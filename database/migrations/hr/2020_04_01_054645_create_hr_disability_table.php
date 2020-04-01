@@ -15,7 +15,11 @@ class CreateHrDisabilityTable extends Migration
     {
         Schema::create('hr_disabilities', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unique()->unsigned();
+            $table->string('disability', 10);
+            $table->string('detail');
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });
     }
 

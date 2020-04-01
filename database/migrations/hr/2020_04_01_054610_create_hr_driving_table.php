@@ -15,7 +15,11 @@ class CreateHrDrivingTable extends Migration
     {
         Schema::create('hr_drivings', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unique()->unsigned();
+            $table->string('licence_no',20);
+            $table->date('licence_expiry');
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });
     }
 

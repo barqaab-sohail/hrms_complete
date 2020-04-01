@@ -15,7 +15,22 @@ class CreateHrContactTable extends Migration
     {
         Schema::create('hr_contacts', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unsigned();
+            $table->bigInteger('hr_contact_type_id')->unsigned();
+            $table->string('house',50);
+            $table->string('street',50);
+            $table->string('town',50);
+            $table->string('tehsil',50);
+            $table->bigInteger('city_id')->unsigned();
+            $table->bigInteger('state_id')->unsigned();
+            $table->bigInteger('country_id')->unsigned();
+            
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
+            $table->foreign('hr_contact_type_id')->references('id')->on('hr_contact_types');
+            $table->foreign('city_id')->references('id')->on('cities');
+            $table->foreign('state_id')->references('id')->on('states');
+            $table->foreign('country_id')->references('id')->on('countries');
         });
     }
 

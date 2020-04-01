@@ -15,7 +15,14 @@ class CreateHrExitTable extends Migration
     {
         Schema::create('hr_exits', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unsigned();
+            $table->bigInteger('hr_status_id')->unsigned();
+            $table->date('effective_date');
+            $table->string('reason');
+            $table->string('remarks');
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
+            $table->foreign('hr_status_id')->references('id')->on('hr_statuses');
         });
     }
 

@@ -15,7 +15,11 @@ class CreateHrPassportTable extends Migration
     {
         Schema::create('hr_passports', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unique()->unsigned();
+            $table->string('passport_no',20);
+            $table->date('passport_expiry');
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });
     }
 

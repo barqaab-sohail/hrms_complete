@@ -15,7 +15,16 @@ class CreateHrExperienceTable extends Migration
     {
         Schema::create('hr_experiences', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unsigned();
+            $table->string('employer',90);
+            $table->date('from');
+            $table->date('to');
+            $table->string('position',70);
+            $table->text('activities'); //65,535 character including spaces
+            $table->bigInteger('country_id')->unsigned();
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('countries');
         });
     }
 

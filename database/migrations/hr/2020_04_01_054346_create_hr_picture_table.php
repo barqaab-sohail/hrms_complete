@@ -15,7 +15,14 @@ class CreateHrPictureTable extends Migration
     {
         Schema::create('hr_pictures', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unique()->unsigned();
+            $table->string('name');
+            $table->string('type');
+            $table->string('size');
+            $table->string('width')->nullable();
+            $table->string('height')->nullable();
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });
     }
 

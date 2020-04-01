@@ -15,6 +15,7 @@ class CreateHrStatusTable extends Migration
     {
         Schema::create('hr_statuses', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
     }

@@ -15,7 +15,13 @@ class CreateHrNextToKinTable extends Migration
     {
         Schema::create('hr_next_to_kins', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unique()->unsigned();
+            $table->string('name');
+            $table->string('relation',30);
+            $table->string('address')->nullable();
+            $table->string('contact')->nullable();
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });
     }
 
