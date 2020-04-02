@@ -33,7 +33,7 @@ class CreateHrEmployeeTable extends Migration
             $table->foreign('gender_id')->references('id')->on('genders');
             $table->foreign('hr_status_id')->references('id')->on('hr_statuses');
             $table->foreign('religion_id')->references('id')->on('religions');
-            $table->foreign('domicile_id')->references('id')->on('cities');
+           $table->foreign('domicile_id')->references('id')->on('cities');
         });
     }
 

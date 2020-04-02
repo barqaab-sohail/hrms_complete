@@ -15,7 +15,11 @@ class CreateHrEobiTable extends Migration
     {
         Schema::create('hr_eobis', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unsigned();
+            $table->string('eobi_no',20);
+            $table->date('date_of_registration')->nullable();
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });
     }
 

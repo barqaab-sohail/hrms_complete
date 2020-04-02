@@ -15,7 +15,14 @@ class CreateHrDependentTable extends Migration
     {
         Schema::create('hr_dependents', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unsigned();
+            $table->string('name');
+            $table->date('date_of_birth')->nullable();
+            $table->string('relation',15)->nullable();
+            $table->bigInteger('gender_id')->unsigned();
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
+            $table->foreign('gender_id')->references('id')->on('genders');
         });
     }
 

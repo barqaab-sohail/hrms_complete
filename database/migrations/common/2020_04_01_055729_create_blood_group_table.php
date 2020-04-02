@@ -15,7 +15,7 @@ class CreateBloodGroupTable extends Migration
     {
         Schema::create('blood_groups', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('name',10);
         });
     }
 

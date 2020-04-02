@@ -14,8 +14,9 @@ class CreateStateTable extends Migration
     public function up()
     {
         Schema::create('states', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->bigIncrements('id')->index();
+            $table->string('name');
+            $table->integer('country_id');          
         });
     }
 

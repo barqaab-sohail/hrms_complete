@@ -13,9 +13,9 @@ class CreateLanguageLevelTable extends Migration
      */
     public function up()
     {
-        Schema::create('languages_levles', function (Blueprint $table) {
+        Schema::create('language_levels', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('name',10);
         });
     }
 
@@ -26,6 +26,6 @@ class CreateLanguageLevelTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('languages_levles');
+        Schema::dropIfExists('language_levels');
     }
 }

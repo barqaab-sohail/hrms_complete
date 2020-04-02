@@ -15,7 +15,7 @@ class CreateHrLetterTypeTable extends Migration
     {
         Schema::create('hr_letter_types', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('name',50);
         });
     }
 

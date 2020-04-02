@@ -13,9 +13,9 @@ class CreateLanguageSkillTable extends Migration
      */
     public function up()
     {
-        Schema::create('languages_skills', function (Blueprint $table) {
+        Schema::create('language_skills', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('name',15);
         });
     }
 
@@ -26,6 +26,6 @@ class CreateLanguageSkillTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('languages_skills');
+        Schema::dropIfExists('language_skills');
     }
 }

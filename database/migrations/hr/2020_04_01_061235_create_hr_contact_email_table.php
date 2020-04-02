@@ -15,7 +15,10 @@ class CreateHrContactEmailTable extends Migration
     {
         Schema::create('hr_contact_emails', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_contact_id')->unsigned();
+            $table->string('email',50);  
             $table->timestamps();
+            $table->foreign('hr_contact_id')->references('id')->on('hr_contacts');
         });
     }
 

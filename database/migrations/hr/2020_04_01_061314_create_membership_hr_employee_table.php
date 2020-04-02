@@ -14,7 +14,14 @@ class CreateMembershipHrEmployeeTable extends Migration
     public function up()
     {
         Schema::create('membership_hr_employee', function (Blueprint $table) {
-            $table->id();
+            $table->bigInteger('membership_id')->unsigned();
+            $table->foreign('membership_id')->references('id')->on('memberships');
+
+            $table->bigInteger('hr_employee_id')->unsigned();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
+
+            $table->string('membership_no',20)->nullable();
+            $table->date('expiry')->nullable();
             $table->timestamps();
         });
     }

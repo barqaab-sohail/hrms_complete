@@ -15,6 +15,7 @@ class CreateHrDepartmentTable extends Migration
     {
         Schema::create('hr_departments', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
     }

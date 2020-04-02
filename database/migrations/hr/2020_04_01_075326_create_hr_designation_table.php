@@ -15,7 +15,9 @@ class CreateHrDesignationTable extends Migration
     {
         Schema::create('hr_designations', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+           $table->string('name')->unique();
+            $table->tinyInteger('level');
+
         });
     }
 

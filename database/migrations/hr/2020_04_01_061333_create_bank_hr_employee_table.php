@@ -14,7 +14,15 @@ class CreateBankHrEmployeeTable extends Migration
     public function up()
     {
         Schema::create('bank_hr_employee', function (Blueprint $table) {
-            $table->id();
+            $table->bigInteger('bank_id')->unsigned();
+            $table->foreign('bank_id')->references('id')->on('banks');
+
+            $table->bigInteger('hr_employee_id')->unsigned();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
+
+            $table->string('account_no',30)->nullable();
+            $table->string('branch_code',10)->nullable();
+            $table->string('branch_name',30)->nullable();
             $table->timestamps();
         });
     }

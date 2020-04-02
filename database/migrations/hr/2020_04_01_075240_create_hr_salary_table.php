@@ -15,6 +15,7 @@ class CreateHrSalaryTable extends Migration
     {
         Schema::create('hr_salaries', function (Blueprint $table) {
             $table->id();
+            $table->integer('total_salary')->unsigned();
             $table->timestamps();
         });
     }

@@ -15,7 +15,13 @@ class CreateHrPublicationTable extends Migration
     {
         Schema::create('hr_publications', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unsigned();
+            $table->string('title');
+            $table->string('description')->nullable();
+            $table->string('channel',20)->nullable();
+            $table->string('year',4)->nullable();
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });
     }
 

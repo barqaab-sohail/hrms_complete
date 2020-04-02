@@ -15,6 +15,8 @@ class CreateEducationTable extends Migration
     {
         Schema::create('educations', function (Blueprint $table) {
             $table->id();
+            $table->string('degree_name')->unique();
+            $table->tinyInteger('level');
             $table->timestamps();
         });
     }

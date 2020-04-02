@@ -15,7 +15,11 @@ class CreateHrPromotionTable extends Migration
     {
         Schema::create('hr_promotions', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('hr_employee_id')->unsigned();
+            $table->date('effective_date');
+            $table->string('remarks');
             $table->timestamps();
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });
     }
 

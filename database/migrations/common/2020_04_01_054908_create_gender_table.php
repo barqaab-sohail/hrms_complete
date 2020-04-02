@@ -15,7 +15,8 @@ class CreateGenderTable extends Migration
     {
         Schema::create('genders', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('name',10)->unique();
+            
         });
     }
 
