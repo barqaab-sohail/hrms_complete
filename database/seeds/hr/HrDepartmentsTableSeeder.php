@@ -11,6 +11,12 @@ class HrDepartmentsTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('blood_groups')->delete();  
+        $HrDepartments = array(
+        	array('name' => 'Finance'),
+        	array('name' => 'Power'),
+        	array('name' => 'Water'),
+        );
+        DB::table('hr_departments')->insert($HrDepartments);
     }
 }

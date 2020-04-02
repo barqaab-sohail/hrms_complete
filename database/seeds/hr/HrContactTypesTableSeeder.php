@@ -11,6 +11,6 @@ class HrContactTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        
     }
 }

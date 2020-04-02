@@ -11,6 +11,11 @@ class HrLetterTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('hr_letter_types')->delete();  
+        $HrLetterTypes = array(
+        	array('name' => 'One Page without Notice'),
+        	array('name' => 'Two Page with Notice'),
+        );
+        DB::table('hr_letter_types')->insert($HrLetterTypes);
     }
 }

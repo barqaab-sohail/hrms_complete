@@ -14,7 +14,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UserTableSeeder::class);
         $this->call(RoleTableSeeder::class);
+        $this->call(BanksTableSeeder::class);
+        $this->call(BloodGroupsTableSeeder::class);
         $this->call(CitiesTableSeeder::class);
+        $this->call(ClientsTableSeeder::class);
+        $this->call(ContractTypesTableSeeder::class);
         $this->call(CountriesTableSeeder::class);
         $this->call(EducationsTableSeeder::class);
         $this->call(GendersTableSeeder::class);
@@ -24,8 +28,11 @@ class DatabaseSeeder extends Seeder
         $this->call(MaritalStatusesTableSeeder::class);
         $this->call(MembershipsTableSeeder::class);
         $this->call(PrRolesTableSeeder::class);
+        $this->call(ReligionsTableSeeder::class);
         $this->call(StatesTableSeeder::class);
+        $this->call(HrDepartmentsTableSeeder::class);
         $this->call(HrDesignationsTableSeeder::class);
+        $this->call(HrLetterTypesTableSeeder::class);
         $this->call(HrStatusesTableSeeder::class);
     }
 }
