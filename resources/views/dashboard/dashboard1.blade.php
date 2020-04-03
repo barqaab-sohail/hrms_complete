@@ -31,6 +31,7 @@
 				@endphp
 				</h1>
 			@endcan
+
 			
 		</div>
 	</div>

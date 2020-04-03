@@ -10,7 +10,7 @@
                 <div class="card-body">
                 @include('layouts.auth.message')
 
-                    <form method="POST" action="{{ route('otp.confirm') }}"  class="form-prevent-multiple-submits">
+                    <form method="POST" action="{{ route('otp.store') }}"  class="form-prevent-multiple-submits">
                         @csrf
 
                         <div class="form-group row">

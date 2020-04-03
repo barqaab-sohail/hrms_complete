@@ -110,7 +110,7 @@ thead th {
 @include('layouts.master.adminScripts')
 @yield('footer')
     <div style="text-align:center">
-        <p>HRMS 2.0 - Developed by: BARQAAB IT</p>
+        <p>HRMS 4.0 - Developed by: BARQAAB IT</p>
     </div>
 </body>
 </html>

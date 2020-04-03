@@ -1,4 +1,8 @@
-
+<style>
+.text_requried{
+  color: red;
+}
+</style>
 
 <aside class="left-sidebar">
     <!-- Sidebar scroll-->
@@ -14,17 +18,17 @@
             <ul id="sidebarnav">
                 {{--/////Second Start--}}
                 
-                 <li @if(request()->is('dashboard')) class="active" @endif><a id="notInclude" class="waves-effect waves-dark" href="{{url('/dashboard')}}" aria-expanded="false"><i class="fas fa-tachometer-alt"></i><span class="hide-menu">Dashboard </span></a>
+                 <li class="{{Request::is('dashboard')?'active':''}}"><a id="notInclude" class="waves-effect waves-dark" href="{{url('/dashboard')}}" aria-expanded="false"><i class="fas fa-tachometer-alt"></i><span class="hide-menu">Dashboard </span></a>
                 </li>
                
 
-                <li @if(request()->is('hrms*')) class="active" @endif > <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fas fa-user"></i><span class="hide-menu">Human Resource</span></a>
+                <li class="{{Request::is('hrms*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fas fa-user"></i><span class="hide-menu">Human Resource</span></a>
                     <ul aria-expanded="false" class="collapse">
                        
-                        <li><a href="{{url('/testing')}}">User Detail</a></li>
+                        <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>
                     @canany(['hr_edit_record','View Record'])
-                        <li><a href="">Add Employee</a></li>
-                        <li><a href="">List of Employees</a></li>
+                        <li><a  class="{{Request::is('hrms/employee/create')?'active':''}}" href="{{route('employee.create')}}">Add Employee</a></li>
+                        <li><a  href="">List of Employees</a></li>
                         <li><a href="">Add Designation</a></li>
                     @endcanany
                       

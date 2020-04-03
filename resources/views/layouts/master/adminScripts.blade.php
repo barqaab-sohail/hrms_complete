@@ -89,16 +89,6 @@
 
 
 <script>
-//$.validate();
-
-// // Function Prevent Explorer Back Button 
-// function preventBack(){
-//     window.history.forward();
-// }
-// setTimeout("preventBack()",0);
-
-// window.onunload = function(){null};
-// //end function
 
 //function to prevent double click on submit button
 (function(){
@@ -164,116 +154,61 @@ function submitFormAjax(form, url,reset=0){
                         
                             
                     }//end error
-        }); //end ajax
+    }); //end ajax
 }
 
 
    
-    $(document).ready(function() {
+$(document).ready(function() {
         
-
-       // var role = "";
-
-       // if(role == 'User'){
-       //  $('input[type="text"]').prop('disabled', true);
-       //  $('.notReadonly').prop('disabled',false);
-       //  $('select').attr("disabled", true); 
-        
-       // }
-
-        //Active Anchor tage with compare url and href
-        var url = window.location.pathname;
-        var lastTenUrl = url.substr(url.length - 15)
-        $('.sidebar-nav li a').each(function() {
-        var href = $(this).attr('href'); 
-        var lastTenHref = href.substr(href.length - 15)
-            if (lastTenUrl == lastTenHref){
-                  $(this).closest('a').not("#notInclude").css('color','red');
-            }
-
-        });
-        
-        //email type input in lower case
-        $('input[type=email]').keyup(function() {
-        $(this).val($(this).val().toLowerCase());
-        });
+    //email type input in lower case
+    $('input[type=email]').keyup(function() {
+    $(this).val($(this).val().toLowerCase());
+    });
 
     
-
-
-
-        $('[id^=hideDiv]').hide();
-
-         $('#hideButton').click (function (){
-
-            $('#hideDiv').toggle();
-        });
-        
-        $('#EduButton, #TraButton, #PubButton').each(function(){
-
-                $(this).on("click", function(){
-                    var id = '#hideDiv' +$(this).prop('id');
-                     $(id).toggle();
-                     $('.editDiv').hide();
-                    $('.hide').not(id).hide();
-                   
-                });
-
-        });
-        
-        //Active Anchor tage with compare url and href
-       /* $('.sidebar-nav li a').each(function(){
-        var ThisHref = ($(this).attr('href').split('?'))[0];
-        if(window.location.href.indexOf(ThisHref) > -1) {
-            $(this).closest('a').not("#notInclude").css('color','red');
-        }
-        });*/
-      
-   
-
-      
-
-       $('.selectTwo').select2({
-            width: "100%",
-            theme: "classic",
-            errorPlacement: function (error, element) {
-                if (element.parent('.input-group').length) { 
-                    error.insertAfter(element.parent());      // radio/checkbox?
-                } else if (element.hasClass('select2')) {     
-                    error.insertAfter(element.next('span'));  // select2
-                } else {                                      
-                    error.insertAfter(element);               // default
-                }
+    
+    $('.selectTwo').select2({
+        width: "100%",
+        theme: "classic",
+        errorPlacement: function (error, element) {
+            if (element.parent('.input-group').length) { 
+                error.insertAfter(element.parent());      // radio/checkbox?
+            } else if (element.hasClass('select2')) {     
+                error.insertAfter(element.next('span'));  // select2
+            } else {                                      
+                error.insertAfter(element);               // default
             }
+        }
 
-        });
+    });
 
-                //get Date from Database and set as "Saturday, 24-August-2019"
-                var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-                var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-                
-                //if Date not empty than enter date with format 'Wednesday, 10-August-2010'
+    //get Date from Database and set as "Saturday, 24-August-2019"
+    var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    //var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+     var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    
+    //if Date not empty than enter date with format 'Wednesday, 10-August-2010'
+    $(".date_input").each(function(){
+        if ($(this).find('input').val()!=''){
+        var Date1 = new Date($(this).find('input').val());
+        $(this).find('input').val(
+        weekday[Date1.getDay()]+", "+
+        Date1.getDate()+"-"+months[Date1.getMonth()]
+        +"-"+Date1.getFullYear());
+        }else{
+            $(this).find('i').hide();
+        }
 
-                $(".date_input").each(function(){
-                    if ($(this).find('input').val()!=''){
-                    var Date1 = new Date($(this).find('input').val());
-                    $(this).find('input').val(
-                    weekday[Date1.getDay()]+", "+
-                    Date1.getDate()+"-"+months[Date1.getMonth()]
-                    +"-"+Date1.getFullYear());
-                    }else{
-                        $(this).find('i').hide();
-                    }
+    });
 
-                });
-
-                //If Click icon than clear date
-                $(".date_input i").click(function (){
-                    if(confirm("Are you sure to clear date")){
-                    $(this).siblings('input').val("");
-                    $(this).hide();
-                    }
-                });
+    //If Click icon than clear date
+    $(".date_input i").click(function (){
+        if(confirm("Are you sure to clear date")){
+        $(this).siblings('input').val("");
+        $(this).hide();
+        }
+    });
 
                 //If Chane date input than show date clear icon
                         // $(".date_input input").change(function (){
@@ -281,17 +216,16 @@ function submitFormAjax(form, url,reset=0){
                         //        $(this).siblings('i').show();
                         // });
 
-                // DatePicker
-                 
-                    $(".date_input input").datepicker({
-                    dateFormat: 'DD, d-MM-yy',
-                    yearRange: '1940:'+ (new Date().getFullYear()+15),
-                    changeMonth: true,
-                    changeYear: true,
+    // DatePicker
+   $(".date_input input").datepicker({
+    dateFormat: 'DD, d-MM-yy',
+    yearRange: '1940:'+ (new Date().getFullYear()+15),
+    changeMonth: true,
+    changeYear: true,
 
-                    }).on('change',function(){
-                         $(this).siblings('i').show();
-                    });
+    }).on('change',function(){
+         $(this).siblings('i').show();
+    });
                 
                  
 

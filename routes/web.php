@@ -17,14 +17,24 @@ Route::get('/dashboard', function () {
     return view('dashboard.dashboard');
 });
 
-Route::get('/testing', function () {
+Route::get('/hrms/testing', function () {
     return view('dashboard.dashboard1');
 });
 
 
 Auth::routes();
-Route::get('/code','Auth\RegisterController@create')->name('otp.create');
-Route::Post('/code','Auth\RegisterController@confirm')->name('otp.confirm');
+
+Route::prefix('code')->namespace('Auth')->name('otp.')->group(function(){
+Route::resource('/','RegisterController',['only'=>['create','store']]);
+});
+
+
+Route::prefix('hrms/employee')->namespace('hr')->name('employee.')->group(function(){
+Route::resource('/', 'EmployeeController');
+});
+
+
+
 
 
 Route::get('/home', 'HomeController@index')->name('home');

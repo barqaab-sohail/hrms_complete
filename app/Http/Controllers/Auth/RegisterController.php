@@ -77,7 +77,7 @@ class RegisterController extends Controller
       return view('auth.codeConfirmation');
     }
 
-    public function confirm(StoreOTP $request){
+    public function store(StoreOTP $request){
 
         $user = user::all()->where('email',$request->email)->first();
        

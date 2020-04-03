@@ -1770,6 +1770,7 @@ form label {
 
 .card-no-border .sidebar-nav>ul>li>a.active {
   background: #ffffff;
+
 }
 
 .card-no-border .shadow-none {
@@ -6300,6 +6301,7 @@ a.mytooltip {
 
 .sidebar-nav ul li ul li a {
   padding: 10px 35px 10px 15px;
+
 }
 
 .sidebar-nav ul li ul ul {
@@ -9583,3 +9585,9 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever:after,input[type=checkbo
 .spinner{
   display: none;
 }
+
+.sidebar-nav ul li ul li a.active {
+  padding: 10px 35px 10px 15px;
+  color:red;
+}
+
