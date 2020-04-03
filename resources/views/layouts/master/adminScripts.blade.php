@@ -21,7 +21,7 @@
 <!--Custom JavaScript in HRMS -->
 <script src="{{asset('Massets/js/custom.js') }}"></script>
 
-<!-- JS Validations -->
+<!-- JS Form Validations -->
 <script   src="{{asset('Massets/js/js-validation/jquery.form-validator.min.js') }}"></script>
 
 <!-- ============================================================== -->
@@ -63,7 +63,8 @@
 <script src="{{asset('Massets/plugins/html5-editor/wysihtml5-0.3.0.js')}}"></script>
 <script src="{{asset('Massets/plugins/html5-editor/bootstrap-wysihtml5.js')}}"></script>
 
-<script src="{{asset('Massets/js/js-ui/jquery-ui.js')}}"></script>
+<!-- Jquery UI Datepicker "Redmond theme" JS -->
+<script src="{{asset('Massets/js/jquery-ui/jquery-ui.js')}}"></script>
 
 <script src="{{asset('Massets/js/full-image/EZView.js') }}"></script>
 
@@ -189,35 +190,34 @@ $(document).ready(function() {
      var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     
     //if Date not empty than enter date with format 'Wednesday, 10-August-2010'
+    
     $(".date_input").each(function(){
-        if ($(this).find('input').val()!=''){
-        var Date1 = new Date($(this).find('input').val());
-        $(this).find('input').val(
+
+       console.log($(this).val());
+        if ($(this).val()!=''){
+        var Date1 = new Date($(this).val());
+        $(this).val(
         weekday[Date1.getDay()]+", "+
         Date1.getDate()+"-"+months[Date1.getMonth()]
         +"-"+Date1.getFullYear());
         }else{
-            $(this).find('i').hide();
+
+            $(this).siblings('i').hide();
         }
 
     });
 
     //If Click icon than clear date
-    $(".date_input i").click(function (){
+    $(".fa-trash-alt").click(function (){
         if(confirm("Are you sure to clear date")){
         $(this).siblings('input').val("");
         $(this).hide();
         }
     });
 
-                //If Chane date input than show date clear icon
-                        // $(".date_input input").change(function (){
-                            
-                        //        $(this).siblings('i').show();
-                        // });
 
     // DatePicker
-   $(".date_input input").datepicker({
+   $(".date_input").datepicker({
     dateFormat: 'DD, d-MM-yy',
     yearRange: '1940:'+ (new Date().getFullYear()+15),
     changeMonth: true,

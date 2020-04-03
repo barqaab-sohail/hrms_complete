@@ -62,10 +62,10 @@
 		                        <div class="row">
 		                            <div class="col-md-4">
 		                                <div class="form-group row">
-		                                    <div class="col-md-12 date_input">
+		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Date of Birth<span class="text_requried">*</span></label>
 		                                        
-		                                        <input type="text" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}" class="form-control" placeholder="Enter Date of Birth" required readonly>
+		                                        <input type="text" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}" class="form-control date_input" placeholder="Enter Date of Birth" required readonly>
 												
 												<br>
 		                                        @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
@@ -88,7 +88,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">CNIC Expiry<span class="text_requried">*</span></label>
 		                                            
-		                                        <input type="text" id="cnic_expiry" name="cnic_expiry" value="{{ old('cnic_expiry') }}" class="form-control "  placeholder="Enter CNIC Expiry Date" readonly required>
+		                                        <input type="text" id="cnic_expiry" name="cnic_expiry" value="{{ old('cnic_expiry') }}" class="form-control date_input"  placeholder="Enter CNIC Expiry Date" readonly required>
 												
 												<br>
 		                                        @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan

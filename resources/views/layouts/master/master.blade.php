@@ -16,8 +16,10 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" rel="stylesheet" />
     
+    <!-- Jquery UI Datepicker "Redmond theme" CSS -->
+    <link href="{{asset('Massets/js/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet">
+
     <!-- Bootstrap Core CSS -->
-    <link href="{{asset('Massets/js/js-ui/jquery-ui.min.css') }}" rel="stylesheet">
     <link href="{{asset('Massets/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
    
     <!-- JS Validation  CSS -->
