@@ -20,10 +20,11 @@
 		                 
 		            <div class="card-body">
 		                <form id= "addEmployee" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
+		                @method('PATCH')
 		                @csrf
 		                    <div class="form-body">
 		                            
-		                        <h3 class="box-title">Employee Information</h3>
+		                        <h3 class="box-title">Edit Employee Information</h3>
 		                        
 		                        <hr class="m-t-0 m-b-40">
 
@@ -33,7 +34,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">First Name<span class="text_requried">*</span></label><br>
 
-		                                       	<input type="text"  name="first_name" value="{{ old('first_name') }}"  class="form-control" data-validation="required" placeholder="Enter First Name">
+		                                       	<input type="text"  name="first_name" value="{{ old('first_name', $data->first_name) }}"  class="form-control" data-validation="required" placeholder="Enter First Name">
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -43,7 +44,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Last Name</label>
 		                                        
-		                                        <input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control " data-validation="required" placeholder="Enter Last Name" >
+		                                        <input type="text" name="last_name" value="{{ old('last_name', $data->last_name) }}" class="form-control " data-validation="required" placeholder="Enter Last Name" >
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -53,7 +54,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Father Name</label>
 		                                        
-		                                        <input type="text" name="father_name" value="{{ old('father_name') }}" class="form-control " data-validation="required" placeholder="Enter Father Name" >
+		                                        <input type="text" name="father_name" value="{{ old('father_name', $data->father_name) }}" class="form-control " data-validation="required" placeholder="Enter Father Name" >
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -65,7 +66,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Date of Birth<span class="text_requried">*</span></label>
 		                                        
-		                                        <input type="text" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}" class="form-control date_input" data-validation="required" readonly>
+		                                        <input type="text" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth', $data->date_of_birth) }}" class="form-control date_input" data-validation="required" readonly>
 												
 												<br>
 		                                        @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
@@ -78,7 +79,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">CNIC<span class="text_requried">*</span></label>
 		                                        
-		                                        <input type="text" name="cnic" id="cnic" pattern="[0-9.-]{15}" title= "13 digit Number without dash" value="{{ old('cnic') }}" class="form-control" data-validation="required" placeholder="Enter CNIC without dash" >
+		                                        <input type="text" name="cnic" id="cnic" pattern="[0-9.-]{15}" title= "13 digit Number without dash" value="{{ old('cnic',$data->cnic) }}" class="form-control" data-validation="required" placeholder="Enter CNIC without dash" >
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -88,7 +89,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">CNIC Expiry<span class="text_requried">*</span></label>
 		                                            
-		                                        <input type="text" id="cnic_expiry" name="cnic_expiry" value="{{ old('cnic_expiry') }}" class="form-control date_input"  data-validation="required" readonly >
+		                                        <input type="text" id="cnic_expiry" name="cnic_expiry" value="{{ old('cnic_expiry',$data->date_of_birth) }}" class="form-control date_input"  data-validation="required" readonly >
 												
 												<br>
 		                                        @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan
@@ -106,7 +107,7 @@
 	                                           	<select  name="gender_id"  class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     @foreach($genders as $gender)
-													<option value="{{$gender->id}}" {{(old("gender_id")==$gender->id? "selected" : "")}}>{{$gender->name}}</option>
+													<option value="{{$gender->id}}" {{(old("gender_id",$data->gender_id)==$gender->id? "selected" : "")}}>{{$gender->name}}</option>
                                                     @endforeach
                                                     
                                                 </select>
@@ -123,7 +124,7 @@
 	                                           	<select  name="marital_status_id"  class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     @foreach($maritalStatuses as $maritalStatus)
-													<option value="{{$maritalStatus->id}}" {{(old("marital_status_id")==$maritalStatus->id? "selected" : "")}}>{{$maritalStatus->name}}</option>
+													<option value="{{$maritalStatus->id}}" {{(old("marital_status_id",$data->marital_status_id)==$maritalStatus->id? "selected" : "")}}>{{$maritalStatus->name}}</option>
                                                     @endforeach
                                                   
                                                 </select>
@@ -139,7 +140,7 @@
 	                                           	<select  name="religion_id"  class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     @foreach($religions as $religion)
-													<option value="{{$religion->id}}" {{(old("religion_id")==$religion->id? "selected" : "")}}>{{$religion->name}}</option>
+													<option value="{{$religion->id}}" {{(old("religion_id",$data->religion_id)==$religion->id? "selected" : "")}}>{{$religion->name}}</option>
                                                     @endforeach
                                                   
                                                 </select>
@@ -153,7 +154,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Employee No<span class="text_requried">*</span></label>
 		                                            
-		                                        <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no') }}" class="form-control"  placeholder="Enter Employee No" >
+		                                        <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no', $data->employee_no) }}" class="form-control"  placeholder="Enter Employee No" >
 												
 		                                    </div>
 		                                </div>
@@ -168,7 +169,7 @@
 		                            <div class="col-md-6">
 		                                <div class="row">
 		                                    <div class="col-md-offset-3 col-md-9">
-		                                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits">Add Employee</button>        
+		                                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits">Edit Employee</button>        
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -199,10 +200,10 @@ $(document).ready(function() {
 
 	$('#addEmployee').on('submit', function(event){
 	 	event.preventDefault();
-		url="{{route('employee.store')}}";
+		url="{{route('employee.update',$data->id)}}";
 		$('.fa-spinner').show();
 		
-	   	submitFormAjax(this, url);
+	   	submitFormAjax(this, url, 1);
 	}); //end submit
 	 
 

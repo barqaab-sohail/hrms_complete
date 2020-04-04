@@ -85,6 +85,11 @@
  $('.fa-spinner').hide();
 $(document).ready(function(){
     
+    $('input[type=email]').keyup(function() {
+    $(this).val($(this).val().toLowerCase());
+    });
+
+    
     (function(){
         $('.form-prevent-multiple-submits').on('submit', function(){
             $('.fa-spinner').show();
@@ -102,6 +107,9 @@ $(document).ready(function(){
         
         //Remove hyphens
         let input = ev.target.value.split("-").join("");
+        if(ev.target.value.length>15){
+            input =  input.substring(0,input.length-1)
+        }
         
         //Make a new string with the hyphens
         // Note that we make it into an array, and then join it at the end

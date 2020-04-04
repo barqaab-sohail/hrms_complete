@@ -21,16 +21,18 @@ class CreateHrEmployeeTable extends Migration
             $table->string('cnic',20);
             $table->date('cnic_expiry');
             $table->date('date_of_birth');
-            $table->string('employee_no',20);
-            $table->bigInteger('user_id')->unsigned();
+            $table->string('employee_no',20)->nullable();
+            $table->bigInteger('user_id')->unsigned()->nullable() ;
             $table->bigInteger('gender_id')->unsigned();
-            $table->bigInteger('hr_status_id')->unsigned();
+            $table->bigInteger('hr_status_id')->unsigned()->default(1)->comment('1 Onboard, 2 Resigned, 3 Terminated, 4 Retired' );
+             $table->bigInteger('marital_status_id')->unsigned();
             $table->bigInteger('religion_id')->unsigned();
-            $table->bigInteger('domicile_id')->unsigned();
+            $table->bigInteger('domicile_id')->unsigned()->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('gender_id')->references('id')->on('genders');
+            $table->foreign('marital_status_id')->references('id')->on('marital_statuses');
             $table->foreign('hr_status_id')->references('id')->on('hr_statuses');
             $table->foreign('religion_id')->references('id')->on('religions');
            $table->foreign('domicile_id')->references('id')->on('cities');

@@ -109,13 +109,15 @@
 
 function resetForm(){
     $(':input','form')
-                     .not(':button, :submit, :reset, :hidden')
+                     .not(':button, :submit, :reset')
                      .val('')
                      .removeAttr('checked')
                      .removeAttr('selected');
     
-     $('select').val('').trigger('chosen:updated');
+    $('select').val('').trigger('chosen:updated');
+    $('.selectTwo').val('').select2('val', 'All');
     $('.remove').click();
+    $(".date_input").siblings('i').hide();
     $('input').removeClass('valid');
     $('input').removeClass('error');
     $("input[style='border-color: rgb(185, 74, 72);']").css('border-color','').siblings("span").attr('class','help-block').remove();
@@ -123,7 +125,18 @@ function resetForm(){
 }
 
 function submitFormAjax(form, url,reset=0){
-      $.ajax({
+
+        //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
+        $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
+            var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
+
+            if (token) {
+                return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Object
+            }
+        });
+
+        //ajax request
+        $.ajax({
            url:url,
            method:"POST",
            data:new FormData(form),
@@ -161,7 +174,10 @@ function submitFormAjax(form, url,reset=0){
 
    
 $(document).ready(function() {
-        
+    $('input[type=text]').keyup (function () {
+        $(this).val($(this).val().toLowerCase());
+    });
+
     //email type input in lower case
     $('input[type=email]').keyup(function() {
     $(this).val($(this).val().toLowerCase());
@@ -184,22 +200,10 @@ $(document).ready(function() {
 
     });
 
-    //get Date from Database and set as "Saturday, 24-August-2019"
-    var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    //var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-     var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    
-    //if Date not empty than enter date with format 'Wednesday, 10-August-2010'
-    
+//Date input   
     $(".date_input").each(function(){
-
-       console.log($(this).val());
         if ($(this).val()!=''){
-        var Date1 = new Date($(this).val());
-        $(this).val(
-        weekday[Date1.getDay()]+", "+
-        Date1.getDate()+"-"+months[Date1.getMonth()]
-        +"-"+Date1.getFullYear());
+        $(this).siblings('i').show();
         }else{
 
             $(this).siblings('i').hide();
@@ -218,7 +222,7 @@ $(document).ready(function() {
 
     // DatePicker
    $(".date_input").datepicker({
-    dateFormat: 'DD, d-MM-yy',
+    dateFormat: 'D, d-M-yy',
     yearRange: '1940:'+ (new Date().getFullYear()+15),
     changeMonth: true,
     changeYear: true,
@@ -226,74 +230,67 @@ $(document).ready(function() {
     }).on('change',function(){
          $(this).siblings('i').show();
     });
+
+
+    //get Date from Database and set as "Saturday, 24-August-2019"
+                var weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
                 
-                 
+                 var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+                
+                //if Date not empty than enter date with format 'Wednesday, 10-August-2010'
 
-
-            $('#myTableStored').DataTable({
-                stateSave: false,
-                dom: 'flrtip',
-
-            });
-
-            $('#myDataTable').DataTable({
-                stateSave: false,
-                dom: 'flrtip',
-
-            });
-
-            // Time Picker
-
-                //Hide trach icon if value is empty
-                 $(".time_input").each(function(){
-                    if ($(this).find('input').val()==''){
-                    $(this).find('i').hide();
+                $(".date_input").each(function(){
+                    if ($(this).val()!=''){
+                    var Date1 = new Date($(this).val());
+                    $(this).val(
+                    weekday[Date1.getDay()]+", "+
+                    Date1.getDate()+"-"+months[Date1.getMonth()]
+                    +"-"+Date1.getFullYear());
                     }else{
-                        $(this).find('i').show();
-                        
+                        $(this).siblings('i').hide();
                     }
 
                 });
-                 
-                //If Click icon than clear date
-                $(".time_input i").click(function (){
-                    if(confirm("Are you sure to clear Time")){
-                    $(this).siblings('input').val("");
-                    $(this).hide();
-                    }
-                });
-
-           
-
-            function showTrash(){
-               $("#trash").show();
-            }
-
-
-            $('.time_input input').timepicker({
-                timeFormat: 'h:mm p',
-                interval: 30,
-                minTime: '8',
-                maxTime: '6:00pm',
-                //defaultTime: false,
-                startTime: '8:00',
-                dynamic: false,
-                dropdown: true,
-                scrollbar: true,
-                change:showTrash
-            });
-
-
-
-
-
-
+                
+     //Make sure that the event fires on input change
+    $("#cnic").on('input', function(ev){
+        
+        //Prevent default
+        ev.preventDefault();
+        
+        //Remove hyphens
+        let input = ev.target.value.split("-").join("");
+        if(ev.target.value.length>15){
+            input =  input.substring(0,input.length-1)
+        }
+        
+        //Make a new string with the hyphens
+        // Note that we make it into an array, and then join it at the end
+        // This is so that we can use .map() 
+        input = input.split('').map(function(cur, index){
+            
+            //If the size of input is 6 or 8, insert dash before it
+            //else, just insert input
+            if(index == 5 || index == 12)
+                return "-" + cur;
+            else
+                return cur;
+        }).join('');
+        
+        //Return the new string
+        $(this).val(input);
     });
+
+
+
+
+}); // end document.ready
+
   //Email validation
-function isValidEmailAddress(emailAddress) {
-               var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
-            return pattern.test(emailAddress);
-            }           
+    function isValidEmailAddress(emailAddress) {
+        var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+        return pattern.test(emailAddress);
+    }           
 
 
 </script>

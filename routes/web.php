@@ -29,8 +29,8 @@ Route::resource('/','RegisterController',['only'=>['create','store']]);
 });
 
 
-Route::prefix('hrms/employee')->namespace('hr')->name('employee.')->group(function(){
-Route::resource('/', 'EmployeeController');
+Route::prefix('hrms/')->namespace('Hr')->group(function(){
+Route::resource('/employee', 'EmployeeController');
 });
 
 

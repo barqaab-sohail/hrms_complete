@@ -28,8 +28,7 @@
                         <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>
                     @canany(['hr_edit_record','View Record'])
                         <li><a  class="{{Request::is('hrms/employee/create')?'active':''}}" href="{{route('employee.create')}}">Add Employee</a></li>
-                        <li><a  href="">List of Employees</a></li>
-                        <li><a href="">Add Designation</a></li>
+                        <li><a  class="{{Request::is('hrms/employee/index')?'active':''}}" href="{{route('employee.index')}}">List of Employees</a></li>
                     @endcanany
                       
                     </ul>
