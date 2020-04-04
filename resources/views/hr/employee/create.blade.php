@@ -192,16 +192,15 @@ $(document).ready(function() {
       e.preventDefault();
 	});
 
-	$.validate({
-	validateHiddenInputs: true,
-	});
+	// $.validate({
+	// validateHiddenInputs: true,
+	// });
 
 
 	$('#addEmployee').on('submit', function(event){
 	 	event.preventDefault();
 		url="{{route('employee.store')}}";
-		$('.fa-spinner').show();
-		
+		$('.fa-spinner').show();	
 	   	submitFormAjax(this, url);
 	}); //end submit
 	 

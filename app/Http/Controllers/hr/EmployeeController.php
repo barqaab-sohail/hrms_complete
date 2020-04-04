@@ -26,23 +26,24 @@ class EmployeeController extends Controller
 
     public function store (EmployeeStore $request){
 
-    	 $input = $request->all();
-            if($request->filled('date_of_birth')){
-            $input ['date_of_birth']= \Carbon\Carbon::parse($request->date_of_birth)->format('Y-m-d');
-            }
-            if($request->filled('cnic_expiry')){
-            $input ['cnic_expiry']= \Carbon\Carbon::parse($request->cnic_expiry)->format('Y-m-d');
-            }
+    	//  $input = $request->all();
+     //        if($request->filled('date_of_birth')){
+     //        $input ['date_of_birth']= \Carbon\Carbon::parse($request->date_of_birth)->format('Y-m-d');
+     //        }
+     //        if($request->filled('cnic_expiry')){
+     //        $input ['cnic_expiry']= \Carbon\Carbon::parse($request->cnic_expiry)->format('Y-m-d');
+     //        }
 
-    	DB::transaction(function () use ($input) {  
+    	// DB::transaction(function () use ($input) {  
 
-    		HrEmployee::create($input);
+    	// 	HrEmployee::create($input);
 
-    	}); // end transcation
+    	// }); // end transcation
 
+        //return response()->json(['url'=>url('/dashboard')]);
+        //response()->json(['reset'=> 'OK'])
 
-
-    	return $data;
+    	return response()->json(['OK'=> 'OK']);
     }
 
     public function index(){
@@ -80,5 +81,9 @@ class EmployeeController extends Controller
     	return 'OK';
     }
 
+    public function show($id)
+    {
+
+    }
 
 }
