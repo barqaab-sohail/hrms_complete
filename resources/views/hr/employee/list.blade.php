@@ -54,7 +54,10 @@
 
 @push('scripts')
 <script>
-	        $(document).ready(function() {
+$(document).ready(function() {
+
+
+	
             $('#myTable').DataTable({
                 stateSave: false,
         

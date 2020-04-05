@@ -35,7 +35,7 @@ $('input[type=text]').keyup (function () {
     });
 
     //If Click icon than clear date
-    $(".fa-trash-alt").click(function (){
+    $(".date_input").siblings('i').click(function (){
         if(confirm("Are you sure to clear date")){
         $(this).siblings('input').val("");
         $(this).hide();
@@ -139,7 +139,6 @@ function resetForm(){
 }
 
 function submitFormAjax(form, ur){
-
         //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
         $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
             var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
@@ -169,7 +168,8 @@ function submitFormAjax(form, ur){
                 	$('.fa-spinner').hide();
                		resetForm();
                	}else{
-               		$('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Data Successfully Entered</strong></div>');
+               		$('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
+                    $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
                 	$('html,body').scrollTop(0);
                 	$('.fa-spinner').hide();
                	}
@@ -182,10 +182,11 @@ function submitFormAjax(form, ur){
 
                         //now saperate only errors object values from test object and store in variable errorMassage;
                         $.each(test.errors, function (key, value){
-                          errorMassage += value + '<br>';
+                          errorMassage += value ;
                         });
                          
-                        $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+                        $('#json_message').attr('class','alert alert-danger').removeAttr('hidden').find('strong').text(errorMassage).siblings('i').removeAttr('hidden');
+                        $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
                         $('html,body').scrollTop(0);
                         $('.fa-spinner').hide();
                         

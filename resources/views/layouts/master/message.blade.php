@@ -30,9 +30,10 @@
         </div>
  @endif
 
-<div id="json_message" align="left">
     
-            
+<div id="json_message" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i>
 </div>
+            
+
 
 

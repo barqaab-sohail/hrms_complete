@@ -23,8 +23,9 @@ class EmployeeStore extends FormRequest
      */
     public function rules()
     {
+        
         return [
-            //'cnic' => 'required|min:15|max:15|unique:hr_employees,cnic,',
+            'cnic' => 'required|min:15|max:15|unique:hr_employees,cnic,'.session('employee_id'),
         ];
     }
 }

@@ -3,7 +3,7 @@
 @section('Heading')
 	<h3 class="text-themecolor">Human Resource</h3>
 	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="javascript:void(0)">New Employee</a></li>
+		<li class="breadcrumb-item"><a href="javascript:void(0)">Add Education</a></li>
 		
 		
 	</ol>
@@ -13,17 +13,21 @@
     <div class="col-lg-12">
         <div class="card card-outline-info">
 			<div class="row">
-		        <div class="col-lg-12">
+		        <div class="col-lg-2">
+					@include('layouts.vButton.hrButton')
+				</div>
+      	
+		        <div class="col-lg-10">
 		            <div style="margin-top:10px; margin-right: 10px;">
 		                <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">List of Employees</button>
 		            </div>
 		                 
 		            <div class="card-body">
-		                <form id= "addEmployee" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
+		                <form id= "addEducation" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
 		                @csrf
 		                    <div class="form-body">
 		                            
-		                        <h3 class="box-title">Employee Information</h3>
+		                        <h3 class="box-title">Add Education</h3>
 		                        
 		                        <hr class="m-t-0 m-b-40">
 
@@ -97,68 +101,7 @@
 		                            </div>
 		                        </div><!--/End Row-->
 
-		                        <div class="row">
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Gender<span class="text_requried">*</span></label>
-		                                        
-	                                           	<select  name="gender_id"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($genders as $gender)
-													<option value="{{$gender->id}}" {{(old("gender_id")==$gender->id? "selected" : "")}}>{{$gender->name}}</option>
-                                                    @endforeach
-                                                    
-                                                </select>
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-		                            <!--/span-->
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Marital Status<span class="text_requried" data-validation="required">*</span></label>
-		                                       
-	                                           	<select  name="marital_status_id"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($maritalStatuses as $maritalStatus)
-													<option value="{{$maritalStatus->id}}" {{(old("marital_status_id")==$maritalStatus->id? "selected" : "")}}>{{$maritalStatus->name}}</option>
-                                                    @endforeach
-                                                  
-                                                </select>
-		                                    </div>
-		                                </div>
-		                            </div>
-		                             <!--/span-->
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Religion<span class="text_requried">*</span></label>
-		                                       
-	                                           	<select  name="religion_id"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($religions as $religion)
-													<option value="{{$religion->id}}" {{(old("religion_id")==$religion->id? "selected" : "")}}>{{$religion->name}}</option>
-                                                    @endforeach
-                                                  
-                                                </select>
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-		                              <!--/span-->
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Employee No<span class="text_requried">*</span></label>
-		                                            
-		                                        <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no') }}" class="form-control"  placeholder="Enter Employee No" >
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div><!--/End Row-->
+		                       
 		                    </div> <!--/End Form Boday-->
 
 		                    <hr>
@@ -168,7 +111,7 @@
 		                            <div class="col-md-6">
 		                                <div class="row">
 		                                    <div class="col-md-offset-3 col-md-9">
-		                                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits">Add Employee</button>        
+		                                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits">Add Education</button>        
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -197,9 +140,9 @@ $(document).ready(function() {
 	// });
 
 
-	$('#addEmployee').on('submit', function(event){
+	$('#addEducation').on('submit', function(event){
 	 	event.preventDefault();
-		url="{{route('employee.store')}}";
+		url="{{route('education.store')}}";
 		$('.fa-spinner').show();	
 	   	submitFormAjax(this, url);
 	}); //end submit

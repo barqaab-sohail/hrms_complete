@@ -15,7 +15,7 @@ use App\Http\Requests\Hr\EmployeeStore;
 class EmployeeController extends Controller
 {
     public function create(){
-
+        session()->put('employee_id', '');
     	$genders = Gender::all();
     	$maritalStatuses = MaritalStatus::all();
     	$religions = Religion::all();
@@ -26,24 +26,24 @@ class EmployeeController extends Controller
 
     public function store (EmployeeStore $request){
 
-    	//  $input = $request->all();
-     //        if($request->filled('date_of_birth')){
-     //        $input ['date_of_birth']= \Carbon\Carbon::parse($request->date_of_birth)->format('Y-m-d');
-     //        }
-     //        if($request->filled('cnic_expiry')){
-     //        $input ['cnic_expiry']= \Carbon\Carbon::parse($request->cnic_expiry)->format('Y-m-d');
-     //        }
+    	 $input = $request->all();
+            if($request->filled('date_of_birth')){
+            $input ['date_of_birth']= \Carbon\Carbon::parse($request->date_of_birth)->format('Y-m-d');
+            }
+            if($request->filled('cnic_expiry')){
+            $input ['cnic_expiry']= \Carbon\Carbon::parse($request->cnic_expiry)->format('Y-m-d');
+            }
 
-    	// DB::transaction(function () use ($input) {  
+            $employee='';
+    	DB::transaction(function () use ($input, &$employee) {  
 
-    	// 	HrEmployee::create($input);
+    		$employee = HrEmployee::create($input);
 
-    	// }); // end transcation
+    	}); // end transcation
 
         //return response()->json(['url'=>url('/dashboard')]);
-        //response()->json(['reset'=> 'OK'])
-
-    	return response()->json(['OK'=> 'OK']);
+        
+    	return response()->json(['url'=> route("employee.edit",$employee),'message' => 'Data Sucessfully Saved']);
     }
 
     public function index(){
@@ -56,13 +56,14 @@ class EmployeeController extends Controller
     	$genders = Gender::all();
     	$maritalStatuses = MaritalStatus::all();
     	$religions = Religion::all();
-    	$data = HrEmployee::where('id',$id)->get()->first();
+    	$data = HrEmployee::find($id);
+        session()->put('employee_id', $data->id);
 
     	return view ('hr.employee.edit', compact('genders','maritalStatuses','religions','data'));
     }
 
 
-    public function update(Request $request, $id){
+    public function update(EmployeeStore $request, $id){
 
     	$input = $request->all();
             if($request->filled('date_of_birth')){
@@ -78,12 +79,15 @@ class EmployeeController extends Controller
 
     		}); // end transcation
 
-    	return 'OK';
+    	return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Updated']);
     }
 
     public function show($id)
-    {
+    {   
+        HrEmployee::findOrFail($id)->delete();
 
+       return back()->with('message', 'Data Sucessfully Deleted');
+        //return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
     }
 
 }

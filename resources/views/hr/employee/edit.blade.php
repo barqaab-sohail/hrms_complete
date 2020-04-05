@@ -13,7 +13,11 @@
     <div class="col-lg-12">
         <div class="card card-outline-info">
 			<div class="row">
-		        <div class="col-lg-12">
+		        <div class="col-lg-2">
+					@include('layouts.vButton.hrButton')
+				</div>
+      	
+		        <div class="col-lg-10">
 		            <div style="margin-top:10px; margin-right: 10px;">
 		                <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">Back to List</button>
 		            </div>
@@ -177,7 +181,7 @@
 		                    </div>
 		                </form>
 		        	</div> <!-- end card body -->    
-		        </div> <!-- end col-lg-12 -->
+		        </div> <!-- end col-lg-10 -->
 		    </div> <!-- end row -->
         </div> <!-- end card card-outline-info -->
     </div> <!-- end col-lg-12 -->
