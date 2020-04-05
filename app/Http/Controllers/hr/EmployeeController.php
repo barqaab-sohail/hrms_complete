@@ -8,6 +8,7 @@ use App\Models\Common\Gender;
 use App\Models\Common\MaritalStatus;
 use App\Models\Common\Religion;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\HrStatus;
 use DB;
 use App\Http\Requests\Hr\EmployeeStore;
 
@@ -33,6 +34,8 @@ class EmployeeController extends Controller
             if($request->filled('cnic_expiry')){
             $input ['cnic_expiry']= \Carbon\Carbon::parse($request->cnic_expiry)->format('Y-m-d');
             }
+            
+            $input ['hr_status_id']=HrStatus::where('name','On Board')->first()->id;
 
             $employee='';
     	DB::transaction(function () use ($input, &$employee) {  
@@ -52,14 +55,22 @@ class EmployeeController extends Controller
     }
 
 
-    public function edit($id){
+    public function edit(Request $request, $id){
     	$genders = Gender::all();
     	$maritalStatuses = MaritalStatus::all();
     	$religions = Religion::all();
     	$data = HrEmployee::find($id);
         session()->put('employee_id', $data->id);
 
-    	return view ('hr.employee.edit', compact('genders','maritalStatuses','religions','data'));
+    	
+
+        if($request->ajax()){
+            return view ('hr.employee.editAjax', compact('genders','maritalStatuses','religions','data')); 
+        }else
+        {
+            return view ('hr.employee.edit', compact('genders','maritalStatuses','religions','data'));
+        }
+        
     }
 
 

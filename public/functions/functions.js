@@ -8,7 +8,8 @@ $('input[type=text]').keyup (function () {
         $(this).val($(this).val().toLowerCase());
     });
 
- $('.selectTwo').select2({
+function selectTwo(){
+    $('.selectTwo').select2({
         width: "100%",
         theme: "classic",
         errorPlacement: function (error, element) {
@@ -21,7 +22,10 @@ $('input[type=text]').keyup (function () {
             }
         }
 
-});
+    });
+}
+
+selectTwo();
 
  //Date input   
     $(".date_input").each(function(){

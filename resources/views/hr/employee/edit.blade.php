@@ -17,7 +17,7 @@
 					@include('layouts.vButton.hrButton')
 				</div>
       	
-		        <div class="col-lg-10">
+		        <div class="col-lg-10 addAjax">
 		            <div style="margin-top:10px; margin-right: 10px;">
 		                <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">Back to List</button>
 		            </div>
@@ -209,6 +209,32 @@ $(document).ready(function() {
 		
 	   	submitFormAjax(this, url, 1);
 	}); //end submit
+
+
+	$('a[id^=add]').click(function(e){
+		e.preventDefault();
+		var url = $(this).attr('href');
+		var id = $(this).attr('id');
+		$.ajax({
+           url:url,
+           method:"GET",
+           //dataType:'JSON',
+           contentType: false,
+           cache: false,
+           processData: false,
+           success:function(data)
+               {
+        		$(".addAjax").html(data);
+        		$('a[id^=add]').css('background-color','');
+        		$('#'+id).css('background-color','#737373');
+        		selectTwo();
+               },
+            error: function (request, status, error) {         
+                            
+                    }//end error
+    	}); //end ajax	
+
+	});
 	 
 
 });

@@ -10,8 +10,9 @@ class EducationController extends Controller
     
     public function create(){
 
+    //return View::make('hr.education.create')
+    //->render();
 
-
-    	return view ('hr.education.create');
+    return view('hr.education.create');
     }
 }

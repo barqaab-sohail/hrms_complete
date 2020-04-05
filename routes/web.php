@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,10 +15,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/dashboard', function () {
+    
     return view('dashboard.dashboard');
 });
 
 Route::get('/hrms/testing', function () {
+	
     return view('dashboard.dashboard1');
 });
 
