@@ -23,12 +23,16 @@ class SessionTimeOut
            
             $lastActivityTime =  DB::table('sessions')->where('user_id', auth()->user()->id)->pluck('last_activity')->first();
            
-            if ((time()-$lastActivityTime) >= (config('session.lifetime'))){
+            if ((time()-$lastActivityTime) >= (config('session.lifetime')*0.01)){
                 //auth()->user()->logout;
                 //return redirect('/login');
               
                 Auth::logout();
+                if($request->ajax()){
+                    return 'Logout';
+                }else{
                 return redirect('/login');
+                }
             }
         }
 

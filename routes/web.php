@@ -32,10 +32,17 @@ Route::resource('/','RegisterController',['only'=>['create','store']]);
 });
 
 
-Route::prefix('hrms/')->namespace('Hr')->group(function(){
-Route::resource('/employee', 'EmployeeController');
-Route::resource('/education', 'EducationController');
-Route::resource('/appointment', 'AppointmentController');
+// Route::prefix('hrms/')->namespace('Hr')->group(function(){
+// Route::resource('/employee', 'EmployeeController');
+// Route::resource('/education', 'EducationController');
+// Route::resource('/appointment', 'AppointmentController');
+
+// });
+
+Route::group(['prefix' => 'hrms', 'middleware' => 'auth'], function(){
+Route::resource('/employee', 'Hr\EmployeeController');
+Route::resource('/education', 'Hr\EducationController');
+Route::resource('/appointment', 'Hr\AppointmentController');
 
 });
 

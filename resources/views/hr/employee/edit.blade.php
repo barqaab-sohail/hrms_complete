@@ -63,10 +63,15 @@ $(document).ready(function() {
         		$('a[id^=add]').css('background-color','');
         		$('#'+id).css('background-color','#737373');
         		formFunctions();
+        		console.log(data);
         		
                },
-            error: function (request, status, error) {         
-                            
+            error: function (jqXHR, textStatus, errorThrown){
+            	if (jqXHR.status == 401){
+            		location.href = "{{route ('login')}}"
+            		}      
+                          
+
                     }//end error
     	}); //end ajax	
 

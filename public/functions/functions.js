@@ -179,6 +179,7 @@ function submitFormAjax(form, url){
                     $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
                 	$('html,body').scrollTop(0);
                 	$('.fa-spinner').hide();
+                  
                	}
         
                },
