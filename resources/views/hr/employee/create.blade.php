@@ -19,7 +19,7 @@
 		            </div>
 		                 
 		            <div class="card-body">
-		                <form id= "addEmployee" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
+		                <form id= "formEmployee" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
 		                @csrf
 		                    <div class="form-body">
 		                            
@@ -168,7 +168,7 @@
 		                            <div class="col-md-6">
 		                                <div class="row">
 		                                    <div class="col-md-offset-3 col-md-9">
-		                                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits">Add Employee</button>        
+		                                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Add Employee</button>        
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -197,7 +197,7 @@ $(document).ready(function() {
 	// });
 
 
-	$('#addEmployee').on('submit', function(event){
+	$('#formEmployee').on('submit', function(event){
 	 	event.preventDefault();
 		url="{{route('employee.store')}}";
 		$('.fa-spinner').show();	

@@ -4,7 +4,7 @@
     </div>
          
     <div class="card-body">
-        <form id= "addEducation" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('education.create')}}" enctype="multipart/form-data">
+        <form id= "addAppointment" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('appointment.update')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
                     
@@ -92,7 +92,7 @@
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Add Education</button>        
+                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Add Appointment</button>        
                             </div>
                         </div>
                     </div>

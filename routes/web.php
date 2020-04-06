@@ -35,7 +35,10 @@ Route::resource('/','RegisterController',['only'=>['create','store']]);
 Route::prefix('hrms/')->namespace('Hr')->group(function(){
 Route::resource('/employee', 'EmployeeController');
 Route::resource('/education', 'EducationController');
+Route::resource('/appointment', 'AppointmentController');
+
 });
+
 
 
 

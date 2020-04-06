@@ -65,7 +65,7 @@ class EmployeeController extends Controller
     	
 
         if($request->ajax()){
-            return view ('hr.employee.editAjax', compact('genders','maritalStatuses','religions','data')); 
+            return view ('hr.employee.ajax', compact('genders','maritalStatuses','religions','data')); 
         }else
         {
             return view ('hr.employee.edit', compact('genders','maritalStatuses','religions','data'));

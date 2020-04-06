@@ -2,11 +2,8 @@
 @section('title', 'BARQAAB HR')
 @section('Heading')
 	<h3 class="text-themecolor">Human Resource</h3>
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="javascript:void(0)">New Employee</a></li>
-		
-		
-	</ol>
+	
+		<h4>{{'Employee Name: '}} {{ucwords($data->first_name)}} {{ ucwords($data->last_name)}}</h4>
 @stop
 @section('content')
 <div class="row">
@@ -18,169 +15,7 @@
 				</div>
       	
 		        <div class="col-lg-10 addAjax">
-		            <div style="margin-top:10px; margin-right: 10px;">
-		                <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">Back to List</button>
-		            </div>
-		                 
-		            <div class="card-body">
-		                <form id= "addEmployee" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
-		                @method('PATCH')
-		                @csrf
-		                    <div class="form-body">
-		                            
-		                        <h3 class="box-title">Edit Employee Information</h3>
-		                        
-		                        <hr class="m-t-0 m-b-40">
-
-		                        <div class="row">
-		                            <div class="col-md-4">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">First Name<span class="text_requried">*</span></label><br>
-
-		                                       	<input type="text"  name="first_name" value="{{ old('first_name', $data->first_name) }}"  class="form-control" data-validation="required" placeholder="Enter First Name">
-		                                    </div>
-		                                </div>
-		                            </div>
-		                            <!--/span-->
-		                            <div class="col-md-4">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Last Name</label>
-		                                        
-		                                        <input type="text" name="last_name" value="{{ old('last_name', $data->last_name) }}" class="form-control " data-validation="required" placeholder="Enter Last Name" >
-		                                    </div>
-		                                </div>
-		                            </div>
-		                             <!--/span-->
-		                            <div class="col-md-4">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Father Name</label>
-		                                        
-		                                        <input type="text" name="father_name" value="{{ old('father_name', $data->father_name) }}" class="form-control " data-validation="required" placeholder="Enter Father Name" >
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div><!--/End Row-->
-
-		                        <div class="row">
-		                            <div class="col-md-4">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Date of Birth<span class="text_requried">*</span></label>
-		                                        
-		                                        <input type="text" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth', $data->date_of_birth) }}" class="form-control date_input" data-validation="required" readonly>
-												
-												<br>
-		                                        @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
-		                                    </div>
-		                                </div>
-		                            </div>
-		                            <!--/span-->
-		                            <div class="col-md-4">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">CNIC<span class="text_requried">*</span></label>
-		                                        
-		                                        <input type="text" name="cnic" id="cnic" pattern="[0-9.-]{15}" title= "13 digit Number without dash" value="{{ old('cnic',$data->cnic) }}" class="form-control" data-validation="required" placeholder="Enter CNIC without dash" >
-		                                    </div>
-		                                </div>
-		                            </div>
-		                             <!--/span-->
-		                            <div class="col-md-4">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">CNIC Expiry<span class="text_requried">*</span></label>
-		                                            
-		                                        <input type="text" id="cnic_expiry" name="cnic_expiry" value="{{ old('cnic_expiry',$data->date_of_birth) }}" class="form-control date_input"  data-validation="required" readonly >
-												
-												<br>
-		                                        @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div><!--/End Row-->
-
-		                        <div class="row">
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Gender<span class="text_requried">*</span></label>
-		                                        
-	                                           	<select  name="gender_id"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($genders as $gender)
-													<option value="{{$gender->id}}" {{(old("gender_id",$data->gender_id)==$gender->id? "selected" : "")}}>{{$gender->name}}</option>
-                                                    @endforeach
-                                                    
-                                                </select>
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-		                            <!--/span-->
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Marital Status<span class="text_requried" data-validation="required">*</span></label>
-		                                       
-	                                           	<select  name="marital_status_id"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($maritalStatuses as $maritalStatus)
-													<option value="{{$maritalStatus->id}}" {{(old("marital_status_id",$data->marital_status_id)==$maritalStatus->id? "selected" : "")}}>{{$maritalStatus->name}}</option>
-                                                    @endforeach
-                                                  
-                                                </select>
-		                                    </div>
-		                                </div>
-		                            </div>
-		                             <!--/span-->
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Religion<span class="text_requried">*</span></label>
-		                                       
-	                                           	<select  name="religion_id"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($religions as $religion)
-													<option value="{{$religion->id}}" {{(old("religion_id",$data->religion_id)==$religion->id? "selected" : "")}}>{{$religion->name}}</option>
-                                                    @endforeach
-                                                  
-                                                </select>
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-		                              <!--/span-->
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Employee No<span class="text_requried">*</span></label>
-		                                            
-		                                        <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no', $data->employee_no) }}" class="form-control"  placeholder="Enter Employee No" >
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div><!--/End Row-->
-		                    </div> <!--/End Form Boday-->
-
-		                    <hr>
-
-		                    <div class="form-actions">
-		                        <div class="row">
-		                            <div class="col-md-6">
-		                                <div class="row">
-		                                    <div class="col-md-offset-3 col-md-9">
-		                                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits">Edit Employee</button>        
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </form>
-		        	</div> <!-- end card body -->    
+		            @include('hr.employee.ajax')
 		        </div> <!-- end col-lg-10 -->
 		    </div> <!-- end row -->
         </div> <!-- end card card-outline-info -->
@@ -191,30 +26,30 @@
 
 @push('scripts')
 <script>
+
+
 $(document).ready(function() {
-
-	$("form").submit(function (e) {
-      e.preventDefault();
-	});
-
-	$.validate({
-	validateHiddenInputs: true,
-	});
+	
+	
+	formFunctions();
 
 
-	$('#addEmployee').on('submit', function(event){
-	 	event.preventDefault();
-		url="{{route('employee.update',$data->id)}}";
-		$('.fa-spinner').show();
+	//$('form[id^=form]').on('submit', function(event){
+	$(document).on('submit','form[id^=form]', function(event){	
+	 	var url = $(this).attr('action');
 		
-	   	submitFormAjax(this, url, 1);
+		//console.log(url);
+		$('.fa-spinner').show();
+		event.preventDefault();
+	   	submitFormAjax(this, url);
+	   	// console.log('OK');
 	}); //end submit
 
 
 	$('a[id^=add]').click(function(e){
-		e.preventDefault();
 		var url = $(this).attr('href');
 		var id = $(this).attr('id');
+		e.preventDefault();
 		$.ajax({
            url:url,
            method:"GET",
@@ -227,7 +62,8 @@ $(document).ready(function() {
         		$(".addAjax").html(data);
         		$('a[id^=add]').css('background-color','');
         		$('#'+id).css('background-color','#737373');
-        		selectTwo();
+        		formFunctions();
+        		
                },
             error: function (request, status, error) {         
                             

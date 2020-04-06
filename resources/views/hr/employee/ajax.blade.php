@@ -4,7 +4,7 @@
 </div>
      
 <div class="card-body">
-    <form id= "addEmployee" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
+    <form id= "formEditEmployee" method="post" action="{{route('employee.update',$data->id)}}"  class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
     @method('PATCH')
     @csrf
         <div class="form-body">
@@ -154,7 +154,7 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9">
-                            <button type="submit" class="btn btn-success btn-prevent-multiple-submits">Edit Employee</button>        
+                            <button type="submit" id="submitEditEmployee"  class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Edit Employee</button>        
                         </div>
                     </div>
                 </div>
