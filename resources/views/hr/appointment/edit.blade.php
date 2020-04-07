@@ -98,7 +98,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Salary<span class="text_requried">*</span></label>
 
-                                <select  name="hr_salary_id"  class="form-control selectTwo" data-validation="required">
+                                <select  id="hr_salary_id"   name="hr_salary_id"  class="form-control selectTwo" data-validation="required">
                                 <option value=""></option>
                                 @foreach($salaries as $salary)
                                 <option value="{{$salary->id}}" {{(old("hr_salary_id",100)==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
@@ -150,7 +150,7 @@
                         <div class="form-group row">
                             <div class="col-md-2">
                                 <input type="number"  name="total_salary" value="{{ old('total_salary') }}"  class="form-control" data-validation="" placeholder="Total Salary">
-                                <i class="fa fa-plus-square fa-2x text_add" id="storeSalary" href="{{route('salary.store')}}" aria-hidden="true"></i>
+                                <i class="fas fa-save fa-2x text_save" id="storeSalary" href="{{route('salary.store')}}" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>            

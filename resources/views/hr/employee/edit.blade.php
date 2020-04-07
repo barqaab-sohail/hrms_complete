@@ -30,6 +30,11 @@
 
 $(document).ready(function() {
 	
+	$(document).on('click','#hr_salary_id',function(){
+		$('.hideDiv').toggle();
+	});
+
+
 	$(document).on('click','i[id^=add]',function(){
 		$('.hideDiv').toggle();
 	});

@@ -21,7 +21,12 @@ class SalaryController extends Controller
     	}); // end transcation
 
         //return response()->json(['url'=>url('/dashboard')]);
+
+         $salaries = DB::table("hr_salaries")
+                ->pluck("total_salary","id");
+    
+   // return response()->json($states);
         
-    	return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Updated']);
+    	return response()->json($salaries);
     }
 }
