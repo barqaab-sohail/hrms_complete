@@ -1,3 +1,6 @@
+
+
+
 function fromPreventDefault(){
     $("form").submit(function (e) {
       e.preventDefault();
@@ -27,6 +30,10 @@ function selectTwo(){
 
 
 function formFunctions(){
+
+    $('.hideDiv').hide();
+
+
      //get Date from Database and set as "Saturday, 24-August-2019"
     var weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
     
@@ -46,6 +53,9 @@ function formFunctions(){
         }
 
     });
+
+
+
 
     //If Click icon than clear date
     $(".date_input").siblings('i').click(function (){
@@ -155,52 +165,71 @@ function submitFormAjax(form, url){
             }
         });
 
-        //ajax request
-        $.ajax({
-           url:url,
-           method:"POST",
-           data:new FormData(form),
-           //dataType:'JSON',
-           contentType: false,
-           cache: false,
-           processData: false,
-           success:function(data)
-               {
-               
-               	if("url" in data){
-               		location.href = data.url;
-               	}else if ('reset' in data){
-               		$('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Data Successfully Entered</strong></div>');
-                	$('html,body').scrollTop(0);
-                	$('.fa-spinner').hide();
-               		resetForm();
-               	}else{
-               		$('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
-                    $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
-                	$('html,body').scrollTop(0);
-                	$('.fa-spinner').hide();
-                  
-               	}
-        
-               },
-            error: function (request, status, error) {
-                        var test = request.responseJSON // this object have two more objects one is errors and other is message.
-                        
-                        var errorMassage = '';
+        console.log(form);
+        var data = new FormData(form)
 
-                        //now saperate only errors object values from test object and store in variable errorMassage;
-                        $.each(test.errors, function (key, value){
-                          errorMassage += value ;
-                        });
+        for (var value of data.values()) {
+        console.log(value); 
+        }
+
+        if($(form).attr('action')){
+             var data = new FormData(form)
+             for (var value of data.values()) {
+        console.log(value); 
+        }
+        }else{
+            var formData = new FormData();
+            //formData.append('total_salary', 'form');
+        }
+        //var data = new FormData(form)
+       console.log(formData);
+
+        //ajax request
+    //     $.ajax({
+    //        url:url,
+    //        method:"POST",
+    //        data:data,
+    //        //dataType:'JSON',
+    //        contentType: false,
+    //        cache: false,
+    //        processData: false,
+    //        success:function(data)
+    //            {
+               
+    //            	if("url" in data){
+    //            		location.href = data.url;
+    //            	}else if ('reset' in data){
+    //            		$('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Data Successfully Entered</strong></div>');
+    //             	$('html,body').scrollTop(0);
+    //             	$('.fa-spinner').hide();
+    //            		resetForm();
+    //            	}else{
+    //            		$('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
+    //                 $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
+    //             	$('html,body').scrollTop(0);
+    //             	$('.fa-spinner').hide();
+                  
+    //            	}
+        
+    //            },
+    //         error: function (request, status, error) {
+    //                     var test = request.responseJSON // this object have two more objects one is errors and other is message.
+                        
+    //                     var errorMassage = '';
+
+    //                     //now saperate only errors object values from test object and store in variable errorMassage;
+    //                     $.each(test.errors, function (key, value){
+    //                       errorMassage += value ;
+    //                     });
                          
-                        $('#json_message').attr('class','alert alert-danger').removeAttr('hidden').find('strong').text(errorMassage).siblings('i').removeAttr('hidden');
-                        $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
-                        $('html,body').scrollTop(0);
-                        $('.fa-spinner').hide();
+    //                     $('#json_message').attr('class','alert alert-danger').removeAttr('hidden').find('strong').text(errorMassage).siblings('i').removeAttr('hidden');
+    //                     $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
+    //                     $('html,body').scrollTop(0);
+    //                     $('.fa-spinner').hide();
                         
                             
-                    }//end error
-    }); //end ajax
+    //                 }//end error
+    // }); //end ajax
 }
 
 

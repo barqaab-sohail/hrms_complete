@@ -30,7 +30,17 @@
 
 $(document).ready(function() {
 	
-	
+	$(document).on('click','i[id^=add]',function(){
+		$('.hideDiv').toggle();
+	});
+
+	$(document).on('click','i[id^=store]',function(){
+		var value = $(this).siblings('input').val();
+		var url = $(this).attr('href');
+
+		submitFormAjax(value, url);
+	});
+
 	formFunctions();
 
 
@@ -49,6 +59,7 @@ $(document).ready(function() {
 	$('a[id^=add]').click(function(e){
 		var url = $(this).attr('href');
 		var id = $(this).attr('id');
+		console.log(url);
 		e.preventDefault();
 		$.ajax({
            url:url,

@@ -39,10 +39,11 @@ Route::resource('/','RegisterController',['only'=>['create','store']]);
 
 // });
 
-Route::group(['prefix' => 'hrms', 'middleware' => 'auth'], function(){
-Route::resource('/employee', 'Hr\EmployeeController');
-Route::resource('/education', 'Hr\EducationController');
-Route::resource('/appointment', 'Hr\AppointmentController');
+Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Hr'], function(){
+Route::resource('/employee', 'EmployeeController');
+Route::resource('/education', 'EducationController');
+Route::resource('/appointment', 'AppointmentController',['only'=>['edit','update']]);
+Route::resource('/salary', 'SalaryController',['only'=>['store']]);
 
 });
 

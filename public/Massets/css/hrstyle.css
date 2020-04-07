@@ -9582,6 +9582,10 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever:after,input[type=checkbo
   color: red;
 }
 
+.text_add{
+  color: #ff1fb0;
+}
+
 .spinner{
   display: none;
 }
