@@ -33,6 +33,7 @@ class ClientsTableSeeder extends Seeder
         	array('name' => 'Pakhtunkhwa Energy Development Organization (PEDO)'),
         	array('name' => 'Irrigation Department, Punjab'),
         	array('name' => 'Irrigation Department, Sindh'),
+            array('name' => 'BARQAAB Consulting Services (Pvt.) Ltd. (BARQAAB)'),
 
         );
         DB::table('clients')->insert($Clients);

@@ -17,14 +17,14 @@ class CreateHrSalaryDetailTable extends Migration
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->bigInteger('hr_salary_id')->unsigned();
+            $table->bigInteger('hr_common_model_id')->unsigned();
             $table->string('category',5);
             $table->tinyInteger('grade')->nullable();
-            $table->string('model_type');
-            $table->bigInteger('model_id');
-            $table->date('effective_date');
+           
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
-             $table->foreign('hr_salary_id')->references('id')->on('hr_salaries');
+            $table->foreign('hr_salary_id')->references('id')->on('hr_salaries');
+            $table->foreign('hr_common_model_id')->references('id')->on('hr_common_models');
         });
     }
 

@@ -82,6 +82,10 @@ function formFunctions(){
     $(this).val($(this).val().toLowerCase());
     });
 
+    $('input[type=number]').on('wheel', function(e){
+    return false;
+    });
+
     selectTwo();
 
     $.validate({
@@ -170,9 +174,11 @@ function submitFormAjax(form, url){
              var data = new FormData(form)
         }else{
             var data = new FormData();
-            data.append('total_salary', form);
+            $.each(form, function(i, field){
+              data.append(field.name, field.value);
+            });
         }
-       // for (var value of formData.values()) {
+       // for (var value of data.values()) {
        //      console.log(value); 
        //      }
 
@@ -188,6 +194,11 @@ function submitFormAjax(form, url){
            success:function(data)
                {
                
+              //   $.each(data.salaries, function(key,value){
+              //   console.log(key+'-'+value);
+              // });
+              
+
                	if("url" in data){
                		location.href = data.url;
                	}else if ('reset' in data){
@@ -195,28 +206,27 @@ function submitFormAjax(form, url){
                 	$('html,body').scrollTop(0);
                 	$('.fa-spinner').hide();
                		resetForm();
-                }
-                else{
+                }else if ("salaries" in data) {
                     $("#hr_salary_id").empty();
                     $("#hr_salary_id").append('<option value="">Select Salary</option>');
                         
-                        $.each(data, function(key,value){
-                            //console.log(key+'-'+value);
+                        $.each(data.salaries, function(key,value){
                          $("#hr_salary_id").append('<option value="'+key+'">'+value+'</option>');
                         });
                     $('#hr_salary_id').select2('destroy');
                     $('#hr_salary_id').select2();
+                     $('.hideDiv').hide().find('input').val('');
+                     $('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
+                     $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
+                     
                 
                	 }
-                // else{
-               	// 	$('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
-                //     $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
-                // 	$('html,body').scrollTop(0);
-                // 	$('.fa-spinner').hide();
-                //     $('.hideDiv').hide();
-                  
-                //  // console.log(data.salaries);
-               	// }
+                else{
+               		$('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
+                  $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
+                	$('html,body').scrollTop(0);
+                	$('.fa-spinner').hide();
+               	}
         
                },
             error: function (request, status, error) {

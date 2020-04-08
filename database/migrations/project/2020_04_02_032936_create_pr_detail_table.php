@@ -22,14 +22,14 @@ class CreatePrDetailTable extends Migration
             $table->date('contractual_completion_date');
             $table->date('actual_completion_date');
             $table->bigInteger('pr_status_id')->unsigned();
-            $table->bigInteger('role_id')->unsigned();
+            $table->bigInteger('pr_role_id')->unsigned();
             $table->string('share')->nullable();
             $table->timestamps();
 
             $table->foreign('contract_type_id')->references('id')->on('contract_types');
             $table->foreign('client_id')->references('id')->on('clients');
             $table->foreign('pr_status_id')->references('id')->on('pr_statuses');
-             $table->foreign('role_id')->references('id')->on('roles');
+             $table->foreign('pr_role_id')->references('id')->on('pr_roles');
         });
     }
 

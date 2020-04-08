@@ -187,7 +187,7 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-
+	formFunctions();
 	$("form").submit(function (e) {
       e.preventDefault();
 	});

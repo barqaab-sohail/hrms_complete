@@ -11,22 +11,27 @@ class SalaryController extends Controller
 {
      public function store (Request $request){
 
-    
+        $salary = HrSalary::where('total_salary', $request->total_salary)->first();
+      
+        if($salary == null){
+            
+             DB::transaction(function () use ($request) {  
 
-            $testSalary='';
-    	DB::transaction(function () use ($request, &$testSalary) {  
+                 HrSalary::create(['total_salary'=>$request->total_salary]);
 
-    		$testSalary = HrSalary::create(['total_salary'=>$request->total_salary]);
+            }); // end transcation   
 
-    	}); // end transcation
+            $message = 'Salary Successfully Entered';
+        }else{
+             $message = "$request->total_salary Salary is already entered";
+        }
+       
 
         //return response()->json(['url'=>url('/dashboard')]);
 
          $salaries = DB::table("hr_salaries")
                 ->pluck("total_salary","id");
-    
-   // return response()->json($states);
         
-    	return response()->json($salaries);
+    	return response()->json(['salaries'=> $salaries, 'message'=>$message]);
     }
 }
