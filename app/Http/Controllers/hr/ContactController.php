@@ -94,4 +94,9 @@ class ContactController extends Controller
 
     	return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
     }
+
+    public function dataTable(){
+
+        return view('hr.contact.list');
+    }
 }

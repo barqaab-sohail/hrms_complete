@@ -44,6 +44,7 @@ Route::resource('/employee', 'EmployeeController');
 Route::resource('/education', 'EducationController');
 Route::resource('/appointment', 'AppointmentController',['only'=>['edit','update']]);
 Route::resource('/salary', 'SalaryController',['only'=>['store']]);
+Route::get('/contact/dataTable', 'ContactController@dataTable');
 Route::resource('/contact', 'ContactController');
 
 });

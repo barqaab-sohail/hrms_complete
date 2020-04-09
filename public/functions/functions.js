@@ -97,61 +97,9 @@ function formFunctions(){
 
 
 //get state/province through ajax
-$(document).on('change','#country',function(){
-  //$('#country').change(function(){
-  var cid = $(this).val();
-    if(cid){
-      $.ajax({
-         type:"get",
-         url: "http://localhost/hrms4/public/country/states"+"/"+cid,
 
-         //url:"http://localhost/hrms4/public/country/"+cid, **//Please see the note at the end of the post**
-         success:function(res)
-         {       
-              if(res)
-              {
-                  $("#state").empty();
-                 $("#city").empty();
-                  $("#state").append('<option value="">Select State</option>');
-                  $.each(res,function(key,value){
-                      $("#state").append('<option value="'+key+'">'+value+'</option>');
-                      
-                  });
-                   $('#state').select2('destroy');
-                   $('#state').select2();
 
-              }
-         }
 
-      });//end ajax
-    }
-});
-
-//get cities through ajax
-$(document).on('change','#state',function(){
-  var sid = $(this).val();
-    if(sid){
-      $.ajax({
-         type:"get",
-          url: "http://localhost/hrms4/public/country/cities"+"/"+sid,
-         success:function(res)
-         {       
-              if(res)
-              {
-                  $("#city").empty();
-                  $("#city").append('<option value="">Select City</option>');
-                  $.each(res,function(key,value){
-                      $("#city").append('<option value="'+key+'">'+value+'</option>');
-                  });
-                   $('#state').select2('destroy');
-                   $('#state').select2();
-              }
-         }
-
-      });
-    }
-
-});
 
              
      //Make sure that the event fires on input change
@@ -199,6 +147,14 @@ $(document).on('change','#state',function(){
     })
 
 })();
+function refreshTable() {
+
+        var url ="localhost/hrms4/public/hrms/contact/dataTable";
+        $('div.table-container').fadeOut();
+        $('div.table-container').load(url, function() {
+        $('div.table-container').fadeIn();
+        });
+}
 
 function resetForm(){
     $(':input','form')
@@ -284,6 +240,7 @@ function submitFormAjax(form, url){
                   $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
                 	$('html,body').scrollTop(0);
                 	$('.fa-spinner').hide();
+                  refreshTable()
                	}
         
                },
