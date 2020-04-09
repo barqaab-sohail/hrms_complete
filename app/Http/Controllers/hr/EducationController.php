@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 class EducationController extends Controller
 {
     
-    public function create(){
+    public function create(Request $request){
 
     //return View::make('hr.education.create')
     //->render();
-
+     if($request->ajax()){
     return view('hr.education.create');
+	}
     }
 }

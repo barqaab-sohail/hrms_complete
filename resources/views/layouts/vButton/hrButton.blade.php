@@ -6,7 +6,7 @@
 
             <a type="submit" role="button" id="addEmployee" href="{{route('employee.edit',session('employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/*/edit')?'style=background-color:#737373':''}}>Employee Information</a>
             <a type="submit" id="addAppointment" role="button" href="{{route('appointment.edit',session('employee_id'))}}" class="btn btn-info" {{Request::is('hrms/appointment/')?'style=background-color:#737373':''}}>Appointment Detail</a>
-            <a type="submit" role="button" href="{{route('employee.edit',session('employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/')?'style=background-color:#737373':''}}>Contact Detail</a>
+            <a type="submit" id="addContact" role="button" href="{{route('contact.create')}}" class="btn btn-info" {{Request::is('hrms/contact/create')?'style=background-color:#737373':''}}>Contact Detail</a>
             <a type="submit" role="button" href="{{route('employee.edit',session('employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/')?'style=background-color:#737373':''}}>Emergency Contact</a>
             <a type="submit" id="addEducation" role="button" href="{{route('education.create')}}" class="btn btn-info" {{Request::is('hrms/education/create')?'style=background-color:#737373':''}}>Education</a>
             <a type="submit" role="button" href="{{route('employee.edit',session('employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/')?'style=background-color:#737373':''}}>Promotion</a>

@@ -44,6 +44,7 @@ Route::resource('/employee', 'EmployeeController');
 Route::resource('/education', 'EducationController');
 Route::resource('/appointment', 'AppointmentController',['only'=>['edit','update']]);
 Route::resource('/salary', 'SalaryController',['only'=>['store']]);
+Route::resource('/contact', 'ContactController');
 
 });
 
@@ -51,5 +52,7 @@ Route::resource('/salary', 'SalaryController',['only'=>['store']]);
 
 
 
+Route::get('/country/states/{id?}', 'CountryController@getStates');
+Route::get('/country/cities/{id?}', 'CountryController@getCities');
 
 Route::get('/home', 'HomeController@index')->name('home');

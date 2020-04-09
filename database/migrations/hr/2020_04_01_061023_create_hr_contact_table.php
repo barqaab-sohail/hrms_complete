@@ -17,10 +17,10 @@ class CreateHrContactTable extends Migration
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->bigInteger('hr_contact_type_id')->unsigned();
-            $table->string('house',50);
-            $table->string('street',50);
+            $table->string('house',50)->nullable();
+            $table->string('street',50)->nullable();
             $table->string('town',50);
-            $table->string('tehsil',50);
+            $table->string('tehsil',50)->nullable();
             $table->bigInteger('city_id')->unsigned();
             $table->bigInteger('state_id')->unsigned();
             $table->bigInteger('country_id')->unsigned();

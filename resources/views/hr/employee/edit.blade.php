@@ -39,9 +39,10 @@ $(document).ready(function() {
 		$('.hideDiv').toggle();
 	});
 
+	
+	//store if single input without form submit;
 	$(document).on('click','i[id^=store]',function(){
 		
-
 		var value = $(this).siblings('input').val();
 		var name = $(this).siblings('input').attr('name');
 		var url = $(this).attr('href');
@@ -52,6 +53,11 @@ $(document).ready(function() {
 			submitFormAjax(result, url);
 		}
 	});
+
+
+
+
+
 
 	formFunctions();
 
@@ -68,10 +74,42 @@ $(document).ready(function() {
 	}); //end submit
 
 
+//edit form load through ajax;
+	$(document).on('click','a[id^=edit]',function(e){
+		e.preventDefault();
+		var url = $(this).attr('href');
+		$.ajax({
+           url:url,
+           method:"GET",
+           //dataType:'JSON',
+           contentType: false,
+           cache: false,
+           processData: false,
+           success:function(data)
+               {
+        		$(".addAjax").html(data);
+        		
+        		formFunctions();
+        		console.log(data);
+        		
+               },
+            error: function (jqXHR, textStatus, errorThrown){
+            	if (jqXHR.status == 401){
+            		location.href = "{{route ('login')}}"
+            		}      
+                          
+
+                    }//end error
+    	}); //end ajax	
+	});
+
+
+
+
+// Vertical Button function to load page through ajax 
 	$('a[id^=add]').click(function(e){
 		var url = $(this).attr('href');
 		var id = $(this).attr('id');
-		console.log(url);
 		e.preventDefault();
 		$.ajax({
            url:url,

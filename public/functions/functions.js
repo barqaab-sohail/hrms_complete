@@ -95,7 +95,65 @@ function formFunctions(){
     $('.fa-spinner').hide();
 } //;end formFunctions
 
-                
+
+//get state/province through ajax
+$(document).on('change','#country',function(){
+  //$('#country').change(function(){
+  var cid = $(this).val();
+    if(cid){
+      $.ajax({
+         type:"get",
+         url: "http://localhost/hrms4/public/country/states"+"/"+cid,
+
+         //url:"http://localhost/hrms4/public/country/"+cid, **//Please see the note at the end of the post**
+         success:function(res)
+         {       
+              if(res)
+              {
+                  $("#state").empty();
+                 $("#city").empty();
+                  $("#state").append('<option value="">Select State</option>');
+                  $.each(res,function(key,value){
+                      $("#state").append('<option value="'+key+'">'+value+'</option>');
+                      
+                  });
+                   $('#state').select2('destroy');
+                   $('#state').select2();
+
+              }
+         }
+
+      });//end ajax
+    }
+});
+
+//get cities through ajax
+$(document).on('change','#state',function(){
+  var sid = $(this).val();
+    if(sid){
+      $.ajax({
+         type:"get",
+          url: "http://localhost/hrms4/public/country/cities"+"/"+sid,
+         success:function(res)
+         {       
+              if(res)
+              {
+                  $("#city").empty();
+                  $("#city").append('<option value="">Select City</option>');
+                  $.each(res,function(key,value){
+                      $("#city").append('<option value="'+key+'">'+value+'</option>');
+                  });
+                   $('#state').select2('destroy');
+                   $('#state').select2();
+              }
+         }
+
+      });
+    }
+
+});
+
+             
      //Make sure that the event fires on input change
     $("#cnic").on('input', function(ev){
         
