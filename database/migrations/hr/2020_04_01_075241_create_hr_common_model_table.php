@@ -18,7 +18,6 @@ class CreateHrCommonModelTable extends Migration
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->string('model_type');
             $table->bigInteger('model_id');
-            $table->date('effective_date');
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });

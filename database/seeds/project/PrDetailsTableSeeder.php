@@ -19,6 +19,7 @@ class PrDetailsTableSeeder extends Seeder
             'contract_type_id' => 1,
             'client_id'=>20,
             'commencement_date'=>'2000-05-09',
+            'contractual_completion_date'=>'2090-05-07',
             'actual_completion_date'=>'2090-05-07',
             'pr_status_id'=>1,
             'pr_role_id'=>1,

@@ -19,7 +19,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Reference No.<span class="text_requried">*</span></label><br>
 
-                               	<input type="text"  name="reference_no" value="{{ old('reference_no', $data->reference_no) }}"  class="form-control" data-validation="required" placeholder="Enter Appointment Letter Reference No">
+                               	<input type="text"  name="reference_no" value="{{ old('reference_no', $data->reference_no??'') }}"  class="form-control" data-validation="required" placeholder="Enter Appointment Letter Reference No">
                             </div>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Joining Date<span class="text_requried">*</span></label>
                                 
-                                <input type="text" name="joining_date" value="{{ old('joining_date',$data->joining_date) }}" class="form-control date_input" data-validation="required" readonly >
+                                <input type="text" name="joining_date" value="{{ old('joining_date',$data->joining_date??'') }}" class="form-control date_input" data-validation="required" readonly >
 
                                 <br>
                                 @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
@@ -42,7 +42,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Expiry Date</label>
                                 
-                                <input type="text" name="expiry_date" value="{{ old('expiry_date',$data->expiry_date) }}" class="form-control date_input" readonly>
+                                <input type="text" name="expiry_date" value="{{ old('expiry_date',$data->expiry_date??'') }}" class="form-control date_input" readonly>
 
                                 <br>
                                 @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
@@ -59,7 +59,7 @@
                                  <select  id="hr_designation_id"   name="hr_designation_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($designations as $designation)
-                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hr_designation_id)==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hr_designation_id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                                     @endforeach 
                                 </select>
                                 
@@ -75,10 +75,10 @@
                                  <select  id="hr_manager_id"   name="hr_manager_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($employees as $employee)
-                                    <option value="{{$employee->id}}" {{(old("hr_manager_id",100)==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}}</option>
+                                    <option value="{{$employee->id}}" {{(old("hr_manager_id",$data->hr_manager_id??'')==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}}</option>
                                     @endforeach  
                                 </select>
-                                
+                                 
                                 
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                                  <select  id="hr_designation_id"   name="hr_designation_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($departments as $designation)
-                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",100)==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hr_designation_id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                                     @endforeach  
                                 </select>
                                     
@@ -126,7 +126,7 @@
                                 <select  id="hr_salary_id"   name="hr_salary_id"  class="form-control selectTwo" data-validation="required">
                                 <option value=""></option>
                                 @foreach($salaries as $salary)
-                                <option value="{{$salary->id}}" {{(old("hr_salary_id",100)==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
+                                <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hr_salary_id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
                                 @endforeach
                                 
                                 
@@ -162,7 +162,7 @@
                                  <select  id="hr_letter_type_id"   name="hr_letter_type_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($letterTypes as $letterType)
-                                    <option value="{{$letterType->id}}" {{(old("hr_letter_type_id",$data->hr_letter_type_id)==$letterType->id? "selected" : "")}}>{{$letterType->name}}</option>
+                                    <option value="{{$letterType->id}}" {{(old("hr_letter_type_id",$data->hr_letter_type_id??'')==$letterType->id? "selected" : "")}}>{{$letterType->name}}</option>
                                     @endforeach  
                                 </select>
                                     
@@ -178,7 +178,7 @@
                                  <select  id="pr_detail_id"   name="pr_detail_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($projects as $project)
-                                    <option value="{{$project->id}}" {{(old("pr_detail_id",$data->pr_detail_id)==$project->id? "selected" : "")}}>{{$project->name}}</option>
+                                    <option value="{{$project->id}}" {{(old("pr_detail_id",$data->pr_detail_id??'')==$project->id? "selected" : "")}}>{{$project->name}}</option>
                                     @endforeach  
                                 </select>
                                     
@@ -204,7 +204,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Remarks</label>
-                                <input type="text"  name="remarks" value="{{ old('remarks',$data->remarks) }}"  class="form-control" data-validation="required" placeholder="Enter Remarks if any">
+                                <input type="text"  name="remarks" value="{{ old('remarks',$data->remarks??'') }}"  class="form-control" data-validation="required" placeholder="Enter Remarks if any">
                                 
                                
                             </div>

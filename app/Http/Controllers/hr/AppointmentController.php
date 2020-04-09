@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrAppointment;
 use App\Models\Hr\HrSalary;
+use App\Models\Hr\HrSalaryDetail;
 use App\Models\Hr\HrDesignation;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDepartment;
 use App\Models\Hr\HrLetterType;
+use App\Models\Hr\HrCommonModel;
 use App\Models\Project\PrDetail;
 use DB;
 
@@ -42,10 +44,18 @@ class AppointmentController extends Controller
             $input ['expiry_date']= \Carbon\Carbon::parse($request->expiry_date)->format('Y-m-d');
             }
         $input['hr_employee_id']=session('employee_id');
+        $input['model_type']='App\Models\Hr\HrAppointment';
+        
 
         DB::transaction(function () use ($input) {  
 
-    		HrAppointment::create($input);
+    		$appointmentId = HrAppointment::create($input);
+
+            $input['model_id']=$appointmentId->id;
+            $commonModelId=HrCommonModel::create($input);
+
+            $input['hr_common_model_id']=$commonModelId->id;
+            HrSalaryDetail::create($input);
 
     	}); // end transcation
 
