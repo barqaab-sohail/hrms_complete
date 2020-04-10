@@ -39,8 +39,6 @@
 								<td>{{$hrContact->state->name}}</td>
 								<td>{{$hrContact->country->name}}</td>
 								
-								 
- 
 
 								 <td class="text-center">
 								 <a class="btn btn-info btn-sm" id="editContact" href="{{route('contact.edit',$hrContact->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>

@@ -186,8 +186,23 @@
 <script>
 $(document).ready(function(){
 
-    
+    $('form[id^=form]').on('submit', function(event){  
+         var url = $(this).attr('action');
+        
+     //console.log(url);
+     $('.fa-spinner').show();
+     event.preventDefault();
+   successData(){
+    $('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
+    $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
+    $('html,body').scrollTop(0);
+    $('.fa-spinner').hide();
+    console.log(data.dataTable);}
+    submitFormAjax(this, url, successData);
+         // console.log('OK');
+    }); //end submit
 
+ 
 
     $('#country').change(function(){
       var cid = $(this).val();

@@ -149,7 +149,7 @@ function formFunctions(){
 })();
 function refreshTable() {
 
-        var url ="localhost/hrms4/public/hrms/contact/dataTable";
+        var url ="{{route('contact.table')}}";
         $('div.table-container').fadeOut();
         $('div.table-container').load(url, function() {
         $('div.table-container').fadeIn();
@@ -173,95 +173,95 @@ function resetForm(){
 
 }
 
-function submitFormAjax(form, url){
-        //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
-        $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
-            var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
+// function submitFormAjax(form, url){
+//         //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
+//         $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
+//             var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
 
-            if (token) {
-                return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Object
-            }
-        });
+//             if (token) {
+//                 return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Object
+//             }
+//         });
 
 
-        if($(form).attr('action')){
-             var data = new FormData(form)
-        }else{
-            var data = new FormData();
-            $.each(form, function(i, field){
-              data.append(field.name, field.value);
-            });
-        }
-       // for (var value of data.values()) {
-       //      console.log(value); 
-       //      }
+//         if($(form).attr('action')){
+//              var data = new FormData(form)
+//         }else{
+//             var data = new FormData();
+//             $.each(form, function(i, field){
+//               data.append(field.name, field.value);
+//             });
+//         }
+//        // for (var value of data.values()) {
+//        //      console.log(value); 
+//        //      }
 
-       // ajax request
-        $.ajax({
-           url:url,
-           method:"POST",
-           data:data,
-           //dataType:'JSON',
-           contentType: false,
-           cache: false,
-           processData: false,
-           success:function(data)
-               {
+//        // ajax request
+//         $.ajax({
+//            url:url,
+//            method:"POST",
+//            data:data,
+//            //dataType:'JSON',
+//            contentType: false,
+//            cache: false,
+//            processData: false,
+//            success:function(data)
+//                {
                
-              //   $.each(data.salaries, function(key,value){
-              //   console.log(key+'-'+value);
-              // });
+//               //   $.each(data.salaries, function(key,value){
+//               //   console.log(key+'-'+value);
+//               // });
               
 
-               	if("url" in data){
-               		location.href = data.url;
-               	}else if ('reset' in data){
-               		$('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Data Successfully Entered</strong></div>');
-                	$('html,body').scrollTop(0);
-                	$('.fa-spinner').hide();
-               		resetForm();
-                }else if ("salaries" in data) {
-                    $("#hr_salary_id").empty();
-                    $("#hr_salary_id").append('<option value="">Select Salary</option>');
+//                	if("url" in data){
+//                		location.href = data.url;
+//                	}else if ('reset' in data){
+//                		$('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Data Successfully Entered</strong></div>');
+//                 	$('html,body').scrollTop(0);
+//                 	$('.fa-spinner').hide();
+//                		resetForm();
+//                 }else if ("salaries" in data) {
+//                     $("#hr_salary_id").empty();
+//                     $("#hr_salary_id").append('<option value="">Select Salary</option>');
                         
-                        $.each(data.salaries, function(key,value){
-                         $("#hr_salary_id").append('<option value="'+key+'">'+value+'</option>');
-                        });
-                    $('#hr_salary_id').select2('destroy');
-                    $('#hr_salary_id').select2();
-                     $('.hideDiv').hide().find('input').val('');
-                     $('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
-                     $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
+//                         $.each(data.salaries, function(key,value){
+//                          $("#hr_salary_id").append('<option value="'+key+'">'+value+'</option>');
+//                         });
+//                     $('#hr_salary_id').select2('destroy');
+//                     $('#hr_salary_id').select2();
+//                      $('.hideDiv').hide().find('input').val('');
+//                      $('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
+//                      $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
                      
                 
-               	 }
-                else{
-               		$('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
-                  $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
-                	$('html,body').scrollTop(0);
-                	$('.fa-spinner').hide();
-                  refreshTable()
-               	}
+//                	 }
+//                 else{
+//                		$('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
+//                   $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
+//                 	$('html,body').scrollTop(0);
+//                 	$('.fa-spinner').hide();
+//                   console.log(data.dataTable);
+//                	}
         
-               },
-            error: function (request, status, error) {
-                        var test = request.responseJSON // this object have two more objects one is errors and other is message.
+//                },
+//             error: function (request, status, error) {
+//                         var test = request.responseJSON // this object have two more objects one is errors and other is message.
                         
-                        var errorMassage = '';
+//                         var errorMassage = '';
 
-                        //now saperate only errors object values from test object and store in variable errorMassage;
-                        $.each(test.errors, function (key, value){
-                          errorMassage += value ;
-                        });
+//                         //now saperate only errors object values from test object and store in variable errorMassage;
+//                         $.each(test.errors, function (key, value){
+//                           errorMassage += value ;
+//                         });
                          
-                        $('#json_message').attr('class','alert alert-danger').removeAttr('hidden').find('strong').text(errorMassage).siblings('i').removeAttr('hidden');
-                        $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
-                        $('html,body').scrollTop(0);
-                        $('.fa-spinner').hide();
+//                         $('#json_message').attr('class','alert alert-danger').removeAttr('hidden').find('strong').text(errorMassage).siblings('i').removeAttr('hidden');
+//                         $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
+//                         $('html,body').scrollTop(0);
+//                         $('.fa-spinner').hide();
                         
                             
-                    }//end error
-    }); //end ajax
-}
+//                     }//end error
+//     }); //end ajax
+// }
 
 

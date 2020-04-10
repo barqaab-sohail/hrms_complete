@@ -21,7 +21,6 @@
                  <li class="{{Request::is('dashboard')?'active':''}}"><a id="notInclude" class="waves-effect waves-dark" href="{{url('/dashboard')}}" aria-expanded="false"><i class="fas fa-tachometer-alt"></i><span class="hide-menu">Dashboard </span></a>
                 </li>
                
-
                 <li class="{{Request::is('hrms*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fas fa-user"></i><span class="hide-menu">Human Resource</span></a>
                     <ul aria-expanded="false" class="collapse">
                        
@@ -31,6 +30,16 @@
                         <li><a  class="{{Request::is('hrms/employee')?'active':''}}" href="{{route('employee.index')}}">List of Employees</a></li>
                     @endcanany
                       
+                    </ul>
+                </li>
+
+                <li class="{{Request::is('cv*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">CV Records</span></a>
+                    <ul aria-expanded="false" class="collapse">  
+                        <li><a href="{{route('cv.create')}}">Add CV</a></li>
+                        <li><a href="">List of CVs</a></li>
+                        @role('Super Admin')
+                        <li><a href="">Services</a></li>  
+                        @endrole
                     </ul>
                 </li>
                

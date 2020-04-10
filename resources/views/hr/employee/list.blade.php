@@ -36,12 +36,14 @@
 								<a class="btn btn-info btn-sm" href="{{route('employee.edit',$employee->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 							</td>
 							<td class="text-center">
-
-							@role('Super Admin')
-								<a class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href="{{route('employee.destroy',$employee->id)}}" title="Delete"> <i class="fas fa-trash-alt"></i></a>
-							@endrole
-							  
-							</td>
+								 @role('Super Admin')
+								 <form  id="formDeleteContact" action="{{route('employee.destroy',$employee->id)}}" method="POST">
+								 @method('DELETE')
+								 @csrf
+								 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
+								 </form>
+								 @endrole
+								 </td>
 														
 						</tr>
 					@endforeach

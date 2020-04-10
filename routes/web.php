@@ -44,16 +44,18 @@ Route::resource('/employee', 'EmployeeController');
 Route::resource('/education', 'EducationController');
 Route::resource('/appointment', 'AppointmentController',['only'=>['edit','update']]);
 Route::resource('/salary', 'SalaryController',['only'=>['store']]);
-Route::get('/contact/dataTable', 'ContactController@dataTable');
+Route::get('/contact/refreshTable', 'ContactController@refreshTable')->name('contact.table');
 Route::resource('/contact', 'ContactController');
 
 });
 
+Route::group(['prefix' => 'cv', 'middleware' => 'auth', 'namespace'=>'Cv'], function(){
+Route::resource('/cv','CvController');
+});
 
 
 
-
-Route::get('/country/states/{id?}', 'CountryController@getStates');
-Route::get('/country/cities/{id?}', 'CountryController@getCities');
+Route::get('/country/states/{id?}', 'CountryController@getStates')->name('states');
+Route::get('/country/cities/{id?}', 'CountryController@getCities')->name('cities');
 
 Route::get('/home', 'HomeController@index')->name('home');

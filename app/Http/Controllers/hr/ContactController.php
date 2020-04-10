@@ -83,8 +83,8 @@ class ContactController extends Controller
     					}
 
     	}); // end transcation
-
-    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
+    	$hrContacts =  HrContact::where('hr_employee_id', session('employee_id'))->get();
+    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated", 'dataTable'=>$hrContacts]);
     }
 
 
@@ -95,7 +95,7 @@ class ContactController extends Controller
     	return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
     }
 
-    public function dataTable(){
+    public function refreshTable(){
 
         return view('hr.contact.list');
     }

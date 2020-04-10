@@ -89,11 +89,15 @@ class EmployeeController extends Controller
     		HrEmployee::findOrFail($id)->update($input);
 
     		}); // end transcation
-
+        
+        if($request->ajax()){
     	return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Updated']);
+        }else{
+            return back()->with('message', 'Data Sucessfully Updated');
+        }
     }
 
-    public function show($id)
+    public function destroy($id)
     {   
         HrEmployee::findOrFail($id)->delete();
 
