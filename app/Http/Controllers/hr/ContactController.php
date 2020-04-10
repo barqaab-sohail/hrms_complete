@@ -22,7 +22,7 @@ class ContactController extends Controller
     	$countries = Country::all();
     	$hrContactTypes = HrContactType::all();
 
-    	$hrContacts =  HrContact::where('hr_employee_id', session('employee_id'))->get();
+    	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
 
 
 
@@ -34,7 +34,7 @@ class ContactController extends Controller
 
     public function store (Request $request){
     	$input = $request->all();
-    	$input['hr_employee_id']=session('employee_id');
+    	$input['hr_employee_id']=session('hr_employee_id');
 
     	DB::transaction(function () use ($input, $request) {  
     		$hrContact = HrContact::create($input);
@@ -61,7 +61,7 @@ class ContactController extends Controller
     public function edit ($id){
     	$data = HrContact::find($id);
     	$hrContactTypes = HrContactType::all();
-    	$hrContacts =  HrContact::where('hr_employee_id', session('employee_id'))->get();
+    	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
     	$countries = country::all();
 		$states = state::where('country_id', $data->country_id)->get();
 		$cities = city::where('state_id', $data->state_id)->get();
@@ -83,7 +83,7 @@ class ContactController extends Controller
     					}
 
     	}); // end transcation
-    	$hrContacts =  HrContact::where('hr_employee_id', session('employee_id'))->get();
+    	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
     	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated", 'dataTable'=>$hrContacts]);
     }
 

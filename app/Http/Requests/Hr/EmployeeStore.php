@@ -25,7 +25,26 @@ class EmployeeStore extends FormRequest
     {
         
         return [
-            'cnic' => 'required|min:15|max:15|unique:hr_employees,cnic,'.session('employee_id'),
+            'first_name'=> 'required',
+            'last_name'=> 'required',
+            'cnic' => 'required|min:15|max:15|unique:hr_employees,cnic,'.session('hr_employee_id'),
+            'date_of_birth'=> 'required|date|before:18 years ago',
+            'cnic_expiry'=> 'required|date',
+            'gender_id'=> 'required',
+            'marital_status_id'=> 'required',
+            'religion_id'=> 'required',
+        ];
+    }
+
+     public function messages()
+    {
+        return [
+            'marital_status_id.required' => 'marital status field is required',
+            'gender_id.required' => 'geneder field is required',
+            'religion_id.required' => 'religion  field is required',
+            'date_of_birth.before' => 'Age must be 18 years old', 
+            'cnic_expiry.required' => 'CNIC expiry date is rquired',            
+            
         ];
     }
 }

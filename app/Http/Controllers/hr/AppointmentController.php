@@ -43,7 +43,7 @@ class AppointmentController extends Controller
             if($request->filled('expiry_date')){
             $input ['expiry_date']= \Carbon\Carbon::parse($request->expiry_date)->format('Y-m-d');
             }
-        $input['hr_employee_id']=session('employee_id');
+        $input['hr_employee_id']=session('hr_employee_id');
         $input['model_type']='App\Models\Hr\HrAppointment';
         
 

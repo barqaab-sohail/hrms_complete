@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(HrContactTypesTableSeeder::class);
         $this->call(HrDepartmentsTableSeeder::class);
         $this->call(HrDesignationsTableSeeder::class);
+        $this->call(HrDocumentNamesTableSeeder::class);
         $this->call(HrLetterTypesTableSeeder::class);
         $this->call(HrStatusesTableSeeder::class);
         $this->call(PrRolesTableSeeder::class);

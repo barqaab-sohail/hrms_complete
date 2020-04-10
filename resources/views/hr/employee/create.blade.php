@@ -41,7 +41,7 @@
 		                            <div class="col-md-4">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Last Name</label>
+		                                       	<label class="control-label text-right">Last Name<span class="text_requried">*</span></label>
 		                                        
 		                                        <input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control " data-validation="required" placeholder="Enter Last Name" >
 		                                    </div>
@@ -51,7 +51,7 @@
 		                            <div class="col-md-4">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Father Name</label>
+		                                       	<label class="control-label text-right">Father Name<span class="text_requried">*</span></label>
 		                                        
 		                                        <input type="text" name="father_name" value="{{ old('father_name') }}" class="form-control " data-validation="required" placeholder="Enter Father Name" >
 		                                    </div>
@@ -151,7 +151,7 @@
 		                            <div class="col-md-2">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Employee No<span class="text_requried">*</span></label>
+		                                       	<label class="control-label text-right">Employee No</label>
 		                                            
 		                                        <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no') }}" class="form-control"  placeholder="Enter Employee No" >
 												
@@ -168,7 +168,7 @@
 		                            <div class="col-md-6">
 		                                <div class="row">
 		                                    <div class="col-md-offset-3 col-md-9">
-		                                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Add Employee</button>        
+		                                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Add Employee</button> 
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -240,11 +240,10 @@ $(document).ready(function() {
 
                     //now saperate only errors object values from test object and store in variable errorMassage;
                     $.each(test.errors, function (key, value){
-                      errorMassage += value ;
+                      errorMassage += value + '<br>';
                     });
                      
-                    $('#json_message').attr('class','alert alert-danger').removeAttr('hidden').find('strong').text(errorMassage).siblings('i').removeAttr('hidden');
-                    $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
+                      $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
                     $('html,body').scrollTop(0);
                     $('.fa-spinner').hide();
                                   

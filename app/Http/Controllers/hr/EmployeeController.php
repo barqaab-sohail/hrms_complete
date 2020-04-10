@@ -16,7 +16,7 @@ use App\Http\Requests\Hr\EmployeeStore;
 class EmployeeController extends Controller
 {
     public function create(){
-        session()->put('employee_id', '');
+        session()->put('hr_employee_id', '');
     	$genders = Gender::all();
     	$maritalStatuses = MaritalStatus::all();
     	$religions = Religion::all();
@@ -60,7 +60,7 @@ class EmployeeController extends Controller
     	$maritalStatuses = MaritalStatus::all();
     	$religions = Religion::all();
     	$data = HrEmployee::find($id);
-        session()->put('employee_id', $data->id);
+        session()->put('hr_employee_id', $data->id);
 
     	
 

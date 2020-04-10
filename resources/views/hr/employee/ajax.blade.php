@@ -1,6 +1,6 @@
 
 <div style="margin-top:10px; margin-right: 10px;">
-    <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">Back to List</button>
+    <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">List of Emploees</button>
 </div>
      
 <div class="card-body">
@@ -27,7 +27,7 @@
                 <div class="col-md-4">
                     <div class="form-group row">
                         <div class="col-md-12">
-                           	<label class="control-label text-right">Last Name</label>
+                           	<label class="control-label text-right">Last Name<span class="text_requried">*</span></label>
                             
                             <input type="text" name="last_name" value="{{ old('last_name', $data->last_name) }}" class="form-control " data-validation="required" placeholder="Enter Last Name" >
                         </div>
@@ -37,7 +37,7 @@
                 <div class="col-md-4">
                     <div class="form-group row">
                         <div class="col-md-12">
-                           	<label class="control-label text-right">Father Name</label>
+                           	<label class="control-label text-right">Father Name<span class="text_requried">*</span></label>
                             
                             <input type="text" name="father_name" value="{{ old('father_name', $data->father_name) }}" class="form-control " data-validation="required" placeholder="Enter Father Name" >
                         </div>
@@ -137,7 +137,7 @@
                 <div class="col-md-2">
                     <div class="form-group row">
                         <div class="col-md-12">
-                           	<label class="control-label text-right">Employee No<span class="text_requried">*</span></label>
+                           	<label class="control-label text-right">Employee No</label>
                                 
                             <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no', $data->employee_no) }}" class="form-control"  placeholder="Enter Employee No" >
 							

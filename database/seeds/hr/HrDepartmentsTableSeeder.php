@@ -11,7 +11,7 @@ class HrDepartmentsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('blood_groups')->delete();  
+        DB::table('hr_departments')->delete();  
         $HrDepartments = array(
         	array('name' => 'Finance'),
         	array('name' => 'Power'),
