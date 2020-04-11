@@ -16,7 +16,8 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "owen-it/laravel-auditing": "^10.0",
-        "spatie/laravel-permission": "^3.11"
+        "spatie/laravel-permission": "^3.11",
+        "asika/pdf2text": "1.*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

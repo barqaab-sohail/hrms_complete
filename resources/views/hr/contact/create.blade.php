@@ -163,18 +163,35 @@
         </form>
 
         <div class="row">
-             <div class="col-md-12">
-            @if($hrContacts->count()!=0)                    
+             <div class="col-md-12 table-container">
+           
             
-                @include('hr.contact.list')    
-            
-            @endif
             </div>
         </div>
 	</div> <!-- end card body -->    
 
 <script>
 $(document).ready(function(){
+    
+    refreshTable("{{route('contact.table')}}");
+  
+
+
+      $("form").submit(function (e) {
+         e.preventDefault();
+      });
+
+      //submit function
+      $("#formContact").submit(function(e) { 
+      e.preventDefault();
+      var url = $(this).attr('action');
+            $('.fa-spinner').show(); 
+      submitForm(this, url);
+      resetForm();
+      refreshTable("{{route('contact.table')}}");
+
+    });
+
 
     $('#country').change(function(){
       var cid = $(this).val();

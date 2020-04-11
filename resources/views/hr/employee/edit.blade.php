@@ -30,16 +30,17 @@
 
 $(document).ready(function() {
 	
+  //must shifted
 	$(document).on('click','#hr_salary_id',function(){
 		$('.hideDiv').toggle();
 	});
 
-
+    //must shifted
 	$(document).on('click','i[id^=add]',function(){
 		$('.hideDiv').toggle();
 	});
 
-	
+	 //must shifted
 	//store if single input without form submit;
 	$(document).on('click','i[id^=store]',function(){
 		
@@ -58,8 +59,8 @@ $(document).ready(function() {
 	formFunctions();
 
 
-	//$('form[id^=form]').on('submit', function(event){
-	$(document).on('submit','form[id^=form]', function(event){	
+	//form submit
+	$(document).on('submit','#formEditEmployee', function(event){	
 	 	var url = $(this).attr('action');
 		
 		$('.fa-spinner').show();
@@ -86,7 +87,6 @@ $(document).ready(function() {
         		$(".addAjax").html(data);
         		
         		formFunctions();
-        		console.log(data);
         		
                },
             error: function (jqXHR, textStatus, errorThrown){

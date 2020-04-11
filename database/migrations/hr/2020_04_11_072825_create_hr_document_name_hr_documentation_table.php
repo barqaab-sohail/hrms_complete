@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHrDocumentationHrDocumentNameTable extends Migration
+class CreateHrDocumentNameHrDocumentationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class CreateHrDocumentationHrDocumentNameTable extends Migration
      */
     public function up()
     {
-        Schema::create('hr_documentation_hr_document_name', function (Blueprint $table) {
-            
+        Schema::create('hr_document_name_hr_documentation', function (Blueprint $table) {
             $table->bigInteger('hr_documentation_id')->unsigned();
             $table->foreign('hr_documentation_id')->references('id')->on('hr_documentations')->onDelete('cascade');
 
@@ -31,6 +30,6 @@ class CreateHrDocumentationHrDocumentNameTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hr_documentation_hr_document_name');
+        Schema::dropIfExists('hr_document_name_hr_documentation');
     }
 }

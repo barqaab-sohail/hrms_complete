@@ -7,11 +7,11 @@
 
 <div class="card-body" id="hideDiv">
 
-    <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formDocument" enctype="multipart/form-data">
+    <form method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('documentation.update',$data->id)}}" id="formEditDocument" enctype="multipart/form-data">
         {{csrf_field()}}
         <div class="form-body">
             
-            <h3 class="box-title">Document</h3>
+            <h3 class="box-title">Edit Document</h3>
             <hr class="m-t-0 m-b-40">
             <div class="row">
                 <div class="col-md-4">
@@ -38,7 +38,7 @@
                         <div class="col-md-12">
                         	<label class="control-label text-right">Document Description</label>
                         
-                            <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
+                            <input type="text" id="description" name="description" value="{{ old('description', $data->description??'') }}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
                         </div>
                     </div>
                 </div>
@@ -123,9 +123,9 @@
 
 
         //submit function
-    	$("#formDocument").submit(function(e) {	
+    	$("#formEditDocument").submit(function(e) {	
 			e.preventDefault();
-			var url = "{{route('documentation.store')}}";
+			var url = $(this).attr('action');
             $('.fa-spinner').show(); 
 			submitForm(this, url);
             resetForm();

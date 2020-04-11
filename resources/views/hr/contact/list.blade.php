@@ -1,3 +1,4 @@
+@if($hrContacts->count()!=0)
 
 <hr>         
 		<div class="card">
@@ -45,17 +46,14 @@
 								 </td>
 								 <td class="text-center">
 								 @can('hr_edit_record')
-								 <form  id="formDeleteContact" action="{{route('contact.destroy',$hrContact->id)}}" method="POST">
+								 <form  id="deleteContact{{$hrContact->id}}" action="{{route('contact.destroy',$hrContact->id)}}" method="POST">
 								 @method('DELETE')
 								 @csrf
 								 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
 								 </form>
 								 @endcan
 								 </td>
-								  
- 
-
-															
+								  						
 							</tr>
 						@endforeach
 					
@@ -67,11 +65,25 @@
 		</div>
 	</div>
 	<hr>  
-
+@endif
 <script>
 $(document).ready(function() {
+	 $("form").submit(function (e) {
+         e.preventDefault();
+      });
 
 
+  	$("form[id^=deleteContact]").submit(function(e) { 
+  	e.preventDefault();
+  	var url = $(this).attr('action');
+  	$('.fa-spinner').show(); 
+
+  	submitForm(this, url);
+  	resetForm();
+  	 refreshTable("{{route('contact.table')}}");
+  	 
+  	 
+    });
 
 });
 </script>

@@ -174,10 +174,6 @@
 
     <div class="row">
         <div class="col-md-12 table-container">
-                            
-            
-                @include('hr.contact.list')    
-            
             
         </div>
     </div>
@@ -185,24 +181,25 @@
 
 <script>
 $(document).ready(function(){
+   
+     refreshTable("{{route('contact.table')}}");
 
-    $('form[id^=form]').on('submit', function(event){  
-         var url = $(this).attr('action');
-        
-     //console.log(url);
-     $('.fa-spinner').show();
+
+      $("form").submit(function (e) {
+         e.preventDefault();
+         });
+
+
+    $('#formEditContact').on('submit', function(event){  
+      var url = $(this).attr('action');
+     $('.fa-spinner').show();     //console.log(url);
      event.preventDefault();
-   successData(){
-    $('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
-    $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
-    $('html,body').scrollTop(0);
-    $('.fa-spinner').hide();
-    console.log(data.dataTable);}
-    submitFormAjax(this, url, successData);
-         // console.log('OK');
+      submitForm(this, url);
+      refreshTable("{{route('contact.table')}}");
+        
     }); //end submit
 
- 
+    
 
     $('#country').change(function(){
       var cid = $(this).val();

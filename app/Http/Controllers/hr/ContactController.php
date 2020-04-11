@@ -96,7 +96,7 @@ class ContactController extends Controller
     }
 
     public function refreshTable(){
-
-        return view('hr.contact.list');
+        $hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
+        return view('hr.contact.list',compact('hrContacts'));
     }
 }
