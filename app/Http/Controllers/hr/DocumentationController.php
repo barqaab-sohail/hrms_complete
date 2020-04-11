@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Hr;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use App\Models\Hr\HrDocumentName;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDocumentation;
@@ -58,10 +59,13 @@ class DocumentationController extends Controller
 				$input['extension']=$extension;
 				$input['hr_employee_id']=session('hr_employee_id');
 
-			$hrDocumentation = HrDocumentation::create($input);  
+			
+            $hrDocumentation = HrDocumentation::create($input);  
 
+            if($request->hr_document_name_id!='Other'){
 			$hrDocumentNameId = $request->input("hr_document_name_id");
-			$hrDocumentation->hrDocumentName()->attach($hrDocumentNameId);		
+			$hrDocumentation->hrDocumentName()->attach($hrDocumentNameId);	
+            }	
 
 
     	});  //end transaction
@@ -85,9 +89,18 @@ class DocumentationController extends Controller
 
     public function destroy($id){
 
-    	HrDocumentation::findOrFail($id)->delete();
+    	$hrDocument = HrDocumentation::findOrFail($id);
 
-    return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
+        $path = public_path('storage/'.$hrDocument->path.$hrDocument->file_name);
+        if(File::exists($path)){
+            File::delete($path);
+            $hrDocument->forceDelete();
+            return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
+        }else{
+            return response()->json(['status'=> 'Not OK', 'message' => "Data is not Deleted"]);
+        }
+
+   
 
     }
 

@@ -19,7 +19,7 @@
                         <div class="col-md-12">
                         	<label class="control-label text-right">Document Name<span class="text_requried">*</span></label>
                         
-                            <select  name="hr_document_name_id" id="document_name"    class="form-control selectTwo">
+                            <select  name="hr_document_name_id" id="document_name"  data-validation="required"  class="form-control selectTwo">
                             <option value=""></option>
                             <option value="Other">Other</option>
                                 @foreach($documentNames as $documentName)
@@ -130,6 +130,7 @@
 			submitForm(this, url);
             resetForm();
             $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','150');
+             $('#pdf').attr('src','');
             $('#h6').text('Click On Image to Add Document');
             refreshTable("{{route('documentation.table')}}");
 

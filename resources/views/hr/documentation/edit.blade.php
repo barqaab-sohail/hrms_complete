@@ -23,7 +23,7 @@
                             <option value=""></option>
                             <option value="Other">Other</option>
                                 @foreach($documentNames as $documentName)
-								<option value="{{$documentName->id}}" {{(old("hr_document_name_id")==$documentName->id? "selected" : "")}}>{{$documentName->name}}</option>
+								<option value="{{$documentName->id}}" {{(old("hr_document_name_id",$data->hrDocumentName->first()->id??'')==$documentName->id? "selected" : "")}}>{{$documentName->name}}</option>
                                 @endforeach
                              
                             </select>
@@ -33,7 +33,7 @@
                 </div>
                 
                 <!--/span-->
-                <div class="col-md-8 hideDiv">
+                <div class="col-md-8 ">
                     <div class="form-group row">
                         <div class="col-md-12">
                         	<label class="control-label text-right">Document Description</label>
@@ -47,7 +47,9 @@
             <!--/row-->
              <div class="row">
                 <div class="col-md-8 pdfView">
-                    <embed id="pdf" src=""  type="application/pdf" height="300" width="100%" />
+                    @if($data->extension == 'pdf')
+                    <embed id="pdf" src="{{asset('storage/'.$data->path.$data->file_name)}}#toolbar=0&navpanes=0&scrollbar=0"  type="application/pdf" height="300" width="100%" />
+                    @endif
                 </div>
 				<div class="col-md-1">
 				</div>
@@ -57,7 +59,11 @@
                 	@can('hr_edit_record')
                     <div class="form-group row">
                         <center >
-                		<img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
+                        @if($data->extension != 'pdf')
+                		<img src="{{asset(isset($data->file_name)? 'storage/'.$data->path.$data->file_name: 'Massets/images/document.png') }}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
+                        @else
+                        <img  src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
+                        @endif
             			
                 		</input>
                 		<input type="file"  name="document" id="view" data-validation="required" class="" required hidden>

@@ -12,10 +12,12 @@
 					<tr>
 						<th>Document Name</th>
 						<th>View</th>					 
-						@can('hr_edit_record')
-						<th class="text-center"style="width:5%">Edit</th> 
+						@role('User')
+						@role('Super Admin')
+						<th class="text-center"style="width:5%">Edit</th>
+						@endrole
 						<th class="text-center"style="width:5%">Delete</th>
-						@endcan
+						@endrole
 					</tr>
 				</thead>
 				<tbody>
@@ -29,12 +31,15 @@
 						@endif
 						
 
-						@can('hr_edit_record')
+						@role('User')
+						
+						@role('Super Admin')
 						<td>
 						 <a class="btn btn-info btn-sm" id="editDocument" href="{{route('documentation.edit',$documentId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 						 </td>
+						 @endrole
+						  
 						 <td>
-						 
 						 <form id="deleteDocument{{$documentId->id}}" action="{{route('documentation.destroy',$documentId->id)}}" method="POST">
 						 @method('DELETE')
 						 @csrf
@@ -42,7 +47,7 @@
 						 </form>
 
 						 </td>
-						 @endcan							
+						 @endrole							
 					</tr>
 					@endforeach
 						
