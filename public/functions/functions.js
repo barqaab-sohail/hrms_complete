@@ -5,7 +5,7 @@
             $('div.table-container').load(url, function() {
             $('div.table-container').fadeIn();
             });
-        },500);
+        },900);
 }
 
 
@@ -30,6 +30,11 @@ function selectTwo(){
             }
         }
 
+    });
+}
+function toTitleCase(str) {
+    return str.replace(/(?:^|\s)\w/g, function(match) {
+        return match.toUpperCase();
     });
 }
 
@@ -84,9 +89,18 @@ function formFunctions(){
          $(this).siblings('i').show();
     });
 
-    //Lower Case of all inputs type text and email
-    $('input[type=text],input[type=email]').keyup(function() {
-    $(this).val($(this).val().toLowerCase());
+    //Title Case of all inputs type text and remove extra spaces
+    $('input[type=text]').keyup(function() {
+        var result = this.value.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+        $(this).val(result);
+    }).blur(function() {
+        var input = this.value.replace(/\s+/g, " ").trim();
+        $(this).val(input);
+    });
+
+     //Lower Case of all inputs type email
+    $('input[type=email]').keyup(function() {
+        $(this).val($(this).val().toLowerCase());
     });
 
     $('input[type=number]').on('wheel', function(e){
@@ -94,10 +108,11 @@ function formFunctions(){
     });
 
     selectTwo();
+    fromPreventDefault();
 
-    $.validate({
-    validateHiddenInputs: true,
-    });
+    // $.validate({
+    // validateHiddenInputs: true,
+    // });
 
     $('.fa-spinner').hide();
 } //;end formFunctions
@@ -154,14 +169,7 @@ function formFunctions(){
     })
 
 })();
-// function refreshTable() {
 
-//         var url ="{{route('contact.table')}}";
-//         $('div.table-container').fadeOut();
-//         $('div.table-container').load(url, function() {
-//         $('div.table-container').fadeIn();
-//         });
-// }
 
 function resetForm(){
     $(':input','form')

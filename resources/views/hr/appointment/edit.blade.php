@@ -239,3 +239,35 @@
   margin: 0;
 }
     </style>
+<script>
+
+$(document).ready(function(){
+    
+ //must shifted
+    $(document).on('click','#hr_salary_id',function(){
+        $('.hideDiv').toggle();
+    });
+
+    //must shifted
+    $(document).on('click','i[id^=add]',function(){
+        $('.hideDiv').toggle();
+    });
+
+     //must shifted
+    //store if single input without form submit;
+    $(document).on('click','i[id^=store]',function(){
+        
+        var value = $(this).siblings('input').val();
+        var name = $(this).siblings('input').attr('name');
+        var url = $(this).attr('href');
+        var result = [];
+
+        result.push({name: name, value: value});
+        if(($(this).siblings('input').val() != '')&&(value>500)){
+            submitFormAjax(result, url);
+        }
+    });
+
+});
+
+</script>

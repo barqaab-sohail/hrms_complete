@@ -25,7 +25,7 @@
                     <ul aria-expanded="false" class="collapse">
                        
                         <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>
-                    @canany(['hr_edit_record','View Record'])
+                    @canany(['edit hr record','delete hr record'])
                         <li><a  class="{{Request::is('hrms/employee/create')?'active':''}}" href="{{route('employee.create')}}">Add Employee</a></li>
                         <li><a  class="{{Request::is('hrms/employee')?'active':''}}" href="{{route('employee.index')}}">List of Employees</a></li>
                     @endcanany
@@ -36,10 +36,9 @@
                 <li class="{{Request::is('cv*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">CV Records</span></a>
                     <ul aria-expanded="false" class="collapse">  
                         <li><a href="{{route('cv.create')}}">Add CV</a></li>
-                        <li><a href="">List of CVs</a></li>
-                        @role('Super Admin')
+                        <li><a href="">List of CVs</a></li> 
                         <li><a href="">Services</a></li>  
-                        @endrole
+                       
                     </ul>
                 </li>
                

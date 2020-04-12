@@ -54,7 +54,7 @@
                 <div class="col-md-3">
                 	 
 
-                	@can('hr_edit_record')
+                	
                     <div class="form-group row">
                         <center >
                 		<img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
@@ -68,7 +68,7 @@
                         </center>
                        
                     </div>
-                    @endcan
+                   
 
 
                 </div>
@@ -83,9 +83,9 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9">
-                        @can('hr_edit_record')
+                       
                             <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save</button>
-                        @endcan                         
+                                            
                         </div>
                     </div>
                 </div>

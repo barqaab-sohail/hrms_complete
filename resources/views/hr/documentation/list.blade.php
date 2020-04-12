@@ -11,13 +11,11 @@
 				
 					<tr>
 						<th>Document Name</th>
-						<th>View</th>					 
-						@role('User')
-						@role('Super Admin')
+						<th>View</th>
+						@can('Super Admin')			 
 						<th class="text-center"style="width:5%">Edit</th>
-						@endrole
+						@endcan
 						<th class="text-center"style="width:5%">Delete</th>
-						@endrole
 					</tr>
 				</thead>
 				<tbody>
@@ -31,13 +29,13 @@
 						@endif
 						
 
-						@role('User')
 						
-						@role('Super Admin')
+						
+						@can('Super Admin')
 						<td>
 						 <a class="btn btn-info btn-sm" id="editDocument" href="{{route('documentation.edit',$documentId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 						 </td>
-						 @endrole
+						 @endcan
 						  
 						 <td>
 						 <form id="deleteDocument{{$documentId->id}}" action="{{route('documentation.destroy',$documentId->id)}}" method="POST">
@@ -47,7 +45,7 @@
 						 </form>
 
 						 </td>
-						 @endrole							
+													
 					</tr>
 					@endforeach
 						

@@ -189,15 +189,9 @@
 $(document).ready(function() {
 	//All Basic Form Implementatin i.e validation etc.
 	formFunctions();
-	
-
-	$("form").submit(function (e) {
-      e.preventDefault();
-	});
-
 
 	$('#formEmployee').on('submit', function(event){
-	 	event.preventDefault();
+	 	//preventDefault work through formFunctions;
 		url="{{route('employee.store')}}";
 		$('.fa-spinner').show();	
 	   	submitFormAjax(this, url);
