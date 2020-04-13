@@ -6,6 +6,8 @@
 
             <a type="submit" role="button" id="addEmployee" href="{{route('employee.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/*/edit')?'style=background-color:#737373':''}}>Employee Information</a>
             @can('Super Admin')
+            <a type="submit" id="addUserLogin" role="button" href="{{route('userLogin.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Login Detail</a>
+            <a type="submit" id="addContact" role="button" href="{{route('contact.create')}}" class="btn btn-info" {{Request::is('hrms/contact/create')?'style=background-color:#737373':''}}>Contact Detail</a>
             <a type="submit" id="addAppointment" role="button" href="{{route('appointment.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/appointment/')?'style=background-color:#737373':''}}>Appointment Detail</a>
             <a type="submit" id="addContact" role="button" href="{{route('contact.create')}}" class="btn btn-info" {{Request::is('hrms/contact/create')?'style=background-color:#737373':''}}>Contact Detail</a>
             <a type="submit" role="button" href="{{route('employee.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/')?'style=background-color:#737373':''}}>Emergency Contact</a>

@@ -1,11 +1,11 @@
 
- function refreshTable(url) {
+ function refreshTable(url, time=500) {
         $('div.table-container').fadeOut();
         setTimeout(function(){
             $('div.table-container').load(url, function() {
             $('div.table-container').fadeIn();
             });
-        },900);
+        },time);
 }
 
 
@@ -210,7 +210,8 @@ function submitForm(form, url){
            success:function(data){
                 if(data.status == 'OK'){
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
-                }else{
+                }
+                else{
                 $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');    
                 }
             $('html,body').scrollTop(0);
