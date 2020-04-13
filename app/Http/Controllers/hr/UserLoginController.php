@@ -27,7 +27,7 @@ class UserLoginController extends Controller
 
 	public function store (Request $request){
 
-		DB::transaction(function () use ($request, &$test) {  
+		DB::transaction(function () use ($request) {  
 
 			$employee = HrEmployee::find(session('hr_employee_id'));
 			//Firs check Employee have user_id if yes than get user and give premission 
