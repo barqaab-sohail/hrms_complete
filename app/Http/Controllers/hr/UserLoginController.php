@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\HrDocumentation;
 use App\User;
 use App\Permission;
 use DB;
@@ -19,9 +20,10 @@ class UserLoginController extends Controller
     	$data = HrEmployee::find($id);
     	$user = User::where('id',$data->user_id)->first();
     	$permissions = Permission::all();
+    	$picture = HrDocumentation::where([['hr_employee_id', '=',session('hr_employee_id')], ['description','=','picture'] ])->first();
 	    
 	   if($request->ajax()){
-	    return view('hr.login.create', compact('data','permissions'));
+	    return view('hr.login.create', compact('data','permissions','picture'));
 	  }
 	}
 

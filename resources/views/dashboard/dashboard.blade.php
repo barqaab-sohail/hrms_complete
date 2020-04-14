@@ -24,18 +24,12 @@
 			<h4 class="card-title">Salaries</h4>
 			-->
 			
-			<h2 >Welcome to HRMS</h2>
-			<h1>@php
-			echo auth()->user()->email;
-			@endphp
-				
-
-			</h1>
+			<h2 >{{ucwords (Auth::User()->hrEmployee->first_name??'')}} {{ucwords(Auth::User()->hrEmployee->last_name??'')}} Welcome to HRMS</h2>
 			
 		</div>
 	</div>
 	
-
+@can('Super Admin')
 	<!--TASK -->
 		<div class="card">
 			<div class="card-body">
@@ -60,6 +54,7 @@
 	
 		</div>
 	<!--End TASK -->
+@endcan
 
 	
 

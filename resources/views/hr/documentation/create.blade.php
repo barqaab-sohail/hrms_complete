@@ -17,13 +17,13 @@
                 <div class="col-md-4">
                     <div class="form-group row">
                         <div class="col-md-12">
-                        	<label class="control-label text-right">Document Name<span class="text_requried">*</span></label>
+                            <label class="control-label text-right">Document Name<span class="text_requried">*</span></label>
                         
                             <select  name="hr_document_name_id" id="document_name"  data-validation="required"  class="form-control selectTwo">
                             <option value=""></option>
                             <option value="Other">Other</option>
                                 @foreach($documentNames as $documentName)
-								<option value="{{$documentName->id}}" {{(old("hr_document_name_id")==$documentName->id? "selected" : "")}}>{{$documentName->name}}</option>
+                                <option value="{{$documentName->id}}" {{(old("hr_document_name_id")==$documentName->id? "selected" : "")}}>{{$documentName->name}}</option>
                                 @endforeach
                              
                             </select>
@@ -36,7 +36,7 @@
                 <div class="col-md-8 hideDiv">
                     <div class="form-group row">
                         <div class="col-md-12">
-                        	<label class="control-label text-right">Document Description</label>
+                            <label class="control-label text-right">Document Description</label>
                         
                             <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
                         </div>
@@ -49,19 +49,19 @@
                 <div class="col-md-8 pdfView">
                     <embed id="pdf" src=""  type="application/pdf" height="300" width="100%" />
                 </div>
-				<div class="col-md-1">
-				</div>
+                <div class="col-md-1">
+                </div>
                 <div class="col-md-3">
-                	 
+                     
 
-                	
+                    
                     <div class="form-group row">
                         <center >
-                		<img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
-            			
-                		</input>
-                		<input type="file"  name="document" id="view" data-validation="required" class="" required hidden>
-                				                                		
+                        <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
+                        
+                        </input>
+                        <input type="file"  name="document" id="view" data-validation="required" class="" required hidden>
+                                                                        
 
                         <h6 id="h6" class="card-title m-t-10">Click On Image to Add Document<span class="text_requried">*</span></h6>
                 
@@ -72,10 +72,10 @@
 
 
                 </div>
-                		                                
+                                                        
             </div>
-			
-            		                           
+            
+                                               
         </div>
          <hr>
         <div class="form-actions">
@@ -105,118 +105,99 @@
     $(document).ready(function(){
         
         refreshTable("{{route('documentation.table')}}");
-
         $("form").submit(function (e) {
          e.preventDefault();
          });
-
-    	$("#document_name").change(function (){
-			var other = $('#document_name').val();
-				if (other == 'Other'){
-					$('.hideDiv').show();
-					$('#description').attr('data-validation','required');
-				}else{
-					$('.hideDiv').hide();
-					$('#description').removeAttr('data-validation').val('');
-				}
-		});
-
-
+        $("#document_name").change(function (){
+            var other = $('#document_name').val();
+                if (other == 'Other'){
+                    $('.hideDiv').show();
+                    $('#description').attr('data-validation','required');
+                }else{
+                    $('.hideDiv').hide();
+                    $('#description').removeAttr('data-validation').val('');
+                }
+        });
         //submit function
-    	$("#formDocument").submit(function(e) {	
-			e.preventDefault();
-			var url = "{{route('documentation.store')}}";
+        $("#formDocument").submit(function(e) { 
+            e.preventDefault();
+            var url = "{{route('documentation.store')}}";
             $('.fa-spinner').show(); 
-			submitForm(this, url);
+            submitForm(this, url);
             resetForm();
             $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','150');
              $('#pdf').attr('src','');
             $('#h6').text('Click On Image to Add Document');
             refreshTable("{{route('documentation.table')}}",900);
-
-		});
-
-
-
-
-
-
+        });
         $( "#pdf" ).hide();
-			// Prepare the preview for profile picture
-	    $("#view").change(function(){
-	        	var fileName = this.files[0].name;
-	        	var fileType = this.files[0].type;
-	        	var fileSize = this.files[0].size;
-	        	//var fileType = fileName.split('.').pop();
-	        	
-
-	        //Restrict File Size Less Than 2MB
-	        if (fileSize> 2048000){
-	        	alert('File Size is bigger than 2MB');
-	        	$(this).val('');
-	        }else{
-	        	//Restrict File Type
-	        	if ((fileType =='image/jpeg') || (fileType=='image/png')){
-                	$( "#pdf" ).hide();
-                	readURL(this);
-                	document.getElementById("h6").innerHTML = "Image is Attached";
-            	}else if(fileType=='application/pdf')
-            	{
-            	readURL(this);// for Default Image
-            	
-            	document.getElementById("pdf").src="{{asset('Massets/images/document.png')}}";	
-            	$( "#pdf" ).show();
-            	}else{
-            		alert('Only PDF, JPG and PNG Files Allowed');
-	        	$(this).val('');
-
-            	}
+            // Prepare the preview for profile picture
+        $("#view").change(function(){
+                var fileName = this.files[0].name;
+                var fileType = this.files[0].type;
+                var fileSize = this.files[0].size;
+                //var fileType = fileName.split('.').pop();
+                
+            //Restrict File Size Less Than 2MB
+            if (fileSize> 2048000){
+                alert('File Size is bigger than 2MB');
+                $(this).val('');
+            }else{
+                //Restrict File Type
+                if ((fileType =='image/jpeg') || (fileType=='image/png')){
+                    $( "#pdf" ).hide();
+                    readURL(this);
+                    document.getElementById("h6").innerHTML = "Image is Attached";
+                }else if(fileType=='application/pdf')
+                {
+                readURL(this);// for Default Image
+                
+                document.getElementById("pdf").src="{{asset('Massets/images/document.png')}}";  
+                $( "#pdf" ).show();
+                }else{
+                    alert('Only PDF, JPG and PNG Files Allowed');
+                $(this).val('');
+                }
             }
             
         });
     });//end document ready
-
         function readURL(input) {
-        	var fileName = input.files[0].name;
-	        var fileType = input.files[0].type;
-	        //var fileType = fileName.split('.').pop();
-	        		        	
-	        if (fileType !='application/pdf'){
-        	//Read URL if image
+            var fileName = input.files[0].name;
+            var fileType = input.files[0].type;
+            //var fileType = fileName.split('.').pop();
+                                
+            if (fileType !='application/pdf'){
+            //Read URL if image
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     
-	                    reader.onload = function (e) {
-	                        $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow').attr('width','100%');
-	                    }
-                   		reader.readAsDataURL(input.files[0]);
-               	}
-                	
+                        reader.onload = function (e) {
+                            $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow').attr('width','100%');
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                }
+                    
             }else{
                
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     
-	                    reader.onload = function (e) {
-	                        $('embed').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
-	                    }
-                   		reader.readAsDataURL(input.files[0]);
-               	}	
-                document.getElementById("wizardPicturePreview").src="{{asset('Massets/images/document.png')}}";	
-
+                        reader.onload = function (e) {
+                            $('embed').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                }   
+                document.getElementById("wizardPicturePreview").src="{{asset('Massets/images/document.png')}}"; 
                 document.getElementById("h6").innerHTML = "PDF File is Attached";
                  $('#wizardPicturePreview').attr('width','150');
-		    }           
+            }           
         }
             
-
-		$("#wizardPicturePreview" ).click (function() {
+        $("#wizardPicturePreview" ).click (function() {
            $("input[id='view']").click();
-
         });
-
-
       
-			
-			
+            
+            
 </script>

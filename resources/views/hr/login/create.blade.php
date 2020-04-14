@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <!--/span-->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
                            	<label class="control-label text-right">Permissions<span class="text_requried">*</span></label>
@@ -34,6 +34,14 @@
                                 @endforeach
                                 
                             </select>
+                            
+                        </div>
+                    </div>
+                </div>
+                 <!--/span-->
+                  <div class="col-md-5">
+                    <div class="form-group row">
+                        <div class="col-md-12">
                             
                         </div>
                     </div>
