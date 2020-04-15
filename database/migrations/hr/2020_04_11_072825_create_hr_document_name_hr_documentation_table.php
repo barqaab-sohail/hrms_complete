@@ -16,9 +16,11 @@ class CreateHrDocumentNameHrDocumentationTable extends Migration
         Schema::create('hr_document_name_hr_documentation', function (Blueprint $table) {
             $table->bigInteger('hr_documentation_id')->unsigned();
             $table->foreign('hr_documentation_id')->references('id')->on('hr_documentations')->onDelete('cascade');
+            $table->bigInteger('hr_employee_id')->unsigned();
 
             $table->bigInteger('hr_document_name_id')->unsigned();
             $table->foreign('hr_document_name_id')->references('id')->on('hr_document_names');
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
             $table->timestamps();
         });
     }

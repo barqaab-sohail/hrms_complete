@@ -32,7 +32,7 @@ class DocumentationController extends Controller
 			}
 
 			$employee = HrEmployee::find(session('hr_employee_id'));
-			$employeeFullName = $employee->first_name .'_'.$employee->last_name;
+			$employeeFullName = strtolower($employee->first_name) .'_'.strtolower($employee->last_name);
 
 
 
@@ -64,7 +64,9 @@ class DocumentationController extends Controller
 
             if($request->hr_document_name_id!='Other'){
 			$hrDocumentNameId = $request->input("hr_document_name_id");
-			$hrDocumentation->hrDocumentName()->attach($hrDocumentNameId);	
+
+            //hr_employee_id is add due to validtaion before enter into database
+			$hrDocumentation->hrDocumentName()->attach($hrDocumentNameId, ['hr_employee_id'=>session('hr_employee_id')]);	
             }	
 
 
@@ -94,13 +96,9 @@ class DocumentationController extends Controller
         $path = public_path('storage/'.$hrDocument->path.$hrDocument->file_name);
         if(File::exists($path)){
             File::delete($path);
+        }
             $hrDocument->forceDelete();
             return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
-        }else{
-            return response()->json(['status'=> 'Not OK', 'message' => "Data is not Deleted"]);
-        }
-
-   
 
     }
 

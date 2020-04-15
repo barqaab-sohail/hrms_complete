@@ -14,5 +14,15 @@ class HrEmployee extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function profilePicture(){
+        $picture = HrDocumentation::where([['description','Picture'],['hr_employee_id',auth()->user()->hrEmployee->id]])->first();
+        if($picture){
+        $profilePicture = $picture->path.$picture->file_name;
+    	}else{
+    		$profilePicture='';
+    	}
+        return $profilePicture;
+    }
+
 
 }

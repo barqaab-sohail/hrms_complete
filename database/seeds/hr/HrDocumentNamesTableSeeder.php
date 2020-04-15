@@ -17,6 +17,7 @@ class HrDocumentNamesTableSeeder extends Seeder
         	array('name' => 'CNIC Front'),
         	array('name' => 'CNIC Back'),
         	array('name' => 'HR Form'),
+            array('name' => 'Picture'),
         	array('name' => 'Joining Report'),
         	array('name' => 'Engineering Degree Graduation'),
         	array('name' => 'Engineering Degree MSc'),

@@ -20,13 +20,13 @@ class EmployeeController extends Controller
     	$genders = Gender::all();
     	$maritalStatuses = MaritalStatus::all();
     	$religions = Religion::all();
-
+        
     	return view ('hr.employee.create', compact('genders','maritalStatuses','religions'));
     }
 
 
     public function store (EmployeeStore $request){
-
+       
     	 $input = $request->all();
             if($request->filled('date_of_birth')){
             $input ['date_of_birth']= \Carbon\Carbon::parse($request->date_of_birth)->format('Y-m-d');
