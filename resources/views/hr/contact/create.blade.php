@@ -238,8 +238,8 @@ $(document).ready(function(){
                       $.each(res,function(key,value){
                           $("#city").append('<option value="'+key+'">'+value+'</option>');
                       });
-                       $('#state').select2('destroy');
-                       $('#state').select2();
+                       $('#city').select2('destroy');
+                       $('#city').select2();
                   }
              }
 

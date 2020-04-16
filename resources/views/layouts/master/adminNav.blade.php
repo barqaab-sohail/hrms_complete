@@ -37,7 +37,7 @@
                 <li class="{{Request::is('cv*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">CV Records</span></a>
                     <ul aria-expanded="false" class="collapse">  
                         <li><a href="{{route('cv.create')}}">Add CV</a></li>
-                        <li><a href="">List of CVs</a></li> 
+                        <li><a href="{{route('cv.index')}}">List of CVs</a></li> 
                         <li><a href="">Services</a></li>  
                        
                     </ul>

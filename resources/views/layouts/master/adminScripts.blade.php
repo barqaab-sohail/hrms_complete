@@ -79,7 +79,7 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.js"></script>
 
  <!-- js functions -->
-<script src="{{asset('Functions/functions.js') }}"></script>
+<script src="{{asset('functions/functions.js') }}"></script>
 
 
 

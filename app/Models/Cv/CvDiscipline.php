@@ -9,5 +9,9 @@ use OwenIt\Auditing\Contracts\Auditable;
 class CvDiscipline extends Model implements Auditable
 {
 	use \OwenIt\Auditing\Auditable;
-    //
+    
+     protected $fillable = [
+        'name', 
+    ];
+
 }
