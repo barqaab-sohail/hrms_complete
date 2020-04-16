@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Hr\HrDocumentation;
 
 class User extends Authenticatable implements Auditable
 {
@@ -42,5 +43,15 @@ class User extends Authenticatable implements Auditable
 
     public function hrEmployee(){
         return $this->hasOne('App\Models\Hr\HrEmployee');
+    }
+
+     public function picturePath(){
+        $picture = HrDocumentation::where([['description','Picture'],['hr_employee_id',auth()->user()->hrEmployee->id]])->first();
+        if($picture){
+        $picturePath = $picture->path.$picture->file_name;
+        }else{
+            $picturePath='';
+        }
+        return $picturePath;
     }
 }

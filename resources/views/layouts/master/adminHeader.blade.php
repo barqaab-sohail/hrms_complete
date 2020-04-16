@@ -55,7 +55,7 @@
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   
                      {{ucwords (Auth::User()->HrEmployee->first_name??'')}} {{ucwords(Auth::User()->HrEmployee->last_name??'')}} 
-                    <img src="{{asset('storage/'.auth()->user()->HrEmployee->profilePicture())}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" class="profile-pic" height="40" width="50%"/></a>
+                    <img src="{{asset('storage/'.auth()->user()->picturePath())}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" class="profile-pic" height="40" width="50%"/></a>
                     
                     <div class="dropdown-menu dropdown-menu-right scale-up">
                         <ul class="dropdown-user">

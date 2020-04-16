@@ -3,8 +3,11 @@
 namespace App\Models\Hr;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class HrContactLandline extends Model
+
+class HrContactLandline extends Model implements Auditable
 {
-     protected $fillable = ['hr_contact_id', 'landline'];
+    use \OwenIt\Auditing\Auditable;
+    protected $fillable = ['hr_contact_id', 'landline'];
 }

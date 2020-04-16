@@ -3,8 +3,11 @@
 namespace App\Models\Hr;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class HrCommonModel extends Model
+
+class HrCommonModel extends Model implements Auditable
 {
+   use \OwenIt\Auditing\Auditable;
     protected $fillable = ['hr_employee_id', 'model_type','model_id'];
 }
