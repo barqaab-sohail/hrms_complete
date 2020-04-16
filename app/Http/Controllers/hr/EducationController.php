@@ -10,10 +10,10 @@ class EducationController extends Controller
     
     public function create(Request $request){
 
-    //return View::make('hr.education.create')
-    //->render();
-     if($request->ajax()){
-    return view('hr.education.create');
-	}
+	    if($request->ajax()){
+	    	return view('hr.education.create');
+		}else{
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }
     }
 }

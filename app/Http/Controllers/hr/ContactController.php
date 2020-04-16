@@ -24,11 +24,11 @@ class ContactController extends Controller
 
     	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
 
-
-
-    	if($request->ajax()){
-    	return view('hr.contact.create', compact('countries','hrContactTypes','hrContacts'));
-    	}
+        if($request->ajax()){
+            return view('hr.contact.create', compact('countries','hrContactTypes','hrContacts'));
+        }else{
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }
     }
 
 
@@ -58,7 +58,7 @@ class ContactController extends Controller
     }
 
 
-    public function edit ($id){
+    public function edit (Request $request, $id){
     	$data = HrContact::find($id);
     	$hrContactTypes = HrContactType::all();
     	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
@@ -66,7 +66,12 @@ class ContactController extends Controller
 		$states = state::where('country_id', $data->country_id)->get();
 		$cities = city::where('state_id', $data->state_id)->get();
 
-		return view('hr.contact.edit', compact('countries','hrContactTypes','hrContacts','data','states','cities'));
+        if($request->ajax()){
+            return view('hr.contact.edit', compact('countries','hrContactTypes','hrContacts','data','states','cities'));
+        }else{
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }
+
     }
 
     public function update (Request $request, $id){

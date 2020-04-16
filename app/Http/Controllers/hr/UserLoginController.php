@@ -24,6 +24,9 @@ class UserLoginController extends Controller
 	    
 	   if($request->ajax()){
 	    return view('hr.login.create', compact('data','permissions','picture'));
+	  }else
+	  {
+	  	return back()->withError('Please contact to administrator, SSE_JS');
 	  }
 	}
 

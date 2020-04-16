@@ -13,12 +13,16 @@ use DB;
 
 class DocumentationController extends Controller
 {
-    public function create(){
+    public function create(Request $request){
 
     	$documentNames = HrDocumentName::all();
     	$documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->get();
 
-    	return view ('hr.documentation.create',compact('documentNames','documentIds'));
+        if($request->ajax()){
+            return view ('hr.documentation.create',compact('documentNames','documentIds'));
+        }else{
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }
     }
 
     public function store(DocumentationStore $request){
@@ -76,13 +80,17 @@ class DocumentationController extends Controller
 
     }
 
-    public function edit($id){
+    public function edit(Request $request, $id){
 
     	$documentNames = HrDocumentName::all();
     	$documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->get();
     	$data = HrDocumentation::find($id);
 
-    	return view ('hr.documentation.edit',compact('documentNames','documentIds','data'));
+        if($request->ajax()){
+            return view ('hr.documentation.edit',compact('documentNames','documentIds','data'));
+        }else{
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }
 
 
     }

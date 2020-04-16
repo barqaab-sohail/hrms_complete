@@ -61,16 +61,12 @@ class EmployeeController extends Controller
     	$religions = Religion::all();
     	$data = HrEmployee::find($id);
         session()->put('hr_employee_id', $data->id);
-
-    	
-
-        if($request->ajax()){
-            return view ('hr.employee.ajax', compact('genders','maritalStatuses','religions','data')); 
-        }else
-        {
-            return view ('hr.employee.edit', compact('genders','maritalStatuses','religions','data'));
+      
+        if($request->ajax()){      
+            return view ('hr.employee.ajax', compact('genders','maritalStatuses','religions','data'));    
+        }else{
+            return view ('hr.employee.edit', compact('genders','maritalStatuses','religions','data'));       
         }
-        
     }
 
 

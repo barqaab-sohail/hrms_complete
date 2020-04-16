@@ -33,7 +33,7 @@
                 </div>
                 
                 <!--/span-->
-                <div class="col-md-8 ">
+                <div class="col-md-8 hideDiv">
                     <div class="form-group row">
                         <div class="col-md-12">
                         	<label class="control-label text-right">Document Description</label>
@@ -120,7 +120,7 @@
 			var other = $('#document_name').val();
 				if (other == 'Other'){
 					$('.hideDiv').show();
-					$('#description').attr('data-validation','required');
+					$('#description').attr('data-validation','required').val('');
 				}else{
 					$('.hideDiv').hide();
 					$('#description').removeAttr('data-validation').val('');

@@ -27,10 +27,11 @@ class AppointmentController extends Controller
     	$projects = PrDetail::all();
     	$data = HrAppointment::where('hr_employee_id',$id)->first();
 
-	    
-	   if($request->ajax()){
-	    return view('hr.appointment.edit', compact('data','salaries','designations','employees','departments','letterTypes','projects'));
-	  }
+        if($request->ajax()){
+            return view('hr.appointment.edit', compact('data','salaries','designations','employees','departments','letterTypes','projects'));
+        }else{
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }
 
     }
 
