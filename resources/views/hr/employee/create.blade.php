@@ -194,11 +194,11 @@ $(document).ready(function() {
 	 	//preventDefault work through formFunctions;
 		url="{{route('employee.store')}}";
 		$('.fa-spinner').show();	
-	   	submitFormAjax(this, url);
+	   	submitFormAjax(this, url,1);
 	}); //end submit
 
 	//ajax function
-    function submitFormAjax(form, url){
+    function submitFormAjax(form, url, reset=0){
         //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
         $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
             var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
@@ -220,8 +220,16 @@ $(document).ready(function() {
            cache: false,
            processData: false,
            success:function(data)
-               {              	
-               	location.href = data.url;
+               {
+               	if(reset == 1){
+	                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
+	                resetForm();
+		            $('html,body').scrollTop(0);
+		            $('.fa-spinner').hide();
+               	}else{
+               		location.href = data.url;
+               	}       	
+               	
                },
             error: function (jqXHR, textStatus, errorThrown) {
                     if (jqXHR.status == 401){

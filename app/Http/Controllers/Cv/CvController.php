@@ -76,7 +76,7 @@ class CvController extends Controller
 			$institute = $request->input("institute.$i");
 			$passingYear = $request->input("passing_year.$i");
 			
-			$cvDetail->hrEducation()->attach($educationId, ['institute'=>$institute, 'passing_year'=>$passingYear]);
+			$cvDetail->cvEducation()->attach($educationId, ['institute'=>$institute, 'passing_year'=>$passingYear]);
 			}
 
 			

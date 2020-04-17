@@ -69,10 +69,10 @@
 		                                 <!--/span 1-4 -->
 		                                <div class="col-md-3">
 		                                    <div class="form-group row">
-		                                        <div class="col-md-12 date_input">
+		                                        <div class="col-md-12">
 		                                        	<label class="control-label text-right">Date of Birth</label>
 		                                        
-		                                            <input type="text" id="date_of_birth" name="date_of_birth" value="{{old('date_of_birth', $cvId->date_of_birth)}}"  class="form-control " readonly>
+		                                            <input type="text" id="date_of_birth" name="date_of_birth" value="{{old('date_of_birth', $cvId->date_of_birth)}}"  class="form-control date_input" readonly>
 													 
 		                                            <br>
 		                                           <i class="fas fa-trash-alt text_requried"></i> 
@@ -86,10 +86,10 @@
 		                                 <!--/span 2-1 -->
 		                                 <div class="col-md-3">
 		                                    <div class="form-group row">
-		                                        <div class="col-md-12 date_input">
+		                                        <div class="col-md-12">
 		                                        	<label class="control-label text-right">Job Starting Date<span class="text_requried">*</span></label>
 		                                        
-		                                            <input type="text" id="job_starting_date" name="job_starting_date" value="{{old('job_starting_date', $cvId->job_starting_date)}}" data-validation="required" class="form-control " placeholder="Enter Date of Birth" readonly>
+		                                            <input type="text" id="job_starting_date" name="job_starting_date" value="{{old('job_starting_date', $cvId->job_starting_date)}}" data-validation="required" class="form-control date_input" placeholder="Enter Date of Birth" readonly>
 													 
 		                                            <br>
 		                                           <i class="fas fa-trash-alt text_requried"></i> 
@@ -485,10 +485,10 @@
 		                                <!--/span 7-2 -->
 		                                <div class="col-md-3">
 		                                    <div class="form-group row">
-		                                        <div class="col-md-12 date_input">
+		                                        <div class="col-md-12">
 		                                        	<label class="control-label text-right">CV Submision Date</label>
 		                                        
-		                                            <input type="text" name="cv_submission_date" value="{{ old('cv_submission_date', $cvId->cv_submission_date) }}" class="form-control" readonly>
+		                                            <input type="text" name="cv_submission_date" value="{{ old('cv_submission_date', $cvId->cv_submission_date) }}" class="form-control date_input" readonly>
 		                                             <br>
 		                                           <i class="fas fa-trash-alt text_requried"></i> 
 		                                           
