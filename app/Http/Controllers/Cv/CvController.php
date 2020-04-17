@@ -20,6 +20,8 @@ use App\Models\CV\CvContact;
 use App\Models\CV\CvPhone;
 use App\Models\CV\CvAttachment;
 use DB;
+use App\Helper\DocxConversion;
+use Storage;
 
 class CvController extends Controller
 {
@@ -184,116 +186,116 @@ class CvController extends Controller
 	    DB::transaction(function () use ($request, $input, $id) {  
 
 	    	//update cv Detail
-	    	cv_detail::findOrFail($id)->update($input);
+	    	CvDetail::findOrFail($id)->update($input);
 
 	    	//update Contact
 			$contact = $request->only('address','city_id','state_id','country_id','email');
 			$contact['cv_detail_id'] = $id;
-			$contactId = cv_contact::where('cv_detail_id',$id)->first();
-			
-			cv_contact::findOrFail($contactId->id)->update($contact);
+			$cvContact = CvContact::where('cv_detail_id',$id)->first();	
+			CvContact::findOrFail($cvContact->id)->update($contact);
+
 
 
 	    	//update phone	
-	    	if(count($request->input('phone'))==cv_phone::where('cv_contact_id',$contactId->id)->count())
+	    	if(count($request->input('phone'))==CvPhone::where('cv_contact_id',$cvContact->id)->count())
 	    	{
 		    	foreach($request->input('phone') as $num){
 		    		
 		    		foreach ($num as $key =>$phone){
 		    		
 		    		$data ['phone'] = $phone;
-		    		$data['cv_contact_id'] = $contactId->id;
+		    		$data['cv_contact_id'] = $cvContact->id;
 		    		$key=trim($key,"'");
 
-					cv_phone::findOrFail($key)->update($data);
+					CvPhone::findOrFail($key)->update($data);
 					
 					}
 		    	}
 		    }else{
-		    	cv_phone::where('cv_contact_id',$contactId->id)->delete();
+		    	CvPhone::where('cv_contact_id',$cvContact->id)->delete();
 			    	foreach($request->input('phone') as $num){
 			    		foreach ($num as $key =>$phone){
 			    		$key=trim($key,"'");
 			    		$data ['phone'] = $phone;
-			    		$data['cv_contact_id'] = $contactId->id;
-						cv_phone::create($data);
+			    		$data['cv_contact_id'] = $cvContact->id;
+						CvPhone::create($data);
 						}
 			    	}
 
 			}
 
 			//Update membership
-			$cv_id= cv_detail::find($id);
-			$cv_id->cv_membership()->detach();	
+			$cvDetail= CvDetail::find($id);
+			$cvDetail->membership()->detach();	
 			if ($request->filled('membership_name')){
 				for ($i=0;$i<count($request->input('membership_name'));$i++){
 				$membershipId = $request->input("membership_name.$i");
 				$numberId = $request->input("membership_number.$i");
-				$cv_id->cv_membership()->attach($membershipId, ['membership_number'=>$numberId]);			
+				$cvDetail->membership()->attach($membershipId, ['membership_number'=>$numberId]);			
 				}
 			}
 
-			//Update specialization
-			if(count($request->input('speciality_name'))==cv_experience::where('cv_detail_id',$id)->count())
+			//Update Experience
+			if(count($request->input('speciality_name'))==CvExperience::where('cv_detail_id',$id)->count())
 	    	{
 		    	for ($i=0;$i<count($request->input('speciality_name'));$i++){
-				$speciality['cv_specialization_id'] = $request->input("speciality_name.$i");
-				$speciality['cv_discipline_id'] = $request->input("discipline_name.$i");
-				$speciality['cv_stage_id'] = $request->input("stage_name.$i");
-				$speciality['cv_detail_id']=$id;
-				$speciality['year'] = $request->input("year.$i");
-				$specialityId = cv_experience::where('cv_detail_id',$id)->get();
-					foreach($specialityId as $key => $s){
+				$experience['cv_specialization_id'] = $request->input("speciality_name.$i");
+				$experience['cv_discipline_id'] = $request->input("discipline_name.$i");
+				$experience['cv_stage_id'] = $request->input("stage_name.$i");
+				$experience['cv_detail_id']=$id;
+				$experience['year'] = $request->input("year.$i");
+				$cvExperience = CvExperience::where('cv_detail_id',$id)->get();
+					foreach($cvExperience as $key => $single){
 						
 						if($i == $key){
 							
-							cv_experience::findOrFail($s->id)->update($speciality);
+							CvExperience::findOrFail($single->id)->update($experience);
 						}
 					}
 				}	
 		    }else{
-		    	cv_experience::where('cv_detail_id',$id)->delete();
+		    	CvExperience::where('cv_detail_id',$id)->delete();
 			    	for ($i=0;$i<count($request->input('speciality_name'));$i++){
-					$speciality['cv_specialization_id'] = $request->input("speciality_name.$i");
-					$speciality['cv_discipline_id'] = $request->input("discipline_name.$i");
-					$speciality['cv_stage_id'] = $request->input("stage_name.$i");
-					$speciality['cv_detail_id']=$id;
-					$speciality['year'] = $request->input("year.$i");
-					cv_experience::create($speciality);
+					$experience['cv_specialization_id'] = $request->input("speciality_name.$i");
+					$experience['cv_discipline_id'] = $request->input("discipline_name.$i");
+					$experience['cv_stage_id'] = $request->input("stage_name.$i");
+					$experience['cv_detail_id']=$id;
+					$experience['year'] = $request->input("year.$i");
+					CvExperience::create($experience);
 					}
 
 			}
 
 			//update education
-			$cv_id->hr_education()->detach();
+			$cvDetail->cvEducation()->detach();
 			
 			for ($i=0;$i<count($request->input('degree_name'));$i++){
 			$educationId = $request->input("degree_name.$i");
 			$instituteId = $request->input("institute.$i");
 			$passingYear = $request->input("passing_year.$i");
 			
-			$cv_id->hr_education()->attach($educationId, ['institute'=>$instituteId, 'passing_year'=>$passingYear]);
+			$cvDetail->cvEducation()->attach($educationId, ['institute'=>$instituteId, 'passing_year'=>$passingYear]);
 			}
 			
 			//update skill	
-	    	if(count($request->input('skill_name'))==cv_skill::where('cv_detail_id',$id)->count())
+	    	if(count($request->input('skill_name'))==CvSkill::where('cv_detail_id',$id)->count())
 	    	{
 		    	foreach($request->input('skill_name') as $num){
 		    		foreach ($num as $key =>$skill){
 		    		$data ['skill_name'] = $skill;
 		    		$data ['cv_detail_id'] = $id;
 		    		$key=trim($key,"'");
-					cv_skill::findOrFail($key)->update($data);
+					CvSkill::findOrFail($key)->update($data);
 					
 					}
 		    	}
 		    }else{
-		    	cv_skill::where('cv_detail_id',$id)->delete();
+		    	CvSkill::where('cv_detail_id',$id)->delete();
 			    	foreach($request->input('skill_name') as $num){
 			    		foreach ($num as $key =>$skill){
 			    		$data ['skill_name'] = $skill;
 			    		$data ['cv_detail_id'] = $id;
-						cv_skill::create($data);
+						CvSkill::create($data);
 						}
 			    	}
 			}
@@ -303,9 +305,9 @@ class CvController extends Controller
 			if ($request->hasFile('cv')){
 				
 				$extension = request()->cv->getClientOriginalExtension();
-				$fileName =request()->full_name.'-'. time().'.'.$extension;
+				$fileName =strtolower(request()->full_name).'-'. time().'.'.$extension;
 				
-				$path= $cv_id->cv_attachment->first()->path;
+				$path= $cvDetail->cvAttachment->first()->path;
 				
 				//store file
 				$request->file('cv')->storeAs('public/'.$path,$fileName);
@@ -331,14 +333,14 @@ class CvController extends Controller
 				$attachment['size']=$request->file('cv')->getSize();
 				//$attachment['path']=$file_path;
 				$attachment['extension']=$extension;
-				$attachment['cv_detail_id']=$cv_id->id;
+				$attachment['cv_detail_id']=$cvDetail->id;
 
 				
-				$oldFileName= $cv_id->cv_attachment->first()->file_name;
+				$oldFileName= $cvDetail->cvAttachment->first()->file_name;
 				
-				$attachment_id = $cv_id->cv_attachment->first()->id;
+				$attachment_id = $cvDetail->cvAttachment->first()->id;
 				
-				cv_attachment::findOrFail($attachment_id)->update($attachment);
+				CvAttachment::findOrFail($attachment_id)->update($attachment);
 
 				if(Storage::exists('public/'.$path.$oldFileName)){
 				unlink(storage_path('app/public/'.$path.$oldFileName));
@@ -348,9 +350,8 @@ class CvController extends Controller
 
 
 		});	//end transaction
-		$ccc = count($request->input('phone'));
-    	return 'OK';
-    	//back()->with('success', 'Data successfully updated');
+		
+    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
 
     }
 

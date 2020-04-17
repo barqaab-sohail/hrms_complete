@@ -582,7 +582,7 @@
 <script>
 $(document).ready(function(){
 $('.fa-spinner').hide();
-
+formFunctions();
 
 
 $('#test').on('submit', function(event){
@@ -596,111 +596,65 @@ $('#test').on('submit', function(event){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	$('select').chosen();
-	// $.validate();
-	// $('form').on('submit',function(e){
-	// 	$(".required").each(function(){
-	// 		if($(this).val()==''){
-	// 			alert($(this).closest('div').find('label').text()+' value is missing');
-	// 			$(this).closest('div').find('label').append("<br><span style='color:red;'>This Field is required</span>");
-
-	// 			e.preventDefault();
-	// 		}else
-	// 		{
-	// 			return true;
-	// 		}
-	// 	});
-	//  });
-
-		$('#country').change(function(){
+	
+	$('#country').change(function(){
         var cid = $(this).val();
         if(cid){
-        $.ajax({
-           type:"get",
-           url: "{{url('country/states')}}"+"/"+cid,
+	        $.ajax({
+	           type:"get",
+	           url: "{{url('country/states')}}"+"/"+cid,
 
-           //url:" url('CV/uploadCv/getStates') /"+cid, **//Please see the note at the end of the post**
-           success:function(res)
-           {       
-               
-                if(res)
-                {
-                   $("#state").empty();
-                    $("#state").append('<option value="">Select State</option>');
-                    $.each(res,function(key,value){
-                        $("#state").append('<option value="'+key+'">'+value+'</option>');
-                        
-                    });
-                     $('#state').chosen('destroy');
-                     $('#state').chosen();
+	           //url:" url('CV/uploadCv/getStates') /"+cid, **//Please see the note at the end of the post**
+	           success:function(res)
+	           {       
+	               
+	                if(res)
+	                {
+	                   $("#state").empty();
+	                    $("#state").append('<option value="">Select State</option>');
+	                    $.each(res,function(key,value){
+	                        $("#state").append('<option value="'+key+'">'+value+'</option>');
+	                        
+	                    });
+	                     $('#state').chosen('destroy');
+	                     $('#state').chosen();
 
-                    $("#city").empty();
-                    $("#city").append('<option>Select City</option>');
-                    $('#city').chosen('destroy');
-                    $('#city').chosen();
+	                    $("#city").empty();
+	                    $("#city").append('<option>Select City</option>');
+	                    $('#city').chosen('destroy');
+	                    $('#city').chosen();
 
-                }
-           }
+	                }
+	           }
 
-        });
+	        });
         }
     });
 
     $('#state').change(function(){
         var sid = $(this).val();
         if(sid){
-        $.ajax({
-           type:"get",
-            url: "{{url('country/cities')}}"+"/"+sid,
-           success:function(res)
-           {       
-                if(res)
-                {
-                    $("#city").empty();
-                    $("#city").append('<option value="">Select City</option>');
-                    $.each(res,function(key,value){
-                        $("#city").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                    $('#city').chosen('destroy');
-                    $('#city').chosen();
-                }
-           }
+	        $.ajax({
+	           type:"get",
+	            url: "{{url('country/cities')}}"+"/"+sid,
+	           success:function(res)
+	           {       
+	                if(res)
+	                {
+	                    $("#city").empty();
+	                    $("#city").append('<option value="">Select City</option>');
+	                    $.each(res,function(key,value){
+	                        $("#city").append('<option value="'+key+'">'+value+'</option>');
+	                    });
+	                    $('#city').chosen('destroy');
+	                    $('#city').chosen();
+	                }
+	           }
 
-        });
+	        });
         }
     }); 	
-
-
-    
-
-
 
 
 	

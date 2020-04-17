@@ -55,7 +55,7 @@ Route::resource('/picture', 'PictureController',['only'=>['edit','store']]);
 
 });
 
-Route::group(['prefix' => 'cv', 'middleware' => 'auth', 'namespace'=>'Cv'], function(){
+Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Cv'], function(){
 Route::resource('/cv','CvController');
 });
 
