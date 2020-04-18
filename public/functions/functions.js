@@ -125,7 +125,8 @@ function formFunctions(){
 
              
      //Make sure that the event fires on input change
-    $("#cnic").on('input', function(ev){
+    $(document).on('input','#cnic',function(ev){
+   // $("#cnic").on('input', function(ev){
         
         //Prevent default
         ev.preventDefault();

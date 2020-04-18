@@ -38,7 +38,6 @@ class CvController extends Controller
 		
 		$today = \Carbon\Carbon::today();
 
-		//return view ('bio-data.test',compact('genders'));
 		return view ('cv.detail.create',compact('genders','specializations','degrees','disciplines','stages','memberships','countries','today'));
 	}
 
@@ -153,7 +152,7 @@ class CvController extends Controller
     }
 
 
-    public function edit($id){
+    public function edit(Request $request, $id){
 
     	session()->put('cv_detail_id', $id);
 		$genders = Gender::all();
@@ -164,10 +163,15 @@ class CvController extends Controller
 		$disciplines = CvDiscipline::all();
 		$stages = CvStage::all();
 		$today = \Carbon\Carbon::today();
-		$cvId = CvDetail::find($id);
-		$states = State::where('country_id', $cvId->cvContact->country_id)->get();
-		$cities = City::where('state_id', $cvId->cvContact->state_id)->get();
-        return view ('cv.detail.edit',compact('genders','specializations','degrees','disciplines','stages','memberships','countries','states','cities','today','cvId'));
+		$data = CvDetail::find($id);
+		$states = State::where('country_id', $data->cvContact->country_id)->get();
+		$cities = City::where('state_id', $data->cvContact->state_id)->get();
+
+		if($request->ajax()){
+			return view ('cv.detail.ajax',compact('genders','specializations','degrees','disciplines','stages','memberships','countries','states','cities','today','data'));
+		}else{
+	        return view ('cv.detail.edit',compact('genders','specializations','degrees','disciplines','stages','memberships','countries','states','cities','today','data'));
+		}
     }
 
     public function update(Request $request, $id){

@@ -16,10 +16,9 @@ class DocumentationController extends Controller
     public function create(Request $request){
 
     	$documentNames = HrDocumentName::all();
-    	$documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->get();
 
         if($request->ajax()){
-            return view ('hr.documentation.create',compact('documentNames','documentIds'));
+            return view ('hr.documentation.create',compact('documentNames'));
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
@@ -83,11 +82,10 @@ class DocumentationController extends Controller
     public function edit(Request $request, $id){
 
     	$documentNames = HrDocumentName::all();
-    	$documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->get();
     	$data = HrDocumentation::find($id);
 
         if($request->ajax()){
-            return view ('hr.documentation.edit',compact('documentNames','documentIds','data'));
+            return view ('hr.documentation.edit',compact('documentNames','data'));
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
