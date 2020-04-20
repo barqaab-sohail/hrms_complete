@@ -139,7 +139,7 @@
                 //var fileType = fileName.split('.').pop();
                 
             //Restrict File Size Less Than 2MB
-            if (fileSize> 3072000){
+            if (fileSize> 4096000){
                 alert('File Size is bigger than 3MB');
                 $(this).val('');
             }else{

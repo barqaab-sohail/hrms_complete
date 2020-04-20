@@ -43,7 +43,7 @@ class DocumentationStore extends FormRequest
     public function rules()
     {
         return [
-            'document'=>'required|file|max:3000|mimes:'.$this->mime_type,
+            'document'=>'required|file|max:4000|mimes:'.$this->mime_type,
             'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
             'hr_document_name_id' => 'required|unique_with:hr_document_name_hr_documentation,hr_employee_id',
              
