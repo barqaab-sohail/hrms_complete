@@ -191,13 +191,15 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12 required">
 		                                       		<label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
-		                                       			<select  name="degree_name[]"  class="form-control">
+		                                       			<select id="degree_name" name="degree_name[]"  class="form-control">
                                                        <option></option>
                                                         @foreach($degrees as $degree)
 														<option value="{{$degree->id}}" {{(old("degree_name.0")==$degree->id? "selected" : "")}}>{{$degree->degree_name}}</option>
                                                         @endforeach
                                                       
                                                     </select>
+                                                    <br>
+					                                @can('hr edit record')<i id="addDegree" class="fa fa-plus-square text_add" aria-hidden="true"></i>@endcan 
 
 		                                        </div>
 		                                    </div>
@@ -238,6 +240,40 @@
 		                                </div>
 		                                
 		                            </div>
+		                            <div class="row hideDiv">
+					                	 <div class="col-md-3">
+		                                    <div class="form-group row">
+		                                        <div class="col-md-12">
+		                                       		<label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
+		                                       		<input type="text"  id="add_degree" name="add_degree" value="{{ old('add_degree') }}"  class="form-control" placeholder="Enter Degree Name" required>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                                <!--/span-->
+		                                <div class="col-md-2">
+		                                    <div class="form-group row">
+		                                        <div class="col-md-12">
+		                                        	<label class="control-label text-right">Level of Degree</label>
+		                                        	<select  id="add_level" name="add_level" class="form-control selectTwo">
+													<option value=""></option>
+													@for ($i = 10; $i <=20; $i++)
+    												<option value="{{$i}}" {{(old("level")==$i? "selected" : "")}}>{{ $i }}</option>
+													@endfor
+													</select>
+		                                        
+		                                        </div>
+		                                    </div>
+		                                </div>   
+		                                 <!--/span-->
+		                                <div class="col-md-2">
+		                                    <div class="form-group row">
+		                                        <div class="col-md-12">
+		                                        <br>
+		                                        	<i class="fas fa-save fa-2x text_save" id="store_degree" href="{{route('education.store')}}" aria-hidden="true"></i>
+		                                        </div>
+		                                    </div>
+		                                </div>    
+					                </div><!--/End Row-->
 		                             <!--row 5-->
 		                            <div class="row specialization" id='spe_1' >
 		                                <div class="col-md-3">
@@ -501,6 +537,22 @@ $(document).ready(function(){
 
 formFunctions();
 
+$('#addDegree').click(function(){
+	$('.hideDiv').toggle();
+});
+$('#store_degree').click(function(){
+	var url = $(this).attr('href');
+	var degree_name = $('#add_degree').val();
+    var level = $('#add_level').val();
+    var result = [];
+    result.push({degree_name: degree_name, level: level});
+    if((degree_name != '')&&(level != '')){
+            submitFormWithoutDataForm(result, url);
+    }else{
+    	alert('Name of Degree and Level of Degree Required');
+    }
+
+});
 
 $('#formCvDetail').on('submit', function(event){
     $('.fa-spinner').show();
@@ -512,7 +564,7 @@ $('#formCvDetail').on('submit', function(event){
 }); //end submit
 
 
-	$('select').chosen();
+	$('select:not(.selectTwo)').chosen();
 
 	$('#country').change(function(){
       var cid = $(this).val();

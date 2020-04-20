@@ -58,6 +58,7 @@ Route::resource('/picture', 'PictureController',['only'=>['edit','store']]);
 Route::group(['prefix' => 'hrms/cvData', 'middleware' => 'auth', 'namespace'=>'Cv'], function(){
 Route::resource('/cv','CvController');
 Route::get('/cvDocument/refreshTable', 'CvDocumentController@refreshTable')->name('cvDocument.table');
+Route::resource('/education', 'EducationController',['only'=>['store']]);
 Route::resource('/cvDocument', 'CvDocumentController');
 
 });
