@@ -46,7 +46,7 @@ class User extends Authenticatable implements Auditable
     }
 
      public function picturePath(){
-        $picture = HrDocumentation::where([['description','Picture'],['hr_employee_id',auth()->user()->hrEmployee->id]])->first();
+        $picture = HrDocumentation::where([['description','Picture'],['hr_employee_id',auth()->user()->hrEmployee->id??'']])->first();
         if($picture){
         $picturePath = $picture->path.$picture->file_name;
         }else{

@@ -194,7 +194,7 @@ $(document).ready(function() {
 	 	//preventDefault work through formFunctions;
 		url="{{route('employee.store')}}";
 		$('.fa-spinner').show();	
-	   	submitFormAjax(this, url,1);
+	   	submitFormAjax(this, url);
 	}); //end submit
 
 	//ajax function

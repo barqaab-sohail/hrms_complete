@@ -56,12 +56,12 @@
 								
 					
 
-								@can('cv_edit')
+								@can('cv edit record')
 								<td>
 									<a class="btn btn-info btn-sm" href="{{route('cv.edit',$cv->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 								</td>
 								@endcan
-								@can('cv_delete')
+								@can('cv edit record')
 								<td> 
 								 <form action="{{route('cv.destroy',$cv->id)}}" method="POST">
 								 @method('DELETE')

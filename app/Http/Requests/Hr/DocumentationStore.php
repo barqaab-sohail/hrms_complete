@@ -15,11 +15,17 @@ class DocumentationStore extends FormRequest
      public function __construct(\Illuminate\Http\Request $request)
     {
         $request->request->add(['hr_employee_id' => session('hr_employee_id')]);
-        $documentName =  HrDocumentName::find($request->hr_document_name_id);
-       
-        if ($documentName->name == 'Picture'){
-        $request->request->add(['mime_type' => ',jpeg,jpg,png']);
-        }else{
+    
+        if($request->hr_document_name_id !='Other'){
+            $documentName =  HrDocumentName::find($request->hr_document_name_id);
+
+             if ($documentName->name == 'Picture'){
+            $request->request->add(['mime_type' => ',jpeg,jpg,png']);
+            }else{
+                $request->request->add(['mime_type' => 'jpeg,jpg,png,pdf']);
+            }
+        }
+        else{
             $request->request->add(['mime_type' => 'jpeg,jpg,png,pdf']);
         }
     }
@@ -37,7 +43,7 @@ class DocumentationStore extends FormRequest
     public function rules()
     {
         return [
-            'document'=>'required|file|max:2000|mimes:'.$this->mime_type,
+            'document'=>'required|file|max:3000|mimes:'.$this->mime_type,
             'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
             'hr_document_name_id' => 'required|unique_with:hr_document_name_hr_documentation,hr_employee_id',
              

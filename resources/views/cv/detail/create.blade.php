@@ -27,7 +27,7 @@
 
 		                <div class="card-body">
 
-		                    <form id="test" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
+		                    <form id="formCvDetail" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
 		                        {{csrf_field()}}
 		                        <div class="form-body">
 		                            
@@ -502,7 +502,7 @@ $(document).ready(function(){
 formFunctions();
 
 
-$('#test').on('submit', function(event){
+$('#formCvDetail').on('submit', function(event){
     $('.fa-spinner').show();
  	var url = "{{ route('cv.store')}}"
 
@@ -511,9 +511,6 @@ $('#test').on('submit', function(event){
 	
 }); //end submit
 
-
-	
-	
 
 	$('select').chosen();
 

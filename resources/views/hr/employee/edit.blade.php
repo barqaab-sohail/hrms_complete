@@ -79,8 +79,8 @@ $(document).ready(function() {
 	$('a[id^=add]').click(function(e){
 		var url = $(this).attr('href');
 		var id = $(this).attr('id');
-    console.log(url);
 		e.preventDefault();
+
 		$.ajax({
            url:url,
            method:"GET",

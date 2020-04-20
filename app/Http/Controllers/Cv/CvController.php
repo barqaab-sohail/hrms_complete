@@ -10,18 +10,19 @@ use App\Models\Common\State;
 use App\Models\Common\City;
 use App\Models\Common\Education;
 use App\Models\Common\Membership;
-use App\Models\CV\CvSpecialization;
-use App\Models\CV\CvDiscipline;
-use App\Models\CV\CvStage;
-use App\Models\CV\CvDetail;
-use App\Models\CV\CvSkill;
-use App\Models\CV\CvExperience;
-use App\Models\CV\CvContact;
-use App\Models\CV\CvPhone;
-use App\Models\CV\CvAttachment;
+use App\Models\Cv\CvSpecialization;
+use App\Models\Cv\CvDiscipline;
+use App\Models\Cv\CvStage;
+use App\Models\Cv\CvDetail;
+use App\Models\Cv\CvSkill;
+use App\Models\Cv\CvExperience;
+use App\Models\Cv\CvContact;
+use App\Models\Cv\CvPhone;
+use App\Models\Cv\CvAttachment;
 use DB;
 use App\Helper\DocxConversion;
 use Storage;
+use App\Http\Requests\Cv\CvDetailStore;
 
 class CvController extends Controller
 {
@@ -174,7 +175,7 @@ class CvController extends Controller
 		}
     }
 
-    public function update(Request $request, $id){
+    public function update(CvDetailStore $request, $id){
 
 	    	$input = $request->only('full_name','father_name','cnic','foreign_experience','donor_experience','barqaab_employment','comments');
 			 if($request->filled('date_of_birth')){

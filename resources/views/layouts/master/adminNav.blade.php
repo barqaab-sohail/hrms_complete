@@ -33,12 +33,14 @@
                       
                     </ul>
                 </li>
-                @can('Super Admin') 
+                @can('cv edit record') 
                 <li class="{{Request::is('hrms/cv*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">CV Records</span></a>
                     <ul aria-expanded="false" class="collapse">  
                         <li><a class="{{Request::is('hrms/cvData/cv/create')?'active':''}}" href="{{route('cv.create')}}">Add CV</a></li>
                         <li><a class="{{Request::is('hrms/cvData/cv')?'active':''}}" href="{{route('cv.index')}}">List of CVs</a></li> 
-                        <li><a href="">Services</a></li>  
+                        @can('Super Admin')
+                        <li><a href="">Services</a></li> 
+                        @endcan
                        
                     </ul>
                 </li>

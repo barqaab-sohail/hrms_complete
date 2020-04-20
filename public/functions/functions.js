@@ -110,9 +110,9 @@ function formFunctions(){
     selectTwo();
     fromPreventDefault();
 
-    // $.validate({
-    // validateHiddenInputs: true,
-    // });
+    $.validate({
+    validateHiddenInputs: true,
+    });
 
     $('.fa-spinner').hide();
 } //;end formFunctions

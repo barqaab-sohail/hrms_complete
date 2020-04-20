@@ -137,7 +137,7 @@
             resetForm();
             $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','150');
             $('#h6').text('Click On Image to Add Document');
-            refreshTable("{{route('documentation.table')}}");
+            refreshTable("{{route('documentation.table')}}",900);
 
 		});
 
@@ -156,8 +156,8 @@
 	        	
 
 	        //Restrict File Size Less Than 2MB
-	        if (fileSize> 2048000){
-	        	alert('File Size is bigger than 2MB');
+	        if (fileSize> 3072000){
+	        	alert('File Size is bigger than 3MB');
 	        	$(this).val('');
 	        }else{
 	        	//Restrict File Type

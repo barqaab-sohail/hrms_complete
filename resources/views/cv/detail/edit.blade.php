@@ -34,7 +34,7 @@
 <script>
 $(document).ready(function(){
 $('.fa-spinner').hide();
-
+formFunctions();
 $(document).on('submit','#formCv',function(event){
  	event.preventDefault();
 	url="{{route('cv.update',$data->id)}}";
