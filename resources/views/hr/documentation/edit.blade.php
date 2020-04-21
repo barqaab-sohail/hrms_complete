@@ -137,7 +137,7 @@
             resetForm();
             $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','150');
             $('#h6').text('Click On Image to Add Document');
-            refreshTable("{{route('documentation.table')}}",900);
+            refreshTable("{{route('documentation.table')}}",1500);
 
 		});
 

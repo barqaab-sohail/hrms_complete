@@ -128,7 +128,7 @@
             $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','150');
              $('#pdf').attr('src','');
             $('#h6').text('Click On Image to Add Document');
-            refreshTable("{{route('documentation.table')}}",900);
+            refreshTable("{{route('documentation.table')}}",1500);
         });
         $( "#pdf" ).hide();
             // Prepare the preview for profile picture
