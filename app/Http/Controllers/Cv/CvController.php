@@ -42,7 +42,7 @@ class CvController extends Controller
 		return view ('cv.detail.create',compact('genders','specializations','degrees','disciplines','stages','memberships','countries','today'));
 	}
 
-	public function store(Request $request){
+	public function store(CvDetailStore $request){
 		
 		$input = $request->only('full_name','father_name','cnic','foreign_experience','donor_experience','barqaab_employment','comments');
 		 if($request->filled('date_of_birth')){

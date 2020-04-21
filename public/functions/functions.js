@@ -160,12 +160,12 @@ function formFunctions(){
 (function(){
     $('.form-prevent-multiple-submits').on('submit', function(){
 
-        $('.btn-prevent-multiple-submits',this).attr('disabled','ture');
+        $('.btn-prevent-multiple-submits').attr('disabled','ture');
         $('.spinner',this).show();
 
         //submit enalbe after 5 second
         setTimeout(function(){
-            $('.btn-prevent-multiple-submits',this).removeAttr('disabled');
+            $('.btn-prevent-multiple-submits').removeAttr('disabled');
             }, 5000);
 
     })

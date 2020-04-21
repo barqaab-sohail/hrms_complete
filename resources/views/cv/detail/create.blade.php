@@ -88,7 +88,7 @@
 		                                        <div class="col-md-12">
 		                                        	<label class="control-label text-right">Job Starting Date<span class="text_requried">*</span></label>
 		                                        
-		                                            <input type="text" id="job_starting_date" name="job_starting_date"  value="{{ old('job_starting_date') }}" class="form-control date_input" placeholder="Enter Date of Birth" readonly>
+		                                            <input type="text" id="job_starting_date" name="job_starting_date"  value="{{ old('job_starting_date') }}" class="form-control date_input" data-validation="required" placeholder="Enter Date of Birth" readonly>
 													 
 		                                            <br>
 		                                           <i class="fas fa-trash-alt text_requried"></i> 
@@ -167,7 +167,7 @@
 		                                		
 		                                        <div class="col-md-8" >
 		                                        	<label class="control-label text-right">Mobile Number<span class="text_requried">*</span></label>
-		                                            <input type="text" name="phone[]" value="{{old('phone.0')}}" class="form-control" >
+		                                            <input type="text" name="phone[]" value="{{old('phone.0')}}" data-validation="required" class="form-control" >
 
 		                                        </div>
 												<div class="col-md-4">
@@ -191,7 +191,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12 required">
 		                                       		<label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
-		                                       			<select id="degree_name" name="degree_name[]"  class="form-control">
+		                                       			<select id="degree_name" name="degree_name[]" data-validation="required" class="form-control">
                                                        <option></option>
                                                         @foreach($degrees as $degree)
 														<option value="{{$degree->id}}" {{(old("degree_name.0")==$degree->id? "selected" : "")}}>{{$degree->degree_name}}</option>
@@ -252,7 +252,7 @@
 		                                        <div class="col-md-12 required">
 		                                       		<label class="control-label text-right">Speciality<span class="text_requried">*</span></label><br>
 
-		                                       		<select  name="speciality_name[]"  id=speciality_name class="form-control" >
+		                                       		<select  name="speciality_name[]"  id=speciality_name data-validation="required" class="form-control" >
                                                         <option value=""></option>
                                                         
                                                         @foreach($specializations as $specialization)
@@ -278,7 +278,7 @@
 		                                        <div class="col-md-12 required">
 		                                        	<label class="control-label">Discipline<span class="text_requried">*</span></label>
 
-		                                        	<select  name="discipline_name[]"  id=discipline class="form-control" >
+		                                        	<select  name="discipline_name[]"  id=discipline data-validation="required" class="form-control" >
                                                         <option value=""></option>
                                                         
                                                         @foreach($disciplines as $discipline)
@@ -299,7 +299,7 @@
 		                                        <div class="col-md-12 required">
 		                                        	<label class="control-label">Stage<span class="text_requried">*</span></label>
 
-		                                        	<select  name="stage_name[]"  id=stage_name class="form-control" >
+		                                        	<select  name="stage_name[]"  id=stage_name data-validation="required" class="form-control" >
                                                         <option value=""></option>
                                                         
                                                         @foreach($stages as $stage)
@@ -320,7 +320,7 @@
 		                                        <div class="col-md-8 required">
 		                                        	<label class="control-label text-right">Years of Experience<span class="text_requried">*</span></label>
 		                                        
-		                                            <select  name="year[]"  class="form-control">
+		                                            <select data-validation="required" name="year[]"  class="form-control">
 
 													<option value=""></option>
 													@for ($i = 1; $i <= 50; $i++)
@@ -405,7 +405,7 @@
 		                                        <div class="col-md-12 required">
 		                                        	<label for="barqaab_employment" class="control-label">BARQAAB Employee<span class="text_requried">*</span></label>
 
-		                                        	<select  id="bqb" name="barqaab_employment" class="form-control " >
+		                                        	<select  id="bqb" name="barqaab_employment" data-validation="required" class="form-control " >
 
                                                         <option value="">&nbsp;</option>
                                                         <option value="1" {{(old("barqaab_employment")=="1"? "selected":"")}}>Yes</option>
@@ -470,7 +470,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12">
 		                                       		<label class="control-label text-right">Attached CV<span class="text_requried">*</span></label><br>
-		                                       		<input type="file"  id="cv" name="cv" value="{{ old('cv') }}"  class="form-control" ><span class="text_requried">doc, docx and pdf only</span>
+		                                       		<input type="file" data-validation="required" id="cv" name="cv" value="{{ old('cv') }}"  class="form-control" ><span class="text_requried">doc, docx and pdf only</span>
 		                                        </div>
 		                                    </div>
 		                                </div>
