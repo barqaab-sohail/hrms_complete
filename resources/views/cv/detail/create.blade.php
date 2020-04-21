@@ -199,7 +199,7 @@
                                                       
                                                     </select>
                                                     <br>
-					                                @can('hr edit record')<i id="addDegree" class="fa fa-plus-square text_add" aria-hidden="true"></i>@endcan 
+					                                @can('cv edit record')<i id="addDegree" class="fa fa-plus-square text_add" aria-hidden="true"></i>@endcan 
 
 		                                        </div>
 		                                    </div>
