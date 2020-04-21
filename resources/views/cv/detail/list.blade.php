@@ -38,7 +38,7 @@
 								<td>{{$cv->father_name}}</td>
 								
 								
-								<td>{{$cv->cvPhone->first()->phone}}</td>
+								<td>{{$cv->cvPhone->first()->phone??''}}</td>
 								
 
 								<td>{{isset($cv->cnic)?$cv->cnic:'No CNIC'}}</td>

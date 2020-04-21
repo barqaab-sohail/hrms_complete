@@ -246,7 +246,7 @@ $('a[id^=add]').click(function(e){
 		  var lastid = $(".specialization:last").attr("id");
 		  var split_id = lastid.split("_");
 		  var nextindex = Number(split_id[1]) + 1;
-		  var max = 5;
+		  var max = 10;
 		  // Check total number elements
 		  if(total_element < max ){
 		   //Clone specialization div and copy
