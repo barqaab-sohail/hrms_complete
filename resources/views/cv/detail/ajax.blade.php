@@ -186,6 +186,8 @@
                                 @endforeach
                               
                             </select>
+                            <br>
+                            @can('Super Admin')<i id="addDegree" class="fa fa-plus-square text_add" aria-hidden="true"></i>@endcan 
 
                         </div>
                     </div>
@@ -233,7 +235,44 @@
                 
             </div>
         @endforeach
-             <!--row 5-->
+
+        <!--/ Row for add Degree -->
+             <div class="row hideDiv">
+                 <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
+                            <input type="text"  id="add_degree" name="add_degree" value="{{ old('add_degree') }}"  class="form-control" placeholder="Enter Degree Name" required>
+                        </div>
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-2">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Level of Degree</label>
+                            <select  id="add_level" name="add_level" class="form-control selectTwo">
+                            <option value=""></option>
+                            @for ($i = 10; $i <=20; $i++)
+                            <option value="{{$i}}" {{(old("level")==$i? "selected" : "")}}>{{ $i }}</option>
+                            @endfor
+                            </select>
+                        
+                        </div>
+                    </div>
+                </div>   
+                 <!--/span-->
+                <div class="col-md-2">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                        <br>
+                            <i class="fas fa-save fa-2x text_save" id="store_degree" href="{{route('education.store')}}" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>    
+            </div><!--/End Row-->
+
+        <!--row 5-->
         @foreach($data->CvExperience as $key => $speciality)
             <div class="row specialization" id='spe_1' >
                 <div class="col-md-3">
@@ -445,7 +484,7 @@
 
                         	<select  name="barqaab_employment" class="form-control required" >
 
-                                <option value="">'</option>
+                                <option value="">&nbsp;</option>
                                 <option value="1" @if($data->barqaab_employment == 1) selected="selected" @endif>Yes</option>
                                 <option value="0" @if($data->barqaab_employment == 0) selected="selected" @endif>No</option>
                                                                                       
@@ -546,7 +585,8 @@
 <script language="JavaScript" type="text/javascript">
 $(document).ready(function (){
 $('select').chosen('destroy');
-$('select').chosen();
+$('select:not(.selectTwo)').chosen();
+
 });
 
 </script>

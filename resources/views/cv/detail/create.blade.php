@@ -433,7 +433,7 @@
 
 		                                        	<select  id="bqb" name="barqaab_employment" class="form-control " >
 
-                                                        <option value="">'</option>
+                                                        <option value="">&nbsp;</option>
                                                         <option value="1" {{(old("barqaab_employment")=="1"? "selected":"")}}>Yes</option>
                                                         <option value="0" {{(old("barqaab_employment")=="0"? "selected":"")}}>No</option>
                                                                                                               
@@ -537,8 +537,11 @@ $(document).ready(function(){
 
 formFunctions();
 
+
 $('#addDegree').click(function(){
 	$('.hideDiv').toggle();
+	$('#add_degree').val('');
+    $('#add_level').val('').select2('val', 'All');
 });
 $('#store_degree').click(function(){
 	var url = $(this).attr('href');

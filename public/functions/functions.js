@@ -20,6 +20,7 @@ function selectTwo(){
     $('.selectTwo').select2({
         width: "100%",
         theme: "classic",
+        
         errorPlacement: function (error, element) {
             if (element.parent('.input-group').length) { 
                 error.insertAfter(element.parent());      // radio/checkbox?
@@ -273,13 +274,14 @@ function submitFormWithoutDataForm(result, url){
                     if(data.degrees)
                     $("#degree_name").empty();
                     $("#degree_name").append('<option value="">Select Degree</option>');
-                    $.each(data, function(key,value){
+                    $.each(data.degrees, function(key,value){
                                 //console.log(key+'-'+value);
                              $("#degree_name").append('<option value="'+key+'">'+value+'</option>');
                     });
                     $('#degree_name').chosen('destroy');
                     $('#degree_name').chosen();
                     $('.hideDiv').hide();
+                    
                 }
 
            },

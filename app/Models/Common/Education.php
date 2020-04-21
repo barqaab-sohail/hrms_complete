@@ -10,4 +10,6 @@ class Education extends Model implements Auditable
 {
 	use \OwenIt\Auditing\Auditable;
     protected $table = 'educations';
+
+    protected $fillable = ['degree_name', 'level'];
 }
