@@ -4,10 +4,13 @@ namespace App\Http\Controllers\CV;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use App\Models\CV\CvAttachment;
 use App\Models\CV\CvDetail;
 use App\Helper\DocxConversion;
+use App\Http\Requests\Cv\DocumentStore;
 use DB;
+
 
 class CvDocumentController extends Controller
 {
@@ -24,7 +27,7 @@ class CvDocumentController extends Controller
 
     }
 
-    public function store (Request $request){
+    public function store (DocumentStore $request){
 
         	$cvDetail= CvDetail::find(session('cv_detail_id'));
         	$folderName= $cvDetail->cvAttachment->first()->path;
@@ -60,9 +63,33 @@ class CvDocumentController extends Controller
         	return response()->json(['status'=> 'OK', 'message' => "Document Sucessfully Saved"]);
     }
 
-     public function refreshTable(){
+    public function edit(Request $request, $id){
+
+    	$data = CvAttachment::find($id);
+	
+		if($request->ajax()){
+            return view ('cv.document.edit',compact('data'));
+        }else{
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }    	
+    }
+
+    public function refreshTable(){
         $documentIds = CvAttachment::where('cv_detail_id', session('cv_detail_id'))->get();
         return view('cv.document.list',compact('documentIds'));
+    }
+
+    public function destroy($id){
+
+    	$cvDocument = CvAttachment::findOrFail($id);
+
+        $path = public_path('storage/'.$cvDocument->path.$cvDocument->file_name);
+        if(File::exists($path)){
+            File::delete($path);
+        }
+            $cvDocument->forceDelete();
+            return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
+
     }
 
 

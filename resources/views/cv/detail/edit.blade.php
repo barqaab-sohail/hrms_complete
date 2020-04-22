@@ -92,6 +92,34 @@ $('a[id^=add]').click(function(e){
     	}); //end ajax	
 });
 
+//edit form load through ajax;
+	$(document).on('click','a[id^=edit]',function(e){
+		e.preventDefault();
+		var url = $(this).attr('href');
+		$.ajax({
+           url:url,
+           method:"GET",
+           //dataType:'JSON',
+           contentType: false,
+           cache: false,
+           processData: false,
+           success:function(data)
+               {
+        		$(".addAjax").html(data);
+        		
+        		formFunctions();
+        		
+               },
+            error: function (jqXHR, textStatus, errorThrown){
+            	if (jqXHR.status == 401){
+            		location.href = "{{route ('login')}}"
+            		}      
+                          
+
+                    }//end error
+    	}); //end ajax	
+	});
+
 
 
 

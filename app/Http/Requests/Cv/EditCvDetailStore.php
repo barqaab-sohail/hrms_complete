@@ -3,8 +3,9 @@
 namespace App\Http\Requests\Cv;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Cv\CvContact;
 
-class CvDetailStore extends FormRequest
+class EditCvDetailStore extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,6 +25,7 @@ class CvDetailStore extends FormRequest
     public function rules()
     {
          $today = \Carbon\Carbon::today();
+         $contact = CvContact::where('cv_detail_id', session('cv_detail_id'))->get()->first();
 
          return [
             
@@ -35,7 +37,7 @@ class CvDetailStore extends FormRequest
             'city' => 'nullable|max:191',
             'province' => 'nullable|max:191',
             'country_id' => 'required|max:191',
-            'email'=>'nullable|email|unique:cv_contacts,email',
+            'email'=>'nullable|email|unique:cv_contacts,email,'.$contact->id,
             'phone.*' => 'required|distinct',
             'degree_name.*' => 'required|distinct',
             'institute.*' => 'nullable|MAX:191',
@@ -49,7 +51,7 @@ class CvDetailStore extends FormRequest
             'membership_name.*'=>'nullable|distinct',
             'barqaab_employment' => 'required',
             'cv_submission_date'=>'nullable|date|before_or_equal:'.$today,
-            'cv' => 'required|file|mimes:doc,docx,pdf',
+            //'cv' => 'required|file|mimes:doc,docx,pdf',
 
         ];
     }
@@ -66,7 +68,7 @@ class CvDetailStore extends FormRequest
             'passing_year.*.distinct' => 'Two Degrees on same year is not allowed',
             'membership_number.*.required_if' => 'Pakistan Engineering Council Number is required',
             'cv_submission_date.before_or_equal'=>'The cv submission date must be a date before or equal today',
-            'cv.required'=>"CV Attachment is Required",
+            //'cv.required'=>"CV Attachment is Required",
             'year.*.required' => 'years of experience is required',
             'phone.*.required' => 'mobil number is required',
 

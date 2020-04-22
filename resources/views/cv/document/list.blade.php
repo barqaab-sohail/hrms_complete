@@ -22,7 +22,7 @@
 					@foreach($documentIds as $documentId)
 					<tr>
 						<td>{{$documentId->document_name}}</td>
-						@if($documentId->extension == "jpg")
+						@if(($documentId->extension == "jpg")||($documentId->extension == "jpeg")||($documentId->extension == "png"))
 						<td><img  id="ViewIMG" src="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" href="{{asset(isset($documentId->file_name)?  'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30/></td>
 						@elseif ($documentId->extension == 'pdf')
 						<td><img  id="ViewPDF" src="{{asset('Massets/images/document.png')}}" href="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30/></td>
@@ -35,12 +35,12 @@
 						
 						@can('Super Admin')
 						<td>
-						 <a class="btn btn-info btn-sm" id="editDocument" href="{{route('documentation.edit',$documentId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
+						 <a class="btn btn-info btn-sm" id="editDocument" href="{{route('cvDocument.edit',$documentId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 						 </td>
 						
 						  
 						 <td>
-						 <form id="deleteDocument{{$documentId->id}}" action="{{route('documentation.destroy',$documentId->id)}}" method="POST">
+						 <form id="deleteDocument{{$documentId->id}}" action="{{route('cvDocument.destroy',$documentId->id)}}" method="POST">
 						 @method('DELETE')
 						 @csrf
 						 <button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
@@ -87,9 +87,12 @@
 
 	  	submitForm(this, url);
 	  	resetForm();
-	  	refreshTable("{{route('documentation.table')}}");
+	  	refreshTable("{{route('cvDocument.table')}}",900);
 	 
 	    });
+
+
+	    
 	});
 </script>
 @endif

@@ -23,6 +23,7 @@ use DB;
 use App\Helper\DocxConversion;
 use Storage;
 use App\Http\Requests\Cv\CvDetailStore;
+use App\Http\Requests\Cv\EditCvDetailStore;
 
 class CvController extends Controller
 {
@@ -172,7 +173,7 @@ class CvController extends Controller
 		}
     }
 
-    public function update(CvDetailStore $request, $id){
+    public function update(EditCvDetailStore $request, $id){
 
 	    	$input = $request->only('full_name','father_name','cnic','foreign_experience','donor_experience','barqaab_employment','comments');
 			 if($request->filled('date_of_birth')){

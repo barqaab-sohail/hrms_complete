@@ -349,7 +349,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12 remove_div">
 		                                        	<label class="control-label text-right">Foreign Experience</label>
-		                                            <input type="text" id="foreign_experience" name="foreign_experience"  value="{{ old('foreign_experience') }}" class="form-control " >	 
+		                                            <input type="number" id="foreign_experience" name="foreign_experience"  value="{{ old('foreign_experience') }}" class="form-control " >	 
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -358,7 +358,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12 remove_div">
 		                                       		<label class="control-label text-right">Donor Experience</label><br>
-		                                       		<input type="text"  name="donor_experience" value="{{ old('donor_experience') }}" class="form-control" >
+		                                       		<input type="number"  name="donor_experience" value="{{ old('donor_experience') }}" class="form-control" >
 		                                        </div>
 		                                    </div>
 		                                </div>

@@ -187,7 +187,10 @@
                               
                             </select>
                             <br>
-                            @can('Super Admin')<i id="addDegree" class="fa fa-plus-square text_add" aria-hidden="true"></i>@endcan 
+                            @can('cv edit record')
+                            <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#eduModal"><i class="fas fa-plus"></i>
+                            </button>
+                            @endcan 
 
                         </div>
                     </div>
@@ -236,41 +239,7 @@
             </div>
         @endforeach
 
-        <!--/ Row for add Degree -->
-             <div class="row hideDiv">
-                 <div class="col-md-3">
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
-                            <input type="text"  id="add_degree" name="add_degree" value="{{ old('add_degree') }}"  class="form-control" placeholder="Enter Degree Name" required>
-                        </div>
-                    </div>
-                </div>
-                <!--/span-->
-                <div class="col-md-2">
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <label class="control-label text-right">Level of Degree</label>
-                            <select  id="add_level" name="add_level" class="form-control selectTwo">
-                            <option value=""></option>
-                            @for ($i = 10; $i <=20; $i++)
-                            <option value="{{$i}}" {{(old("level")==$i? "selected" : "")}}>{{ $i }}</option>
-                            @endfor
-                            </select>
-                        
-                        </div>
-                    </div>
-                </div>   
-                 <!--/span-->
-                <div class="col-md-2">
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                        <br>
-                            <i class="fas fa-save fa-2x text_save" id="store_degree" href="{{route('education.store')}}" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </div>    
-            </div><!--/End Row-->
+      
 
         <!--row 5-->
         @foreach($data->CvExperience as $key => $speciality)
@@ -290,6 +259,11 @@
 								@if($specialization->id == $speciality->cv_specialization_id) selected="selected" @endif>{{$specialization->name}}</option>
                                 @endforeach   
                             </select>
+                            <br>
+                            @can('cv edit record')
+                            <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#spcModal"><i class="fas fa-plus"></i>
+                            </button>
+                            @endcan 
                         </div>
                     </div>
                 </div>
@@ -382,7 +356,7 @@
                         <div class="col-md-12">
                         	<label class="control-label text-right">Foreign Experienc</span></label>
                         
-                            <input type="text" id="foreign_experience" name="foreign_experience" value="{{ old('foreign_experience',$data->foreign_experience) }}" class="form-control " >
+                            <input type="number" id="foreign_experience" name="foreign_experience" value="{{ old('foreign_experience',$data->foreign_experience) }}" class="form-control " >
 							 
                         </div>
                     </div>
@@ -393,7 +367,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                        		<label class="control-label text-right">Donor Experience</label><br>
-                       		<input type="text"  name="donor_experience" value="{{ old('donor_experience', $data->donor_experience )}}" class="form-control" >
+                       		<input type="number"  name="donor_experience" value="{{ old('donor_experience', $data->donor_experience )}}" class="form-control" >
                         </div>
                     </div>
                 </div>

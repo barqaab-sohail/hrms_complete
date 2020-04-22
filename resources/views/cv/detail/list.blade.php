@@ -26,43 +26,32 @@
 						<th>Father's Name</th>
 						<th>Contact No.</th>
 						<th>CNIC</th>
-						<th>Total Experience</th>
-						<th> Actions </th>
-						<th></th>
+						
+						<th class="text-center"style="width:5%">Edit</th>
+						<th class="text-center"style="width:5%">Delete</th>
 					</tr>
 					</thead>
 					<tbody>
 						@foreach($cvs as $cv)
 							<tr>
 								<td>{{$cv->full_name}}</td>
-								<td>{{$cv->father_name}}</td>
+								<td>{{$cv->father_name??''}}</td>
 								
 								
 								<td>{{$cv->cvPhone->first()->phone??''}}</td>
 								
 
-								<td>{{isset($cv->cnic)?$cv->cnic:'No CNIC'}}</td>
-
-								<td>
-									@php
-										foreach ($cvs as $cv){
-		       								$totalExperience = \Carbon\Carbon::createFromDate($cv->job_starting_date)->diff(\Carbon\Carbon::now())->format('%y years, %m months');
-		       	
-		       								echo $totalExperience;
-		        					    }
-									@endphp
-	
-								</td>
+								<td>{{$cv->cnic??''}}</td>
 								
 					
 
 								@can('cv edit record')
-								<td>
+								<td class="text-center">
 									<a class="btn btn-info btn-sm" href="{{route('cv.edit',$cv->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 								</td>
 								@endcan
 								@can('cv edit record')
-								<td> 
+								<td class="text-center"> 
 								 <form action="{{route('cv.destroy',$cv->id)}}" method="POST">
 								 @method('DELETE')
 								 @csrf

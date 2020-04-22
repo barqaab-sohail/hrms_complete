@@ -1,5 +1,5 @@
 
- function refreshTable(url, time=500) {
+ function refreshTable(url, time=50) {
         $('div.table-container').fadeOut();
         setTimeout(function(){
             $('div.table-container').load(url, function() {
