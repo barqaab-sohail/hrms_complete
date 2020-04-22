@@ -83,8 +83,32 @@
 <script src="{{asset('Massets/plugins/jquery/jquery.min.js') }}"></script>
 <script>
  $('.fa-spinner').hide();
+
 $(document).ready(function(){
-    
+
+   var input = document.getElementById("password");
+   var text = document.getElementById("text");
+   input.addEventListener("keyup", function(event) {
+        if (event.getModifierState("CapsLock")) {
+        text.style.display = "block";
+        } else {
+        text.style.display = "none"
+        }
+    });
+
+    jQuery('#password').keypress(function(e) {
+        var s = String.fromCharCode( e.which );
+          if ( s.toUpperCase() === s && s.toLowerCase() !== s && !e.shiftKey ) {
+            jQuery('#capslockdiv').show();
+          }
+          else { 
+            jQuery('#capslockdiv').hide();
+          }
+    });
+
+
+
+
     $('input[type=email]').keyup(function() {
     $(this).val($(this).val().toLowerCase());
     });

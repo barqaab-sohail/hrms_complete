@@ -32,6 +32,7 @@
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                <p id="text" style="display:none;color:red">Caps lock is ON.</p>
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -72,4 +73,5 @@
         </div>
     </div>
 </div>
+
 @endsection
