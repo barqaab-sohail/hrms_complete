@@ -14,6 +14,7 @@ class CreateHrEobiTable extends Migration
     public function up()
     {
         Schema::create('hr_eobis', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->string('eobi_no',20);

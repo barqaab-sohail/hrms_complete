@@ -14,6 +14,7 @@ class CreateCvExperience extends Migration
     public function up()
     {
         Schema::create('cv_experiences', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->bigInteger('cv_detail_id')->unsigned()->index();
             $table->foreign('cv_detail_id')->references('id')->on('cv_details')->onDelete('cascade');

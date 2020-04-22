@@ -14,6 +14,7 @@ class CreatePrDetailTable extends Migration
     public function up()
     {
         Schema::create('pr_details', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name')->unique();
             $table->bigInteger('contract_type_id')->unsigned();

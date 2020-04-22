@@ -14,6 +14,7 @@ class CreateHrEmployeeLanguageTable extends Migration
     public function up()
     {
         Schema::create('hr_employee_language', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigInteger('language')->unsigned();
             $table->foreign('language')->references('id')->on('languages');
 

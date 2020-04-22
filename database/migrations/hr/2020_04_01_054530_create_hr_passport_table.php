@@ -14,6 +14,7 @@ class CreateHrPassportTable extends Migration
     public function up()
     {
         Schema::create('hr_passports', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_employee_id')->unique()->unsigned();
             $table->string('passport_no',20);

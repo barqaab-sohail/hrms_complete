@@ -14,6 +14,7 @@ class CreateBankHrEmployeeTable extends Migration
     public function up()
     {
         Schema::create('bank_hr_employee', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigInteger('bank_id')->unsigned();
             $table->foreign('bank_id')->references('id')->on('banks');
 

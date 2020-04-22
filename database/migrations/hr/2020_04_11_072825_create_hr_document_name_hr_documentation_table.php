@@ -14,6 +14,7 @@ class CreateHrDocumentNameHrDocumentationTable extends Migration
     public function up()
     {
         Schema::create('hr_document_name_hr_documentation', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigInteger('hr_documentation_id')->unsigned();
             $table->foreign('hr_documentation_id')->references('id')->on('hr_documentations')->onDelete('cascade');
             $table->bigInteger('hr_employee_id')->unsigned();

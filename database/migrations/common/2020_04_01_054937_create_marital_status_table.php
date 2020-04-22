@@ -14,6 +14,7 @@ class CreateMaritalStatusTable extends Migration
     public function up()
     {
         Schema::create('marital_statuses', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name',15)->unique();
             

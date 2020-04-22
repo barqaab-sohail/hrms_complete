@@ -14,6 +14,7 @@ class CreateCvDiscipline extends Migration
     public function up()
     {
         Schema::create('cv_disciplines', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('name')->unqiue();
             $table->timestamps();

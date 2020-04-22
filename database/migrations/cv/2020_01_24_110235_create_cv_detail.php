@@ -14,6 +14,7 @@ class CreateCvDetail extends Migration
     public function up()
     {
         Schema::create('cv_details', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('full_name');
             $table->string('father_name')->nullable();

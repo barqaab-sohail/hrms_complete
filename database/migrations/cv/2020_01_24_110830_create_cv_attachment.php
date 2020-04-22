@@ -14,6 +14,7 @@ class CreateCvAttachment extends Migration
     public function up()
     {
         Schema::create('cv_attachments', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('document_name');
             $table->string('file_name');

@@ -14,6 +14,7 @@ class CreateEducationHrEmployeeTable extends Migration
     public function up()
     {
         Schema::create('education_hr_employee', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigInteger('education_id')->unsigned();
             $table->foreign('education_id')->references('id')->on('educations');
 

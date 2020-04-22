@@ -14,6 +14,7 @@ class CreateCvDetailEducationTable extends Migration
     public function up()
     {
         Schema::create('cv_detail_education', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigInteger('cv_detail_id')->unsigned()->index();
             $table->foreign('cv_detail_id')->references('id')->on('cv_details')->onDelete('cascade');
 

@@ -14,6 +14,7 @@ class CreateHrDesignationTable extends Migration
     public function up()
     {
         Schema::create('hr_designations', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
            $table->string('name')->unique();
             $table->tinyInteger('level');

@@ -14,6 +14,7 @@ class CreateHrContactTypeTable extends Migration
     public function up()
     {
         Schema::create('hr_contact_types', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name',30);
             $table->timestamps();

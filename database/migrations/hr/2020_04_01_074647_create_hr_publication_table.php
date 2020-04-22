@@ -14,6 +14,7 @@ class CreateHrPublicationTable extends Migration
     public function up()
     {
         Schema::create('hr_publications', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->string('title');

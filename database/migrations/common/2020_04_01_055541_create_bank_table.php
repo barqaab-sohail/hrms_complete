@@ -14,6 +14,7 @@ class CreateBankTable extends Migration
     public function up()
     {
         Schema::create('banks', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name')->unique();
             

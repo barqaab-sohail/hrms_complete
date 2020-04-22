@@ -14,6 +14,7 @@ class CreateHrSalaryDetailTable extends Migration
     public function up()
     {
         Schema::create('hr_salary_details', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->bigInteger('hr_salary_id')->unsigned();

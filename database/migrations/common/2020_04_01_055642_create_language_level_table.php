@@ -14,6 +14,7 @@ class CreateLanguageLevelTable extends Migration
     public function up()
     {
         Schema::create('language_levels', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name',10);
         });

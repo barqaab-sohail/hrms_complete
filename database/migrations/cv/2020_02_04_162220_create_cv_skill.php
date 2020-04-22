@@ -14,6 +14,7 @@ class CreateCvSkill extends Migration
     public function up()
     {
         Schema::create('cv_skills', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('skill_name')->nullable();
             $table->bigInteger('cv_detail_id')->unsigned();

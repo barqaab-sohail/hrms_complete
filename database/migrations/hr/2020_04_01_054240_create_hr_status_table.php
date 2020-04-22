@@ -14,6 +14,7 @@ class CreateHrStatusTable extends Migration
     public function up()
     {
         Schema::create('hr_statuses', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name');
             $table->timestamps();

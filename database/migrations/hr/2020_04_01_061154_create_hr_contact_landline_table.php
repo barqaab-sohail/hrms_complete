@@ -14,6 +14,7 @@ class CreateHrContactLandlineTable extends Migration
     public function up()
     {
         Schema::create('hr_contact_landlines', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_contact_id')->unsigned();
             $table->string('landline',20);  

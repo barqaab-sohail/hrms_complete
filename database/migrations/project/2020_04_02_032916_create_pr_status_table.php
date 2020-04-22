@@ -14,6 +14,7 @@ class CreatePrStatusTable extends Migration
     public function up()
     {
         Schema::create('pr_statuses', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name',30);
             $table->timestamps();

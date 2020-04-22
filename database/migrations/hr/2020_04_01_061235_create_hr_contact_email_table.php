@@ -14,6 +14,7 @@ class CreateHrContactEmailTable extends Migration
     public function up()
     {
         Schema::create('hr_contact_emails', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_contact_id')->unsigned();
             $table->string('email',50);  

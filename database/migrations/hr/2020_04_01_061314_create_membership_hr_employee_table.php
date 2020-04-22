@@ -14,6 +14,7 @@ class CreateMembershipHrEmployeeTable extends Migration
     public function up()
     {
         Schema::create('membership_hr_employee', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigInteger('membership_id')->unsigned();
             $table->foreign('membership_id')->references('id')->on('memberships');
 

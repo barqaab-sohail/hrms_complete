@@ -55,13 +55,11 @@ class CvController extends Controller
             $input ['cv_submission_date']= \Carbon\Carbon::parse($request->cv_submission_date)->format('Y-m-d');
             }
 
-
         //start transaction
 		DB::transaction(function () use ($request, $input) {   
 		
 		//add cv detail
 		$cvDetail=CvDetail::create($input);
-
 
 		//add skill
 		foreach ($request->input('skill')as $skill){
@@ -79,7 +77,6 @@ class CvController extends Controller
 			$cvDetail->cvEducation()->attach($educationId, ['institute'=>$institute, 'passing_year'=>$passingYear]);
 			}
 
-			
 		//add specialization
 			for ($i=0;$i<count($request->input('speciality_name'));$i++){
 			$speciality['cv_specialization_id'] = $request->input("speciality_name.$i");

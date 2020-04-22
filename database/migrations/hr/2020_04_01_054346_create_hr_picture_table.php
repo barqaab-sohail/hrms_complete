@@ -14,6 +14,7 @@ class CreateHrPictureTable extends Migration
     public function up()
     {
         Schema::create('hr_pictures', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_employee_id')->unique()->unsigned();
             $table->string('name');

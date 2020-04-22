@@ -14,6 +14,7 @@ class CreateHrDocumentNameTable extends Migration
     public function up()
     {
         Schema::create('hr_document_names', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name')->unique();
         });

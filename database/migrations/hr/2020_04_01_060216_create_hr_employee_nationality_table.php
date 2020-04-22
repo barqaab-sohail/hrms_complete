@@ -14,6 +14,7 @@ class CreateHrEmployeeNationalityTable extends Migration
     public function up()
     {
         Schema::create('hr_employee_nationality', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigInteger('country_id')->unsigned();
             $table->foreign('country_id')->references('id')->on('countries');
 

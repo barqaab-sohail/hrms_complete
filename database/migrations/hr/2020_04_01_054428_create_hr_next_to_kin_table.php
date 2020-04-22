@@ -14,6 +14,7 @@ class CreateHrNextToKinTable extends Migration
     public function up()
     {
         Schema::create('hr_next_to_kins', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_employee_id')->unique()->unsigned();
             $table->string('name');

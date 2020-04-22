@@ -14,6 +14,7 @@ class CreateHrDrivingTable extends Migration
     public function up()
     {
         Schema::create('hr_drivings', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_employee_id')->unique()->unsigned();
             $table->string('licence_no',20);

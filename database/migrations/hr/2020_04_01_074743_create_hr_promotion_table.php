@@ -14,6 +14,7 @@ class CreateHrPromotionTable extends Migration
     public function up()
     {
         Schema::create('hr_promotions', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->date('effective_date');

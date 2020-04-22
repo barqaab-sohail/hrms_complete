@@ -14,6 +14,7 @@ class CreateHrLetterTypeTable extends Migration
     public function up()
     {
         Schema::create('hr_letter_types', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name',50);
         });

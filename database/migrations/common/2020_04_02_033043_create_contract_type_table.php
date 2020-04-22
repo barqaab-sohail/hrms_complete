@@ -14,6 +14,7 @@ class CreateContractTypeTable extends Migration
     public function up()
     {
         Schema::create('contract_types', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name',30);
         });
