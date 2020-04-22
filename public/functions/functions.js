@@ -161,7 +161,7 @@ function formFunctions(){
     $('.form-prevent-multiple-submits').on('submit', function(){
 
         $('.btn-prevent-multiple-submits').attr('disabled','ture');
-        $('.spinner').show();
+        $('.spinner',this).show();
 
         //submit enalbe after 5 second
         setTimeout(function(){

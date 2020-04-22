@@ -88,7 +88,7 @@
 		                                        <div class="col-md-12">
 		                                        	<label class="control-label text-right">Job Starting Date<span class="text_requried">*</span></label>
 		                                        
-		                                            <input type="text" id="job_starting_date" name="job_starting_date"  value="{{ old('job_starting_date') }}" class="form-control date_input" placeholder="Enter Date of Birth" readonly>
+		                                            <input type="text" id="job_starting_date" name="job_starting_date"  value="{{ old('job_starting_date') }}" class="form-control date_input" data-validation="required" placeholder="Enter Date of Birth" readonly>
 													 
 		                                            <br>
 		                                           <i class="fas fa-trash-alt text_requried"></i> 
@@ -167,7 +167,7 @@
 		                                		
 		                                        <div class="col-md-8" >
 		                                        	<label class="control-label text-right">Mobile Number<span class="text_requried">*</span></label>
-		                                            <input type="text" name="phone[]" value="{{old('phone.0')}}" class="form-control" >
+		                                            <input type="text" name="phone[]" value="{{old('phone.0')}}" data-validation="required" class="form-control" >
 
 		                                        </div>
 												<div class="col-md-4">
@@ -191,7 +191,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12 required">
 		                                       		<label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
-		                                       			<select id="degree_name" name="degree_name[]"  class="form-control">
+		                                       			<select id="degree_name" name="degree_name[]" data-validation="required" class="form-control">
                                                        <option></option>
                                                         @foreach($degrees as $degree)
 														<option value="{{$degree->id}}" {{(old("degree_name.0")==$degree->id? "selected" : "")}}>{{$degree->degree_name}}</option>
@@ -199,7 +199,10 @@
                                                       
                                                     </select>
                                                     <br>
-					                                @can('cv edit record')<i id="addDegree" class="fa fa-plus-square text_add" aria-hidden="true"></i>@endcan 
+					                                @can('cv edit record')
+					                                <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#eduModal"><i class="fas fa-plus"></i>
+		          									</button>
+		          									@endcan 
 
 		                                        </div>
 		                                    </div>
@@ -240,40 +243,7 @@
 		                                </div>
 		                                
 		                            </div>
-		                            <div class="row hideDiv">
-					                	 <div class="col-md-3">
-		                                    <div class="form-group row">
-		                                        <div class="col-md-12">
-		                                       		<label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
-		                                       		<input type="text"  id="add_degree" name="add_degree" value="{{ old('add_degree') }}"  class="form-control" placeholder="Enter Degree Name" required>
-		                                        </div>
-		                                    </div>
-		                                </div>
-		                                <!--/span-->
-		                                <div class="col-md-2">
-		                                    <div class="form-group row">
-		                                        <div class="col-md-12">
-		                                        	<label class="control-label text-right">Level of Degree</label>
-		                                        	<select  id="add_level" name="add_level" class="form-control selectTwo">
-													<option value=""></option>
-													@for ($i = 10; $i <=20; $i++)
-    												<option value="{{$i}}" {{(old("level")==$i? "selected" : "")}}>{{ $i }}</option>
-													@endfor
-													</select>
-		                                        
-		                                        </div>
-		                                    </div>
-		                                </div>   
-		                                 <!--/span-->
-		                                <div class="col-md-2">
-		                                    <div class="form-group row">
-		                                        <div class="col-md-12">
-		                                        <br>
-		                                        	<i class="fas fa-save fa-2x text_save" id="store_degree" href="{{route('education.store')}}" aria-hidden="true"></i>
-		                                        </div>
-		                                    </div>
-		                                </div>    
-					                </div><!--/End Row-->
+		                            
 		                             <!--row 5-->
 		                            <div class="row specialization" id='spe_1' >
 		                                <div class="col-md-3">
@@ -282,7 +252,7 @@
 		                                        <div class="col-md-12 required">
 		                                       		<label class="control-label text-right">Speciality<span class="text_requried">*</span></label><br>
 
-		                                       		<select  name="speciality_name[]"  id=speciality_name class="form-control" >
+		                                       		<select  name="speciality_name[]"  id=speciality_name data-validation="required" class="form-control" >
                                                         <option value=""></option>
                                                         
                                                         @foreach($specializations as $specialization)
@@ -292,6 +262,10 @@
                                                         @endforeach
                                                       
                                                     </select>
+                                                    @can('cv edit record')
+					                                <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#spcModal"><i class="fas fa-plus"></i>
+		          									</button>
+		          									@endcan 
 
 		                                       		
 
@@ -304,7 +278,7 @@
 		                                        <div class="col-md-12 required">
 		                                        	<label class="control-label">Discipline<span class="text_requried">*</span></label>
 
-		                                        	<select  name="discipline_name[]"  id=discipline class="form-control" >
+		                                        	<select  name="discipline_name[]"  id=discipline data-validation="required" class="form-control" >
                                                         <option value=""></option>
                                                         
                                                         @foreach($disciplines as $discipline)
@@ -325,7 +299,7 @@
 		                                        <div class="col-md-12 required">
 		                                        	<label class="control-label">Stage<span class="text_requried">*</span></label>
 
-		                                        	<select  name="stage_name[]"  id=stage_name class="form-control" >
+		                                        	<select  name="stage_name[]"  id=stage_name data-validation="required" class="form-control" >
                                                         <option value=""></option>
                                                         
                                                         @foreach($stages as $stage)
@@ -346,7 +320,7 @@
 		                                        <div class="col-md-8 required">
 		                                        	<label class="control-label text-right">Years of Experience<span class="text_requried">*</span></label>
 		                                        
-		                                            <select  name="year[]"  class="form-control">
+		                                            <select data-validation="required" name="year[]"  class="form-control">
 
 													<option value=""></option>
 													@for ($i = 1; $i <= 50; $i++)
@@ -431,7 +405,7 @@
 		                                        <div class="col-md-12 required">
 		                                        	<label for="barqaab_employment" class="control-label">BARQAAB Employee<span class="text_requried">*</span></label>
 
-		                                        	<select  id="bqb" name="barqaab_employment" class="form-control " >
+		                                        	<select  id="bqb" name="barqaab_employment" data-validation="required" class="form-control " >
 
                                                         <option value="">&nbsp;</option>
                                                         <option value="1" {{(old("barqaab_employment")=="1"? "selected":"")}}>Yes</option>
@@ -496,7 +470,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12">
 		                                       		<label class="control-label text-right">Attached CV<span class="text_requried">*</span></label><br>
-		                                       		<input type="file"  id="cv" name="cv" value="{{ old('cv') }}"  class="form-control" ><span class="text_requried">doc, docx and pdf only</span>
+		                                       		<input type="file" data-validation="required" id="cv" name="cv" value="{{ old('cv') }}"  class="form-control" ><span class="text_requried">doc, docx and pdf only</span>
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -521,7 +495,9 @@
 		                            </div>
 		                        </div>
 		                    </form>
-		        		</div>       
+		        		</div>      
+		        		@include('cv.detail.eduModal') 
+		        		@include('cv.detail.spcModal') 
 		        	</div>
 		        </div>
             </div>
@@ -793,66 +769,7 @@ $('#formCvDetail').on('submit', function(event){
 
 
 
-		function submitFormWithoutDataForm(result, url){
-	        //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
-	        $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
-	            var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
-
-	            if (token) {
-	                return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Object
-	            }
-	        });
-	         var data = new FormData();
-	         data.append('degree_name', result[0].degree_name);
-	         data.append('level', result[0].level);
-
-	       // ajax request
-	        $.ajax({
-	           url:url,
-	           method:"POST",
-	           data:data,
-	           //dataType:'JSON',
-	           contentType: false,
-	           cache: false,
-	           processData: false,
-	           success:function(data){
-	               
-	                if(data.degrees ==''){
-	                    $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
-	                    $('html,body').scrollTop(0);
-	                }else{  
-	                    if(data.degrees)
-	                    $("#degree_name").empty();
-	                    $("#degree_name").append('<option value="">Select Degree</option>');
-	                    $.each(data.degrees, function(key,value){
-	                                //console.log(key+'-'+value);
-	                             $("#degree_name").append('<option value="'+key+'">'+value+'</option>');
-	                    });
-	                    $('#degree_name').chosen('destroy');
-	                    $('#degree_name').chosen();
-	                    $('.hideDiv').hide();
-	                    
-	                }
-
-	           },
-	            error: function (jqXHR, textStatus, errorThrown){
-	                if (jqXHR.status == 401){
-	                    location.href = "{{route ('login')}}"
-	                    }      
-	                var test = jqXHR.responseJSON // this object have two more objects one is errors and other is message.
-	                
-	                var errorMassage = '';
-
-	                //now saperate only errors object values from test object and store in variable errorMassage;
-	                $.each(test.errors, function (key, value){
-	                errorMassage += value + '<br>';  
-	                });
-	                 $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
-	                 $('html,body').scrollTop(0);                
-	                    
-	            }//end error
-			    }); //end ajax
-		}
+		
 	});	
 	
 </script>

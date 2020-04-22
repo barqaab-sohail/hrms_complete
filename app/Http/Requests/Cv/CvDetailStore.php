@@ -29,7 +29,7 @@ class CvDetailStore extends FormRequest
             
             'full_name' => 'required',
             'cnic' => 'nullable|min:15|max:15|unique:cv_details,cnic,'.session('cv_detail_id'),
-            'date_of_birth' => 'nullable|date|before:18 years ago',
+            'date_of_birth' => 'nullable|date|before:18 years ago|after:75 years ago',
             'job_starting_date' => 'required|date',
             'address' => 'nullable|max:191',
             'city' => 'nullable|max:191',
@@ -47,7 +47,7 @@ class CvDetailStore extends FormRequest
             'membership_name.*'=>'nullable|distinct',
             'barqaab_employment' => 'required',
             'cv_submission_date'=>'nullable|date|before_or_equal:'.$today,
-            //'cv' => 'required|file|mimes:doc,docx,pdf',
+            'cv' => 'required|file|mimes:doc,docx,pdf',
 
         ];
     }
@@ -65,8 +65,9 @@ class CvDetailStore extends FormRequest
             'membership_number.*.required_if' => 'Pakistan Engineering Council Number is required',
             'cv_submission_date.before_or_equal'=>'The cv submission date must be a date before or equal today',
             'cv.required'=>"CV Attachment is Required",
+            'year.*.required' => 'years of experience is required',
+            'phone.*.required' => 'mobil number is required',
 
-            
         ];
     }
 }
