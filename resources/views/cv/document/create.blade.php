@@ -75,25 +75,25 @@
     </form>
     
     <div class="col-md-12 table-container">
-                      
+                 
     </div>
    
 </div>
         
 <script>
     $(document).ready(function(){
-        $('#formDocument').hide();
-        $('#hideButton').click(function(){
 
+        formFunctions();
+
+        $('#formDocument').hide();
+
+        $('#hideButton').click(function(){
             $('#formDocument').toggle();
         });
 
+       refreshTable("{{route('cvDocument.table')}}");
 
-        refreshTable("{{route('cvDocument.table')}}");
-        $("form").submit(function (e) {
-         e.preventDefault();
-         });
-       
+      
         //submit function
         $("#formDocument").submit(function(e) { 
             e.preventDefault();
@@ -105,6 +105,7 @@
             $('#h6').text('Click On Image to Add Document');
             refreshTable("{{route('cvDocument.table')}}",900);
         });
+
         $( "#pdf" ).hide();
             // Prepare the preview for profile picture
         $("#view").change(function(){
@@ -131,7 +132,8 @@
                 $( "#pdf" ).show();
                 }else if ((fileType=='application/vnd.openxmlformats-officedocument.wordprocessingml.document')||(fileType=='application/msword')){
                     readURL(this);
-                    document.getElementById("h6").innerHTML = "Document is Attached";
+                    document.getElementById("h6").innerHTML = "Document File is Attached";
+                    $('embed').remove();
                     
                 }else{
                     alert('Only PDF, JPG and PNG Files Allowed');

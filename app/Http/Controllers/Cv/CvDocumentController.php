@@ -58,7 +58,6 @@ class CvDocumentController extends Controller
 				$attachment['cv_detail_id']=$cvDetail->id;
 			CvAttachment::create($attachment);
 
-
 		});  //end transaction
         	return response()->json(['status'=> 'OK', 'message' => "Document Sucessfully Saved"]);
     }
@@ -74,6 +73,53 @@ class CvDocumentController extends Controller
         }    	
     }
 
+    public function update(Request $request, $id){
+
+        $input = CvAttachment::find($id);
+        if ($request->hasFile('document')){
+           
+            DB::transaction(function () use ($request, $input, $id) { 
+                $extension = request()->document->getClientOriginalExtension();
+                $fileName =strtolower(request()->document_name).'-'. time().'.'.$extension;
+                $folderName = $input->path;
+                $request->file('document')->storeAs('public/'.$folderName,$fileName);
+                $file_path = storage_path('app/public/'.$folderName.$fileName);
+            
+                $attachment['content']='';                               
+                    if (($extension == 'doc')||($extension == 'docx')){
+                        $text = new DocxConversion($file_path);
+                        $attachment['content']=mb_strtolower($text->convertToText());
+                    }else if ($extension =='pdf'){
+                        $reader = new \Asika\Pdf2text;
+                        $attachment['content'] = mb_strtolower($reader->decode($file_path));
+                    }
+
+                $attachment['document_name']=request()->document_name;
+                $attachment['file_name']=$fileName;
+                $attachment['size']=$request->file('document')->getSize();
+                $attachment['extension']=$extension;
+
+                CvAttachment::findOrFail($id)->update($attachment);
+                
+                if(File::exists(public_path('storage/'.$input->path.$input->file_name))){
+                    File::delete(public_path('storage/'.$input->path.$input->file_name));
+                }
+
+            });  //end transaction
+
+
+        }else{
+
+            DB::transaction(function () use ($request, $id) {  
+            CvAttachment::findOrFail($id)->update(['document_name'=>$request->document_name]);
+            }); // end transcation
+
+        }
+        return response()->json(['status'=> 'OK', 'message' => "Document Sucessfully Updated"]);
+
+
+    }
+
     public function refreshTable(){
         $documentIds = CvAttachment::where('cv_detail_id', session('cv_detail_id'))->get();
         return view('cv.document.list',compact('documentIds'));
@@ -82,13 +128,12 @@ class CvDocumentController extends Controller
     public function destroy($id){
 
     	$cvDocument = CvAttachment::findOrFail($id);
-
-        $path = public_path('storage/'.$cvDocument->path.$cvDocument->file_name);
-        if(File::exists($path)){
-            File::delete($path);
-        }
-            $cvDocument->forceDelete();
-            return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
+            $path = public_path('storage/'.$cvDocument->path.$cvDocument->file_name);
+            if(File::exists($path)){
+                File::delete($path);
+            }
+        $cvDocument->forceDelete();
+        return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
 
     }
 

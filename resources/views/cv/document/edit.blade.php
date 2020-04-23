@@ -8,6 +8,7 @@
 <div class="card-body">
 
     <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formDocument" enctype="multipart/form-data">
+        @method('PATCH')
         {{csrf_field()}}
         <div class="form-body">
             
@@ -19,7 +20,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Document Description</label>
                         
-                            <input type="text" id="description" name="description" value="{{ old('description',$data->description) }}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
+                            <input type="text" id="document_name" name="document_name" value="{{ old('document_name',$data->document_name) }}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
                         </div>
                     </div>
                 </div>
@@ -28,7 +29,9 @@
             <!--/row-->
              <div class="row">
                 <div class="col-md-8 pdfView">
-                    <embed id="pdf" src=""  type="application/pdf" height="300" width="100%" />
+                 @if($data->extension =='pdf')
+                    <iframe src="{{asset('storage/'.$data->path.$data->file_name)}}" height="300" width="100%"/>
+                @endif
                 </div>
                 <div class="col-md-1">
                 </div>
@@ -41,7 +44,7 @@
                         <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
                         
                         </input>
-                        <input type="file"  name="document" id="view" data-validation="required" class="" required hidden>
+                        <input type="file"  name="document" id="view" class="" hidden>
                                                                         
 
                         <h6 id="h6" class="card-title m-t-10">Click On Image to Add Document<span class="text_requried">*</span></h6>
@@ -82,10 +85,10 @@
         
 <script>
     $(document).ready(function(){
-        $('#formDocument').hide();
+   
         $('#hideButton').click(function(){
 
-            $('#formDocument').toggle();
+           resetForm();
         });
 
 
@@ -131,7 +134,8 @@
                 $( "#pdf" ).show();
                 }else if ((fileType=='application/vnd.openxmlformats-officedocument.wordprocessingml.document')||(fileType=='application/msword')){
                     readURL(this);
-                    document.getElementById("h6").innerHTML = "Document is Attached";
+                    document.getElementById("h6").innerHTML = "Document File is Attached";
+                    $('iframe').hide();
                     
                 }else{
                     alert('Only PDF, JPG and PNG Files Allowed');
@@ -163,7 +167,7 @@
                     var reader = new FileReader();
                     
                         reader.onload = function (e) {
-                            $('embed').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
+                            $('iframe').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
                         }
                         reader.readAsDataURL(input.files[0]);
                 }   

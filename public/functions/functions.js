@@ -44,8 +44,6 @@ function toTitleCase(str) {
 function formFunctions(){
 
     $('.hideDiv').hide();
-   
-
 
      //get Date from Database and set as "Saturday, 24-August-2019"
     var weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -173,6 +171,8 @@ function formFunctions(){
 })();
 
 
+
+
 function resetForm(){
     $(':input','form')
                      .not(':button, :submit, :reset')
@@ -187,6 +187,7 @@ function resetForm(){
     $('input').removeClass('valid');
     $('input').removeClass('error');
     $("input[style='border-color: rgb(185, 74, 72);']").css('border-color','').siblings("span").attr('class','help-block').remove();
+    $('iframe').remove();
 
 }
 

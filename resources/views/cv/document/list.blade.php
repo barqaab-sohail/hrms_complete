@@ -12,10 +12,10 @@
 					<tr>
 						<th>Document Name</th>
 						<th>View</th>
-						@can('Super Admin')			 
-						<th class="text-center"style="width:5%">Edit</th>
-						@endcan
+						@can('edit cv record')			 
+						<th class="text-center"style="width:5%">Edit</th>	
 						<th class="text-center"style="width:5%">Delete</th>
+						@endcan
 					</tr>
 				</thead>
 				<tbody>
@@ -33,21 +33,25 @@
 
 						
 						
-						@can('Super Admin')
-						<td>
+						@can('cv edit record')
+						@if($documentId->document_name != 'Original CV')
+						<td class="text-center">
+						
 						 <a class="btn btn-info btn-sm" id="editDocument" href="{{route('cvDocument.edit',$documentId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
+						
 						 </td>
 						
 						  
-						 <td>
-						 <form id="deleteDocument{{$documentId->id}}" action="{{route('cvDocument.destroy',$documentId->id)}}" method="POST">
+						 <td class="text-center">
+						 <form id="deleteDocument{{$documentId->id}}" method="POST">
 						 @method('DELETE')
 						 @csrf
 						 <button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
 						 </form>
 
 						 </td>
-						  @endcan
+						 @endif
+						 @endcan
 													
 					</tr>
 					@endforeach
@@ -61,17 +65,12 @@
 <script>
     $(document).ready(function(){
 
-	    $('#myDataTable').DataTable({
-	                stateSave: false,
-	                dom: 'flrtip',
-
-	    });
 
 	     //function view from list table
         $(function(){
+        $('#ViewPDF, #ViewIMG').EZView();
+    	});
 
-			 $('#ViewPDF, #ViewIMG').EZView();
-		});
 
 
 
@@ -79,12 +78,10 @@
          e.preventDefault();
       	});
 
-
-	  	$("form[id^=deleteDocument]").submit(function(e) { 
+		$(document).on('submit','#deleteDocument{{$documentId->id}}',function(e) {
 	  	e.preventDefault();
-	  	var url = $(this).attr('action');
+	  	var url = "{{route('cvDocument.destroy',$documentId->id)}}";
 	  	$('.fa-spinner').show(); 
-
 	  	submitForm(this, url);
 	  	resetForm();
 	  	refreshTable("{{route('cvDocument.table')}}",900);

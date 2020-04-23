@@ -555,14 +555,12 @@
         </div>
     </form>
 </div>       
-@push('scripts')
-<script language="JavaScript" type="text/javascript">
-$(document).ready(function (){
-$('select').chosen('destroy');
-$('select:not(.selectTwo)').chosen();
 
-});
+<script>
+    $(document).ready(function (){
+    $('select').chosen('destroy');
+    $('select:not(.selectTwo)').chosen();
+    });
 
 </script>
-@endpush
-@stack('scripts')
+
