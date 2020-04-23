@@ -14,7 +14,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                        		<label class="control-label text-right">Full Name<span class="text_requried">*</span></label><br>
-                       		<input type="text"  name="full_name" data-validation="required" value="{{old('full_name', $data->full_name)}}"  class="form-control" placeholder="Enter Full Name" >
+                       		<input type="text"  name="full_name" data-validation="required length"  data-validation-length="max190" value="{{old('full_name', $data->full_name)}}"  class="form-control" placeholder="Enter Full Name" >
                         </div>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
                         <div class="col-md-12 ">
                         	<label class="control-label">Father Name</label>
                         
-                            <input type="text"  name="father_name" value="{{old('father_name', $data->father_name)}}"   class="form-control" placeholder="Enter Father Name" >
+                            <input type="text"  name="father_name" value="{{old('father_name', $data->father_name)}}"  data-validation="length"  data-validation-length="max190" class="form-control" placeholder="Enter Father Name" >
                         </div>
                     </div>
                 </div>
@@ -48,6 +48,7 @@
 							 
                             <br>
                            <i class="fas fa-trash-alt text_requried"></i> 
+                           <span id="age" class="float-right" style="color:red"></span>
                         </div>
                     </div>
                 </div>
@@ -74,7 +75,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                        		<label class="control-label ">Address</label><br>
-                       		<input type="text"  name="address" value="{{old('address', $data->cvContact->address)}}"   class="form-control" placeholder="Enter Address" >
+                       		<input type="text"  name="address" value="{{old('address', $data->cvContact->address)}}" data-validation="length"  data-validation-length="max190"  class="form-control" placeholder="Enter Address" >
                         </div>
                     </div>
                 </div>
@@ -139,7 +140,7 @@
                         <div class="col-md-12">
                         	<label class="control-label text-right">Email</label>
                         
-                            <input type="email" name="email" value="{{old('email', $data->cvContact->email)}}" class="form-control" placeholder="Enter Email Address " >
+                            <input type="email" name="email" value="{{old('email', $data->cvContact->email)}}" data-validation="length"  data-validation-length="max190" class="form-control" placeholder="Enter Email Address " >
                         </div>
                     </div>
                 </div>
@@ -151,7 +152,7 @@
                 	<div class="form-group row">
                         <div class="col-md-8">
                         	<label class="control-label text-right">Mobile Number<span class="text_requried">*</span></label>
-                            <input type="text" name="phone[]['{{$phone->id}}']" data-validation="required" value="{{$phone->phone}}"  class="form-control" >
+                            <input type="text" name="phone[]['{{$phone->id}}']" data-validation="required length"  data-validation-length="max190" value="{{$phone->phone}}"  class="form-control" >
 
                         </div>
 						<div class="col-md-4">
@@ -201,7 +202,7 @@
                     <div class="form-group row">
                         <div class="col-md-12 ">
                         	<label class="control-label">Name of Institut</label>
-                            <input type="text" name="institute[]" id="institute" value="{{$education->pivot->institute}}"  class="form-control" placeholder="Enter Institute Name" >
+                            <input type="text" name="institute[]" id="institute" value="{{$education->pivot->institute}}" data-validation="length"  data-validation-length="max190" class="form-control" placeholder="Enter Institute Name" >
 
                         </div>
                     </div>
@@ -429,7 +430,7 @@
                         </div>
                         <div class="col-md-4">
                         	<label class="control-label text-right">Number</label>
-                            <input type="text" name="membership_number[]" value="{{ old('membership_number.0') }}" class="form-control" >
+                            <input type="text" name="membership_number[]" data-validation="length"  data-validation-length="max190" value="{{ old('membership_number.0') }}" class="form-control" >
                              
                     
                         </div>
@@ -485,7 +486,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                        		<label class="control-label text-right">Comments</label><br>
-                       		<input type="text"  name="comments" value="{{ old('comments', $data->comments) }}" class="form-control" >
+                       		<input type="text"  name="comments" data-validation="length"  data-validation-length="max190" value="{{ old('comments', $data->comments) }}" class="form-control" >
                         </div>
                     </div>
                 </div>
@@ -502,7 +503,7 @@
                     <div class="form-group row">
                         <div class="col-md-9">
                         	<label class="control-label text-right">Other Skills</label><br>
-                       		<input type="text"  name="skill_name[]['{{$skill->id}}']" value="{{$skill->skill_name}}" class="form-control" >
+                       		<input type="text"  name="skill_name[]['{{$skill->id}}']" value="{{$skill->skill_name}}" data-validation="length"  data-validation-length="max190" class="form-control" >
 
                         </div>
                         <div class="col-md-3">
@@ -557,11 +558,12 @@
 </div>       
 @include('cv.detail.eduModal') 
 @include('cv.detail.spcModal') 
+@push('scripts')
 <script>
     $(document).ready(function (){
     $('select').chosen('destroy');
     $('select:not(.selectTwo)').chosen();
     });
-
 </script>
+@endpush
 

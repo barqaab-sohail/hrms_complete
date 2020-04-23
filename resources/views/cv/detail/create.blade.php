@@ -40,8 +40,10 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12">
 		                                       		<label class="control-label text-right">Full Name<span class="text_requried">*</span></label><br>
-		                                       		<input type="text"  name="full_name" data-validation="required" value="{{ old('full_name') }}"  class="form-control" placeholder="Enter Full Name" >
-		                                       		<span class="help-block full_name-error"></span>
+		                                       		<input type="text" id="full_name" name="full_name" data-validation="required length"  data-validation-length="max190" value="{{ old('full_name') }}"  class="form-control" placeholder="Enter Full Name" ><span class="help-block full_name-error"></span>
+		                                       		<div id="nameList">
+		                                       		</div>
+		                                       		
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -51,7 +53,7 @@
 		                                        <div class="col-md-12 ">
 		                                        	<label class="control-label">Father Name</label>
 		                                        
-		                                            <input type="text"  name="father_name" value="{{ old('father_name') }}"  class="form-control" placeholder="Enter Father Name" >
+		                                            <input type="text"  name="father_name" value="{{ old('father_name') }}"  class="form-control"  data-validation="length"  data-validation-length="max190"  placeholder="Enter Father Name" >
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -75,6 +77,7 @@
 													 
 		                                            <br>
 		                                           <i class="fas fa-trash-alt text_requried"></i> 
+		                                           <span id="age" class="float-right" style="color:red"></span>
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -100,7 +103,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12">
 		                                       		<label class="control-label ">Address</label><br>
-		                                       		<input type="text"  name="address" value="{{ old('address') }}"  class="form-control" placeholder="Enter Address" >
+		                                       		<input type="text"  name="address" value="{{ old('address') }}"  class="form-control" class="form-control"  data-validation="length"  data-validation-length="max190"  placeholder="Enter Address" >
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -155,7 +158,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12 remove_phone_div">
 		                                        	<label class="control-label text-right">Email</label>
-		                                            <input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="Enter Email Address " >
+		                                            <input type="email" name="email" value="{{ old('email') }}" class="form-control" class="form-control"  data-validation="length"  data-validation-length="max190" placeholder="Enter Email Address " >
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -167,7 +170,7 @@
 		                                		
 		                                        <div class="col-md-8" >
 		                                        	<label class="control-label text-right">Mobile Number<span class="text_requried">*</span></label>
-		                                            <input type="text" name="phone[]" value="{{old('phone.0')}}" data-validation="required" class="form-control" >
+		                                            <input type="text" name="phone[]" value="{{old('phone.0')}}" data-validation="required length" data-validation-length="max15"  class="form-control" >
 
 		                                        </div>
 												<div class="col-md-4">
@@ -212,7 +215,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12 ">
 		                                        	<label class="control-label">Name of Institute</label>
-		                                            <input type="text" name="institute[]" value="{{old('institute.0')}}" class="form-control" placeholder="Enter Institute Name" >
+		                                            <input type="text" name="institute[]" value="{{old('institute.0')}}" class="form-control" class="form-control"  data-validation="length"  data-validation-length="max190"  placeholder="Enter Institute Name" >
 
 		                                        </div>
 		                                    </div>
@@ -381,7 +384,7 @@
 		                                        </div>
 		                                        <div class="col-md-4">
 		                                        	<label class="control-label text-right">Number</label>
-		                                            <input type="text" name="membership_number[]" value="{{ old('membership_number.0') }}" class="form-control" >
+		                                            <input type="text" name="membership_number[]" value="{{ old('membership_number.0') }}" class="form-control"  data-validation="length"  data-validation-length="max190"  class="form-control" >
 		                                             
                                             
 		                                        </div>
@@ -433,7 +436,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12">
 		                                       		<label class="control-label text-right">Comments</label><br>
-		                                       		<input type="text"  name="comments" value="{{ old('comments') }}" class="form-control" >
+		                                       		<input type="text"  name="comments" value="{{ old('comments') }}" class="form-control"  data-validation="length"  data-validation-length="max190"  class="form-control" >
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -447,7 +450,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-9">
 		                                        	<label class="control-label text-right">Other Skills</label><br>
-		                                       		<input type="text"  name='skill[]' value="{{old('skill.0')}}" class="form-control" >
+		                                       		<input type="text"  name='skill[]' value="{{old('skill.0')}}" class="form-control"  data-validation="length"  data-validation-length="max190"  class="form-control" >
 
 		                                        </div>
 		                                        <div class="col-md-3">
@@ -509,6 +512,23 @@
 <script>
 
 $(document).ready(function(){
+
+	$('#full_name').keyup(function(){ 
+        var query = $(this).val();
+        if(query != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"{{ route('autocomplete.fetch') }}",
+          method:"GET",
+          data:{query:query, _token:_token},
+          success:function(data){
+           $('#nameList').fadeIn();  
+                    $('#nameList').html(data);
+          }
+         });
+        }
+    });
 
 
 formFunctions();

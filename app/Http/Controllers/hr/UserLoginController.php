@@ -23,7 +23,8 @@ class UserLoginController extends Controller
     	$picture = HrDocumentation::where([['hr_employee_id', '=',session('hr_employee_id')], ['description','=','picture'] ])->first();
 	    
 	   if($request->ajax()){
-	    return view('hr.login.create', compact('data','permissions','picture'));
+	   		$view = view('hr.login.create', compact('data','permissions','picture'))->render();
+    		return response()->json($view);
 	  }else
 	  {
 	  	return back()->withError('Please contact to administrator, SSE_JS');

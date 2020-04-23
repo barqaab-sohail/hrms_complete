@@ -57,7 +57,7 @@
 <script>
 $('#eduModalFrom').on('submit', function(event){
    
-  var url = "{{route('education.store')}}"
+  var url = "{{route('cvEducation.store')}}"
     event.preventDefault();
           //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
           $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request

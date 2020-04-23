@@ -27,7 +27,7 @@ class CvDetailStore extends FormRequest
 
          return [
             
-            'full_name' => 'required',
+            'full_name' => 'required|max:190',
             'cnic' => 'nullable|min:15|max:15|unique:cv_details,cnic,'.session('cv_detail_id'),
             'date_of_birth' => 'nullable|date|before:18 years ago|after:75 years ago',
             'job_starting_date' => 'required|date',
@@ -35,10 +35,10 @@ class CvDetailStore extends FormRequest
             'city' => 'nullable|max:191',
             'province' => 'nullable|max:191',
             'country_id' => 'required|max:191',
-            'email'=>'nullable|email|unique:cv_contacts,email',
-            'phone.*' => 'required|distinct',
+            'email'=>'nullable|max:190|email|unique:cv_contacts,email',
+            'phone.*' => 'required|max:15|distinct',
             'degree_name.*' => 'required|distinct',
-            'institute.*' => 'nullable|MAX:191',
+            'institute.*' => 'nullable|max:191',
             'passing_year.*' => 'nullable|distinct',
             'speciality_name.*' => 'required',
             'discipline_name.*' => 'required',
@@ -48,6 +48,7 @@ class CvDetailStore extends FormRequest
             'donor_experience'=>'nullable|numeric',
             'membership_name.*'=>'nullable|distinct',
             'barqaab_employment' => 'required',
+             'skill.*' => 'nullable|max:190',
             'cv_submission_date'=>'nullable|date|before_or_equal:'.$today,
             'cv' => 'required|file|mimes:doc,docx,pdf',
 

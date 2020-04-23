@@ -18,7 +18,8 @@ class DocumentationController extends Controller
     	$documentNames = HrDocumentName::all();
 
         if($request->ajax()){
-            return view ('hr.documentation.create',compact('documentNames'));
+            $view = view ('hr.documentation.create',compact('documentNames'))->render();
+            return response()->json($view);
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }

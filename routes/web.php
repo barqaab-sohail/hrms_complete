@@ -14,16 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/dashboard', function () {
-    
-    return view('dashboard.dashboard');
-});
 
-Route::get('/hrms/testing', function () {
-	
-    return view('dashboard.dashboard1');
-});
-
+Route::get('/dashboard','HomeController@index');
+Route::get('/hrms/testing','HomeController@testing');
 
 Auth::routes();
 
@@ -56,9 +49,10 @@ Route::resource('/picture', 'PictureController',['only'=>['edit','store']]);
 });
 
 Route::group(['prefix' => 'hrms/cvData', 'middleware' => 'auth', 'namespace'=>'Cv'], function(){
+Route::get('/autocomplete/fetch', 'CvController@fetch')->name('autocomplete.fetch');
 Route::resource('/cv','CvController');
 Route::get('/cvDocument/refreshTable', 'CvDocumentController@refreshTable')->name('cvDocument.table');
-Route::resource('/education', 'EducationController',['only'=>['store']]);
+Route::post('/education', 'EducationController@store')->name('cvEducation.store');
 Route::resource('/speciality', 'SpecialityController',['only'=>['store']]);
 Route::resource('/cvDocument', 'CvDocumentController');
 

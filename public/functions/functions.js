@@ -73,19 +73,24 @@ function formFunctions(){
         if(confirm("Are you sure to clear date")){
         $(this).siblings('input').val("");
         $(this).hide();
+        $(this).siblings('span').text("");
         }
     });
 
 
     // DatePicker
    $(".date_input").datepicker({
+     onSelect: function(value, ui) {
+        $(this).siblings('i').show();
+        var today = new Date(), 
+            age = today.getFullYear() - ui.selectedYear;
+        $('#age').text(age+' years total age');
+    },
     dateFormat: 'D, d-M-yy',
     yearRange: '1940:'+ (new Date().getFullYear()+15),
     changeMonth: true,
     changeYear: true,
 
-    }).on('change',function(){
-         $(this).siblings('i').show();
     });
 
     //Title Case of all inputs type text and remove extra spaces
