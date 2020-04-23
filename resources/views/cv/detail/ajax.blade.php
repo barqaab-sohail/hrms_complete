@@ -555,7 +555,8 @@
         </div>
     </form>
 </div>       
-
+@include('cv.detail.eduModal') 
+@include('cv.detail.spcModal') 
 <script>
     $(document).ready(function (){
     $('select').chosen('destroy');

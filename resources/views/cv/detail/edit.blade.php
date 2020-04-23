@@ -34,25 +34,25 @@
 <script>
 $(document).ready(function(){
 
-$(document).on('click','#addDegree',function(){
-	$('.hideDiv').toggle();
-	$('#add_degree').val('');
-    $('#add_level').val('').select2('val', 'All');
-});
+// $(document).on('click','#addDegree',function(){
+// 	$('.hideDiv').toggle();
+// 	$('#add_degree').val('');
+//     $('#add_level').val('').select2('val', 'All');
+// });
 
-$(document).on('click','#store_degree',function(){
-	var url = $(this).attr('href');
-	var degree_name = $('#add_degree').val();
-    var level = $('#add_level').val();
-    var result = [];
-    result.push({degree_name: degree_name, level: level});
-    if((degree_name != '')&&(level != '')){
-            submitFormWithoutDataForm(result, url);
-    }else{
-    	alert('Name of Degree and Level of Degree Required');
-    }
+// $(document).on('click','#store_degree',function(){
+// 	var url = $(this).attr('href');
+// 	var degree_name = $('#add_degree').val();
+//     var level = $('#add_level').val();
+//     var result = [];
+//     result.push({degree_name: degree_name, level: level});
+//     if((degree_name != '')&&(level != '')){
+//             submitFormWithoutDataForm(result, url);
+//     }else{
+//     	alert('Name of Degree and Level of Degree Required');
+//     }
 
-});
+// });
 
 
 

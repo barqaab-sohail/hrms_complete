@@ -25,7 +25,7 @@
                         <label class="control-label text-right">Level of Degree<span class="text_requried">*</span></label>
                         <select  id="add_level" name="level" class="form-control selectTwo" required>
                         <option value=""></option>
-                        @for ($i = 10; $i <=20; $i++)
+                        @for ($i = 10; $i <=22; $i++)
                         <option value="{{$i}}" {{(old("level")==$i? "selected" : "")}}>{{ $i }}</option>
                         @endfor
                         </select>
