@@ -1,4 +1,4 @@
-@can('hr_edit_record')
+@can('hr edit record')
 <div style="margin-top:10px; margin-right: 10px;">
     <button type="button"  id ="hideButton"  class="btn btn-info float-right">Add Document</button>
 </div>
@@ -8,6 +8,7 @@
 <div class="card-body" id="hideDiv">
 
     <form method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('documentation.update',$data->id)}}" id="formEditDocument" enctype="multipart/form-data">
+    @method('PATCH')
         {{csrf_field()}}
         <div class="form-body">
             
@@ -48,7 +49,7 @@
              <div class="row">
                 <div class="col-md-8 pdfView">
                     @if($data->extension == 'pdf')
-                    <embed id="pdf" src="{{asset('storage/'.$data->path.$data->file_name)}}#toolbar=0&navpanes=0&scrollbar=0"  type="application/pdf" height="300" width="100%" />
+                    <iframe src="{{asset('storage/'.$data->path.$data->file_name)}}" height="300" width="100%"/>
                     @endif
                 </div>
 				<div class="col-md-1">
@@ -56,7 +57,7 @@
                 <div class="col-md-3">
                 	 
 
-                	@can('hr_edit_record')
+                	@can('hr edit record')
                     <div class="form-group row">
                         <center >
                         @if($data->extension != 'pdf')
@@ -66,7 +67,7 @@
                         @endif
             			
                 		</input>
-                		<input type="file"  name="document" id="view" data-validation="required" class="" required hidden>
+                		<input type="file"  name="document" id="view" class="" hidden>
                 				                                		
 
                         <h6 id="h6" class="card-title m-t-10">Click On Image to Add Document<span class="text_requried">*</span></h6>
@@ -89,7 +90,7 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9">
-                        @can('hr_edit_record')
+                        @can('hr edit record')
                             <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save</button>
                         @endcan                         
                         </div>
@@ -137,7 +138,7 @@
             resetForm();
             $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','150');
             $('#h6').text('Click On Image to Add Document');
-            refreshTable("{{route('documentation.table')}}",1500);
+            //refreshTable("{{route('documentation.table')}}",1500);
 
 		});
 
@@ -203,7 +204,7 @@
                     var reader = new FileReader();
                     
 	                    reader.onload = function (e) {
-	                        $('embed').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
+	                        $('iframe').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
 	                    }
                    		reader.readAsDataURL(input.files[0]);
                	}	

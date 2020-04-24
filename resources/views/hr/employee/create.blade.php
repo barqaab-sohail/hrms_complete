@@ -68,7 +68,7 @@
 		                                        <input type="text" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}" class="form-control date_input" data-validation="required" readonly>
 												
 												<br>
-		                                        @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
+		                                        @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -79,6 +79,7 @@
 		                                       	<label class="control-label text-right">CNIC<span class="text_requried">*</span></label>
 		                                        
 		                                        <input type="text" name="cnic" id="cnic" pattern="[0-9.-]{15}" title= "13 digit Number without dash" value="{{ old('cnic') }}" class="form-control" data-validation="required" placeholder="Enter CNIC without dash" >
+		                                        <span id="cnicCheck" class="float-right" style="color:red"></span>
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -91,7 +92,7 @@
 		                                        <input type="text" id="cnic_expiry" name="cnic_expiry" value="{{ old('cnic_expiry') }}" class="form-control date_input"  data-validation="required" readonly >
 												
 												<br>
-		                                        @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan
+		                                        @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -187,6 +188,29 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+
+	$('#cnic').blur(function(){ 
+		$('#cnicCheck').fadeOut(); 
+        var query = $(this).val();
+        if(query != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"{{ route('employee.cnic') }}",
+          method:"Post",
+          data:{query:query, _token:_token},
+	         	success:function(data){
+		          	if(data.status == 'Not Ok'){
+		          		console.log(data.status);
+		           		$('#cnicCheck').fadeIn();  
+		                  $('#cnicCheck').html('This CNIC is already entered');
+		            }
+	          	}
+         });
+        }
+    });
+
+
 	//All Basic Form Implementatin i.e validation etc.
 	formFunctions();
 

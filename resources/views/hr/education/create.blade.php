@@ -53,7 +53,7 @@
                                 <input type="text" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}" class="form-control date_input" data-validation="required" readonly>
 								
 								<br>
-                                @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
+                                @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                                 <input type="text" id="cnic_expiry" name="cnic_expiry" value="{{ old('cnic_expiry') }}" class="form-control date_input"  data-validation="required" readonly >
 								
 								<br>
-                                @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan
+                                @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan
                             </div>
                         </div>
                     </div>

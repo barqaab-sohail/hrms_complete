@@ -64,6 +64,7 @@
 		                                        	<label class="control-label text-right">CNIC</label>
 		                                        
 		                                            <input type="text" name="cnic" id="cnic" pattern="[0-9.-]{15}" title= "13 digit Number without dash" value="{{ old('cnic') }}" class="form-control" onkeyup='addHyphen(this)'  placeholder="Enter CNIC without dash" >
+		                                            <span id="cnicCheck" class="float-right" style="color:red"></span>
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -512,6 +513,28 @@
 <script>
 
 $(document).ready(function(){
+
+
+	$('#cnic').blur(function(){ 
+		$('#cnicCheck').fadeOut(); 
+        var query = $(this).val();
+        if(query != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"{{ route('cv.cnic') }}",
+          method:"Post",
+          data:{query:query, _token:_token},
+	         	success:function(data){
+		          	if(data.status == 'Not Ok'){
+		          		console.log(data.status);
+		           		$('#cnicCheck').fadeIn();  
+		                  $('#cnicCheck').html('This CNIC is already entered');
+		            }
+	          	}
+         });
+        }
+    });
 
 	$('#full_name').keyup(function(){ 
         var query = $(this).val();

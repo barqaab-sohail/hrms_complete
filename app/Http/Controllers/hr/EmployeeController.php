@@ -101,4 +101,21 @@ class EmployeeController extends Controller
         //return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
     }
 
+    public function employeeCnic(Request $request){
+
+        if($request->get('query'))
+        {
+            $hrEmployee = HrEmployee::where('cnic', $request->get('query'))->get()->first();
+
+            if ($hrEmployee){
+
+                return response()->json(['status'=> 'Not Ok']);
+            }else{
+                return response()->json(['status'=> 'Ok']);
+            }
+
+        }
+
+    }
+
 }

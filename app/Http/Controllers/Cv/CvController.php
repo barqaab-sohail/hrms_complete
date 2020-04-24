@@ -373,7 +373,7 @@ class CvController extends Controller
 	      $query = $request->get('query');
 	      $data = DB::table('cv_details')
 	        ->where('full_name', 'LIKE', "%{$query}%")
-	        ->get();
+	        ->take(3)->get();
 	      $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
 	      foreach($data as $row)
 	      {
@@ -384,6 +384,22 @@ class CvController extends Controller
 	      $output .= '</ul>';
 	      echo $output;
 	    }
+    }
+    public function cvCnic(Request $request){
+
+        if($request->get('query'))
+        {
+            $cvDetail = CvDetail::where('cnic', $request->get('query'))->get()->first();
+
+            if ($cvDetail){
+
+                return response()->json(['status'=> 'Not Ok']);
+            }else{
+                return response()->json(['status'=> 'Ok']);
+            }
+
+        }
+
     }
 
 

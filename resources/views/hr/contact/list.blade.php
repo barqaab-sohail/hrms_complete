@@ -45,7 +45,7 @@
 								 <a class="btn btn-info btn-sm" id="editContact" href="{{route('contact.edit',$hrContact->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 								 </td>
 								 <td class="text-center">
-								 @can('hr_edit_record')
+								 @can('hr edit record')
 								 <form  id="deleteContact{{$hrContact->id}}" action="{{route('contact.destroy',$hrContact->id)}}" method="POST">
 								 @method('DELETE')
 								 @csrf

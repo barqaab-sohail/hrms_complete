@@ -86,7 +86,7 @@
                         <div class="col-md-12">
                         	<label class="control-label text-right">City</label>
                         	<select class="form-control" name="city_id" data-placeholder="First Select Province" id="city">
-                        	<option value=""></option>
+                        	<option value="">&nbsp;</option>
 								@foreach($cities as $city)
 								<option value="{{$city->id}}" {{(old("city_id",$data->cvContact->city_id)==$city->id? "selected" : "")}}>{{$city->name}}</option>
                             @endforeach 	
@@ -107,7 +107,7 @@
                         	<label class="control-label text-right">Province</label>
                        		
                         	<select class="form-control" name="state_id" data-placeholder="First Select Country" id="state">
-                        	<option value="">'</option>
+                        	<option value="">&nbsp;</option>
 								@foreach($states as $state)
 								<option value="{{$state->id}}" {{(old("state_id",$data->cvContact->state_id)==$state->id? "selected" : "")}}>{{$state->name}}</option>
                             @endforeach 	
@@ -124,7 +124,7 @@
                        		<label class="control-label text-right">Country<span class="text_requried">*</span></label><br>
                        		
                        		<select  name="country_id" id="country" data-validation="required" class="form-control">
-                               	<option value=""></option>
+                               	<option value="">&nbsp;</option>
                             @foreach($countries as $country)
 								<option value="{{$country->id}}" {{(old("country_id",$data->cvContact->country_id)==$country->id? "selected" : "")}}>{{$country->name}}</option>
                             @endforeach 	
@@ -181,7 +181,7 @@
                         <div class="col-md-12">
                        		<label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
                        			<select  name="degree_name[]" id="degree_name" class="form-control required">
-                                <option value=""></option>
+                                <option value="">&nbsp;</option>
                                 @foreach($degrees as $degree)
 								<option value="{{$degree->id}}" @if($degree->id == $education->id) selected="selected" @endif>{{$degree->degree_name}}</option>
                                 @endforeach
@@ -215,7 +215,7 @@
                         
                             <select  name="passing_year[]" id="passing_year" class="form-control" >
 
-							<option value=""></option>
+							<option value="">&nbsp;</option>
 							@for ($i = 1958; $i <= now()->year; $i++)
 							<option value="{{$i}}" @if($i == $education->pivot->passing_year) selected="selected" @endif>{{ $i }}</option>
 							@endfor
@@ -252,7 +252,7 @@
                        		<label class="control-label text-right">Speciality<span class="text_requried">*</span></label><br>
 
                        		<select  name="speciality_name[]" id="speciality_name" class="form-control required" >
-                                 <option value=""></option>
+                                 <option value="">&nbsp;</option>
                                 
                                 @foreach($specializations as $specialization)
 								
@@ -275,7 +275,7 @@
                         	<label class="control-label">Discipline<span class="text_requried">*</span></label>
 
                         	<select  name="discipline_name[]" data-validation="required" id=discipline_name class="form-control required" >
-                                <option value=""></option>
+                                <option value="">&nbsp;</option>
                                 
                                 @foreach($disciplines as $discipline)
 
@@ -298,7 +298,7 @@
                         	<label class="control-label">Stage of Work<span class="text_requried">*</span></label>
 
                         	<select  name="stage_name[]" data-validation="required" id=stage_name class="form-control required" >
-                                <option value=""></option>
+                                <option value="">&nbsp;</option>
                                 
                                 @foreach($stages as $stage)
 
@@ -322,7 +322,7 @@
                         
                             <select  name="year[]" id="field_year" class="form-control required">
 
-							<option value=""></option>
+							<option value="">&nbsp;</option>
 							@for ($i = 1; $i <= 50; $i++)
 							<option value="{{$i}}" 
 								@if($i == $speciality->year) selected="selected" @endif
@@ -381,7 +381,7 @@
                         	<label class="control-label">Membership</label>
 							
                         	<select  name="membership_name[]" id=membership_name class="form-control">
-                                <option value="">'</option>
+                                <option value="">&nbsp;</option>
                                 
                                 @foreach($memberships as $membership)
 								
@@ -566,4 +566,5 @@
     });
 </script>
 @endpush
+@stack('scripts')
 

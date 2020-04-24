@@ -24,7 +24,7 @@
 							<tr>
 								<td>{{$userPermission->name}}</td>
 								 <td class="text-center">
-								 @can('hr_edit_record')
+								 @can('hr edit record')
 								 <form  id="deletePermission{{$userPermission->id}}" action="{{route('userLogin.destroy',$userPermission->id)}}" method="POST">
 								 @method('DELETE')
 								 @csrf

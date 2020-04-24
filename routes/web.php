@@ -33,6 +33,7 @@ Route::resource('/','RegisterController',['only'=>['create','store']]);
 // });
 
 Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Hr'], function(){
+Route::post('/employeeCnic','EmployeeController@employeeCnic')->name('employee.cnic');
 Route::resource('/employee', 'EmployeeController');
 Route::resource('/education', 'EducationController');
 Route::resource('/appointment', 'AppointmentController',['only'=>['edit','update']]);
@@ -50,6 +51,7 @@ Route::resource('/picture', 'PictureController',['only'=>['edit','store']]);
 
 Route::group(['prefix' => 'hrms/cvData', 'middleware' => 'auth', 'namespace'=>'Cv'], function(){
 Route::get('/autocomplete/fetch', 'CvController@fetch')->name('autocomplete.fetch');
+Route::post('/cvCnic','CvController@cvCnic')->name('cv.cnic');
 Route::resource('/cv','CvController');
 Route::get('/cvDocument/refreshTable', 'CvDocumentController@refreshTable')->name('cvDocument.table');
 Route::post('/education', 'EducationController@store')->name('cvEducation.store');

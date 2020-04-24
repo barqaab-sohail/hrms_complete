@@ -32,7 +32,7 @@
                                 <input type="text" name="joining_date" value="{{ old('joining_date',$data->joining_date??'') }}" class="form-control date_input" data-validation="required" readonly >
 
                                 <br>
-                                @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
+                                @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                                 <input type="text" name="expiry_date" value="{{ old('expiry_date',$data->expiry_date??'') }}" class="form-control date_input" readonly>
 
                                 <br>
-                                @can('hr_edit_record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
+                                @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
                             </div>
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                                 
                             </select>
                             <br>
-                                @can('hr_edit_record')<i id="addSalary" class="fa fa-plus-square text_add" aria-hidden="true"></i>@endcan 
+                                @can('hr edit record')<i id="addSalary" class="fa fa-plus-square text_add" aria-hidden="true"></i>@endcan 
                                 
                                
                             </div>
