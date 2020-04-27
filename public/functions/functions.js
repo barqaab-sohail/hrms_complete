@@ -8,6 +8,7 @@
         },time);
 }
 
+ 
 
 function fromPreventDefault(){
     $("form").submit(function (e) {
@@ -16,8 +17,8 @@ function fromPreventDefault(){
 }
 
 
-function selectTwo(){
-    $('.selectTwo').select2({
+function selectTwo(parameter ='.selectTwo'){
+    $(parameter).select2({
         width: "100%",
         theme: "classic",
         

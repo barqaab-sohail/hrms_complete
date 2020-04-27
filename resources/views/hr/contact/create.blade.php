@@ -33,7 +33,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">House No.</label><br>
 
-                                <input type="text"  name="house" value="{{ old('house') }}"  class="form-control" placeholder="Enter House No">
+                                <input type="text"  name="house" value="{{ old('house') }}"  class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter House No">
                             </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Street No/Society</label>
                                 
-                                <input type="text" name="street" value="{{ old('street') }}" class="form-control" placeholder="Enter Street No and Society">
+                                <input type="text" name="street" value="{{ old('street') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Street No and Society">
 
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                             <div class="col-md-12">
                                <label class="control-label text-right">Town/Village<span class="text_requried">*</span></label>
                                 
-                               <input type="text" name="town" value="{{ old('town') }}" class="form-control" placeholder="Enter Town or Village" data-validation="required">
+                               <input type="text" name="town" value="{{ old('town') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Town or Village" data-validation="required">
 
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Tehsil</span></label>
                                 
-                               <input type="text" name="tehsil" value="{{ old('tehsil') }}" class="form-control" placeholder="Enter Tehsil">
+                               <input type="text" name="tehsil" value="{{ old('tehsil') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Tehsil">
                                 
                                
                             </div>
@@ -116,7 +116,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Mobile No.<span class="text_requried">*</span></label>
                                 
-                               <input type="text" name="mobile" value="{{ old('mobile') }}" class="form-control" placeholder="Enter Mobile No" data-validation="required">
+                               <input type="text" name="mobile" value="{{ old('mobile') }}" data-validation="length"  data-validation-length="max15" class="form-control" placeholder="Enter Mobile No" data-validation="required">
                                
                             </div>
                         </div>
@@ -127,7 +127,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Landline No.</label>
                                 
-                               <input type="text" name="landline" value="{{ old('landline') }}" class="form-control" placeholder="Enter Landline No.">
+                               <input type="text" name="landline" value="{{ old('landline') }}"  data-validation="length"  data-validation-length="max15" class="form-control" placeholder="Enter Landline No.">
                                 
                             </div>
                         </div>
@@ -138,7 +138,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Email</label>
                                 
-                               <input type="email" name="email" value="{{ old('emal') }}" class="form-control" placeholder="Enter Email Address">
+                               <input type="email" name="email" value="{{ old('emal') }}" data-validation="length"  data-validation-length="max50" class="form-control" placeholder="Enter Email Address">
                                 
                             </div>
                         </div>
@@ -187,9 +187,7 @@ $(document).ready(function(){
       var url = $(this).attr('action');
             $('.fa-spinner').show(); 
       submitForm(this, url);
-      resetForm();
       refreshTable("{{route('contact.table')}}");
-
     });
 
 

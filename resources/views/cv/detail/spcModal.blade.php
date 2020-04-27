@@ -82,7 +82,7 @@ $('#spcModalFrom').on('submit', function(event){
                       $('#speciality_name').chosen('destroy');
                       $('#speciality_name').chosen();
                       $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
-                      resetForm();
+                      
                       $('.spinner').hide();
                        $('.btn-prevent-multiple-submits').removeAttr('disabled');
                       $('#spcModal').modal('toggle');

@@ -36,8 +36,8 @@ Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Hr'], fu
 Route::post('/employeeCnic','EmployeeController@employeeCnic')->name('employee.cnic');
 Route::resource('/employee', 'EmployeeController');
 Route::resource('/education', 'EducationController');
-Route::resource('/appointment', 'AppointmentController',['only'=>['edit','update']]);
 Route::resource('/salary', 'SalaryController',['only'=>['store']]);
+Route::resource('/appointment', 'AppointmentController',['only'=>['edit','update']]);
 Route::get('/contact/refreshTable', 'ContactController@refreshTable')->name('contact.table');
 Route::resource('/contact', 'ContactController');
 Route::get('/documentation/refreshTable', 'DocumentationController@refreshTable')->name('documentation.table');

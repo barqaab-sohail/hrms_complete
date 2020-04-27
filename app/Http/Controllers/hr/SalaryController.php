@@ -9,7 +9,9 @@ use DB;
 
 class SalaryController extends Controller
 {
-     public function store (Request $request){
+    public function store (Request $request){
+
+       // $totalSalary = (int)str_replace(',', '', $request->total_salary);
 
         $salary = HrSalary::where('total_salary', $request->total_salary)->first();
       
@@ -21,17 +23,17 @@ class SalaryController extends Controller
 
             }); // end transcation   
 
-            $message = 'Salary Successfully Entered';
-        }else{
-             $message = "$request->total_salary Salary is already entered";
-        }
-       
-
-        //return response()->json(['url'=>url('/dashboard')]);
-
-         $salaries = DB::table("hr_salaries")
+            $salaries = DB::table("hr_salaries")
                 ->pluck("total_salary","id");
         
-    	return response()->json(['salaries'=> $salaries, 'message'=>$message]);
+            return response()->json(['salaries'=> $salaries, 'message'=>"Salary Successfully Entered"]);
+        }else{
+
+            return response()->json(['salaries'=> '', 'message'=>"$totalSalary Salary is already entered"]);
+           
+        }
+
+            
+    	
     }
 }

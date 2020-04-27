@@ -88,10 +88,10 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">Department<span class="text_requried">*</span></label>
-                                 <select  id="hr_designation_id"   name="hr_designation_id"  class="form-control selectTwo" data-validation="required">
+                                 <select  id="hr_department_id"   name="hr_department_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
-                                    @foreach($departments as $designation)
-                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hr_designation_id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+                                    @foreach($departments as $department)
+                                    <option value="{{$department->id}}" {{(old("hr_department_id",$data->hr_department_id??'')==$department->id? "selected" : "")}}>{{$department->name}}</option>
                                     @endforeach  
                                 </select>
                                     
@@ -124,17 +124,18 @@
                                 <label class="control-label text-right">Salary<span class="text_requried">*</span></label>
 
                                 <select  id="hr_salary_id"   name="hr_salary_id"  class="form-control selectTwo" data-validation="required">
-                                <option value=""></option>
-                                @foreach($salaries as $salary)
-                                <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hr_salary_id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
-                                @endforeach
-                                
-                                
-                            </select>
-                            <br>
-                                @can('hr edit record')<i id="addSalary" class="fa fa-plus-square text_add" aria-hidden="true"></i>@endcan 
-                                
-                               
+                                    <option value=""></option>
+                                    @foreach($salaries as $salary)
+                                    <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hr_salary_id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
+                                    @endforeach
+                              
+                                </select>
+
+                                @can('hr edit record')
+                                <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#salModal"><i class="fas fa-plus"></i>
+                                </button>
+                                @endcan 
+                                                           
                             </div>
                         </div>
                     </div>
@@ -230,7 +231,7 @@
             </div>
         </form>
 	</div> <!-- end card body -->    
-
+    @include('hr.appointment.salModal')
 
     <style>
 
@@ -238,36 +239,15 @@
   -webkit-appearance: none;
   margin: 0;
 }
-    </style>
+</style>
+
+@push('scripts')
 <script>
-
 $(document).ready(function(){
-    
- //must shifted
-    $(document).on('click','#hr_salary_id',function(){
-        $('.hideDiv').toggle();
-    });
-
-    //must shifted
-    $(document).on('click','i[id^=add]',function(){
-        $('.hideDiv').toggle();
-    });
-
-     //must shifted
-    //store if single input without form submit;
-    $(document).on('click','i[id^=store]',function(){
-        
-        var value = $(this).siblings('input').val();
-        var name = $(this).siblings('input').attr('name');
-        var url = $(this).attr('href');
-        var result = [];
-
-        result.push({name: name, value: value});
-        if(($(this).siblings('input').val() != '')&&(value>500)){
-            submitFormAjax(result, url);
-        }
-    });
+   
 
 });
 
 </script>
+@endpush
+@stack('scripts')

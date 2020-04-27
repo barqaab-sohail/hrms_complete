@@ -37,7 +37,7 @@
 							</td>
 							<td class="text-center">
 								 @role('Super Admin')
-								 <form  id="formDeleteContact" action="{{route('employee.destroy',$employee->id)}}" method="POST">
+								 <form  id="formDeleteContact{{$employee->id}}" action="{{route('employee.destroy',$employee->id)}}" method="POST">
 								 @method('DELETE')
 								 @csrf
 								 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
