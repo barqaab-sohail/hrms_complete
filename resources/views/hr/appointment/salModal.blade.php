@@ -39,7 +39,7 @@
     </div>
   </div>
 </div>
- @push('scripts')
+@push('scripts')
 <script>
 
 $(document).ready(function(){
@@ -135,5 +135,4 @@ $(document).ready(function(){
 });
 </script>
 @endpush
-@stack('scripts')
 <!--end Model--> 

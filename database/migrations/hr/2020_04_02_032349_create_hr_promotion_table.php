@@ -18,7 +18,9 @@ class CreateHrPromotionTable extends Migration
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->date('effective_date');
-            $table->string('remarks');
+            $table->tinyInteger('grade')->nullable();
+            $table->string('category',1)->nullable();
+            $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });

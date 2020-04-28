@@ -9,5 +9,5 @@ use OwenIt\Auditing\Contracts\Auditable;
 class HrSalary extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    protected $guarded = [];
+    protected $fillable = ['total_salary'];
 }

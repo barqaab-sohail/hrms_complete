@@ -22,6 +22,8 @@ class CreateHrAppointmentTable extends Migration
             $table->string('reference_no')->nullable();
             $table->date('joining_date');
             $table->date('expiry_date')->nullable();
+            $table->tinyInteger('grade')->nullable();
+            $table->string('category',1)->nullable();
             $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');

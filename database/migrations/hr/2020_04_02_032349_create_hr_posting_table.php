@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHrDepartmentDetailTable extends Migration
+class CreateHrPostingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,18 @@ class CreateHrDepartmentDetailTable extends Migration
      */
     public function up()
     {
-        Schema::create('hr_department_details', function (Blueprint $table) {
+        Schema::create('hr_postings', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
-            $table->bigInteger('hr_department_id')->unsigned();
-            $table->bigInteger('hr_common_model_id')->unsigned();
+            $table->bigInteger('pr_detail_id')->unsigned();
+            $table->date('effective_date');
+            $table->tinyInteger('grade')->nullable();
+            $table->string('category',1)->nullable();
+            $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
-            $table->foreign('hr_department_id')->references('id')->on('hr_departments');
-            $table->foreign('hr_common_model_id')->references('id')->on('hr_common_models');
+            $table->foreign('pr_detail_id')->references('id')->on('pr_details');
         });
     }
 
@@ -33,6 +35,6 @@ class CreateHrDepartmentDetailTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hr_department_details');
+        Schema::dropIfExists('hr_postings');
     }
 }

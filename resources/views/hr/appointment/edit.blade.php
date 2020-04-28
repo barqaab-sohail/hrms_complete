@@ -59,7 +59,7 @@
                                  <select  id="hr_designation_id"   name="hr_designation_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($designations as $designation)
-                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hr_designation_id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->designation->name??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                                     @endforeach 
                                 </select>
                                 
@@ -230,8 +230,9 @@
                 </div>
             </div>
         </form>
+          @include('hr.appointment.salModal')
 	</div> <!-- end card body -->    
-    @include('hr.appointment.salModal')
+  
 
     <style>
 
@@ -243,11 +244,20 @@
 
 @push('scripts')
 <script>
-$(document).ready(function(){
-   
 
-});
+   console.log('ok');
+    //submit function
+        $("#formAppointment").submit(function(e) { 
+            e.preventDefault();
+            var url = $(this).attr('action');
+            $('.fa-spinner').show(); 
+            submitForm(this, url);
+
+        });
+
+
 
 </script>
 @endpush
 @stack('scripts')
+
