@@ -59,7 +59,7 @@
                                  <select  id="hr_designation_id"   name="hr_designation_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($designations as $designation)
-                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->designation->name??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$employeeDesignation->id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                                     @endforeach 
                                 </select>
                                 
@@ -75,7 +75,7 @@
                                  <select  id="hr_manager_id"   name="hr_manager_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($employees as $employee)
-                                    <option value="{{$employee->id}}" {{(old("hr_manager_id",$data->hr_manager_id??'')==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}}</option>
+                                    <option value="{{$employee->id}}" {{(old("hr_manager_id",$employeeHod->id??'')==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}}</option>
                                     @endforeach  
                                 </select>
                                  
@@ -91,7 +91,7 @@
                                  <select  id="hr_department_id"   name="hr_department_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($departments as $department)
-                                    <option value="{{$department->id}}" {{(old("hr_department_id",$data->hr_department_id??'')==$department->id? "selected" : "")}}>{{$department->name}}</option>
+                                    <option value="{{$department->id}}" {{(old("hr_department_id",$employeeDepartment->id??'')==$department->id? "selected" : "")}}>{{$department->name}}</option>
                                     @endforeach  
                                 </select>
                                     
@@ -106,9 +106,9 @@
                                 <label class="control-label text-right">Category<span class="text_requried">*</span></label>
                                 <select  name="category"  class="form-control selectTwo" required>
                                     <option value=""></option>
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
+                                    <option value="A" @if ($data->category??'' == 'A') selected="selected" @endif>A</option>
+                                    <option value="B" @if ($data->category??'' == 'B') selected="selected" @endif>B</option>
+                                    <option value="C"@if ($data->category??'' == 'C') selected="selected" @endif>C</option>
                                 </select>
                                     
                                 
@@ -126,7 +126,7 @@
                                 <select  id="hr_salary_id"   name="hr_salary_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($salaries as $salary)
-                                    <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hr_salary_id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
+                                    <option value="{{$salary->id}}" {{(old("hr_salary_id",$employeeSalary->id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
                                     @endforeach
                               
                                 </select>
@@ -147,7 +147,7 @@
                                 <select  name="grade"  class="form-control selectTwo">
                                     <option value=""></option>
                                     @for ($i = 1; $i < 15; $i++)
-                                    <option value="{{$i}}">{{ $i }}</option>
+                                    <option value="{{$i}}" @if ($data->grade??'' == $i) selected="selected" @endif>{{ $i }}</option>
                                     @endfor
                                 </select>
                                 

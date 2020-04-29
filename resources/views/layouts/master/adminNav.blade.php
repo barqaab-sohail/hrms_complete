@@ -38,10 +38,15 @@
                     <ul aria-expanded="false" class="collapse">  
                         <li><a class="{{Request::is('hrms/cvData/cv/create')?'active':''}}" href="{{route('cv.create')}}">Add CV</a></li>
                         <li><a class="{{Request::is('hrms/cvData/cv')?'active':''}}" href="{{route('cv.index')}}">List of CVs</a></li> 
-                        @can('Super Admin')
-                        <li><a href="">Services</a></li> 
-                        @endcan
-                       
+                        
+                    </ul>
+                </li>
+               @endcan
+               @can('Super Admin')
+                 <li class="{{Request::is('hrms/admin*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">Admin</span></a>
+                    <ul aria-expanded="false" class="collapse">  
+                        <li><a class="{{Request::is('hrms/admin/activeUser')?'active':''}}" href="{{route('activeUser.index')}}">Active User List</a></li>
+                                               
                     </ul>
                 </li>
                @endcan

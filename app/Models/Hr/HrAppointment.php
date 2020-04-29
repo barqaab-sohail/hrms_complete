@@ -14,16 +14,21 @@ class HrAppointment extends Model implements Auditable
 
 
 
-    // public function designation(){
+    // // public function designation(){
 
-    // 	 return $this->hasOneThrough('App\Models\Hr\HrDesignation', 'App\Models\Hr\HrAppointmentDetail');
+    // // 	 return $this->hasOneThrough('App\Models\Hr\HrDesignation', 'App\Models\Hr\HrAppointmentDetail');
+    // // }
+   
+    // public function appointmentDetail(){
+
+    // 	return $this->hasOne('App\Models\Hr\HrAppointmentDetail');
     // }
 
 
-    public function designation(){
+    // public function designation(){
 
-    	 return $this->belongsToThrough('App\Models\Hr\HrDesignation', ['App\Models\Hr\HrAppointmentDetail'],null,'',['App\Models\Hr\HrAppointmentDetail'=>'hr_designation_id']);
-    }
+    // 	 return $this->belongsToThrough('App\Models\Hr\HrDesignation', 'App\Models\Hr\HrAppointmentDetail');
+    // }
 
 }
 

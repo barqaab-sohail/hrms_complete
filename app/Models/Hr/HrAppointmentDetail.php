@@ -12,4 +12,10 @@ class HrAppointmentDetail extends Model implements Auditable
 
     protected $fillable = ['hr_appointment_id', 'hr_manager_id','hr_department_id','hr_salary_id','hr_designation_id'];
 
+
+   // public function designation(){
+
+   // 		return $this->belongsTo('App\Models\Hr\HrDesignation');
+   // }
+
 }

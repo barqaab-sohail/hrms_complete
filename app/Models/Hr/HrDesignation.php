@@ -9,8 +9,10 @@ class HrDesignation extends Model
     
 
 
-    // public function hrAppointment(){
+	// public function hrAppointment(){
 
-    // 	 return $this->hasOneThrough('App\Models\Hr\HrAppointment', 'App\Models\Hr\HrAppointmentDetail');
-    // }
+	// 	return $this->belongsToThrough('App\Models\Hr\HrAppointment', 'App\Models\Hr\HrAppointmentDetail');
+	// }
+
+   
 }

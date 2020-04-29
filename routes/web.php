@@ -61,8 +61,19 @@ Route::resource('/cvDocument', 'CvDocumentController');
 });
 
 
+Route::group(['prefix' => 'hrms/admin', 'middleware' => 'auth', 'namespace'=>'Admin'], function(){
+
+	Route::get('/activeUser', 'ActiveUserController@index')->name('activeUser.index');
+
+});
+
+
+
+
+
+
 
 Route::get('/country/states/{id?}', 'CountryController@getStates')->name('states');
 Route::get('/country/cities/{id?}', 'CountryController@getCities')->name('cities');
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
