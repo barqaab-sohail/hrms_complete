@@ -26,6 +26,7 @@
 						<th>Email</th>
 						<th>CNIC</th>
 						<th>Father Name</th>
+						<th class="text-center">Log Out</th>
 						
 					</tr>
 					</thead>
@@ -36,6 +37,14 @@
 								<td>{{$employee->email}}</td>
 								<td>{{$employee->cnic}}</td>
 								<td>{{$employee->father_name}}</td>
+								<td class="text-center">
+									<form id="deleteDocument{{$employee->userId}}" method="POST">
+									@method('DELETE')
+									@csrf
+									<button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-sign-out-alt"></i></button>
+									</form>
+								</td>
+								
 																						
 							</tr>
 						@endforeach

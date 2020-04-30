@@ -12,4 +12,10 @@ class CvExperience extends Model implements Auditable
     protected $fillable = [
         'cv_detail_id','cv_specialization_id', 'cv_discipline_id','cv_stage_id','year'
     ];
+
+    public function cvDetail()
+    {
+        return $this->belongsTo('App\Models\Cv\CvDetail');
+    }
+
 }
