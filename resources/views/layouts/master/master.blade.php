@@ -60,6 +60,8 @@
      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">     
     <!-- end - This is for datatabe Fixed Columns only -->
     
+    @include('layouts.master.adminScripts')
+    
 </head>
 <style>
 thead th {
@@ -107,7 +109,7 @@ thead th {
         </div>
     </div>
 </div>
-@include('layouts.master.adminScripts')
+
 @yield('footer')
     <div style="text-align:center">
         <p>HRMS 4.0 - Developed by: BARQAAB IT</p>

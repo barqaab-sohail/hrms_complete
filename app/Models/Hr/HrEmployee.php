@@ -18,4 +18,12 @@ class HrEmployee extends Model implements Auditable
     }
 
 
+     public function education()
+    {
+        return $this->belongsToMany('App\Models\Common\Education')
+        ->withPivot('country_id','institute','from','to','total_marks','marks_obtain','grade')
+        ->withTimestamps();
+    }
+
+
 }

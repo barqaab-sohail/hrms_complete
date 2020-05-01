@@ -135,4 +135,5 @@ $(document).ready(function(){
 });
 </script>
 @endpush
+
 <!--end Model--> 

@@ -15,6 +15,7 @@ class CreateEducationHrEmployeeTable extends Migration
     {
         Schema::create('education_hr_employee', function (Blueprint $table) {
             $table->engine = 'InnoDB';
+            $table->id();
             $table->bigInteger('education_id')->unsigned();
             $table->foreign('education_id')->references('id')->on('educations');
 
@@ -22,8 +23,8 @@ class CreateEducationHrEmployeeTable extends Migration
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
 
 
-            $table->bigInteger('country')->unsigned();
-            $table->foreign('country')->references('id')->on('countries');
+            $table->bigInteger('country_id')->unsigned();
+            $table->foreign('country_id')->references('id')->on('countries');
 
             $table->string('institute')->nullable();
             $table->string('from',15);

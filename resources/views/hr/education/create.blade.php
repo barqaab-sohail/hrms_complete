@@ -4,7 +4,7 @@
     </div>
          
     <div class="card-body">
-        <form id= "addEducation" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('education.create')}}" enctype="multipart/form-data">
+        <form id= "addEducation" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('education.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
                     
@@ -17,10 +17,10 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
-                                <select id="degree_name" name="degree_name[]" data-validation="required" class="form-control selectTwo">
+                                <select id="degree_name" name="degree_name" data-validation="required" class="form-control selectTwo">
                                    <option></option>
                                     @foreach($degrees as $degree)
-                                    <option value="{{$degree->id}}" {{(old("degree_name.0")==$degree->id? "selected" : "")}}>{{$degree->degree_name}}</option>
+                                    <option value="{{$degree->id}}" {{(old("degree_name")==$degree->id? "selected" : "")}}>{{$degree->degree_name}}</option>
                                     @endforeach
                                   
                                 </select>
@@ -48,7 +48,7 @@
                 </div><!--/End Row-->
 
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">From</label>
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <!--/span-->
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">To</label>
@@ -92,11 +92,25 @@
                         </div>
                     </div>
                       <!--/span-->
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Grade</label>       
-                                <input type="number" id="grade" name="grade" value="{{ old('grade') }}" class="form-control"  >
+                                <input type="text" id="grade" name="grade" value="{{ old('grade') }}" class="form-control"  >
+                            </div>
+                        </div>
+                    </div>
+                      <!--/span-->
+                    <div class="col-md-3">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label class="control-label text-right">Country</label>       
+                                <select  name="country_id" id="country" data-validation="required" class="form-control selectTwo">
+                                    <option value=""></option>
+                                @foreach($countries as $country)
+                                    <option value="{{$country->id}}" {{(old("country_id")==$country->id? "selected" : "")}}>{{$country->name}}</option>
+                                @endforeach     
+                                </select> 
                             </div>
                         </div>
                     </div>
@@ -120,11 +134,35 @@
             </div>
         </form>
 	</div> <!-- end card body -->    
-    @include('cv.detail.eduModal') 
+    @include('cv.detail.eduModal')
+    @include('hr.education.list')
 
 @push('scripts')
 <script>
 $(document).ready(function(){
+    refreshTable("{{route('education.table')}}");
+
+    $("form").submit(function (e) {
+         e.preventDefault();
+    });
+
+      //submit function
+    $(document).on('submit','#addEducation',function(e){
+    //$("#addEducation").submit(function(e) { 
+        console.log('submit');
+        e.preventDefault();
+        var url = $(this).attr('action');
+        $('.fa-spinner').show(); 
+        submitForm(this, url);
+      //refreshTable("{{route('contact.table')}}");
+    });
+
+
+
+
+
+
+
     $('.fa-trash-alt').hide();
     $('#from, #to').datepicker( {
     changeMonth: true,

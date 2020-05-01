@@ -35,6 +35,7 @@ Route::resource('/','RegisterController',['only'=>['create','store']]);
 Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Hr'], function(){
 Route::post('/employeeCnic','EmployeeController@employeeCnic')->name('employee.cnic');
 Route::resource('/employee', 'EmployeeController');
+Route::get('/education/refreshTable', 'EducationController@refreshTable')->name('education.table');
 Route::resource('/education', 'EducationController');
 Route::resource('/salary', 'SalaryController',['only'=>['store']]);
 Route::resource('/appointment', 'AppointmentController',['only'=>['edit','update']]);
