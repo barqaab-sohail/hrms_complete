@@ -117,8 +117,8 @@
                 //var fileType = fileName.split('.').pop();
                 console.log(fileType);
             //Restrict File Size Less Than 2MB
-            if (fileSize> 3072000){
-                alert('File Size is bigger than 3MB');
+            if (fileSize> 4096000){
+                alert('File Size is bigger than 4MB');
                 $(this).val('');
             }else{
                 //Restrict File Type

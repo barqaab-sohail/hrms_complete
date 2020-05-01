@@ -64,8 +64,15 @@
 
 	    $('#myDataTable').DataTable({
 	                stateSave: false,
-	                dom: 'flrtip',
-
+	                dom: 'flrti',
+	                scrollY:        "500px",
+	      			scrollX:        true,
+	        		scrollCollapse: true,
+	        		paging:         false,
+	        		fixedColumns:   {
+	            		leftColumns: 1,
+	            		rightColumns:2
+	        		}
 	    });
 
 	     //function view from list table

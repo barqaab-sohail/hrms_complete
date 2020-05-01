@@ -50,7 +50,7 @@ class CvDetailStore extends FormRequest
             'barqaab_employment' => 'required',
              'skill.*' => 'nullable|max:190',
             'cv_submission_date'=>'nullable|date|before_or_equal:'.$today,
-            'cv' => 'required|file|mimes:doc,docx,pdf',
+            'cv' => 'required|file|max:4000|mimes:doc,docx,pdf',
 
         ];
     }

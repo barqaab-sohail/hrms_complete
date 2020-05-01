@@ -40,7 +40,7 @@ class EditCvDetailStore extends FormRequest
             'email'=>'nullable|email|unique:cv_contacts,email,'.$contact->id,
             'phone.*' => 'required|distinct',
             'degree_name.*' => 'required|distinct',
-            'institute.*' => 'nullable|MAX:191',
+            'institute.*' => 'nullable|max:191',
             'passing_year.*' => 'nullable|distinct',
             'speciality_name.*' => 'required',
             'discipline_name.*' => 'required',
@@ -51,7 +51,7 @@ class EditCvDetailStore extends FormRequest
             'membership_name.*'=>'nullable|distinct',
             'barqaab_employment' => 'required',
             'cv_submission_date'=>'nullable|date|before_or_equal:'.$today,
-            //'cv' => 'required|file|mimes:doc,docx,pdf',
+            'cv' => 'nullable|file|max:4000|mimes:doc,docx,pdf',
 
         ];
     }

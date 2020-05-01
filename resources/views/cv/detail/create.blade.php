@@ -649,8 +649,8 @@ $('#formCvDetail').on('submit', function(event){
 	 	var fileType = this.files[0].type;
 	 	var fileSize = this.files[0].size;
 
-	 	if (fileSize> 2048000){
-		        	alert('File Size is bigger than 2MB');
+	 	if (fileSize> 4096000){
+		        	alert('File Size is bigger than 4MB');
 		        	$(this).val('');
 		}else{
 

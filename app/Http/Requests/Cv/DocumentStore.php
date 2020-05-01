@@ -26,7 +26,7 @@ class DocumentStore extends FormRequest
         return [
             
             'description'=> 'required|max:191',
-            'document' => 'required|file|mimes:jpg,jpeg,png,doc,docx,pdf',
+            'document' => 'required|file|max:4000|mimes:jpg,jpeg,png,doc,docx,pdf',
 
 
         ];
