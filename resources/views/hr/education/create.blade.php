@@ -4,7 +4,7 @@
     </div>
          
     <div class="card-body">
-        <form id= "addEducation" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('education.store')}}" enctype="multipart/form-data">
+        <form id= "education" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('education.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
                     
@@ -17,7 +17,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
-                                <select id="degree_name" name="degree_name" data-validation="required" class="form-control selectTwo">
+                                <select id="degree_name" name="degree_name" data-validation="required" class="form-control">
                                    <option></option>
                                     @foreach($degrees as $degree)
                                     <option value="{{$degree->id}}" {{(old("degree_name")==$degree->id? "selected" : "")}}>{{$degree->degree_name}}</option>
@@ -38,9 +38,9 @@
                     <div class="col-md-6">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">Institute<span class="text_requried">*</span></label>
+                               	<label class="control-label text-right">Institute</label>
                                 
-                                <input type="text" name="institute" id="institute" value="{{ old('institute') }}" class="form-control" data-validation="required" >
+                                <input type="text" name="institute" id="institute" value="{{ old('institute') }}" class="form-control" data-validation="length" data-validation-length="max190" >
                             </div>
                         </div>
                     </div>
@@ -64,9 +64,9 @@
                     <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">To</label>
+                               	<label class="control-label text-right">To<span class="text_requried">*</span></label>
                                 
-                                <input type="text" id="to" name="to" value="{{ old('to') }}" class="form-control" readonly>
+                                <input type="text" id="to" name="to" value="{{ old('to') }}" class="form-control" data-validation="required" readonly>
                                 
                                 <br>
                                 @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
@@ -78,7 +78,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">Total Marks</label>       
-                                <input type="number" id="total_marks" name="total_marks" value="{{ old('total_marks') }}" class="form-control"  >
+                                <input type="number" id="total_marks" name="total_marks" value="{{ old('total_marks') }}" data-validation-allowing="range[1.00;6000.00],float" class="form-control"  >
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Marks Obtain</label>       
-                                <input type="number" id="marks_obtain" name="marks_obtain" value="{{ old('marks_obtain') }}" class="form-control"  >
+                                <input type="number" id="marks_obtain" name="marks_obtain" value="{{ old('marks_obtain') }}"  data-validation-allowing="range[1.00;6000.00],float" class="form-control"  >
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                     <div class="col-md-3">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Country</label>       
+                                <label class="control-label text-right">Country<span class="text_requried">*</span></label>       
                                 <select  name="country_id" id="country" data-validation="required" class="form-control selectTwo">
                                     <option value=""></option>
                                 @foreach($countries as $country)
@@ -137,29 +137,31 @@
     @include('cv.detail.eduModal')
     @include('hr.education.list')
 
-@push('scripts')
+
 <script>
 $(document).ready(function(){
     refreshTable("{{route('education.table')}}");
+    $('#degree_name').chosen();
 
-    $("form").submit(function (e) {
-         e.preventDefault();
+   
+    $('#marks_obtain, #total_marks').on('change',function(){
+
+        if($(this).val() !=''){
+        $(this).attr('data-validation','number');
+        }else {
+             $(this).removeAttr('data-validation');
+        }
     });
 
-      //submit function
-    $(document).on('submit','#addEducation',function(e){
-    //$("#addEducation").submit(function(e) { 
-        console.log('submit');
+    //submit function
+     $("#education").submit(function(e) { 
+        console.log('it is submitted add education');
         e.preventDefault();
         var url = $(this).attr('action');
         $('.fa-spinner').show(); 
         submitForm(this, url);
       //refreshTable("{{route('contact.table')}}");
     });
-
-
-
-
 
 
 
@@ -185,5 +187,6 @@ $(document).ready(function(){
 });
 
 </script>
-@endpush
-@stack('scripts')
+
+
+

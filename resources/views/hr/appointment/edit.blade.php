@@ -104,7 +104,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Category<span class="text_requried">*</span></label>
-                                <select  name="category"  class="form-control selectTwo" required>
+                                <select  name="category"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     <option value="A" @if ($data->category??'' == 'A') selected="selected" @endif>A</option>
                                     <option value="B" @if ($data->category??'' == 'B') selected="selected" @endif>B</option>
@@ -247,6 +247,7 @@
 
    console.log('ok');
     //submit function
+ 
         $("#formAppointment").submit(function(e) { 
             e.preventDefault();
             var url = $(this).attr('action');
@@ -254,10 +255,8 @@
             submitForm(this, url);
 
         });
-
-
-
 </script>
 @endpush
-@stack('scripts')
+
+
 

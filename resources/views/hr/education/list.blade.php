@@ -16,20 +16,39 @@
 					
 					<tr >
 						<th>Degree Name</th>
+						<th>Institute</th>
+						<th>Passing Year</th>
+						<th class="text-center">Edit</th>
+						<th class="text-center">Delete</th>
 						
-						 
- 
-
 					</tr>
 					</thead>
 					<tbody>
-						
+						@foreach($employee->education as $education)
 							<tr>
-								<td>testing</td>
+								<td>{{$education->degree_name}}</td>
+								<td>{{$education->pivot->institute}}</td>
+								<td>{{$education->pivot->to}}</td>
+								@can('hr edit education')
+								<td class="text-center">
+								 <a class="btn btn-info btn-sm" id="editEducation" href="{{route('education.edit',$education->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
+								 </td>
+								@endcan
+								 
+								@can('hr delete education')
+								 <td class="text-center">
+								 <form id="deleteEducation{{$education->id}}" action="{{route('education.destroy',$education->id)}}" method="POST">
+								 @method('DELETE')
+								 @csrf
+								 <button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"><i class="fas fa-trash"></i></button>
+								 </form>
+
+								 </td>
+								@endcan
+								
 	
-								  						
 							</tr>
-					
+						@endforeach
 					
 					 
 					
@@ -55,8 +74,6 @@ $(document).ready(function() {
   	submitForm(this, url);
   	resetForm();
   	 refreshTable("{{route('education.table')}}");
-  	 
-  	 
     });
 
 });

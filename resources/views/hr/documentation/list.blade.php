@@ -16,7 +16,7 @@
 						<th class="text-center"style="width:5%">Edit</th>
 						@endcan
 						@can('hr delete documentation')
-						<th class="text-center"style="width:5%">Delete</th>
+						<th class="text-center" style="width:5%">Delete</th>
 						@endcan
 					</tr>
 				</thead>
@@ -34,17 +34,17 @@
 						
 						
 						@can('Super Admin')
-						<td>
+						<td class="text-center">
 						 <a class="btn btn-info btn-sm" id="editDocument" href="{{route('documentation.edit',$documentId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 						 </td>
 						 @endcan
 						 
 						 @can('hr delete documentation')
-						 <td>
+						 <td class="text-center">
 						 <form id="deleteDocument{{$documentId->id}}" action="{{route('documentation.destroy',$documentId->id)}}" method="POST">
 						 @method('DELETE')
 						 @csrf
-						 <button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
+						 <button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"><i class="fas fa-trash-alt "></i></button>
 						 </form>
 
 						 </td>

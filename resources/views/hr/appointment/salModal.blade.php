@@ -135,5 +135,6 @@ $(document).ready(function(){
 });
 </script>
 @endpush
+@stack('scripts')
 
 <!--end Model--> 

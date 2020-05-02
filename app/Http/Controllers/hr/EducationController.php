@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Common\Education;
 use App\Models\Common\Country;
 use App\Models\Hr\HrEmployee;
+use DB;
 
 class EducationController extends Controller
 {
@@ -15,9 +16,12 @@ class EducationController extends Controller
 
     	$degrees = Education::all();
     	$countries = Country::all();
+    	$employee = HrEmployee::find(session('hr_employee_id'));
 
 	    if($request->ajax()){
-	    	return view('hr.education.create',compact('degrees','countries'));
+	    	$view =  view('hr.education.create',compact('degrees','countries','employee'))->render();
+	    	return response()->json($view);
+
 		}else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
@@ -50,6 +54,23 @@ class EducationController extends Controller
 
 				return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
 			}
+
+    }
+
+
+    public function edit(Request $request, $id){
+
+    	$degrees = Education::all();
+    	$countries = Country::all();
+    	$employee = HrEmployee::find(session('hr_employee_id'));
+    	$data = DB::table('education_hr_employee')->find($id);
+
+
+    	if($request->ajax()){
+	    	return view('hr.education.edit',compact('degrees','countries','employee','data'));
+		}else{
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }
 
     }
 

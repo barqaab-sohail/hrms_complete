@@ -27,7 +27,7 @@ class CreateEducationHrEmployeeTable extends Migration
             $table->foreign('country_id')->references('id')->on('countries');
 
             $table->string('institute')->nullable();
-            $table->string('from',15);
+            $table->string('from',15)->nullable();
             $table->string('to',15);
             $table->float('total_marks')->nullable(); //4+2 i.e 9999.99
             $table->float('marks_obtain')->nullable();

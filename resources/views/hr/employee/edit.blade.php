@@ -24,7 +24,7 @@
 
 
 
-@push('scripts')
+
 <script>
 
 
@@ -33,9 +33,11 @@ $(document).ready(function() {
 
 	formFunctions();
 
-
 	//form submit
-	$(document).on('submit','#formEditEmployee', function(event){	
+	$(document).on('submit','#formEditEmployee', function(e){	
+  //$('#formEditEmployee').submit(function (e){ 
+   
+    // prevent default call from function formFunctions()
 	 	var url = $(this).attr('action');
 		$('.fa-spinner').show();
 	   	submitForm(this, url);
@@ -44,33 +46,34 @@ $(document).ready(function() {
 
 
 
-//edit form load through ajax;
-	$(document).on('click','a[id^=edit]',function(e){
-		e.preventDefault();
-		var url = $(this).attr('href');
-		$.ajax({
-           url:url,
-           method:"GET",
-           //dataType:'JSON',
-           contentType: false,
-           cache: false,
-           processData: false,
-           success:function(data)
-               {
-        		$(".addAjax").html(data);
+// //edit form load through ajax;
+// 	$(document).on('click','a[id^=edit]',function(e){
+//     console.log('edit click');
+// 		e.preventDefault();
+// 		var url = $(this).attr('href');
+// 		$.ajax({
+//            url:url,
+//            method:"GET",
+//            //dataType:'JSON',
+//            contentType: false,
+//            cache: false,
+//            processData: false,
+//            success:function(data)
+//                {
+//         		$(".addAjax").html(data);
         		
-        		formFunctions();
+//         		formFunctions();
         		
-               },
-            error: function (jqXHR, textStatus, errorThrown){
-            	if (jqXHR.status == 401){
-            		location.href = "{{route ('login')}}"
-            		}      
+//                },
+//             error: function (jqXHR, textStatus, errorThrown){
+//             	if (jqXHR.status == 401){
+//             		location.href = "{{route ('login')}}"
+//             		}      
                           
 
-                    }//end error
-    	}); //end ajax	
-	});
+//                     }//end error
+//     	}); //end ajax	
+// 	});
 
 
 
@@ -90,7 +93,8 @@ $(document).ready(function() {
            processData: false,
            success:function(data)
                {
-        		$(".addAjax").html(data);
+        		
+            $(".addAjax").html(data);
         		$('a[id^=add]').css('background-color','');
         		$('#'+id).css('background-color','#737373');
         		formFunctions();
@@ -164,7 +168,5 @@ $(document).ready(function() {
 </script>
 
 
-
-@endpush
 
 @stop
