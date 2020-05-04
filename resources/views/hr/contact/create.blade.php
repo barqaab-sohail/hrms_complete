@@ -116,7 +116,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Mobile No.<span class="text_requried">*</span></label>
                                 
-                               <input type="text" name="mobile" value="{{ old('mobile') }}" data-validation="length"  data-validation-length="max15" class="form-control" placeholder="Enter Mobile No" data-validation="required">
+                               <input type="text" name="mobile" value="{{ old('mobile') }}" data-validation="required length"  data-validation-length="max15" class="form-control" placeholder="Enter Mobile No">
                                
                             </div>
                         </div>

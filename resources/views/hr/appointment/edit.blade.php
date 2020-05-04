@@ -189,23 +189,12 @@
                     </div>
                 </div><!--/End Row-->
 
-                <div class="row hideDiv">
-                    <div class="col-md-12">
-                        <div class="form-group row">
-                            <div class="col-md-2">
-                                <input type="number"  name="total_salary" value="{{ old('total_salary') }}"  class="form-control" placeholder="Total Salary">
-                                <i class="fas fa-save fa-2x text_save" id="storeSalary" href="{{route('salary.store')}}" aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>            
-                </div><!--/End Row-->
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Remarks</label>
-                                <input type="text"  name="remarks" value="{{ old('remarks',$data->remarks??'') }}"  class="form-control" data-validation="required" placeholder="Enter Remarks if any">
+                                <input type="text"  name="remarks" value="{{ old('remarks',$data->remarks??'') }}"  class="form-control" placeholder="Enter Remarks if any">
                                 
                                
                             </div>
@@ -242,7 +231,7 @@
 }
 </style>
 
-@push('scripts')
+
 <script>
 
    console.log('ok');
@@ -256,7 +245,7 @@
 
         });
 </script>
-@endpush
+
 
 
 

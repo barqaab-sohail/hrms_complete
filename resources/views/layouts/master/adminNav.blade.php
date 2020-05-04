@@ -45,6 +45,18 @@
                     </ul>
                 </li>
                @endcan
+
+               <li class="{{Request::is('hrms/project*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fas fa-cubes"></i><span class="hide-menu">Projects</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                   
+                    @canany(['project edit record','project delete record'])
+                        <li><a  class="{{Request::is('hrms/project/create')?'active':''}}" href="{{route('project.create')}}">Add Project</a></li>
+                        <li><a  class="{{Request::is('hrms/project')?'active':''}}" href="{{route('project.index')}}">List of Projects</a></li>
+                    @endcanany
+                      
+                    </ul>
+                </li>
+
                @can('Super Admin')
                  <li class="{{Request::is('hrms/admin*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">Admin</span></a>
                     <ul aria-expanded="false" class="collapse">  

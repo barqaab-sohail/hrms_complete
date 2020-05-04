@@ -12,6 +12,7 @@ use App\Models\Hr\HrContact;
 use App\Models\Hr\HrContactMobile;
 use App\Models\Hr\HrContactLandline;
 use App\Models\Hr\HrContactEmail;
+use App\Http\Requests\Hr\ContactStore;
 use DB;
 
 class ContactController extends Controller
@@ -32,7 +33,7 @@ class ContactController extends Controller
     }
 
 
-    public function store (Request $request){
+    public function store (ContactStore $request){
     	$input = $request->all();
     	$input['hr_employee_id']=session('hr_employee_id');
 

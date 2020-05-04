@@ -14,6 +14,7 @@ use App\Models\Hr\HrDepartment;
 use App\Models\Hr\HrLetterType;
 use App\Models\Hr\HrCommonModel;
 use App\Models\Project\PrDetail;
+use App\Http\Requests\Hr\AppointmentStore;
 use DB;
 
 class AppointmentController extends Controller
@@ -54,7 +55,8 @@ class AppointmentController extends Controller
 
 
         if($request->ajax()){
-            return view('hr.appointment.edit', compact('data','salaries','designations','employees','departments','letterTypes','projects','employeeDesignation','employeeHod','employeeDepartment','employeeSalary'));
+            $view =  view('hr.appointment.edit', compact('data','salaries','designations','employees','departments','letterTypes','projects','employeeDesignation','employeeHod','employeeDepartment','employeeSalary'))->render();
+            return response()->json($view);
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
@@ -62,7 +64,7 @@ class AppointmentController extends Controller
     }
 
 
-    public function update(Request $request, $id){
+    public function update(AppointmentStore $request, $id){
     	$input = $request->all();
             if($request->filled('joining_date')){
             $input ['joining_date']= \Carbon\Carbon::parse($request->joining_date)->format('Y-m-d');
@@ -75,7 +77,7 @@ class AppointmentController extends Controller
         $appointment = HrAppointment::where('hr_employee_id',$id)->first();
 
         DB::transaction(function () use ($input, $appointment) {  
-
+            //check if appointment exist then update else create
             if ($appointment){
 
                 $appointmentDetail = HrAppointmentDetail::where('hr_appointment_id', $appointment->id)->first();

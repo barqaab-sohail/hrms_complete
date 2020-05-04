@@ -32,6 +32,8 @@ Route::resource('/','RegisterController',['only'=>['create','store']]);
 
 // });
 
+
+//HR Routes
 Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Hr'], function(){
 Route::post('/employeeCnic','EmployeeController@employeeCnic')->name('employee.cnic');
 Route::resource('/employee', 'EmployeeController');
@@ -47,8 +49,9 @@ Route::get('/userLogin/refreshTable', 'UserLoginController@refreshTable')->name(
 Route::resource('/userLogin', 'UserLoginController',['only'=>['edit','store','destroy']]);
 Route::resource('/picture', 'PictureController',['only'=>['edit','store']]);
 
-
 });
+
+//CV Routes
 
 Route::group(['prefix' => 'hrms/cvData', 'middleware' => 'auth', 'namespace'=>'Cv'], function(){
 Route::get('/autocomplete/fetch', 'CvController@fetch')->name('autocomplete.fetch');
@@ -63,7 +66,16 @@ Route::resource('/cvDocument', 'CvDocumentController');
 
 });
 
+//Projects Routes
+Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Project'], function(){
+Route::resource('/project', 'ProjectController');
 
+});
+
+
+
+
+//Admin Routes
 Route::group(['prefix' => 'hrms/admin', 'middleware' => 'auth', 'namespace'=>'Admin'], function(){
 
 	Route::get('/activeUser', 'ActiveUserController@index')->name('activeUser.index');
@@ -75,7 +87,7 @@ Route::group(['prefix' => 'hrms/admin', 'middleware' => 'auth', 'namespace'=>'Ad
 
 
 
-
+//General Routes
 Route::get('/country/states/{id?}', 'CountryController@getStates')->name('states');
 Route::get('/country/cities/{id?}', 'CountryController@getCities')->name('cities');
 

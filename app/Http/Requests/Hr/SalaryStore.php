@@ -33,7 +33,7 @@ class SalaryStore extends FormRequest
     {
         return [
             'total_salary.min' => 'salary minimum 5 digits',
-            'total_salary.max' => 'salary minimum 6 digits',
+            'total_salary.max' => 'salary maximumt 6 digits',
              
             
         ];

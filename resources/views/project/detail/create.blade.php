@@ -1,9 +1,9 @@
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
 @section('Heading')
-	<h3 class="text-themecolor">Human Resource</h3>
+	<h3 class="text-themecolor">Projects</h3>
 	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="javascript:void(0)">New Employee</a></li>
+		<li class="breadcrumb-item"><a href="javascript:void(0)">New Project Detail</a></li>
 		
 		
 	</ol>
@@ -15,45 +15,43 @@
 			<div class="row">
 		        <div class="col-lg-12">
 		            <div style="margin-top:10px; margin-right: 10px;">
-		                <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">List of Employees</button>
+		                <button type="button" onclick="window.location.href='{{route('project.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">List of Projects</button>
 		            </div>
 		                 
 		            <div class="card-body">
-		                <form id= "formEmployee" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
+		                <form id= "formProject" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
 		                @csrf
 		                    <div class="form-body">
 		                            
-		                        <h3 class="box-title">Employee Information</h3>
+		                        <h3 class="box-title">Project Information</h3>
 		                        
 		                        <hr class="m-t-0 m-b-40">
 
 		                        <div class="row">
-		                            <div class="col-md-4">
+		                            <div class="col-md-8">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">First Name<span class="text_requried">*</span></label><br>
+		                                       	<label class="control-label text-right">Name of Project<span class="text_requried">*</span></label><br>
 
-		                                       	<input type="text"  name="first_name" value="{{ old('first_name') }}"  class="form-control" data-validation="required" placeholder="Enter First Name">
+		                                       	<input type="text"  name="name" value="{{ old('name') }}"  class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Name of Project">
 		                                    </div>
 		                                </div>
 		                            </div>
-		                            <!--/span-->
-		                            <div class="col-md-4">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Last Name<span class="text_requried">*</span></label>
-		                                        
-		                                        <input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control " data-validation="required" placeholder="Enter Last Name" >
-		                                    </div>
-		                                </div>
-		                            </div>
+		                           
 		                             <!--/span-->
 		                            <div class="col-md-4">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Father Name<span class="text_requried">*</span></label>
+		                                       	<label class="control-label text-right">Client Name<span class="text_requried">*</span></label>
+		                                       		<select  name="client_id"  class="form-control selectTwo" data-validation="required">
+                                                    <option value=""></option>
+                                                    @foreach($clients as $client)
+													<option value="{{$client->id}}" {{(old("client_id")==$client->id? "selected" : "")}}>{{$client->name}}</option>
+                                                    @endforeach
+                                                    
+                                                </select>
 		                                        
-		                                        <input type="text" name="father_name" value="{{ old('father_name') }}" class="form-control " data-validation="required" placeholder="Enter Father Name" >
+		                                       
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -63,12 +61,12 @@
 		                            <div class="col-md-4">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Date of Birth<span class="text_requried">*</span></label>
+		                                       	<label class="control-label text-right">Commencement Date<span class="text_requried">*</span></label>
 		                                        
-		                                        <input type="text" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}" class="form-control date_input" data-validation="required" readonly>
+		                                        <input type="text"  name="commencement_date" value="{{ old('commencement_date') }}" class="form-control date_input" data-validation="required" readonly>
 												
 												<br>
-		                                        @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
+		                                        @can('project edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -76,10 +74,12 @@
 		                            <div class="col-md-4">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">CNIC<span class="text_requried">*</span></label>
+		                                       	<label class="control-label text-right">Contractual Completion Date<span class="text_requried">*</span></label>
 		                                        
-		                                        <input type="text" name="cnic" id="cnic" pattern="[0-9.-]{15}" title= "13 digit Number without dash" value="{{ old('cnic') }}" class="form-control" data-validation="required" placeholder="Enter CNIC without dash" >
-		                                        <span id="cnicCheck" class="float-right" style="color:red"></span>
+		                                        <input type="text"  name="contractual_completion_date" value="{{ old('contractual_completion_date') }}" class="form-control date_input" data-validation="required" readonly>
+												
+												<br>
+		                                        @can('project edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -87,12 +87,12 @@
 		                            <div class="col-md-4">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">CNIC Expiry<span class="text_requried">*</span></label>
-		                                            
-		                                        <input type="text" id="cnic_expiry" name="cnic_expiry" value="{{ old('cnic_expiry') }}" class="form-control date_input"  data-validation="required" readonly >
+		                                       		<label class="control-label text-right">Actual Completion Date</label>
+		                                        
+		                                        <input type="text"  name="actual_completion_date" value="{{ old('actual_completion_date') }}" class="form-control date_input" readonly>
 												
 												<br>
-		                                        @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan
+		                                        @can('project edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -102,13 +102,14 @@
 		                            <div class="col-md-2">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Gender<span class="text_requried">*</span></label>
+		                                       	<label class="control-label text-right">Project Status<span class="text_requried">*</span></label>
 		                                        
-	                                           	<select  name="gender_id"  class="form-control selectTwo" data-validation="required">
+	                                           	<select  name="pr_status_id"  class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
-                                                    @foreach($genders as $gender)
-													<option value="{{$gender->id}}" {{(old("gender_id")==$gender->id? "selected" : "")}}>{{$gender->name}}</option>
+                                                    @foreach($projectStatuses as $projectStatus)
+													<option value="{{$projectStatus->id}}" {{(old("pr_status_id")==$projectStatus->id? "selected" : "")}}>{{$projectStatus->name}}</option>
                                                     @endforeach
+                                                    
                                                     
                                                 </select>
 												
@@ -119,13 +120,14 @@
 		                            <div class="col-md-2">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Marital Status<span class="text_requried" data-validation="required">*</span></label>
+		                                       	<label class="control-label text-right">BARQAAB Role<span class="text_requried" data-validation="required">*</span></label>
 		                                       
-	                                           	<select  name="marital_status_id"  class="form-control selectTwo" data-validation="required">
+	                                           	<select  name="pr_role_id"  class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
-                                                    @foreach($maritalStatuses as $maritalStatus)
-													<option value="{{$maritalStatus->id}}" {{(old("marital_status_id")==$maritalStatus->id? "selected" : "")}}>{{$maritalStatus->name}}</option>
+                                                    @foreach($projectRoles as $projectRole)
+													<option value="{{$projectRole->id}}" {{(old("pr_role_id")==$projectRole->id? "selected" : "")}}>{{$projectRole->name}}</option>
                                                     @endforeach
+                                                   
                                                   
                                                 </select>
 		                                    </div>
@@ -135,30 +137,43 @@
 		                            <div class="col-md-2">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Religion<span class="text_requried">*</span></label>
-		                                       
-	                                           	<select  name="religion_id"  class="form-control selectTwo" data-validation="required">
+		                                       	<label class="control-label text-right">Contract Type<span class="text_requried">*</span></label>
+		                                       	<select  name="contract_type_id"  class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
-                                                    @foreach($religions as $religion)
-													<option value="{{$religion->id}}" {{(old("religion_id")==$religion->id? "selected" : "")}}>{{$religion->name}}</option>
+                                                    @foreach($contractTypes as $contractType)
+													<option value="{{$contractType->id}}" {{(old("contract_type_id")==$contractType->id? "selected" : "")}}>{{$contractType->name}}</option>
                                                     @endforeach
-                                                  
+                                                    
                                                 </select>
-												
+		                                        
+		                                        
 		                                    </div>
 		                                </div>
 		                            </div>
-		                              <!--/span-->
+		                            <!--/span-->
 		                            <div class="col-md-2">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Employee No</label>
-		                                            
-		                                        <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no') }}" class="form-control"  placeholder="Enter Employee No" >
+		                                       	<label class="control-label text-right">Project No<span class="text_requried">*</span></label>
+		                                       
+	                                           	<input type="text"  name="project_no" data-validation=" required length" data-validation-length="max6" value="{{ old('project_no') }}" class="form-control" >
 												
 		                                    </div>
 		                                </div>
 		                            </div>
+		                            <!--/span-->
+		                            <div class="col-md-4">
+		                                <div class="form-group row">
+		                                    <div class="col-md-12">
+		                                       	<label class="control-label text-right">share</label>
+		                                       
+	                                           	 <input type="text" name="share" value="{{ old('share') }}" data-validation="length" data-validation-length="max190" class="form-control"  placeholder="BARQAAB Share" >
+												
+		                                    </div>
+		                                </div>
+		                            </div>
+		                             
+		                            
 		                        </div><!--/End Row-->
 		                    </div> <!--/End Form Boday-->
 
@@ -169,7 +184,7 @@
 		                            <div class="col-md-6">
 		                                <div class="row">
 		                                    <div class="col-md-offset-3 col-md-9">
-		                                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Add Employee</button> 
+		                                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Add Project</button> 
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -184,41 +199,18 @@
 </div> <!-- end row -->
 
 
-
-@push('scripts')
 <script>
 $(document).ready(function() {
-
-	$('#cnic').blur(function(){ 
-		$('#cnicCheck').fadeOut(); 
-        var query = $(this).val();
-        if(query != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-          url:"{{ route('employee.cnic') }}",
-          method:"Post",
-          data:{query:query, _token:_token},
-	         	success:function(data){
-		          	if(data.status == 'Not Ok'){
-		          		console.log(data.status);
-		           		$('#cnicCheck').fadeIn();  
-		                  $('#cnicCheck').html('This CNIC is already entered');
-		            }
-	          	}
-         });
-        }
-    });
-
 
 	//All Basic Form Implementatin i.e validation etc.
 	formFunctions();
 
-	$('#formEmployee').on('submit', function(event){
+	$('#formProject').on('submit', function(event){
 	 	//preventDefault work through formFunctions;
-		url="{{route('employee.store')}}";
+	 	console.log('submit');
+		url="{{route('project.store')}}";
 		$('.fa-spinner').show();	
-	   	submitFormAjax(this, url);
+	   	submitFormAjax(this, url,1);
 	}); //end submit
 
 	//ajax function
@@ -283,6 +275,5 @@ $(document).ready(function() {
 });
 </script>
 
-@endpush
 
 @stop
