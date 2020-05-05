@@ -122,8 +122,15 @@ function formFunctions(){
     $('.fa-spinner').hide();
 } //;end formFunctions
 
-
-
+  $(document).on('keypress','#mobile',function(e){
+  //$("#mobile").keypress(function (e) {
+     //if the letter is not digit then display error and don't type anything
+         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            //display error message
+            console.log('only digit');
+                   return false;
+        }
+    });
 
 
 

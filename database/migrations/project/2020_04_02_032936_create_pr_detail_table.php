@@ -21,10 +21,11 @@ class CreatePrDetailTable extends Migration
             $table->bigInteger('client_id')->unsigned();
             $table->date('commencement_date');
             $table->date('contractual_completion_date');
-            $table->date('actual_completion_date');
+            $table->date('actual_completion_date')nullable();
             $table->bigInteger('pr_status_id')->unsigned();
             $table->bigInteger('pr_role_id')->unsigned();
             $table->string('share')->nullable();
+             $table->string('project_no',15)->unique()->nullable();
             $table->timestamps();
 
             $table->foreign('contract_type_id')->references('id')->on('contract_types');

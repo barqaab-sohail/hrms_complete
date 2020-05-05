@@ -19,7 +19,7 @@ class CreateHrEmergencyTable extends Migration
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->string('name');
             $table->string('relation',20);
-            $table->string('landline',20);
+            $table->string('address',190);
             $table->string('mobile',20);
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');

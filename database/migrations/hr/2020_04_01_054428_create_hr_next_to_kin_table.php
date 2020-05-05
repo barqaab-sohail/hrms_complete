@@ -20,7 +20,7 @@ class CreateHrNextToKinTable extends Migration
             $table->string('name');
             $table->string('relation',30);
             $table->string('address')->nullable();
-            $table->string('contact')->nullable();
+            $table->string('mobile',20)->nullable();
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });

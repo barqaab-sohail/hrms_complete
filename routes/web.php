@@ -43,6 +43,8 @@ Route::resource('/salary', 'SalaryController',['only'=>['store']]);
 Route::resource('/appointment', 'AppointmentController',['only'=>['edit','update']]);
 Route::get('/contact/refreshTable', 'ContactController@refreshTable')->name('contact.table');
 Route::resource('/contact', 'ContactController');
+Route::resource('/emergency', 'EmergencyController');
+Route::resource('/nextToKin', 'NextToKinController');
 Route::get('/documentation/refreshTable', 'DocumentationController@refreshTable')->name('documentation.table');
 Route::resource('/documentation', 'DocumentationController');
 Route::get('/userLogin/refreshTable', 'UserLoginController@refreshTable')->name('userLogin.table');
