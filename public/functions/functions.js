@@ -123,12 +123,11 @@ function formFunctions(){
 } //;end formFunctions
 
 
-//get state/province through ajax
 
 
 
 
-             
+//CNIC Format         
      //Make sure that the event fires on input change
     $(document).on('input','#cnic',function(ev){
    // $("#cnic").on('input', function(ev){
@@ -159,6 +158,38 @@ function formFunctions(){
         $(this).val(input);
     });
 
+//Mobile format
+     //Make sure that the event fires on input change
+    $(document).on('input','#mobile',function(ev){
+   // $("#cnic").on('input', function(ev){
+        
+        //Prevent default
+        ev.preventDefault();
+        
+        //Remove hyphens
+        let input = ev.target.value.split("-").join("");
+        if(ev.target.value.length>12){
+            input =  input.substring(0,input.length-1)
+        }
+        
+        //Make a new string with the hyphens
+        // Note that we make it into an array, and then join it at the end
+        // This is so that we can use .map() 
+        input = input.split('').map(function(cur, index){
+            
+            //If the size of input is 6 or 8, insert dash before it
+            //else, just insert input
+            if(index == 4)
+                return "-" + cur;
+            else
+                return cur;
+        }).join('');
+        
+        //Return the new string
+        $(this).val(input);
+    });
+
+    
 
  //function to prevent double click on submit button
 (function(){
@@ -195,6 +226,31 @@ function resetForm(){
     $("input[style='border-color: rgb(185, 74, 72);']").css('border-color','').siblings("span").attr('class','help-block').remove();
     $('iframe').remove();
 
+}
+
+// HR get data through ajax
+function getAjaxData(url){
+        $.ajax({
+           url:url,
+           method:"GET",
+           //dataType:'JSON',
+           contentType: false,
+           cache: false,
+           processData: false,
+           success:function(data)
+               {
+                
+                $(".addAjax").html(data);
+               
+               },
+            error: function (jqXHR, textStatus, errorThrown){
+                if (jqXHR.status == 401){
+                    location.href = "{{route ('login')}}"
+                    }      
+                          
+
+                }//end error
+        }); //end ajax  
 }
 
 function submitForm(form, url,reset=0){

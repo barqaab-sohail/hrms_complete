@@ -72,6 +72,13 @@ $(document).ready(function() {
          e.preventDefault();
       });
 
+	 $('a[id^=edit]').click(function (e){
+        e.preventDefault();
+        console.log('edit');
+        var url = $(this).attr('href');
+        getAjaxData(url);
+
+      });
 
   	$("form[id^=deleteContact]").submit(function(e) { 
   	e.preventDefault();
@@ -80,8 +87,7 @@ $(document).ready(function() {
 
   	submitForm(this, url);
   	resetForm();
-  	 refreshTable("{{route('contact.table')}}");
-  	 
+  	 refreshTable("{{route('contact.table')}}",300);
   	 
     });
 

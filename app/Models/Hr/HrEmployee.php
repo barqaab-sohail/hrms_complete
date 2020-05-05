@@ -25,5 +25,17 @@ class HrEmployee extends Model implements Auditable
         ->withTimestamps();
     }
 
+    public function mobile(){
+
+            return $this->hasOneThrough('App\Models\Hr\HrContactMobile', 'App\Models\Hr\HrContact');
+
+    }
+
+    public function appointment(){
+
+        return $this->hasOne('App\Models\Hr\HrAppointment');
+
+    }
+
 
 }

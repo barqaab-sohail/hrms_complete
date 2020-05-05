@@ -70,6 +70,7 @@ Route::resource('/cvDocument', 'CvDocumentController');
 Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Project'], function(){
 Route::resource('/project', 'ProjectController');
 
+
 });
 
 
@@ -79,6 +80,7 @@ Route::resource('/project', 'ProjectController');
 Route::group(['prefix' => 'hrms/admin', 'middleware' => 'auth', 'namespace'=>'Admin'], function(){
 
 	Route::get('/activeUser', 'ActiveUserController@index')->name('activeUser.index');
+	Route::resource('/permission', 'PermissionController');
 
 });
 

@@ -171,7 +171,7 @@
 		                                		
 		                                        <div class="col-md-8" >
 		                                        	<label class="control-label text-right">Mobile Number<span class="text_requried">*</span></label>
-		                                            <input type="text" name="phone[]" value="{{old('phone.0')}}" data-validation="required length" data-validation-length="max15"  class="form-control" >
+		                                            <input type="text" name="phone[]" id="mobile" value="{{old('phone.0')}}" data-validation="required length" data-validation-length="max15" placeholder="0345-0000000" class="form-control" >
 
 		                                        </div>
 												<div class="col-md-4">

@@ -34,7 +34,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">House No.</label><br>
 
-                                <input type="text"  name="house" value="{{ old('house',$data->house??'') }}"  class="form-control" placeholder="Enter House No">
+                                <input type="text"  name="house" value="{{ old('house',$data->house??'') }}"  class="form-control" placeholder="Enter House No" data-validation="length"  data-validation-length="max190">
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Street No/Society</label>
                                 
-                                <input type="text" name="street" value="{{ old('street',$data->street??'') }}" class="form-control" placeholder="Enter Street No and Society">
+                                <input type="text" name="street" value="{{ old('street',$data->street??'') }}" class="form-control" placeholder="Enter Street No and Society" data-validation="length"  data-validation-length="max190">
 
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                             <div class="col-md-12">
                                <label class="control-label text-right">Town/Village<span class="text_requried">*</span></label>
                                 
-                               <input type="text" name="town" value="{{ old('town',$data->town??'') }}" class="form-control" placeholder="Enter Town or Village" data-validation="required">
+                               <input type="text" name="town" value="{{ old('town',$data->town??'') }}" class="form-control" placeholder="Enter Town or Village" data-validation="required length" data-validation-length="max190">
 
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Tehsil</span></label>
                                 
-                               <input type="text" name="tehsil" value="{{ old('tehsil',$data->tehsil??'') }}" class="form-control" placeholder="Enter Tehsil">
+                               <input type="text" name="tehsil" value="{{ old('tehsil',$data->tehsil??'') }}" class="form-control" placeholder="Enter Tehsil" data-validation="length"  data-validation-length="max190">
                                 
                                
                             </div>
@@ -126,7 +126,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Mobile No.<span class="text_requried">*</span></label>
                                 
-                               <input type="text" name="mobile" value="{{ old('mobile',$data->mobile->mobile??'') }}" class="form-control" placeholder="Enter Mobile No" data-validation="required">
+                               <input type="text" name="mobile" id="mobile" pattern="[0-9.-]{12}" title= "11 digit without dash" value="{{ old('mobile',$data->mobile->mobile??'') }}" class="form-control" placeholder="0345-0000000" data-validation="required">
                                
                             </div>
                         </div>
@@ -137,7 +137,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Landline No.</label>
                                 
-                               <input type="text" name="landline" value="{{ old('landline',$data->landline->landline??'') }}" class="form-control" placeholder="Enter Landline No.">
+                               <input type="text" name="landline" value="{{ old('landline',$data->landline->landline??'') }}" class="form-control" placeholder="0092-42-00000000">
                                 
                             </div>
                         </div>
@@ -183,7 +183,7 @@
 $(document).ready(function(){
    
      refreshTable("{{route('contact.table')}}");
-
+     formFunctions();
 
       $("form").submit(function (e) {
          e.preventDefault();
@@ -195,7 +195,7 @@ $(document).ready(function(){
      $('.fa-spinner').show();     //console.log(url);
      event.preventDefault();
       submitForm(this, url);
-      refreshTable("{{route('contact.table')}}");
+      refreshTable("{{route('contact.table')}}",300);
         
     }); //end submit
 

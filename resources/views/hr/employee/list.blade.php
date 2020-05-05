@@ -14,8 +14,8 @@
 				<tr>
 					<th>Employee Name</th>
 					<th>Father's Name</th>
-					<th>CNIC</th>
-					<th>CNIC Expiry</th>
+					<th>Category</th>
+					<th>Mobile</th>
 					<th>Created at</th>
 					<th class="text-center"style="width:5%">Edit</th> 
 					<th class="text-center"style="width:5%">Delete</th>
@@ -28,8 +28,8 @@
 						<tr>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 							<td>{{$employee->father_name}}</td>
-							<td>{{$employee->cnic}}</td>
-							<td>{{$employee->cnic_expiry}}</td>
+							<td>{{$employee->appointment->category??''}}</td>
+							<td>{{$employee->mobile->mobile??''}}</td>
 							<td>{{$employee->created_at}}</td>
 							
 							<td class="text-center">
