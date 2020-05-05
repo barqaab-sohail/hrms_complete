@@ -152,7 +152,7 @@
                 	<div class="form-group row">
                         <div class="col-md-8">
                         	<label class="control-label text-right">Mobile Number<span class="text_requried">*</span></label>
-                            <input type="text" name="phone[]['{{$phone->id}}']" data-validation="required length"  data-validation-length="max190" value="{{$phone->phone}}"  class="form-control" >
+                            <input type="text" name="phone[]['{{$phone->id}}']" id="mobile" data-validation="required length"  data-validation-length="max190" value="{{$phone->phone}}"  class="form-control" placeholder="0345-0000000">
 
                         </div>
 						<div class="col-md-4">

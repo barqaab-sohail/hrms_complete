@@ -75,7 +75,7 @@ class ContactController extends Controller
 
     }
 
-    public function update (Request $request, $id){
+    public function update (ContactStore $request, $id){
     	$input = $request->all();
     	DB::transaction(function () use ($input, $request, $id) {  
 

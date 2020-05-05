@@ -54,7 +54,7 @@
                             <div class="col-md-12">
                                <label class="control-label text-right">Town/Village<span class="text_requried">*</span></label>
                                 
-                               <input type="text" name="town" value="{{ old('town') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Town or Village" data-validation="required">
+                               <input type="text" name="town" value="{{ old('town') }}" class="form-control" data-validation=" required length"  data-validation-length="max190" placeholder="Enter Town or Village">
 
                             </div>
                         </div>
@@ -116,7 +116,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Mobile No.<span class="text_requried">*</span></label>
                                 
-                               <input type="text" name="mobile" value="{{ old('mobile') }}" data-validation="required length"  data-validation-length="max15" class="form-control" placeholder="Enter Mobile No">
+                               <input type="text" name="mobile" id="mobile" pattern="[0-9.-]{12}" title= "11 digit without dash" value="{{ old('mobile') }}" data-validation="required length"  data-validation-length="max15" class="form-control" placeholder="0345-0000000">
                                
                             </div>
                         </div>
@@ -127,7 +127,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Landline No.</label>
                                 
-                               <input type="text" name="landline" value="{{ old('landline') }}"  data-validation="length"  data-validation-length="max15" class="form-control" placeholder="Enter Landline No.">
+                               <input type="text" name="landline" value="{{ old('landline') }}"  data-validation="length"  data-validation-length="max15" class="form-control" placeholder="0092-42-00000000">
                                 
                             </div>
                         </div>
@@ -173,13 +173,16 @@
 <script>
 $(document).ready(function(){
     
-    refreshTable("{{route('contact.table')}}");
+    refreshTable("{{route('contact.table')}}",300);
   
 
 
       $("form").submit(function (e) {
          e.preventDefault();
       });
+
+      
+
 
       //submit function
       $("#formContact").submit(function(e) { 

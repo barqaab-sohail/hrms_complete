@@ -78,7 +78,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">CNIC<span class="text_requried">*</span></label>
 		                                        
-		                                        <input type="text" name="cnic" id="cnic" pattern="[0-9.-]{15}" title= "13 digit Number without dash" value="{{ old('cnic') }}" class="form-control" data-validation="required" placeholder="Enter CNIC without dash" >
+		                                        <input type="text" name="cnic" id="cnic" pattern="[0-9.-]{15}" title= "13 digit without dash" value="{{ old('cnic') }}" class="form-control" data-validation="required" placeholder="Enter CNIC without dash" >
 		                                        <span id="cnicCheck" class="float-right" style="color:red"></span>
 		                                    </div>
 		                                </div>
