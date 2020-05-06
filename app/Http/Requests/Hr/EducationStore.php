@@ -24,13 +24,26 @@ class EducationStore extends FormRequest
     public function rules()
     {
         return [
-           'role' => [
-                'required', 
-                Rule::unique('role_user', 'role_id')->where(function ($query) {
-                    return $query->where('user_id', $this->user_id); 
-            // assuming you're sending 'user_id' in the request
-                }),
-            ]
+            'education_id'=> 'required',
+            'institute'=> 'nullable|max:190',
+            'major'=> 'nullable|max:190',
+            'from'=> 'nullable|max:4',
+            'to'=> 'required|max:4',
+            'total_marks'=> 'nullable|max:4',
+            'marks_obtain'=> 'nullable|max:4|lt:total_marks',
+            'grade'=> 'nullable|max:10',
+            'country_id'=> 'required',
         ];
+    }
+
+
+    public function messages(){
+
+        return [
+            'marks_obtain.lt'=> 'The marks obtain must be less than total marks',
+
+
+            ];
+
     }
 }

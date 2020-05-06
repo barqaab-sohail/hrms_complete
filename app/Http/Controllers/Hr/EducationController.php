@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Common\Education;
 use App\Models\Common\Country;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\HrEducation;
+use App\Http\Requests\Hr\EducationStore;
 use DB;
 
 class EducationController extends Controller
@@ -16,10 +18,10 @@ class EducationController extends Controller
 
     	$degrees = Education::all();
     	$countries = Country::all();
-    	$employee = HrEmployee::find(session('hr_employee_id'));
+    	$hrEducations = HrEducation::where('hr_employee_id',session('hr_employee_id'))->get();
 
 	    if($request->ajax()){
-	    	$view =  view('hr.education.create',compact('degrees','countries','employee'))->render();
+	    	$view =  view('hr.education.create',compact('degrees','countries','hrEducations'))->render();
 	    	return response()->json($view);
 
 		}else{
@@ -27,34 +29,17 @@ class EducationController extends Controller
         }
     }
 
-    public function store(Request $request){
+    public function store(EducationStore $request){
 
-    		$employee = HrEmployee::find(session('hr_employee_id'));
-    		$testing=false;
-    		foreach ($employee->education as $edu) {
-    				if ($edu->pivot->education_id == $request->input("degree_name")){
-    					$testing=true;
-    				}
-			}
+            $input = $request->all();
+            $input['hr_employee_id']=session('hr_employee_id');
 
-			if ($testing){
-				return response()->json(['status'=> 'Not OK', 'message' => "This  Degree is already Saved"]);
-			}else{
+            DB::transaction(function () use ($input) {  
+                HrEducation::create($input);
+            }); // end transcation
 
-	    		$educationId = $request->input("degree_name");
-	    		$countryId = $request->input("country_id");
-	    		$institute = $request->input("institute");
-	    		$from = $request->input("from");
-	    		$to = $request->input("to");
-	    		$marksObtain = $request->input("marks_obtain");
-	    		$totalMarks = $request->input("total_marks");
-	    		$grade = $request->input("grade");
-			
-				$employee->education()->attach($educationId, ['country_id'=>$countryId,'institute'=>$institute,'from'=>$from,'to'=>$to,'marks_obtain'=>$marksObtain,'total_marks'=>$totalMarks,'grade'=>$grade,]);	
-
-				return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
-			}
-
+    		
+            return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
     }
 
 
@@ -62,23 +47,52 @@ class EducationController extends Controller
 
     	$degrees = Education::all();
     	$countries = Country::all();
-    	$employee = HrEmployee::find(session('hr_employee_id'));
-    	$data = DB::table('education_hr_employee')->find($id);
+        $hrEducations = HrEducation::where('hr_employee_id',session('hr_employee_id'))->get();
+    	$data = HrEducation::find($id);
 
 
     	if($request->ajax()){
-	    	return view('hr.education.edit',compact('degrees','countries','employee','data'));
+	    
+            $view =  view('hr.education.edit',compact('degrees','countries','hrEducations','data'))->render();
+            return response()->json($view);
 		}else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
 
     }
 
+    public function update(EducationStore $request, $id){
+        $input = $request->all();
+        
+        DB::transaction(function () use ($input, $id) {  
+
+            HrEducation::findOrFail($id)->update($input);
+
+        }); // end transcation
+        
+        return response()->json(['status'=> 'OK', 'message' => " Data Sucessfully Saved"]);
+    }
+
+
+
+
+
+    public function destroy($id){
+        
+    
+        HrEducation::find($id)->delete();
+
+       
+        return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
+    }
+
+
+
     public function refreshTable(){
 
-    	$employee = HrEmployee::find(session('hr_employee_id'));
+    	$hrEducations = HrEducation::where('hr_employee_id',session('hr_employee_id'))->get();
        
-        return view('hr.education.list',compact('employee'));
+        return view('hr.education.list',compact('hrEducations'));
         
     }
 }
