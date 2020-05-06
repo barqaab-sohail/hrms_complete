@@ -63,14 +63,32 @@ class EducationController extends Controller
 
     public function update(EducationStore $request, $id){
         $input = $request->all();
-        
+        $uniqueEducation=true;
+        $degreeNames = HrEducation::where('hr_employee_id', session('hr_employee_id'))
+                                ->where('id','!=',$id)
+                                ->get();
+
+
+        foreach($degreeNames as $degreeName){
+            $combineDegree = $degreeName->hr_employee_id.$degreeName->education_id;
+            $combineRequest = session('hr_employee_id').$request->education_id;
+
+            if($combineDegree == $combineRequest){
+                $uniqueEducation=false;
+            }
+        }
+
+        if($uniqueEducation){
         DB::transaction(function () use ($input, $id) {  
 
             HrEducation::findOrFail($id)->update($input);
 
         }); // end transcation
         
-        return response()->json(['status'=> 'OK', 'message' => " Data Sucessfully Saved"]);
+        return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+        }else{
+            return response()->json(['status'=> 'Not OK', 'message' => "This degree is already saved"]);
+        }
     }
 
 

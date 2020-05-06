@@ -115,7 +115,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Grade</label>       
-                                <input type="text" id="grade" name="grade" value="{{ old('grade',$data->grade) }}" class="form-control"  >
+                                <input type="text" id="grade" name="grade" value="{{ old('grade',$data->grade) }}" class="form-control"  data-validation="length" data-validation-length="max10">
                             </div>
                         </div>
                     </div>
@@ -187,7 +187,7 @@ $(document).ready(function(){
         var url = $(this).attr('action');
         $('.fa-spinner').show(); 
         submitForm(this, url);
-        refreshTable("{{route('education.table')}}",200);
+        //refreshTable("{{route('education.table')}}",200);
     });
 
 
