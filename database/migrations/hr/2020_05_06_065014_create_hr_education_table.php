@@ -25,6 +25,7 @@ class CreateHrEducationTable extends Migration
 
             $table->bigInteger('country_id')->unsigned();
             $table->foreign('country_id')->references('id')->on('countries');
+            $table->unique(['education_id', 'hr_employee_id'],'unique_education'); 
             $table->string('major')->nullable();
             $table->string('institute')->nullable();
             $table->string('from',15)->nullable();

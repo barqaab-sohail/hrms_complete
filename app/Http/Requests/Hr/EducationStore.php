@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Hr;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Validator;
+use DB;
 
 class EducationStore extends FormRequest
 {
@@ -11,6 +13,21 @@ class EducationStore extends FormRequest
      *
      * @return bool
      */
+
+      public function __construct(\Illuminate\Http\Request $request)
+    {
+        Validator::extend('unique_education', function ($attribute, $value, $parameters, $validator) {
+                $count = DB::table('hr_educations')->where('education_id', $value)
+                                    ->where('hr_employee_id', $parameters[0])
+                                    ->count();
+
+            return $count === 0;
+        });
+
+
+    }
+
+
     public function authorize()
     {
         return true;
@@ -23,8 +40,9 @@ class EducationStore extends FormRequest
      */
     public function rules()
     {
-        return [
-            'education_id'=> 'required',
+        $rules = [
+            
+            
             'institute'=> 'nullable|max:190',
             'major'=> 'nullable|max:190',
             'from'=> 'nullable|max:4',
@@ -34,6 +52,13 @@ class EducationStore extends FormRequest
             'grade'=> 'nullable|max:10',
             'country_id'=> 'required',
         ];
+
+        if ($this->getMethod() == 'POST') {
+        $rules += ['education_id'=> "required|unique_education:".session('hr_employee_id')];
+        }
+
+    return $rules;
+
     }
 
 
@@ -41,8 +66,7 @@ class EducationStore extends FormRequest
 
         return [
             'marks_obtain.lt'=> 'The marks obtain must be less than total marks',
-
-
+            'education_id.unique_education'=> 'This degree is already entered'
             ];
 
     }
