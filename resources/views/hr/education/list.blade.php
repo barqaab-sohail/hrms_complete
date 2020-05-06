@@ -1,4 +1,4 @@
-
+@if($hrEducations->count()!=0)
 
 <hr>         
 		<div class="card">
@@ -24,11 +24,11 @@
 					</tr>
 					</thead>
 					<tbody>
-						@foreach($employee->education as $education)
+						@foreach($hrEducations as $education)
 							<tr>
-								<td>{{$education->degree_name}}</td>
-								<td>{{$education->pivot->institute}}</td>
-								<td>{{$education->pivot->to}}</td>
+								<td>{{$education->education->degree_name}}</td>
+								<td>{{$education->institute}}</td>
+								<td>{{$education->to}}</td>
 								@can('hr edit education')
 								<td class="text-center">
 								 <a class="btn btn-info btn-sm" id="editEducation" href="{{route('education.edit',$education->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
@@ -58,23 +58,34 @@
 		</div>
 	</div>
 	<hr>  
-
+@endif
 <script>
 $(document).ready(function() {
 	 $("form").submit(function (e) {
          e.preventDefault();
       });
 
+	 $('a[id^=edit]').click(function (e){
+        e.preventDefault();
+        console.log('edit');
+        var url = $(this).attr('href');
+        getAjaxData(url);
+        formFunctions();
+      });
 
-  	$("form[id^=deleteContact]").submit(function(e) { 
+
+  	$("form[id^=deleteEducation]").submit(function(e) { 
   	e.preventDefault();
   	var url = $(this).attr('action');
   	$('.fa-spinner').show(); 
 
   	submitForm(this, url);
   	resetForm();
-  	 refreshTable("{{route('education.table')}}");
+  	refreshTable("{{route('education.table')}}",200);
     });
+
+
+
 
 });
 </script>

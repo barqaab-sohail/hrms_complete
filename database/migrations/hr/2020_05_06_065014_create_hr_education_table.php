@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEducationHrEmployeeTable extends Migration
+class CreateHrEducationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateEducationHrEmployeeTable extends Migration
      */
     public function up()
     {
-        Schema::create('education_hr_employee', function (Blueprint $table) {
+        Schema::create('hr_educations', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('education_id')->unsigned();
@@ -25,7 +25,7 @@ class CreateEducationHrEmployeeTable extends Migration
 
             $table->bigInteger('country_id')->unsigned();
             $table->foreign('country_id')->references('id')->on('countries');
-
+            $table->string('major')->nullable();
             $table->string('institute')->nullable();
             $table->string('from',15)->nullable();
             $table->string('to',15);
@@ -43,6 +43,6 @@ class CreateEducationHrEmployeeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('education_hr_employee');
+        Schema::dropIfExists('hr_educations');
     }
 }
