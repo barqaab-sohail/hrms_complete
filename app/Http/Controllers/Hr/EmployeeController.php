@@ -8,7 +8,11 @@ use App\Models\Common\Gender;
 use App\Models\Common\MaritalStatus;
 use App\Models\Common\Religion;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\HrContact;
+use App\Models\Hr\HrAppointment;
 use App\Models\Hr\HrStatus;
+use App\Models\Hr\HrContactMobile;
+use App\Models\Hr\HrEmergency;
 use DB;
 use App\Http\Requests\Hr\EmployeeStore;
 
@@ -50,7 +54,9 @@ class EmployeeController extends Controller
     }
 
     public function index(){
-    	$employees = HrEmployee::all();
+    	$employees = HrEmployee::with('hrAppointment','hrContactMobile')->get();
+
+       
     	return view ('hr.employee.list',compact('employees'));
     }
 
