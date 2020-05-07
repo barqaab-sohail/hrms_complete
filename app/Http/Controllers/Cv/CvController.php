@@ -144,7 +144,7 @@ class CvController extends Controller
 	}
 
 	public function index (){
-       $cvs = CvDetail::with('CvContact')->get();
+       $cvs = CvDetail::with('cvPhone')->get();
        
         return view('cv.detail.list', compact('cvs'));
 
