@@ -33,7 +33,7 @@
                       
                     </ul>
                 </li>
-                @can('cv edit record') 
+                @if(auth()->user()->hasPermissionTo('cv edit record')) 
                 <li class="{{Request::is('hrms/cv*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">CV Records</span></a>
                     <ul aria-expanded="false" class="collapse">  
                         <li><a class="{{Request::is('hrms/cvData/cv/create')?'active':''}}" href="{{route('cv.create')}}">Add CV</a></li>
@@ -44,7 +44,7 @@
                         
                     </ul>
                 </li>
-               @endcan
+               @endif
 
                <li class="{{Request::is('hrms/project*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fas fa-cubes"></i><span class="hide-menu">Projects</span></a>
                     <ul aria-expanded="false" class="collapse">
