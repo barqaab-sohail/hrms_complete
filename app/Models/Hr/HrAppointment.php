@@ -13,6 +13,12 @@ class HrAppointment extends Model implements Auditable
 
 
 
+    public function hrEmployee(){
+
+        return $this->belongsTo('App\Models\Hr\HrEmployee');
+
+    }
+
     // // public function designation(){
 
     // // 	 return $this->hasOneThrough('App\Models\Hr\HrDesignation', 'App\Models\Hr\HrAppointmentDetail');

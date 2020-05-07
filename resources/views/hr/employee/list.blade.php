@@ -28,8 +28,8 @@
 						<tr>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 							<td>{{$employee->father_name}}</td>
-							<td>{{$employee->appointment->category??''}}</td>
-							<td>{{$employee->mobile->mobile??''}}</td>
+							<td>{{$employee->hrAppointment->category??''}}</td>
+							<td>{{$employee->hrContactMobile->mobile??''}}</td>
 							<td>{{$employee->created_at}}</td>
 							
 							<td class="text-center">

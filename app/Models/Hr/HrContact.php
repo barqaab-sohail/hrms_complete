@@ -12,6 +12,7 @@ class HrContact extends Model implements Auditable
    use \OwenIt\Auditing\Auditable;
     protected $fillable = ['hr_employee_id', 'hr_contact_type_id', 'house','street','town','tehsile','city_id','state_id','country_id'];
 
+    
 
     public function hrContactType()
     {
