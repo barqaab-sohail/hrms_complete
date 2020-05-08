@@ -416,27 +416,41 @@ class CvController extends Controller
 
     public function find(Request $request){
     	$data = $request->all();
-	//if($request->filled('discipline_id')){
 
-    	// $data = CvExperience::where([
-    	// 		['cv_specialization_id','=',$request->speciality_id],
-    	// 		['cv_stage_id','=',$request->stage_id],
-    	// 		['cv_discipline_id','=',$request->discipline_id],
-    	// 		['year','>=',$request->year],
-    	// 	])
-    	// 	->join ('cv_details','cv_experiences.cv_detail_id','=','cv_details.id')->get();
+    
+   //  	$data = CvDetail::with('cvPhone')->with(['cvExperience' => function($query) {
+			//     $query->where('cv_experiences.cv_detail_id', 3);
+			// }]);
 
-    	// $result = MyModel::join('contacts', function ($join) {
-     //        $join->on('users.id', '=', 'contacts.user_id')
-     //             ->where('contacts.user_id', '>', 5);
-     //    })
-     //    ->get();
+   //  	dd($data);
 
-    	// $data = CvDetail::join('cvExperience', function ($join){
-    	// 		$join->on('users.id', '=', 'contacts.user_id')
-     //             ->where('contacts.user_id', '>', 5);
-    	// 	})->get();
-    	
+
+    	$qry = CvDetail::join('cv_experiences','cv_experiences.cv_detail_id','=','cv_details.id')
+    					->join('cv_detail_education','cv_detail_education.cv_detail_id','=','cv_details.id')
+    							->when($data['speciality_id'], function ($query) use ($data){
+			    				return $query->where('cv_specialization_id','=',$data['speciality_id']);
+			    				})
+			    			->when($data['stage_id'], function ($query) use ($data){
+			    				return $query->where('cv_stage_id','=',$data['stage_id']);
+			    				})
+			    			->when($data['discipline_id'], function ($query) use ($data){
+			    				return $query->where('cv_discipline_id','=',$data['discipline_id']);
+			    				})
+			    			->when($data['year'], function ($query) use ($data){
+			    				return $query->where('year','>=',$data['year']);
+			    				})
+			    			->when($data['degree'], function ($query) use ($data){
+			    				return $query->where('education_id',$data['degree']);
+			    				})
+    					->get();
+    	//Pending  call function from model 
+		dd($qry);
+
+
+
+
+    	// //Version-1
+    	// $data = DB::table('cv_experiences')
     			// ->when($data['speciality_id'], function ($query) use ($data){
     			// 	return $query->where('cv_specialization_id','=',$data['speciality_id']);
     			// 	})
@@ -449,62 +463,17 @@ class CvController extends Controller
     			// ->when($data['year'], function ($query) use ($data){
     			// 	return $query->where('year','>=',$data['year']);
     			// 	})
-    			// ->get();
-
-    	// $data = DB::table('cv_experiences')
-    	// 		->when($data['speciality_id'], function ($query) use ($data){
-    	// 			return $query->where('cv_specialization_id','=',$data['speciality_id']);
-    	// 			})
-    	// 		->when($data['stage_id'], function ($query) use ($data){
-    	// 			return $query->where('cv_stage_id','=',$data['stage_id']);
-    	// 			})
-    	// 		->when($data['discipline_id'], function ($query) use ($data){
-    	// 			return $query->where('cv_discipline_id','=',$data['discipline_id']);
-    	// 			})
-    	// 		->when($data['year'], function ($query) use ($data){
-    	// 			return $query->where('year','>=',$data['year']);
-    	// 			})
     		
     	// 		->join ('cv_details','cv_experiences.cv_detail_id','=','cv_details.id')->get();
 
 
 
-    			// ->where('cv_specialization_id','=',$request->speciality_id)
-       //          ->where('cv_stage_id','=',$request->stage_id)
-       //          ->where('cv_discipline_id','=',$request->discipline_id)
-       //          ->where('year','>=',$request->year)
-                
 
     	
-
-
-				// $product =  Products::select('id', 'title)
-				// ->when(!empty($data['category']) , function ($query) use($data){
-				// return $query->where('category',$data['category']);
-				// })
-				// ->when (!empty($data['title']) , function ($query) use($data){
-				// return $query->where('title',$data['title']);
-				// })
-				// ->get()
-
-
-
-
-
-    	// $employeeDesignation = HrAppointment::where('hr_employee_id', session('hr_employee_id'))
-      //       ->join('hr_appointment_details', 'hr_appointments.id', '=', 'hr_appointment_details.hr_appointment_id')
-      //       ->join('hr_designations', 'hr_designations.id', '=', 'hr_appointment_details.hr_designation_id')
-      //       ->select('hr_designations.*')
-      //       ->first();
-
-      //        $activeUsers = DB::table('hr_employees')
-	     //                ->join('users','hr_employees.user_id','=','users.id')
-	     //                ->join('sessions','users.id','=','sessions.user_id')
-	     //                ->select('users.id AS userId','users.email','sessions.*','hr_employees.*')->where('last_activity','>=', $time)->get();
     			echo 'Full Name      ------   Specialization'. '---Discipline------Stage------'.'<br>';
     		foreach ($data as $data){
 
-    			echo $data->full_name. '---'.$data->cv_specialization_id.'---'.$data->cv_discipline_id.'---'.$data->cv_stage_id.'---'.$data->year. '<br>';
+    			echo $data->full_name. '---'.$data->cvExperience->first()->cv_specialization_id.'---'.$data->cv_discipline_id.'---'.$data->cv_stage_id.'---'.$data->year. '<br>';
     		}
 
     	//dd($data->full_name);
