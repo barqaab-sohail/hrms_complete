@@ -1,35 +1,54 @@
+@if($result->count()!=0)
 
-<div class="table-responsive m-t-40">	
-	<table id="myTable" class="table table-bordered table-striped"  style="width:100%" >
-		<thead>
-		<tr>
-			<th>Full Name</th>
-			<th>Detail</th>
+<hr>         
+        <div class="card">
+        <div class="card-body">
+            <!--<div class="float-right">
+                <input id="month" class="form-control" value="" type="month">
+            </div>-->
+            
+            <div class="table-responsive">
+                
+                <table id="myTable" class="table-primary table-bordered table-striped" width="100%" cellspacing="0">
+                    <thead>
+                    
+                    <tr >
+                        <th>Full Name</th>
+                        <th>Stage</th>
+                        <th>Experience</th>
 
-		</tr>
-		</thead>
-		<tbody>
-		
-			<tr>
-				<td></td>
-				<td></td>
-			</tr>
-		
-		
-		</tbody>
-	</table>
-</div>
-
-@push('scripts')
+                    </tr>
+                    </thead>
+                    <tbody>
+                        
+                        @foreach($result as $cvDetail)
+                            <tr>
+                                <td>{{$cvDetail->full_name}}</td>
+                                
+                                <td>{{$cvDetail->cvEducation->implode('degree_name',' + ')}}</td>
+                              
+                                <td>{{$cvDetail->year}}</td>
+                               
+                            </tr>
+                        @endforeach
+                    
+                     
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr>  
+@endif
 <script>
 $(document).ready(function() {
 
 
-	
             $('#myTable').DataTable({
                 stateSave: false,
         
-                dom: 'Blrtip',
+                dom: 'Bfrti',
                 buttons: [
                     {
                         extend: 'copyHtml5',
@@ -67,4 +86,3 @@ $(document).ready(function() {
             
         });
 </script>
-@endpush
