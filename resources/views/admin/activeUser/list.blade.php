@@ -26,6 +26,8 @@
 						<th>Email</th>
 						<th>CNIC</th>
 						<th>Father Name</th>
+						<th>Last Login Time</th>
+						<th>Last Login IP</th>
 						<th class="text-center">Log Out</th>
 						
 					</tr>
@@ -37,6 +39,8 @@
 								<td>{{$employee->email}}</td>
 								<td>{{$employee->cnic}}</td>
 								<td>{{$employee->father_name}}</td>
+								<td>{{$employee->last_login_at}}</td>
+								<td>{{$employee->last_login_ip}}</td>
 								<td class="text-center">
 
 								<form  id="logoutUser{{$employee->userId}}" action="{{route('logout.all')}}/{{$employee->userId}}" method="GET">

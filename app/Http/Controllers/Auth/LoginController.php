@@ -99,30 +99,39 @@ class LoginController extends Controller
  * @return boolean
  */
 // //Override from original (take from AuthenticatesUsers)
-protected function sendLoginResponse(Request $request)
-{
+    protected function sendLoginResponse(Request $request)
+    {
 
-    $request->session()->regenerate();
-    
-    //It is overrried function
-    $previous_session = Auth::User()->session_id;
-    if ($previous_session) {
-        Session::getHandler()->destroy($previous_session);
-    }
-    Auth::user()->session_id = Session::getId();
-    Auth::user()->save();
-    // end overridd function
-
-    $this->clearLoginAttempts($request);
-    if ($response = $this->authenticated($request, $this->guard()->user())) {
-            return $response;
+        $request->session()->regenerate();
+        
+        //It is overrried function
+        $previous_session = Auth::User()->session_id;
+        if ($previous_session) {
+            Session::getHandler()->destroy($previous_session);
         }
+        Auth::user()->session_id = Session::getId();
+        Auth::user()->save();
+        // end overridd function
 
-        return $request->wantsJson()
-                    ? new Response('', 204)
-                    : redirect()->intended($this->redirectPath());
-}
+        $this->clearLoginAttempts($request);
 
+
+        if ($response = $this->authenticated($request, $this->guard()->user())) {
+                return $response;
+            }
+
+            return $request->wantsJson()
+                        ? new Response('', 204)
+                        : redirect()->intended($this->redirectPath());
+    }
+
+    function authenticated(Request $request, $user)
+    {
+        $user->update([
+            'last_login_at' => \Carbon\Carbon::now()->toDateTimeString(),
+            'last_login_ip' => $request->getClientIp()
+        ]);
+    }
 
 
 
