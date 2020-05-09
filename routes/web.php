@@ -39,6 +39,8 @@ Route::post('/employeeCnic','EmployeeController@employeeCnic')->name('employee.c
 Route::resource('/employee', 'EmployeeController');
 Route::get('/education/refreshTable', 'EducationController@refreshTable')->name('education.table');
 Route::resource('/education', 'EducationController');
+Route::get('/experience/refreshTable', 'ExperienceController@refreshTable')->name('experience.table');
+Route::resource('/experience', 'ExperienceController');
 Route::resource('/salary', 'SalaryController',['only'=>['store']]);
 Route::resource('/appointment', 'AppointmentController',['only'=>['edit','update']]);
 Route::get('/contact/refreshTable', 'ContactController@refreshTable')->name('contact.table');
@@ -82,6 +84,7 @@ Route::resource('/project', 'ProjectController');
 Route::group(['prefix' => 'hrms/admin', 'middleware' => 'auth', 'namespace'=>'Admin'], function(){
 
 	Route::get('/activeUser', 'ActiveUserController@index')->name('activeUser.index');
+	Route::get('/logoutAll/{id?}', 'ActiveUserController@logoutAll')->name('logout.all');
 	Route::resource('/permission', 'PermissionController');
 
 });

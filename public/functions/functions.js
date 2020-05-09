@@ -260,6 +260,34 @@ function getAjaxData(url){
         }); //end ajax  
 }
 
+// HR get data through ajax
+function getAjaxMessage(url){
+        $.ajax({
+           url:url,
+           method:"GET",
+           //dataType:'JSON',
+           contentType: false,
+           cache: false,
+           processData: false,
+           success:function(data)
+               {
+                if(data.status == 'OK'){
+                    $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
+                } else{
+                $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');    
+                }
+               
+               },
+            error: function (jqXHR, textStatus, errorThrown){
+                if (jqXHR.status == 401){
+                    location.href = "{{route ('login')}}"
+                    }      
+                          
+
+                }//end error
+        }); //end ajax  
+}
+
 function submitForm(form, url,reset=0){
         //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
         $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request

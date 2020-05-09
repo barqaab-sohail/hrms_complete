@@ -29,6 +29,32 @@ class ActiveUserController extends Controller
 
 	}
 
+	public function logoutAll($id=1){
+
+		if($id == 1){
+			$loginUsers = Session::where('user_id','!=',1)->get();
+			foreach($loginUsers as $loginUser){
+
+			$loginUser->delete();
+			}
+			return response()->json(['status'=> 'OK', 'message' => "All Users Logout Sucessfully"]);
+		} else {
+
+			$user = Session::where('user_id', $id)->first();
+			if($user != null){
+				$user->delete();
+
+				return response()->json(['status'=> 'OK', 'message' => "User Logout Sucessfully"]);
+			}else{
+				return response()->json(['status'=> 'Not OK', 'message' => "This User is not Login"]);
+			}
+			
+		}
+		
+
+		
+	}
+
 
 
 }

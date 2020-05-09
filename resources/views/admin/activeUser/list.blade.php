@@ -15,7 +15,7 @@
 				<input id="month" class="form-control" value="" type="month">
 			</div>-->
 			<h4 class="card-title">Total Login Users = {{$totalActiveUsers}}</h4>
-			
+			<button id="logoutAll" class="float-right btn btn-danger">Logout All Active Users</button>
 			<div class="table-responsive m-t-40">
 				
 				<table id="myTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
@@ -38,11 +38,14 @@
 								<td>{{$employee->cnic}}</td>
 								<td>{{$employee->father_name}}</td>
 								<td class="text-center">
-									<form id="deleteDocument{{$employee->userId}}" method="POST">
-									@method('DELETE')
-									@csrf
-									<button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-sign-out-alt"></i></button>
-									</form>
+
+								<form  id="logoutUser{{$employee->userId}}" action="{{route('logout.all')}}/{{$employee->userId}}" method="GET">
+								 
+								 @csrf
+								 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-sign-out-alt"></i></button>
+								</form>
+									
+																		
 								</td>
 								
 																						
@@ -56,11 +59,29 @@
 			</div>
 		</div>
 	</div>
-@push('scripts')
-	
-	
+@push('scripts')	
 	<script>
         $(document).ready(function() {
+        	$('#logoutAll').click(function (e){
+        		console.log('click');
+        		e.preventDefault();
+        		var url ="{{route('logout.all')}}";
+        		console.log(url);
+        		getAjaxMessage(url);
+
+        	});
+
+        	
+        	$('form[id^=logoutUser]').submit(function(e){
+        		        		
+        		var url = $(this).attr('action');
+        		e.preventDefault();
+        		console.log(url);
+        		getAjaxMessage(url);
+
+        	});
+
+
             $('#myTable').DataTable({
                 stateSave: false,
                 scrollY:        "300px",
