@@ -184,7 +184,7 @@ $(document).ready(function(){
         var url = $(this).attr('action');
         $('.fa-spinner').show(); 
         submitForm(this, url);
-       // refreshTable("{{route('education.table')}}",200);
+       refreshTable("{{route('education.table')}}",200);
     });
 
 

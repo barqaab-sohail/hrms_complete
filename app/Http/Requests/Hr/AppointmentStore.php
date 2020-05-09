@@ -32,7 +32,7 @@ class AppointmentStore extends FormRequest
             'hr_department_id'=>'required|numeric',
             'category'=>'required|max:1',
             'hr_salary_id'=>'required|numeric',
-            'grade'=>'required|numeric|digits_between:1,14',
+            'grade'=>'nullable|numeric|digits_between:1,14',
             'hr_letter_type_id'=>'required|numeric',
             'pr_detail_id'=>'required|numeric',
             'remarks'=>'nullable|max:190',   

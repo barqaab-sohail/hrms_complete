@@ -25,14 +25,14 @@ class SalaryStore extends FormRequest
     public function rules()
     {
         return [
-            'total_salary'=>'required|min:6|max:7',
+            'total_salary'=>'required|min:5|max:7',
         ];
     }
 
      public function messages()
     {
         return [
-            'total_salary.min' => 'salary minimum 5 digits',
+            'total_salary.min' => 'salary minimum 4 digits',
             'total_salary.max' => 'salary maximumt 6 digits',
              
             
