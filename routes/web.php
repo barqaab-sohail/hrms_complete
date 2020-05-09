@@ -95,7 +95,9 @@ Route::group(['prefix' => 'hrms/admin', 'middleware' => 'auth', 'namespace'=>'Ad
 
 
 //General Routes
+Route::group(['middleware' => 'auth'], function(){
 Route::get('/country/states/{id?}', 'CountryController@getStates')->name('states');
 Route::get('/country/cities/{id?}', 'CountryController@getCities')->name('cities');
+});
 
 //Route::get('/home', 'HomeController@index')->name('home');

@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('password')->default(bcrypt('Great@786'));
             $table->integer('user_status')->default(0)->comment('0 Not Registered, 1 Registered, 2 Blocked');
             $table->string('session_id')->nullable();
+            $table->datetime('last_login_at')->nullable();
+            $table->string('last_login_ip')->nullable();
             $table->rememberToken();
             $table->timestamps();
             

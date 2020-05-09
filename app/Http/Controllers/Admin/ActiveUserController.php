@@ -23,7 +23,7 @@ class ActiveUserController extends Controller
 	    $activeUsers = DB::table('hr_employees')
 	                    ->join('users','hr_employees.user_id','=','users.id')
 	                    ->join('sessions','users.id','=','sessions.user_id')
-	                    ->select('users.id AS userId','users.email','sessions.*','hr_employees.*')->where('last_activity','>=', $time)->get();
+	                    ->select('users.id AS userId','users.email','users.last_login_at','users.last_login_ip','sessions.*','hr_employees.*')->where('last_activity','>=', $time)->get();
 
 	return view ('admin.activeUser.list',compact('activeUsers', 'totalActiveUsers'));
 
