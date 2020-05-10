@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\Session;
+use App\User;
 use DB;
 
 class ActiveUserController extends Controller
@@ -26,6 +27,13 @@ class ActiveUserController extends Controller
 	                    ->select('users.id AS userId','users.email','users.last_login_at','users.last_login_ip','sessions.*','hr_employees.*')->where('last_activity','>=', $time)->get();
 
 	return view ('admin.activeUser.list',compact('activeUsers', 'totalActiveUsers'));
+
+	}
+
+	public function lastLogin(){
+		$users = User::all();
+		return view ('admin.activeUser.lastLoginDetail',compact('users'));
+
 
 	}
 

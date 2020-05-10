@@ -12,11 +12,12 @@
 			<table id="myTable" class="table table-bordered table-striped"  style="width:100%" >
 				<thead>
 				<tr>
+					<th>Id</th>
 					<th>Employee Name</th>
 					<th>Father's Name</th>
 					<th>Category</th>
 					<th>Mobile</th>
-					<th>Created at</th>
+					
 					<th class="text-center"style="width:5%">Edit</th> 
 					<th class="text-center"style="width:5%">Delete</th>
 
@@ -26,11 +27,12 @@
 				<tbody>
 					@foreach($employees as $employee)
 						<tr>
+							<td>{{$employee->id}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 							<td>{{$employee->father_name}}</td>
 							<td>{{$employee->hrAppointment->category??''}}</td>
 							<td>{{$employee->hrContactMobile->mobile??''}}</td>
-							<td>{{$employee->created_at}}</td>
+							
 							
 							<td class="text-center">
 								<a class="btn btn-info btn-sm" href="{{route('employee.edit',$employee->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
