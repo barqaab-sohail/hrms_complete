@@ -82,7 +82,7 @@ Route::resource('/project', 'ProjectController');
 
 //Admin Routes
 Route::group(['prefix' => 'hrms/admin', 'middleware' => 'auth', 'namespace'=>'Admin'], function(){
-
+	Route::get('/lastLogin', 'ActiveUserController@lastLogin')->name('lastLogin.detail');
 	Route::get('/activeUser', 'ActiveUserController@index')->name('activeUser.index');
 	Route::get('/logoutAll/{id?}', 'ActiveUserController@logoutAll')->name('logout.all');
 	Route::resource('/permission', 'PermissionController');
