@@ -18,8 +18,8 @@ class CreateHrExperienceTable extends Migration
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->string('organization',90);
-            $table->date('from');
-            $table->date('to');
+            $table->string('from',20);
+            $table->string('to',20);
             $table->string('job_title',70);
             $table->text('activities')->nullable(); //65,535 character including spaces
             $table->bigInteger('country_id')->nullable()->unsigned();
