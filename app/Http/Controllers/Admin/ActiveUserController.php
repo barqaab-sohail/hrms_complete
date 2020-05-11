@@ -50,7 +50,8 @@ class ActiveUserController extends Controller
 
 			$user = Session::where('user_id', $id)->first();
 			if($user != null){
-				$user->delete();
+				
+				$user->update(array('user_id' => Null));
 
 				return response()->json(['status'=> 'OK', 'message' => "User Logout Sucessfully"]);
 			}else{
