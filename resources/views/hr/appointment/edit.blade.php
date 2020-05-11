@@ -106,9 +106,9 @@
                                 <label class="control-label text-right">Category<span class="text_requried">*</span></label>
                                 <select  name="category"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
-                                    <option value="A" @if ($data->category??'' == 'A') selected="selected" @endif>A</option>
-                                    <option value="B" @if ($data->category??'' == 'B') selected="selected" @endif>B</option>
-                                    <option value="C"@if ($data->category??'' == 'C') selected="selected" @endif>C</option>
+                                    <option value="A" {{(old("category",$data->category??'')=='A'? "selected" : "")}}>A</option>
+                                    <option value="B" {{(old("category",$data->category??'')=='B'? "selected" : "")}}>B</option>
+                                    <option value="C" {{(old("category",$data->category??'')=='C'? "selected" : "")}}>C</option>
                                 </select>
                                     
                                 
@@ -147,7 +147,8 @@
                                 <select  name="grade"  class="form-control selectTwo">
                                     <option value=""></option>
                                     @for ($i = 1; $i < 15; $i++)
-                                    <option value="{{$i}}" @if ($data->grade??'' == $i) selected="selected" @endif>{{ $i }}</option>
+                                    <option value="{{$i}}" {{(old("grade",$data->grade??'')==$i? "selected" : "")}}>{{ $i }}</option>
+
                                     @endfor
                                 </select>
                                 
