@@ -21,11 +21,7 @@
             @endcan
             @can('Super Admin')
             <a type="submit" id="addUserLogin" role="button" href="{{route('userLogin.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Login Detail</a>
-            <a type="submit" role="button" href="{{route('employee.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/')?'style=background-color:#737373':''}}>Emergency Contact</a>
-            
-            
-
-
+           
 
             <a type="submit" role="button" href="{{route('employee.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/')?'style=background-color:#737373':''}}>Promotion</a>
             <a type="submit" role="button" href="{{route('employee.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/')?'style=background-color:#737373':''}}>Transfer/Posting</a>
