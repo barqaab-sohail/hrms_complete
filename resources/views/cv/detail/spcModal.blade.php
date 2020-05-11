@@ -16,7 +16,7 @@
                     <div class="form-group row">
                       <div class="col-md-12">
                         <label class="control-label text-right">Name of Speciality<span class="text_requried">*</span></label><br>
-                        <input type="text" name="name" value="{{ old('name') }}"  class="form-control" placeholder="Enter Degree Name" required>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}"  class="form-control" placeholder="Enter Degree Name" required>
                       </div>
                     </div>                                                                
                   </div>
@@ -39,7 +39,7 @@
     </div>
   </div>
 </div>
- @push('scripts')
+
 <script>
 $('#spcModalFrom').on('submit', function(event){
    
@@ -85,6 +85,7 @@ $('#spcModalFrom').on('submit', function(event){
                       
                       $('.spinner').hide();
                        $('.btn-prevent-multiple-submits').removeAttr('disabled');
+                       $('#name').val('');
                       $('#spcModal').modal('toggle');
                       
                   }
@@ -111,5 +112,5 @@ $('#spcModalFrom').on('submit', function(event){
   
 }); //end submit
 </script>
-@endpush
+
 <!--end Model--> 

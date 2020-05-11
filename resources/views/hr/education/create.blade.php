@@ -183,8 +183,8 @@ $(document).ready(function(){
         e.preventDefault();
         var url = $(this).attr('action');
         $('.fa-spinner').show(); 
-        submitForm(this, url);
-       refreshTable("{{route('education.table')}}",200);
+        submitForm(this, url,1);
+       refreshTable("{{route('education.table')}}",500);
     });
 
 

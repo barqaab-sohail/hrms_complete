@@ -248,6 +248,7 @@ function getAjaxData(url){
                {
                 
                 $(".addAjax").html(data);
+                formFunctions();
                
                },
             error: function (jqXHR, textStatus, errorThrown){

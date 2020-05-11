@@ -53,7 +53,7 @@
     </div>
   </div>
 </div>
- @push('scripts')
+
 <script>
 $('#eduModalFrom').on('submit', function(event){
    
@@ -87,6 +87,7 @@ $('#eduModalFrom').on('submit', function(event){
                       $('#eduModal').modal('toggle');
                       $('html,body').scrollTop(0);
                   }else{
+
                       $("#degree_name").empty();
                       $("#degree_name").append('<option value="">Select Degree</option>');
                       $.each(data.degrees, function(key,value){
@@ -98,7 +99,9 @@ $('#eduModalFrom').on('submit', function(event){
                       $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                       
                       $('.spinner').hide();
-                       $('.btn-prevent-multiple-submits').removeAttr('disabled');
+                      $('.btn-prevent-multiple-submits').removeAttr('disabled');
+                       $('#add_degree').val('');
+                      $('#add_level').val('').select2('val', 'All');
                       $('#eduModal').modal('toggle');
                       
                   }
@@ -125,5 +128,5 @@ $('#eduModalFrom').on('submit', function(event){
   
 }); //end submit
 </script>
-@endpush
+
 <!--end Model--> 
