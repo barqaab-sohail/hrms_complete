@@ -37,6 +37,12 @@ class HrEmployee extends Model implements Auditable
 
     }
 
+     public function hrEducation(){
+
+            return $this->hasMany('App\Models\Hr\HrEducation');
+
+    }
+
 
 
     public function hrAppointment(){
