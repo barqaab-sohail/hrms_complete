@@ -136,7 +136,7 @@ $(document).ready(function(){
         var url = $(this).attr('action');
         $('.fa-spinner').show(); 
         submitForm(this, url);
-       refreshTable("{{route('experience.table')}}",500);
+       refreshTable("{{route('experience.table')}}",1000);
     });
 
 

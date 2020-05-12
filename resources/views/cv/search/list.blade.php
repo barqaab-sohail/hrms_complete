@@ -14,8 +14,10 @@
                     
                     <tr >
                         <th>Full Name</th>
-                        <th>Stage</th>
+                        <th>Education</th>
+                         <th>Speciality</th>
                         <th>Experience</th>
+                        <th>Total</th>
 
                     </tr>
                     </thead>
@@ -24,10 +26,11 @@
                         @foreach($result as $cvDetail)
                             <tr>
                                 <td>{{$cvDetail->full_name}}</td>
-                                
+
                                 <td>{{$cvDetail->cvEducation->implode('degree_name',' + ')}}</td>
-                              
-                                <td>{{$cvDetail->year}}</td>
+                                <td>{{dd($cvDetail->cvSpecialization)}}</td> 
+                                <td>{{$cvDetail->cvExperience->implode('year',' + ')}}</td>
+                                <td>{{$cvDetail->cvExperience->sum('year')}}</td>
                                
                             </tr>
                         @endforeach
