@@ -15,7 +15,7 @@
 					<th>Id</th>
 					<th>Employee Name</th>
 					<th>Father's Name</th>
-					<th>Category</th>
+					<th>Education</th>
 					<th>Mobile</th>
 					
 					<th class="text-center"style="width:5%">Edit</th> 
@@ -30,7 +30,7 @@
 							<td>{{$employee->id}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 							<td>{{$employee->father_name}}</td>
-							<td>{{$employee->hrAppointment->category??''}}</td>
+							<td>{{$employee->hrEducation->first()->to??''}}</td>
 							<td>{{$employee->hrContactMobile->mobile??''}}</td>
 							
 							
