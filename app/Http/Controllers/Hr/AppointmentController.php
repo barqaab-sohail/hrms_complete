@@ -7,12 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Hr\HrAppointment;
 use App\Models\Hr\HrAppointmentDetail;
 use App\Models\Hr\HrSalary;
-use App\Models\Hr\HrSalaryDetail;
 use App\Models\Hr\HrDesignation;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDepartment;
 use App\Models\Hr\HrLetterType;
-use App\Models\Hr\HrCommonModel;
 use App\Models\Project\PrDetail;
 use App\Http\Requests\Hr\AppointmentStore;
 use DB;
@@ -23,7 +21,7 @@ class AppointmentController extends Controller
 
     	$salaries = HrSalary::all();
     	$designations = HrDesignation::all();
-    	$employees = HrEmployee::all();
+    	$managers = HrEmployee::all();
     	$departments = HrDepartment::all();
     	$letterTypes = HrLetterType::all();
     	$projects = PrDetail::all();
@@ -55,7 +53,7 @@ class AppointmentController extends Controller
 
 
         if($request->ajax()){
-            $view =  view('hr.appointment.edit', compact('data','salaries','designations','employees','departments','letterTypes','projects','employeeDesignation','employeeHod','employeeDepartment','employeeSalary'))->render();
+            $view =  view('hr.appointment.edit', compact('data','salaries','designations','managers','departments','letterTypes','projects','employeeDesignation','employeeHod','employeeDepartment','employeeSalary'))->render();
             return response()->json($view);
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');

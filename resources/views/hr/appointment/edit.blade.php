@@ -74,8 +74,8 @@
                                	<label class="control-label text-right">HOD<span class="text_requried">*</span></label>
                                  <select  id="hr_manager_id"   name="hr_manager_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
-                                    @foreach($employees as $employee)
-                                    <option value="{{$employee->id}}" {{(old("hr_manager_id",$employeeHod->id??'')==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}}</option>
+                                    @foreach($managers as $manager)
+                                    <option value="{{$manager->id}}" {{(old("hr_manager_id",$employeeHod->id??'')==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
                                     @endforeach  
                                 </select>
                                  

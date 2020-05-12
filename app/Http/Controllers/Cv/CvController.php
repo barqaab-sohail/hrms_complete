@@ -436,7 +436,8 @@ class CvController extends Controller
 			    				return $query->where('education_id',$data['degree']);
 			    				})
 			    		->select('cv_details.*')
-    					->distinct('id')->get();
+    					->distinct('id')
+    					->get();
     	
 
     	//Pending  call function from model 
@@ -444,10 +445,6 @@ class CvController extends Controller
     	//dd($test->first()->cvEducation->first()->degree_name);
 
 		//dd($qry->first()->cvEducation->first()->degree_name);
-
-
-
-
     	// //Version-1
     	// $result = DB::table('cv_experiences')
     	// 		->when($data['speciality_id'], function ($query) use ($data){
