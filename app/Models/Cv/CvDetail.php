@@ -19,7 +19,12 @@ class CvDetail extends Model implements Auditable
         ->withPivot('institute', 'passing_year')
     	->withTimestamps();
     }
-     public function cvExperience()
+    
+
+
+
+    
+    public function cvExperience()
     {
         return $this->hasMany('App\Models\Cv\CvExperience');
     }
@@ -29,10 +34,12 @@ class CvDetail extends Model implements Auditable
         return $this->hasMany('App\Models\Cv\CvDiscipline');
     }
 
-    public function cvSpecialization()
-    {
-        return $this->hasManyThrough('App\Models\Cv\CvSpecialization','App\Models\Cv\CvExperience','cv_detail_id','id');
-    }
+
+
+    // public function cvSpecialization()
+    // {
+    //     return $this->hasManyThrough('App\Models\Cv\CvSpecialization','App\Models\Cv\CvExperience','cv_detail_id','id');
+    // }
 
     public function cvStage()
     {

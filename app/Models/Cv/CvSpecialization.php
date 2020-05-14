@@ -13,4 +13,10 @@ class CvSpecialization extends Model implements Auditable
     protected $fillable = [
         'name', 
     ];
+
+
+    public function cvExperience()
+    {
+        return $this->hasMany('App\Models\Cv\CvExperience');
+    }
 }

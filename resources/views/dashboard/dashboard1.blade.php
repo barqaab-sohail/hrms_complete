@@ -66,13 +66,7 @@
 
 
 @stop
-  @push('scripts')
-  <script>
- 
-
-  </script>
-
-  @endpush
+  
 
 @section('footer')
 
