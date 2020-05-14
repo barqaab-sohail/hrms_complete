@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
- @push('scripts')
+
         <script>
            $(document).ready(function() {
             $('#myTable').DataTable({
@@ -113,6 +113,5 @@
         });
 
         </script>
-    @endpush
 
 @stop

@@ -15,9 +15,9 @@
                     <tr >
                         <th>Full Name</th>
                         <th>Education</th>
-                         <th>Speciality</th>
+                         <th>Detail</th>
                         <th>Experience</th>
-                        <th>Total</th>
+                        <th>Total Experience</th>
 
                     </tr>
                     </thead>
@@ -25,11 +25,20 @@
                         
                         @foreach($result as $cvDetail)
                             <tr>
-                                <td>{{$cvDetail->full_name}}</td>
+                                <td>{{$cvDetail->full_name}}  </td>
 
                                 <td>{{$cvDetail->cvEducation->implode('degree_name',' + ')}}</td>
-                                <td>{{dd($cvDetail->cvSpecialization)}}</td> 
-                                <td>{{$cvDetail->cvExperience->implode('year',' + ')}}</td>
+                                <td> <button type="button" name="edit" id="{{$cvDetail->id}}" class="edit btn btn-primary btn-sm">Detail</button>
+                           
+
+
+                                <!-- @foreach($cvDetail->cvExperience as $spec)
+                                        {{cvSpecilizationName($spec->cv_specialization_id)}} {{$spec->year}}
+
+                                    @endforeach -->
+
+                                </td> 
+                                <td><!-- {{$cvDetail->cvExperience->implode('year',' + ')}} --></td>
                                 <td>{{$cvDetail->cvExperience->sum('year')}}</td>
                                
                             </tr>
@@ -40,6 +49,7 @@
                     </tbody>
                 </table>
             </div>
+            @include('cv.search.detailModal')
         </div>
     </div>
     <hr>  
@@ -86,6 +96,7 @@ $(document).ready(function() {
             		rightColumns:2
         		}
             });
+
             
-        });
+});
 </script>

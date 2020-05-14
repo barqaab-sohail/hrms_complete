@@ -63,7 +63,7 @@
 			</div>
 		</div>
 	</div>
-@push('scripts')	
+	
 	<script>
         $(document).ready(function() {
         	$('#logoutAll').click(function (e){
@@ -122,5 +122,5 @@
         });
  
 	</script>
-	@endpush
+	
 @stop

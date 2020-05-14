@@ -74,7 +74,7 @@
         width: auto;
     }
 	</style>
-@push('scripts')
+
 	<!-- start - This is for datatabe Fixed Columns only -->
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/fixedcolumns/3.2.6/js/dataTables.fixedColumns.min.js"></script>
@@ -138,5 +138,5 @@
 
 
 	</script>
-	@endpush
+
 @stop
