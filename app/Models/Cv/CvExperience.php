@@ -18,4 +18,19 @@ class CvExperience extends Model implements Auditable
         return $this->belongsTo('App\Models\Cv\CvDetail');
     }
 
+    public function cvSpecialization(){
+
+    	return $this->belongsTo('App\Models\Cv\CvSpecialization');
+    }
+
+    public function cvStage(){
+
+    	return $this->belongsTo('App\Models\Cv\CvStage');
+    }
+
+    public function cvDiscipline(){
+
+    	return $this->belongsTo('App\Models\Cv\CvDiscipline');
+    }
+
 }

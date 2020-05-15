@@ -1,22 +1,22 @@
 <!-- Modal -->
-<div class="modal fade" id="spcModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="disModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Speciality</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Discipline</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
        
-           <form id="spcModalFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
+           <form id="disModalFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
                   {{csrf_field()}}
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-12">
-                        <label class="control-label text-right">Name of Speciality<span class="text_requried">*</span></label><br>
-                        <input type="text" id="name" name="name" value="{{ old('name') }}"  class="form-control" placeholder="Enter Speciality Name" required>
+                        <label class="control-label text-right">Name of Discipline<span class="text_requried">*</span></label><br>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}"  class="form-control" placeholder="Enter Discipline Name" required>
                       </div>
                     </div>                                                                
                   </div>
@@ -41,9 +41,9 @@
 </div>
 
 <script>
-$('#spcModalFrom').on('submit', function(event){
+$('#disModalFrom').on('submit', function(event){
    
-  var url = "{{route('speciality.store')}}"
+  var url = "{{route('discipline.store')}}"
     event.preventDefault();
           //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
           $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
@@ -66,27 +66,27 @@ $('#spcModalFrom').on('submit', function(event){
              processData: false,
              success:function(data){
                  
-                  if(data.specializations ==''){
+                  if(data.disciplines ==''){
                       $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                       $('.spinner').hide();
                        $('.btn-prevent-multiple-submits').removeAttr('disabled');
-                      $('#spcModal').modal('toggle');
+                      $('#disModal').modal('toggle');
                       $('html,body').scrollTop(0);
                   }else{
-                      $("#speciality_name").empty();
-                      $("#speciality_name").append('<option value="">Select Speciality</option>');
-                      $.each(data.specializations, function(key,value){
+                      $("#discipline_name").empty();
+                      $("#discipline_name").append('<option value="">Select Discipline</option>');
+                      $.each(data.disciplines, function(key,value){
                                   //console.log(key+'-'+value);
-                               $("#speciality_name").append('<option value="'+key+'">'+value+'</option>');
+                               $("#discipline_name").append('<option value="'+key+'">'+value+'</option>');
                       });
-                      $('#speciality_name').chosen('destroy');
-                      $('#speciality_name').chosen();
+                      $('#discipline_name').chosen('destroy');
+                      $('#discipline_name').chosen();
                       $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                       
                       $('.spinner').hide();
                        $('.btn-prevent-multiple-submits').removeAttr('disabled');
                        $('#name').val('');
-                      $('#spcModal').modal('toggle');
+                      $('#disModal').modal('toggle');
                       
                   }
 

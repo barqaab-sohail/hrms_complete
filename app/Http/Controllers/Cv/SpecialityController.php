@@ -11,9 +11,9 @@ class SpecialityController extends Controller
 {
     public function store (Request $request){
 
-        $degree = CvSpecialization::where('name', $request->name)->first();
+        $speciality = CvSpecialization::where('name', $request->name)->first();
       
-	        if($degree == null){
+	        if($speciality == null){
 	            
 	             DB::transaction(function () use ($request) {  
 

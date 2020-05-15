@@ -62,11 +62,13 @@ Route::group(['prefix' => 'hrms/cvData', 'middleware' => 'auth', 'namespace'=>'C
 Route::get('/autocomplete/fetch', 'CvController@fetch')->name('autocomplete.fetch');
 Route::post('/cvCnic','CvController@cvCnic')->name('cv.cnic');
 Route::get('/search','CvController@search')->name('cv.search');
+Route::get('/getData/{id?}','CvController@getData')->name('cv.getData');
 Route::post('/result','CvController@result')->name('cv.result');
 Route::resource('/cv','CvController');
 Route::get('/cvDocument/refreshTable', 'CvDocumentController@refreshTable')->name('cvDocument.table');
 Route::post('/education', 'EducationController@store')->name('cvEducation.store');
 Route::resource('/speciality', 'SpecialityController',['only'=>['store']]);
+Route::resource('/discipline', 'DisciplineController',['only'=>['store']]);
 Route::resource('/cvDocument', 'CvDocumentController');
 
 });

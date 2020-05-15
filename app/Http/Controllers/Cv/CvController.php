@@ -476,5 +476,26 @@ class CvController extends Controller
     }
 
 
+    public function getData($id){
+
+
+    	$cvDetail = CvDetail::find($id);
+    	$cvExperience = CvExperience::where('cv_detail_id',$cvDetail->id)->get();
+
+      	foreach ($cvExperience as $exp){
+    		$data [] = array(
+				"cv_specialization_id" => $exp->cvSpecialization->name,
+				"cv_discipline_id" => $exp->cvDiscipline->name,
+				"cv_stage_id" => $exp->cvStage->name,
+				"year" => $exp->year,
+		  
+			);  			
+    	}
+
+    	return response()->json(['status'=> 'Ok', 'full_name'=>$cvDetail->full_name, 'cv_experience'=>$data]);
+
+    }
+
+
 
 }
