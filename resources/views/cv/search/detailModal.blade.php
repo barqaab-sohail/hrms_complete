@@ -13,9 +13,10 @@
           <div class="table-responsive">
 
 
-                <label class="control-label text-right">Full Name</label><br>
-                <table id="myTable" class="table-primary table-bordered table-striped" width="100%" cellspacing="0">
-                    <thead>
+                <h2> <span id="full_name"></span> </h2>
+                <br>
+                <table id="cvDetail" class="table-primary table-bordered table-striped" width="100%" cellspacing="0">
+                    <thead >
                     
                       <tr >
                           <th>Speciality</th>
@@ -25,11 +26,8 @@
                          
                       </tr>
                     </thead>
-                    <tbody>
-                        <th>Construction Supervision Engineer</th>
-                        <th>Infrastructure (Roads & Buildings)</th>
-                        <th>Construction</th>
-                        <th>10</th>
+                    <tbody id="tbody">
+                       
                    
                     </tbody>
                 </table>
@@ -49,24 +47,38 @@
 
 $('button[name=edit]').click(function(){ 
   var id = $(this).attr('id');
-  console.log(id);
-    $('#detailModel').modal('show');
-    // $.ajax({
-    //  url:"/ajax-crud/"+id+"/edit",
-    //  dataType:"json",
+  var url = "{{route('cv.getData')}}"+"/"+id;
+  console.log(url);
+
+     $.ajax({
+     url:url,
+     dataType:"json",
      
-    //  success:function(html){
-    //   $('#first_name').val(html.data.first_name);
-    //   $('#last_name').val(html.data.last_name);
-    //   $('#store_image').html("<img src={{ URL::to('/') }}/images/" + html.data.image + " width='70' class='img-thumbnail' />");
-    //   $('#store_image').append("<input type='hidden' name='hidden_image' value='"+html.data.image+"' />");
-    //   $('#hidden_id').val(html.data.id);
-    //   $('.modal-title').text("Edit New Record");
-    //   $('#action_button').val("Edit");
-    //   $('#action').val("Edit");
-    //   $('#detailModel').modal('show');
-    //  }
-    // })
+     success:function(data){
+
+        $('#full_name').text(data.full_name);
+        $("#tbody").empty();
+                
+        $.each(data.cv_experience, function() {
+          $('#cvDetail > tbody').append(
+              '<tr><td>'
+              + this.cv_specialization_id
+              + '</td><td>'
+              + this.cv_discipline_id
+              + '</td><td>'
+              + this.cv_stage_id
+              + '</td><td class="text-center">'
+              + this.year +
+              '</td></tr>'
+          );
+        });
+
+      
+        $('#detailModel').modal('show');
+
+
+     }
+    })
   
 });
 

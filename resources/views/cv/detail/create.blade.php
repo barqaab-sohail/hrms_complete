@@ -282,7 +282,7 @@
 		                                        <div class="col-md-12 required">
 		                                        	<label class="control-label">Discipline<span class="text_requried">*</span></label>
 
-		                                        	<select  name="discipline_name[]"  id=discipline data-validation="required" class="form-control" >
+		                                        	<select  name="discipline_name[]"  id="discipline_name" data-validation="required" class="form-control" >
                                                         <option value=""></option>
                                                         
                                                         @foreach($disciplines as $discipline)
@@ -292,6 +292,10 @@
                                                         @endforeach
                                                       
                                                     </select>
+                                                    @can('cv edit record')
+					                                <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#disModal"><i class="fas fa-plus"></i>
+		          									</button>
+		          									@endcan 
 		                                        
 		                                            
 		                                        </div>
@@ -501,7 +505,8 @@
 		                    </form>
 		        		</div>      
 		        		@include('cv.detail.eduModal') 
-		        		@include('cv.detail.spcModal') 
+		        		@include('cv.detail.spcModal')
+		        		@include('cv.detail.disModal') 
 		        	</div>
 		        </div>
             </div>

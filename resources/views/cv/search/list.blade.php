@@ -15,9 +15,11 @@
                     <tr >
                         <th>Full Name</th>
                         <th>Education</th>
-                         <th>Detail</th>
-                        <th>Experience</th>
-                        <th>Total Experience</th>
+                        <th class="text-center">Age</th>
+                        <th class="text-center">Detail</th>
+                        <th class="text-center">Profile</th>
+                        
+                       <!--  <th>Total Experience</th> -->
 
                     </tr>
                     </thead>
@@ -28,18 +30,14 @@
                                 <td>{{$cvDetail->full_name}}  </td>
 
                                 <td>{{$cvDetail->cvEducation->implode('degree_name',' + ')}}</td>
-                                <td> <button type="button" name="edit" id="{{$cvDetail->id}}" class="edit btn btn-primary btn-sm">Detail</button>
-                           
-
-
-                                <!-- @foreach($cvDetail->cvExperience as $spec)
-                                        {{cvSpecilizationName($spec->cv_specialization_id)}} {{$spec->year}}
-
-                                    @endforeach -->
-
+                                <td class="text-center">{{age($cvDetail->date_of_birth)}}</td>
+                                <td class="text-center">    <button type="button" name="edit" id="{{$cvDetail->id}}" class="edit btn btn-primary btn-sm">Detail</button>
                                 </td> 
-                                <td><!-- {{$cvDetail->cvExperience->implode('year',' + ')}} --></td>
-                                <td>{{$cvDetail->cvExperience->sum('year')}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-info btn-sm" href="{{route('cv.edit',$cvDetail->id)}}"  title="Edit"><i class="fas fa-list text-white "></i></a>
+                                </td>
+                                
+                               <!--  <td>{{$cvDetail->cvExperience->sum('year')}}</td> -->
                                
                             </tr>
                         @endforeach
