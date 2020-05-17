@@ -17,9 +17,9 @@
 		            	<!--/span 5-1 -->
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
-		                   		<label class="control-label text-right">Degree<span class="text_requried">*</span></label><br>
+		                   		<label class="control-label text-right">Degree</label><br>
 
-		                   		<select  name="degree"  data-validation="required" class="form-control" >
+		                   		<select  name="degree"  class="form-control" >
 		                            <option value=""></option>
 		                            
 		                            @foreach($degrees as $degree)
@@ -37,9 +37,9 @@
 		            	<!--/span 5-1 -->
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
-		                   		<label class="control-label text-right">Speciality<span class="text_requried">*</span></label><br>
+		                   		<label class="control-label text-right">Speciality</label><br>
 
-		                   		<select  name="speciality_id"  id=speciality_id data-validation="required" class="form-control" >
+		                   		<select  name="speciality_id"  id=speciality_id  class="form-control" >
 		                            <option value=""></option>
 		                            
 		                            @foreach($specializations as $specialization)
@@ -57,9 +57,9 @@
 		            <div class="col-md-2">
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
-		                    	<label class="control-label">Discipline<span class="text_requried">*</span></label>
+		                    	<label class="control-label">Discipline</label>
 
-		                    	<select  name="discipline_id"   data-validation="required" class="form-control" >
+		                    	<select  name="discipline_id" class="form-control" >
 		                            <option value=""></option>
 		                            
 		                            @foreach($disciplines as $discipline)
@@ -78,9 +78,9 @@
 		            <div class="col-md-2">
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
-		                    	<label class="control-label">Stage<span class="text_requried">*</span></label>
+		                    	<label class="control-label">Stage</label>
 
-		                    	<select  name="stage_id"  id=stage_id data-validation="required" class="form-control" >
+		                    	<select  name="stage_id"  id=stage_id class="form-control" >
 		                            <option value=""></option>
 		                            
 		                            @foreach($stages as $stage)
@@ -99,9 +99,9 @@
 		            <div class="col-md-2">
 		                <div class="form-group row">
 		                    <div class="col-md-8 required">
-		                    	<label class="control-label text-right">Experience<span class="text_requried">*</span></label>
+		                    	<label class="control-label text-right">Experience</label>
 		                    
-		                        <select data-validation="required" name="year"  class="form-control">
+		                        <select name="year"  class="form-control">
 
 								<option value=""></option>
 								@for ($i = 1; $i <= 50; $i++)
@@ -155,6 +155,7 @@ $(document).ready(function(){
 	//submit function
       $("#cvSearch").submit(function(e) { 
       e.preventDefault();
+      $('.fa-spinner').show();
       var url = $(this).attr('action');
       
 	      //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
