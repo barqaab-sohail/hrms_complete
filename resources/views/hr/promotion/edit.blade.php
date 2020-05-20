@@ -4,11 +4,12 @@
     </div>
          
     <div class="card-body">
-        <form id= "formPromotion" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('promotion.store')}}" enctype="multipart/form-data">
+        <form id= "formPromotion" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('promotion.update',$data->id)}}" enctype="multipart/form-data">
+        @method('PATCH')
         @csrf
             <div class="form-body">
                     
-                <h3 class="box-title">Add Promotion</h3>
+                <h3 class="box-title">Edit Promotion</h3>
                 
                 <hr class="m-t-0 m-b-40">
 
@@ -20,7 +21,7 @@
                                  <select  id="hr_designation_id"   name="hr_designation_id" data-validation="required" class="form-control selectTwo">
                                     <option value=""></option>
                                     @foreach($designations as $designation)
-                                    <option value="{{$designation->id}}" {{(old("hr_designation_id")==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hr_designation_id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                                     @endforeach 
                                 </select>
                                 
@@ -34,7 +35,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Effective Date<span class="text_requried">*</span></label>
                                 
-                                <input type="text" name="effective_date" value="{{ old('effective_date') }}" class="form-control date_input" data-validation="required" readonly >
+                                <input type="text" name="effective_date" value="{{ old('effective_date',$data->effective_date??'') }}" class="form-control date_input" data-validation="required" readonly >
 
                                 <br>
                                 @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
@@ -50,7 +51,7 @@
                                 <select  id="hr_salary_id"   name="hr_salary_id" data-validation="required" class="form-control selectTwo">
                                     <option value=""></option>
                                     @foreach($salaries as $salary)
-                                    <option value="{{$salary->id}}" {{(old("hr_salary_id")==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
+                                    <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hr_salary_id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
                                     @endforeach
                               
                                 </select>
@@ -71,7 +72,7 @@
                                 <select  name="grade"  class="form-control selectTwo">
                                     <option value=""></option>
                                     @for ($i = 1; $i < 15; $i++)
-                                    <option value="{{$i}}" {{(old("grade")==$i? "selected" : "")}}>{{ $i }}</option>
+                                    <option value="{{$i}}" {{(old("grade",$data->grade??'')==$i? "selected" : "")}}>{{ $i }}</option>
 
                                     @endfor
                                 </select>
@@ -91,7 +92,7 @@
                                  <select  id="hr_manager_id"   name="hr_manager_id" data-validation="required" class="form-control selectTwo" >
                                     <option value=""></option>
                                     @foreach($managers as $manager)
-                                    <option value="{{$manager->id}}" {{(old("hr_manager_id")==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
+                                    <option value="{{$manager->id}}" {{(old("hr_manager_id",$data->hr_manager_id??'')==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
                                     @endforeach  
                                 </select>
                                  
@@ -107,7 +108,7 @@
                                  <select  id="hr_department_id"   name="hr_department_id" data-validation="required" class="form-control selectTwo" >
                                     <option value=""></option>
                                     @foreach($departments as $department)
-                                    <option value="{{$department->id}}" {{(old("hr_department_id")==$department->id? "selected" : "")}}>{{$department->name}}</option>
+                                    <option value="{{$department->id}}" {{(old("hr_department_id",$data->hr_department_id??'')==$department->id? "selected" : "")}}>{{$department->name}}</option>
                                     @endforeach  
                                 </select>
                                     
@@ -122,9 +123,9 @@
                                 <label class="control-label text-right">Category<span class="text_requried">*</span></label>
                                 <select  name="category"  class="form-control selectTwo" data-validation="required" >
                                     <option value=""></option>
-                                    <option value="A" {{(old("category")=='A'? "selected" : "")}}>A</option>
-                                    <option value="B" {{(old("category")=='B'? "selected" : "")}}>B</option>
-                                    <option value="C" {{(old("category")=='C'? "selected" : "")}}>C</option>
+                                    <option value="A" {{(old("category",$data->category??'')=='A'? "selected" : "")}}>A</option>
+                                    <option value="B" {{(old("category",$data->category??'')=='B'? "selected" : "")}}>B</option>
+                                    <option value="C" {{(old("category",$data->category??'')=='C'? "selected" : "")}}>C</option>
                                 </select>
                                     
                                 
@@ -138,7 +139,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Remarks<span class="text_requried">*</span></label>
-                                <input type="text"  name="remarks" value="{{ old('remarks') }}"  class="form-control" data-validation="required length" data-validation-length="max100" placeholder="Enter Remarks if any">
+                                <input type="text"  name="remarks" value="{{ old('remarks',$data->remarks??'') }}"  class="form-control" data-validation="required length" data-validation-length="max100" placeholder="Enter Remarks if any">
                                 
                                
                             </div>
@@ -154,7 +155,7 @@
                             <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="50" >
                             
                             </input>
-                            <input type="file"  name="document" id="view" data-validation="required" class="" hidden>
+                            <input type="file"  name="document" id="view"  class="" hidden>
                                                                             
 
                             <h6 id="h6" class="card-title m-t-10">Click On Image to Add Pdf Document<span class="text_requried">*</span></h6>
@@ -180,7 +181,7 @@
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save Promotion</button>        
+                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Edit Promotion</button>        
                             </div>
                         </div>
                     </div>
@@ -208,7 +209,8 @@ $(document).ready(function(){
             console.log('OK');
            
             $('.fa-spinner').show(); 
-            submitForm(this, url,1);
+            submitForm(this, url);
+            refreshTable("{{route('promotion.table')}}",1000);
         });
        
 

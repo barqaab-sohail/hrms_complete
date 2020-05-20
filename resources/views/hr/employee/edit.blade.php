@@ -34,9 +34,10 @@ $(document).ready(function() {
 	//form submit
 	$(document).on('submit','#formEditEmployee', function(e){	
   //$('#formEditEmployee').submit(function (e){ 
-   
+      
     // prevent default call from function formFunctions()
 	 	var url = $(this).attr('action');
+    console.log('EEEEEEE');
 		$('.fa-spinner').show();
 	   	submitForm(this, url);
 	}); //end submit

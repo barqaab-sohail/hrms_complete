@@ -50,7 +50,7 @@
 									<a class="btn btn-info btn-sm" href="{{route('cv.edit',$cv->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 								</td>
 								@endcan
-								@can('cv edit record')
+								@can('cv delete record')
 								<td class="text-center"> 
 								 <form action="{{route('cv.destroy',$cv->id)}}" method="POST">
 								 @method('DELETE')

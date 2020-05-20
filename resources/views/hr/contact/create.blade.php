@@ -177,9 +177,9 @@ $(document).ready(function(){
   
 
 
-      $("form").submit(function (e) {
-         e.preventDefault();
-      });
+      // $("form").submit(function (e) {
+      //    e.preventDefault();
+      // });
 
       
 
@@ -189,7 +189,7 @@ $(document).ready(function(){
       e.preventDefault();
       var url = $(this).attr('action');
             $('.fa-spinner').show(); 
-      submitForm(this, url);
+      submitForm(this, url,1);
       refreshTable("{{route('contact.table')}}");
     });
 
