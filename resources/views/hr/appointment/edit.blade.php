@@ -234,8 +234,8 @@
 
 
 <script>
-
-   console.log('ok');
+$(document).ready(function(){
+  
     //submit function
  
         $("#formAppointment").submit(function(e) { 
@@ -245,7 +245,9 @@
             submitForm(this, url);
 
         });
+});
 </script>
+
 
 
 

@@ -11,6 +11,8 @@ use App\Models\Common\Client;
 use App\Models\Common\ContractType;
 use App\Http\Requests\Project\PrDetailStore;
 use DB;
+use Excel;
+use App\Imports\ProjectsImport;
 
 
 class ProjectController extends Controller
@@ -110,6 +112,21 @@ class ProjectController extends Controller
 
 	}
 
+
+	function import(Request $request)
+    {
+     	
+     $this->validate($request, [
+      'select_file'  => 'required|mimes:xls,xlsx'
+     ]);
+
+     	$path = $request->file('select_file')->getRealPath();
+        
+
+     	Excel::import(new ProjectsImport, $path);
+         
+    return back()->with('success', 'Excel Data Imported successfully.');
+    }
 
 
 

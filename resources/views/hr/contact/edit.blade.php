@@ -185,9 +185,9 @@ $(document).ready(function(){
      refreshTable("{{route('contact.table')}}");
      formFunctions();
 
-      $("form").submit(function (e) {
-         e.preventDefault();
-         });
+      // $("form").submit(function (e) {
+      //    e.preventDefault();
+      //    });
 
 
     $('#formEditContact').on('submit', function(event){  

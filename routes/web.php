@@ -47,6 +47,7 @@ Route::get('/contact/refreshTable', 'ContactController@refreshTable')->name('con
 Route::resource('/contact', 'ContactController');
 Route::resource('/emergency', 'EmergencyController');
 Route::resource('/nextToKin', 'NextToKinController');
+Route::get('/promotion/refreshTable', 'PromotionController@refreshTable')->name('promotion.table');
 Route::resource('/promotion', 'PromotionController');
 Route::get('/documentation/refreshTable', 'DocumentationController@refreshTable')->name('documentation.table');
 Route::resource('/documentation', 'DocumentationController');
@@ -75,6 +76,7 @@ Route::resource('/cvDocument', 'CvDocumentController');
 
 //Projects Routes
 Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Project'], function(){
+Route::post('/project/import', 'ProjectController@import')->name('project.import');
 Route::resource('/project', 'ProjectController');
 
 

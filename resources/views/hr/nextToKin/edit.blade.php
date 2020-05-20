@@ -91,15 +91,9 @@
 <script>
 $(document).ready(function(){
   
-  
-
-
-      $("form").submit(function (e) {
-         e.preventDefault();
-      });
-
-    
-
+  // $("form").submit(function (e) {
+  //    e.preventDefault();
+  // });
 
 
       //submit function

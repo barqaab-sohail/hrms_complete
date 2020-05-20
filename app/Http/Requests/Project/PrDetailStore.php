@@ -24,7 +24,7 @@ class PrDetailStore extends FormRequest
     public function rules()
     {
         return [    
-            'name'=>'required|max:190',
+            'name'=>'required|max:190|unique:pr_details,name',
             'client_id'=>'required|numeric',
             'commencement_date'=>'required|date',
             'contractual_completion_date'=>'nullable|date|after:commencement_date',
