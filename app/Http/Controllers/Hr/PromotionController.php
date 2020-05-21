@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrPromotion;
 use App\Models\Hr\HrSalary;
@@ -38,6 +39,7 @@ class PromotionController extends Controller
 
     public function store (PromotionStore $request){
     		$input = $request->all();
+
     		if($request->filled('effective_date')){
             $input ['effective_date']= \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
             }
@@ -102,20 +104,85 @@ class PromotionController extends Controller
     }
 
 
-    public function update(Request $request, $id){
+    public function update(PromotionStore $request, $id){
 
     	 $input = $request->all();
     		if($request->filled('effective_date')){
             $input ['effective_date']= \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
             }
-       
-        DB::transaction(function () use ($input, $id) {  
+
+                               
+        DB::transaction(function () use ($input, $id, $request) {  
+
+            
+        	if ($request->hasFile('document')){
+
+        		//Remove file 
+        		$hrPromotion = HrPromotion::find($id);
+    	 		$hrDocument = HrDocumentation::where('id',$hrPromotion->hr_documentation_id)->first();
+       	 		$path = public_path('storage/'.$hrDocument->path.$hrDocument->file_name);
+        		if(File::exists($path)){
+            	File::delete($path);
+        		}
+
+        		//update 
+        		$employee = HrEmployee::find(session('hr_employee_id'));
+				$employeeFullName = strtolower($employee->first_name) .'_'.strtolower($employee->last_name);
+
+        		$extension = request()->document->getClientOriginalExtension();
+				$fileName =session('hr_employee_id').'-'.$input['remarks'].'-'. time().'.'.$extension;
+				$folderName = "hr/documentation/".session('hr_employee_id').'-'.$employeeFullName."/";
+				//store file
+				$request->file('document')->storeAs('public/'.$folderName,$fileName);
+				
+				$file_path = storage_path('app/public/'.$folderName.$fileName);
+			
+				$input['content']='';
+											
+					if ($extension =='pdf'){
+						$reader = new \Asika\Pdf2text;
+						$input['content'] = mb_strtolower($reader->decode($file_path));
+					}
+				$input['description']=$input['remarks'];
+				$input['file_name']=$fileName;
+				$input['size']=$request->file('document')->getSize();
+				$input['path']=$folderName;
+				$input['extension']=$extension;
+				$input['hr_employee_id']=session('hr_employee_id');
+
+				$hrDocument->update($input);
+
+        	}
+            
+
 
             HrPromotion::findOrFail($id)->update($input);
 
         }); // end transcation
         
         return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
+    }
+
+    public function destroy ($id){
+
+    	 DB::transaction(function () use ($id) {  
+
+    	 	$hrPromotion = HrPromotion::find($id);
+    	 	$hrDocument = HrDocumentation::where('id',$hrPromotion->hr_documentation_id)->first();
+    	 	$hrPromotion->delete();
+
+    	 	$path = public_path('storage/'.$hrDocument->path.$hrDocument->file_name);
+        	if(File::exists($path)){
+            File::delete($path);
+        	}
+            $hrDocument->forceDelete();
+    	 	
+    		
+    	 }); // end transcation
+
+
+        return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
+
     }
 
 

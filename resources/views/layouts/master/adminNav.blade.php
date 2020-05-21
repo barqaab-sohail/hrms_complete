@@ -25,6 +25,7 @@
                     <ul aria-expanded="false" class="collapse">
                     @can('Super Admin') 
                         <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>
+                        <li><a  class="{{Request::is('hrms/employee/missingDocuments')?'active':''}}" href="{{route('employee.missingDocuments')}}">Missing Documents</a></li>
                     @endcan
                     @canany(['hr edit record','hr delete record'])
                         <li><a  class="{{Request::is('hrms/employee/create')?'active':''}}" href="{{route('employee.create')}}">Add Employee</a></li>

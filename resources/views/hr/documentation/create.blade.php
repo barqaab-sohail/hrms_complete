@@ -38,7 +38,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Document Description</label>
                         
-                            <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
+                            <input type="text" id="forward_slash" name="description"  value="{{ old('description') }}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
                         </div>
                     </div>
                 </div>

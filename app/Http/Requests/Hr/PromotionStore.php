@@ -23,9 +23,8 @@ class PromotionStore extends FormRequest
      */
     public function rules()
     {
-        return [
-           
-            'document'=>'required|file|max:2000|mimes:pdf' ,
+         $rules = [
+            
             'hr_designation_id' => 'required',
             'effective_date' => 'required',
             'hr_salary_id' => 'required',
@@ -35,5 +34,14 @@ class PromotionStore extends FormRequest
             'remarks' => 'required|max:100',
 
         ];
+
+        //If method is POST then document is required otherwise in Patch method document is nullable.
+        if ($this->getMethod() == 'POST') {
+            $rules += ['document'=>'required|file|max:2000|mimes:pdf'];
+        }else{
+             $rules += ['document'=>'nullable|file|max:2000|mimes:pdf'];
+        }
+
+    return $rules;
     }
 }
