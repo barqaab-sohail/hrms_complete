@@ -57,5 +57,27 @@ class HrEmployee extends Model implements Auditable
 
     }
 
+    
+    // public function users()
+    // {
+    //     return $this->hasManyThrough(
+    //         'App\Models\Hr\HrDocumentName'                     //HrDocumentName
+    //         'App\Models\Hr\HrDocumentNameDocumentation',      //
+    //         'podcast_id',
+    //         'hr_document_name_id',
+    //         'id',
+    //         'podcast_id'
+    //     );
+
+    //     return $this->hasManyThrough(
+    //     'App\Users'
+    //     'App\Pivots\Subscription',
+    //     'podcast_id',
+    //     'user_id',
+    //     'id',
+    //     'podcast_id'
+    // );
+    // }
+
 
 }

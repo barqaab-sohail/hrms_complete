@@ -120,11 +120,11 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Category<span class="text_requried">*</span></label>
-                                <select  name="category"  class="form-control selectTwo" data-validation="required" >
+                                <select  name="category" class="form-control selectTwo" data-validation="required" >
                                     <option value=""></option>
-                                    <option value="A" {{(old("category")=='A'? "selected" : "")}}>A</option>
-                                    <option value="B" {{(old("category")=='B'? "selected" : "")}}>B</option>
-                                    <option value="C" {{(old("category")=='C'? "selected" : "")}}>C</option>
+                                    <option value="A" {{(old("category")=='A'? "selected" : "")}}>Category-A</option>
+                                    <option value="B" {{(old("category")=='B'? "selected" : "")}}>Category-B</option>
+                                    <option value="C" {{(old("category")=='C'? "selected" : "")}}>Category-C</option>
                                 </select>
                                     
                                 
@@ -138,7 +138,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Remarks<span class="text_requried">*</span></label>
-                                <input type="text"  name="remarks" value="{{ old('remarks') }}"  class="form-control" data-validation="required length" data-validation-length="max100" placeholder="Enter Remarks if any">
+                                <input type="text"  name="remarks" id="forward_slash" value="{{ old('remarks') }}"  class="form-control" data-validation="required length" data-validation-length="max100" placeholder="Enter Remarks if any">
                                 
                                
                             </div>
@@ -166,7 +166,7 @@
                  <!--/row-->
                 <div class="row">
                     <div class="col-md-8 pdfView">
-                        <embed id="pdf" src=""  type="application/pdf" height="200" width="100%" />
+                        <iframe id="pdf" src=""  type="application/pdf" height="200" width="100%" />
                     </div>
                 </div>
 
@@ -209,6 +209,8 @@ $(document).ready(function(){
            
             $('.fa-spinner').show(); 
             submitForm(this, url,1);
+            document.getElementById("h6").innerHTML = "Click On Image to Add Pdf Document";
+            refreshTable("{{route('promotion.table')}}",1000);
         });
        
 
@@ -262,7 +264,7 @@ $(document).ready(function(){
                     var reader = new FileReader();
                     
                         reader.onload = function (e) {
-                            $('embed').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
+                            $('iframe').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
                         }
                         reader.readAsDataURL(input.files[0]);
                 }   

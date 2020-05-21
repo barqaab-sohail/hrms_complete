@@ -60,6 +60,18 @@ class EmployeeController extends Controller
     	return view ('hr.employee.list',compact('employees'));
     }
 
+    public function missingDocuments(){
+
+        $employees = HrEmployee::all();
+
+            // HrEmployee::join('hr_document_name_hr_documentation','hr_document_name_hr_documentation.hr_employee_id','=','hr_employees.id')
+            //             ->join('hr_document_names','hr_document_names.id','=','hr_document_name_hr_documentation.hr_document_name_id')
+            //             ->
+
+
+        return view ('hr.employee.missingDocuments', compact('employees'));
+    }
+
 
     public function edit(Request $request, $id){
     	$genders = Gender::all();

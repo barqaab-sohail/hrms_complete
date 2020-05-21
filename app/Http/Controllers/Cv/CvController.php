@@ -358,7 +358,7 @@ class CvController extends Controller
 
     }
 
-     public function destroy($id)
+    public function destroy($id)
     {
     
     CvDetail::findOrFail($id)->delete(); 

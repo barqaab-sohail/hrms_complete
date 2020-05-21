@@ -123,9 +123,9 @@
                                 <label class="control-label text-right">Category<span class="text_requried">*</span></label>
                                 <select  name="category"  class="form-control selectTwo" data-validation="required" >
                                     <option value=""></option>
-                                    <option value="A" {{(old("category",$data->category??'')=='A'? "selected" : "")}}>A</option>
-                                    <option value="B" {{(old("category",$data->category??'')=='B'? "selected" : "")}}>B</option>
-                                    <option value="C" {{(old("category",$data->category??'')=='C'? "selected" : "")}}>C</option>
+                                    <option value="A" {{(old("category",$data->category??'')=='A'? "selected" : "")}}>Category-A</option>
+                                    <option value="B" {{(old("category",$data->category??'')=='B'? "selected" : "")}}>Category-B</option>
+                                    <option value="C" {{(old("category",$data->category??'')=='C'? "selected" : "")}}>Category-C</option>
                                 </select>
                                     
                                 
@@ -139,7 +139,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Remarks<span class="text_requried">*</span></label>
-                                <input type="text"  name="remarks" value="{{ old('remarks',$data->remarks??'') }}"  class="form-control" data-validation="required length" data-validation-length="max100" placeholder="Enter Remarks if any">
+                                <input type="text"  name="remarks" id="forward_slash" value="{{ old('remarks',$data->remarks??'') }}"  class="form-control" data-validation="required length" data-validation-length="max100" placeholder="Enter Remarks if any">
                                 
                                
                             </div>
