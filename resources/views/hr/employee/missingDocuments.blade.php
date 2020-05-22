@@ -13,10 +13,9 @@
 				<thead>
 				<tr>
 					<th>Id</th>
+					<th>Name</th>
 					<th>Appointment Letter</th>
-					<th>Father's Name</th>
-					<th>Education</th>
-					<th>Mobile</th>
+					
 					
 					
 
@@ -25,16 +24,22 @@
 				</thead>
 				<tbody>
 					@foreach($employees as $employee)
-						<tr>
-							<td>{{$employee->id}}</td>
-							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
-							<td>{{$employee->hrDocumentName->first()->name??''}}</td>
-							<td>{{$employee->hrEducation->first()->to??''}}</td>
-							<td>{{$employee->hrContactMobile->mobile??''}}</td>
-							
-							
-																					
-						</tr>
+                        
+                             
+                                @empty($employee->documentName->name)
+            						<tr>
+            							<td>{{$employee->id}}</td>
+            							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
+                						<td>{{$employee->documentName}}</td>
+            						</tr>
+                                @else
+                                    <tr>
+                                        <td>{{$employee->id}}</td>
+                                        <td>{{$employee->first_name}} {{$employee->last_name}}</td>
+                                        <td>Avaiable</td>
+                                    </tr>
+                                @endempty
+                           
 					@endforeach
 				
 				</tbody>
