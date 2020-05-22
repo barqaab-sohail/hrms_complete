@@ -62,12 +62,19 @@ class EmployeeController extends Controller
 
     public function missingDocuments(){
 
-        $employees = HrEmployee::all();
+        $employees = HrEmployee::with('documentName')->get();
 
-            // HrEmployee::join('hr_document_name_hr_documentation','hr_document_name_hr_documentation.hr_employee_id','=','hr_employees.id')
-            //             ->join('hr_document_names','hr_document_names.id','=','hr_document_name_hr_documentation.hr_document_name_id')
-            //             ->
+        // foreach ($employees as $emp){ 
 
+        //         if(!$emp->documentName){
+        //             echo 'No record found';
+        //         }else{
+        //             echo 'record found ';
+        //         }
+        //         dd();
+        //     }
+
+        //     dd();
 
         return view ('hr.employee.missingDocuments', compact('employees'));
     }
