@@ -30,14 +30,8 @@
             						<tr>
             							<td>{{$employee->id}}</td>
             							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
-                						<td>{{$employee->documentName}}</td>
+                						<td>{{$employee->documentName->first()->laravel_through_key??'Missing'}}</td>
             						</tr>
-                                @else
-                                    <tr>
-                                        <td>{{$employee->id}}</td>
-                                        <td>{{$employee->first_name}} {{$employee->last_name}}</td>
-                                        <td>Avaiable</td>
-                                    </tr>
                                 @endempty
                            
 					@endforeach

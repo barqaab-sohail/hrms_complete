@@ -133,20 +133,6 @@ function formFunctions(){
     });
 
 
-//Remove Forward Salsh          
-     //Make sure that the event fires on input change
-    $(document).on('input','#forward_slash',function(ev){
-   // $("#cnic").on('input', function(ev){
-        
-        //Prevent default
-        ev.preventDefault();
-        
-         let input = ev.target.value.replace(/\\|\//g,'-');       
-        //Return the new string
-        $(this).val(input);
-    });
-
-
 
 //CNIC Format         
      //Make sure that the event fires on input change
@@ -176,7 +162,6 @@ function formFunctions(){
         }).join('');
         
         //Return the new string
-
         $(this).val(input);
     });
 
@@ -247,7 +232,6 @@ function resetForm(){
     $('input').removeClass('error');
     $("input[style='border-color: rgb(185, 74, 72);']").css('border-color','').siblings("span").attr('class','help-block').remove();
     $('iframe').remove();
-
 
 }
 

@@ -65,7 +65,56 @@ class HrEmployee extends Model implements Auditable
             'id',                                             //Final Model Primary Key
             'id',
             'hr_document_name_id'                             //Forein Key in Immediate Model of Final Model
-        )->where('hr_document_names.id',6);
+        )->where('hr_document_names.id',1);
+
+    }
+
+
+    public function hrDesignation(){
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrDesignation',                  //Final Model HrDocumentName
+            'App\Models\Hr\HrAppointment',              //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_designation_id'                             //Forein Key in Immediate Model of Final Model
+        );
+
+    }
+
+    public function manager(){
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrEmployee',                  //Final Model HrDocumentName
+            'App\Models\Hr\HrAppointment',              //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_manager_id'                             //Forein Key in Immediate Model of Final Model
+        );
+
+    }
+
+    public function hrDepartment(){
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrDepartment',                  //Final Model HrDocumentName
+            'App\Models\Hr\HrAppointment',              //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_department_id'                             //Forein Key in Immediate Model of Final Model
+        );
+
+    }
+
+    public function hrSalary(){
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrSalary',                  //Final Model HrDocumentName
+            'App\Models\Hr\HrAppointment',              //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_salary_id'                             //Forein Key in Immediate Model of Final Model
+        );
 
     }
     
