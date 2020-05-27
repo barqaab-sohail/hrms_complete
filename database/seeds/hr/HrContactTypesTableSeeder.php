@@ -11,7 +11,7 @@ class HrContactTypesTableSeeder extends Seeder
      */
     public function run()
     {
-         DB::table('hr_contact_types')->delete();
+        DB::table('hr_contact_types')->delete();
         
         $HrContactTypes = array(
         	array('name' => 'Permanent'),
