@@ -176,14 +176,6 @@ $(document).ready(function(){
     refreshTable("{{route('contact.table')}}",300);
   
 
-
-      // $("form").submit(function (e) {
-      //    e.preventDefault();
-      // });
-
-      
-
-
       //submit function
       $("#formContact").submit(function(e) { 
       e.preventDefault();
