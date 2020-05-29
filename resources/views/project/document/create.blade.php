@@ -148,8 +148,8 @@ $(document).ready(function(){
                 //var fileType = fileName.split('.').pop();
                 
             //Restrict File Size Less Than 2MB
-            if (fileSize> 4096000){
-                alert('File Size is bigger than 3MB');
+            if (fileSize> 25600000){
+                alert('File Size is bigger than 20MB');
                 $(this).val('');
             }else{
                 //Restrict File Type

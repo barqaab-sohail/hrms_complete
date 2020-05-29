@@ -112,10 +112,10 @@
             var other = $('#document_name').val();
                 if (other == 'Other'){
                     $('.hideDiv').show();
-                    $('#description').attr('data-validation','required');
+                    $('#forward_slash').attr('data-validation','required');
                 }else{
                     $('.hideDiv').hide();
-                    $('#description').removeAttr('data-validation').val('');
+                    $('#forward_slash').removeAttr('data-validation').val('');
                 }
         });
         //submit function
