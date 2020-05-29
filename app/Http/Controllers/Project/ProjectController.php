@@ -11,7 +11,7 @@ use App\Models\Common\Client;
 use App\Models\Common\ContractType;
 use App\Http\Requests\Project\PrDetailStore;
 use DB;
-use Excel;
+
 use App\Imports\ProjectsImport;
 
 
@@ -65,7 +65,7 @@ class ProjectController extends Controller
 	}
 
 
-	public function edit($id){
+	public function edit(Request $request, $id){
 
 		session()->put('pr_detail_id', $id);
 		$data = PrDetail::find($id);
@@ -73,8 +73,14 @@ class ProjectController extends Controller
 		$projectStatuses = PrStatus::all();
 		$clients = Client::all();
 		$contractTypes = ContractType::all();
+
+    if($request->ajax()){      
+            return view ('project.detail.ajax', compact('projectRoles','projectStatuses','clients','contractTypes','data'));    
+        }else{
+           return view ('project.detail.edit', compact('projectRoles','projectStatuses','clients','contractTypes','data'));       
+        }
     	        
-    	return view ('project.detail.edit', compact('projectRoles','projectStatuses','clients','contractTypes','data'));
+    	
 
 	}
 

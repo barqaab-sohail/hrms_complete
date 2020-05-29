@@ -79,6 +79,7 @@ Route::resource('/cvDocument', 'CvDocumentController');
 Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Project'], function(){
 Route::post('/project/import', 'ProjectController@import')->name('project.import');
 Route::resource('/project', 'ProjectController');
+Route::resource('/projectDocument', 'ProjectDocumentController');
 
 
 });
