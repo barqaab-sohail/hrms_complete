@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\Hr\HrDocumentName;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDocumentation;
+use App\Models\Hr\HrDocumentNameDocumentation;
 use App\Http\Requests\Hr\DocumentationStore;
 use DB;
 
@@ -84,9 +85,10 @@ class DocumentationController extends Controller
 
     	$documentNames = HrDocumentName::all();
     	$data = HrDocumentation::find($id);
+        $documentNameExist = HrDocumentNameDocumentation::where('hr_documentation_id',$data->id)->first();
 
         if($request->ajax()){
-            return view ('hr.documentation.edit',compact('documentNames','data'));
+            return view ('hr.documentation.edit',compact('documentNames','data','documentNameExist'));
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }

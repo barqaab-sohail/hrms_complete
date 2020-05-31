@@ -87,6 +87,14 @@
          e.preventDefault();
       	});
 
+      	$('a[id^=editDocument]').click(function (e){
+        e.preventDefault();
+        console.log('edit');
+        var url = $(this).attr('href');
+        getAjaxData(url);
+
+      });
+
 
 	  	$("form[id^=deleteDocument]").submit(function(e) { 
 	  	e.preventDefault();

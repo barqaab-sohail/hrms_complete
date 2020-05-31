@@ -77,41 +77,41 @@
         </div>
     </div>
 
-        <script>
-           $(document).ready(function() {
-            $('#myTable').DataTable({
-                stateSave: false,
-                "order": [[ 1, "asc" ]],
-                "columnDefs": [
-    				{ "width": "70%", "targets": 0, },
-    				{"targets": [-1,-2], "className": "dt-center"}
+<script>
+   $(document).ready(function() {
+    $('#myTable').DataTable({
+        stateSave: false,
+        "order": [[ 1, "asc" ]],
+        "columnDefs": [
+			{ "width": "70%", "targets": 0, },
+			{"targets": [-1,-2], "className": "dt-center"}
 
- 				 ],
+			 ],
 
-                dom: 'Blfrtip',
-                buttons: [
-                    
-                    {
-                        extend: 'excelHtml5',
-                        exportOptions: {
-                            columns: [ 0, 1]
-                        }
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        exportOptions: {
-                            columns: [ 0, 1]
-                        }
-                    }, {
-                        extend: 'csvHtml5',
-                        exportOptions: {
-                            columns: [ 0, 1]
-                        }
-                    },
-                ]
-            });
-        });
+        dom: 'Blfrtip',
+        buttons: [
+            
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1]
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1]
+                }
+            }, {
+                extend: 'csvHtml5',
+                exportOptions: {
+                    columns: [ 0, 1]
+                }
+            },
+        ]
+    });
+});
 
-        </script>
+</script>
 
 @stop

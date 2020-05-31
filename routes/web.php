@@ -80,12 +80,18 @@ Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Project'
 Route::post('/project/import', 'ProjectController@import')->name('project.import');
 Route::resource('/project', 'ProjectController');
 Route::resource('/projectDocument', 'ProjectDocumentController');
+Route::get('/projectPosition/refreshTable', 'ProjectPositionController@refreshTable')->name('projectPosition.table');
+Route::resource('/projectPosition', 'ProjectPositionController');
 
 
 });
 
 
+//Admin Routes
+Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Charging'], function(){
+	Route::resource('/charging', 'ChargingController');
 
+});
 
 //Admin Routes
 Route::group(['prefix' => 'hrms/admin', 'middleware' => 'auth', 'namespace'=>'Admin'], function(){

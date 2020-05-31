@@ -25,7 +25,7 @@
                     <ul aria-expanded="false" class="collapse">
                     @can('Super Admin') 
                         <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>
-                        <li><a  class="{{Request::is('hrms/employee/missingDocuments')?'active':''}}" href="{{route('employee.missingDocuments')}}">Missing Documents</a></li>
+                        <li><a  class="{{Request::is('hrms/employee/missingDocuments')?'active':''}}" href="{{route('employee.missingDocuments')}}">Missing Appointment</a></li>
                     @endcan
                     @canany(['hr edit record','hr delete record'])
                         <li><a  class="{{Request::is('hrms/employee/create')?'active':''}}" href="{{route('employee.create')}}">Add Employee</a></li>
@@ -59,6 +59,16 @@
                       
                     </ul>
                 </li>
+
+                @can('Super Admin')
+                <li class="{{Request::is('hrms/charging*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">Charging</span></a>
+                    <ul aria-expanded="false" class="collapse">  
+                        <li><a class="{{Request::is('hrms/charging/create')?'active':''}}" href="{{route('charging.create')}}">Add Charging</a></li>
+                        
+                                               
+                    </ul>
+                </li>
+               @endcan
 
                @can('Super Admin')
                  <li class="{{Request::is('hrms/admin*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">Admin</span></a>

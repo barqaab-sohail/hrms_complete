@@ -34,15 +34,27 @@
                 </div>
                 
                 <!--/span-->
-                <div class="col-md-8 hideDiv">
+                @if($documentNameExist == null)
+                <div class="col-md-8" id="documentNameExist">
                     <div class="form-group row">
                         <div class="col-md-12">
                         	<label class="control-label text-right">Document Description</label>
+                        
+                            <input type="text" id="description" name="description" value="{{old('description',$data->description??'')}}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
+                        </div>
+                    </div>
+                </div>
+                @else
+                <div class="col-md-8 hideDiv">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Document Description</label>
                         
                             <input type="text" id="description" name="description" value="{{ old('description', $data->description??'') }}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
                 
             <!--/row-->
@@ -121,10 +133,12 @@
 			var other = $('#document_name').val();
 				if (other == 'Other'){
 					$('.hideDiv').show();
-					$('#description').attr('data-validation','required').val('');
+                    $('#documentNameExist').show();
+					$('#description').attr('data-validation','required');
 				}else{
 					$('.hideDiv').hide();
-					$('#description').removeAttr('data-validation').val('');
+                    $('#documentNameExist').hide();
+					$('#description').removeAttr('data-validation');
 				}
 		});
 

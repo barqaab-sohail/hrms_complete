@@ -249,6 +249,7 @@ $(document).ready(function() {
 	                resetForm();
 		            $('html,body').scrollTop(0);
 		            $('.fa-spinner').hide();
+		            clearMessage();
                	}else{
                		location.href = data.url;
                	}       	
