@@ -91,7 +91,7 @@ $(document).ready(function(){
                            $('.btn-prevent-multiple-submits').removeAttr('disabled');
                           $('#total_salary').val('');
                           $('#salModal').modal('toggle');
-                          
+                        clearMessage(); 
                       }
 
                  },

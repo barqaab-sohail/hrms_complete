@@ -260,6 +260,13 @@ function getAjaxData(url){
                 }//end error
         }); //end ajax  
 }
+// json message clear after 5 second
+function clearMessage(time=5000){
+   setTimeout(function(){
+    $('#json_message').empty();
+    }, time);
+}
+
 
 // HR get data through ajax
 function getAjaxMessage(url){
@@ -277,7 +284,7 @@ function getAjaxMessage(url){
                 } else{
                 $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');    
                 }
-               
+                clearMessage();
                },
             error: function (jqXHR, textStatus, errorThrown){
                 if (jqXHR.status == 401){
@@ -310,16 +317,17 @@ function submitForm(form, url,reset=0){
            processData: false,
            success:function(data){
                 if(data.status == 'OK'){
-                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
+                $('#json_message').html('<div id="j_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                 }
                 else{
-                $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');    
+                $('#json_message').html('<div id="j_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');    
                 }
                 if(reset==1){
                     resetForm();
                 }
             $('html,body').scrollTop(0);
             $('.fa-spinner').hide();
+            clearMessage();
 
            },
             error: function (jqXHR, textStatus, errorThrown){
@@ -334,13 +342,12 @@ function submitForm(form, url,reset=0){
                 $.each(test.errors, function (key, value){
                 errorMassage += value + '<br>';  
                 });
-                 $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
                  $('html,body').scrollTop(0);
                 $('.fa-spinner').hide();                   
                     
             }//end error
     }); //end ajax
 }
-
 
 

@@ -20,7 +20,7 @@ class CreatePrPositionTable extends Migration
             $table->bigInteger('pr_position_type_id')->unsigned();
             
             $table->string('name');
-            $table->decimal('total_mm', 4, 4)->nullable();  //first is total number of numbers and second is decimal precision
+            $table->float('total_mm',8,3)->nullable();  //first is total number of numbers and second is decimal precision
             
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');

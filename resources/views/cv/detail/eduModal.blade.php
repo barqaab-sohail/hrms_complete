@@ -103,7 +103,7 @@ $('#eduModalFrom').on('submit', function(event){
                        $('#add_degree').val('');
                       $('#add_level').val('').select2('val', 'All');
                       $('#eduModal').modal('toggle');
-                      
+                    clearMessage();  
                   }
 
              },

@@ -87,7 +87,7 @@ $('#disModalFrom').on('submit', function(event){
                        $('.btn-prevent-multiple-submits').removeAttr('disabled');
                        $('#name').val('');
                       $('#disModal').modal('toggle');
-                      
+                    clearMessage(); 
                   }
 
              },

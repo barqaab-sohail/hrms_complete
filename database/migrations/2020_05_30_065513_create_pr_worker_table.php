@@ -20,8 +20,8 @@ class CreatePrWorkerTable extends Migration
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->bigInteger('office_id')->unsigned();
             $table->bigInteger('pr_position_id')->unsigned();
-            $table->decimal('current_mm', 4, 4);  //first is total number of numbers and second is decimal precision
-            $table->decimal('utilized_mm', 4, 4);  //first is total number of numbers and second is decimal precision
+            $table->float('current_mm',8,3); //first is total number of numbers and second is decimal precision
+            $table->float('utilized_mm',8,3); //first is total number of numbers and second is decimal precision
             $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('pr_invoice_id')->references('id')->on('pr_invoices')->onDelete('cascade');
