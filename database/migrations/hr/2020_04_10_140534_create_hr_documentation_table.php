@@ -18,6 +18,7 @@ class CreateHrDocumentationTable extends Migration
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->string('description');
+            $table->date('document_date')->nullable();
             $table->string('file_name');
             $table->string('extension');
             $table->string('path');

@@ -15,7 +15,7 @@
             <h3 class="box-title">Edit Document</h3>
             <hr class="m-t-0 m-b-40">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
                         	<label class="control-label text-right">Document Name<span class="text_requried">*</span></label>
@@ -32,10 +32,23 @@
                         </div>
                     </div>
                 </div>
+                <!--/span-->
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Date</span></label>
+                        
+                            <input type="text" name="document_date"  value="{{ old('document_date',$data->document_date) }}" class="form-control date_input" readonly placeholder="Enter Document Detail">
+                            <br>
+                            @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
+                            
+                        </div>
+                    </div>
+                </div>
                 
                 <!--/span-->
                 @if($documentNameExist == null)
-                <div class="col-md-8" id="documentNameExist">
+                <div class="col-md-6" id="documentNameExist">
                     <div class="form-group row">
                         <div class="col-md-12">
                         	<label class="control-label text-right">Document Description</label>
@@ -45,7 +58,7 @@
                     </div>
                 </div>
                 @else
-                <div class="col-md-8 hideDiv">
+                <div class="col-md-6 hideDiv">
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Document Description</label>
