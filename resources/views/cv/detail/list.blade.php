@@ -61,7 +61,7 @@
 								 </form>
 								
 								 </td>
-								  @endcan
+								 @endcan
 															
 							</tr>
 						@endforeach
