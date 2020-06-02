@@ -28,7 +28,9 @@
 						<th>CNIC</th>
 						
 						<th class="text-center"style="width:5%">Edit</th>
+						@can('cv delete record')
 						<th class="text-center"style="width:5%">Delete</th>
+						@endcan
 					</tr>
 					</thead>
 					<tbody>
@@ -57,8 +59,9 @@
 								 @csrf
 								 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
 								 </form>
-								 @endcan
+								
 								 </td>
+								  @endcan
 															
 							</tr>
 						@endforeach
