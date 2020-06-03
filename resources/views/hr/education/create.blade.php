@@ -66,7 +66,7 @@
 								<select  name="from"  id="from" class="form-control selectTwo" >
 
                                 <option value=""></option>
-                                @for ($i = (date('Y')-65); $i < (date('Y')+1); $i++)
+                                @for ($i = (date('Y')-75); $i < (date('Y')+1); $i++)
                                 <option value="{{$i}}">{{ $i }}</option>
                                 @endfor
                                 </select>
@@ -82,7 +82,7 @@
 
                                 <select  name="to"  id="to" class="form-control selectTwo" data-validation="required" >
                                     <option value=""></option>
-                                    @for ($i = (date('Y')-65); $i < (date('Y')+1); $i++)
+                                    @for ($i = (date('Y')-75); $i < (date('Y')+1); $i++)
                                     <option value="{{$i}}">{{ $i }}</option>
                                     @endfor
                                 </select>
