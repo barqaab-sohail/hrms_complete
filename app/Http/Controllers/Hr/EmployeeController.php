@@ -60,21 +60,17 @@ class EmployeeController extends Controller
     	return view ('hr.employee.list',compact('employees'));
     }
 
+     public function appointmentList(){
+
+        $employees = HrEmployee::with('hrAppointment')->get();
+
+       
+        return view ('hr.employee.appointmentList',compact('employees'));
+    }
+
     public function missingDocuments(){
 
         $employees = HrEmployee::with('documentName')->get();
-
-        // foreach ($employees as $emp){ 
-
-        //         if(!$emp->documentName){
-        //             echo 'No record found';
-        //         }else{
-        //             echo 'record found ';
-        //         }
-        //         dd();
-        //     }
-
-        //     dd();
 
         return view ('hr.employee.missingDocuments', compact('employees'));
     }
