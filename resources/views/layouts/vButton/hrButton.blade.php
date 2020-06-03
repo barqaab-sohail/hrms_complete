@@ -17,12 +17,12 @@
             
             <a type="submit" id="addEducation" role="button" href="{{route('education.create')}}" class="btn btn-info" {{Request::is('hrms/education/create')?'style=background-color:#737373':''}}>Education</a>
             <a type="submit" id="addExperience" role="button" href="{{route('experience.create')}}" class="btn btn-info" {{Request::is('hrms/experience/create')?'style=background-color:#737373':''}}>Experience</a>
+            <a type="submit" id="addAppointment" role="button" href="{{route('appointment.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/appointment/')?'style=background-color:#737373':''}}>Appointment Detail</a>
             
             @endcan
             @can('Super Admin')
             <a type="submit" id="addUserLogin" role="button" href="{{route('userLogin.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Login Detail</a>
-            <a type="submit" id="addAppointment" role="button" href="{{route('appointment.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/appointment/')?'style=background-color:#737373':''}}>Appointment Detail</a>
-
+            
             <a type="submit" role="button" id="addPromotion"  href="{{route('promotion.create')}}" class="btn btn-info" {{Request::is('hrms/promotion/create')?'style=background-color:#737373':''}}>Promotion</a>
 
             <a type="submit" role="button" href="{{route('employee.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/')?'style=background-color:#737373':''}}>Transfer/Posting</a>

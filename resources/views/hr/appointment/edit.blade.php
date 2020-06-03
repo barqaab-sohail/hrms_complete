@@ -213,7 +213,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Remarks</label>
-                                <input type="text"  name="remarks" value="{{ old('remarks',$data->remarks??'') }}" data-validation="length"  data-validation-length="190"  class="form-control" placeholder="Enter Remarks if any">
+                                <input type="text"  name="remarks" value="{{ old('remarks',$data->remarks??'') }}" data-validation="length"  data-validation-length="max190"  class="form-control" placeholder="Enter Remarks if any">
                                 
                                
                             </div>

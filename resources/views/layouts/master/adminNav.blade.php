@@ -27,6 +27,9 @@
                         <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>
                         <li><a  class="{{Request::is('hrms/employee/missingDocuments')?'active':''}}" href="{{route('employee.missingDocuments')}}">Missing Appointment</a></li>
                     @endcan
+                    @can('hr edit appointment')
+                        <li><a  class="{{Request::is('hrms/employee/appointmentList')?'active':''}}" href="{{route('employee.appointmentList')}}">Appointment List</a></li>
+                    @endcan
                     @canany(['hr edit record','hr delete record'])
                         <li><a  class="{{Request::is('hrms/employee/create')?'active':''}}" href="{{route('employee.create')}}">Add Employee</a></li>
                         <li><a  class="{{Request::is('hrms/employee')?'active':''}}" href="{{route('employee.index')}}">List of Employees</a></li>
