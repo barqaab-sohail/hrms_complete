@@ -26,6 +26,8 @@
             <a type="submit" role="button" id="addPromotion"  href="{{route('promotion.create')}}" class="btn btn-info" {{Request::is('hrms/promotion/create')?'style=background-color:#737373':''}}>Promotion</a>
 
             <a type="submit" role="button" href="{{route('employee.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/')?'style=background-color:#737373':''}}>Transfer/Posting</a>
+
+            <a type="submit" id="addExit"  role="button" href="{{route('exit.create')}}" class="btn btn-info" {{Request::is('hrms/exit/create/')?'style=background-color:#737373':''}}>Exit</a>
             @endcan
             <a type="submit" role="button" id="addDocumentation"  href="{{route('documentation.create')}}" class="btn btn-info" {{Request::is('hrms/documentation/create')?'style=background-color:#737373':''}}>Employee Documentation</a>   
              
