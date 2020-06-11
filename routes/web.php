@@ -54,6 +54,7 @@ Route::resource('/nextToKin', 'NextToKinController');
 Route::get('/promotion/refreshTable', 'PromotionController@refreshTable')->name('promotion.table');
 Route::resource('/promotion', 'PromotionController');
 Route::get('/documentation/refreshTable', 'DocumentationController@refreshTable')->name('documentation.table');
+Route::resource('/exit', 'ExitController');
 Route::resource('/documentation', 'DocumentationController');
 Route::get('/userLogin/refreshTable', 'UserLoginController@refreshTable')->name('userLogin.table');
 Route::resource('/userLogin', 'UserLoginController',['only'=>['edit','store','destroy']]);
