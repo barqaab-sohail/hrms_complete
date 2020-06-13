@@ -20,6 +20,11 @@
             <a type="submit" id="addAppointment" role="button" href="{{route('appointment.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/appointment/')?'style=background-color:#737373':''}}>Appointment Detail</a>
             
             @endcan
+            @can('hr edit exit')
+            <a type="submit" id="addExit"  role="button" href="{{route('exit.create')}}" class="btn btn-info" {{Request::is('hrms/exit/create/')?'style=background-color:#737373':''}}>Exit</a>
+            @endcan
+
+
             @can('Super Admin')
             <a type="submit" id="addUserLogin" role="button" href="{{route('userLogin.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Login Detail</a>
             
@@ -27,7 +32,7 @@
 
             <a type="submit" role="button" href="{{route('employee.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/employee/')?'style=background-color:#737373':''}}>Transfer/Posting</a>
 
-            <a type="submit" id="addExit"  role="button" href="{{route('exit.create')}}" class="btn btn-info" {{Request::is('hrms/exit/create/')?'style=background-color:#737373':''}}>Exit</a>
+            
             @endcan
             <a type="submit" role="button" id="addDocumentation"  href="{{route('documentation.create')}}" class="btn btn-info" {{Request::is('hrms/documentation/create')?'style=background-color:#737373':''}}>Employee Documentation</a>   
              

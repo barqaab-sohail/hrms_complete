@@ -4,7 +4,8 @@
     </div>
          
     <div class="card-body">
-        <form id= "formExit" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('exit.store')}}" enctype="multipart/form-data">
+        <form id= "formEditExit" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('exit.update',$data->id??'')}}" enctype="multipart/form-data">
+        @method('PATCH')
         @csrf
             <div class="form-body">
                     
@@ -16,11 +17,11 @@
                     <div class="col-md-3">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">Current Status<span class="text_requried">*</span></label>
+                               	<label class="control-label text-right">Status<span class="text_requried">*</span></label>
                                  <select  id="hr_status_id"   name="hr_status_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($hrStatuses as $hrStatus)
-                                    <option value="{{$hrStatus->id}}" {{(old("hr_status_id", $employee->hr_status_id)==$hrStatus->id? "selected" : "")}}>{{$hrStatus->name}}</option>
+                                    <option value="{{$hrStatus->id}}" {{(old("hr_status_id",$data->hr_status_id??'')==$hrStatus->id? "selected" : "")}}>{{$hrStatus->name}}</option>
                                     @endforeach 
                                 </select>
                                
@@ -33,7 +34,7 @@
                             <div class="col-md-12">
                                  <label class="control-label text-right">Effective Date</span></label>
                         
-                                  <input type="text" name="effective_date"  value="{{ old('effective_date') }}" class="form-control date_input" readonly placeholder="Enter Document Detail">
+                                  <input type="text" name="effective_date"  value="{{ old('effective_date',$data->effective_date??'') }}" class="form-control date_input" readonly placeholder="Enter Document Detail">
                                   <br>
                                   @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
                             </div>
@@ -45,7 +46,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Reason</label>
                                 
-                                <input type="text" name="reason" value="{{ old('reason') }}" class="form-control" data-validation="length"  data-validation-length="max190" >
+                                <input type="text" name="reason" value="{{ old('reason',$data->reason??'') }}" class="form-control" data-validation="length"  data-validation-length="max190" >
 
                             </div>
                         </div>
@@ -59,7 +60,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Remarks</span></label>
                                 
-                               <input type="text" name="remarks" value="{{ old('remarks') }}" class="form-control" data-validation="length"  data-validation-length="max190" >
+                               <input type="text" name="remarks" value="{{ old('remarks',$data->remarks??'') }}" class="form-control" data-validation="length"  data-validation-length="max190" >
                                 
                                
                             </div>
@@ -98,20 +99,20 @@
 <script>
 $(document).ready(function(){
     
-   refreshTable("{{route('exit.table')}}",500);
+  refreshTable("{{route('exit.table')}}",500);
+  formFunctions();
+
+    $('#formEditExit').on('submit', function(event){  
+      var url = $(this).attr('action');
+     $('.fa-spinner').show();     //console.log(url);
+     event.preventDefault();
+      submitForm(this, url);
+      refreshTable("{{route('exit.table')}}",5000);
+        
+    }); //end submit
   
 
-      //submit function
-    $("#formExit").submit(function(e) { 
-      e.preventDefault();
-      var url = $(this).attr('action');
-            $('.fa-spinner').show(); 
-      submitForm(this, url,1);
-      refreshTable("{{route('exit.table')}}",500);
-    });
-
-
-   
+       
 });
 </script>
 
