@@ -61,6 +61,9 @@ Route::get('/userLogin/refreshTable', 'UserLoginController@refreshTable')->name(
 Route::resource('/userLogin', 'UserLoginController',['only'=>['edit','store','destroy']]);
 Route::resource('/picture', 'PictureController',['only'=>['edit','store']]);
 
+Route::get('/posting/refreshTable', 'PostingController@refreshTable')->name('posting.table');
+Route::resource('/posting', 'PostingController');
+
 });
 
 //CV Routes

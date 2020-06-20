@@ -4,11 +4,11 @@
     </div>
          
     <div class="card-body">
-        <form id= "formPromotion" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('promotion.store')}}" enctype="multipart/form-data">
+        <form id= "formPosting" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('posting.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
                     
-                <h3 class="box-title">Add Promotion</h3>
+                <h3 class="box-title">Add Trasnfer/Posting</h3>
                 
                 <hr class="m-t-0 m-b-40">
 
@@ -32,6 +32,22 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
+                                <label class="control-label text-right">Project<span class="text_requried">*</span></label>
+                                 <select  id="pr_detail_id"   name="pr_detail_id" data-validation="required" class="form-control selectTwo">
+                                    <option value=""></option>
+                                    @foreach($projects as $project)
+                                    <option value="{{$project->id}}" {{(old("pr_detail_id")==$project->id? "selected" : "")}}>{{$project->name}}</option>
+                                    @endforeach 
+                                </select>
+                                
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <div class="col-md-12">
                                	<label class="control-label text-right">Effective Date<span class="text_requried">*</span></label>
                                 
                                 <input type="text" name="effective_date" value="{{ old('effective_date') }}" class="form-control date_input" data-validation="required" readonly >
@@ -41,7 +57,11 @@
                             </div>
                         </div>
                     </div>
-                     <!--/span-->
+                  
+                </div><!--/End Row-->
+
+                <div class="row">
+                      
                     <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
@@ -63,27 +83,7 @@
                             </div>
                         </div>
                     </div>
-                    <!--/span-->
-                    <div class="col-md-2">
-                        <div class="form-group row">
-                            <div class="col-md-12">
-                                <label class="control-label text-right">Grade</label>
-                                <select  name="grade"  class="form-control selectTwo">
-                                    <option value=""></option>
-                                    @for ($i = 1; $i < 15; $i++)
-                                    <option value="{{$i}}" {{(old("grade")==$i? "selected" : "")}}>{{ $i }}</option>
-
-                                    @endfor
-                                </select>
-                                
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div><!--/End Row-->
-
-                <div class="row">
-                    
+                     <!--/span-->
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
@@ -116,21 +116,25 @@
                         </div>
                     </div>
                     <!--/span-->
-                     <div class="col-md-2">
+                    
+                    <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Category<span class="text_requried">*</span></label>
-                                <select  name="category" class="form-control selectTwo" data-validation="required" >
+                                <label class="control-label text-right">Office<span class="text_requried">*</span></label>
+                                 <select  id="office_id"   name="office_id" data-validation="required" class="form-control selectTwo" >
                                     <option value=""></option>
-                                    <option value="A" {{(old("category")=='A'? "selected" : "")}}>Category-A</option>
-                                    <option value="B" {{(old("category")=='B'? "selected" : "")}}>Category-B</option>
-                                    <option value="C" {{(old("category")=='C'? "selected" : "")}}>Category-C</option>
+                                    @foreach($offices as $office)
+                                    <option value="{{$office->id}}" {{(old("office_id")==$office->id? "selected" : "")}}>{{$office->name}}</option>
+                                    @endforeach  
                                 </select>
                                     
                                 
                             </div>
                         </div>
                     </div>
+
+
+
                 </div><!--/End Row-->
 
                 <div class="row">
@@ -144,32 +148,9 @@
                             </div>
                         </div>
                     </div>     
-                     <!--/span-->
-                    <div class="col-md-2">
-                        <!--/empty-->
-                    </div>                  
-                    <div class="col-md-2">
-                        <div class="form-group row">
-                            <center >
-                            <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="50" >
-                            
-                            </input>
-                            <input type="file"  name="document" id="view" data-validation="required" class="" hidden>
-                                                                            
-
-                            <h6 id="h6" class="card-title m-t-10">Click On Image to Add Pdf Document<span class="text_requried">*</span></h6>
-                    
-                            </center>
-                        </div>
-                    </div>                  
+                       
                 </div><!--/End Row-->
-                 <!--/row-->
-                <div class="row">
-                    <div class="col-md-8 pdfView">
-                        <iframe id="pdf" src=""  type="application/pdf" height="200" width="100%" />
-                    </div>
-                </div>
-
+                
                
             </div> <!--/End Form Boday-->
 
@@ -199,85 +180,18 @@
 
 <script>
 $(document).ready(function(){
-     refreshTable("{{route('promotion.table')}}");
+     refreshTable("{{route('posting.table')}}");
     //submit function
 
-       $("#formPromotion").submit(function(e) { 
+        $("#formPosting").submit(function(e) { 
             e.preventDefault();
             var url = $(this).attr('action');
-            console.log('OK');
-           
+                      
             $('.fa-spinner').show(); 
             submitForm(this, url,1);
-            document.getElementById("h6").innerHTML = "Click On Image to Add Pdf Document";
-            refreshTable("{{route('promotion.table')}}",1000);
+            refreshTable("{{route('posting.table')}}",1000);
         });
        
-
-        $( "#pdf" ).hide();
-
-         $("#view").change(function(){
-                var fileName = this.files[0].name;
-                var fileType = this.files[0].type;
-                var fileSize = this.files[0].size;
-                //var fileType = fileName.split('.').pop();
-                
-            //Restrict File Size Less Than 2MB
-            if (fileSize> 2048000){
-                alert('File Size is bigger than 2MB');
-                $(this).val('');
-            }else{
-                //Restrict File Type
-                if(fileType=='application/pdf')
-                {
-                readURL(this);// for Default Image
-                
-                document.getElementById("pdf").src="{{asset('Massets/images/document.png')}}";  
-                $( "#pdf" ).show();
-                }else{
-                    alert('Only PDF File is Allowed');
-                $(this).val('');
-                }
-            }
-            
-        });
-
-        function readURL(input) {
-            var fileName = input.files[0].name;
-            var fileType = input.files[0].type;
-            //var fileType = fileName.split('.').pop();
-                                
-            if (fileType !='application/pdf'){
-            //Read URL if image
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    
-                        reader.onload = function (e) {
-                            $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow').attr('width','100%');
-                        }
-                        reader.readAsDataURL(input.files[0]);
-                }
-                    
-            }else{
-               
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    
-                        reader.onload = function (e) {
-                            $('iframe').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
-                        }
-                        reader.readAsDataURL(input.files[0]);
-                }   
-                document.getElementById("wizardPicturePreview").src="{{asset('Massets/images/document.png')}}"; 
-                document.getElementById("h6").innerHTML = "PDF File is Attached";
-                 $('#wizardPicturePreview').attr('width','50');
-            }           
-        }
-            
-        $("#wizardPicturePreview" ).click (function() {
-           $("input[id='view']").click();
-        });
-
 
 });
 

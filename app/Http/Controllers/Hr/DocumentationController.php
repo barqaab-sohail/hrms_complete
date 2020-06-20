@@ -111,11 +111,12 @@ class DocumentationController extends Controller
             $input ['document_date']= \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
         }
 
-        if ($request->filled('description')) {
-        }else{
+        if($request->hr_document_name_id!='Other'){
             $input['description']= HrDocumentName::find($input['hr_document_name_id'])->name;
         }
-
+          
+        
+          
         if ($request->hasFile('document')){
 
 
@@ -126,7 +127,9 @@ class DocumentationController extends Controller
                     $hrDocumentNameId = $request->input("hr_document_name_id");
 
                     //hr_employee_id is add due to validtaion before enter into database
-                    $data->hrDocumentName()->updateExistingPivot($hrDocumentNameId, ['hr_employee_id'=>session('hr_employee_id')]); 
+                    $data->hrDocumentName()->detach();
+                    $data->hrDocumentName()->attach($hrDocumentNameId, ['hr_employee_id'=>session('hr_employee_id')]);
+
                 }
 
         }
@@ -185,7 +188,7 @@ class DocumentationController extends Controller
 
         // });  //end transaction
 
-        return response()->json(['status'=> 'OK', 'message' => "Updation is Under Development"]);
+        return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
 
 
 

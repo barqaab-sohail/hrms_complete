@@ -4,11 +4,12 @@
     </div>
          
     <div class="card-body">
-        <form id= "formPromotion" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('promotion.store')}}" enctype="multipart/form-data">
+        <form id= "formPosting" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('posting.update',$data->id)}}" enctype="multipart/form-data">
+        @method('PATCH')
         @csrf
             <div class="form-body">
                     
-                <h3 class="box-title">Add Trasnfer/Posting</h3>
+                <h3 class="box-title">Edit Trasnfer/Posting</h3>
                 
                 <hr class="m-t-0 m-b-40">
 
@@ -20,7 +21,7 @@
                                  <select  id="hr_designation_id"   name="hr_designation_id" data-validation="required" class="form-control selectTwo">
                                     <option value=""></option>
                                     @foreach($designations as $designation)
-                                    <option value="{{$designation->id}}" {{(old("hr_designation_id")==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+                                    <option value="{{$designation->id}}" {{(old("hr_designation_id", $data->hr_designation_id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                                     @endforeach 
                                 </select>
                                 
@@ -32,11 +33,11 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Designation<span class="text_requried">*</span></label>
-                                 <select  id="hr_designation_id"   name="hr_designation_id" data-validation="required" class="form-control selectTwo">
+                                <label class="control-label text-right">Project<span class="text_requried">*</span></label>
+                                 <select  id="pr_detail_id"   name="pr_detail_id" data-validation="required" class="form-control selectTwo">
                                     <option value=""></option>
-                                    @foreach($designations as $designation)
-                                    <option value="{{$designation->id}}" {{(old("hr_designation_id")==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+                                    @foreach($projects as $project)
+                                    <option value="{{$project->id}}" {{(old("pr_detail_id", $data->pr_detail_id??'')==$project->id? "selected" : "")}}>{{$project->name}}</option>
                                     @endforeach 
                                 </select>
                                 
@@ -50,7 +51,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Effective Date<span class="text_requried">*</span></label>
                                 
-                                <input type="text" name="effective_date" value="{{ old('effective_date') }}" class="form-control date_input" data-validation="required" readonly >
+                                <input type="text" name="effective_date" value="{{ old('effective_date', $data->effective_date??'') }}" class="form-control date_input" data-validation="required" readonly >
 
                                 <br>
                                 @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
@@ -70,7 +71,7 @@
                                 <select  id="hr_salary_id"   name="hr_salary_id" data-validation="required" class="form-control selectTwo">
                                     <option value=""></option>
                                     @foreach($salaries as $salary)
-                                    <option value="{{$salary->id}}" {{(old("hr_salary_id")==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
+                                    <option value="{{$salary->id}}" {{(old("hr_salary_id", $data->hr_salary_id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
                                     @endforeach
                               
                                 </select>
@@ -91,7 +92,7 @@
                                  <select  id="hr_manager_id"   name="hr_manager_id" data-validation="required" class="form-control selectTwo" >
                                     <option value=""></option>
                                     @foreach($managers as $manager)
-                                    <option value="{{$manager->id}}" {{(old("hr_manager_id")==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
+                                    <option value="{{$manager->id}}" {{(old("hr_manager_id",$data->hr_manager_id??'')==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
                                     @endforeach  
                                 </select>
                                  
@@ -107,7 +108,7 @@
                                  <select  id="hr_department_id"   name="hr_department_id" data-validation="required" class="form-control selectTwo" >
                                     <option value=""></option>
                                     @foreach($departments as $department)
-                                    <option value="{{$department->id}}" {{(old("hr_department_id")==$department->id? "selected" : "")}}>{{$department->name}}</option>
+                                    <option value="{{$department->id}}" {{(old("hr_department_id",$data->hr_department_id??'')==$department->id? "selected" : "")}}>{{$department->name}}</option>
                                     @endforeach  
                                 </select>
                                     
@@ -116,21 +117,25 @@
                         </div>
                     </div>
                     <!--/span-->
-                     <div class="col-md-2">
+                    
+                    <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Category<span class="text_requried">*</span></label>
-                                <select  name="category" class="form-control selectTwo" data-validation="required" >
+                                <label class="control-label text-right">Office<span class="text_requried">*</span></label>
+                                 <select  id="office_id"   name="office_id" data-validation="required" class="form-control selectTwo" >
                                     <option value=""></option>
-                                    <option value="A" {{(old("category")=='A'? "selected" : "")}}>Category-A</option>
-                                    <option value="B" {{(old("category")=='B'? "selected" : "")}}>Category-B</option>
-                                    <option value="C" {{(old("category")=='C'? "selected" : "")}}>Category-C</option>
+                                    @foreach($offices as $office)
+                                    <option value="{{$office->id}}" {{(old("office_id",$data->office_id??'')==$office->id? "selected" : "")}}>{{$office->name}}</option>
+                                    @endforeach  
                                 </select>
                                     
                                 
                             </div>
                         </div>
                     </div>
+
+
+
                 </div><!--/End Row-->
 
                 <div class="row">
@@ -138,7 +143,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Remarks<span class="text_requried">*</span></label>
-                                <input type="text"  name="remarks" id="forward_slash" value="{{ old('remarks') }}"  class="form-control" data-validation="required length" data-validation-length="max100" placeholder="Enter Remarks if any">
+                                <input type="text"  name="remarks" id="forward_slash" value="{{ old('remarks',$data->remarks??'') }}"  class="form-control" data-validation="required length" data-validation-length="max100" placeholder="Enter Remarks if any">
                                 
                                
                             </div>
@@ -157,14 +162,14 @@
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save Promotion</button>        
+                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Edit Promotion</button>        
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
-        
+          @include('hr.appointment.salModal')
 	</div> <!-- end card body --> 
     <div class="row">
         <div class="col-md-12 table-container">
@@ -176,18 +181,16 @@
 
 <script>
 $(document).ready(function(){
-     refreshTable("{{route('promotion.table')}}");
+     refreshTable("{{route('posting.table')}}");
     //submit function
 
-       $("#formPromotion").submit(function(e) { 
+        $("#formPosting").submit(function(e) { 
             e.preventDefault();
             var url = $(this).attr('action');
-            console.log('OK');
-           
+                       
             $('.fa-spinner').show(); 
-            submitForm(this, url,1);
-            document.getElementById("h6").innerHTML = "Click On Image to Add Pdf Document";
-            refreshTable("{{route('promotion.table')}}",1000);
+            submitForm(this, url);
+            refreshTable("{{route('posting.table')}}",1000);
         });
        
 
