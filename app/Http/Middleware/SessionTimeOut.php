@@ -28,11 +28,13 @@ class SessionTimeOut
                 //return redirect('/login');
               
                 Auth::logout();
-                if($request->ajax()){
-                    return 'Logout';
-                }else{
-                return redirect('/login');
-                }
+
+                
+                // if($request->ajax()){
+                //     return 'Logout';
+                // }else{
+                // return redirect('/login');
+                // }
             }
         }
 
