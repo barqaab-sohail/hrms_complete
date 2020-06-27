@@ -25,7 +25,8 @@
                     <ul aria-expanded="false" class="collapse">
                     @can('Super Admin') 
                         <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>
-                        <li><a  class="{{Request::is('hrms/employee/missingDocuments')?'active':''}}" href="{{route('employee.missingDocuments')}}">Missing Appointment</a></li>
+                      
+                        <li><a  class="{{Request::is('hrms/employee/allEmployeeList')?'active':''}}" href="{{route('employee.allEmployeeList')}}">All Employees</a></li>
                     @endcan
                     @can('hr edit appointment')
                         <li><a  class="{{Request::is('hrms/employee/appointmentList')?'active':''}}" href="{{route('employee.appointmentList')}}">Appointment List</a></li>
@@ -37,7 +38,14 @@
                       
                     </ul>
                 </li>
-               
+                @can('Super Admin')
+                <li class="{{Request::is('hrms/hrReports*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu">HR Reports</span></a>
+                    <ul aria-expanded="false" class="collapse">  
+                        <li><a class="{{Request::is('hrms/hrReports/list')?'active':''}}" href="{{route('hrReports.list')}}">Reports</a></li>
+                       
+                    </ul>
+                </li>
+                @endcan
                 @can('cv edit record') 
                 <li class="{{Request::is('hrms/cv*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">CV Records</span></a>
                     <ul aria-expanded="false" class="collapse">  

@@ -60,6 +60,12 @@ class EmployeeController extends Controller
     	return view ('hr.employee.list',compact('employees'));
     }
 
+    public function allEmployeeList(){
+        $employees = HrEmployee::all();
+
+        return view ('hr.employee.allEmployeeList',compact('employees'));
+    }
+
      public function appointmentList(){
 
         $employees = HrEmployee::with('hrAppointment')->get();

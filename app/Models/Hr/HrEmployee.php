@@ -13,6 +13,33 @@ class HrEmployee extends Model implements Auditable
     protected $guarded = [];
 
 
+    //default value of hr_status_id=1
+    protected $attributes = [
+        'hr_status_id' => 1 //default value of hr_status_id is 1 
+    ];
+    
+    //get value of hr_status_id and show in string as per statusOptions
+    public function getHrStatusIdAttribute($attribute)
+    {
+        return $this->statusOptions()[$attribute];
+    }
+    
+    public function statusOptions()
+    {
+        return [
+            1 => 'Onboard',
+            2 => 'Resigned',
+            3 => 'Terminated',
+            4 => 'Retired',
+            5 => 'Long Leave',
+            6 => 'ManMonth Ended'
+
+        ];
+    }
+
+
+
+
     public function user(){
         return $this->belongsTo('App\User');
     }
@@ -57,7 +84,7 @@ class HrEmployee extends Model implements Auditable
 
     }
 
-    public function documentName(){
+    public function appointmentLetter(){
         return $this->hasManyThrough(
             'App\Models\Hr\HrDocumentName',                    //Final Model HrDocumentName
             'App\Models\Hr\HrDocumentNameDocumentation',      //Model Through Access Final Model (Immediate Model)
@@ -68,6 +95,60 @@ class HrEmployee extends Model implements Auditable
         )->where('hr_document_names.id',1);
 
     }
+
+    public function cnicFront(){
+        return $this->hasManyThrough(
+            'App\Models\Hr\HrDocumentName',                    //Final Model HrDocumentName
+            'App\Models\Hr\HrDocumentNameDocumentation',      //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_document_name_id'                             //Forein Key in Immediate Model of Final Model
+        )->where('hr_document_names.id',2);
+
+    }
+
+    public function hrForm(){
+        return $this->hasManyThrough(
+            'App\Models\Hr\HrDocumentName',                    //Final Model HrDocumentName
+            'App\Models\Hr\HrDocumentNameDocumentation',      //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_document_name_id'                             //Forein Key in Immediate Model of Final Model
+        )->where('hr_document_names.id',4);
+
+    }
+
+    public function engineeringDegree(){
+        return $this->hasManyThrough(
+            'App\Models\Hr\HrDocumentName',                    //Final Model HrDocumentName
+            'App\Models\Hr\HrDocumentNameDocumentation',      //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_document_name_id'                             //Forein Key in Immediate Model of Final Model
+        )->where('hr_document_names.id',6);
+
+    }
+
+    public function educationalDocuments(){
+        return $this->hasManyThrough(
+            'App\Models\Hr\HrDocumentName',                    //Final Model HrDocumentName
+            'App\Models\Hr\HrDocumentNameDocumentation',      //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_document_name_id'                             //Forein Key in Immediate Model of Final Model
+        )->where('hr_document_names.id',11);
+
+    }
+
+
+
+
+
+
 
 
     public function hrDesignation(){
