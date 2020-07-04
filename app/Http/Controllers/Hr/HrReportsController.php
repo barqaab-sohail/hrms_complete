@@ -18,7 +18,7 @@ class HrReportsController extends Controller
     public function cnicExpiryList(){
 
 
-    	$date = \Carbon\Carbon::now()->format('Y-m-d');
+    	$date = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
 
     	
     	$employees = HrEmployee::where('cnic_expiry','<',$date)->where('hr_status_id',1)->get();
