@@ -72,6 +72,13 @@ Route::get('/hrReports/list', 'HrReportsController@list')->name('hrReports.list'
 Route::get('/hrReports/cnicExpiryList', 'HrReportsController@cnicExpiryList')->name('hrReports.cnicExpiryList');
 Route::get('/hrReports/missingDocumentList', 'HrReportsController@missingDocumentList')->name('hrReports.missingDocumentList');
 
+
+
+});
+
+//Self Services Routes
+Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Self'], function(){
+	Route::resource('/selfServices/task','SelfTaskController');
 });
 
 //CV Routes

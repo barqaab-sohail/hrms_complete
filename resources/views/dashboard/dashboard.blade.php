@@ -42,13 +42,17 @@
 		          	</button>
 		          
 		          	<!-- Modeal Include-->
-		          
-	  			
-	  				<div id="append_data" class="table-responsive m-t-40">
-	      		</div>
-				
-				
+		          	@include('self.task.modal')
+	  				
 
+	  					<div id="append_data" class="table-responsive m-t-40 table-container">
+	  				
+            	         
+            			
+           				 </div>
+       			
+
+	      		</div>
 	
 			</div>	
 	
@@ -56,12 +60,55 @@
 	<!--End TASK -->
 @endcan
 
-	
 
 
 @stop
- 
+
+@push('scripts')
+<script>
+$(document).ready(function () {
+  
+	//var url = "{{route('task.index')}}";
+	//refreshTable("{{route('task.index')}}");
+	load_data();
+});
+	
+
+	 function load_data(){
+    var loadUrl = "{{route('task.index')}}";
+          $("#append_data").load(loadUrl, function (){
+            $('#myTable').DataTable({
+              stateSave: false,
+              "order": [[ 2, "asc" ]],
+              "destroy": true,
+              "columnDefs": [
+              { "width": "30%", "targets": 0, },
+              {"targets": "_all", "className": "dt-center"}
+              ],
+                   dom: 'Blfrtip',
+                    buttons: [
+                        {
+                            extend: 'copyHtml5',
+                            exportOptions: {
+                                columns: [ 0, 1, 2]
+                            }
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            exportOptions: {
+                                columns: [ 0, 1, 2]
+                            }
+                        },
+                    ]
+                 
+            });
+        });
+  }
+
+</script>
+@endpush
 
 @section('footer')
 
 @stop
+
