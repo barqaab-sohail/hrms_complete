@@ -268,6 +268,37 @@ function clearMessage(time=5000){
 }
 
 
+//load tasks
+ function load_data(url){
+    var loadUrl = url;
+          $("#append_data").load(loadUrl, function (){
+            $('#myTable').DataTable({
+              stateSave: false,
+              "order": [[ 3, "asc" ]],
+              "destroy": true,
+              "columnDefs": [
+              { "width": "30%", "targets": 0, },
+              {"targets": "_all", "className": "dt-center"}
+              ],
+                  dom: 'Blfrtip',
+                    buttons: [
+                        {
+                            extend: 'copyHtml5',
+                            exportOptions: {
+                                columns: [ 0, 1, 2]
+                            }
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            exportOptions: {
+                                columns: [ 0, 1, 2]
+                            }
+                        },
+                    ]
+            });
+        });
+  }
+
 // HR get data through ajax
 function getAjaxMessage(url){
         $.ajax({

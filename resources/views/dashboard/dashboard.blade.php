@@ -43,6 +43,7 @@
 		          
 		          	<!-- Modeal Include-->
 		          	@include('self.task.modal')
+		          	@include('self.task.editModal')
 	  				
 
 	  					<div id="append_data" class="table-responsive m-t-40 table-container">
@@ -70,7 +71,7 @@ $(document).ready(function () {
   
 	//var url = "{{route('task.index')}}";
 	//refreshTable("{{route('task.index')}}");
-	load_data();
+	//load_data();
 });
 	
 

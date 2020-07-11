@@ -1,23 +1,24 @@
 <!-- Modal -->
-<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add New Task</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Edit Task</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
        
-           <form id="taskFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
+           <form id="editTaskFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
+           @method('PATCH')
                   {{csrf_field()}}
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-12">
                         <label class="control-label text-right">Task Detail<span class="text_requried">*</span></label>
                                   
-                         <input type="text"  id='task_detail' name="task_detail" value="{{ old('task_detail') }}" class="form-control" placeholder="Enter Task Detail" data-validation=" required">
+                         <input type="text"  id='edit_task_detail' name="task_detail" value="{{ old('task_detail',$data->task_detail??'') }}" class="form-control" placeholder="Enter Task Detail" required>
                       </div>
                     </div>
 
@@ -25,7 +26,7 @@
                       <div class="col-md-12">
                         <label class="control-label text-right">Completion Date<span class="text_requried">*</span></label>
                                       
-                        <input type="text" id="completion_date" name="completion_date" value="{{ old('completion_date') }}" class="form-control date_input readonly"  placeholder="Enter Task Completion Date" data-validation=" required" readonly>
+                        <input type="text" id="edit_completion_date" name="completion_date" value="{{ old('completion_date') }}" class="form-control date_input readonly"  placeholder="Enter Task Completion Date" autocomplete="off" required>
                         
                         <br>
                         <i class="fas fa-trash-alt text_requried"></i>
@@ -37,7 +38,7 @@
                       <div class="col-md-12">
                         <label class="control-label text-right">Target Completion Date<span class="text_requried">*</span></label>
                                       
-                        <input type="text" id="target_completion" name="target_completion" value="{{ old('target_completion') }}" class="form-control date_input readonly"  placeholder="Target date must be less than completion date" data-validation=" required" readonly>
+                        <input type="text" id="edit_target_completion" name="target_completion" value="{{ old('target_completion') }}" class="form-control date_input readonly"  placeholder="Target date must be less than completion date" autocomplete="off"  required>
                         
                         <br>
                         <i class="fas fa-trash-alt text_requried"></i>
@@ -49,7 +50,7 @@
                       <div class="col-md-12">
                         <label class="control-label text-right">Remarks</label>
                                       
-                        <input type="text" name="remakrs" value="{{ old('remakrs') }}" class="form-control"  placeholder="Enter Remarks if any" >
+                        <input type="text" id="edit_remarks" name="remarks" value="{{ old('remarks') }}" class="form-control"  placeholder="Enter Remarks if any" >
                                                 
                       </div>
                     </div>
@@ -81,17 +82,13 @@
 <!--end Model-->
 
 <script>
- $.validate({
-    validateHiddenInputs: true,
-    });
-
-$(document).ready(function () {
+  $(document).ready(function () {
          
     load_data("{{route('task.index')}}");
 
-    // $(".readonly").keydown(function(e){
-    //     e.preventDefault();
-    // });
+    $(".readonly").keydown(function(e){
+        e.preventDefault();
+    });
 
     (function(){
     $('.form-prevent-multiple-submits').on('submit', function(){
@@ -109,11 +106,42 @@ $(document).ready(function () {
 
     })();
 
+    
+  });  // end document ready function
 
-     //task sumbmit
-  $('#taskFrom').on('submit', function(event){
+ 
 
-  var url = "{{route('task.store')}}"
+     //If Click icon than clear date
+    $(".date_input").siblings('i').click(function (){
+        if(confirm("Are you sure to clear date")){
+        $(this).siblings('input').val("");
+        $(this).hide();
+        $(this).siblings('span').text("");
+        }
+    });
+
+
+    // DatePicker
+   $(".date_input").datepicker({
+     onSelect: function(value, ui) {
+        $(this).siblings('i').show();
+        var today = new Date(), 
+            age = today.getFullYear() - ui.selectedYear;
+        $('#age').text(age+' years total age');
+    },
+    dateFormat: 'D, d-M-yy',
+    yearRange: '1940:'+ (new Date().getFullYear()+15),
+    changeMonth: true,
+    changeYear: true,
+
+    });
+
+
+
+  //task sumbmit
+  $('#editTaskFrom').on('submit', function(event){
+
+  var url = $(this).attr('action');
   event.preventDefault();
     //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
     $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
@@ -138,8 +166,7 @@ $(document).ready(function () {
            
             if(data.status =='OK'){
                 load_data("{{route('task.index')}}");
-                $('#taskFrom').trigger("reset");
-                $('#taskModal').modal('toggle');
+                $('#editTaskModal').modal('toggle');
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
 
             }else{
@@ -169,38 +196,5 @@ $(document).ready(function () {
      
   }); //end submit
 
-
-    
-});  // end document ready function
-
-
-     //If Click icon than clear date
-    $(".date_input").siblings('i').click(function (){
-        if(confirm("Are you sure to clear date")){
-        $(this).siblings('input').val("");
-        $(this).hide();
-        $(this).siblings('span').text("");
-        }
-    });
-
-
-    // DatePicker
-   $(".date_input").datepicker({
-     onSelect: function(value, ui) {
-        $(this).siblings('i').show();
-        var today = new Date(), 
-            age = today.getFullYear() - ui.selectedYear;
-        $('#age').text(age+' years total age');
-    },
-    dateFormat: 'D, d-M-yy',
-    yearRange: '1940:'+ (new Date().getFullYear()+15),
-    changeMonth: true,
-    changeYear: true,
-
-    });
-
-
-
- 
 
 </script>

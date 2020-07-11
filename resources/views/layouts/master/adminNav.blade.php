@@ -72,6 +72,14 @@
                 </li>
 
                 @can('Super Admin')
+                 <li class="{{Request::is('hrms/charging*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-shopping"></i><span class="hide-menu">Self Services</span></a>
+                    <ul aria-expanded="false" class="collapse">  
+                        <li><a class="{{Request::is('hrms/selfServices/selfContact/create')?'active':''}}" href="{{route('selfContact.create')}}">Personal Contact</a></li>
+                        
+                                               
+                    </ul>
+                </li>
+
                 <li class="{{Request::is('hrms/charging*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">Charging</span></a>
                     <ul aria-expanded="false" class="collapse">  
                         <li><a class="{{Request::is('hrms/charging/create')?'active':''}}" href="{{route('charging.create')}}">Add Charging</a></li>
