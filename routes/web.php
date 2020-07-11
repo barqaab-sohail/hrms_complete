@@ -78,7 +78,11 @@ Route::get('/hrReports/missingDocumentList', 'HrReportsController@missingDocumen
 
 //Self Services Routes
 Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Self'], function(){
+
+	Route::get('/selfServices/task/{id}','SelfTaskController@updateStatus')->name('task.updateStatus');
 	Route::resource('/selfServices/task','SelfTaskController');
+	Route::get('/selfServices/selfContact/refreshTable', 'SelfContactController@refreshTable')->name('selfContact.table');
+	Route::resource('/selfServices/selfContact','SelfContactController');
 });
 
 //CV Routes
