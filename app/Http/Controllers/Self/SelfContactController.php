@@ -38,20 +38,27 @@ class SelfContactController extends Controller
     		$SsContact=SsContact::create($input);
 
     		//add mobile	
-			for ($i=0;$i<count($request->input('mobile'));$i++){
-			$mobile['mobile']= $request->input("mobile.$i");
-			$mobile['ss_contact_id'] = $SsContact->id;
-			SsContactMobile::create($mobile);		
-			}
+            if($request->filled("mobile.0")){
+    			for ($i=0;$i<count($request->input('mobile'));$i++){
+    			$mobile['mobile']= $request->input("mobile.$i");
+    			$mobile['ss_contact_id'] = $SsContact->id;
+    			SsContactMobile::create($mobile);		
+    			}
+            }
 
 			//add email	
-			for ($i=0;$i<count($request->input('email'));$i++){
-			$email['email']= $request->input("email.$i");
-			$email['ss_contact_id'] = $SsContact->id;
-			SsContactEmail::create($email);		
-			}
-			$input['ss_contact_id']= $SsContact->id;
-			SsContactOffice::create($input);
+            if($request->filled("email.0")){
+    			for ($i=0;$i<count($request->input('email'));$i++){
+    			$email['email']= $request->input("email.$i");
+    			$email['ss_contact_id'] = $SsContact->id;
+    			SsContactEmail::create($email);		
+    			}
+            }
+
+            if($request->filled("office_phone")||$request->filled("office_address")||$request->filled("office_fax")){
+    			$input['ss_contact_id']= $SsContact->id;
+    			SsContactOffice::create($input);
+            }
 
 
     	});  //end transaction
@@ -65,7 +72,12 @@ class SelfContactController extends Controller
 
 
 
+    public function destroy($id){
+        
+        SsContact::findOrFail($id)->delete(); 
 
+        return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
+    }
 
 
 

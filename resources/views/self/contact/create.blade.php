@@ -259,10 +259,6 @@ $('#formCvDetail').on('submit', function(event){
  		}); 
 
 
-
-
-
-
 		 //Dynamic add Email
 		 // Add new element
 		 $("#add_email").click(function(){
@@ -279,7 +275,7 @@ $('#formCvDetail').on('submit', function(event){
 		  if(total_element < max ){
 		   //Clone specialization div and copy
 		   	var $clone = $("#email_1").clone();
-		  	$clone.prop('id','email_'+nextindex).find('input:text').val('');
+		  	$clone.prop('id','email_'+nextindex).find('input:email').val('');
 		   	$clone.find("#add_email").html('X').prop("class", "btn btn-danger remove remove_email");
 		   	$clone.insertAfter("div.email:last");
 		  }

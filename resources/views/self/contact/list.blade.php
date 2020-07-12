@@ -11,6 +11,7 @@
 					
 					<th>Name</th>
 					<th>Designation</th>
+
 					<th>Mobile-1</th>
 					<th>Mobile-2</th>
 					<th>Mobile-3</th>
@@ -27,15 +28,15 @@
 							
 							<td>{{$contact->name}}</td>
 							<td>{{$contact->designation}}</td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td>{{$contact->mobile->get(0)->mobile}}</td>
+							<td>{{$contact->mobile->get(1)->mobile??''}}</td>
+							<td>{{$contact->mobile->get(2)->mobile??''}}</td>
 
 							
 							
 							
 							<td class="text-center">
-								<a class="btn btn-info btn-sm" href="{{route('selfContact.edit',$contact->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+								<a class="btn btn-info btn-sm" id="editContact{{$contact->id}}" href="{{route('selfContact.edit',$contact->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 							</td>
 							<td class="text-center">
 								
@@ -58,8 +59,26 @@
 @endif
 
 <script>
-$(document).ready(function() {
+	$(document).ready(function() {
+		$('a[id^=editContact]').click(function (e){
+        e.preventDefault();
+        $("#name").val("testing");
+        console.log('edit');
+        $("#hideDiv").show();
+        // var url = $(this).attr('href');
+        // getAjaxData(url);
+     	});
 
+	  	$("form[id^=formDeleteContact]").submit(function(e) { 
+	  	e.preventDefault();
+	  	var url = $(this).attr('action');
+	  	$('.fa-spinner').show(); 
+
+	  	submitForm(this, url);
+	  	resetForm();
+	  	refreshTable("{{route('selfContact.table')}}",300);
+	  	 
+	    });
 
 	
             $('#myTable').DataTable({
@@ -101,6 +120,6 @@ $(document).ready(function() {
         		}
             });
             
-        });
+    });
 </script>
 
