@@ -18,9 +18,9 @@ class CreateSsContactTable extends Migration
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->string('name');
-            $table->string('designation');
-            $table->string('address');
-            $table->string('remarks');
+            $table->string('designation')->nullable();
+            $table->string('address')->nullable();
+            $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });

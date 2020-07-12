@@ -17,9 +17,9 @@ class CreateSsContactOfficeTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('ss_contact_id')->unsigned();
-            $table->string('office_phone');
-            $table->string('office_fax');
-            $table->string('office_address');
+            $table->string('office_phone')->nullable();
+            $table->string('office_fax')->nullable();
+            $table->string('office_address')->nullable();
             $table->timestamps();
             $table->foreign('ss_contact_id')->references('id')->on('ss_contacts')->onDelete('cascade');
         });
