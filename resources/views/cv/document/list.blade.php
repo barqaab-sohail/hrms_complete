@@ -27,7 +27,7 @@
 						@elseif ($documentId->extension == 'pdf')
 						<td><img  id="ViewPDF" src="{{asset('Massets/images/document.png')}}" href="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30/></td>
 						@else
-						<td></td>
+						<td><a href="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30><i class="fa fa-download" aria-hidden="true"></i>Download</a></td>
 						@endif
 						
 

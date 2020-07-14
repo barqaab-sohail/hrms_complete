@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\CV;
+namespace App\Http\Controllers\Cv;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

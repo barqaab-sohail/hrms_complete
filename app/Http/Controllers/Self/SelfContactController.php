@@ -68,8 +68,18 @@ class SelfContactController extends Controller
 
     }
 
+    public function edit(Request $request, $id){
 
+        $result = SsContact::find($id);
+        
+        if($request->ajax()){
 
+            return response()->json($result);
+        }else{
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }
+
+    }
 
 
     public function destroy($id){

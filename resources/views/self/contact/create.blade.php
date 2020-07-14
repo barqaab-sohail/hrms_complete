@@ -26,7 +26,7 @@
 
 		                <div class="card-body">
 
-		                    <form id="formCvDetail" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
+		                    <form id="formSsContact" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
 		                        {{csrf_field()}}
 		                        <div class="form-body">
 		                            
@@ -50,7 +50,7 @@
 		                                        <div class="col-md-12 ">
 		                                        	<label class="control-label">Designation</label>
 		                                        
-		                                            <input type="text"  name="designation" value="{{ old('designation') }}"  class="form-control"  data-validation="length"  data-validation-length="max190"  placeholder="Enter Designation" >
+		                                            <input type="text"  id="designation"   name="designation" value="{{ old('designation') }}"  class="form-control"  data-validation="length"  data-validation-length="max190"  placeholder="Enter Designation" >
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -80,7 +80,7 @@
 		                                		
 		                                        <div class="col-md-8" >
 		                                        	<label class="control-label text-right">Mobile Number<span class="text_requried">*</span></label>
-		                                            <input type="text" name="mobile[]" id="mobile" value="{{old('mobile.0')}}" data-validation="required length" data-validation-length="max15" placeholder="0345-0000000" class="form-control" >
+		                                            <input type="text" name="mobile[]" id="mobile-1" value="{{old('mobile.0')}}" data-validation="required length" data-validation-length="max15" placeholder="0345-0000000" class="form-control" >
 
 		                                        </div>
 												<div class="col-md-4">
@@ -99,7 +99,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-9">
 		                                        	<label class="control-label text-right">Email</label><br>
-		                                       		<input type="email"  name='email[]' value="{{old('email.0')}}" class="form-control"  data-validation="length"  data-validation-length="max190"  class="form-control" >
+		                                       		<input type="email"  id="email-1"  name='email[]' value="{{old('email.0')}}" class="form-control"  data-validation="length"  data-validation-length="max190"  class="form-control" >
 
 		                                        </div>
 		                                        <div class="col-md-3">
@@ -117,7 +117,7 @@
 		                                        <div class="col-md-12 ">
 		                                        	<label class="control-label">Office Phone</label>
 		                                        
-		                                            <input type="text"  name="office_phone" value="{{ old('office_phone') }}"  class="form-control"  data-validation="length"  data-validation-length="max190"  placeholder="Enter Office Phone Number" >
+		                                            <input type="text" id="office_phone" name="office_phone" value="{{ old('office_phone') }}"  class="form-control"  data-validation="length"  data-validation-length="max190"  placeholder="Enter Office Phone Number" >
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -127,7 +127,7 @@
 		                                        <div class="col-md-12 ">
 		                                        	<label class="control-label">Office Fax</label>
 		                                        
-		                                            <input type="text"  name="office_fax" value="{{ old('office_fax') }}"  class="form-control"  data-validation="length"  data-validation-length="max190"  placeholder="Enter Fax Number" >
+		                                            <input type="text"  id="office_fax" name="office_fax" value="{{ old('office_fax') }}"  class="form-control"  data-validation="length"  data-validation-length="max190"  placeholder="Enter Fax Number" >
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -208,7 +208,7 @@ $(document).ready(function(){
 
  $("#hideDiv").hide();
  $("#hideButton").click(function(){
-
+ 	resetForm();
  	$("#hideDiv").toggle();
  })
  
@@ -218,7 +218,7 @@ formFunctions();
 
 
 
-$('#formCvDetail').on('submit', function(event){
+$('#formSsContact').on('submit', function(event){
     $('.fa-spinner').show();
  	var url = "{{ route('selfContact.store')}}"
  	event.preventDefault();
