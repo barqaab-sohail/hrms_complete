@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\CV;
+namespace App\Http\Controllers\Cv;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use App\Models\CV\CvAttachment;
-use App\Models\CV\CvDetail;
+use App\Models\Cv\CvAttachment;
+use App\Models\Cv\CvDetail;
 use App\Helper\DocxConversion;
 use App\Http\Requests\Cv\DocumentStore;
 use DB;

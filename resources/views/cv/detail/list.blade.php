@@ -22,6 +22,7 @@
 				<table id="myTable" class="table table-bordered table-striped"  style="width:100%" >
 					<thead>
 					<tr>
+						<th>Id</th>
 						<th>Name</th>
 						<th>Father's Name</th>
 						<th>Contact No.</th>
@@ -36,6 +37,7 @@
 					<tbody>
 						@foreach($cvs as $cv)
 							<tr>
+								<td>{{$cv->id}}</td>
 								<td>{{$cv->full_name}}</td>
 								<td>{{$cv->father_name??''}}</td>
 								
