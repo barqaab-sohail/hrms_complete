@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-lg-12">
 
-            <div class="card card-outline-info">
+            <div class="card card-outline-info addAjax">
             	<div style="margin-top:10px; margin-right: 10px;">
 		                    <button type="button"  id ="hideButton"  class="btn btn-info float-right">Add Contact</button>
 				</div>
@@ -99,7 +99,7 @@
 		                                    <div class="form-group row">
 		                                        <div class="col-md-9">
 		                                        	<label class="control-label text-right">Email</label><br>
-		                                       		<input type="email"  id="email-1"  name='email[]' value="{{old('email.0')}}" class="form-control"  data-validation="length"  data-validation-length="max190"  class="form-control" >
+		                                       		<input type="email"  id="email-1"  name='email[]' value="{{old('email.0')}}" class="form-control"  data-validation="email length"  data-validation-length="max190"  class="form-control" >
 
 		                                        </div>
 		                                        <div class="col-md-3">
@@ -223,6 +223,7 @@ $('#formSsContact').on('submit', function(event){
  	var url = "{{ route('selfContact.store')}}"
  	event.preventDefault();
 	submitForm(this, url,1);
+	refreshTable("{{route('selfContact.table')}}",300);
 	
 }); //end submit
 
@@ -275,7 +276,7 @@ $('#formSsContact').on('submit', function(event){
 		  if(total_element < max ){
 		   //Clone specialization div and copy
 		   	var $clone = $("#email_1").clone();
-		  	$clone.prop('id','email_'+nextindex).find('input:email').val('');
+		  	$clone.prop('id','email_'+nextindex).find("input[type='email']").val('');
 		   	$clone.find("#add_email").html('X').prop("class", "btn btn-danger remove remove_email");
 		   	$clone.insertAfter("div.email:last");
 		  }

@@ -28,15 +28,15 @@
 							
 							<td>{{$contact->name}}</td>
 							<td>{{$contact->designation}}</td>
-							<td>{{$contact->mobile->get(0)->mobile}}</td>
-							<td>{{$contact->mobile->get(1)->mobile??''}}</td>
-							<td>{{$contact->mobile->get(2)->mobile??''}}</td>
+							<td>{{$contact->mobiles->get(0)->mobile}}</td>
+							<td>{{$contact->mobiles->get(1)->mobile??''}}</td>
+							<td>{{$contact->mobiles->get(2)->mobile??''}}</td>
 
 							
 							
 							
 							<td class="text-center">
-								<a class="btn btn-info btn-sm" id="editContact{{$contact->id}}" href="{{route('selfContact.edit',$contact->id)}}" update="{{route('selfContact.update',$contact->id)}}" title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+								<a class="btn btn-info btn-sm" id="editContact{{$contact->id}}" href="{{route('selfContact.edit',$contact->id)}}" title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 							</td>
 							<td class="text-center">
 								
@@ -63,34 +63,10 @@
 		$('a[id^=editContact]').click(function (e){
         e.preventDefault();
        	var url = $(this).attr('href');
-        var editUrl = $(this).attr('update');
-        	     
-        $("#hideDiv").show();
-	        $.ajax({
-	           url:url,
-	           method:"GET",
-	           //dataType:'JSON',
-	           contentType: false,
-	           cache: false,
-	           processData: false,
-	           success:function(data)
-	               {
-	                console.log(data);
-	                // $("#formSsContact").attr('action',editUrl);
-	                // $("#name").val(data.data.name);
-	                // $("#designation").val(data.data.designation);
-	                
-	                // formFunctions();
-	               
-	               },
-	            error: function (jqXHR, textStatus, errorThrown){
-	                if (jqXHR.status == 401){
-	                    location.href = "{{route ('login')}}"
-	                    }      
-	                          
-
-	                }//end error
-	        }); //end ajax  
+       	console.log(url);
+       	getAjaxData(url);
+        refreshTable("{{route('selfContact.table')}}",300);	     
+       
      	});
 
 	  	$("form[id^=formDeleteContact]").submit(function(e) { 
