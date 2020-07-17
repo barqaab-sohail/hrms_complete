@@ -163,7 +163,7 @@ class SelfContactController extends Controller
                 }
             }else{
                 SsContactEmail::where('ss_contact_id',$id)->delete();
-                 $test = "No email";
+                
             }//end update email
 
             //update office detail
@@ -175,7 +175,7 @@ class SelfContactController extends Controller
                         ['ss_contact_id' => $id, 'id'=> $SsContactOffice->id??''],
                         $input);          
             }else{
-                $SsContactOffice = SsContactOffice::where('ss_contact_id',$id)->first()->delete();
+                $SsContactOffice = SsContactOffice::where('ss_contact_id',$id)->delete();
             }
            
         }); //end transaction
