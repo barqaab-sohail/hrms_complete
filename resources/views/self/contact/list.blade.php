@@ -65,7 +65,7 @@
        	var url = $(this).attr('href');
        	console.log(url);
        	getAjaxData(url);
-        refreshTable("{{route('selfContact.table')}}",300);	     
+        refreshTable("{{route('selfContact.table')}}",500);	     
        
      	});
 
@@ -76,7 +76,7 @@
 
 	  	submitForm(this, url);
 	  	resetForm();
-	  	refreshTable("{{route('selfContact.table')}}",300);
+	  	refreshTable("{{route('selfContact.table')}}",500);
 	  	 
 	    });
 

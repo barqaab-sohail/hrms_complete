@@ -126,40 +126,45 @@ class SelfContactController extends Controller
 
             } //end update phone
 
-             //update email  
-            if(count($request->input('email'))==SsContactEmail::where('ss_contact_id',$id)->count())
-            {       $ssContactEmail = SsContactEmail::where('ss_contact_id',$id)->get();
-                    foreach($request->input('email') as $key => $num){
+             //update email
+            if ($request->filled("email.0")){
+                if(count($request->input('email'))==SsContactEmail::where('ss_contact_id',$id)->count())
+                {       $ssContactEmail = SsContactEmail::where('ss_contact_id',$id)->get();
+                        foreach($request->input('email') as $key => $num){
+                            
+                            $emailId = $ssContactEmail->get($key)->id;
+                            SsContactEmail::findOrFail($emailId)->update(['email'=>$num]);
+                        }
+                  
+                }elseif(count($request->input('email'))<SsContactEmail::where('ss_contact_id',$id)->count()){
+
+                        $ssContactEmail = SsContactEmail::where('ss_contact_id',$id)->get();
+                        $count = 0;
+                        foreach($request->input('email') as $key => $num){
+                            
+                            $emailId = $ssContactEmail->get($key)->id;
+                            SsContactEmail::findOrFail($emailId)->update(['email'=>$num]);
+                            $count++;
+                        }
+
+                        $ssContactEmail->get($count)->delete(); // Remaining data delete from database
+                       
                         
-                        $emailId = $ssContactEmail->get($key)->id;
-                        SsContactEmail::findOrFail($emailId)->update(['email'=>$num]);
-                    }
-              
-            }elseif(count($request->input('email'))<SsContactEmail::where('ss_contact_id',$id)->count()){
+                }elseif(count($request->input('email'))>SsContactEmail::where('ss_contact_id',$id)->count()){
 
                     $ssContactEmail = SsContactEmail::where('ss_contact_id',$id)->get();
-                    $count = 0;
                     foreach($request->input('email') as $key => $num){
-                        
-                        $emailId = $ssContactEmail->get($key)->id;
-                        SsContactEmail::findOrFail($emailId)->update(['email'=>$num]);
-                        $count++;
+                            $emailId = $ssContactEmail->get($key)->id??''; // this is required becuase greater value is not exist in database so greater value must be optional
+                            SsContactEmail::updateOrCreate(
+                            ['ss_contact_id' => $id, 'id'=> $emailId],
+                            ['email'=>$num]);
                     }
 
-                    $ssContactEmail->get($count)->delete(); // Remaining data delete from database
-                   
-                    
-            }elseif(count($request->input('email'))>SsContactEmail::where('ss_contact_id',$id)->count()){
-
-                $ssContactEmail = SsContactEmail::where('ss_contact_id',$id)->get();
-                foreach($request->input('email') as $key => $num){
-                        $emailId = $ssContactEmail->get($key)->id??''; // this is required becuase greater value is not exist in database so greater value must be optional
-                        SsContactEmail::updateOrCreate(
-                        ['ss_contact_id' => $id, 'id'=> $emailId],
-                        ['email'=>$num]);
                 }
-
-            } //end update email
+            }else{
+                SsContactEmail::where('ss_contact_id',$id)->delete();
+                 $test = "No email";
+            }//end update email
 
             //update office detail
             if($request->filled("office_phone")||$request->filled("office_address")||$request->filled("office_fax")){
@@ -176,7 +181,7 @@ class SelfContactController extends Controller
         }); //end transaction
 
         //$input = json_encode($input["mobile"][1]);
-        return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
+        return response()->json(['status'=> 'OK', 'message' => "$test Data Sucessfully Updated"]);
 
     }
 

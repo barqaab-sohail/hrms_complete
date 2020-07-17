@@ -96,8 +96,13 @@
                                     </div>
                                     <div class="col-md-3">
                                     <br>
-                                         <div class="float-right">
-                                        <button type="button" name="add" id="add_email" class="btn btn-success add" >+</button>
+                                      
+                                    	<div class="float-right">
+			                            @if($key==0)
+			                            <button type="button" name="add" id="add_email" class="btn btn-success add" >+</button>
+			                            @else
+			                            <button type="button" name="add" id="remove_email" class="btn btn-danger remove_email" >X</button>
+			                            @endif
 										</div>
                                     </div>
 									
