@@ -70,14 +70,113 @@ class SelfContactController extends Controller
 
     public function edit(Request $request, $id){
 
-        $result = SsContact::find($id);
+        $data = SsContact::find($id);
         
         if($request->ajax()){
 
-            return response()->json($result);
+            $view =  view('self.contact.edit',compact('data'))->render();
+            return response()->json($view);
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
+
+    }
+
+    public function update(Request $request, $id){
+
+        $input = $request->all();
+
+        DB::transaction(function () use ($request, $input, $id, &$test) {  
+
+            //update Contact
+            SsContact::findOrFail($id)->update($input);
+
+            //update phone  
+            if(count($request->input('mobile'))==SsContactMobile::where('ss_contact_id',$id)->count())
+            {       $ssContactMobile = SsContactMobile::where('ss_contact_id',$id)->get();
+                    foreach($request->input('mobile') as $key => $num){
+                        
+                        $mobileId = $ssContactMobile->get($key)->id;
+                        SsContactMobile::findOrFail($mobileId)->update(['mobile'=>$num]);
+                    }
+              
+            }elseif(count($request->input('mobile'))<SsContactMobile::where('ss_contact_id',$id)->count()){
+
+                    $ssContactMobile = SsContactMobile::where('ss_contact_id',$id)->get();
+                    $count = 0;
+                    foreach($request->input('mobile') as $key => $num){
+                        
+                        $mobileId = $ssContactMobile->get($key)->id;
+                        SsContactMobile::findOrFail($mobileId)->update(['mobile'=>$num]);
+                        $count++;
+                    }
+
+                    $ssContactMobile->get($count)->delete(); // Remaining data delete from database
+                   
+                    
+            }elseif(count($request->input('mobile'))>SsContactMobile::where('ss_contact_id',$id)->count()){
+
+                $ssContactMobile = SsContactMobile::where('ss_contact_id',$id)->get();
+                foreach($request->input('mobile') as $key => $num){
+                        $mobileId = $ssContactMobile->get($key)->id??''; // this is required becuase greater value is not exist in database so greater value must be optional
+                        SsContactMobile::updateOrCreate(
+                        ['ss_contact_id' => $id, 'id'=> $mobileId],
+                        ['mobile'=>$num]);
+                }
+
+            } //end update phone
+
+             //update email  
+            if(count($request->input('email'))==SsContactEmail::where('ss_contact_id',$id)->count())
+            {       $ssContactEmail = SsContactEmail::where('ss_contact_id',$id)->get();
+                    foreach($request->input('email') as $key => $num){
+                        
+                        $emailId = $ssContactEmail->get($key)->id;
+                        SsContactEmail::findOrFail($emailId)->update(['email'=>$num]);
+                    }
+              
+            }elseif(count($request->input('email'))<SsContactEmail::where('ss_contact_id',$id)->count()){
+
+                    $ssContactEmail = SsContactEmail::where('ss_contact_id',$id)->get();
+                    $count = 0;
+                    foreach($request->input('email') as $key => $num){
+                        
+                        $emailId = $ssContactEmail->get($key)->id;
+                        SsContactEmail::findOrFail($emailId)->update(['email'=>$num]);
+                        $count++;
+                    }
+
+                    $ssContactEmail->get($count)->delete(); // Remaining data delete from database
+                   
+                    
+            }elseif(count($request->input('email'))>SsContactEmail::where('ss_contact_id',$id)->count()){
+
+                $ssContactEmail = SsContactEmail::where('ss_contact_id',$id)->get();
+                foreach($request->input('email') as $key => $num){
+                        $emailId = $ssContactEmail->get($key)->id??''; // this is required becuase greater value is not exist in database so greater value must be optional
+                        SsContactEmail::updateOrCreate(
+                        ['ss_contact_id' => $id, 'id'=> $emailId],
+                        ['email'=>$num]);
+                }
+
+            } //end update email
+
+            //update office detail
+            if($request->filled("office_phone")||$request->filled("office_address")||$request->filled("office_fax")){
+                
+                $SsContactOffice = SsContactOffice::where('ss_contact_id',$id)->first();
+
+                SsContactOffice::updateOrCreate(
+                        ['ss_contact_id' => $id, 'id'=> $SsContactOffice->id??''],
+                        $input);          
+            }else{
+                $SsContactOffice = SsContactOffice::where('ss_contact_id',$id)->first()->delete();
+            }
+           
+        }); //end transaction
+
+        //$input = json_encode($input["mobile"][1]);
+        return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
 
     }
 
