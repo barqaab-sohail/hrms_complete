@@ -24,6 +24,7 @@ class CreatePrDetailTable extends Migration
             $table->date('actual_completion_date')->nullable();
             $table->bigInteger('pr_status_id')->unsigned();
             $table->bigInteger('pr_role_id')->unsigned();
+            $table->bigInteger('pr_division_id')->unsigned();
             $table->string('share')->nullable();
              $table->string('project_no',15)->unique()->nullable();
             $table->timestamps();
@@ -31,7 +32,8 @@ class CreatePrDetailTable extends Migration
             $table->foreign('contract_type_id')->references('id')->on('contract_types');
             $table->foreign('client_id')->references('id')->on('clients');
             $table->foreign('pr_status_id')->references('id')->on('pr_statuses');
-             $table->foreign('pr_role_id')->references('id')->on('pr_roles');
+            $table->foreign('pr_role_id')->references('id')->on('pr_roles');
+            $table->foreign('pr_division_id')->references('id')->on('pr_divisions');
         });
     }
 
