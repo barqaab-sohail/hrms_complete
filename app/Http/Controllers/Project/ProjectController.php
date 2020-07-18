@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Project\PrRole;
 use App\Models\Project\PrStatus;
 use App\Models\Project\PrDetail;
+use App\Models\Project\PrDivision;
 use App\Models\Common\Client;
 use App\Models\Common\ContractType;
 use App\Http\Requests\Project\PrDetailStore;
@@ -33,8 +34,9 @@ class ProjectController extends Controller
 		$projectStatuses = PrStatus::all();
 		$clients = Client::all();
 		$contractTypes = ContractType::all();
+    $divisions = PrDivision::all();
     	        
-    	return view ('project.detail.create', compact('projectRoles','projectStatuses','clients','contractTypes'));
+    	return view ('project.detail.create', compact('projectRoles','projectStatuses','clients','contractTypes','divisions'));
 
 	}
 
@@ -73,11 +75,12 @@ class ProjectController extends Controller
 		$projectStatuses = PrStatus::all();
 		$clients = Client::all();
 		$contractTypes = ContractType::all();
+    $divisions = PrDivision::all();
 
     if($request->ajax()){      
-            return view ('project.detail.ajax', compact('projectRoles','projectStatuses','clients','contractTypes','data'));    
+            return view ('project.detail.ajax', compact('projectRoles','projectStatuses','clients','contractTypes','divisions','data'));    
         }else{
-           return view ('project.detail.edit', compact('projectRoles','projectStatuses','clients','contractTypes','data'));       
+           return view ('project.detail.edit', compact('projectRoles','projectStatuses','clients','contractTypes','divisions','data'));       
         }
     	        
     	

@@ -110,13 +110,16 @@ Route::resource('/projectDocument', 'ProjectDocumentController');
 Route::get('/projectPosition/refreshTable', 'ProjectPositionController@refreshTable')->name('projectPosition.table');
 Route::resource('/projectPosition', 'ProjectPositionController');
 
+Route::resource('/projectCode', 'ProjectCodeController');
+
 
 });
 
 
-//Admin Routes
+//Charging Routes
 Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Charging'], function(){
 	Route::resource('/charging', 'ChargingController');
+	
 
 });
 

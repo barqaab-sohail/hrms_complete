@@ -36,7 +36,9 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Date<span class="text_requried">*</span></label>
                         
-                            <input type="text" name="document_date"  value="{{ old('document_date') }}" class="form-control date_input" readonly placeholder="Enter Document Detail">
+                            <input type="text" name="document_date"  value="{{ old('document_date') }}" class="form-control date_input" data-validation="required"  readonly placeholder="Enter Document Detail">
+                            <br>
+                            <i class="fas fa-trash-alt text_requried"></i>
                             
                         </div>
                     </div>
