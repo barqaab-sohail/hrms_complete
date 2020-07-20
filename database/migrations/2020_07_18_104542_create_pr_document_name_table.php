@@ -14,7 +14,9 @@ class CreatePrDocumentNameTable extends Migration
     public function up()
     {
         Schema::create('pr_document_names', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
+            $table->string('name')->unique();
             $table->timestamps();
         });
     }
