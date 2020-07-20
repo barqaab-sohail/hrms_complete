@@ -12,10 +12,10 @@
 					<tr>
 						<th>Document Name</th>
 						<th>View</th>
-						@can('hr delete documentation')			 
+						@can('hr edit documentation')			 
 						<th class="text-center"style="width:5%">Edit</th>
 						@endcan
-						@can('Super Admin')
+						@can('hr delete documentation')
 						<th class="text-center" style="width:5%">Delete</th>
 						@endcan
 					</tr>
@@ -33,13 +33,13 @@
 
 						
 						
-						@can('hr delete documentation')
+						@can('hr edit documentation')
 						<td class="text-center">
 						 <a class="btn btn-info btn-sm" id="editDocument" href="{{route('documentation.edit',$documentId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 						 </td>
 						 @endcan
 						 
-						 @can('Super Admin')
+						@can('hr delete documentation')
 						 <td class="text-center">
 						 <form id="deleteDocument{{$documentId->id}}" action="{{route('documentation.destroy',$documentId->id)}}" method="POST">
 						 @method('DELETE')

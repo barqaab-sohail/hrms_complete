@@ -13,7 +13,7 @@ class HrDocumentation extends Model implements Auditable
 
 
 
-      public function hrDocumentName()
+    public function hrDocumentName()
     {
         return $this->belongsToMany('App\Models\Hr\HrDocumentName');
         

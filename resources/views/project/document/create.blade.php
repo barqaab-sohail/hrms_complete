@@ -19,11 +19,11 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Document Name<span class="text_requried">*</span></label>
                         
-                            <select  name="hr_document_name_id" id="document_name"  data-validation="required"  class="form-control selectTwo">
+                            <select  name="pr_document_name_id" id="document_name"  data-validation="required"  class="form-control selectTwo">
                                 <option value=""></option>
                                 <option value="Other">Other</option>
                                 @foreach($documentNames as $documentName)
-                                <option value="{{$documentName->id}}" {{(old("hr_document_name_id")==$documentName->id? "selected" : "")}}>{{$documentName->name}}</option>
+                                <option value="{{$documentName->id}}" {{(old("pr_document_name_id")==$documentName->id? "selected" : "")}}>{{$documentName->name}}</option>
                                 @endforeach
                             </select>
                             
