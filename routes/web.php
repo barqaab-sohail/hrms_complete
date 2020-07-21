@@ -106,6 +106,7 @@ Route::resource('/cvDocument', 'CvDocumentController');
 Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Project'], function(){
 Route::post('/project/import', 'ProjectController@import')->name('project.import');
 Route::resource('/project', 'ProjectController');
+Route::resource('/projectPartner', 'ProjectPartnerController');
 Route::resource('/projectDocument', 'ProjectDocumentController');
 Route::get('/projectPosition/refreshTable', 'ProjectPositionController@refreshTable')->name('projectPosition.table');
 Route::resource('/projectPosition', 'ProjectPositionController');
