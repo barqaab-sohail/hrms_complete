@@ -69,7 +69,7 @@ class ProjectDocumentController extends Controller
                 $input['path']=$folderName;
                 $input['extension']=$extension;
                 $input['pr_detail_id']=session('pr_detail_id');
-
+               
             $prDocument = PrDocument::create($input);  
 
             if($request->pr_document_name_id!='Other'){
