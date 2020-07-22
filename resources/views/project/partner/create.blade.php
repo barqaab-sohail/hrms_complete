@@ -14,9 +14,14 @@
                     <div class="col-md-8">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Name of Partner</label>
-                                
-                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" data-validation="required length"  data-validation-length="max190" placeholder="Enter Street No and Society">
+                                <label class="control-label text-right">Name of Partner<span class="text_requried">*</span></label>
+
+                                <select  id="partner_id"   name="partner_id"  class="form-control selectTwo" data-validation="required">
+                                    <option value=""></option>
+                                    @foreach($partners as $partner)
+                                    <option value="{{$partner->id}}" {{(old("partner_id")==$partner->id? "selected" : "")}}>{{$partner->name}}</option>
+                                    @endforeach 
+                                </select>
 
                             </div>
                         </div>
@@ -44,7 +49,7 @@
                             <div class="col-md-12">
                                <label class="control-label text-right">Partner Share<span class="text_requried">*</span></label>
                                 
-                               <input type="text" name="share" value="{{ old('share') }}" class="form-control" data-validation=" required length"  data-validation-length="max190" placeholder="Enter Town or Village">
+                               <input type="text" name="share" value="{{ old('share') }}" class="form-control" data-validation="required length"  data-validation-length="max190">
 
                             </div>
                         </div>
@@ -55,9 +60,9 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">Authorize Person</span></label>
+                               	<label class="control-label text-right">Authorize Person<span class="text_requried">*</span></label>
                                 
-                               <input type="text" name="authorize_person" value="{{ old('authorize_person') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Authorize Person Name">
+                               <input type="text" name="authorize_person" value="{{ old('authorize_person') }}" class="form-control" data-validation="required length"  data-validation-length="max190" placeholder="Enter Authorize Person Name">
                                 
                                
                             </div>
@@ -68,7 +73,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">Designation<span class="text_requried">*</span></label>
-                                <input type="text" name="designation" value="{{ old('designation') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Authorize Person Designation">
+                                <input type="text" name="designation" value="{{ old('designation') }}" class="form-control" data-validation="required length"  data-validation-length="max190" placeholder="Enter Authorize Person Designation">
                                 
                             </div>
                         </div>
