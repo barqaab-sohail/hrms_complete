@@ -18,11 +18,12 @@ class CreatePrPartnerTable extends Migration
             $table->id();
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->bigInteger('pr_role_id')->unsigned();
-            $table->string('name');
+            $table->bigInteger('partner_id')->unsigned();
             $table->string('share')->nullable();
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
             $table->foreign('pr_role_id')->references('id')->on('pr_roles');
+            $table->foreign('partner_id')->references('id')->on('partners');
         });
     }
 
