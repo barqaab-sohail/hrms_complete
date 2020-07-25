@@ -113,6 +113,8 @@ class DocumentationController extends Controller
 
         if($request->hr_document_name_id!='Other'){
             $input['description']= HrDocumentName::find($input['hr_document_name_id'])->name;
+        }else{
+             $data->hrDocumentName()->detach();
         }
           
         

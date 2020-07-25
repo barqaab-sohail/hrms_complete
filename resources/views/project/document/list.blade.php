@@ -12,10 +12,10 @@
 					<tr>
 						<th>Document Name</th>
 						<th>View</th>
-						@can('hr edit documentation')			 
+						@can('pr edit document')			 
 						<th class="text-center"style="width:5%">Edit</th>
 						@endcan
-						@can('hr delete documentation')
+						@can('pr delete document')
 						<th class="text-center" style="width:5%">Delete</th>
 						@endcan
 					</tr>
@@ -24,27 +24,27 @@
 					@foreach($documentIds as $documentId)
 					<tr>
 						<td>{{$documentId->description}}</td>
-						@if($documentId->extension!='pdf')
+						@if(($documentId->extension == "jpg")||($documentId->extension == "jpeg")||($documentId->extension == "png"))
 						<td><img  id="ViewIMG" src="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" href="{{asset(isset($documentId->file_name)?  'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30/></td>
-						@else
+						@elseif ($documentId->extension == 'pdf')
 						<td><img  id="ViewPDF" src="{{asset('Massets/images/document.png')}}" href="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30/></td>
+						@else
+						<td><a href="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30><i class="fa fa-download" aria-hidden="true"></i>Download</a></td>
 						@endif
-						
 
 						
-						
-						@can('hr edit documentation')
+						@can('pr edit document')
 						<td class="text-center">
-						 <a class="btn btn-info btn-sm" id="editDocument" @if (empty($documentId->pr_document_id)) href="{{route('documentation.edit',$documentId->id)}}"@else href="" @endif data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white " disabled></i></a>
+						 <a class="btn btn-info btn-sm" id="editDocument" href="{{route('projectDocument.edit',$documentId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 						 </td>
 						 @endcan
 						 
-						@can('hr delete documentation')
+						@can('pr delete document')
 						 <td class="text-center">
-						 <form id="deleteDocument{{$documentId->id}}" action="{{route('documentation.destroy',$documentId->id)}}" method="POST">
+						 <form id="deleteDocument{{$documentId->id}}" action="{{route('projectDocument.destroy',$documentId->id)}}" method="POST">
 						 @method('DELETE')
 						 @csrf
-						 <button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete" @if(!empty($documentId->pr_document_id)) disabled @endif><i class="fas fa-trash-alt "></i></button>
+						 <button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"><i class="fas fa-trash-alt "></i></button>
 						 </form>
 
 						 </td>
@@ -91,11 +91,7 @@
         e.preventDefault();
         console.log('edit');
         var url = $(this).attr('href');
-        if(url != ''){
-        	getAjaxData(url);
-        }else{
-        	alert('you cannot edit external refernece');
-        }
+        getAjaxData(url);
 
       });
 
@@ -107,7 +103,7 @@
 
 	  	submitForm(this, url);
 	  	resetForm();
-	  	refreshTable("{{route('documentation.table')}}");
+	  	refreshTable("{{route('projectDocument.table')}}",300);
 	 
 	    });
 	});

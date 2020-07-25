@@ -1,13 +1,13 @@
 @can('hr edit record')
 <div style="margin-top:10px; margin-right: 10px;">
-    <button type="button"  id ="hideButton"  class="btn btn-info float-right">Add Document</button>
+    <a type="button" style="color:white;" id ="hideButton"  class="btn btn-info float-right">Add Document</a>
 </div>
 @endcan
 
 
 <div class="card-body" id="hideDiv">
 
-    <form method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('documentation.update',$data->id)}}" id="formEditDocument" enctype="multipart/form-data">
+    <form method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('projectDocument.update',$data->id)}}" id="formEditDocument" enctype="multipart/form-data">
     @method('PATCH')
         {{csrf_field()}}
         <div class="form-body">
@@ -20,12 +20,14 @@
                         <div class="col-md-12">
                         	<label class="control-label text-right">Document Name<span class="text_requried">*</span></label>
                         
-                            <select  name="hr_document_name_id" id="document_name"    class="form-control selectTwo">
+                            <select  name="pr_document_name_id" id="document_name"  data-validation="required"    class="form-control selectTwo">
                             <option value=""></option>
-                            <option value="Other" selected>Other</option>
+                                <option value="Other" selected>Other</option>
                                 @foreach($documentNames as $documentName)
-								<option value="{{$documentName->id}}" {{(old("hr_document_name_id",$data->hrDocumentName->first()->id??'')==$documentName->id? "selected" : "")}}>{{$documentName->name}}</option>
+                               	<option value="{{$documentName->id}}" {{(old("pr_document_name_id",$data->prDocumentName->first()->id??'')==$documentName->id? "selected" : "")}}>{{$documentName->name}}</option>
                                 @endforeach
+
+                           
                              
                             </select>
                             
@@ -69,8 +71,28 @@
                 </div>
                 @endif
             </div>
-
-  
+            <!--/row-->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Employee Name</label>
+                        
+                            <select  name="hr_employee_id[]" id="hr_employee_id"  multiple="multiple" class="form-control selectTwo">
+                                <option value=""></option>
+                                @foreach($employees as $employee)
+                                     @if(in_array($employee->id, $employeeDocuments))
+                                     <option value="{{$employee->id}}" selected="true">{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}}</option>
+                                     @else
+                                    <option value="{{$employee->id}}">{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}}</option>
+                                    @endif 
+                                @endforeach
+                            </select>         
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
             <!--/row-->
              <div class="row">
                 <div class="col-md-8 pdfView">
@@ -83,10 +105,10 @@
                 <div class="col-md-3">
                 	 
 
-                	@can('hr edit record')
+                	@can('pr edit document')
                     <div class="form-group row">
                         <center >
-                        @if($data->extension != 'pdf')
+                        @if(($data->extension == "jpg")||($data->extension == "jpeg")||($data->extension == "png"))
                 		<img src="{{asset(isset($data->file_name)? 'storage/'.$data->path.$data->file_name: 'Massets/images/document.png') }}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
                         @else
                         <img  src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
@@ -116,28 +138,40 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9">
-                        @can('hr edit record')
+                        
                             <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save</button>
-                        @endcan                         
+                                                
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-    <div class="row">
-              <div class="col-md-12 table-container">
-                             
-            
-               
-            </div>
-    </div>
+   
+</div>
+<div class="row">
+        <div class="col-md-12 table-container">
+
+        </div>
 </div>
         
 <script>
     $(document).ready(function(){
         
-        refreshTable("{{route('documentation.table')}}");
+        $('#hideButton').click(function(e){
+            e.preventDefault();
+            url="{{route('projectDocument.create')}}";
+            getAjaxData(url);
+
+            setTimeout(function(){
+                $('#hideDiv').show();
+            },1000);
+
+
+        });
+
+
+        refreshTable("{{route('projectDocument.table')}}");
 
         $("form").submit(function (e) {
          e.preventDefault();
@@ -172,10 +206,7 @@
 
 
 
-
-
-
-        $( "#pdf" ).hide();
+        $("#pdf").hide();
 			// Prepare the preview for profile picture
 	    $("#view").change(function(){
 	        	var fileName = this.files[0].name;
@@ -185,8 +216,8 @@
 	        	
 
 	        //Restrict File Size Less Than 2MB
-	        if (fileSize> 4096000){
-	        	alert('File Size is bigger than 3MB');
+	        if (fileSize> 25600000){
+	        	alert('File Size is bigger than 20MB');
 	        	$(this).val('');
 	        }else{
 	        	//Restrict File Type

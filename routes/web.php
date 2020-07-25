@@ -56,9 +56,9 @@ Route::resource('/emergency', 'EmergencyController');
 Route::resource('/nextToKin', 'NextToKinController');
 Route::get('/promotion/refreshTable', 'PromotionController@refreshTable')->name('promotion.table');
 Route::resource('/promotion', 'PromotionController');
-Route::get('/documentation/refreshTable', 'DocumentationController@refreshTable')->name('documentation.table');
 Route::get('/exit/refreshTable', 'ExitController@refreshTable')->name('exit.table');
 Route::resource('/exit', 'ExitController');
+Route::get('/documentation/refreshTable', 'DocumentationController@refreshTable')->name('documentation.table');
 Route::resource('/documentation', 'DocumentationController');
 Route::get('/userLogin/refreshTable', 'UserLoginController@refreshTable')->name('userLogin.table');
 Route::resource('/userLogin', 'UserLoginController',['only'=>['edit','store','destroy']]);
@@ -107,6 +107,8 @@ Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Project'
 Route::post('/project/import', 'ProjectController@import')->name('project.import');
 Route::resource('/project', 'ProjectController');
 Route::resource('/projectPartner', 'ProjectPartnerController');
+
+Route::get('/projectDocument/refreshTable', 'ProjectDocumentController@refreshTable')->name('projectDocument.table');
 Route::resource('/projectDocument', 'ProjectDocumentController');
 Route::get('/projectPosition/refreshTable', 'ProjectPositionController@refreshTable')->name('projectPosition.table');
 Route::resource('/projectPosition', 'ProjectPositionController');

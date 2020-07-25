@@ -16,7 +16,7 @@ class CreatePrRoleTable extends Migration
         Schema::create('pr_roles', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->string('name',30);
+            $table->string('name',30)->unique();
         });
     }
 
