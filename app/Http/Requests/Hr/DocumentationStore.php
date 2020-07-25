@@ -12,8 +12,15 @@ class DocumentationStore extends FormRequest
      *
      * @return bool
      */
+    private $documentNames;
+
      public function __construct(\Illuminate\Http\Request $request)
     {
+        
+        $this->documentNames =  HrDocumentName::all()->pluck('name')->toArray();
+        $this->documentNames=implode(',',$this->documentNames);
+
+
         $request->request->add(['hr_employee_id' => session('hr_employee_id')]);
     
         if($request->hr_document_name_id !='Other'){
@@ -44,7 +51,8 @@ class DocumentationStore extends FormRequest
     {
         return [
             'document'=>'required|file|max:4000|mimes:'.$this->mime_type,
-            'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
+            'description'=>'not_in:'.$this->documentNames,
+            //'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
             'hr_document_name_id' => 'required|unique_with:hr_document_name_hr_documentation,hr_employee_id',
              
         ];

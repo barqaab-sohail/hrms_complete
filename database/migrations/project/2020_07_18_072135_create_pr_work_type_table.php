@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrDocumentNameTable extends Migration
+class CreatePrWorkTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreatePrDocumentNameTable extends Migration
      */
     public function up()
     {
-        Schema::create('pr_document_names', function (Blueprint $table) {
+        Schema::create('pr_work_types', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
+            $table->bigInteger('pr_division_id')->unsigned();
             $table->string('name')->unique();
+            $table->tinyInteger('code')->unsigned()->unique();
+            $table->foreign('pr_division_id')->references('id')->on('pr_divisions')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -27,6 +31,6 @@ class CreatePrDocumentNameTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pr_document_names');
+        Schema::dropIfExists('pr_work_types');
     }
 }

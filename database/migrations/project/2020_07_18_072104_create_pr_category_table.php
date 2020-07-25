@@ -17,7 +17,7 @@ class CreatePrCategoryTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('pr_division_id')->unsigned();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->tinyInteger('code')->unsigned()->unique();
             $table->timestamps();
             $table->foreign('pr_division_id')->references('id')->on('pr_divisions')->onDelete('cascade');

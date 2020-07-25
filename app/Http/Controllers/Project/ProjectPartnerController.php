@@ -37,6 +37,8 @@ class ProjectPartnerController extends Controller
 
 			PrPartnerContact::create($input);
 
+			
+
 
 		});  //end transaction
 
@@ -44,6 +46,9 @@ class ProjectPartnerController extends Controller
 
 
 	}
+
+
+
 
 
 }

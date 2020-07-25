@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrWorkTypeTable extends Migration
+class CreatePrDivisionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreatePrWorkTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('pr_work_types', function (Blueprint $table) {
+        Schema::create('pr_divisions', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->bigInteger('pr_division_id')->unsigned();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->tinyInteger('code')->unsigned()->unique();
-            $table->foreign('pr_division_id')->references('id')->on('pr_divisions')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ class CreatePrWorkTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pr_work_types');
+        Schema::dropIfExists('pr_divisions');
     }
 }

@@ -9,7 +9,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class HrDocumentation extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    protected $fillable = ['hr_employee_id','description','document_date','file_name','size','path','extension','content'];
+    protected $fillable = ['hr_employee_id','description','document_date','file_name','size','path','extension','content','pr_document_id'];
 
 
 
