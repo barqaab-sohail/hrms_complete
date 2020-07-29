@@ -53,7 +53,8 @@ class ProjectDocumentController extends Controller
     	DB::transaction(function () use ($request, $input) { 
 
     			$extension = request()->document->getClientOriginalExtension();
-                $fileName =strtolower($input['description']).'-'. time().'.'.$extension;
+                
+                $fileName =strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s','', $input['description'])).'-'. time().'.'.$extension;
                 $folderName = "project/".session('pr_detail_id')."/";
                 //store file
                 $request->file('document')->storeAs('public/'.$folderName,$fileName);
@@ -158,7 +159,7 @@ class ProjectDocumentController extends Controller
 
             //Now save new Document
             $extension = request()->document->getClientOriginalExtension();
-            $fileName =strtolower($input['description']).'-'. time().'.'.$extension;
+            $fileName =strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s','', $input['description'])).'-'. time().'.'.$extension;
             $folderName = "project/".session('pr_detail_id')."/";
             //store file
             $request->file('document')->storeAs('public/'.$folderName,$fileName);

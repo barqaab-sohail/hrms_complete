@@ -48,7 +48,8 @@ class DocumentationController extends Controller
     	DB::transaction(function () use ($request, $input, $employeeFullName) { 
 
     			$extension = request()->document->getClientOriginalExtension();
-				$fileName =session('hr_employee_id').'-'.$input['description'].'-'. time().'.'.$extension;
+
+				$fileName =session('hr_employee_id').'-'.strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s','', $input['description'])).'-'. time().'.'.$extension;
 				$folderName = "hr/documentation/".session('hr_employee_id').'-'.$employeeFullName."/";
 				//store file
 				$request->file('document')->storeAs('public/'.$folderName,$fileName);
