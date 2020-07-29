@@ -37,7 +37,7 @@
 						<td class="text-center">
 						 <a class="btn btn-info btn-sm" id="editDocument" href="{{route('projectDocument.edit',$documentId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 						 </td>
-						 @endcan
+						@endcan
 						 
 						@can('pr delete document')
 						 <td class="text-center">
@@ -48,7 +48,7 @@
 						 </form>
 
 						 </td>
-						 @endcan
+						@endcan
 													
 					</tr>
 					@endforeach
