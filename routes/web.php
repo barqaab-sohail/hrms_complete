@@ -119,9 +119,9 @@ Route::resource('/projectCode', 'ProjectCodeController');
 });
 
 
-//Charging Routes
-Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Charging'], function(){
-	Route::resource('/charging', 'ChargingController');
+//Submission Routes
+Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'submission'], function(){
+	Route::resource('/submission', 'SubmissionController');
 	
 
 });

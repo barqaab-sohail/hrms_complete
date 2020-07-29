@@ -20,7 +20,8 @@
                 
                  <li class="{{Request::is('dashboard')?'active':''}}"><a id="notInclude" class="waves-effect waves-dark" href="{{url('/dashboard')}}" aria-expanded="false"><i class="fas fa-tachometer-alt"></i><span class="hide-menu">Dashboard </span></a>
                 </li>
-               
+
+<!-- HR -->               
                 <li class="{{Request::is('hrms/employee*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fas fa-user"></i><span class="hide-menu">Human Resource</span></a>
                     <ul aria-expanded="false" class="collapse">
                     @can('Super Admin') 
@@ -38,6 +39,9 @@
                       
                     </ul>
                 </li>
+<!-- End HR -->
+
+<!-- HR Reports -->
                 @can('hr reports')
                 <li class="{{Request::is('hrms/hrReports*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu">HR Reports</span></a>
                     <ul aria-expanded="false" class="collapse">  
@@ -46,6 +50,10 @@
                     </ul>
                 </li>
                 @endcan
+
+<!-- End HR Reports -->
+
+<!-- CV -->               
                 @can('cv edit record') 
                 <li class="{{Request::is('hrms/cv*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">CV Records</span></a>
                     <ul aria-expanded="false" class="collapse">  
@@ -58,8 +66,10 @@
                     </ul>
                 </li>
                 @endcan
-  
 
+<!-- End CV -->
+ 
+<!-- Project -->
                <li class="{{Request::is('hrms/project*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fas fa-cubes"></i><span class="hide-menu">Projects</span></a>
                     <ul aria-expanded="false" class="collapse">
                    
@@ -68,10 +78,13 @@
                         <li><a  class="{{Request::is('hrms/project')?'active':''}}" href="{{route('project.index')}}">List of Projects</a></li>
                          <li><a  class="{{Request::is('hrms/projectCode')?'active':''}}" href="{{route('projectCode.create')}}">Project Code Calculator</a></li>
                     @endcanany
-                      
+                                               
                     </ul>
                 </li>
 
+<!-- End Project -->
+
+<!-- Self Services -->
                 @can('Super Admin')
                  <li class="{{Request::is('hrms/charging*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-shopping"></i><span class="hide-menu">Self Services</span></a>
                     <ul aria-expanded="false" class="collapse">  
@@ -80,18 +93,22 @@
                                                
                     </ul>
                 </li>
+<!-- Self Services -->
 
-                <li class="{{Request::is('hrms/charging*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">Charging</span></a>
+<!-- Submissions -->
+                <li class="{{Request::is('hrms/submission*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-book" aria-hidden="true"></i><span class="hide-menu">Submissions</span></a>
                     <ul aria-expanded="false" class="collapse">  
-                        <li><a class="{{Request::is('hrms/charging/create')?'active':''}}" href="{{route('charging.create')}}">Add Charging</a></li>
+                        <li><a class="{{Request::is('hrms/submission/create')?'active':''}}" href="{{route('submission.create')}}">Add Submission</a></li>
                         
                                                
                     </ul>
                 </li>
                @endcan
+<!-- End Submissions -->
 
+<!-- Admin -->
                @can('Super Admin')
-                 <li class="{{Request::is('hrms/admin*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">Admin</span></a>
+                 <li class="{{Request::is('hrms/admin*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-lock" aria-hidden="true"></i><span class="hide-menu">Admin</span></a>
                     <ul aria-expanded="false" class="collapse">  
                         <li><a class="{{Request::is('hrms/admin/activeUser')?'active':''}}" href="{{route('activeUser.index')}}">Active User List</a></li>
                         <li><a class="{{Request::is('hrms/admin/lastLogin')?'active':''}}" href="{{route('lastLogin.detail')}}">Last Login Detail</a></li>
@@ -100,7 +117,7 @@
                     </ul>
                 </li>
                @endcan
-                 
+<!-- End Admin -->                 
     
                
                 {{--///////// Second End--}}

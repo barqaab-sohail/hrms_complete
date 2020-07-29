@@ -110,7 +110,7 @@ class CvController extends Controller
 
 		//add attachment
 				$extension = request()->cv->getClientOriginalExtension();
-				$fileName =strtolower(request()->full_name).'-'. time().'.'.$extension;
+				$fileName =strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s','', request()->full_name)).'-'. time().'.'.$extension;
 				$folderName = "cv/".$cvDetail->id.'-'.strtolower(request()->full_name)."/";
 				//store file
 				$request->file('cv')->storeAs('public/'.$folderName,$fileName);
@@ -308,7 +308,8 @@ class CvController extends Controller
 			if ($request->hasFile('cv')){
 				
 				$extension = request()->cv->getClientOriginalExtension();
-				$fileName =strtolower(request()->full_name).'-'. time().'.'.$extension;
+
+				$fileName =strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s','', request()->full_name)).'-'. time().'.'.$extension;
 				
 				$path= $cvDetail->cvAttachment->first()->path;
 				
