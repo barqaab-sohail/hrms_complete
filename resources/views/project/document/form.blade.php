@@ -44,7 +44,17 @@
             </div>
             <!--/row-->
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="employee_file">
+                          <label class="form-check-label" for="employee_file">
+                            Also Save in Employee File
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 employeeName">
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Employee Name</label>

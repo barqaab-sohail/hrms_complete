@@ -72,6 +72,7 @@
                 @endif
             </div>
             <!--/row-->
+            @if(!empty($employeeDocuments))
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
@@ -91,8 +92,36 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
+            @else
+            <!--/row-->
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="employee_file">
+                          <label class="form-check-label" for="employee_file">
+                            Also Save in Employee File
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 employeeName">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Employee Name</label>
+                        
+                            <select  name="hr_employee_id[]" id="hr_employee_id"  multiple="multiple" class="form-control selectTwo">
+                                <option value=""></option>
+                                @foreach($employees as $employee)
+                                <option value="{{$employee->id}}">{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}}</option>
+                                @endforeach
+                            </select>         
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
             <!--/row-->
              <div class="row">
                 <div class="col-md-8 pdfView">
@@ -158,6 +187,15 @@
 <script>
     $(document).ready(function(){
         
+        $('.employeeName').hide();
+        $('#employee_file').click(function(){
+              $('.employeeName').toggle();
+
+        });
+
+
+
+
         $('#hideButton').click(function(e){
             e.preventDefault();
             url="{{route('projectDocument.create')}}";
