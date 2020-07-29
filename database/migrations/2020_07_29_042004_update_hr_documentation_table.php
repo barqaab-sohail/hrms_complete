@@ -14,7 +14,7 @@ class UpdateHrDocumentationTable extends Migration
     public function up()
     {
          Schema::table('hr_documentations', function($table) {
-            $table->bigInteger('pr_document_id')->after('content')->unsigned();
+            $table->bigInteger('pr_document_id')->after('content')->unsigned()->nullable();
         });
     }
 

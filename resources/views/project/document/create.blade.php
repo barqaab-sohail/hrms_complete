@@ -21,7 +21,6 @@ $(document).ready(function(){
         $('.employeeName').hide();
         $('#employee_file').click(function(){
               $('.employeeName').toggle();
-
         });
 
 
