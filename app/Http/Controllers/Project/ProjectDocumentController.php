@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\Project\DocumentStore;
-use App\Models\Project\PrDocumentName;
+use App\Models\Project\PrDocumentHead;
 use App\Models\Project\PrDocument;
-use App\Models\Project\PrDocumentPrDocumentName;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDocumentation;
 use App\Helper\DocxConversion;
@@ -20,13 +19,13 @@ class ProjectDocumentController extends Controller
 
     public function create(Request $request){
 
-    	$documentNames = PrDocumentName::all();
+    	$documentsHeads = PrDocumentHead::all();
         $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))->get();
 
         $employees = HrEmployee::where('hr_status_id',1)->get();
 
         if($request->ajax()){
-            $view = view ('project.document.create',compact('documentNames','documentIds','employees'))->render();
+            $view = view ('project.document.create',compact('documentsHeads','documentIds','employees'))->render();
             return response()->json($view);
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
@@ -196,16 +195,27 @@ class ProjectDocumentController extends Controller
         
         //if any employee removing from input than delete also in Hr Documentation
             $existingHrDocument = HrDocumentation::where('pr_document_id', $prDocument->id)->get()->pluck('hr_employee_id')->toArray();
+            //$data1 = json_encode($existingHrDocument);
 
             if($request->filled("hr_employee_id.0")){
-                for ($i=0;$i<count($existingHrDocument);$i++){
-
-                    if(!in_array($existingHrDocument[$i], $input['hr_employee_id'])){
-
-                         HrDocumentation::where(['pr_document_id', $prDocument->id],['hr_employee_id',$existingHrDocument[$i]])->delete();
-                        //$test = $existingHrDocument[$i];
-                    }  
+                //create collection
+                 $existingHrDocument = collect($existingHrDocument);
+                 
+                //find required employee and exclude.  Remaining all are data delete after forloop
+                for ($i=0;$i<count($input['hr_employee_id']);$i++){
+                    
+                    $key = $existingHrDocument->search($request->input("hr_employee_id.$i"));
+                    if($key){
+                        $existingHrDocument->pull($key);
+                    }
                 }
+                    //Now remaining delete from HR Documentation
+                     //$data2 = json_encode($existingHrDocument);
+
+
+                   HrDocumentation::where('pr_document_id',$id)->wherein('hr_employee_id',$existingHrDocument)->delete();
+                    
+
             }
 
             //Now update in all employee documents
@@ -231,7 +241,7 @@ class ProjectDocumentController extends Controller
                 HrDocumentation::where('pr_document_id', $prDocument->id)->delete();
             }
 
-        return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
+        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);
 
     }
 

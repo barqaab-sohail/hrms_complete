@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrDocumentNameTable extends Migration
+class CreatePrDocumentHeadTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePrDocumentNameTable extends Migration
      */
     public function up()
     {
-        Schema::create('pr_document_names', function (Blueprint $table) {
+        Schema::create('pr_document_heads', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->string('name')->unique();
@@ -28,6 +28,6 @@ class CreatePrDocumentNameTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pr_document_names');
+        Schema::dropIfExists('pr_document_heads');
     }
 }

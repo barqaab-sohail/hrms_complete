@@ -5,9 +5,150 @@
 
 
 <div class="card-body" id="hideDiv">
-    @include('project.document.form')
+    <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formDocument" enctype="multipart/form-data">
+        {{csrf_field()}}
+        <div class="form-body">
+            
+            <h3 class="box-title">Document</h3>
+            <hr class="m-t-0 m-b-40">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">File Head<span class="text_requried">*</span></label>
+                        
+                            <select  name="pr_document_name_id" id="document_name"  data-validation="required"  class="form-control selectTwo">
+                                <option value=""></option>
+                                @foreach($documentsHeads as $documentHead)
+                                <option value="{{$documentHead->id}}" {{(old("pr_document_name_id")==$documentHead->id? "selected" : "")}}>{{$documentHead->name}}</option>
+                                @endforeach
+                            </select>         
+                        </div>
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Reference No</label>
+                            <input type="text" id="forward_slash" name="reference_no"  value="{{ old('reference_no') }}" class="form-control excempted" data-validation="length"  data-validation-length="max190" placeholder="Enter Document Reference" >
+                        </div>
+                    </div>
+                </div>
+                 <!--/span-->
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Date<span class="text_requried">*</span></label>
+                            <input type="text" name="document_date"  value="{{ old('document_date') }}" class="form-control date_input" data-validation="required"  readonly placeholder="Enter Document Detail">
+                            <br>
+                            <i class="fas fa-trash-alt text_requried"></i>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/row-->
+            
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                           
+                            <label class="control-label text-right">Document Description</label>
+                            <input type="text" id="forward_slash" name="description"  value="{{ old('description') }}" class="form-control" data-validation="required length"  data-validation-length="max190" placeholder="Enter Document Detail" >
+                               
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <!--/row-->
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="employee_file">
+                          <label class="form-check-label" for="employee_file">
+                            Also Save in Employee File
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 employeeName">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Employee Name</label>
+                        
+                            <select  name="hr_employee_id[]" id="hr_employee_id"  multiple="multiple" class="form-control selectTwo">
+                                <option value=""></option>
+                                @foreach($employees as $employee)
+                                <option value="{{$employee->id}}">{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}}</option>
+                                @endforeach
+                            </select>         
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+                            
+            <!--/row-->
+             <div class="row">
+                <div class="col-md-8 pdfView">
+                    <embed id="pdf" src=""  type="application/pdf" height="300" width="100%" />
+                </div>
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <center >
+                        <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
+                        </input>
+                        <input type="file"  name="document" id="view" data-validation="required" class="" hidden>
+                                                                        
+                        <h6 id="h6" class="card-title m-t-10">Click On Image to Add Document<span class="text_requried">*</span></h6>
+                
+                        </center>
+                       
+                    </div>
+
+                </div>
+                                                        
+            </div>
+            
+                                               
+        </div>
+         <hr>
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9">
+                       
+                            <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save</button>
+                                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
    
 </div>
+
+        <table id="myDataTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
+        <tr>
+         @foreach($documentsHeads as $documentHead)
+        <td  style="text-align:center">
+        <i class="fa fa-folder fa-3x"  style="color:#dbe075" aria-hidden="true"></i>
+        <p>{{$documentHead->name}}</p>
+        </td>
+        @endforeach
+        </tr>
+        </table>
+
+
+
     <div class="row">
               <div class="col-md-12 table-container">
        
@@ -34,16 +175,7 @@ $(document).ready(function(){
 
         refreshTable("{{route('projectDocument.table')}}");
         
-        $("#document_name").change(function (){
-            var other = $('#document_name').val();
-                if (other == 'Other'){
-                    $('.hideDiv').show();
-                    $('#forward_slash').attr('data-validation','required length');
-                }else{
-                    $('.hideDiv').hide();
-                    $('#forward_slash').removeAttr('data-validation').val('');
-                }
-        });
+      
         //submit function
         $("#formDocument").submit(function(e) { 
             console.log('submit');
