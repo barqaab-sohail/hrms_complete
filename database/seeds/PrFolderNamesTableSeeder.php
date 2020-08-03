@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class PrDocumentHeadsTableSeeder extends Seeder
+class PrFolderNamesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,8 +11,8 @@ class PrDocumentHeadsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('pr_document_heads')->delete();  
-        $prDocumentHeads = array(
+        DB::table('pr_folder_names')->delete();  
+        $prFolderNames = array(
         	array('name' => 'General Correspondence'),
         	array('name' => 'Deployment of Staff'),
         	array('name' => 'Time Sheets'),
@@ -20,6 +20,6 @@ class PrDocumentHeadsTableSeeder extends Seeder
         	array('name' => 'RFP'),
            
         );
-        DB::table('pr_document_heads')->insert($prDocumentHeads);
+        DB::table('pr_folder_names')->insert($prFolderNames);
     }
 }

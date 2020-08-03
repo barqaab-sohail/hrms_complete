@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrDocumentHeadTable extends Migration
+class CreatePrFolderNameTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePrDocumentHeadTable extends Migration
      */
     public function up()
     {
-        Schema::create('pr_document_heads', function (Blueprint $table) {
+        Schema::create('pr_folder_names', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->string('name')->unique();
@@ -28,6 +28,6 @@ class CreatePrDocumentHeadTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pr_document_heads');
+        Schema::dropIfExists('pr_folder_names');
     }
 }

@@ -19,9 +19,9 @@ class DocumentStore extends FormRequest
     public function __construct(\Illuminate\Http\Request $request)
     {
         
-        $this->documentNames =  PrDocumentName::all()->pluck('name')->toArray();
-        $this->documentNames=implode(',',$this->documentNames);
-        $this->description = $request->description;
+        // $this->documentNames =  PrDocumentName::all()->pluck('name')->toArray();
+        // $this->documentNames=implode(',',$this->documentNames);
+        // $this->description = $request->description;
        
         // if($request->pr_document_name_id !='Other'){
         //     $documentName =  PrDocumentName::find($request->pr_document_name_id);
@@ -51,9 +51,9 @@ class DocumentStore extends FormRequest
     {
         return [
             'document'=>'required|file|max:20000|mimes:doc,docx,jpeg,jpg,png,pdf',
-            'description'=>'not_in:'.$this->documentNames,
+            'description'=>'required',
             //'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
-            'pr_document_name_id' => 'required|unique_with:pr_document_pr_document_name,pr_detail_id',
+            //'pr_document_name_id' => 'required|unique_with:pr_document_pr_document_name,pr_detail_id',
              
         ];
     }
@@ -63,8 +63,7 @@ class DocumentStore extends FormRequest
         
         return [
             'document.mimes' => ' picture only jpg,png allowed otherwise pdf, jpg, tif and png attachment allowed',
-            'pr_document_name_id.unique_with' => 'this document names is already entered',
-            'description.not_in' => $this->description . " is reserved word, please use different word in document description",
+           
 
 
         ];
