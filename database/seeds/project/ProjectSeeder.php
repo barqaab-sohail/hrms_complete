@@ -17,7 +17,7 @@ class ProjectSeeder extends Seeder
        //$this->call(PrRolesSeeder::class);
         //$this->call(PrStatusesTableSeeder::class);
         $this->call(PrWorkTypesSeeder::class);
-        $this->call(PrDocumentHeadsTableSeeder::class);
+        $this->call(PrFolderNamesTableSeeder::class);
         //$this->call(PrDetailsTableSeeder::class);
         
     }

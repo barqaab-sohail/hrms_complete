@@ -4,7 +4,7 @@ namespace App\Models\Project;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PrDocumentHead extends Model
+class PrFolderName extends Model
 {
     //
 }

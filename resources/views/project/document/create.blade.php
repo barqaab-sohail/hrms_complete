@@ -15,12 +15,12 @@
                 <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <label class="control-label text-right">File Head<span class="text_requried">*</span></label>
+                            <label class="control-label text-right">Folder Name<span class="text_requried">*</span></label>
                         
-                            <select  name="pr_document_name_id" id="document_name"  data-validation="required"  class="form-control selectTwo">
+                            <select  name="pr_folder_name_id" id="document_name"  data-validation="required"  class="form-control selectTwo">
                                 <option value=""></option>
-                                @foreach($documentsHeads as $documentHead)
-                                <option value="{{$documentHead->id}}" {{(old("pr_document_name_id")==$documentHead->id? "selected" : "")}}>{{$documentHead->name}}</option>
+                                @foreach($prFolderNames as $prFolderName)
+                                <option value="{{$prFolderName->id}}" {{(old("pr_folder_name_id")==$prFolderName->id? "selected" : "")}}>{{$prFolderName->name}}</option>
                                 @endforeach
                             </select>         
                         </div>
@@ -118,7 +118,7 @@
             
                                                
         </div>
-         <hr>
+         
         <div class="form-actions">
             <div class="row">
                 <div class="col-md-6">
@@ -126,7 +126,8 @@
                         <div class="col-md-offset-3 col-md-9">
                        
                             <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save</button>
-                                            
+                        <hr>
+                        <br>           
                         </div>
                     </div>
                 </div>
@@ -136,20 +137,35 @@
    
 </div>
 
-        <table id="myDataTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
+        <!-- <table id="folderTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
         <tr>
-         @foreach($documentsHeads as $documentHead)
-        <td  style="text-align:center">
-        <i class="fa fa-folder fa-3x"  style="color:#dbe075" aria-hidden="true"></i>
-        <p>{{$documentHead->name}}</p>
+         @foreach($prFolderNames as $prFolderName)
+        <td  style="text-align:center"> <a id="documentList{{$prFolderName->id}}" href="{{route('projectDocument.show',$prFolderName->id)}}" data-toggle="tooltip" data-original-title="Edit">
+        <i class="fa fa-folder fa-3x"  style="color:#cfca3e;" aria-hidden="true"></i>
+        <p>{{$prFolderName->name}}</p>
         </td>
         @endforeach
         </tr>
-        </table>
+        </table> -->
+
+         <div class="row">
+                @foreach($prFolderNames as $prFolderName)
+                <div class="col-md-3 ">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                          <a id="documentList{{$prFolderName->id}}" href="{{route('projectDocument.show',$prFolderName->id)}}" data-toggle="tooltip" data-original-title="Edit">
+                            <i class="fa fa-folder fa-3x"  style="color:#cfca3e;" aria-hidden="true"></i>
+                            <p style="color:black;">{{$prFolderName->name}}</p>
+                           </a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+        </div>
 
 
 
-    <div class="row">
+    <div class="row" >
               <div class="col-md-12 table-container">
        
                
@@ -173,7 +189,24 @@ $(document).ready(function(){
         });
 
 
-        refreshTable("{{route('projectDocument.table')}}");
+
+        $('a[id^=documentList]').click(function (e){
+            e.preventDefault();
+            $('a[id^=documentList]').not(this).find('i').attr('class','fa fa-folder fa-3x')
+
+            var url = $(this).attr('href');
+            console.log(url);
+            var $el = $(this).find( "i" ).toggleClass('fa-folder-open');
+            if ($el.hasClass('fa-folder-open')) {
+                refreshTable(url);
+            }else{
+                $('#myDataDiv').remove();
+            }
+       
+        });
+
+
+        //refreshTable("{{route('projectDocument.table')}}");
         
       
         //submit function

@@ -1,8 +1,8 @@
 @if($documentIds->count()!=0)  
-<hr>
-<div class="card">
+
+<div class="card" id="myDataDiv">
 	<div class="card-body">
-		<h2 class="card-title">Employee Documentation Detail</h2>
+		<h2 class="card-title">{{$folderName->name}} Detail</h2>
 		
 		<div class="table-responsive m-t-40">
 			
@@ -10,7 +10,9 @@
 				<thead>
 				
 					<tr>
-						<th>Document Name</th>
+						<th>Description</th>
+						<th>Reference No.</th>
+						<th>Date</th>
 						<th>View</th>
 						@can('pr edit document')			 
 						<th class="text-center"style="width:5%">Edit</th>
@@ -24,6 +26,8 @@
 					@foreach($documentIds as $documentId)
 					<tr>
 						<td>{{$documentId->description}}</td>
+						<td>{{$documentId->reference_no}}</td>
+						<td>{{$documentId->date}}</td>
 						@if(($documentId->extension == "jpg")||($documentId->extension == "jpeg")||($documentId->extension == "png"))
 						<td><img  id="ViewIMG" src="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" href="{{asset(isset($documentId->file_name)?  'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30/></td>
 						@elseif ($documentId->extension == 'pdf')

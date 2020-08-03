@@ -18,19 +18,27 @@
                 <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
-                        	<label class="control-label text-right">Document Name<span class="text_requried">*</span></label>
+                        	<label class="control-label text-right">Folder Name<span class="text_requried">*</span></label>
                         
-                            <select  name="pr_document_name_id" id="document_name"  data-validation="required"    class="form-control selectTwo">
+                            <select  name="pr_folder_name_id" id="document_name"  data-validation="required"    class="form-control selectTwo">
                             <option value=""></option>
-                                <option value="Other" selected>Other</option>
-                                @foreach($documentNames as $documentName)
-                               	<option value="{{$documentName->id}}" {{(old("pr_document_name_id",$data->prDocumentName->first()->id??'')==$documentName->id? "selected" : "")}}>{{$documentName->name}}</option>
+                                
+                                @foreach($prFolderNames as $prFolderName)
+                               	<option value="{{$prFolderName->id}}" {{(old("pr_folder_name_id",$data->pr_folder_name_id??'')==$prFolderName->id? "selected" : "")}}>{{$prFolderName->name}}</option>
                                 @endforeach
 
-                           
-                             
+           
                             </select>
                             
+                        </div>
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Reference No</label>
+                            <input type="text" id="forward_slash" name="reference_no"  value="{{ old('reference_no', $data->reference_no??'') }}" class="form-control excempted" data-validation="length"  data-validation-length="max190" placeholder="Enter Document Reference">
                         </div>
                     </div>
                 </div>
@@ -48,28 +56,21 @@
                     </div>
                 </div>
                 
-                <!--/span-->
-                @if($documentNameExist == null)
-                <div class="col-md-6" id="documentNameExist">
+                              
+            </div>
+             <!--/row-->
+            <div class="row">
+                <div class="col-md-9">
                     <div class="form-group row">
                         <div class="col-md-12">
-                        	<label class="control-label text-right">Document Description</label>
-                        
-                            <input type="text" id="description" name="description" value="{{old('description',$data->description??'')}}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
-                        </div>
-                    </div>
-                </div>
-                @else
-                <div class="col-md-6 hideDiv">
-                    <div class="form-group row">
-                        <div class="col-md-12">
+                           
                             <label class="control-label text-right">Document Description</label>
-                        
                             <input type="text" id="description" name="description" value="{{ old('description', $data->description??'') }}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
+                               
                         </div>
                     </div>
                 </div>
-                @endif
+                
             </div>
             <!--/row-->
             @if(!empty($employeeDocuments))
@@ -178,6 +179,20 @@
     </form>
    
 </div>
+    <div class="row">
+        @foreach($prFolderNames as $prFolderName)
+        <div class="col-md-3 ">
+            <div class="form-group row">
+                <div class="col-md-12">
+                  <a id="documentList{{$prFolderName->id}}" href="{{route('projectDocument.show',$prFolderName->id)}}" data-toggle="tooltip" data-original-title="Edit">
+                    <i class="fa fa-folder fa-3x"  style="color:#cfca3e;" aria-hidden="true"></i>
+                    <p style="color:black;">{{$prFolderName->name}}</p>
+                   </a>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
 <div class="row">
         <div class="col-md-12 table-container">
 
@@ -193,6 +208,20 @@
 
         });
 
+         $('a[id^=documentList]').click(function (e){
+            e.preventDefault();
+            $('a[id^=documentList]').not(this).find('i').attr('class','fa fa-folder fa-3x')
+
+            var url = $(this).attr('href');
+            console.log(url);
+            var $el = $(this).find( "i" ).toggleClass('fa-folder-open');
+            if ($el.hasClass('fa-folder-open')) {
+                refreshTable(url);
+            }else{
+                $('#myDataDiv').remove();
+            }
+       
+        });
 
 
 

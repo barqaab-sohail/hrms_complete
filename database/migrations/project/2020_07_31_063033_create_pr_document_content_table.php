@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHrDocumentContentTable extends Migration
+class CreatePrDocumentContentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateHrDocumentContentTable extends Migration
      */
     public function up()
     {
-        Schema::create('hr_document_contents', function (Blueprint $table) {
+        Schema::create('pr_document_contents', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('pr_document_id')->unsigned();
@@ -30,6 +30,6 @@ class CreateHrDocumentContentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hr_document_contents');
+        Schema::dropIfExists('pr_document_contents');
     }
 }

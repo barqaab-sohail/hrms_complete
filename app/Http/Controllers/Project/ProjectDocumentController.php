@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\Project\DocumentStore;
-use App\Models\Project\PrDocumentHead;
+use App\Models\Project\PrFolderName;
 use App\Models\Project\PrDocument;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDocumentation;
@@ -17,15 +17,22 @@ class ProjectDocumentController extends Controller
 {   
     
 
+    public function show ($id){
+        $folderName = PrFolderName::find($id);
+        $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))
+        ->where('pr_folder_name_id',$id)->get();
+        return view('project.document.list',compact('documentIds','folderName'));
+    }
+
     public function create(Request $request){
 
-    	$documentsHeads = PrDocumentHead::all();
+    	$prFolderNames = PrFolderName::all();
         $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))->get();
 
         $employees = HrEmployee::where('hr_status_id',1)->get();
 
         if($request->ajax()){
-            $view = view ('project.document.create',compact('documentsHeads','documentIds','employees'))->render();
+            $view = view ('project.document.create',compact('prFolderNames','documentIds','employees'))->render();
             return response()->json($view);
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
@@ -39,17 +46,12 @@ class ProjectDocumentController extends Controller
 
         $input = $request->all();
 
-            if ($request->filled('description')) {
-            //
-            }else{
-                $input['description']= PrDocumentName::find($input['pr_document_name_id'])->name;
-            }
-
+            
             if($request->filled('document_date')){
             $input ['document_date']= \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
             }
  
-    	DB::transaction(function () use ($request, $input) { 
+    	DB::transaction(function () use ($request, $input, &$test) { 
 
     			$extension = request()->document->getClientOriginalExtension();
                 
@@ -77,15 +79,15 @@ class ProjectDocumentController extends Controller
                 $input['extension']=$extension;
                 $input['pr_detail_id']=session('pr_detail_id');
                
-            $prDocument = PrDocument::create($input);  
+            $prDocument = PrDocument::create($input); 
+            $input['pr_document_id'] = $prDocument->id;
+            // $test = $input['content'];
+            //$test = strlen($input['content']);
+            if (strlen($input['content'])>100){
+                $test = $input['content'];
+            }
 
-            if($request->pr_document_name_id!='Other'){
-            $prDocumentNameId = $request->input("pr_document_name_id");
-
-            //pr_detail_id is add due to validtaion before enter into database
-            $prDocument->prDocumentName()->attach($prDocumentNameId, ['pr_detail_id'=>session('pr_detail_id')]);   
-            } 
-
+            
             //add document path into employee record    
             if($request->filled("hr_employee_id.0")){
                 for ($i=0;$i<count($request->input('hr_employee_id'));$i++){
@@ -99,7 +101,7 @@ class ProjectDocumentController extends Controller
 
     	});  //end transaction
 
-    	return response()->json(['status'=> 'OK', 'message' => " Data Sucessfully Saved"]);
+    	return response()->json(['status'=> 'OK', 'message' => "$test Data Sucessfully Saved"]);
 
     }
 
@@ -110,14 +112,12 @@ class ProjectDocumentController extends Controller
         $employees = HrEmployee::where('hr_status_id',1)->get();
         
         $employeeDocuments = HrDocumentation::where('pr_document_id',$id)->get()->pluck('hr_employee_id')->toArray();
-        $documentNames = PrDocumentName::all();
+        $prFolderNames = PrFolderName::all();
 
         $data = PrDocument::find($id);
-        $documentNameExist = PrDocumentPrDocumentName::where('pr_document_id',$data->id)->first();
-
-
+       
         if($request->ajax()){
-            return view ('project.document.edit',compact('documentNames','data','documentNameExist','employees','employeeDocuments'));
+            return view ('project.document.edit',compact('prFolderNames','data','employees','employeeDocuments'));
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
@@ -135,15 +135,7 @@ class ProjectDocumentController extends Controller
             $input ['document_date']= \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
         }
 
-        //if select not other than save pr_document_name into description
-        if($request->pr_document_name_id!='Other'){
-            $input['description']= PrDocumentName::find($input['pr_document_name_id'])->name;
-        }else{
-            $data->prDocumentName()->detach();
-        }
-          
-        
-       
+               
         $prDocument = PrDocument::findOrFail($id);
 
           
@@ -184,14 +176,7 @@ class ProjectDocumentController extends Controller
 
         // Now update remaining inputs in pr_document
             $prDocument->update($input);
-            // Now pivot table update
-            if($request->pr_document_name_id!='Other'){
-                $prDocumentNameId = $request->input("pr_document_name_id");
-
-                //pr_employee_id is add due to validtaion before enter into database
-                $data->prDocumentName()->detach();
-                $data->prDocumentName()->attach($prDocumentNameId, ['pr_detail_id'=>session('pr_detail_id')]);
-            }
+            
         
         //if any employee removing from input than delete also in Hr Documentation
             $existingHrDocument = HrDocumentation::where('pr_document_id', $prDocument->id)->get()->pluck('hr_employee_id')->toArray();

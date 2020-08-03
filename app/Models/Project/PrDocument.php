@@ -13,7 +13,7 @@ class PrDocument extends Model implements Auditable
     ];
 
 
-    protected $fillable = ['pr_detail_id','description','document_date','file_name','size','path','extension','content'];
+    protected $fillable = ['pr_detail_id','reference_no','description','document_date','file_name','size','path','extension','pr_folder_name_id'];
 
 
 
