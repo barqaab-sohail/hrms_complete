@@ -238,9 +238,7 @@
         });
 
 
-        refreshTable("{{route('projectDocument.table')}}");
-
-        $("form").submit(function (e) {
+         $("form").submit(function (e) {
          e.preventDefault();
          });
 
@@ -267,7 +265,11 @@
             resetForm();
             $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','150');
             $('#h6').text('Click On Image to Add Document');
-            //refreshTable("{{route('documentation.table')}}",1500);
+
+            var folderUrl = $('.fa-folder-open').closest('a').attr('href');
+            if (typeof folderUrl  !== "undefined"){
+                refreshTable(folderUrl,1000);
+            }
 
 		});
 

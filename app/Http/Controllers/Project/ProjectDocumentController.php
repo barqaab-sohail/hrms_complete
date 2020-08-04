@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use App\Http\Requests\Project\DocumentStore;
 use App\Models\Project\PrFolderName;
 use App\Models\Project\PrDocument;
+use App\Models\Project\PrDocumentContent;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDocumentation;
 use App\Helper\DocxConversion;
@@ -51,7 +52,7 @@ class ProjectDocumentController extends Controller
             $input ['document_date']= \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
             }
  
-    	DB::transaction(function () use ($request, $input, &$test) { 
+    	DB::transaction(function () use ($request, $input) { 
 
     			$extension = request()->document->getClientOriginalExtension();
                 
@@ -80,14 +81,14 @@ class ProjectDocumentController extends Controller
                 $input['pr_detail_id']=session('pr_detail_id');
                
             $prDocument = PrDocument::create($input); 
-            $input['pr_document_id'] = $prDocument->id;
+          
             // $test = $input['content'];
             //$test = strlen($input['content']);
-            if (strlen($input['content'])>100){
-                $test = $input['content'];
+            if (strlen($input['content'])>50){
+                $input['pr_document_id'] = $prDocument->id;
+                PrDocumentContent::create($input); 
             }
 
-            
             //add document path into employee record    
             if($request->filled("hr_employee_id.0")){
                 for ($i=0;$i<count($request->input('hr_employee_id'));$i++){
@@ -97,11 +98,9 @@ class ProjectDocumentController extends Controller
                 }
             }
 
-
-
     	});  //end transaction
 
-    	return response()->json(['status'=> 'OK', 'message' => "$test Data Sucessfully Saved"]);
+    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
 
     }
 
@@ -138,98 +137,106 @@ class ProjectDocumentController extends Controller
                
         $prDocument = PrDocument::findOrFail($id);
 
-          
-        //If document attached then first delete existing file and then new file save
-        if ($request->hasFile('document')){
-            
-            //Delete Existing Document
-            $path = public_path('storage/'.$prDocument->path.$prDocument->file_name);
-            if(File::exists($path)){
-                File::delete($path);
-            }
-
-            //Now save new Document
-            $extension = request()->document->getClientOriginalExtension();
-            $fileName =strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s','', $input['description'])).'-'. time().'.'.$extension;
-            $folderName = "project/".session('pr_detail_id')."/";
-            //store file
-            $request->file('document')->storeAs('public/'.$folderName,$fileName);
-            
-            $file_path = storage_path('app/public/'.$folderName.$fileName);
-        
-            $input['content']='';
-                                        
-                if (($extension == 'doc')||($extension == 'docx')){
-                    $text = new DocxConversion($file_path);
-                    $input['content']=mb_strtolower($text->convertToText());
-                }else if ($extension =='pdf'){
-                    $reader = new \Asika\Pdf2text;
-                    $input['content'] = mb_strtolower($reader->decode($file_path));
+        DB::transaction(function () use ($request, $input, $prDocument, $id) { 
+            //If document attached then first delete existing file and then new file save
+            if ($request->hasFile('document')){
+                
+                //Delete Existing Document
+                $path = public_path('storage/'.$prDocument->path.$prDocument->file_name);
+                if(File::exists($path)){
+                    File::delete($path);
                 }
 
-            $input['file_name']=$fileName;
-            $input['size']=$request->file('document')->getSize();
-            $input['path']=$folderName;
-            $input['extension']=$extension;
-            $input['pr_detail_id']=session('pr_detail_id');
-        }
-
-        // Now update remaining inputs in pr_document
-            $prDocument->update($input);
+                //Now save new Document
+                $extension = request()->document->getClientOriginalExtension();
+                $fileName =strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s','', $input['description'])).'-'. time().'.'.$extension;
+                $folderName = "project/".session('pr_detail_id')."/";
+                //store file
+                $request->file('document')->storeAs('public/'.$folderName,$fileName);
+                
+                $file_path = storage_path('app/public/'.$folderName.$fileName);
             
-        
-        //if any employee removing from input than delete also in Hr Documentation
-            $existingHrDocument = HrDocumentation::where('pr_document_id', $prDocument->id)->get()->pluck('hr_employee_id')->toArray();
-            //$data1 = json_encode($existingHrDocument);
-
-            if($request->filled("hr_employee_id.0")){
-                //create collection
-                 $existingHrDocument = collect($existingHrDocument);
-                 
-                //find required employee and exclude.  Remaining all are data delete after forloop
-                for ($i=0;$i<count($input['hr_employee_id']);$i++){
-                    
-                    $key = $existingHrDocument->search($request->input("hr_employee_id.$i"));
-                    if($key){
-                        $existingHrDocument->pull($key);
+                $input['content']='';
+                                            
+                    if (($extension == 'doc')||($extension == 'docx')){
+                        $text = new DocxConversion($file_path);
+                        $input['content']=mb_strtolower($text->convertToText());
+                    }else if ($extension =='pdf'){
+                        $reader = new \Asika\Pdf2text;
+                        $input['content'] = mb_strtolower($reader->decode($file_path));
                     }
-                }
-                    //Now remaining delete from HR Documentation
-                     //$data2 = json_encode($existingHrDocument);
 
+                $input['file_name']=$fileName;
+                $input['size']=$request->file('document')->getSize();
+                $input['path']=$folderName;
+                $input['extension']=$extension;
+                $input['pr_detail_id']=session('pr_detail_id');
 
-                   HrDocumentation::where('pr_document_id',$id)->wherein('hr_employee_id',$existingHrDocument)->delete();
-                    
+                
+                //update project document content  
+                PrDocumentContent::updateOrCreate(
+                    ['pr_document_id'=> $id],       //It is find and update 
+                    $input);  
+                                   
 
             }
 
-            //Now update in all employee documents
-            if($request->filled("hr_employee_id.0")){
-                            
-                //for update or create Hr Documentation
-                for ($i=0;$i<count($request->input('hr_employee_id'));$i++){
-                    //array of hr_employee_id into single value;
-                    $input['hr_employee_id']=$request->input("hr_employee_id.$i");
-                    //This information requried if new employee add in request
-                    $input['file_name']= $prDocument->file_name;
-                    $input['size']=$prDocument->size;
-                    $input['path']=$prDocument->path;
-                    $input['extension']=$prDocument->extension;
+            // Now update remaining inputs in pr_document
+                $prDocument->update($input);
+                
+            
+            //if any employee removing from input than delete also in Hr Documentation
+                $existingHrDocument = HrDocumentation::where('pr_document_id', $prDocument->id)->get()->pluck('hr_employee_id')->toArray();
+                //$data1 = json_encode($existingHrDocument);
 
-                    HrDocumentation::updateOrCreate(
-                    ['hr_employee_id' => $input['hr_employee_id'],'pr_document_id'=> $prDocument->id],   //It is find and update 
-                    $input);                                //If first one not found than create
+                if($request->filled("hr_employee_id.0")){
+                    //create collection
+                     $existingHrDocument = collect($existingHrDocument);
+                     
+                    //find required employee and exclude.  Remaining all are data delete after forloop
+                    for ($i=0;$i<count($input['hr_employee_id']);$i++){
+                        
+                        $key = $existingHrDocument->search($request->input("hr_employee_id.$i"));
+                        if($key){
+                            $existingHrDocument->pull($key);
+                        }
+                    }
+                        //Now remaining delete from HR Documentation
+                         //$data2 = json_encode($existingHrDocument);
+
+
+                       HrDocumentation::where('pr_document_id',$id)->wherein('hr_employee_id',$existingHrDocument)->delete();
+                        
+
                 }
 
-            }else{
-                //If no fill hr_employee_id then delete from employee documentation
-                HrDocumentation::where('pr_document_id', $prDocument->id)->delete();
-            }
+                //Now update in all employee documents
+                if($request->filled("hr_employee_id.0")){
+                                
+                    //for update or create Hr Documentation
+                    for ($i=0;$i<count($request->input('hr_employee_id'));$i++){
+                        //array of hr_employee_id into single value;
+                        $input['hr_employee_id']=$request->input("hr_employee_id.$i");
+                        //This information requried if new employee add in request
+                        $input['file_name']= $prDocument->file_name;
+                        $input['size']=$prDocument->size;
+                        $input['path']=$prDocument->path;
+                        $input['extension']=$prDocument->extension;
+
+                        HrDocumentation::updateOrCreate(
+                        ['hr_employee_id' => $input['hr_employee_id'],'pr_document_id'=> $prDocument->id],   //It is find and update 
+                        $input);                                //If first one not found than create
+                    }
+
+                }else{
+                    //If no fill hr_employee_id then delete from employee documentation
+                    HrDocumentation::where('pr_document_id', $prDocument->id)->delete();
+                }
+            });  //end transaction
 
         return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);
 
     }
-
 
 
     public function destroy($id){

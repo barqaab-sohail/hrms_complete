@@ -31,7 +31,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Reference No</label>
-                            <input type="text" id="forward_slash" name="reference_no"  value="{{ old('reference_no') }}" class="form-control excempted" data-validation="length"  data-validation-length="max190" placeholder="Enter Document Reference" >
+                            <input type="text" name="reference_no"  value="{{ old('reference_no') }}" class="form-control excempted" data-validation="length"  data-validation-length="max190" placeholder="Enter Document Reference" >
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                         <div class="col-md-12">
                            
                             <label class="control-label text-right">Document Description</label>
-                            <input type="text" id="forward_slash" name="description"  value="{{ old('description') }}" class="form-control" data-validation="required length"  data-validation-length="max190" placeholder="Enter Document Detail" >
+                            <input type="text" name="description"  value="{{ old('description') }}" class="form-control" data-validation="required length"  data-validation-length="max190" placeholder="Enter Document Detail" >
                                
                         </div>
                     </div>
@@ -137,17 +137,7 @@
    
 </div>
 
-        <!-- <table id="folderTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
-        <tr>
-         @foreach($prFolderNames as $prFolderName)
-        <td  style="text-align:center"> <a id="documentList{{$prFolderName->id}}" href="{{route('projectDocument.show',$prFolderName->id)}}" data-toggle="tooltip" data-original-title="Edit">
-        <i class="fa fa-folder fa-3x"  style="color:#cfca3e;" aria-hidden="true"></i>
-        <p>{{$prFolderName->name}}</p>
-        </td>
-        @endforeach
-        </tr>
-        </table> -->
-
+        
          <div class="row">
                 @foreach($prFolderNames as $prFolderName)
                 <div class="col-md-3 ">
@@ -191,6 +181,7 @@ $(document).ready(function(){
 
 
         $('a[id^=documentList]').click(function (e){
+            $('#hideDiv').hide();
             e.preventDefault();
             $('a[id^=documentList]').not(this).find('i').attr('class','fa fa-folder fa-3x')
 
@@ -220,7 +211,12 @@ $(document).ready(function(){
             $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','150');
              $('#pdf').attr('src','');
             $('#h6').text('Click On Image to Add Document');
-            //refreshTable("{{route('projectDocument.table')}}",500);
+
+            var folderUrl = $('.fa-folder-open').closest('a').attr('href');
+            if (typeof folderUrl  !== "undefined"){
+                refreshTable(folderUrl,1000);
+            }
+            
         });
         $( "#pdf" ).hide();
             // Prepare the preview for profile picture
