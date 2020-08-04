@@ -14,8 +14,8 @@ class PrDivisionsTableSeeder extends Seeder
         DB::table('pr_divisions')->delete();
         
         $prDivisions = array(
-        	array('name' => 'Power', 'code'=>1),
-        	array('name' => 'Water', 'code'=>2),
+        	array('name' => 'Water', 'code'=>1),
+        	array('name' => 'Power', 'code'=>2),
         );
 
         DB::table('pr_divisions')->insert($prDivisions);

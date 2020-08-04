@@ -70,17 +70,20 @@
 <!-- End CV -->
  
 <!-- Project -->
+                @canany(['pr edit','pr delete document','pr edit document'])
                <li class="{{Request::is('hrms/project*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fas fa-cubes"></i><span class="hide-menu">Projects</span></a>
                     <ul aria-expanded="false" class="collapse">
                    
-                    @canany(['project edit record','project delete record'])
+                   
                         <li><a  class="{{Request::is('hrms/project/create')?'active':''}}" href="{{route('project.create')}}">Add Project</a></li>
                         <li><a  class="{{Request::is('hrms/project')?'active':''}}" href="{{route('project.index')}}">List of Projects</a></li>
-                         <li><a  class="{{Request::is('hrms/projectCode')?'active':''}}" href="{{route('projectCode.create')}}">Project Code Calculator</a></li>
-                    @endcanany
+
+                        <li><a  class="{{Request::is('hrms/projectCode')?'active':''}}" href="{{route('projectCode.create')}}">Project Code Calculator</a></li>
+                   
                                                
                     </ul>
                 </li>
+                @endcanany
 
 <!-- End Project -->
 

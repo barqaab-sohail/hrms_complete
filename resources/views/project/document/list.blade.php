@@ -27,7 +27,7 @@
 					<tr>
 						<td>{{$documentId->description}}</td>
 						<td>{{$documentId->reference_no}}</td>
-						<td>{{$documentId->date}}</td>
+						<td>{{$documentId->document_date}}</td>
 						@if(($documentId->extension == "jpg")||($documentId->extension == "jpeg")||($documentId->extension == "png"))
 						<td><img  id="ViewIMG" src="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" href="{{asset(isset($documentId->file_name)?  'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30/></td>
 						@elseif ($documentId->extension == 'pdf')
@@ -67,6 +67,7 @@
     $(document).ready(function(){
 
 	    $('#myDataTable').DataTable({
+	                "order": [[ 2, "desc" ]],
 	                stateSave: false,
 	                dom: 'flrti',
 	                scrollY:        "500px",
@@ -104,11 +105,11 @@
 	  	e.preventDefault();
 	  	var url = $(this).attr('action');
 	  	$('.fa-spinner').show(); 
-
+	  	var folderUrl = $('.fa-folder-open').closest('a').attr('href');
+	  	refreshTable(folderUrl);
 	  	submitForm(this, url);
 	  	resetForm();
-	  	refreshTable("{{route('projectDocument.table')}}",300);
-	 
+	  		 
 	    });
 	});
 </script>
