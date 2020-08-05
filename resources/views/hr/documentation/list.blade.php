@@ -30,12 +30,10 @@
 						<td><img  id="ViewPDF" src="{{asset('Massets/images/document.png')}}" href="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30/></td>
 						@endif
 						
-
-						
 						
 						@can('hr edit documentation')
 						<td class="text-center">
-						 <a class="btn btn-info btn-sm" id="editDocument" @if (empty($documentId->pr_document_id)) href="{{route('documentation.edit',$documentId->id)}}"@else href="" @endif data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white " disabled></i></a>
+						 <a class="btn btn-info btn-sm" id="editDocument" @if (empty($documentId->hrDocumentationProject->id??'')) href="{{route('documentation.edit',$documentId->id)}}"@else href="" @endif data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white " disabled></i></a>
 						 </td>
 						 @endcan
 						 
@@ -44,7 +42,7 @@
 						 <form id="deleteDocument{{$documentId->id}}" action="{{route('documentation.destroy',$documentId->id)}}" method="POST">
 						 @method('DELETE')
 						 @csrf
-						 <button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete" @if(!empty($documentId->pr_document_id)) disabled @endif><i class="fas fa-trash-alt "></i></button>
+						 <button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete" @if(!empty($documentId->hrDocumentationProject->id??'')) disabled @endif><i class="fas fa-trash-alt "></i></button>
 						 </form>
 
 						 </td>
