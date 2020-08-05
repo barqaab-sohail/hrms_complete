@@ -262,7 +262,7 @@
 			var url = $(this).attr('action');
             $('.fa-spinner').show(); 
 			submitForm(this, url);
-            resetForm();
+           
             $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','150');
             $('#h6').text('Click On Image to Add Document');
 

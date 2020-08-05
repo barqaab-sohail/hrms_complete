@@ -11,6 +11,7 @@ use App\Models\Project\PrDocument;
 use App\Models\Project\PrDocumentContent;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDocumentation;
+use App\Models\Hr\HrDocumentationProject;
 use App\Helper\DocxConversion;
 use DB;
 
@@ -81,11 +82,11 @@ class ProjectDocumentController extends Controller
                 $input['pr_detail_id']=session('pr_detail_id');
                
             $prDocument = PrDocument::create($input); 
-          
+            $input['pr_document_id'] = $prDocument->id;
             // $test = $input['content'];
             //$test = strlen($input['content']);
             if (strlen($input['content'])>50){
-                $input['pr_document_id'] = $prDocument->id;
+                
                 PrDocumentContent::create($input); 
             }
 
@@ -94,7 +95,10 @@ class ProjectDocumentController extends Controller
                 for ($i=0;$i<count($request->input('hr_employee_id'));$i++){
                 $input['hr_employee_id']=$request->input("hr_employee_id.$i");
                 $input['pr_document_id']=$prDocument->id;
-                HrDocumentation::create($input);       
+                $hrDocumentation = HrDocumentation::create($input); 
+                $input['hr_documentation_id'] = $hrDocumentation->id;
+                HrDocumentationProject::create($input);
+
                 }
             }
 
@@ -109,8 +113,11 @@ class ProjectDocumentController extends Controller
 
 
         $employees = HrEmployee::where('hr_status_id',1)->get();
-        
-        $employeeDocuments = HrDocumentation::where('pr_document_id',$id)->get()->pluck('hr_employee_id')->toArray();
+        $hrDocumentationIds = HrDocumentationProject::where('pr_document_id',$id)->get()->pluck('hr_documentation_id')->toArray();
+
+         $employeeDocuments = HrDocumentation::wherein('id',$hrDocumentationIds)->get()->pluck('hr_employee_id')->toArray();
+                        
+    
         $prFolderNames = PrFolderName::all();
 
         $data = PrDocument::find($id);
@@ -137,7 +144,7 @@ class ProjectDocumentController extends Controller
                
         $prDocument = PrDocument::findOrFail($id);
 
-        DB::transaction(function () use ($request, $input, $prDocument, $id) { 
+        DB::transaction(function () use ($request, $input, $prDocument, $id, &$check) { 
             //If document attached then first delete existing file and then new file save
             if ($request->hasFile('document')){
                 
@@ -183,58 +190,106 @@ class ProjectDocumentController extends Controller
 
             // Now update remaining inputs in pr_document
                 $prDocument->update($input);
+
+
                 
             
             //if any employee removing from input than delete also in Hr Documentation
-                $existingHrDocument = HrDocumentation::where('pr_document_id', $prDocument->id)->get()->pluck('hr_employee_id')->toArray();
+                $hrDocumentationIds = HrDocumentationProject::where('pr_document_id',$id)->get()->pluck('hr_documentation_id')->toArray();
+
+                $existingHrDocument = HrDocumentation::wherein('id',$hrDocumentationIds)->get()->pluck('hr_employee_id')->toArray();
+
                 //$data1 = json_encode($existingHrDocument);
 
+                $hrDocumentationIds = HrDocumentationProject::where('pr_document_id',$id)->get()->pluck('hr_documentation_id')->toArray();
+
+                 //$hrDocumentationIds = explode(',',$hrDocumentationIds);
+                 // $check = json_encode($hrDocumentationIds);
                 if($request->filled("hr_employee_id.0")){
-                    //create collection
-                     $existingHrDocument = collect($existingHrDocument);
+                    
+                    for ($i=0;$i<count($request->input("hr_employee_id"));$i++){
+                        
+
+
+                        // $input['hr_employee_id']= 3;
+                        // $check = HrDocumentation::find(3600);
+                        // $check = json_encode($check);
+                        //$check->update(['description', 'OK']);
+                        $input['hr_employee_id']= $request->input("hr_employee_id.$i");
+                        $check =  HrDocumentation::where('id',3601)->first()->update($input);
+                        //json_encode($input);
+                        //
+                    //->get()->pluck('id');
+                    //$check = json_encode($check);
+                    //$check->update(['description',$input['description']]); 
+
+
+                    }
+
+
+
+
+                    // //create collection
+                    //  $existingHrDocument = collect($existingHrDocument);
                      
-                    //find required employee and exclude.  Remaining all are data delete after forloop
-                    for ($i=0;$i<count($input['hr_employee_id']);$i++){
+                    // //find required employee and exclude.  Remaining all are data delete after forloop
+                    // for ($i=0;$i<count($input['hr_employee_id']);$i++){
                         
-                        $key = $existingHrDocument->search($request->input("hr_employee_id.$i"));
-                        if($key){
-                            $existingHrDocument->pull($key);
-                        }
-                    }
-                        //Now remaining delete from HR Documentation
-                         //$data2 = json_encode($existingHrDocument);
+                    //     $key = $existingHrDocument->search($request->input("hr_employee_id.$i"));
+
+                    //     if($key){
+
+                    //         $existingHrDocument->pull($key);
+                    //     }else{
+
+                    //         $newEmployee = $request->input("hr_employee_id.$i");
+                    //     }
+                    // }
+                    //     //Now remaining delete from HR Documentation
+                    //      //$data2 = json_encode($existingHrDocument);
 
 
-                       HrDocumentation::where('pr_document_id',$id)->wherein('hr_employee_id',$existingHrDocument)->delete();
+                    //    HrDocumentation::where('pr_document_id',$id)->wherein('hr_employee_id',$existingHrDocument)->delete();
                         
 
                 }
 
-                //Now update in all employee documents
-                if($request->filled("hr_employee_id.0")){
+                // //Now update in all employee documents
+                // if($request->filled("hr_employee_id.0")){
                                 
-                    //for update or create Hr Documentation
-                    for ($i=0;$i<count($request->input('hr_employee_id'));$i++){
-                        //array of hr_employee_id into single value;
-                        $input['hr_employee_id']=$request->input("hr_employee_id.$i");
-                        //This information requried if new employee add in request
-                        $input['file_name']= $prDocument->file_name;
-                        $input['size']=$prDocument->size;
-                        $input['path']=$prDocument->path;
-                        $input['extension']=$prDocument->extension;
+                //     //for update or create Hr Documentation
+                //     for ($i=0;$i<count($request->input('hr_employee_id'));$i++){
+                //         //array of hr_employee_id into single value;
+                //         $input['hr_employee_id']=$request->input("hr_employee_id.$i");
+                //         //This information requried if new employee add in request
+                //         $input['file_name']= $prDocument->file_name;
+                //         $input['size']=$prDocument->size;
+                //         $input['path']=$prDocument->path;
+                //         $input['extension']=$prDocument->extension;
 
-                        HrDocumentation::updateOrCreate(
-                        ['hr_employee_id' => $input['hr_employee_id'],'pr_document_id'=> $prDocument->id],   //It is find and update 
-                        $input);                                //If first one not found than create
-                    }
+                //         //After update (may be delete) get current status of Hr Documentation Project
+                //         $currentHrDocumentationProjectIds = HrDocumentationProject::where('pr_document_id',$id)->get()->pluck('hr_documentation_id')->toArray();
 
-                }else{
-                    //If no fill hr_employee_id then delete from employee documentation
-                    HrDocumentation::where('pr_document_id', $prDocument->id)->delete();
-                }
+                //         foreach($currentHrDocumentationProjectIds as $currentId){
+
+                //             $curentHrDocumentation = HrDocumentation::find($currentId);
+                //             $curentHrDocumentation->update($input);
+
+                //         }
+
+                //         HrDocumentation::updateOrCreate(
+                //         ['hr_employee_id' => $input['hr_employee_id'],'pr_document_id'=> $prDocument->id],   //It is find and update 
+                //         $input);                                //If first one not found than create
+                //     }
+
+                // }else{
+                //     //If no fill hr_employee_id then delete from employee documentation
+                //     HrDocumentation::where('pr_document_id', $prDocument->id)->delete();
+                // }
+
             });  //end transaction
 
-        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);
+        return response()->json(['status'=> 'OK', 'message' => "$check Data Successfully Updated"]);
 
     }
 
