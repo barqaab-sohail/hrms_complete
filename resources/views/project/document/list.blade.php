@@ -106,7 +106,7 @@
 	  	var url = $(this).attr('action');
 	  	$('.fa-spinner').show(); 
 	  	var folderUrl = $('.fa-folder-open').closest('a').attr('href');
-	  	refreshTable(folderUrl);
+	  	refreshTable(folderUrl,1000);
 	  	submitForm(this, url);
 	  	resetForm();
 	  		 
