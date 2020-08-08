@@ -214,7 +214,7 @@ $(document).ready(function(){
 
             var folderUrl = $('.fa-folder-open').closest('a').attr('href');
             if (typeof folderUrl  !== "undefined"){
-                refreshTable(folderUrl,1000);
+                //refreshTable(folderUrl,1000);
             }
             
         });

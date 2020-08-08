@@ -8,8 +8,5 @@ class PrDocumentName extends Model
 {
     
 
-    public function prDocument()
-    {
-        return $this->belongsToMany('App\Models\Project\PrDocument');
-    }
+    
 }

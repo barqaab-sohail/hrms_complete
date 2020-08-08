@@ -70,7 +70,7 @@
 <!-- End CV -->
  
 <!-- Project -->
-                @canany(['pr edit','pr delete document','pr edit document'])
+                @canany(['pr edit power','pr edit water'])
                <li class="{{Request::is('hrms/project*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fas fa-cubes"></i><span class="hide-menu">Projects</span></a>
                     <ul aria-expanded="false" class="collapse">
                    
