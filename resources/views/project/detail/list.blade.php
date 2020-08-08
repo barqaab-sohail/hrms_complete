@@ -45,32 +45,55 @@
 				<thead>
 				<tr>
 					<th>Project Name</th>
-					<th>Commencement Date</th>
+					<th>Project No</th>
 					<th class="text-center"style="width:5%">Edit</th> 
-					<th class="text-center"style="width:5%">Delete</th>	
+					@role('Super Admin')
+					<th class="text-center"style="width:5%">Delete</th>
+					@endrole
 				</tr>
 				</thead>
 				<tbody>
+					
+					@if(Auth::User()->can('pr edit power'))
+							@php
+							$projects = $projects->merge($powerProjects);
+							@endphp
+					@endif	
+					@if(Auth::User()->can('pr edit water'))
+							@php
+							$projects = $projects->merge($waterProjects);
+							@endphp				
+					@endif
+
+
+
 					@foreach($projects as $project)
+					
+
 						<tr>
 							<td>{{$project->name}}</td>
-							<td>{{$project->commencement_date}}</td>
+							<td>{{$project->project_no}}</td>
 														
 							<td class="text-center">
 								<a class="btn btn-info btn-sm" href="{{route('project.edit',$project->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 							</td>
+							@role('Super Admin')
 							<td class="text-center">
-								 @role('Super Admin')
+								
 								 <form  id="formDeleteProject{{$project->id}}" action="{{route('project.destroy',$project->id)}}" method="POST">
 								 @method('DELETE')
 								 @csrf
 								 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
 								 </form>
-								 @endrole
+								
 								 </td>
+							 @endrole
 														
 						</tr>
+						
+						
 					@endforeach
+					
 				
 				</tbody>
 			</table>
