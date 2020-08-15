@@ -167,8 +167,16 @@ $(document).ready(function(){
         
         $('.employeeName').hide();
         $('#employee_file').click(function(){
-              $('.employeeName').toggle();
+         $('.employeeName').toggle();
+         $("#hr_employee_id").val('').select2('val', 'All');
+
         });
+
+        // if($('.employeeName').hide()){
+        //     $('#hr_employee_id').each(function(index, option) {
+        //             $(option).remove();
+        //         });
+        // }
 
 
 

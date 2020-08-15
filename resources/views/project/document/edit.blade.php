@@ -205,6 +205,7 @@
         $('.employeeName').hide();
         $('#employee_file').click(function(){
               $('.employeeName').toggle();
+              $("#hr_employee_id").val('').select2('val', 'All');
 
         });
 
