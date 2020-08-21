@@ -19,7 +19,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Reference No.<span class="text_requried">*</span></label><br>
 
-                               	<input type="text"  name="reference_no" value="{{ old('reference_no', $data->reference_no??'') }}"  class="form-control" data-validation="required" placeholder="Enter Appointment Letter Reference No">
+                               	<input type="text"  name="reference_no" value="{{ old('reference_no', $data->reference_no??'') }}"  class="form-control excempted" data-validation="required" placeholder="Enter Appointment Letter Reference No">
                             </div>
                         </div>
                     </div>

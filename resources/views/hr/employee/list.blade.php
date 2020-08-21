@@ -14,14 +14,13 @@
 				<tr>
 					<th>Id</th>
 					<th>Employee Name</th>
-					<th>Father's Name</th>
+					<th>Education</th>
 					<th>Employee No</th>
 					<th>Mobile</th>
 					
 					<th class="text-center"style="width:5%">Edit</th> 
 					<th class="text-center"style="width:5%">Delete</th>
-
-					
+				
 				</tr>
 				</thead>
 				<tbody>
@@ -29,7 +28,7 @@
 						<tr>
 							<td>{{$employee->id}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
-							<td>{{$employee->father_name}}</td>
+							<td>{{$employee->hrEducation->first()->to??''}}</td>
 							<td>{{$employee->employee_no??''}}</td>
 							<td>{{$employee->hrContactMobile->mobile??''}}</td>
 							
