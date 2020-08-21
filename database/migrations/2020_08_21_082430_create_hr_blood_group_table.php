@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHrDisabilityTable extends Migration
+class CreateHrBloodGroupTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateHrDisabilityTable extends Migration
      */
     public function up()
     {
-        Schema::create('hr_disabilities', function (Blueprint $table) {
+        Schema::create('hr_blood_groups', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->bigInteger('hr_employee_id')->unique()->unsigned();
-            $table->string('detail');
-            $table->timestamps();
+            $table->bigInteger('blood_group_id')->unsigned();
+            $table->foreign('blood_group_id')->references('id')->on('blood_groups');
+
+            $table->bigInteger('hr_employee_id')->unsigned();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -30,6 +32,6 @@ class CreateHrDisabilityTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hr_disabilities');
+        Schema::dropIfExists('hr_blood_groups');
     }
 }

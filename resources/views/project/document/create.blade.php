@@ -172,12 +172,7 @@ $(document).ready(function(){
 
         });
 
-        // if($('.employeeName').hide()){
-        //     $('#hr_employee_id').each(function(index, option) {
-        //             $(option).remove();
-        //         });
-        // }
-
+       
 
 
         $('#hideDiv').hide();

@@ -63,6 +63,8 @@ Route::resource('/documentation', 'DocumentationController');
 Route::get('/userLogin/refreshTable', 'UserLoginController@refreshTable')->name('userLogin.table');
 Route::resource('/userLogin', 'UserLoginController',['only'=>['edit','store','destroy']]);
 Route::resource('/picture', 'PictureController',['only'=>['edit','store']]);
+Route::resource('/additionalInformation', 'AdditionalInformationController',['only'=>['edit','update']]);
+
 
 Route::get('/posting/refreshTable', 'PostingController@refreshTable')->name('posting.table');
 Route::resource('/posting', 'PostingController');
