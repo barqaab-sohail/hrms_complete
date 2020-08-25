@@ -12,6 +12,7 @@
             <a type="submit" id="addEmergency" role="button" href="{{route('emergency.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/emergency/')?'style=background-color:#737373':''}}>Emergency Contact</a>
 
             <a type="submit" id="addNextToKin" role="button" href="{{route('nextToKin.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/nextToKin/')?'style=background-color:#737373':''}}>Next to Kin</a>
+            <a type="submit" id="addUserLogin" role="button" href="{{route('additionalInformation.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/additionalInformation/')?'style=background-color:#737373':''}}>Additional Information</a>
             @endcan
             @can('hr edit appointment')
             
@@ -26,7 +27,7 @@
 
 
             @can('Super Admin')
-            <a type="submit" id="addUserLogin" role="button" href="{{route('additionalInformation.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/additionalInformation/')?'style=background-color:#737373':''}}>Additional Information</a>
+            
             <a type="submit" id="addUserLogin" role="button" href="{{route('userLogin.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Login Detail</a>
             
             <a type="submit" role="button" id="addPromotion"  href="{{route('promotion.create')}}" class="btn btn-info" {{Request::is('hrms/promotion/create')?'style=background-color:#737373':''}}>Promotion</a>
