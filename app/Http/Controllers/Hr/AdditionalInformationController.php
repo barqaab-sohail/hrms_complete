@@ -10,6 +10,7 @@ use App\Models\Hr\HrPassport;
 use App\Models\Hr\HrDriving;
 use App\Models\Hr\HrDisability;
 use App\Models\Hr\HrEmployee;
+use App\Http\Requests\Hr\AdditionalInformationStore;
 use DB;
 
 
@@ -32,7 +33,7 @@ class AdditionalInformationController extends Controller
 	}
 
 
-	public function update(Request $request, $id){
+	public function update(AdditionalInformationStore $request, $id){
 
 		$input = $request->all();
 		if($request->filled('licence_expiry')){

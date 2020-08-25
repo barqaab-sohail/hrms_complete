@@ -43,7 +43,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Passport No.</label><br>
 
-                                <input type="text"  name="passport_no" value="{{ old('passport_no', $employee->hrPassport->passport_no??'') }}"  class="form-control excempted" placeholder="Enter Passport No">
+                                <input type="text"  name="passport_no" id="passport_no" value="{{ old('passport_no', $employee->hrPassport->passport_no??'') }}"  class="form-control excempted" placeholder="Enter Passport No">
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Passport Expiry Date</label>
                                 
-                                <input type="text" name="passport_expiry" value="{{ old('passport_expiry',$employee->hrPassport->passport_expiry??'') }}" class="form-control date_input" readonly>
+                                <input type="text" name="passport_expiry" id="passport_expiry" value="{{ old('passport_expiry',$employee->hrPassport->passport_expiry??'') }}" class="form-control date_input" readonly>
 
                                 <br>
                                 @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
@@ -136,14 +136,16 @@ $(document).ready(function(){
             }
         });
 
-         $('#licence_expiry').on('change',function(){
-             console.log('OK');
+        $('#passport_no').on('change',function(){
+
             if($(this).val() !=''){
-                $('#licence_no').attr('data-validation','required');
+                $('#passport_expiry').attr('data-validation','required');
             }else {
-                $('#licence_no').removeAttr('data-validation');
+                $('#passport_expiry').removeAttr('data-validation');
             }
         });
+
+        
  
         $("#formAdditionalInformation").submit(function(e) { 
            
