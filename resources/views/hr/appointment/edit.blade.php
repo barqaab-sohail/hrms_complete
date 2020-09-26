@@ -17,9 +17,9 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">Reference No.<span class="text_requried">*</span></label><br>
+                                <label class="control-label text-right">Reference No.<span class="text_requried">*</span></label><br>
 
-                               	<input type="text"  name="reference_no" value="{{ old('reference_no', $data->reference_no??'') }}"  class="form-control excempted" data-validation="required" placeholder="Enter Appointment Letter Reference No">
+                                <input type="text"  name="reference_no" value="{{ old('reference_no', $data->reference_no??'') }}"  class="form-control excempted" data-validation="required" placeholder="Enter Appointment Letter Reference No">
                             </div>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">Joining Date<span class="text_requried">*</span></label>
+                                <label class="control-label text-right">Joining Date<span class="text_requried">*</span></label>
                                 
                                 <input type="text" name="joining_date" value="{{ old('joining_date',$data->joining_date??'') }}" class="form-control date_input" data-validation="required" readonly >
 
@@ -40,7 +40,7 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">Expiry Date</label>
+                                <label class="control-label text-right">Expiry Date</label>
                                 
                                 <input type="text" name="expiry_date" value="{{ old('expiry_date',$data->expiry_date??'') }}" class="form-control date_input" readonly>
 
@@ -55,7 +55,7 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">Designation<span class="text_requried">*</span></label>
+                                <label class="control-label text-right">Designation<span class="text_requried">*</span></label>
                                  <select  id="hr_designation_id"   name="hr_designation_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($designations as $designation)
@@ -71,7 +71,7 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">HOD<span class="text_requried">*</span></label>
+                                <label class="control-label text-right">HOD<span class="text_requried">*</span></label>
                                  <select  id="hr_manager_id"   name="hr_manager_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($managers as $manager)
@@ -87,7 +87,7 @@
                     <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">Department<span class="text_requried">*</span></label>
+                                <label class="control-label text-right">Department<span class="text_requried">*</span></label>
                                  <select  id="hr_department_id"   name="hr_department_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($departments as $department)
@@ -239,11 +239,10 @@
             </div>
         </form>
           @include('hr.appointment.salModal')
-	</div> <!-- end card body -->    
+    </div> <!-- end card body -->    
   
 
     <style>
-
     input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
@@ -261,12 +260,6 @@ $(document).ready(function(){
             var url = $(this).attr('action');
             $('.fa-spinner').show(); 
             submitForm(this, url);
-
         });
 });
 </script>
-
-
-
-
-

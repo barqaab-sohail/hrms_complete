@@ -171,10 +171,6 @@ class HrEmployee extends Model implements Auditable
 
 
 
-
-
-
-
     public function hrDesignation(){
         return $this->hasOneThrough(
             'App\Models\Hr\HrDesignation',                  //Final Model HrDocumentName
