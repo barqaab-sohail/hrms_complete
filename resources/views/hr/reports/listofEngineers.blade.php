@@ -1,51 +1,52 @@
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
 @section('Heading')
-	<h3 class="text-themecolor">List of HR Reports</h3>
+	<h3 class="text-themecolor">List of Engineers</h3>
 @stop
 @section('content')
 <div class="card">
 	<div class="card-body">	
-		<h4 class="card-title">List of HR Reports</h4>
+		<h4 class="card-title">List of Engineers</h4>
 
 		<div class="table-responsive m-t-40">	
 			<table id="myTable" class="table table-bordered table-striped"  style="width:100%" >
 				<thead>
 				<tr>
 					
-					<th>Name of Report</th>
-					<th class="text-center"style="width:5%">Show</th> 
+					<th>Employee Name</th>
+					<th>Engineering Degree</th>
+					<th>Mobile</th>
+					
+					<th class="text-center"style="width:5%">Edit</th> 
+					<th class="text-center"style="width:5%">Delete</th>
+
+					
 				</tr>
 				</thead>
-				
 				<tbody>
-					
-					<tr>
-						<td>CNIC Expiry List</td>
-						
-						<td class="text-center">
-							<a class="btn btn-info btn-sm" href="{{route('hrReports.cnicExpiryList')}}"  title="Show"><i class="fas fa-pencil-alt text-white "></i></a>
-						</td>
-																				
-					</tr>
-					<tr>
-						<td>Missing Document List</td>
-						
-						<td class="text-center">
-							<a class="btn btn-info btn-sm" href="{{route('hrReports.missingDocumentList')}}"  title="Show"><i class="fas fa-pencil-alt text-white "></i></a>
-						</td>
-																				
-					</tr>
-
-					<tr>
-						<td>Search Employee</td>
-						
-						<td class="text-center">
-							<a class="btn btn-info btn-sm" href="{{route('hrReports.searchEmployee')}}"  title="Show"><i class="fas fa-pencil-alt text-white "></i></a>
-						</td>
-																				
-					</tr>
-				
+					@foreach($employees as $employee)
+						<tr>
+							
+							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
+							<td>{{$employee->degree_name}}</td>
+							<td>{{$employee->hrContactMobile->mobile??''}}</td>
+							
+							
+							<td class="text-center">
+								<a class="btn btn-info btn-sm" href="{{route('employee.edit',$employee->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+							</td>
+							<td class="text-center">
+								 @role('Super Admin')
+								 <form  id="formDeleteContact{{$employee->id}}" action="{{route('employee.destroy',$employee->id)}}" method="POST">
+								 @method('DELETE')
+								 @csrf
+								 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
+								 </form>
+								 @endrole
+								 </td>
+														
+						</tr>
+					@endforeach
 				
 				</tbody>
 			</table>
@@ -67,24 +68,24 @@ $(document).ready(function() {
                     {
                         extend: 'copyHtml5',
                         exportOptions: {
-                            columns: [ 0, 1]
+                            columns: [ 0, 1, 2,3,4]
                         }
                     },
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [ 0, 1]
+                            columns: [ 0, 1, 2,3,4]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [ 0, 1]
+                            columns: [ 0, 1, 2,3,4]
                         }
                     }, {
                         extend: 'csvHtml5',
                         exportOptions: {
-                            columns: [ 0, 1]
+                            columns: [ 0, 1, 2,3,4]
                         }
                     },
                 ],
