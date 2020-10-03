@@ -14,13 +14,18 @@
             <a type="submit" id="addNextToKin" role="button" href="{{route('nextToKin.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/nextToKin/')?'style=background-color:#737373':''}}>Next to Kin</a>
             <a type="submit" id="addUserLogin" role="button" href="{{route('additionalInformation.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/additionalInformation/')?'style=background-color:#737373':''}}>Additional Information</a>
             @endcan
-            @can('hr edit appointment')
-            
+           
+            @can('hr edit education')
             <a type="submit" id="addEducation" role="button" href="{{route('education.create')}}" class="btn btn-info" {{Request::is('hrms/education/create')?'style=background-color:#737373':''}}>Education</a>
             <a type="submit" id="addExperience" role="button" href="{{route('experience.create')}}" class="btn btn-info" {{Request::is('hrms/experience/create')?'style=background-color:#737373':''}}>Experience</a>
-            <a type="submit" id="addAppointment" role="button" href="{{route('appointment.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/appointment/')?'style=background-color:#737373':''}}>Appointment Detail</a>
-            
             @endcan
+
+            @can('hr edit appointment')
+            <a type="submit" id="addAppointment" role="button" href="{{route('appointment.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/appointment/')?'style=background-color:#737373':''}}>Appointment Detail</a>
+
+            <a type="submit" role="button" id="addPosting" href="{{route('posting.create')}}" class="btn btn-info" {{Request::is('hrms/posting/create')?'style=background-color:#737373':''}}>Transfer/Posting</a>
+            @endcan
+
             @can('hr edit exit')
             <a type="submit" id="addExit"  role="button" href="{{route('exit.create')}}" class="btn btn-info" {{Request::is('hrms/exit/create/')?'style=background-color:#737373':''}}>Exit</a>
             @endcan
@@ -32,7 +37,7 @@
             
             <a type="submit" role="button" id="addPromotion"  href="{{route('promotion.create')}}" class="btn btn-info" {{Request::is('hrms/promotion/create')?'style=background-color:#737373':''}}>Promotion</a>
 
-            <a type="submit" role="button" id="addPosting" href="{{route('posting.create')}}" class="btn btn-info" {{Request::is('hrms/posting/create')?'style=background-color:#737373':''}}>Transfer/Posting</a>
+            
 
             
             @endcan

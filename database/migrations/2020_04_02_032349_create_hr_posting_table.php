@@ -17,22 +17,13 @@ class CreateHrPostingTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
-            $table->bigInteger('pr_detail_id')->unsigned();
-            $table->bigInteger('hr_manager_id')->unsigned();
-            $table->bigInteger('hr_designation_id')->unsigned();
-            $table->bigInteger('hr_department_id')->unsigned();
-            $table->bigInteger('hr_salary_id')->unsigned();
-            $table->bigInteger('office_id')->unsigned();
+            $table->bigInteger('hr_documentation_id')->unsigned();
             $table->date('effective_date');
             $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
-            $table->foreign('pr_detail_id')->references('id')->on('pr_details');
-            $table->foreign('hr_manager_id')->references('id')->on('hr_employees');
-            $table->foreign('hr_designation_id')->references('id')->on('hr_designations');
-            $table->foreign('hr_department_id')->references('id')->on('hr_departments');
-            $table->foreign('hr_salary_id')->references('id')->on('hr_salaries');
-            $table->foreign('office_id')->references('id')->on('offices');
+            $table->foreign('hr_documentation_id')->references('id')->on('hr_documentations');
+           
         });
     }
 

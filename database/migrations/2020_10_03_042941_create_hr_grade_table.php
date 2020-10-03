@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEmployeeTypeTable extends Migration
+class CreateHrGradeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateEmployeeTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('employee_types', function (Blueprint $table) {
+        Schema::create('hr_grades', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateEmployeeTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employee_types');
+        Schema::dropIfExists('hr_grades');
     }
 }

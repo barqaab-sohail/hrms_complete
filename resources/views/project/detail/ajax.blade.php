@@ -19,7 +19,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Name of Project<span class="text_requried">*</span></label><br>
 
-                               	<input type="text"  name="name" value="{{ old('name', $data->name??'') }}"  class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Name of Project">
+                               	<input type="text"  name="name" value="{{ old('name', $data->name??'') }}"  class="form-control excempted" data-validation="required length" data-validation-length="max190" placeholder="Enter Name of Project">
                             </div>
                         </div>
                     </div>

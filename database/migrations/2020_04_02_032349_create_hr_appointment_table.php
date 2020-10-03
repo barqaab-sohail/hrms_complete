@@ -27,8 +27,9 @@ class CreateHrAppointmentTable extends Migration
             $table->string('reference_no')->nullable();
             $table->date('joining_date');
             $table->date('expiry_date')->nullable();
-            $table->tinyInteger('grade')->nullable();
-            $table->string('category',1);
+            $table->bigInteger('hr_grade_id')->nullable()->unsigned();
+            $table->bigInteger('hr_category_id')->unsigned();
+            $table->bigInteger('hr_employee_type_id')->unsigned();
             $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
@@ -39,6 +40,9 @@ class CreateHrAppointmentTable extends Migration
             $table->foreign('hr_department_id')->references('id')->on('hr_departments');
             $table->foreign('hr_salary_id')->references('id')->on('hr_salaries');
             $table->foreign('office_id')->references('id')->on('offices');
+            $table->foreign('hr_grade_id')->references('id')->on('hr_grades');
+            $table->foreign('hr_category_id')->references('id')->on('hr_categories');
+            $table->foreign('hr_employee_type_id')->references('id')->on('hr_employee_types');
         });
     }
 
