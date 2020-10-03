@@ -104,11 +104,11 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Category<span class="text_requried">*</span></label>
-                                <select  name="category"  class="form-control selectTwo" data-validation="required">
+                                <select  name="hr_category_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
-                                    <option value="A" {{(old("category",$data->category??'')=='A'? "selected" : "")}}>A</option>
-                                    <option value="B" {{(old("category",$data->category??'')=='B'? "selected" : "")}}>B</option>
-                                    <option value="C" {{(old("category",$data->category??'')=='C'? "selected" : "")}}>C</option>
+                                    @foreach($hrCategories as $hrCategory)
+                                    <option value="{{$hrCategory->id}}" {{(old("hr_category_id",$data->hr_category_id??'')==$hrCategory->id? "selected" : "")}}>{{$hrCategory->name}}</option>
+                                    @endforeach 
                                 </select>
                                     
                                 
@@ -144,12 +144,11 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Grade</label>
-                                <select  name="grade"  class="form-control selectTwo">
+                                <select  name="hr_grade_id"  class="form-control selectTwo">
                                     <option value=""></option>
-                                    @for ($i = 1; $i < 15; $i++)
-                                    <option value="{{$i}}" {{(old("grade",$data->grade??'')==$i? "selected" : "")}}>{{ $i }}</option>
-
-                                    @endfor
+                                    @foreach($hrGrades as $hrGrade)
+                                    <option value="{{$hrGrade->id}}" {{(old("hr_grade_id",$data->hr_grade_id??'')==$hrGrade->id? "selected" : "")}}>{{$hrGrade->name}}</option>
+                                    @endforeach 
                                 </select>
                                 
                                 
@@ -191,8 +190,25 @@
                 </div><!--/End Row-->
 
                 <div class="row">
+                     <!--/span-->
+                    <div class="col-md-2">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label class="control-label text-right">Employee Type<span class="text_requried">*</span></label>
+                                 <select   name="hr_employee_type_id"  class="form-control selectTwo" data-validation="required">
+                                    <option value=""></option>
+                                    @foreach($hrEmployeeTypes as $hrEmployeeType)
+                                    <option value="{{$hrEmployeeType->id}}" {{(old("hr_employee_type_id",$data->hr_employee_type_id??'')==$hrEmployeeType->id? "selected" : "")}}>{{$hrEmployeeType->name}}</option>
+                                    @endforeach
+                                   
+                                </select>
+                                    
+                                
+                            </div>
+                        </div>
+                    </div>
                     <!--/span-->
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Office<span class="text_requried">*</span></label>

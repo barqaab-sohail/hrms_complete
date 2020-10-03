@@ -15,9 +15,9 @@
 					<thead>
 					
 					<tr >
-						<th>Designation</th>
+						
+						<th>Description / Remarks</th>
 						<th>Effective Date</th>
-						<th>Salary</th>
 						<th class="text-center">Edit</th>
 						<th class="text-center">Delete</th>
 						
@@ -26,9 +26,10 @@
 					<tbody>
 						@foreach($hrPostings as $posting)
 							<tr>
-								<td>{{$posting->hrDesignation->name}}</td>
+								
+								<td>{{$posting->remarks}}</td>
 								<td>{{$posting->effective_date}}</td>
-								<td>{{$posting->hrSalary->total_salary}}</td>
+								
 								@can('hr edit posting')
 								<td class="text-center">
 								 <a class="btn btn-info btn-sm" id="editEducation" href="{{route('posting.edit',$posting->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>

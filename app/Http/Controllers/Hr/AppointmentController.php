@@ -12,6 +12,9 @@ use App\Models\Hr\HrDepartment;
 use App\Models\Hr\HrLetterType;
 use App\Models\Project\PrDetail;
 use App\Models\Office\Office;
+use App\Models\Hr\HrGrade;
+use App\Models\Hr\HrCategory;
+use App\Models\Hr\HrEmployeeType;
 use App\Http\Requests\Hr\AppointmentStore;
 use DB;
 
@@ -26,6 +29,9 @@ class AppointmentController extends Controller
     	$letterTypes = HrLetterType::all();
     	$projects = PrDetail::all();
         $offices = Office::all();
+        $hrGrades = HrGrade::all();
+        $hrCategories = HrCategory::all();
+        $hrEmployeeTypes = HrEmployeeType::all();
     	$data = HrAppointment::where('hr_employee_id',$id)->first();
        
         // $employeeDesignation = HrAppointment::where('hr_employee_id', session('hr_employee_id'))
@@ -54,7 +60,7 @@ class AppointmentController extends Controller
 
 
         if($request->ajax()){
-            $view =  view('hr.appointment.edit', compact('data','salaries','designations','managers','departments','letterTypes','projects','offices'))->render();
+            $view =  view('hr.appointment.edit', compact('data','salaries','designations','managers','departments','letterTypes','projects','offices','hrGrades','hrCategories','hrEmployeeTypes'))->render();
             return response()->json($view);
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');

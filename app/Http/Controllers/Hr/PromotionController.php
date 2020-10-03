@@ -51,7 +51,7 @@ class PromotionController extends Controller
     	DB::transaction(function () use ($request,$input, $employeeFullName) { 
 
     			$extension = request()->document->getClientOriginalExtension();
-				$fileName =session('hr_employee_id').'-'.$input['remarks'].'-'. time().'.'.$extension;
+				$fileName =session('hr_employee_id').'-'. time().'.'.$extension;
 				$folderName = "hr/documentation/".session('hr_employee_id').'-'.$employeeFullName."/";
 				//store file
 				$request->file('document')->storeAs('public/'.$folderName,$fileName);
