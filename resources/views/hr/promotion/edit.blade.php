@@ -17,11 +17,11 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Designation<span class="text_requried">*</span></label>
-                                 <select  id="hr_designation_id"   name="hr_designation_id" data-validation="required" class="form-control selectTwo">
+                                <label class="control-label text-right">Designation</label>
+                                 <select  id="hr_designation_id"   name="hr_designation_id" class="form-control selectTwo">
                                     <option value=""></option>
                                     @foreach($designations as $designation)
-                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hr_designation_id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hrDesignation->id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                                     @endforeach 
                                 </select>
                                 
@@ -46,12 +46,12 @@
                     <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Salary<span class="text_requried">*</span></label>
+                                <label class="control-label text-right">Salary</label>
 
-                                <select  id="hr_salary_id"   name="hr_salary_id" data-validation="required" class="form-control selectTwo">
+                                <select  id="hr_salary_id"   name="hr_salary_id" class="form-control selectTwo">
                                     <option value=""></option>
                                     @foreach($salaries as $salary)
-                                    <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hr_salary_id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
+                                    <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hrSalary->id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
                                     @endforeach
                               
                                 </select>
@@ -69,12 +69,11 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Grade</label>
-                                <select  name="grade"  class="form-control selectTwo">
+                                <select  name="hr_grade_id"  class="form-control selectTwo">
                                     <option value=""></option>
-                                    @for ($i = 1; $i < 15; $i++)
-                                    <option value="{{$i}}" {{(old("grade",$data->grade??'')==$i? "selected" : "")}}>{{ $i }}</option>
-
-                                    @endfor
+                                    @foreach($hrGrades as $hrGrade)
+                                    <option value="{{$hrGrade->id}}" {{(old("hr_grade_id",$data->hrGrade->id??'')==$hrGrade->id? "selected" : "")}}>{{$hrGrade->name}}</option>
+                                    @endforeach 
                                 </select>
                                 
                                 
@@ -88,11 +87,11 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">HOD<span class="text_requried">*</span></label>
-                                 <select  id="hr_manager_id"   name="hr_manager_id" data-validation="required" class="form-control selectTwo" >
+                               	<label class="control-label text-right">HOD</label>
+                                 <select  id="hr_manager_id"   name="hr_manager_id" class="form-control selectTwo" >
                                     <option value=""></option>
                                     @foreach($managers as $manager)
-                                    <option value="{{$manager->id}}" {{(old("hr_manager_id",$data->hr_manager_id??'')==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
+                                    <option value="{{$manager->id}}" {{(old("hr_manager_id",$data->hrManager->id??'')==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
                                     @endforeach  
                                 </select>
                                  
@@ -104,11 +103,11 @@
                     <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">Department<span class="text_requried">*</span></label>
-                                 <select  id="hr_department_id"   name="hr_department_id" data-validation="required" class="form-control selectTwo" >
+                               	<label class="control-label text-right">Department</label>
+                                 <select  id="hr_department_id"   name="hr_department_id" class="form-control selectTwo" >
                                     <option value=""></option>
                                     @foreach($departments as $department)
-                                    <option value="{{$department->id}}" {{(old("hr_department_id",$data->hr_department_id??'')==$department->id? "selected" : "")}}>{{$department->name}}</option>
+                                    <option value="{{$department->id}}" {{(old("hr_department_id",$data->hrDepartment->id??'')==$department->id? "selected" : "")}}>{{$department->name}}</option>
                                     @endforeach  
                                 </select>
                                     
@@ -120,12 +119,12 @@
                      <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Category<span class="text_requried">*</span></label>
-                                <select  name="category"  class="form-control selectTwo" data-validation="required" >
+                                <label class="control-label text-right">Category</label>
+                                <select  name="hr_category_id"  class="form-control selectTwo" >
                                     <option value=""></option>
-                                    <option value="A" {{(old("category",$data->category??'')=='A'? "selected" : "")}}>Category-A</option>
-                                    <option value="B" {{(old("category",$data->category??'')=='B'? "selected" : "")}}>Category-B</option>
-                                    <option value="C" {{(old("category",$data->category??'')=='C'? "selected" : "")}}>Category-C</option>
+                                    @foreach($hrCategories as $hrCategory)
+                                    <option value="{{$hrCategory->id}}" {{(old("hr_category_id",$data->hrCategory->id??'')==$hrCategory->id? "selected" : "")}}>{{$hrCategory->name}}</option>
+                                    @endforeach 
                                 </select>
                                     
                                 
@@ -139,7 +138,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Remarks<span class="text_requried">*</span></label>
-                                <input type="text"  name="remarks" id="forward_slash" value="{{ old('remarks',$data->remarks??'') }}"  class="form-control" data-validation="required length" data-validation-length="max100" placeholder="Enter Remarks if any">
+                                <input type="text"  name="remarks" id="forward_slash" value="{{ old('remarks',$data->remarks??'') }}"  class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Remarks if any">
                                 
                                
                             </div>
