@@ -25,13 +25,9 @@ class PromotionStore extends FormRequest
     {
          $rules = [
             
-            'hr_designation_id' => 'required',
+            
             'effective_date' => 'required',
-            'hr_salary_id' => 'required',
-            'hr_manager_id' => 'required',
-            'hr_department_id' => 'required',
-            'category' => 'required',
-            'remarks' => 'required|max:100',
+            'remarks' => 'required|max:190',
 
         ];
 

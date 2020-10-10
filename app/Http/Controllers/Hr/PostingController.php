@@ -242,11 +242,6 @@ class PostingController extends Controller
 
             }
 
-
-
-
-
-
            
     	});  //end transaction
 
@@ -258,7 +253,7 @@ class PostingController extends Controller
 
     public function destroy ($id){
 
-    	 DB::transaction(function () use ($id) {  
+    	DB::transaction(function () use ($id) {  
 
     	 	$hrPosting = HrPosting::find($id);
             $hrPosting->delete();

@@ -38,7 +38,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">Institute</label>
-                                <input type="text" name="institute" id="institute" value="{{ old('institute',$data->institute) }}" class="form-control" data-validation="length" data-validation-length="max190" >
+                                <input type="text" name="institute" id="institute" value="{{ old('institute',$data->institute) }}" class="form-control excempted" data-validation="length" data-validation-length="max190" >
                             </div>
                         </div>
                     </div>
