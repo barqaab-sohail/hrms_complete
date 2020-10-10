@@ -52,8 +52,7 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               <label class="control-label text-right">Town/Village<span class="text_requried">*</span></label>
-                                
+                               <label class="control-label text-right">Town/Village</label>
                                <input type="text" name="town" value="{{ old('town') }}" class="form-control" data-validation=" required length"  data-validation-length="max190" placeholder="Enter Town or Village">
 
                             </div>
@@ -65,9 +64,8 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">Tehsil</span></label>
-                                
-                               <input type="text" name="tehsil" value="{{ old('tehsil') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Tehsil">
+                              <label class="control-label text-right">Tehsil</span></label> 
+                              <input type="text" name="tehsil" value="{{ old('tehsil') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Tehsil">
                                 
                                
                             </div>
@@ -136,9 +134,9 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Email</label>
+                              <label class="control-label text-right">Email</label>
                                 
-                               <input type="email" name="email" value="{{ old('emal') }}" data-validation="length"  data-validation-length="max50" class="form-control" placeholder="Enter Email Address">
+                              <input type="email" name="email" value="{{ old('emal') }}" data-validation="length"  data-validation-length="max50" class="form-control" placeholder="Enter Email Address">
                                 
                             </div>
                         </div>
