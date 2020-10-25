@@ -124,7 +124,7 @@ Route::resource('/projectCode', 'ProjectCodeController');
 //Submission Routes
 Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'submission'], function(){
 	Route::resource('/submission', 'SubmissionController');
-	
+	Route::get('/submissionCode','SubmissionController@submissionCode')->name('submission.code');
 
 });
 

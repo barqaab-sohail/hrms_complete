@@ -113,18 +113,20 @@
 		                                <div class="col-md-3">
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12 required">
-		                                        	<label class="control-label text-right">City</label>
-		                                       		 <select class="form-control" name="city_id" id="city" data-placeholder="First Select Province" >
-      												  </select>
-
-		                                       	
+		                                        	<label class="control-label text-right">Country<span class="text_requried">*</span></label><br>
+		                                       		<select  name="country_id" id="country" data-validation="required" class="form-control">
+			                                           	<option value=""></option>
+			                                        @foreach($countries as $country)
+														<option value="{{$country->id}}" {{(old("country_id")==$country->id? "selected" : "")}}>{{$country->name}}</option>
+                                                    @endforeach 	
+                                                    </select> 
+                            	
 		                                        </div>
 		                                    </div>
 		                                </div>
 		                                
 		                            </div>
 		                     
-
 		               <!--row 3-->
 		                            <div class="row" >
 		                            <!--/span 3-1 -->
@@ -134,7 +136,6 @@
 		                                        	<label class="control-label text-right">Province</label>
 		                                       		<select class="form-control" name="state_id" id="state" data-placeholder="First Select Country" >
        												</select>
-
 		                             
 		                                        </div>
 		                                    </div>
@@ -143,13 +144,9 @@
 		                                <div class="col-md-3">   	
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12">
-		                                       		<label class="control-label text-right">Country<span class="text_requried">*</span></label><br>
-		                                       		<select  name="country_id" id="country" data-validation="required" class="form-control">
-			                                           	<option value=""></option>
-			                                        @foreach($countries as $country)
-														<option value="{{$country->id}}" {{(old("country_id")==$country->id? "selected" : "")}}>{{$country->name}}</option>
-                                                    @endforeach 	
-                                                    </select> 
+		                                        	<label class="control-label text-right">City</label>
+		                                       		 <select class="form-control" name="city_id" id="city" data-placeholder="First Select Province" >
+      												  </select>
 		                                       		
 		                                        </div>
 		                                    </div>

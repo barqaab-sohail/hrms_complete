@@ -28,6 +28,64 @@
 		                        <hr class="m-t-0 m-b-40">
 
 		                        <div class="row">
+		                            <div class="col-md-2">
+		                                <div class="form-group row">
+		                                    <div class="col-md-12">
+		                                       	<label class="control-label text-right">Division<span class="text_requried">*</span></label>
+		                                        
+	                                           	<select  name="sub_division_id" id="sub_division_id" class="form-control selectTwo" data-validation="required">
+                                                    <option value=""></option>
+                                                    @foreach($divisions as $division)
+													<option value="{{$division->code}}" {{(old("sub_division_id")==$division->id? "selected" : "")}}>{{$division->name}}</option>
+                                                    @endforeach   
+                                                </select>
+												
+		                                    </div>
+		                                </div>
+		                            </div>
+		                             <!--/span-->
+		                            <div class="col-md-2" id="submission_type_div">
+		                                <div class="form-group row">
+		                                    <div class="col-md-12">
+		                                       	<label class="control-label text-right">Submission Type<span class="text_requried">*</span></label>
+		                                       	<select  name="sub_type_id" id="submission_type" class="form-control selectTwo" data-validation="required">
+                                                    <option value=""></option>
+                                                    @foreach($subTypes as $subType)
+													<option value="{{$subType->id}}" {{(old("sub_type_id")==$subType->id? "selected" : "")}}>{{$subType->name}}</option>
+                                                    @endforeach   
+                                                </select>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                            <!--span-->
+		                            <div class="col-md-2">
+		                                <div class="form-group row" id="submission_no_div">
+		                                    <div class="col-md-12">
+		                                       	<label class="control-label text-right">Submission No<span class="text_requried">*</span></label>
+		                                        
+		                                        <input type="text"  name="submission_no" id="submission_no"  class="form-control" data-validation="required" readonly>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                            <!--/span-->
+		                            <div class="col-md-6"  id="eoi_reference_div">
+		                                <div class="form-group row">
+		                                    <div class="col-md-12">
+		                                       	<label class="control-label text-right">EOI Reference</label>
+		                                       	<select  name="eoi_reference_no"  id="eoi_reference_no" class="form-control selectTwo">
+                                                    <option value=""></option>
+                                                    @foreach($eoiReferences as $eoiReference)
+													<option value="{{$eoiReference->id}}" {{(old("eoi_reference_no")==$eoiReference->id? "selected" : "")}}>{{$eoiReference->project_name}}</option>
+                                                    @endforeach   
+                                                </select>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                           
+		                         		                           
+		                        </div><!--/End Row-->
+
+		                        <div class="row">
 		                            <div class="col-md-8">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
@@ -58,22 +116,7 @@
 		                        </div><!--/End Row-->
 
 		                        <div class="row">
-		                        	<div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Submission Type<span class="text_requried">*</span></label>
-		                                       	<select  name="sub_type_id"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($subTypes as $subType)
-													<option value="{{$subType->id}}" {{(old("sub_type_id")==$subType->id? "selected" : "")}}>{{$subType->name}}</option>
-                                                    @endforeach   
-                                                </select>
-		                                        
-		                                        
-		                                    </div>
-		                                </div>
-		                            </div>
-		                            <!--/span-->
+		                        	
 		                            <div class="col-md-2">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
@@ -100,7 +143,7 @@
 		                                </div>
 		                            </div>
 		                             <!--/span-->
-		                            <div class="col-md-6">
+		                            <div class="col-md-8">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Submission Address</label>
@@ -164,26 +207,7 @@
 		                            </div>
 		                            
 		                        </div><!--/End Row-->
-		                        <div class="row">
-		                        	<div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">EOI Reference<span class="text_requried">*</span></label>
-		                                       	<select  name="eoi_id"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($submissions as $submission)
-													<option value="{{$submission->id}}" {{(old("sub_type_id")==$submission->id? "selected" : "")}}>{{$submission->name}}</option>
-                                                    @endforeach   
-                                                </select>
-		                                        
-		                                        
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div>
-
-
-
+		                       
 		                    </div> <!--/End Form Boday-->
 
 		                    <hr>
@@ -210,6 +234,59 @@
 
 <script>
 $(document).ready(function() {
+
+
+	$("#submission_type_div").hide();
+	$("#submission_no_div").hide();
+	$("#eoi_reference_div").hide();
+
+	$('#sub_division_id').change(function(){
+		if(!$('#sub_division_id').val()==''){
+			
+			$("#submission_type_div").show();
+		} else{
+			//.removeAttr('selected')
+			$('#submission_type').val('').select2('val', 'All');
+			$("#submission_type_div").hide();
+			$("#submission_no_div").hide();
+		}
+	});
+
+	$('#submission_type').change(function(){
+		if(!$('#submission_type').val()==''){
+			
+			$("#submission_no_div").show();
+		} else{
+			$("#submission_no_div").hide();
+		}
+	});
+
+	$('#submission_type, #sub_division_id').change(function(){
+ 		if($('#submission_type').val() == '3'){ // or this.value == 'volvo'
+    		$("#eoi_reference_div").show();
+ 		}else{
+ 			$('#eoi_reference_no').val('').select2('val', 'All');
+ 			$("#eoi_reference_div").hide();
+ 		}
+
+ 		
+ 		$.ajax({
+	        type: "GET",
+	        url:  '{{route("submission.code")}}',
+	        data: {subType: $(this).val(), division:$('#sub_division_id').val()},
+	        success: function(data) {
+	            console.log(data);
+	            $('#submission_no').val(data);
+	        },
+		        error: function() {
+		            alert('Submission Code is not Generated');
+		        }
+    	});
+
+
+	});
+
+
 
 	//All Basic Form Implementatin i.e validation etc.
 	formFunctions();

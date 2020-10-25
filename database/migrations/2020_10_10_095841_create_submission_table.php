@@ -16,14 +16,17 @@ class CreateSubmissionTable extends Migration
         Schema::create('submissions', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->bigInteger('submission_id')->unsigned();
+            $table->bigInteger('eoi_reference')->unsigned()->nullable();
             $table->bigInteger('sub_type_id')->unsigned();
             $table->bigInteger('client_id')->unsigned();
+            $table->bigInteger('pr_division_id')->unsigned();
+            $table->string('submission_no',15)->unique()->nullable();
             $table->string('project_name');
             $table->string('comments')->nullable();
-            $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
+            $table->foreign('eoi_reference')->references('id')->on('submissions')->onDelete('cascade');
             $table->foreign('sub_type_id')->references('id')->on('sub_types');
             $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('pr_division_id')->references('id')->on('pr_divisions');
             $table->timestamps();
         });
     }

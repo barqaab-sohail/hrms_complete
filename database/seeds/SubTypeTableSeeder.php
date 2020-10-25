@@ -14,8 +14,8 @@ class SubTypeTableSeeder extends Seeder
         DB::table('sub_types')->delete();  
         $subTypes = array(
         	array('name' => 'EOI'),
-        	array('name' => 'RFP'),
         	array('name' => 'PQD'),
+        	array('name' => 'RFP'),
         );
         DB::table('sub_types')->insert($subTypes);
     }
