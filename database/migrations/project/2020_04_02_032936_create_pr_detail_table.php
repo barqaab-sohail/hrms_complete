@@ -26,7 +26,7 @@ class CreatePrDetailTable extends Migration
             $table->bigInteger('pr_role_id')->unsigned();
             $table->bigInteger('pr_division_id')->unsigned();
             $table->string('share')->nullable();
-             $table->string('project_no',15)->unique()->nullable();
+            $table->string('project_no',15)->unique()->nullable();
             $table->timestamps();
 
             $table->foreign('contract_type_id')->references('id')->on('contract_types');

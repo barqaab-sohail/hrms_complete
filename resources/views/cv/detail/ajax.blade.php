@@ -84,14 +84,14 @@
                 <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
-                        	<label class="control-label text-right">City</label>
-                        	<select class="form-control" name="city_id" data-placeholder="First Select Province" id="city">
-                        	<option value="">&nbsp;</option>
-								@foreach($cities as $city)
-								<option value="{{$city->id}}" {{(old("city_id",$data->cvContact->city_id)==$city->id? "selected" : "")}}>{{$city->name}}</option>
-                            @endforeach 	
-                            	
-                            </select>	
+                        	<label class="control-label text-right">Country<span class="text_requried">*</span></label><br>
+                            
+                            <select  name="country_id" id="country" data-validation="required" class="form-control">
+                                <option value="">&nbsp;</option>
+                            @foreach($countries as $country)
+                                <option value="{{$country->id}}" {{(old("country_id",$data->cvContact->country_id)==$country->id? "selected" : "")}}>{{$country->name}}</option>
+                            @endforeach     
+                            </select> 
 
                         </div>
                     </div>
@@ -121,15 +121,14 @@
                 	<!--/span 3-2 -->
                     <div class="form-group row">
                         <div class="col-md-12">
-                       		<label class="control-label text-right">Country<span class="text_requried">*</span></label><br>
-                       		
-                       		<select  name="country_id" id="country" data-validation="required" class="form-control">
-                               	<option value="">&nbsp;</option>
-                            @foreach($countries as $country)
-								<option value="{{$country->id}}" {{(old("country_id",$data->cvContact->country_id)==$country->id? "selected" : "")}}>{{$country->name}}</option>
-                            @endforeach 	
-                            </select> 
-
+                            <label class="control-label text-right">City</label>
+                            <select class="form-control" name="city_id" data-placeholder="First Select Province" id="city">
+                            <option value="">&nbsp;</option>
+                                @foreach($cities as $city)
+                                <option value="{{$city->id}}" {{(old("city_id",$data->cvContact->city_id)==$city->id? "selected" : "")}}>{{$city->name}}</option>
+                            @endforeach     
+                                
+                            </select>   
                        	
                         </div>
                     </div>
