@@ -16,7 +16,7 @@
                     <div class="form-group row">
                       <div class="col-md-12">
                         <label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
-                        <input type="text"  id="add_degree" name="degree_name" value="{{ old('add_degree') }}"  class="form-control excempted" placeholder="Enter Degree Name" required>
+                        <input type="text"  id="add_degree" name="degree_name" value="{{ old('add_degree') }}"  class="form-control exempted" placeholder="Enter Degree Name" required>
                       </div>
                     </div>
 

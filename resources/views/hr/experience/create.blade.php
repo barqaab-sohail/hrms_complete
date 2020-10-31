@@ -17,7 +17,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">Organization<span class="text_requried">*</span></label><br>
-                                <input type="text" name="organization" id="organization" value="{{ old('organization') }}" class="form-control excempted" data-validation="required length" data-validation-length="max90" >
+                                <input type="text" name="organization" id="organization" value="{{ old('organization') }}" class="form-control exempted" data-validation="required length" data-validation-length="max90" >
  
                             </div>
                         </div>
@@ -27,7 +27,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">Job Title<span class="text_requried">*</span></label>
-                                <input type="text" name="job_title" id="job_title" value="{{ old('job_title') }}" class="form-control excempted" data-validation="required length" data-validation-length="max70" >
+                                <input type="text" name="job_title" id="job_title" value="{{ old('job_title') }}" class="form-control exempted" data-validation="required length" data-validation-length="max70" >
                             </div>
                         </div>
                     </div>

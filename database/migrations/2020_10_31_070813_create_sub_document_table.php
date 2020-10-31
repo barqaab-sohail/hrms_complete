@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubAttachmentTable extends Migration
+class CreateSubDocumentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,17 @@ class CreateSubAttachmentTable extends Migration
      */
     public function up()
     {
-        Schema::create('sub_attachments', function (Blueprint $table) {
+        Schema::create('sub_documents', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->id();
             $table->bigInteger('submission_id')->unsigned();
-            $table->string('document_name');
+            $table->string('description');
             $table->string('file_name');
             $table->string('extension');
             $table->string('path');
-            $table->string('size');
-            $table->text('content')->nullable();
-            $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
+            $table->string('size',20);
             $table->timestamps();
+            $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
         });
     }
 
@@ -35,6 +34,6 @@ class CreateSubAttachmentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_attachments');
+        Schema::dropIfExists('sub_documents');
     }
 }

@@ -38,7 +38,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Reference No</label>
-                            <input type="text" id="forward_slash" name="reference_no"  value="{{ old('reference_no', $data->reference_no??'') }}" class="form-control excempted" data-validation="length"  data-validation-length="max190" placeholder="Enter Document Reference">
+                            <input type="text" id="forward_slash" name="reference_no"  value="{{ old('reference_no', $data->reference_no??'') }}" class="form-control exempted" data-validation="length"  data-validation-length="max190" placeholder="Enter Document Reference">
                         </div>
                     </div>
                 </div>

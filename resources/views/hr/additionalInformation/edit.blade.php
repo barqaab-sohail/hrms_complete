@@ -19,7 +19,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Driving Licence No.</label><br>
 
-                               	<input type="text"  name="licence_no" id="licence_no" value="{{ old('licence_no', $employee->hrDriving->licence_no??'') }}"  class="form-control excempted" placeholder="Enter Licence No">
+                               	<input type="text"  name="licence_no" id="licence_no" value="{{ old('licence_no', $employee->hrDriving->licence_no??'') }}"  class="form-control exempted" placeholder="Enter Licence No">
                             </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Passport No.</label><br>
 
-                                <input type="text"  name="passport_no" id="passport_no" value="{{ old('passport_no', $employee->hrPassport->passport_no??'') }}"  class="form-control excempted" placeholder="Enter Passport No">
+                                <input type="text"  name="passport_no" id="passport_no" value="{{ old('passport_no', $employee->hrPassport->passport_no??'') }}"  class="form-control exempted" placeholder="Enter Passport No">
                             </div>
                         </div>
                     </div>

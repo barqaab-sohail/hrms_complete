@@ -66,12 +66,24 @@ function formFunctions(){
 
     });
 
+     //if Time not empty than enter time with format
+
+
 
 
 
     //If Click icon than clear date
     $(".date_input").siblings('i').click(function (){
         if(confirm("Are you sure to clear date")){
+        $(this).siblings('input').val("");
+        $(this).hide();
+        $(this).siblings('span').text("");
+        }
+    });
+
+    //If Click icon than clear time
+    $(".time_input").siblings('i').click(function (){
+        if(confirm("Are you sure to clear time")){
         $(this).siblings('input').val("");
         $(this).hide();
         $(this).siblings('span').text("");
@@ -88,14 +100,32 @@ function formFunctions(){
         $('#age').text(age+' years total age');
     },
     dateFormat: 'D, d-M-yy',
-    yearRange: '1940:'+ (new Date().getFullYear()+15),
+    yearRange: '1935:'+ (new Date().getFullYear()+15),
     changeMonth: true,
     changeYear: true,
 
     });
 
+
+    // TimePicker
+   $(".time_input").timepicker({
+     change: function() {
+        $(this).siblings('i').show();
+      },
+      timeFormat: 'HH:mm',
+    });
+
+   $(".time_input").each(function(){
+        if ($(this).val()==''){
+         $(this).siblings('i').hide();
+        }else{
+            $(this).siblings('i').show();
+        }
+
+    });
+
     //Title Case of all inputs type text and remove extra spaces
-    $("input[type=text]:not('.excempted')").keyup(function() {
+    $("input[type=text]:not('.exempted')").keyup(function() {
         var result = this.value.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
         $(this).val(result);
     }).blur(function() {
@@ -228,6 +258,7 @@ function resetForm(){
     $('.selectTwo').val('').select2('val', 'All');
     $('.remove').click();
     $(".date_input").siblings('i').hide();
+    $(".time_input").siblings('i').hide();
     $('input').removeClass('valid');
     $('input').removeClass('error');
     $("input[style='border-color: rgb(185, 74, 72);']").css('border-color','').siblings("span").attr('class','help-block').remove();

@@ -57,25 +57,15 @@
 		                                    </div>
 		                                </div>
 		                            </div>
-		                            <!--span-->
-		                            <div class="col-md-2">
-		                                <div class="form-group row" id="submission_no_div">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Submission No<span class="text_requried">*</span></label>
-		                                        
-		                                        <input type="text"  name="submission_no" id="submission_no"  class="form-control" data-validation="required" readonly>
-		                                    </div>
-		                                </div>
-		                            </div>
 		                            <!--/span-->
 		                            <div class="col-md-6"  id="eoi_reference_div">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">EOI Reference</label>
-		                                       	<select  name="eoi_reference_no"  id="eoi_reference_no" class="form-control selectTwo">
+		                                       	<select  name="eoi_reference"  id="eoi_reference_no" class="form-control selectTwo">
                                                     <option value=""></option>
                                                     @foreach($eoiReferences as $eoiReference)
-													<option value="{{$eoiReference->id}}" {{(old("eoi_reference_no")==$eoiReference->id? "selected" : "")}}>{{$eoiReference->project_name}}</option>
+													<option value="{{$eoiReference->id}}" {{(old("eoi_reference")==$eoiReference->id? "selected" : "")}}>{{$eoiReference->project_name}}</option>
                                                     @endforeach   
                                                 </select>
 		                                    </div>
@@ -91,7 +81,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Name of Project<span class="text_requried">*</span></label><br>
 
-		                                       	<input type="text"  name="name" value="{{ old('name') }}"  class="form-control excempted" data-validation="required length" data-validation-length="max190" placeholder="Enter Name of Submission Project">
+		                                       	<input type="text"  name="project_name" value="{{ old('project_name') }}"  class="form-control exempted" data-validation="required length" data-validation-length="max190" placeholder="Enter Name of Submission Project">
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -135,7 +125,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Submission Time<span class="text_requried">*</span></label>
 		                                        
-		                                        <input type="text"  name="submission_time" value="{{ old('submission_time') }}" class="form-control date_input" data-validation="required" readonly>
+		                                        <input type="text"  name="submission_time" id="submission_time" value="{{ old('submission_time') }}" class="form-control time_input" data-validation="required" readonly>
 												
 												<br>
 		                                        @can('submission edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
@@ -146,9 +136,9 @@
 		                            <div class="col-md-8">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Submission Address</label>
+		                                       	<label class="control-label text-right">Submission Address<span class="text_requried">*</span></label>
 		                                        
-		                                        <input type="text"  name="address" value="{{ old('address') }}"  class="form-control excempted" data-validation="required length" data-validation-length="max190" placeholder="Enter Address where document submitted">
+		                                        <input type="text"  name="address" value="{{ old('address') }}"  class="form-control exempted" data-validation="required length" data-validation-length="max190" placeholder="Enter Address where document submitted">
 												
 		                                    </div>
 		                                </div>
@@ -160,7 +150,7 @@
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Designation<span class="text_requried">*</span></label>
-		                                       	<input type="text"  name="designation" value="{{ old('designation') }}"  class="form-control excempted" data-validation="required length" data-validation-length="max190" placeholder="Designation of Client Representative">
+		                                       	<input type="text"  name="designation" value="{{ old('designation') }}"  class="form-control exempted" data-validation="required length" data-validation-length="max190" placeholder="Designation of Client Representative">
 
 		                                    </div>
 		                                </div>
@@ -190,7 +180,7 @@
 		                                    <div class="col-md-12">
 		                                       <label class="control-label text-right">Mobile No.</label>
                                 
-				                               <input type="text" name="mobile" id="mobile" pattern="[0-9.-]{12}" title= "11 digit without dash" value="{{ old('mobile') }}" data-validation="required length"  data-validation-length="max15" class="form-control" placeholder="0345-0000000">		                                       
+				                               <input type="text" name="mobile" id="mobile" pattern="[0-9.-]{12}" title= "11 digit without dash" value="{{ old('mobile') }}" data-validation="length"  data-validation-length="max15" class="form-control" placeholder="0345-0000000">		                                       
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -235,33 +225,9 @@
 <script>
 $(document).ready(function() {
 
-
-	$("#submission_type_div").hide();
-	$("#submission_no_div").hide();
 	$("#eoi_reference_div").hide();
 
-	$('#sub_division_id').change(function(){
-		if(!$('#sub_division_id').val()==''){
-			
-			$("#submission_type_div").show();
-		} else{
-			//.removeAttr('selected')
-			$('#submission_type').val('').select2('val', 'All');
-			$("#submission_type_div").hide();
-			$("#submission_no_div").hide();
-		}
-	});
-
 	$('#submission_type').change(function(){
-		if(!$('#submission_type').val()==''){
-			
-			$("#submission_no_div").show();
-		} else{
-			$("#submission_no_div").hide();
-		}
-	});
-
-	$('#submission_type, #sub_division_id').change(function(){
  		if($('#submission_type').val() == '3'){ // or this.value == 'volvo'
     		$("#eoi_reference_div").show();
  		}else{
@@ -269,30 +235,13 @@ $(document).ready(function() {
  			$("#eoi_reference_div").hide();
  		}
 
- 		
- 		$.ajax({
-	        type: "GET",
-	        url:  '{{route("submission.code")}}',
-	        data: {subType: $(this).val(), division:$('#sub_division_id').val()},
-	        success: function(data) {
-	            console.log(data);
-	            $('#submission_no').val(data);
-	        },
-		        error: function() {
-		            alert('Submission Code is not Generated');
-		        }
-    	});
-
-
 	});
-
 
 
 	//All Basic Form Implementatin i.e validation etc.
 	formFunctions();
 	$('#formSubmission').on('submit', function(event){
 	 	//preventDefault work through formFunctions;
-	 	console.log('submit');
 		url="{{route('submission.store')}}";
 		$('.fa-spinner').show();	
 	   	submitFormAjax(this, url,1);
@@ -324,7 +273,7 @@ $(document).ready(function() {
                {
                	if(reset == 1){
 	                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
-	                resetForm();
+	                //resetForm();
 		            $('html,body').scrollTop(0);
 		            $('.fa-spinner').hide();
 		            clearMessage();
