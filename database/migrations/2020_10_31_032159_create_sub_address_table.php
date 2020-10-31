@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubEoiIdTable extends Migration
+class CreateSubAddressTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateSubEoiIdTable extends Migration
      */
     public function up()
     {
-        Schema::create('sub_eoi_ids', function (Blueprint $table) {
+        Schema::create('sub_addresses', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->bigInteger('submission_id')->unsigned();
-            $table->bigInteger('eoi_id')->unsigned();
+            $table->string('address');
+            $table->string('designation');
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
-            $table->foreign('eoi_id')->references('id')->on('submissions');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateSubEoiIdTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_eoi_ids');
+        Schema::dropIfExists('sub_addresses');
     }
 }
