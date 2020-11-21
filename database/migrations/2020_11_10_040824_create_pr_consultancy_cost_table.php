@@ -19,10 +19,6 @@ class CreatePrConsultancyCostTable extends Migration
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->bigInteger('pr_cost_type_id')->unsigned();
             $table->bigInteger('partner_id')->unsigned()->nullable();
-            $table->bigInteger('mm_cost')->unsigned()->nullable();
-            $table->bigInteger('direct_cost')->nullable();
-            $table->bigInteger('tax')->nullable();
-            $table->bigInteger('total');
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
             $table->foreign('pr_cost_type_id')->references('id')->on('pr_cost_types');
