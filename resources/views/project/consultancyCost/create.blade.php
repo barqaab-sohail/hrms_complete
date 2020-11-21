@@ -1,18 +1,19 @@
         
     <div class="card-body">
-        <form id= "formConsultancyCost" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('projectPartner.store')}}" enctype="multipart/form-data">
+        <form id= "formConsultancyCost" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('projectConsultancyCost.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
                     
-                <h3 class="box-title">Partner Detail</h3>
+                <h3 class="box-title">Consultancy Cost</h3>
                 
                 <hr class="m-t-0 m-b-40">
 
                 <div class="row">
-
+                    @if($prDetail->pr_role_id != 1)
                     <div class="col-md-8">
                         <div class="form-group row">
                             <div class="col-md-12">
+                              
                                 <label class="control-label text-right">Name of Partner<span class="text_requried">*</span></label>
 
                                 <select  id="partner_id"   name="partner_id"  class="form-control selectTwo" data-validation="required">
@@ -21,10 +22,11 @@
                                     <option value="{{$partner->id}}" {{(old("partner_id")==$partner->id? "selected" : "")}}>{{$partner->name}}</option>
                                     @endforeach 
                                 </select>
-
+                               
                             </div>
                         </div>
                     </div>
+                    @endif
                      <!--/span-->
 
                     <div class="col-md-4">
@@ -45,45 +47,56 @@
                 </div><!--/End Row-->
 
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
-                               	<label class="control-label text-right">Man Month Cost</label>
+                               	<label class="control-label text-right">Man Month Cost<span class="text_requried">*</span></label>
                                 
-                               <input type="text" name="mm_cost" id="mm_cost" value="{{ old('mm_cost') }}" class="form-control">
+                               <input type="text" name="man_month_cost" id="man_month_cost" value="{{ old('man_month_cost') }}" class="form-control total" data-validation="required">
                                 
                                
                             </div>
                         </div>
                     </div>
                     <!--/span-->
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">Direct Cost</label>
-                                <input type="text" name="direct_cost" id="direct_cost" value="{{ old('direct_cost') }}" class="form-control">
+                                <input type="text" name="direct_cost" id="direct_cost" value="{{ old('direct_cost') }}" class="form-control total">
                                 
                             </div>
                         </div>
                     </div>
                     <!--/span-->
-                     <div class="col-md-3">
+                     <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Tax</label>
                                 
-                               <input type="text" name="tax" id="tax"  value="{{ old('tax') }}" class="form-control">
+                               <input type="text" name="tax_cost" id="tax_cost"  value="{{ old('tax_cost') }}" class="form-control total">
                                
                             </div>
                         </div>
                     </div>
                     <!--/span-->
-                     <div class="col-md-3">
+                     <div class="col-md-2">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Total Cost<span class="text_requried">*</span></label>
+                                <label class="control-label text-right">Contigency</label>
                                 
-                               <input type="text" name="total_cost" id="total_cost" value="{{ old('total_cost') }}" data-validation="required"  class="form-control" >
+                               <input type="text" name="contingency_cost" id="contingency_cost" value="{{ old('contingency_cost') }}"  class="form-control total" >
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                     <div class="col-md-2">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label class="control-label text-right">Total Cost</label>
+                                
+                               <input type="text" name="total_cost" id="total_cost" value="{{ old('total_cost') }}"  class="form-control" readonly>
                                
                             </div>
                         </div>
@@ -119,12 +132,43 @@
 $(document).ready(function(){
     
     //refreshTable("{{route('contact.table')}}",300);
-    $('#mm_cost').on('change, keyup', function() {
+    
+    //only number value entered
+    $('#man_month_cost, #direct_cost, #contingency_cost, #tax_cost').on('change, keyup', function() {
     var currentInput = $(this).val();
     var fixedInput = currentInput.replace(/[A-Za-z!@#$%^&*()]/g, '');
     $(this).val(fixedInput);
-    console.log(fixedInput);
     });
+
+    $(".form-group").on("input", ".total", function() {
+            var sum = 0;
+            $(".form-group .total").each(function(){
+                var inputVal = $(this).val();
+                inputVal=inputVal.replace(/\,/g,'') // remove comma
+                if ($.isNumeric(inputVal)){
+                sum += parseFloat(inputVal);
+                }
+            });
+            sum = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+        $("#total_cost").val(sum);
+    });
+
+
+    //Enter Comma after three digit
+    $('#man_month_cost, #direct_cost, #contingency_cost, #tax_cost').keyup(function(event) {
+
+      // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
 
     //submit function
     $("#formConsultancyCost").submit(function(e) { 
