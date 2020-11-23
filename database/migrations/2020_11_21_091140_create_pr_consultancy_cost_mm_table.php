@@ -17,7 +17,7 @@ class CreatePrConsultancyCostMmTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('pr_consultancy_cost_id')->unsigned();
-            $table->integer('man_month_cost')->unsigned();
+            $table->bigInteger('man_month_cost')->unsigned();
             $table->timestamps();
             $table->foreign('pr_consultancy_cost_id')->references('id')->on('pr_consultancy_costs')->onDelete('cascade');
         });

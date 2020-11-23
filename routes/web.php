@@ -116,7 +116,9 @@ Route::get('/projectDocument/refreshTable', 'ProjectDocumentController@refreshTa
 Route::resource('/projectDocument', 'ProjectDocumentController');
 Route::get('/projectPosition/refreshTable', 'ProjectPositionController@refreshTable')->name('projectPosition.table');
 Route::resource('/projectPosition', 'ProjectPositionController');
+Route::get('/projectConsultancyCost/refreshTable', 'ProjectConsultancyCostController@refreshTable')->name('projectConsultancyCost.table');
 Route::resource('/projectConsultancyCost', 'ProjectConsultancyCostController');
+
 Route::resource('/projectCode', 'ProjectCodeController');
 
 });
