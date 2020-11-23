@@ -1,11 +1,14 @@
         
+    
     <div class="card-body">
+            <button type="button" id="addButton" class="btn btn-info float-right">Add Consultancy Cost</button>
+
+        <h3 class="box-title">Consultancy Cost</h3>
+        
         <form id= "formConsultancyCost" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('projectConsultancyCost.store')}}" enctype="multipart/form-data">
-        @csrf
-            <div class="form-body">
-                    
-                <h3 class="box-title">Consultancy Cost</h3>
-                
+        @csrf         
+            <div class="form-body" >
+                     
                 <hr class="m-t-0 m-b-40">
 
                 <div class="row">
@@ -105,7 +108,7 @@
                
             </div> <!--/End Form Boday-->
 
-            <hr>
+          
 
             <div class="form-actions">
                 <div class="row">
@@ -119,7 +122,7 @@
                 </div>
             </div>
         </form>
-
+        <hr>
         <div class="row">
              <div class="col-md-12 table-container">
            
@@ -130,8 +133,17 @@
 
 <script>
 $(document).ready(function(){
-    
-    //refreshTable("{{route('contact.table')}}",300);
+    $("#addButton").hide();
+    @if($prConsultancyCosts->count()!=0)
+    $("#formConsultancyCost").hide();
+    $("#addButton").show();
+    @endif
+
+    $("#addButton").click(function(){
+         $("#formConsultancyCost").toggle();
+    });
+
+    refreshTable("{{route('projectConsultancyCost.table')}}",1000);
     
     //only number value entered
     $('#man_month_cost, #direct_cost, #contingency_cost, #tax_cost').on('change, keyup', function() {
@@ -176,7 +188,7 @@ $(document).ready(function(){
       var url = $(this).attr('action');
             $('.fa-spinner').show(); 
       submitForm(this, url,1);
-      //refreshTable("{{route('contact.table')}}");
+      refreshTable("{{route('projectConsultancyCost.table')}}",1000);
     });
    
 });

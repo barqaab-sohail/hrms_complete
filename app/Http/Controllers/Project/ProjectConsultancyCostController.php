@@ -19,15 +19,16 @@ use DB;
 class ProjectConsultancyCostController extends Controller
 {
     
+
 	public function create(){
 
 		$prCostTypes = PrCostType::all();
 		$partners = Partner::all();
 		$prDetail = PrDetail::find(session('pr_detail_id'));
 
+		$prConsultancyCosts = PrConsultancyCost::where('pr_detail_id',session('pr_detail_id'))->get();
 
-	return view ('project.consultancyCost.create',compact('prCostTypes','partners','prDetail'));
-
+		return view ('project.consultancyCost.create',compact('prCostTypes','partners','prDetail','prConsultancyCosts'));
 	}
 
 	public function store(PrConsultancyCostStore $request){
@@ -69,15 +70,24 @@ class ProjectConsultancyCostController extends Controller
     			PrConsultancyCostContingency::create($input);
     		}
 
-
-
     	}); // end transcation
 
-
-
 		return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
-
 	}
+
+
+	public function destroy($id){
+
+		PrConsultancyCost::findOrFail($id)->delete();
+		return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
+		
+	}
+
+	public function refreshTable(){
+
+    	$prConsultancyCosts = PrConsultancyCost::where('pr_detail_id',session('pr_detail_id'))->get();
+        return view('project.consultancyCost.list',compact('prConsultancyCosts'));   
+    }
 
 
 }
