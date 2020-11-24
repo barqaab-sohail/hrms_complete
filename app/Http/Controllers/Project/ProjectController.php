@@ -77,7 +77,7 @@ class ProjectController extends Controller
 		$projectStatuses = PrStatus::all();
 		$clients = Client::all();
 		$contractTypes = ContractType::all();
-    $divisions = PrDivision::all();
+        $divisions = PrDivision::all();
 
     if($request->ajax()){      
             return view ('project.detail.ajax', compact('projectRoles','projectStatuses','clients','contractTypes','divisions','data'));    
