@@ -17,7 +17,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                               
-                                <label class="control-label text-right">Name of Partner<span class="text_requried">*</span></label>
+                                <label class="control-label text-right">Name of Firm<span class="text_requried">*</span></label>
 
                                 <select  id="partner_id"   name="partner_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
