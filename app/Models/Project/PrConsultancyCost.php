@@ -43,6 +43,12 @@ class PrConsultancyCost extends Model implements Auditable
 
     }
 
+    public function prFirmName(){
+
+        return $this->belongsTo('App\Models\Common\Partner', 'partner_id');
+
+    }
+
 
     // public function prConsultancyCostType(){
     //     return $this->belongsTo('App\Models\Project\PrCostType');

@@ -10,6 +10,7 @@
 				<thead>
 				
 					<tr>
+						<th>Name of Firm</th>
 						<th>Cost Type</th>
 						<th>Man-Month Cost</th>	
 						<th>Direct Cost</th>
@@ -23,6 +24,7 @@
 				<tbody>
 					@foreach($prConsultancyCosts as $prConsultancyCost)
 					<tr>
+						<td>{{$prConsultancyCost->prFirmName->name}}</td>
 						<td>{{$prConsultancyCost->prConsultancyCostType->name}}</td>
 						<td>{{number_format($prConsultancyCost->prConsultancyCostMm->man_month_cost)}}</td>
 						<td>{{number_format($prConsultancyCost->prConsultancyCostDirect->direct_cost??0)}}</td>
