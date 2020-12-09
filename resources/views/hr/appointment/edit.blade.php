@@ -268,9 +268,17 @@
 
 <script>
 $(document).ready(function(){
+
+
+    //Add Comma only for Display
+    $("#hr_salary_id option").each(function()
+    {
+        var test = this.text;
+        test = test.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        $(this).text(test);
+    });
   
     //submit function
- 
         $("#formAppointment").submit(function(e) { 
             e.preventDefault();
             var url = $(this).attr('action');
