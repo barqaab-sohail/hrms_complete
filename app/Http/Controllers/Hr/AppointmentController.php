@@ -23,7 +23,7 @@ class AppointmentController extends Controller
     public function edit(Request $request, $id){
 
     	$salaries = HrSalary::all();
-    	$designations = HrDesignation::all();
+        $designations = HrDesignation::all();
     	$managers = HrEmployee::all();
     	$departments = HrDepartment::all();
     	$letterTypes = HrLetterType::all();
