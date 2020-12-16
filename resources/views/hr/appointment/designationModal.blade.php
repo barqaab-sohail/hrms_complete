@@ -1,22 +1,35 @@
 <!-- Modal -->
-<div class="modal fade" id="salModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Salary</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Designation</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
        
-           <form id="salModalFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
+           <form id="designationModalFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
                   {{csrf_field()}}
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-12">
-                        <label class="control-label text-right">Total Salary<span class="text_requried">*</span></label><br>
-                        <input type="text" name="total_salary" id="total_salary" value="{{ old('total_salary') }}" class="form-control" placeholder="Enter Total Salary" required>
+                        <label class="control-label text-right">Name of Designation<span class="text_requried">*</span></label><br>
+                        <input type="text" name="name" id="designation_name" value="{{ old('name') }}" class="form-control" placeholder="Enter Total Salary" required>
+                      </div>
+                    </div>                                                                
+                  </div>
+                  <div class="form-body">
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label class="control-label text-right">Level<span class="text_requried">*</span></label><br>
+                         <select  name="level" id="designation_level" class="form-control selectTwo">
+                            <option value=""></option>
+                            @for ($i = 1; $i < 16; $i++)
+                            <option value="{{$i}}">{{$i}}</option>
+                            @endfor 
+                        </select>
                       </div>
                     </div>                                                                
                   </div>
@@ -45,9 +58,9 @@
 $(document).ready(function(){
 
 
-    $('#salModalFrom').on('submit', function(event){
+    $('#designationModalFrom').on('submit', function(event){
        
-      var url = "{{route('salary.store')}}"
+      var url = "{{route('designation.store')}}"
         event.preventDefault();
               //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
               $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
@@ -70,28 +83,29 @@ $(document).ready(function(){
                  processData: false,
                  success:function(data){
                      
-                      if(data.salaries ==''){
+                      if(data.designations ==''){
                           $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                           $('.spinner').hide();
                            $('.btn-prevent-multiple-submits').removeAttr('disabled');
-                          $('#salModal').modal('toggle');
+                          $('#designationModal').modal('toggle');
                           $('html,body').scrollTop(0);
                       }else{
-                          $("#hr_salary_id").empty();
-                          $("#hr_salary_id").append('<option value="">Select Salary</option>');
-                          $.each(data.salaries, function(key,value){
+                          $("#hr_designation_id").empty();
+                          $("#hr_designation_id").append('<option value="">Select Designation</option>');
+                          $.each(data.designations, function(key,value){
                                       //console.log(key+'-'+value);
-                                   $("#hr_salary_id").append('<option value="'+key+'">'+value+'</option>');
+                                   $("#hr_designation_id").append('<option value="'+key+'">'+value+'</option>');
                           });
-                          $('#hr_salary_id').select2('destroy');
-                          selectTwo('#hr_salary_id');
+                          $('#hr_designation_id').select2('destroy');
+                          selectTwo('#hr_designation_id');
 
                           $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                            $('.spinner').hide();
                            $('.btn-prevent-multiple-submits').removeAttr('disabled');
                            //after sucessfull save clear input fields
-                          $('#total_salary').val('');
-                          $('#salModal').modal('toggle');
+                            $('#designation_name').val('');
+                            $('#designation_level').select2('val', 'All');
+                          $('#designationModal').modal('toggle');
                         clearMessage(); 
                       }
 
