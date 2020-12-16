@@ -3,16 +3,13 @@
 namespace App\Models\Hr;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class HrDesignation extends Model
+class HrDesignation extends Model implements Auditable
 {
     
-
-
-	// public function hrAppointment(){
-
-	// 	return $this->belongsToThrough('App\Models\Hr\HrAppointment', 'App\Models\Hr\HrAppointmentDetail');
-	// }
-
+	use \OwenIt\Auditing\Auditable;
+    protected $fillable = ['name', 'level'];
+    public $timestamps = false;
    
 }

@@ -15,7 +15,6 @@ use DB;
 class UserLoginController extends Controller
 {
    public function edit(Request $request, $id){
-
     	
     	$data = HrEmployee::find($id);
     	$user = User::where('id',$data->user_id)->first();

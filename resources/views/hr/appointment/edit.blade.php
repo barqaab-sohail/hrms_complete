@@ -62,6 +62,10 @@
                                     <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hr_designation_id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                                     @endforeach 
                                 </select>
+                                @can('hr add designation')
+                                <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#designationModal"><i class="fas fa-plus"></i>
+                                </button>
+                                @endcan 
                                 
                                
                             </div>
@@ -254,7 +258,12 @@
                 </div>
             </div>
         </form>
-          @include('hr.appointment.salModal')
+        
+            @include('hr.appointment.salModal')
+
+            @can('hr add designation')
+            @include('hr.appointment.designationModal')
+            @endcan
     </div> <!-- end card body -->    
   
 
