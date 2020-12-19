@@ -62,7 +62,7 @@
                         </div>
                     </div>
                 </div><!--/End Row-->
-                 <div class="row">
+                <div class="row">
                     <div class="col-md-3">
                         <div class="form-group row">
                             <div class="col-md-12">
@@ -91,7 +91,50 @@
                         </div>
                     </div>
                 </div><!--/End Row-->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label class="control-label text-right">PEC Membership</label><br>
 
+                                 <select  name="membership_id" id="membership_id" class="form-control selectTwo">
+                                    <option value=""></option>
+                                @foreach($memberships as $membership)
+                                    <option value="{{$membership->id}}" {{(old("membership_id",$employee->hrMembership->membership_id??'')==$membership->id? "selected" : "")}}>{{$membership->name}}</option>
+                                @endforeach     
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                                                         
+                    <!--/span-->
+                    <div class="col-md-3">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label class="control-label text-right">Membership No.</label>
+                                
+                                <input type="text" name="membership_no" id="membership_no" value="{{ old('membership_no',$employee->hrMembership->membership_no??'') }}" class="form-control" data-validation="length" data-validation-length="max20"  placeholder="Please enter membeship No.">
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="col-md-3">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label class="control-label text-right">Membership Expiry Date</label>
+                                
+                                <input type="text" name="expiry" id="expiry" value="{{ old('expiry',$employee->hrMembership->expiry??'') }}" class="form-control date_input" readonly>
+
+                                <br>
+                                @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div><!--/End Row-->
 
                 
             </div> <!--/End Form Boday-->
@@ -145,11 +188,18 @@ $(document).ready(function(){
             }
         });
 
+        $('#membership_id').on('change',function(){
+
+            if($(this).val() !=''){
+                $('#membership_no').attr('data-validation','required');
+            }else {
+                $('#membership_no').removeAttr('data-validation');
+            }
+        });
         
  
         $("#formAdditionalInformation").submit(function(e) { 
            
-
             e.preventDefault();
             var url = $(this).attr('action');
             $('.fa-spinner').show(); 

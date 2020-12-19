@@ -78,6 +78,12 @@ class HrEmployee extends Model implements Auditable
 
     }
 
+    public function hrMembership(){
+
+        return $this->hasOne('App\Models\Hr\HrMembership');
+
+    }
+
     public function hrDriving(){
 
         return $this->hasOne('App\Models\Hr\HrDriving');

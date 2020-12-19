@@ -19,11 +19,11 @@ class Membership extends Model implements Auditable
         ->withTimestamps();
     }
 
-    public function hrEmployee()
-    {
-        return $this->belongsToMany('App\Models\Hr\HrEmployee')
-        ->withPivot('membership_no', 'expiry')
-        ->withTimestamps();
-    }
+    // public function hrEmployee()
+    // {
+    //     return $this->belongsToMany('App\Models\Hr\HrEmployee')
+    //     ->withPivot('membership_no', 'expiry')
+    //     ->withTimestamps();
+    // }
     //
 }
