@@ -113,7 +113,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Membership No.</label>
                                 
-                                <input type="text" name="membership_no" id="membership_no" value="{{ old('membership_no',$employee->hrMembership->membership_no??'') }}" class="form-control" data-validation="length" data-validation-length="max20"  placeholder="Please enter membeship No.">
+                                <input type="text" name="membership_no" id="membership_no" value="{{ old('membership_no',$employee->hrMembership->membership_no??'') }}" class="form-control exempted" data-validation="length" data-validation-length="max20"  placeholder="Please enter membeship No.">
 
                                 
                             </div>
@@ -196,6 +196,10 @@ $(document).ready(function(){
                 $('#membership_no').removeAttr('data-validation');
             }
         });
+
+        $('#membership_no').keyup(function(){
+        $(this).val($(this).val().toUpperCase());
+         });
         
  
         $("#formAdditionalInformation").submit(function(e) { 
