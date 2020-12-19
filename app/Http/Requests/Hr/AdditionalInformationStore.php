@@ -27,7 +27,8 @@ class AdditionalInformationStore extends FormRequest
             'licence_no' => 'required_with:licence_expiry',
             'licence_expiry' => 'required_with:licence_no',
             'passport_no' => 'required_with:passport_expiry',
-            'passport_expiry' => 'required_with:passport_no'
+            'passport_expiry' => 'required_with:passport_no',
+            'membership_no' => 'required_with:membership_id'
         ];
 
        return $rules;

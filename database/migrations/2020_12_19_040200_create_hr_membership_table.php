@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMembershipHrEmployeeTable extends Migration
+class CreateHrMembershipTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class CreateMembershipHrEmployeeTable extends Migration
      */
     public function up()
     {
-        Schema::create('membership_hr_employee', function (Blueprint $table) {
+        Schema::create('hr_memberships', function (Blueprint $table) {
             $table->engine = 'InnoDB';
+            $table->bigIncrements('id');
             $table->bigInteger('membership_id')->unsigned();
             $table->foreign('membership_id')->references('id')->on('memberships');
 
@@ -34,6 +35,6 @@ class CreateMembershipHrEmployeeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('membership_hr_employee');
+        Schema::dropIfExists('hr_memberships');
     }
 }
