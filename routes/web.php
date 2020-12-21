@@ -76,8 +76,7 @@ Route::get('/hrReports/cnicExpiryList', 'HrReportsController@cnicExpiryList')->n
 Route::get('/hrReports/missingDocumentList', 'HrReportsController@missingDocumentList')->name('hrReports.missingDocumentList');
 Route::get('/hrReports/searchEmployee', 'HrReportsController@searchEmployee')->name('hrReports.searchEmployee');
 Route::post('/hrReports/searchEmployeeResult', 'HrReportsController@searchEmployeeResult')->name('hrReports.searchEmployeeResult');
-
-
+Route::resource('/hrMonthlyReport', 'HrMonthlyReportController');
 
 });
 
