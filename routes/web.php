@@ -70,7 +70,7 @@ Route::resource('/designation', 'DesignationController',['only'=>['store']]);
 Route::get('/posting/refreshTable', 'PostingController@refreshTable')->name('posting.table');
 Route::resource('/posting', 'PostingController');
 
-
+Route::resource('/monthlyReport','MonthlyReportController');
 Route::get('/hrReports/list', 'HrReportsController@list')->name('hrReports.list');
 Route::get('/hrReports/cnicExpiryList', 'HrReportsController@cnicExpiryList')->name('hrReports.cnicExpiryList');
 Route::get('/hrReports/missingDocumentList', 'HrReportsController@missingDocumentList')->name('hrReports.missingDocumentList');
