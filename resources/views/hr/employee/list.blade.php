@@ -15,7 +15,10 @@
 					<th>Id</th>
 					<th>Employee Name</th>
 					<th>Father Name</th>
-					<th>Education</th>
+					<th>Degree Name</th>
+					<th>Education Year</th>
+					<th>Date of Joining</th>
+					<th>PEC No</th>
 					<th>Employee No</th>
 					<th>Mobile</th>
 					
@@ -30,8 +33,15 @@
 							<td>{{$employee->id}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 							<td>{{$employee->father_name}}</td>
-							<td>{{$employee->hrEducation->first()->to??''}}</td>
+							<td>{{$employee->cnic}}</td>
+							<td>
+							{{$employee->degreeName->implode('degree_name',' + ')??''
+							}}</td>
+							<td>{{$employee->hrEducation->implode('to',' + ')??''}}</td>
+							<td>{{$employee->hrAppointment->joining_date??''}}</td>
+							<td>{{$employee->hrMembership->membership_no??''}}</td>
 							<td>{{$employee->employee_no??''}}</td>
+
 							<td>{{$employee->hrContactMobile->mobile??''}}</td>
 							
 							
@@ -71,24 +81,24 @@ $(document).ready(function() {
                     {
                         extend: 'copyHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3]
+                            columns: [ 0, 1, 2,3,4,5,6]
                         }
                     },
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3]
+                            columns: [ 0, 1, 2,3,4,5,6]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3]
+                            columns: [ 0, 1, 2,3,4,5,6]
                         }
                     }, {
                         extend: 'csvHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3]
+                            columns: [ 0, 1, 2,3,4,5,6]
                         }
                     },
                 ],
