@@ -64,9 +64,22 @@ class HrEmployee extends Model implements Auditable
 
     }
 
-     public function hrEducation(){
+    public function hrEducation(){
 
             return $this->hasMany('App\Models\Hr\HrEducation');
+
+    }
+
+    public function degreeName(){
+             return $this->hasManyThrough(
+            'App\Models\Common\Education',                  //Final Model l
+            'App\Models\Hr\HrEducation',              //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'education_id'                             //Forein Key in Immediate Model of Final Model
+        );
+            //return $this->hasMany('App\Models\Hr\HrEducation');
 
     }
 
