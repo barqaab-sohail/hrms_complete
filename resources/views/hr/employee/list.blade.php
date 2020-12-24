@@ -15,6 +15,7 @@
 					<th>Id</th>
 					<th>Employee Name</th>
 					<th>Father Name</th>
+					<th>CNIC</th>
 					<th>Degree Name</th>
 					<th>Education Year</th>
 					<th>Date of Joining</th>
