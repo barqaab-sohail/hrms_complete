@@ -42,10 +42,15 @@
 						
 						<td class="text-center">
 							<a class="btn btn-info btn-sm" href="{{route('hrReports.searchEmployee')}}"  title="Show"><i class="fas fa-pencil-alt text-white "></i></a>
-						</td>
-																				
+						</td>														
 					</tr>
-				
+					<tr>
+						<td>Report_1 (Father Name, CNIC, Degree, Degree Year, DOJ, PEC, Employee No., Contact No.)</td>
+						
+						<td class="text-center">
+							<a class="btn btn-info btn-sm" href="{{route('hrReports.report_1')}}"  title="Show"><i class="fas fa-pencil-alt text-white "></i></a>
+						</td>
+					</tr>
 				
 				</tbody>
 			</table>

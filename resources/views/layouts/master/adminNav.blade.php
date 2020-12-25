@@ -29,12 +29,10 @@
                       
                         <li><a  class="{{Request::is('hrms/employee/allEmployeeList')?'active':''}}" href="{{route('employee.allEmployeeList')}}">All Employees</a></li>
                     @endcan
-                    @can('hr edit appointment')
-                        <li><a  class="{{Request::is('hrms/employee/appointmentList')?'active':''}}" href="{{route('employee.appointmentList')}}">Appointment List</a></li>
-                    @endcan
+                   
                     @canany(['hr edit record','hr delete record'])
                         <li><a  class="{{Request::is('hrms/employee/create')?'active':''}}" href="{{route('employee.create')}}">Add Employee</a></li>
-                        <li><a  class="{{Request::is('hrms/employee')?'active':''}}" href="{{route('employee.index')}}">List of Employees</a></li>
+                        <li><a  class="{{Request::is('hrms/employee')?'active':''}}" href="{{route('employee.index')}}">List of Active Employees</a></li>
                     @endcanany
                       
                     </ul>
@@ -44,10 +42,7 @@
 <!-- HR Reports -->
                 @can('hr reports')
                 <li class="{{Request::is('hrms/hrReports*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu">HR Reports</span></a>
-                    <ul aria-expanded="false" class="collapse">  
-                        <li><a class="{{Request::is('hrms/monthlyReport/create')?'active':''}}" href="{{route('monthlyReport.create')}}">Monthly Report</a></li>
-                       
-                    </ul>
+
                     <ul aria-expanded="false" class="collapse">  
                         <li><a class="{{Request::is('hrms/hrReports/list')?'active':''}}" href="{{route('hrReports.list')}}">Reports</a></li>
                        

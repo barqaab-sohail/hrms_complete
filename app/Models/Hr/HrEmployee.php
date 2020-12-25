@@ -70,7 +70,9 @@ class HrEmployee extends Model implements Auditable
 
     }
 
-    public function degreeName(){
+
+
+    public function degreeAbove12(){
              return $this->hasManyThrough(
             'App\Models\Common\Education',                  //Final Model l
             'App\Models\Hr\HrEducation',              //Model Through Access Final Model (Immediate Model)
@@ -78,8 +80,17 @@ class HrEmployee extends Model implements Auditable
             'id',                                             //Final Model Primary Key
             'id',
             'education_id'                             //Forein Key in Immediate Model of Final Model
-        );
-            //return $this->hasMany('App\Models\Hr\HrEducation');
+        )->where('educations.level','>',12);
+
+    }
+
+    public function degreeYearAbove12(){
+            return $this->hasMany('App\Models\Hr\HrEducation')->join('educations', function($join)
+                {
+                     $join->on('hr_educations.education_id', '=', 'educations.id');
+
+                })
+                ->where('educations.level','>',12);
 
     }
 
