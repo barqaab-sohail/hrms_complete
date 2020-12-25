@@ -38,7 +38,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Hr'], fu
 Route::post('/employeeCnic','EmployeeController@employeeCnic')->name('employee.cnic');
 //temporary
 Route::get('/employee/allEmployeeList', 'EmployeeController@allEmployeeList')->name('employee.allEmployeeList');
-Route::get('/employee/appointmentList', 'EmployeeController@appointmentList')->name('employee.appointmentList');
+
 //end temporary 
 Route::resource('/employee', 'EmployeeController');
 //all Employee list including terminated/resigned/retired
@@ -70,11 +70,11 @@ Route::resource('/designation', 'DesignationController',['only'=>['store']]);
 Route::get('/posting/refreshTable', 'PostingController@refreshTable')->name('posting.table');
 Route::resource('/posting', 'PostingController');
 
-Route::resource('/monthlyReport','MonthlyReportController');
 Route::get('/hrReports/list', 'HrReportsController@list')->name('hrReports.list');
 Route::get('/hrReports/cnicExpiryList', 'HrReportsController@cnicExpiryList')->name('hrReports.cnicExpiryList');
 Route::get('/hrReports/missingDocumentList', 'HrReportsController@missingDocumentList')->name('hrReports.missingDocumentList');
 Route::get('/hrReports/searchEmployee', 'HrReportsController@searchEmployee')->name('hrReports.searchEmployee');
+Route::get('/hrReports/report_1', 'HrReportsController@report_1')->name('hrReports.report_1');
 Route::post('/hrReports/searchEmployeeResult', 'HrReportsController@searchEmployeeResult')->name('hrReports.searchEmployeeResult');
 Route::resource('/hrMonthlyReport', 'HrMonthlyReportController');
 

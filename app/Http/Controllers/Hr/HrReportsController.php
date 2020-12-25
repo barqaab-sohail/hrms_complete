@@ -55,6 +55,12 @@ class HrReportsController extends Controller
 
     }
 
+    public function report_1(){
+        $employees = HrEmployee::where('hr_status_id',1)->with('degreeYearAbove12','degreeAbove12','hrContactMobile','hrAppointment','hrMembership')->get();
+
+        return view ('hr.reports.report_1',compact('employees'));
+    }
+
     public function searchEmployeeResult(Request $request){
         
         $data = $request->all();

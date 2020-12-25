@@ -24,11 +24,11 @@
             <a type="submit" id="addExperience" role="button" href="{{route('experience.create')}}" class="btn btn-info" {{Request::is('hrms/experience/create')?'style=background-color:#737373':''}}>Experience</a>
             @endcan
 
-            @can('hr edit posting')
+            @can('hr edit promotion')
             <a type="submit" role="button" id="addPromotion"  href="{{route('promotion.create')}}" class="btn btn-info" {{Request::is('hrms/promotion/create')?'style=background-color:#737373':''}}>Promotion</a>
             @endcan
 
-            @can('hr edit promotion')
+            @can('hr edit posting')
              <a type="submit" role="button" id="addPosting" href="{{route('posting.create')}}" class="btn btn-info" {{Request::is('hrms/posting/create')?'style=background-color:#737373':''}}>Transfer/Posting</a>
             @endcan
 

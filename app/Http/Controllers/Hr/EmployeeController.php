@@ -54,7 +54,7 @@ class EmployeeController extends Controller
     }
 
     public function index(){
-    	$employees = HrEmployee::where('hr_status_id',1)->with('hrEducation','hrContactMobile','hrAppointment','hrMembership','hrMembership')->get();
+    	$employees = HrEmployee::where('hr_status_id',1)->with('hrContactMobile','hrAppointment')->get();
 
        
     	return view ('hr.employee.list',compact('employees'));
@@ -64,14 +64,6 @@ class EmployeeController extends Controller
         $employees = HrEmployee::all();
 
         return view ('hr.employee.allEmployeeList',compact('employees'));
-    }
-
-     public function appointmentList(){
-
-        $employees = HrEmployee::with('hrAppointment')->get();
-
-       
-        return view ('hr.employee.appointmentList',compact('employees'));
     }
 
     public function missingDocuments(){
