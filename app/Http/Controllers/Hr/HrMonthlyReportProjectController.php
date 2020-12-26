@@ -21,4 +21,14 @@ class HrMonthlyReportProjectController extends Controller
             
             return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
     }
+
+
+    public function refreshTable(){
+
+    	$hrMonthlyReportProjects = HrMonthlyReportProject::all();
+       
+        return view('hr.hrMonthlyReport.hrMonthlyProject.list',compact('hrMonthlyReportProjects'));
+        
+    }
+
 }

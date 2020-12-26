@@ -18,32 +18,61 @@
 		            <div style="margin-top:10px; margin-right: 10px;">                   
 		            </div>
 		            <div class="card-body">
-		                <form action="{{route('hrMonthlyReport.store')}}" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
+		                <form id= "hrMonthlyReport"  action="{{route('hrMonthlyReport.store')}}" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
 		                {{csrf_field()}}
 		                <div class="form-body">
 		                    <h3 class="box-title">Create Monthly Report</h3>
 		                    <hr class="m-t-0 m-b-40">
 	                            <div class="row">
-	                                <div class="col-md-9">
+	                            	<div class="col-md-3">
+		                                <div class="form-group row">
+		                                    <div class="col-md-12">
+		                                       	<label class="control-label text-right">Month<span class="text_requried" data-validation="required">*</span></label>
+		                                       
+	                                           	<select  name="month"  class="form-control selectTwo" data-validation="required">
+                                                    <option value=""></option>
+                                                    @foreach($months as $month)
+													<option value="{{$month}}" {{(old("month")==$month? "selected" : "")}}>{{$month}}</option>
+                                                    @endforeach
+                                                  
+                                                </select>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                            <!--/span-->
+		                            <div class="col-md-2">
+	                                    <div class="form-group row"> 
+	                                        <div class="col-md-12">
+	                                        <label class="control-label text-right">Year</label>
+	                                            <select  name="year"  class="form-control selectTwo" data-validation="required">
+                                                    <option value=""></option>
+                                                    @for ($i=2020; $i<2022; $i++)
+													<option value="{{$i}}">{{$i}}</option>
+													@endfor 
+                                                </select>
+	                                        </div>
+	                                    </div>
+	                            	</div>   
+		                            <!--/span-->
+		                            <div class="col-md-2">
 	                                    <div class="form-group row">
-	                                        <label class="control-label text-right col-md-3">Month and Year</label>
-	                                        <div class="col-md-9">
-	                                            <input type="text" id="month" name="date_of_birth" value="{{ old('date_of_birth') }}" class="form-control date_input" data-validation="required" readonly>
+	                                    	<div class="col-md-12">
+	                                        <label class="control-label text-right">Status</label>
+	                                        
+	                                        	<select  name="is_lock"  class="form-control selectTwo" data-validation="required">
+                                                    <option value=""></option>
+                                                    <option value="0">UnLock</option>
+													<option value="1">Lock</option>  
+                                                </select>
 	                                        </div>
 	                                    </div>
 	                            	</div>   
 		                            <!--/span-->
 		                            <div class="col-md-3">
 		                                <div class="form-actions">
-		                            		<div class="row">
-		                                		<div class="col-md-6">
-		                                    		<div class="row">
-		                                        		<div class="col-md-offset-3 col-md-9">
-		                                            	<button type="submit" class="btn btn-success btn-prevent-multiple-submits">Save</button>
-		                                        		</div>
-		                                    		</div>
-		                                		</div>
-		                            		</div>
+	                                		<div class="col-md-12"> <br>
+                                            	<button type="submit" class="btn btn-success btn-prevent-multiple-submits">Save</button>
+	                                		</div>
 		                        		</div>
 		                            </div>
 		                        </div>
@@ -56,21 +85,37 @@
             </div>
         </div>
     </div>
+    @include('hr.hrMonthlyReport.hrMonthlyProject.create')
 </div>
+
 
 <script>
  $(document).ready(function() {
+
+
+ 	selectTwo();
   	$(function() {
             $('#month').datepicker( {
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
             dateFormat: 'MM yy',
-            onClose: function(dateText, inst) { 
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-            }
+            // onClose: function(dateText, inst) { 
+            //     $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            // }
             });
     });
+
+    //submit function
+     $("#hrMonthlyReport").submit(function(e) { 
+        e.preventDefault();
+        var url = $(this).attr('action');
+        $('.fa-spinner').show(); 
+        submitForm(this, url,1);
+       
+    });
+
+    
 });
 
 </script>
