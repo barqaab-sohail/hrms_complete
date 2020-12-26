@@ -69,8 +69,15 @@
 		                            </div>
 		                        </div>
 		                </div>
-		                <hr> 
+		           
 		            	</form>
+
+			            	<div class="row">
+	        					<div class="col-md-12 table-container">
+	           
+	            
+	        					</div>
+	    					</div>      
 		        		</div>       
 		        	</div>
 		        </div>
@@ -78,3 +85,28 @@
         </div>
     </div>
 </div>
+
+<script>
+$(document).ready(function() {
+
+	refreshTable("{{route('hrMonthlyProject.table')}}",1000);
+	 //submit function
+     $("#hrMonthlyReportProject").submit(function(e) { 
+        e.preventDefault();
+        var url = $(this).attr('action');
+        $('.fa-spinner').show(); 
+        submitForm(this, url,1);
+        refreshTable("{{route('hrMonthlyProject.table')}}",1000);
+       
+    });
+
+});
+
+</script>
+
+
+
+
+
+
+	

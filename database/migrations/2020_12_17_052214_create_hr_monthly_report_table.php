@@ -16,7 +16,9 @@ class CreateHrMonthlyReportTable extends Migration
         Schema::create('hr_monthly_reports', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->date('date');
+            $table->string('month');
+            $table->string('year');
+            $table->boolean('is_locak')->default(false);
             $table->timestamps();
         });
     }

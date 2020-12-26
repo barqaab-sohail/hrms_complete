@@ -18,6 +18,7 @@ class CreateHrMonthlyReportProjectTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('hr_monthly_report_id')->unsigned();
             $table->bigInteger('pr_detail_id')->unsigned();
+            $table->boolean('is_locak')->default(false);
             $table->timestamps();
             $table->foreign('hr_monthly_report_id')->references('id')->on('hr_monthly_reports')->onDelete('cascade');
             $table->foreign('pr_detail_id')->references('id')->on('pr_details');
