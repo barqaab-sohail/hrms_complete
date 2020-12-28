@@ -240,6 +240,17 @@
                         </div>
                     </div>            
                 </div><!--/End Row-->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <input type="text"  name="url" id="url" class="form-control" hidden>
+                                
+                               
+                            </div>
+                        </div>
+                    </div>            
+                </div><!--/End Row-->
 
                
             </div> <!--/End Form Boday-->
@@ -277,7 +288,8 @@
 
 <script>
 $(document).ready(function(){
-
+var url      = window.location.href;  
+$('#url').val(url);
 
     //Add Comma only for Display
     $("#hr_salary_id option").each(function()
