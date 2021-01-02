@@ -59,6 +59,8 @@
 
 <script>
     $(document).ready(function(){
+    	var id = window.location.href.replace ( /[^\d.]/g, '' );
+        var table = '{{route("documentation.table",":id")}}'.replace(':id', id);
 
 	    $('#myDataTable').DataTable({
 	                stateSave: false,
@@ -105,7 +107,7 @@
 
 	  	submitForm(this, url);
 	  	resetForm();
-	  	refreshTable("{{route('documentation.table')}}");
+	  	refreshTable(table);
 	 
 	    });
 	});

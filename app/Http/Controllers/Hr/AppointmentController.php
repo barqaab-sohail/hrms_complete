@@ -80,28 +80,30 @@ class AppointmentController extends Controller
         $input['hr_employee_id']=session('hr_employee_id');
         
         $appointment = HrAppointment::where('hr_employee_id',$id)->first();
+       
+        $url = $request->url;
+        $url = intval(filter_var($url, FILTER_SANITIZE_NUMBER_INT));
 
-        DB::transaction(function () use ($input, $appointment) {  
-            //check if appointment exist then update else create
-            if ($appointment){
+        if ($url === session('hr_employee_id')){
+            DB::transaction(function () use ($input, $appointment) {  
+                //check if appointment exist then update else create
+                if ($appointment){
 
-                HrAppointment::findOrFail($appointment->id)->update($input);
-                 
-            }else{
-    		  HrAppointment::create($input);
-            
-            }
+                    HrAppointment::findOrFail($appointment->id)->update($input);
+                     
+                }else{
+        		  HrAppointment::create($input);
+                
+                }
+        	}); // end transcation
 
+          return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Update"]);
 
-    	}); // end transcation
-
-
-      return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Updated']);
+        }else
+        {
+            return response()->json(['status'=> 'Not OK', 'message' => "Multiple Tabs Opened, please closed all Tabs and try again"]);
+        }
 
     }
-
-
-
-
 
 }

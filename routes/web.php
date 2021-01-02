@@ -78,12 +78,22 @@ Route::get('/hrReports/searchEmployee', 'HrReportsController@searchEmployee')->n
 Route::get('/hrReports/report_1', 'HrReportsController@report_1')->name('hrReports.report_1');
 Route::post('/hrReports/searchEmployeeResult', 'HrReportsController@searchEmployeeResult')->name('hrReports.searchEmployeeResult');
 
+
+
 Route::resource('/hrMonthlyReport', 'HrMonthlyReportController');
 Route::get('/hrMonthlyReportProject/refreshTable', 'HrMonthlyReportProjectController@refreshTable')->name('hrMonthlyProject.table');
 Route::resource('/hrMonthlyReportProject', 'HrMonthlyReportProjectController');
+});
 
+Route::group(['prefix' => 'input', 'middleware' => 'auth', 'namespace'=>'input'], function(){
+Route::resource('/inputProject', 'InputProjectController');
+
+Route::resource('/input', 'InputController');
+Route::get('/input/{id}/{month?}', 'InputController@projectList')->name('input.projectList');
 
 });
+
+
 
 //Self Services Routes
 Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Self'], function(){
