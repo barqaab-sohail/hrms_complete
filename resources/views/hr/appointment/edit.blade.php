@@ -288,8 +288,8 @@
 
 <script>
 $(document).ready(function(){
-var url      = window.location.href;  
-$('#url').val(url);
+    var emp_url = window.location.href;  
+    $('#url').val(emp_url);
 
     //Add Comma only for Display
     $("#hr_salary_id option").each(function()

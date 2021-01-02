@@ -53,9 +53,12 @@
 <!-- End HR Reports -->
 <!-- HR Monthly Report -->
                 @can('hr monthly report')
-                <li class="{{Request::is('hrms/hrMonthlyReport*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu">HR Monthly Report</span></a>
+                <li class="{{Request::is('input/*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu">HR Monthly Report</span></a>
                     <ul aria-expanded="false" class="collapse">  
-                        <li><a class="{{Request::is('hrms/hrMonthlyReport/create')?'active':''}}" href="{{route('hrMonthlyReport.create')}}">Monthly</a></li>
+                        <li><a class="{{Request::is('input/inputProject/create')?'active':''}}" href="{{route('inputProject.create')}}">Add Project</a></li> 
+                    </ul>
+                    <ul aria-expanded="false" class="collapse">  
+                        <li><a class="{{Request::is('input/input/create')?'active':''}}" href="{{route('input.create')}}">Add Input</a></li>
                        
                     </ul>
                     
