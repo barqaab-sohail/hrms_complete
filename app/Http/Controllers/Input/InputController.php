@@ -23,22 +23,27 @@ class InputController extends Controller
 
    public function projectList($id, $month){
 
-   	$hrInputProjects = HrMonthlyInputProject::where('hr_monthly_input_id',$month)->where('pr_detail_id',$id)->with('prDetail')->first();
+   	$hrInputProjects = HrMonthlyInputProject::where('hr_monthly_input_id',$month)->where('pr_detail_id',$id)->with('prDetail','hrEmployee','hrDesignation','hrMonthlyInputEmployee')->first();
     	return response()->json($hrInputProjects);
 
 
    }
 
-   public function store(Requst $request){
+   public function store(Request $request){
 
    			$input = $request->all();
-            $input['hr_monthly_input_project_id']=1;
             
             DB::transaction(function () use ($input, &$data) {  
                 $data = HrMonthlyInputEmployee::create($input);
             }); // end transcation
-
+            //$data = $data->with('hrEmployee')->get();
+            $data = HrMonthlyInputEmployee::where('id',$data->id)->with('hrEmployee','hrDesignation')->first();
             return response()->json($data);
 
+   }
+
+   public function destroy($id){
+    HrMonthlyInputEmployee::findOrFail($id)->delete();
+    return response()->json('OK');
    }
 }
