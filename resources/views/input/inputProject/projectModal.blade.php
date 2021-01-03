@@ -10,7 +10,7 @@
       </div>
       <div class="modal-body">
        
-           <form id="projectModalFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
+           <form id="projectModalFrom"  class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
                   {{csrf_field()}}
                   <div class="form-body">
                     <div class="form-group row">
@@ -54,6 +54,7 @@
                       </div>
                     </div>                                                                
                   </div>
+                  <input type="text" name="hr_monthly_input_project_id" id="hr_monthly_input_project_id" class="form-control" hidden required>
                   
                    <hr>
                   <div class="form-actions">
@@ -87,7 +88,6 @@ $(document).ready(function(){
 
 
     $('#projectModalFrom').on('submit', function(event){
-       
       var url = "{{route('input.store')}}"
         event.preventDefault();
               //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
@@ -110,8 +110,23 @@ $(document).ready(function(){
                  cache: false,
                  processData: false,
                  success:function(data){
-                     $("#inputTable tbody").prepend('<tr><td>'++'</td><td>'++'</td><td>'++'</td><td>'++'</td></tr>');
-                     $("#projectModalFrom")[0].reset();
+                     // $("#inputTable tbody").prepend('<tr><td>'++'</td><td>'++'</td><td>'++'</td><td>'++'</td></tr>');
+                     console.log(data);
+                     var num = parseInt($("#inputTable tr:last-child td:first-child").html())+1;
+                      var editUrl='{{route("input.edit",":id")}}';
+                          editUrl= editUrl.replace(':id', data['id']);
+
+                      $("#inputTable tbody").append('<tr><td>'+ num +
+                        '</td><td>'+data['hr_employee']['first_name']+' '+data['hr_employee']['last_name']+
+                        '</td><td>'+data['hr_designation']['name']+
+                        '</td><td>'+data['input']+
+                        '</td><td>'+data['remarks']+
+                        '</td><td><form action='+"{{route('input.destroy','')}}"+
+                        '/'+data['id']+' method="POST"><a class="btn btn-primary"href='
+                          +editUrl+'>Edit</a>@csrf @method("DELETE")<button type="submit" class="btn btn-danger">Delete</button></form></td></tr>');  
+
+                     $('#hr_employee_id, #hr_designation_id').val('').select2('val', 'All');
+                     $('#input, #remarks').val('');
                      $("#projectModal").modal('hide');
                       
                  },

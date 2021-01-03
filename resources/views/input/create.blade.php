@@ -54,20 +54,10 @@
 						            <th>Name</th>
 						            <th>Designation</th>
 						            <th>Input</th>
+                        <th>Remarks</th>
 						            <th width="250px">Action</th>
 						        </tr>
-						            <td></td>
-						            <td></td>
-						            <td></td>
-						            <td></td>
-						            <td>
-						                <form action="" method="POST">
-						                    <a class="btn btn-primary" href="">Edit</a>
-						                    @csrf
-						                    @method('DELETE')
-						                    <button type="submit" class="btn btn-danger">Delete</button>
-						                </form>
-						            </td>
+						            
 						        </tr>
 					    	</table>
 		        		</div>       
@@ -109,7 +99,7 @@
                      $("#project").empty();
                      $("#project").append('<option value="">Select Project</option>');
                       $.each(res,function(key,value){
-                          $("#project").append('<option value="'+value['pr_detail']['id']+'">'+value['pr_detail']['name']+'</option>');       
+                          $("#project").append('<option value="'+value['pr_detail']['id']+'">'+value['pr_detail']['name']+'</option>'); 
                       });
                        $('#state').select2('destroy');
                        $('#state').select2();
@@ -134,21 +124,67 @@
              {       
                   if(res)
                   { 
-                  	$('#heading').text(
+                  	$("#inputTable td").remove();
+                    $('#heading').text(
                   		res['pr_detail']['name']+'-'+res['pr_detail']['project_no']
                   		)
                   	$('#heading').append( "<br><a class='btn btn-success' href='#' data-toggle='modal' data-target='#projectModal'>Add Employee</a>" );
+                    $('#hr_monthly_input_project_id').val(res['id']);
 
-                    console.log(res);
+                    $.each(res['hr_employee'],function(key,val){ 
+                      var editUrl='{{route("input.edit",":id")}}';
+                          editUrl= editUrl.replace(':id', res['hr_monthly_input_employee'][key]['id']);
+
+                      $("#inputTable tbody").append('<tr><td>'+ (key+1) +
+                        '</td><td>'+val['first_name']+' '+val['last_name']+
+                        '</td><td>'+res['hr_designation'][key]['name']+
+                        '</td><td>'+res['hr_monthly_input_employee'][key]['input']+
+                        '</td><td>'+res['hr_monthly_input_employee'][key]['remarks']+
+                        '</td><td><form id=deleteForm'+key+' action='+"{{route('input.destroy','')}}"+
+                        '/'+res['hr_monthly_input_employee'][key]['id']+' method="POST"><a class="btn btn-primary"href='
+                          +editUrl+'>Edit</a>@csrf @method("DELETE")<button type="submit" class="btn btn-danger">Delete</button></form></td></tr>');  
+                            //console.log(val['first_name']);
+                    }); 
                   }
-                 
              }
 
           });//end ajax
         }
     }); 
 
-    
+    // $("#inputForm").submit(function(e){
+    //   e.preventDefault();
+    //   alert('lk');
+    // });
+
+    $(document).on('submit','form[id^=deleteForm]',function(event){
+    event.preventDefault();
+    var url = $(this).attr('action');
+    var tr = $(this).closest('tr');
+      $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
+            var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
+
+            if (token) {
+                return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Objectl
+            }
+        });
+      $.ajax({
+             method:"DELETE",
+             url: url,
+             success:function(res)
+             {       
+                  if(res)
+                  {
+                    tr.remove();
+                    $('#inputTable tr').each(function(i) {
+                      $(this).children('td:first-child').text(i);
+                    });
+                   // console.log(tr);
+                  }     
+             }
+
+          });//end ajax
+    }); //end submit
 
 
 
