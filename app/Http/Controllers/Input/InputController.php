@@ -7,14 +7,17 @@ use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDesignation;
 use App\Models\MonthlyInput\HrMonthlyInputProject;
+use App\Models\MonthlyInput\HrMonthlyInput;
 use App\Models\MonthlyInput\HrMonthlyInputEmployee;
+use App\Http\Requests\MonthlyInput\EmployeeInputStore;
+
 use DB;
 
 class InputController extends Controller
 {
     public function create(){
 
-    	$hrInputMonths = HrMonthlyInputProject::where('lock_user',0)->get();
+    	$hrInputMonths = HrMonthlyInput::where('is_lock',0)->get();
     	$hrEmployees = HrEmployee::where('hr_status_id',1)->get();
     	$hrDesignations = HrDesignation::all();
     	return view ('input.create',compact('hrInputMonths','hrEmployees','hrDesignations'));
@@ -29,7 +32,7 @@ class InputController extends Controller
 
    }
 
-   public function store(Request $request){
+   public function store(EmployeeInputStore $request){
 
    			$input = $request->all();
             

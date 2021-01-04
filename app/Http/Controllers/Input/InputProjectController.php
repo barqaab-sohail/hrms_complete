@@ -19,7 +19,7 @@ class InputProjectController extends Controller
     	//$years = ['2021'];
 
     	$monthYears = HrMonthlyInput::where('is_lock',0)->get();
-
+       
     	return view ('input.inputProject.create',compact('monthYears','projects'));
     }
 
