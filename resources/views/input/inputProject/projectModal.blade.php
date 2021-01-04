@@ -42,15 +42,15 @@
                     <div class="form-group row">
                       <div class="col-md-12">
                         <label class="control-label text-right">Input<span class="text_requried">*</span></label><br>
-                        <input type="text" name="input" id="input" value="{{ old('input') }}" class="form-control" required>
+                        <input type="text" name="input" id="input" value="{{ old('input') }}" class="form-control" data-validation="required number" data-validation-allowing="range[0.03;1.0],float">
                       </div>
                     </div>                                                                
                   </div>
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-12">
-                        <label class="control-label text-right">Remarks<span class="text_requried">*</span></label><br>
-                        <input type="text" name="remarks" id="remarks" value="{{ old('remarks') }}" class="form-control" required>
+                        <label class="control-label text-right">Remarks</label><br>
+                        <input type="text" name="remarks" id="remarks" value="{{ old('remarks') }}" class="form-control">
                       </div>
                     </div>                                                                
                   </div>
@@ -79,7 +79,10 @@
 <script>
 
 $(document).ready(function(){
- 
+    $.validate({
+    validateHiddenInputs: true,
+    });
+
     $('#hr_employee_id, #hr_designation_id').select2({
         dropdownParent: $('#projectModal'),
         width: "100%",
@@ -113,6 +116,7 @@ $(document).ready(function(){
                      // $("#inputTable tbody").prepend('<tr><td>'++'</td><td>'++'</td><td>'++'</td><td>'++'</td></tr>');
                      console.log(data);
                      var num = parseInt($("#inputTable tr:last-child td:first-child").html())+1;
+                        if(!num){num=1;}
                       var editUrl='{{route("input.edit",":id")}}';
                           editUrl= editUrl.replace(':id', data['id']);
 
@@ -121,14 +125,13 @@ $(document).ready(function(){
                         '</td><td>'+data['hr_designation']['name']+
                         '</td><td>'+data['input']+
                         '</td><td>'+data['remarks']+
-                        '</td><td><form action='+"{{route('input.destroy','')}}"+
+                        '</td><td><form id=deleteForm'+num+' action='+"{{route('input.destroy','')}}"+
                         '/'+data['id']+' method="POST"><a class="btn btn-primary"href='
                           +editUrl+'>Edit</a>@csrf @method("DELETE")<button type="submit" class="btn btn-danger">Delete</button></form></td></tr>');  
 
                      $('#hr_employee_id, #hr_designation_id').val('').select2('val', 'All');
                      $('#input, #remarks').val('');
-                     $("#projectModal").modal('hide');
-                      
+                     $("#projectModal").modal('hide');     
                  },
                   error: function (jqXHR, textStatus, errorThrown){
                       if (jqXHR.status == 401){
