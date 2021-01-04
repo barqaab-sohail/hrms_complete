@@ -28,7 +28,7 @@
 	                                           	<select  name="month" id="month"  class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     @foreach($hrInputMonths as $month)
-													<option value="{{$month->id}}" {{(old("month")==$month? "selected" : "")}}>{{$month->hrMonthlyInput->month}}-{{$month->hrMonthlyInput->year}}</option>
+													<option value="{{$month->id}}" {{(old("month")==$month? "selected" : "")}}>{{$month->month}}-{{$month->year}}</option>
                                                     @endforeach     
                                                 </select>
 		                                    </div>

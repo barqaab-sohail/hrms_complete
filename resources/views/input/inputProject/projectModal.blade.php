@@ -9,7 +9,8 @@
         </button>
       </div>
       <div class="modal-body">
-       
+      <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i>
+</div>
            <form id="projectModalFrom"  class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
                   {{csrf_field()}}
                   <div class="form-body">
@@ -145,7 +146,7 @@ $(document).ready(function(){
                       $.each(test.errors, function (key, value){
                       errorMassage += value + '<br>';  
                       });
-                       $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+                       $('#json_message_modal').html('<div id="json_message_modal" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
                        $('html,body').scrollTop(0);                
                           
                   }//end error
