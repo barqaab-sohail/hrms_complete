@@ -28,6 +28,18 @@
 			
 		</div>
 	</div>
+	<div class="card">
+		<div class="card-body">
+			<!--<div class="float-right">
+				<input id="month" class="form-control" value="" type="month">
+			</div>
+			<h4 class="card-title">Salaries</h4>
+			-->
+			@include('hr.charts.category');
+		
+			
+		</div>
+	</div>
 	
 @can('Super Admin')
 	<!--TASK -->
