@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Hr\HrEmployee;
 
 class HomeController extends Controller
 {
@@ -23,7 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard.dashboard');
+        
+        $employees = HrEmployee::find(3);
+        return view('dashboard.dashboard', compact('employees'));
     }
     public function testing()
     {

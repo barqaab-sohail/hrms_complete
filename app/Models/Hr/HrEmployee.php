@@ -4,6 +4,7 @@ namespace App\Models\Hr;
 
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Hr\HrAppointment;
 
 
 class HrEmployee extends Model implements Auditable
@@ -68,6 +69,26 @@ class HrEmployee extends Model implements Auditable
 
             return $this->hasMany('App\Models\Hr\HrEducation');
 
+    }
+
+    public function categoryA(){
+
+           return $this->join('hr_appointments','hr_appointments.hr_employee_id','=','hr_employees.id')->where('hr_status_id',1)
+           ->where('hr_category_id',1)
+           ->get()->count();
+    }
+
+    public function categoryB(){
+
+           return $this->join('hr_appointments','hr_appointments.hr_employee_id','=','hr_employees.id')->where('hr_status_id',1)
+           ->where('hr_category_id',2)
+           ->get()->count();
+    }
+     public function categoryC(){
+
+           return $this->join('hr_appointments','hr_appointments.hr_employee_id','=','hr_employees.id')->where('hr_status_id',1)
+           ->where('hr_category_id',3)
+           ->get()->count();
     }
 
 
