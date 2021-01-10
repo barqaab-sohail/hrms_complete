@@ -83,7 +83,9 @@ Route::post('/hrReports/searchEmployeeResult', 'HrReportsController@searchEmploy
 Route::resource('/hrMonthlyReport', 'HrMonthlyReportController');
 Route::get('/hrMonthlyReportProject/refreshTable', 'HrMonthlyReportProjectController@refreshTable')->name('hrMonthlyProject.table');
 Route::resource('/hrMonthlyReportProject', 'HrMonthlyReportProjectController');
+Route::get('/charts/category', 'HrChartController@category')->name('charts.category');
 });
+
 
 Route::group(['prefix' => 'input', 'middleware' => 'auth', 'namespace'=>'input'], function(){
 Route::resource('/inputProject', 'InputProjectController');
