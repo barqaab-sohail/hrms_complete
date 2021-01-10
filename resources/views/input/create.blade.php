@@ -97,6 +97,8 @@
                   if(res)
                   {
                      $("#project").empty();
+                     $("#inputTable td").remove();
+                     $('#heading').text(''); 
                      $("#project").append('<option value="">Select Project</option>');
                       $.each(res,function(key,value){
                           $("#project").append('<option value="'+value['pr_detail']['id']+'">'+value['pr_detail']['name']+'</option>'); 
@@ -130,7 +132,7 @@
                   		)
                   	$('#heading').append( "<br><a class='btn btn-success' href='#' data-toggle='modal' data-target='#projectModal'>Add Employee</a>" );
                     $('#hr_monthly_input_project_id').val(res['id']);
-
+                    $('#month_id').val(res['hr_monthly_input_id']);
                     $.each(res['hr_employee'],function(key,val){ 
                       var editUrl='{{route("input.edit",":id")}}';
                           editUrl= editUrl.replace(':id', res['hr_monthly_input_employee'][key]['id']);
