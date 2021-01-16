@@ -15,9 +15,7 @@ class InputProjectController extends Controller
     public function create(){
     	
     	$projects = PrDetail::all();
-    	//$months = ['January','Febrary', 'March','April', 'May','June','July','August','September','October', 'November', 'December'];
-    	//$years = ['2021'];
-
+    	
     	$monthYears = HrMonthlyInput::where('is_lock',0)->get();
        
     	return view ('input.inputProject.create',compact('monthYears','projects'));

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHrMonthlyInputTable extends Migration
+class CreateHrInputMonthTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateHrMonthlyInputTable extends Migration
      */
     public function up()
     {
-        Schema::create('hr_monthly_inputs', function (Blueprint $table) {
+        Schema::create('hr_input_months', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('month',8);
@@ -30,6 +30,6 @@ class CreateHrMonthlyInputTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hr_monthly_inputs');
+        Schema::dropIfExists('hr_input_months');
     }
 }

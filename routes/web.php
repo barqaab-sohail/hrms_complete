@@ -86,10 +86,11 @@ Route::resource('/hrMonthlyReportProject', 'HrMonthlyReportProjectController');
 });
 
 Route::group(['prefix' => 'input', 'middleware' => 'auth', 'namespace'=>'input'], function(){
-Route::resource('/inputProject', 'InputProjectController');
+	Route::resource('/inputMonth', 'InputMonthController');
+	Route::resource('/inputProject', 'InputProjectController');
+	Route::resource('/input', 'InputController');
 
-Route::resource('/input', 'InputController');
-Route::get('/input/{id}/{month?}', 'InputController@projectList')->name('input.projectList');
+	Route::get('/input/{id}/{month?}', 'InputController@projectList')->name('input.projectList');
 
 });
 
