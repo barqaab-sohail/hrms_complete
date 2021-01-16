@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\MonthlyInput;
+namespace App\Http\Requests\Input;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MonthlyInputStore extends FormRequest
+class InputMonthStore extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,18 +24,19 @@ class MonthlyInputStore extends FormRequest
     public function rules()
     {
         $rules = [
-        'hr_monthly_input_id'=> 'required',
-        'pr_detail_id'=> 'required|unique_with:hr_monthly_input_projects,hr_monthly_input_id'
+        'month'=> 'required',
+        'year'=> 'required|unique_with:hr_input_months,month'
         ];
 
         return $rules;
     }
 
-
     public function messages()
     {
+        
         return [
-            'pr_detail_id.unique_with' => 'Project already entered',
+            'year.unique_with' => "This Month & Year is already entered"        
+            
         ];
     }
 }

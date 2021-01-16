@@ -25,10 +25,10 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Month & Year<span class="text_requried" data-validation="required">*</span></label>
 		                                       
-	                                           	<select  name="hr_monthly_input_id"  class="form-control selectTwo" data-validation="required">
+	                                           	<select  name="hr_input_month_id"  class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     @foreach($monthYears as $monthYear)
-													<option value="{{$monthYear->id}}" {{(old("hr_monthly_input_id")==$monthYear? "selected" : "")}}>{{$monthYear->month}}-{{$monthYear->year}}</option>
+													<option value="{{$monthYear->id}}" {{(old("hr_input_month_id")==$monthYear? "selected" : "")}}>{{$monthYear->month}}-{{$monthYear->year}}</option>
                                                     @endforeach     
                                                 </select>
 		                                    </div>
