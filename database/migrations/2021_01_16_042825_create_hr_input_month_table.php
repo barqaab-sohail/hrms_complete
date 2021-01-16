@@ -16,7 +16,7 @@ class CreateHrInputMonthTable extends Migration
         Schema::create('hr_input_months', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->string('month',8);
+            $table->string('month',9);
             $table->string('year',4);
             $table->boolean('is_lock')->default(false);
             $table->timestamps();

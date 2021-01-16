@@ -38,7 +38,7 @@
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Projects<span class="text_requried" data-validation="required">*</span></label> 
-	                                           	<select  name="hr_monthly_input_project_id" id="project" class="form-control selectTwo" data-validation="required">     
+	                                           	<select  name="hr_input_project_id" id="project" class="form-control selectTwo" data-validation="required">     
                                               </select>
 		                                    </div>
 		                                </div>
@@ -131,19 +131,19 @@
                   		res['pr_detail']['name']+'-'+res['pr_detail']['project_no']
                   		)
                   	$('#heading').append( "<br><a class='btn btn-success' href='#' data-toggle='modal' data-target='#projectModal'>Add Employee</a>" );
-                    $('#hr_monthly_input_project_id').val(res['id']);
-                    $('#month_id').val(res['hr_monthly_input_id']);
+                    $('#hr_input_project_id').val(res['id']);
+                    $('#month_id').val(res['hr_input_month_id']);
                     $.each(res['hr_employee'],function(key,val){ 
                       var editUrl='{{route("input.edit",":id")}}';
-                          editUrl= editUrl.replace(':id', res['hr_monthly_input_employee'][key]['id']);
+                          editUrl= editUrl.replace(':id', res['hr_input'][key]['id']);
 
                       $("#inputTable tbody").append('<tr><td>'+ (key+1) +
                         '</td><td>'+val['first_name']+' '+val['last_name']+
                         '</td><td>'+res['hr_designation'][key]['name']+
-                        '</td><td>'+res['hr_monthly_input_employee'][key]['input']+
-                        '</td><td>'+res['hr_monthly_input_employee'][key]['remarks']+
+                        '</td><td>'+res['hr_input'][key]['input']+
+                        '</td><td>'+res['hr_input'][key]['remarks']+
                         '</td><td><form id=deleteForm'+key+' action='+"{{route('input.destroy','')}}"+
-                        '/'+res['hr_monthly_input_employee'][key]['id']+' method="POST"><a class="btn btn-primary"href='
+                        '/'+res['hr_input'][key]['id']+' method="POST"><a class="btn btn-primary"href='
                           +editUrl+'>Edit</a>@csrf @method("DELETE")<button type="submit" class="btn btn-danger">Delete</button></form></td></tr>');  
                             //console.log(val['first_name']);
                     }); 

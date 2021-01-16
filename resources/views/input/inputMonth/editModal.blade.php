@@ -1,9 +1,9 @@
 <!-- Modal -->
-<div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Employee Input</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Edit Month and Year</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -11,17 +11,30 @@
       <div class="modal-body">
       <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i>
 </div>
-           <form id="projectModalFrom"  class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
+           <form id="editModalFrom"  class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
                   {{csrf_field()}}
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-12">
-                        <label class="control-label text-right">Name of Employee<span class="text_requried">*</span></label><br>
-                          <select  id="hr_employee_id"   name="hr_employee_id"  class="form-control" data-validation="required">
-                            <option></option>
-                            @foreach($hrEmployees as $employee)
-                            <option value="{{$employee->id}}" {{(old("hr_employee_id")==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}}</option>
-                            @endforeach  
+                        <label class="control-label text-right">Month<span class="text_requried">*</span></label><br>
+                          <select  name="month"  id="modalMonth" class="form-control selectTwo" data-validation="required">
+                            <option value=""></option>
+                            @foreach($months as $month)
+                            <option value="{{$month}}" {{(old("month")==$month? "selected" : "")}}>{{$month}}</option>
+                            @endforeach     
+                            </select>
+                      </div>
+                    </div>                                                                
+                  </div>
+                  <div class="form-body">
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label class="control-label text-right">Year<span class="text_requried">*</span></label><br>
+                        <select  name="year"  id="modalYear" class="form-control selectTwo" data-validation="required">
+                          <option value=""></option>
+                          @foreach($years as $year)
+                          <option value="{{$year}}" {{(old("year")==$year? "selected" : "")}}>{{$year}}</option>
+                          @endforeach     
                           </select>
                       </div>
                     </div>                                                                
@@ -29,43 +42,24 @@
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-12">
-                        <label class="control-label text-right">Designation<span class="text_requried">*</span></label><br>
-                        <select  id="hr_designation_id"   name="hr_designation_id"  class="form-control" data-validation="required">
-                            <option></option>
-                            @foreach($hrDesignations as $hrDesignation)
-                            <option value="{{$hrDesignation->id}}" {{(old("hr_designation_id")==$hrDesignation->id? "selected" : "")}}>{{$hrDesignation->name}}</option>
-                            @endforeach  
-                          </select>
+                        <label class="control-label text-right">Status<span class="text_requried">*</span></label><br>
+                        <select  name="is_lock"  id="modalStatus" class="form-control selectTwo" data-validation="required">
+                            <option value=""></option>
+                            <option value="0">Open</option>
+                            <option value="1">Lock</option>  
+                        </select>
                       </div>
                     </div>                                                                
                   </div>
-                  <div class="form-body">
-                    <div class="form-group row">
-                      <div class="col-md-12">
-                        <label class="control-label text-right">Input<span class="text_requried">*</span></label><br>
-                        <input type="text" name="input" id="input" value="{{ old('input') }}" class="form-control" data-validation="required number" data-validation-allowing="range[0.03;1.0],float">
-                      </div>
-                    </div>                                                                
-                  </div>
-                  <div class="form-body">
-                    <div class="form-group row">
-                      <div class="col-md-12">
-                        <label class="control-label text-right">Remarks</label><br>
-                        <input type="text" name="remarks" id="remarks" value="{{ old('remarks') }}" class="form-control">
-                      </div>
-                    </div>                                                                
-                  </div>
-                  <input type="text" name="hr_input_project_id" id="hr_input_project_id" class="form-control" hidden required>
-
-                  <input type="text" name="month_id" id="month_id" class="form-control" hidden required>
                   
-                   <hr>
+                  
+                  <hr>
                   <div class="form-actions">
                       <div class="row">
                           <div class="col-md-6">
                               <div class="row">
                                   <div class="col-md-offset-3 col-md-9">
-                                      <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="spinner fa fa-spinner fa-spin" ></i>Save</button>   
+                                      <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="spinner fa fa-spinner fa-spin" ></i>Save Changes</button>   
                                   </div>
                               </div>
                           </div>
