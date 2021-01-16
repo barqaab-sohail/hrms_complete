@@ -35,8 +35,6 @@
 			</div>
 			<h4 class="card-title">Salaries</h4>
 			-->
-			@include('hr.charts.category');
-		
 			
 		</div>
 	</div>
