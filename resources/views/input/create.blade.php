@@ -39,7 +39,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Projects<span class="text_requried" data-validation="required">*</span></label> 
 	                                           	<select  name="hr_monthly_input_project_id" id="project" class="form-control selectTwo" data-validation="required">     
-                                                </select>
+                                              </select>
 		                                    </div>
 		                                </div>
 		                            </div> 
