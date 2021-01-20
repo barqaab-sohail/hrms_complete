@@ -73,7 +73,6 @@ class EmployeeController extends Controller
         return view ('hr.employee.missingDocuments', compact('employees'));
     }
 
-
     public function edit(Request $request, $id){
     	$genders = Gender::all();
     	$maritalStatuses = MaritalStatus::all();

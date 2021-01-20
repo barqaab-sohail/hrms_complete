@@ -23,9 +23,11 @@ class InputMonthStore extends FormRequest
      */
     public function rules()
     {
+        $id = request()->route()->parameter('inputMonth');
         $rules = [
         'month'=> 'required',
-        'year'=> 'required|unique_with:hr_input_months,month'
+        'year'=> 'required|unique_with:hr_input_months,month,'.$id
+
         ];
 
         return $rules;
@@ -33,7 +35,7 @@ class InputMonthStore extends FormRequest
 
     public function messages()
     {
-        
+       
         return [
             'year.unique_with' => "This Month & Year is already entered"        
             

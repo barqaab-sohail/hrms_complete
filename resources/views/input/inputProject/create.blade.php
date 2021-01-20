@@ -25,7 +25,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Month & Year<span class="text_requried" data-validation="required">*</span></label>
 		                                       
-	                                           	<select  name="hr_input_month_id"  class="form-control selectTwo" data-validation="required">
+	                                           	<select  name="hr_input_month_id" id="hr_input_month_id" class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     @foreach($monthYears as $monthYear)
 													<option value="{{$monthYear->id}}" {{(old("hr_input_month_id")==$monthYear? "selected" : "")}}>{{$monthYear->month}}-{{$monthYear->year}}</option>
@@ -58,6 +58,17 @@
 		                </div>
 		                <hr> 
 		            	</form>
+		            		<table id="inputTable" class="table table-bordered">
+      								<h2 align="center" id="heading"></h2>
+      						        <tr>
+      						            <th>Month & Year</th>
+      						            <th>Project</th>
+      						            <th width="250px">Action</th>
+      						        </tr>
+      					    </table>
+
+
+
 		        		</div>       
 		        	</div>
 		        </div>
@@ -81,6 +92,35 @@
         submitForm(this, url,1);
        
     });
+
+    $('#hr_input_month_id').change(function(){
+      var cid = $(this).val();
+        if(cid){
+          $.ajax({
+             type:"get",
+             url: "{{url('input/inputProject')}}"+"/"+cid,
+
+             //url:"http://localhost/hrms4/public/country/"+cid, **//Please see the note at the end of the post**
+             success:function(res)
+             {       
+                   $.each(res['pr_detail'],function(key,val){ 
+                      var editUrl='{{route("input.edit",":id")}}';
+                          editUrl= editUrl.replace(':id', res['id'][key]['id']);
+
+                      $("#inputTable tbody").append('<tr><td>'+ (key+1) +
+                        '</td><td>'+val['name']+
+                        '</td><td><form id=deleteForm'+key+' action='+"{{route('input.destroy','')}}"+
+                        '/'+res['id'][key]['id']+' method="POST"><a class="btn btn-primary"href='
+                          +editUrl+'>Edit</a>@csrf @method("DELETE")<button type="submit" class="btn btn-danger">Delete</button></form></td></tr>');  
+                            //console.log(val['first_name']);
+                    }); 
+                 console.log(res);
+             }
+
+          });//end ajax
+        }
+    }); 
+
 
     
 });

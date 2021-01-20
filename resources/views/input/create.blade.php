@@ -47,19 +47,19 @@
 		                </div>
 		                <hr> 
 		            	</form>
-							<table id="inputTable" class="table table-bordered">
-								<h2 align="center" id="heading"></h2>
-						        <tr>
-						            <th>No</th>
-						            <th>Name</th>
-						            <th>Designation</th>
-						            <th>Input</th>
-                        <th>Remarks</th>
-						            <th width="250px">Action</th>
-						        </tr>
-						            
-						        </tr>
-					    	</table>
+      							<table id="inputTable" class="table table-bordered">
+      								<h2 align="center" id="heading"></h2>
+      						        <tr>
+      						            <th>No</th>
+      						            <th>Name</th>
+      						            <th>Designation</th>
+      						            <th>Input</th>
+                              <th>Remarks</th>
+      						            <th width="250px">Action</th>
+      						        </tr>
+      						            
+      						        </tr>
+      					    </table>
 		        		</div>       
 		        	</div>
 		        </div>

@@ -82,7 +82,7 @@
 						        </tr>
 						        <tbody>
 						        	@foreach($monthYears as $year)
-						        	<tr>
+						        	<tr id="tr_{{$year->id}}">
 						        		<td>{{$year->month}}-{{$year->year}}</td>
 						        		<td>{{$year->is_lock}}</td>
 						        		<td class="text-center">
@@ -181,23 +181,7 @@
 
     }); //end submit
 
-    $(document).on('click','a[id^=editMonthInput]',function(event){
-    	$("#editModal").modal('show');
-    	var tr = $(this).closest('tr').children('td:first').text().split('-');
-    	
-    	var month = tr[0];
-    	var year = tr[1];
-    		$("#modalMonth option").each(function(){
-        		if($(this).val() === month){ // EDITED THIS LINE
-           			 $(this).attr("selected","selected"); 
-           			
-        		}
-       	
-        		
-    		});
-    	
-    	
-    });
+   
 
     //delete function
     $(document).on('submit','form[id^=deleteInputMonth]',function(event){
