@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/dashboard','HomeController@index');
 Route::get('/hrms/testing','HomeController@testing');
 
+
 Auth::routes();
 
 Route::prefix('code')->namespace('Auth')->name('otp.')->group(function(){
@@ -78,12 +79,11 @@ Route::get('/hrReports/searchEmployee', 'HrReportsController@searchEmployee')->n
 Route::get('/hrReports/report_1', 'HrReportsController@report_1')->name('hrReports.report_1');
 Route::post('/hrReports/searchEmployeeResult', 'HrReportsController@searchEmployeeResult')->name('hrReports.searchEmployeeResult');
 
-
-
-Route::resource('/hrMonthlyReport', 'HrMonthlyReportController');
-Route::get('/hrMonthlyReportProject/refreshTable', 'HrMonthlyReportProjectController@refreshTable')->name('hrMonthlyProject.table');
-Route::resource('/hrMonthlyReportProject', 'HrMonthlyReportProjectController');
+//Route::resource('/hrMonthlyReport', 'HrMonthlyReportController');
+//Route::get('/hrMonthlyReportProject/refreshTable', 'HrMonthlyReportProjectController@refreshTable')->name('hrMonthlyProject.table');
+//Route::resource('/hrMonthlyReportProject', 'HrMonthlyReportProjectController');
 Route::get('/charts/category', 'HrChartController@category')->name('charts.category');
+
 });
 
 
