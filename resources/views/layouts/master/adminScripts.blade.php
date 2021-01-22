@@ -5,7 +5,6 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.min.js"></script>
-
 <!-- Bootstrap tether Core JavaScript -->
 <script src="{{asset('Massets/plugins/popper/popper.min.js') }}"></script>
 <script src="{{asset('Massets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
@@ -34,8 +33,8 @@
 
 <!--CDN ChartJS 
  -->
- <script src="http://www.chartjs.org/dist/2.7.3/Chart.bundle.js"></script>
-  <script src="http://www.chartjs.org/samples/latest/utils.js"></script>
+<script src="http://www.chartjs.org/dist/2.7.3/Chart.bundle.js"></script>
+<script src="http://www.chartjs.org/samples/latest/utils.js"></script>
 
 <!-- ============================================================== -->
 <!-- Style switcher -->

@@ -7,26 +7,28 @@
 	</ol>
 @stop
 @section('content')
+
 <div class="row">
   <div class="col-lg-12">
     <div class="card card-outline-info">
         <div class="row">
 		      <div class="col-lg-12">
-            <a class="btn btn-success" href="javascript:void(0)" id="createNewMonth">Add New Month</a>
-            <br>
-            <table class="table table-bordered data-table">
-              <thead>
-                <tr>
-                    <th>Month & Year</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-        </table>
-
-
+            <div class="card-body">
+              <a class="btn btn-success" href="javascript:void(0)" id="createNewMonth">Add New Month</a>
+              <br>
+              <table class="table table-bordered data-table">
+                <thead>
+                  <tr>
+                      <th class="text-center">Month</th>
+                      <th class="text-center">Year</th>
+                      <th class="text-center">Status</th>
+                      <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
 		      </div>
         </div>
     </div>
@@ -38,33 +40,39 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="modelHeading"></h4>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
             </div>
             <div class="modal-body">
+              <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
                 <form id="monthForm" name="monthForm" class="form-horizontal">
                    <input type="hidden" name="month_id" id="month_id">
                     <div class="form-group">
                         <label class="control-label text-right">Month<span class="text_requried">*</span></label><br>
                           <select  name="month"  id="month" class="form-control" data-validation="required">
-                            <option value=""></option>
-                              
+                              <option value=""></option>
+                              @foreach ($months as $month)
+                              <option value="{{$month}}">{{$month}}</option>
+                              @endforeach
                             </select>
                     </div>
                     <div class="form-group">
                         <label class="control-label text-right">Year<span class="text_requried">*</span></label><br>
                           <select  name="year"  id="year" class="form-control" data-validation="required">
-                            <option value=""></option>
-                              
+                              <option value=""></option>
+                              @foreach ($years as $year)
+                              <option value="{{$year}}">{{$year}}</option>
+                              @endforeach   
                             </select>
                     </div>
                     <div class="form-group">
                         <label class="control-label text-right">status<span class="text_requried">*</span></label><br>
                           <select  name="is_lock"  id="is_lock" class="form-control" data-validation="required">
-                            <option value=""></option>
+                              <option value=""></option>
+                              <option value="0">Open</option>
+                              <option value="1">Lock</option>
                               
                             </select>
                     </div>
-
-      
                     <div class="col-sm-offset-2 col-sm-10">
                      <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Save changes
                      </button>
@@ -74,12 +82,9 @@
         </div>
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>  
+
 <script type="text/javascript">
+$(document).ready(function() {
   $(function () {
       $.ajaxSetup({
           headers: {
@@ -95,18 +100,24 @@
             {data: 'year', name: 'year'},
             {data: 'is_lock', name: 'is_lock'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
+        ],
+        columnDefs: [
+          {
+            "targets": [0,1,2,3], // your case first column
+            "className": "text-center",
+          }
+        ],
     });
     $('#createNewMonth').click(function () {
         $('#saveBtn').val("create-month");
         $('#month_id').val('');
         $('#monthForm').trigger("reset");
-        $('#modelHeading').html("Create New MOnth");
+        $('#modelHeading').html("Create New Month");
         $('#ajaxModel').modal('show');
     });
     $('body').on('click', '.editMonth', function () {
       var month_id = $(this).data('id');
-      $.get("{{ route('inputMonth.create') }}" +'/' + inputMonth +'/edit', function (data) {
+      $.get("{{ url('input/inputMonth') }}" +'/' + month_id +'/edit', function (data) {
           $('#modelHeading').html("Edit Month");
           $('#saveBtn').val("edit-month");
           $('#ajaxModel').modal('show');
@@ -121,19 +132,25 @@
         $(this).html('Save');
     
         $.ajax({
-          data: $('#bookMonth').serialize(),
+          data: $('#monthForm').serialize(),
           url: "{{ route('inputMonth.store') }}",
           type: "POST",
           dataType: 'json',
           success: function (data) {
      
-              $('#bookMonth').trigger("reset");
+              $('#monthForm').trigger("reset");
               $('#ajaxModel').modal('hide');
               table.draw();
          
           },
           error: function (data) {
-              console.log('Error:', data);
+              console.log(data.responseJSON.errors);
+              var errorMassage = '';
+              $.each(data.responseJSON.errors, function (key, value){
+                errorMassage += value + '<br>';  
+                });
+                 $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+
               $('#saveBtn').html('Save Changes');
           }
       });
@@ -157,6 +174,7 @@
     });
      
   });
+});
 </script>
 
 @stop
