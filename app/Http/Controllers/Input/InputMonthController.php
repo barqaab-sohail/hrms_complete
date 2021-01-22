@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Input\InputMonthStore;
 use App\Models\Input\HrInputMonth;
 use DB;
+use DataTables;
 
 class InputMonthController extends Controller
 {
@@ -19,11 +20,13 @@ class InputMonthController extends Controller
     public function create(Request $request)
     {
    
-        $books = HrInputMonth::latest()->get();
+        $months = ['January','February', 'March','April', 'May','June','July','August','September','October', 'November', 'December'];
+        $years = ['2021','2022'];
+
         
         if ($request->ajax()) {
             $data = HrInputMonth::latest()->get();
-            return Datatables::of($data)
+            return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
    
@@ -37,7 +40,7 @@ class InputMonthController extends Controller
                     ->make(true);
         }
       
-        return view('input.inputMonth.inputMonth',compact('books'));
+        return view('input.inputMonth.inputMonth', compact('years','months'));
     }
      
     /**
@@ -46,7 +49,7 @@ class InputMonthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(InputMonthStore $request)
     {
         HrInputMonth::updateOrCreate(['id' => $request->month_id],
                 ['month' => $request->month, 'year' => $request->year, 'is_lock' => $request->is_lock]);        
