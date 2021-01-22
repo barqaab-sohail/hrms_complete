@@ -21,12 +21,12 @@ class EmergencyController extends Controller
 
     public function update(EmergencyStore $request, $id){
     	$input = $request->all();
-        $input['hr_employee_id']=$id;
+        $input['hr_employee_id']=session('hr_employee_id');
 
-        DB::transaction(function () use ($input, $id) {  
+        DB::transaction(function () use ($input) {  
             
         	HrEmergency::updateOrCreate(
-			         	['hr_employee_id' => $id],
+			         	['hr_employee_id' => session('hr_employee_id')],
 			         	$input);
             
     	}); // end transcation

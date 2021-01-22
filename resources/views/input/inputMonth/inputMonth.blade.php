@@ -109,6 +109,7 @@ $(document).ready(function() {
         ],
     });
     $('#createNewMonth').click(function () {
+        $('#json_message_modal').html('');
         $('#saveBtn').val("create-month");
         $('#month_id').val('');
         $('#monthForm').trigger("reset");
@@ -117,6 +118,7 @@ $(document).ready(function() {
     });
     $('body').on('click', '.editMonth', function () {
       var month_id = $(this).data('id');
+      $('#json_message_modal').html('');
       $.get("{{ url('input/inputMonth') }}" +'/' + month_id +'/edit', function (data) {
           $('#modelHeading').html("Edit Month");
           $('#saveBtn').val("edit-month");
