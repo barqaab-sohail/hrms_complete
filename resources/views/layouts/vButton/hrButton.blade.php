@@ -43,6 +43,8 @@
 
 
             @can('Super Admin')   
+            <a type="submit" role="button" id="addManager" href="{{route('manager.create')}}" class="btn btn-info" {{Request::is('hrms/manager/create')?'style=background-color:#737373':''}}>HOD</a>
+
             <a type="submit" id="addUserLogin" role="button" href="{{route('userLogin.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Login Detail</a> 
             @endcan
             

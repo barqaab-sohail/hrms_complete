@@ -52,7 +52,7 @@
 
 <!-- End HR Reports -->
 <!-- HR Monthly Report -->
-                @can('hr monthly report')
+                @can('hr monthly input')
                 <li class="{{Request::is('input/*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu">HR Monthly Report</span></a>
                     <ul aria-expanded="false" class="collapse">  
                         <li><a class="{{Request::is('input/inputMonth/create')?'active':''}}" href="{{route('inputMonth.create')}}">Add Month</a></li> 
