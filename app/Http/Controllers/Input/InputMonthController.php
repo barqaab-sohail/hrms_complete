@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Input;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Input\InputMonthStore;
 use App\Models\Input\HrInputMonth;
 use DB;
@@ -31,9 +32,12 @@ class InputMonthController extends Controller
                     ->addColumn('action', function($row){
    
                            $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editMonth">Edit</a>';
-   
+
+                           if(Auth::user()->hasPermissionTo('hr monthly input')){
                            $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMonth">Delete</a>';
-    
+                            }
+                            
+                           
                             return $btn;
                     })
                     ->rawColumns(['action'])

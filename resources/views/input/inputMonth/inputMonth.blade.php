@@ -100,6 +100,7 @@ $(document).ready(function() {
             {data: 'year', name: 'year'},
             {data: 'is_lock', name: 'is_lock'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
+            
         ],
         columnDefs: [
           {

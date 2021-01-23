@@ -55,6 +55,7 @@ Route::get('/contact/refreshTable', 'ContactController@refreshTable')->name('con
 Route::resource('/contact', 'ContactController');
 Route::resource('/emergency', 'EmergencyController');
 Route::resource('/nextToKin', 'NextToKinController');
+Route::resource('/manager', 'ManagerController');
 Route::get('/promotion/refreshTable', 'PromotionController@refreshTable')->name('promotion.table');
 Route::resource('/promotion', 'PromotionController');
 Route::get('/exit/refreshTable', 'ExitController@refreshTable')->name('exit.table');

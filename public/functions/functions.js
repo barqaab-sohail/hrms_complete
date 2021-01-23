@@ -292,6 +292,31 @@ function getAjaxData(url){
                 }//end error
         }); //end ajax  
 }
+
+// HR get data through ajax
+function getData(url){
+        $.ajax({
+           url:url,
+           method:"GET",
+           //dataType:'JSON',
+           contentType: false,
+           cache: false,
+           processData: false,
+           success:function(data)
+               {        
+                var value = data;
+               },
+            error: function (jqXHR, textStatus, errorThrown){
+                if (jqXHR.status == 401){
+                    location.href = "{{route ('login')}}"
+                    }      
+                          
+
+                }//end error
+        }); //end ajax  
+  return value;
+}
+
 // json message clear after 5 second
 function clearMessage(time=5000){
    setTimeout(function(){
