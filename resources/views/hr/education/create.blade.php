@@ -1,9 +1,9 @@
 
     <div style="margin-top:10px; margin-right: 10px;">
-        <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">List of Employees</button>
+        <button type="button"  id ="hideButton"  class="btn btn-info float-right">Add Education</button>
     </div>
          
-    <div class="card-body">
+    <div class="card-body" id="hideDiv">
         <form id= "education" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('education.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
@@ -160,13 +160,15 @@
         </div>   
     @include('cv.detail.eduModal')
   
-
-
 <script>
 $(document).ready(function(){
+    
     refreshTable("{{route('education.table')}}");
     $('#education_id').chosen();
-
+    $('#hideDiv').hide();
+    $('#hideButton').click(function(){
+          $('#hideDiv').toggle();
+    });
    
     $('#marks_obtain, #total_marks').on('change',function(){
 

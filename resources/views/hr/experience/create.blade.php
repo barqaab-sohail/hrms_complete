@@ -1,9 +1,9 @@
 
     <div style="margin-top:10px; margin-right: 10px;">
-        <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">List of Employees</button>
+       <button type="button"  id ="hideButton"  class="btn btn-info float-right">Add Experience</button>
     </div>
          
-    <div class="card-body">
+    <div class="card-body" id="hideDiv">
         <form id= "experience" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('experience.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
@@ -115,18 +115,21 @@
             </div>
         </form>
 	</div> <!-- end card body --> 
-        <div class="row">
-             <div class="col-md-12 table-container">
-           
-            
-            </div>
-        </div>   
+    
+    <div class="row">
+         <div class="col-md-12 table-container">
+
+        </div>
+    </div>   
   
 
 <script>
 $(document).ready(function(){
     refreshTable("{{route('experience.table')}}");
-  
+    $('#hideDiv').hide();
+    $('#hideButton').click(function(){
+          $('#hideDiv').toggle();
+    });
  
     //submit function
      $("#experience").submit(function(e) { 

@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Hr\HrAppointment;
 use App\Models\Hr\HrSalary;
 use App\Models\Hr\HrDesignation;
+use App\Models\Hr\EmployeeDesignation;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\HrManager;
 use App\Models\Hr\HrDepartment;
 use App\Models\Hr\HrLetterType;
 use App\Models\Project\PrDetail;
@@ -93,8 +95,17 @@ class AppointmentController extends Controller
                      
                 }else{
         		  HrAppointment::create($input);
-                
                 }
+
+                $input['effective_date']=$input['joining_date'];
+                $input['hod_id']=$input['hr_manager_id'];
+
+                EmployeeDesignation::updateOrCreate(['hr_employee_id' => session('hr_employee_id')],
+                $input);
+                HrManager::updateOrCreate(['hr_employee_id' => session('hr_employee_id')],
+                $input);
+
+
         	}); // end transcation
 
           return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Update"]);

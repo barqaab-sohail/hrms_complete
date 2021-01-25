@@ -210,7 +210,6 @@ class HrEmployee extends Model implements Auditable
             'id',
             'hr_designation_id'                             //Forein Key in Immediate Model of Final Model
         );
-
     }
 
     public function manager(){

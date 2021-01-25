@@ -1,9 +1,9 @@
 
     <div style="margin-top:10px; margin-right: 10px;">
-        <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">List of Employees</button>
+        <button type="button"  id ="hideButton"  class="btn btn-info float-right">Add Promotion</button>
     </div>
          
-    <div class="card-body">
+    <div class="card-body" id="hideDiv">
         <form id= "formPromotion" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('promotion.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
@@ -198,9 +198,13 @@
 
 <script>
 $(document).ready(function(){
-     refreshTable("{{route('promotion.table')}}");
-    //submit function
+    refreshTable("{{route('promotion.table')}}");
+    $('#hideDiv').hide();
+    $('#hideButton').click(function(){
+          $('#hideDiv').toggle();
+    });
 
+    //submit function
        $("#formPromotion").submit(function(e) { 
             e.preventDefault();
             var url = $(this).attr('action');

@@ -105,19 +105,23 @@
             </div>
         </div>
     </form>
-    <div class="row">
-              <div class="col-md-12 table-container">
-                             
-            
-               
-            </div>
-    </div>
 </div>
+<div class="row">
+        <div class="col-md-12 table-container">    
+        </div>
+    </div>
         
 <script>
     $(document).ready(function(){
         
         refreshTable("{{route('documentation.table')}}");
+        
+        $('#hideDiv').hide();
+            $('#hideButton').click(function(){
+          $('#hideDiv').toggle();
+        });
+
+
         $("form").submit(function (e) {
          e.preventDefault();
          });
