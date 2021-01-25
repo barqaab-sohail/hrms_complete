@@ -51,7 +51,7 @@
                           <select  name="hod_id"  id="hod_id" class="form-control selectTwo" data-validation="required">
                               <option value=""></option>
                               @foreach ($employees as $employee)
-                              <option value="{{$employee->id}}">{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}}</option>
+                              <option value="{{$employee->id}}">{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}} -  {{$employee->hrDesignation->name??''}}</option>
                               @endforeach
                             </select>
                     </div>

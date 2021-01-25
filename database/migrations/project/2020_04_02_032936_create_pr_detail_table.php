@@ -28,7 +28,6 @@ class CreatePrDetailTable extends Migration
             $table->string('share')->nullable();
             $table->string('project_no',15)->unique()->nullable();
             $table->timestamps();
-
             $table->foreign('contract_type_id')->references('id')->on('contract_types');
             $table->foreign('client_id')->references('id')->on('clients');
             $table->foreign('pr_status_id')->references('id')->on('pr_statuses');

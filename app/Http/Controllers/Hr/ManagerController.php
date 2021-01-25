@@ -14,10 +14,10 @@ class ManagerController extends Controller
     
     public function index() {
     	
-       	$employees = HrEmployee::where('hr_status_id',1)->get();
-       	$managers = HrManager::where('hr_employee_id',session('hr_employee_id'))->get();
+       	$employees = HrEmployee::all();
         
-        $view =  view('hr.manager.create', compact('employees','managers'))->render();
+       	$managers = HrManager::where('hr_employee_id',session('hr_employee_id'))->get();
+        $view =  view('hr.manager.create', compact('employees','managers'))->with('hodDesignation','hrDesignation')->render();
         return response()->json($view);
 
     }
@@ -25,7 +25,7 @@ class ManagerController extends Controller
     public function create(Request $request) {
         
         if ($request->ajax()) {
-            $data = HrManager::latest()->with('hrEmployee')->get();
+            $data = HrManager::latest()->with('hrEmployee','hodDesignation')->get();
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('Edit', function($row){
@@ -43,7 +43,7 @@ class ManagerController extends Controller
                     })
                     ->addColumn('fullName', function($row){                
                       
-                           return $row->hrEmployee->first_name.' '.$row->hrEmployee->last_name;
+                           return $row->hrEmployee->first_name.' '.$row->hrEmployee->last_name.' - '.$row->hodDesignation->name;
                            
                     })
                     ->rawColumns(['Edit','Delete','fullName'])
