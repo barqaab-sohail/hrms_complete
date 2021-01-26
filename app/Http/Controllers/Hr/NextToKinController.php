@@ -20,7 +20,12 @@ class NextToKinController extends Controller
     }
 
     public function update(EmergencyStore $request, $id){
-    	$input = $request->all();
+    	//ensure client end is is not changed
+        if($id != session('hr_employee_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
+
+        $input = $request->all();
         $input['hr_employee_id']=$id;
 
         DB::transaction(function () use ($input, $id) {  

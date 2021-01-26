@@ -60,6 +60,9 @@ class ContactController extends Controller
 
 
     public function edit (Request $request, $id){
+        //For security checking
+        session()->put('contact_edit_id', $id);
+
     	$data = HrContact::find($id);
     	$hrContactTypes = HrContactType::all();
     	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
@@ -76,6 +79,11 @@ class ContactController extends Controller
     }
 
     public function update (ContactStore $request, $id){
+        //ensure client end id is not changed
+        if($id != session('contact_edit_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
+
     	$input = $request->all();
     	DB::transaction(function () use ($input, $request, $id) {  
 
@@ -94,11 +102,12 @@ class ContactController extends Controller
     }
 
 
-    public function destroy($id){
-    	
-    	HrContact::findOrFail($id)->delete(); 
+    public function destroy(Request $request, $id){
 
-    	return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
+    	
+    	//HrContact::findOrFail($id)->delete(); 
+
+    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
     }
 
     public function refreshTable(){

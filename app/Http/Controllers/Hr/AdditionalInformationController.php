@@ -38,6 +38,12 @@ class AdditionalInformationController extends Controller
 
 	public function update(AdditionalInformationStore $request, $id){
 
+        //ensure client end is is not changed
+        if($id != session('hr_employee_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
+
+        
 		$input = $request->all();
 		if($request->filled('licence_expiry')){
           $input ['licence_expiry']= \Carbon\Carbon::parse($request->licence_expiry)->format('Y-m-d');

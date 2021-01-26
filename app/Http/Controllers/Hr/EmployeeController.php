@@ -74,6 +74,7 @@ class EmployeeController extends Controller
     }
 
     public function edit(Request $request, $id){
+        
     	$genders = Gender::all();
     	$maritalStatuses = MaritalStatus::all();
     	$religions = Religion::all();
@@ -89,6 +90,11 @@ class EmployeeController extends Controller
 
 
     public function update(EmployeeStore $request, $id){
+        
+        //ensure client end is is not changed
+        if($id != session('hr_employee_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
 
     	$input = $request->all();
             if($request->filled('date_of_birth')){
@@ -105,7 +111,7 @@ class EmployeeController extends Controller
     		}); // end transcation
         
         if($request->ajax()){
-    	return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Updated']);
+    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
         }else{
             return back()->with('message', 'Data Sucessfully Updated');
         }
@@ -113,6 +119,12 @@ class EmployeeController extends Controller
 
     public function destroy($id)
     {   
+        
+        //ensure client end is is not changed
+        if($id != session('hr_employee_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
+
         HrEmployee::findOrFail($id)->delete();
 
        return back()->with('message', 'Data Sucessfully Deleted');

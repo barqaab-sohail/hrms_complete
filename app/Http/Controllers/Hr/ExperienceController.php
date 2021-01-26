@@ -41,6 +41,8 @@ class ExperienceController extends Controller
 
 
     public function edit(Request $request, $id){
+        //For security checking
+        session()->put('experience_edit_id', $id);
 
         $countries = Country::all();
         $hrExperiences = HrExperience::where('hr_employee_id',session('hr_employee_id'))->get();
@@ -58,6 +60,11 @@ class ExperienceController extends Controller
     }
 
     public function update(ExperienceStore $request, $id){
+        //ensure client end id is not changed
+        if($id != session('experience_edit_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
+
         $input = $request->all();
        
         DB::transaction(function () use ($input, $id) {  

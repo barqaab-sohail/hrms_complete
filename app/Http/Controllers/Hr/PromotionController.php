@@ -125,7 +125,10 @@ class PromotionController extends Controller
     }
 
     public function edit(Request $request, $id){
-    	$salaries = HrSalary::all();
+    	//For security checking
+        session()->put('promotion_edit_id', $id);
+
+        $salaries = HrSalary::all();
 		$designations = HrDesignation::all();
 		$managers = HrEmployee::all();
 		$departments = HrDepartment::all();
@@ -146,6 +149,10 @@ class PromotionController extends Controller
 
 
     public function update(PromotionStore $request, $id){
+        //ensure client end id is not changed
+        if($id != session('promotion_edit_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
 
     	 $input = $request->all();
     		if($request->filled('effective_date')){

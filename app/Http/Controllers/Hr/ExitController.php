@@ -43,7 +43,10 @@ class ExitController extends Controller
     }
 
     public function edit (Request $request, $id){
-    	$data = HrExit::find($id);
+    	//For security checking
+        session()->put('exit_edit_id', $id);
+
+        $data = HrExit::find($id);
     	$hrStatuses = HrStatus::all();
     	$hrExits =  HrExit::where('hr_employee_id', session('hr_employee_id'))->get();    	
     	
@@ -56,7 +59,12 @@ class ExitController extends Controller
     }
 
      public function update (Request $request, $id){
-    	$input = $request->all();
+    	 //ensure client end id is not changed
+        if($id != session('exit_edit_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
+
+        $input = $request->all();
     	 if($request->filled('effective_date')){
             $input ['effective_date']= \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
             }

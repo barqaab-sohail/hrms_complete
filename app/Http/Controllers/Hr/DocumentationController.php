@@ -87,6 +87,8 @@ class DocumentationController extends Controller
     }
 
     public function edit(Request $request, $id){
+        //For security checking
+        session()->put('document_edit_id', $id);
 
     	$documentNames = HrDocumentName::all();
     	$data = HrDocumentation::find($id);
@@ -104,6 +106,10 @@ class DocumentationController extends Controller
 
 
     public function update(Request $request, $id){
+        //ensure client end id is not changed
+        if($id != session('document_edit_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
 
         $input = $request->only('hr_document_name_id','description','document','document_date');
         $data = HrDocumentation::find($id);
