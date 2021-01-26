@@ -24,7 +24,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        
         $employees = HrEmployee::find(3);
         return view('dashboard.dashboard', compact('employees'));
     }

@@ -44,6 +44,9 @@ class EducationController extends Controller
 
 
     public function edit(Request $request, $id){
+        //For security checking
+        session()->put('education_edit_id', $id);
+
 
     	$degrees = Education::all();
     	$countries = Country::all();
@@ -62,6 +65,12 @@ class EducationController extends Controller
     }
 
     public function update(EducationStore $request, $id){
+         //ensure client end id is not changed
+        if($id != session('education_edit_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
+
+
         $input = $request->all();
         $uniqueEducation=true;
         $degreeNames = HrEducation::where('hr_employee_id', session('hr_employee_id'))

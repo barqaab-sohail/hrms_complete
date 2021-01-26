@@ -119,6 +119,8 @@ class PostingController extends Controller
     }
 
     public function edit (Request $request, $id){
+        //For security checking
+        session()->put('posting_edit_id', $id);
 
     	$designations = HrDesignation::all();
     	$departments = HrDepartment::all();
@@ -141,7 +143,12 @@ class PostingController extends Controller
     }
 
     public function update (Request $request, $id){
-    		$input = $request->all();
+    	//ensure client end id is not changed
+        if($id != session('posting_edit_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
+
+            $input = $request->all();
 
     		if($request->filled('effective_date')){
             $input ['effective_date']= \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');

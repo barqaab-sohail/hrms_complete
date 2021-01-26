@@ -20,6 +20,11 @@ class EmergencyController extends Controller
     }
 
     public function update(EmergencyStore $request, $id){
+        //ensure client end id is not changed
+        if($id != session('hr_employee_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+        }
+        
     	$input = $request->all();
         $input['hr_employee_id']=session('hr_employee_id');
 
