@@ -74,7 +74,7 @@ class AppointmentController extends Controller
     public function update(AppointmentStore $request, $id){
         //ensure client end is is not changed
         if($id != session('hr_employee_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 
     	$input = $request->all();

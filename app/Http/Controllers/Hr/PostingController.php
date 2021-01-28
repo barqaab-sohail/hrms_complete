@@ -110,8 +110,6 @@ class PostingController extends Controller
                 HrPostingOffice::create($input);
             }
 
-
-
     	});  //end transaction
 
     	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
@@ -145,7 +143,7 @@ class PostingController extends Controller
     public function update (Request $request, $id){
     	//ensure client end id is not changed
         if($id != session('posting_edit_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 
             $input = $request->all();
@@ -259,6 +257,9 @@ class PostingController extends Controller
 
 
     public function destroy ($id){
+         if(!in_array($id, session('posting_delete_ids'))){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
 
     	DB::transaction(function () use ($id) {  
 
@@ -276,7 +277,11 @@ class PostingController extends Controller
      public function refreshTable(){
 
     	$hrPostings = HrPosting::where('hr_employee_id',session('hr_employee_id'))->get();
-       
+        
+        $ids = $hrPostings->pluck('id')->toArray();
+        //For security checking
+        session()->put('posting_delete_ids', $ids);
+
         return view('hr.posting.list',compact('hrPostings'));
         
     }

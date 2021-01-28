@@ -108,7 +108,7 @@ class DocumentationController extends Controller
     public function update(Request $request, $id){
         //ensure client end id is not changed
         if($id != session('document_edit_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 
         $input = $request->only('hr_document_name_id','description','document','document_date');
@@ -206,6 +206,10 @@ class DocumentationController extends Controller
 
 
     public function destroy($id){
+        
+        if(!in_array($id, session('document_delete_ids'))){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
 
     	$hrDocument = HrDocumentation::findOrFail($id);
 
@@ -220,6 +224,11 @@ class DocumentationController extends Controller
 
     public function refreshTable(){
         $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->get();
+
+        $Ids = $documentIds->pluck('id')->toArray();
+        //For security checking
+        session()->put('document_delete_ids', $Ids);
+
         return view('hr.documentation.list',compact('documentIds'));
     }
 }

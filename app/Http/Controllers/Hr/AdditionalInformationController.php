@@ -40,7 +40,7 @@ class AdditionalInformationController extends Controller
 
         //ensure client end is is not changed
         if($id != session('hr_employee_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 
         

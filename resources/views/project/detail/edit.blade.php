@@ -38,7 +38,7 @@ $(document).ready(function() {
   //$('#formProject').on('submit', function(event){
       
     // prevent default call from function formFunctions()
-	 	var url = "{{route('project.update',$data->id)}}";
+	 	var url = $(this).attr('action');;
    		console.log('Submit');
 		$('.fa-spinner').show();
 	   	submitForm(this, url);

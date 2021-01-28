@@ -62,7 +62,7 @@ class ExperienceController extends Controller
     public function update(ExperienceStore $request, $id){
         //ensure client end id is not changed
         if($id != session('experience_edit_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 
         $input = $request->all();
@@ -79,7 +79,9 @@ class ExperienceController extends Controller
 
 
     public function destroy($id){
-        
+        if(!in_array($id, session('experience_delete_ids'))){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
     
         HrExperience::find($id)->delete();
 
@@ -92,6 +94,10 @@ class ExperienceController extends Controller
 
        $hrExperiences = HrExperience::where('hr_employee_id',session('hr_employee_id'))->get();
        
+       $ids = $hrExperiences->pluck('id')->toArray();
+        //For security checking
+        session()->put('experience_delete_ids', $ids);
+
         return view('hr.experience.list',compact('hrExperiences'));
         
     }
