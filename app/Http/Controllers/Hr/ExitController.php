@@ -61,7 +61,7 @@ class ExitController extends Controller
      public function update (Request $request, $id){
     	 //ensure client end id is not changed
         if($id != session('exit_edit_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 
         $input = $request->all();
@@ -82,7 +82,11 @@ class ExitController extends Controller
 
      public function destroy($id){
         
-    	DB::transaction(function () use ($id) {  
+        if(!in_array($id, session('exit_delete_ids'))){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
+    	
+        DB::transaction(function () use ($id) {  
 
     		HrExit::find($id)->delete();
     		   	
@@ -94,11 +98,13 @@ class ExitController extends Controller
     }
 
 
-
-
-
     public function refreshTable(){
         $hrExits =  HrExit::where('hr_employee_id', session('hr_employee_id'))->get();
+
+        $ids = $hrExits->pluck('id')->toArray();
+        //For security checking
+        session()->put('exit_delete_ids', $ids);
+
         return view('hr.exit.list',compact('hrExits'));
     }
 

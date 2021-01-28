@@ -4,7 +4,7 @@
     </div>
          
     <div class="card-body">
-        <form id= "formProject" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
+        <form id= "formProject" method="post" action="{{route('project.update',$data->id)}}" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
          @method('PATCH')
         @csrf
             <div class="form-body">

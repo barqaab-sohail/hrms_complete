@@ -67,7 +67,7 @@ class EducationController extends Controller
     public function update(EducationStore $request, $id){
          //ensure client end id is not changed
         if($id != session('education_edit_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 
 
@@ -106,10 +106,12 @@ class EducationController extends Controller
 
     public function destroy($id){
         
-    
-        HrEducation::find($id)->delete();
+        if(!in_array($id, session('education_delete_ids'))){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
+        //HrEducation::find($id)->delete();
 
-       
+        
         return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
     }
 
@@ -117,8 +119,12 @@ class EducationController extends Controller
 
     public function refreshTable(){
 
-    	$hrEducations = HrEducation::where('hr_employee_id',session('hr_employee_id'))->get();
-       
+    	
+        $hrEducations = HrEducation::where('hr_employee_id',session('hr_employee_id'))->get();
+        $educationIds = $hrEducations->pluck('id')->toArray();
+        //For security checking
+        session()->put('education_delete_ids', $educationIds);
+
         return view('hr.education.list',compact('hrEducations'));
         
     }

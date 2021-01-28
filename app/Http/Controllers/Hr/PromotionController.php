@@ -151,7 +151,7 @@ class PromotionController extends Controller
     public function update(PromotionStore $request, $id){
         //ensure client end id is not changed
         if($id != session('promotion_edit_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 
     	 $input = $request->all();
@@ -259,6 +259,9 @@ class PromotionController extends Controller
     }
 
     public function destroy ($id){
+        if(!in_array($id, session('promotion_delete_ids'))){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
 
     	DB::transaction(function () use ($id) {  
 
@@ -277,7 +280,9 @@ class PromotionController extends Controller
     public function refreshTable(){
 
     	$hrPromotions = HrPromotion::where('hr_employee_id',session('hr_employee_id'))->get();
-       
+        $ids = $hrPromotions->pluck('id')->toArray();
+        //For security checking
+        session()->put('promotion_delete_ids', $ids);
         return view('hr.promotion.list',compact('hrPromotions'));
         
     }

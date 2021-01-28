@@ -81,7 +81,7 @@ class ContactController extends Controller
     public function update (ContactStore $request, $id){
         //ensure client end id is not changed
         if($id != session('contact_edit_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breatch"]);
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 
     	$input = $request->all();
@@ -103,15 +103,21 @@ class ContactController extends Controller
 
 
     public function destroy(Request $request, $id){
-
+        if(!in_array($id, session('contact_delete_ids'))){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
     	
-    	//HrContact::findOrFail($id)->delete(); 
+    	HrContact::findOrFail($id)->delete(); 
 
     	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
     }
 
     public function refreshTable(){
         $hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
+        $contactIds = $hrContacts->pluck('id')->toArray();
+        //For security checking
+        session()->put('contact_delete_ids', $contactIds);
+
         return view('hr.contact.list',compact('hrContacts'));
     }
 }

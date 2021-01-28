@@ -82,14 +82,14 @@ class ProjectController extends Controller
     if($request->ajax()){      
             return view ('project.detail.ajax', compact('projectRoles','projectStatuses','clients','contractTypes','divisions','data'));    
         }else{
-           return view ('project.detail.edit', compact('projectRoles','projectStatuses','clients','contractTypes','divisions','data'));       
+            return view ('project.detail.edit', compact('projectRoles','projectStatuses','clients','contractTypes','divisions','data'));       
         }
-    	        
-    	
-
 	}
 
 	public function update(PrDetailStore $request, $id){
+        if($id != session('pr_detail_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
 
 		$input = $request->all();
 
@@ -109,8 +109,8 @@ class ProjectController extends Controller
 
     	}); // end transcation
 
-
-    	return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Updated']);
+        
+    	return response()->json(['status'=> 'OK', 'message' => "$id Data Sucessfully Updated"]);
         
 	}
 
