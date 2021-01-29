@@ -31,7 +31,8 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Reference No</label>
-                            <input type="text" name="reference_no"  value="{{ old('reference_no') }}" class="form-control exempted" data-validation="length"  data-validation-length="max190" placeholder="Enter Document Reference" >
+                            <input type="text" name="reference_no" id="reference_no" value="{{ old('reference_no') }}" class="form-control exempted" data-validation="length"  data-validation-length="max190" placeholder="Enter Document Reference" >
+                            <div id="check_reference"></div>
                         </div>
                     </div>
                 </div>
@@ -252,6 +253,22 @@ $(document).ready(function(){
             
         });
 
+        $('#reference_no').keyup(function(){ 
+            var query = $(this).val();
+            if(query != '')
+            {
+             var _token = $('input[name="_token"]').val();
+                $.ajax({
+                  url:"{{ route('projectDocument.reference') }}",
+                  method:"GET",
+                  data:{query:query, _token:_token},
+                  success:function(data){
+                   $('#check_reference').fadeIn();  
+                            $('#check_reference').html(data);
+                  }
+                });
+            }
+        });
 
         function readURL(input) {
             var fileName = input.files[0].name;

@@ -132,6 +132,8 @@ Route::resource('/project', 'ProjectController');
 Route::resource('/projectPartner', 'ProjectPartnerController');
 
 Route::get('/projectDocument/refreshTable', 'ProjectDocumentController@refreshTable')->name('projectDocument.table');
+Route::get('/projectDocument/reference', 'ProjectDocumentController@reference')->name('projectDocument.reference');
+
 Route::resource('/projectDocument', 'ProjectDocumentController');
 Route::get('/projectPosition/refreshTable', 'ProjectPositionController@refreshTable')->name('projectPosition.table');
 Route::resource('/projectPosition', 'ProjectPositionController');

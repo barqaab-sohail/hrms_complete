@@ -117,8 +117,8 @@ class ProjectController extends Controller
 
 	public function destroy($id){
 
-		PrDetail::findOrFail($id)->delete();
-
+		
+        PrDetail::findOrFail($id)->delete();
 		return back()->with('message', 'Data Sucessfully Updated');
 
 	}
