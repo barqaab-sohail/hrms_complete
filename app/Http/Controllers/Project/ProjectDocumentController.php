@@ -23,7 +23,32 @@ class ProjectDocumentController extends Controller
         $folderName = PrFolderName::find($id);
         $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))
         ->where('pr_folder_name_id',$id)->get();
+        $Ids = $documentIds->pluck('id')->toArray();
+        //For security checking
+        session()->put('pr_document_delete_ids', $Ids);
+
         return view('project.document.list',compact('documentIds','folderName'));
+    }
+
+    public function reference(Request $request)
+    {
+        if($request->get('query'))
+        {
+          $query = $request->get('query');
+          $data = DB::table('pr_documents')
+            ->where ('pr_detail_id', session('pr_detail_id'))
+            ->where('reference_no', 'LIKE', "%{$query}%")
+            ->take(3)->get();
+          $output = '<ul style="display:block; position:relative;list-style-type:none;">';
+          foreach($data as $row)
+          {
+           $output .= '
+           <li style="color: red;">'.$row->reference_no.'</li>
+           ';
+          }
+          $output .= '</ul>';
+          echo $output;
+        }
     }
 
     public function create(Request $request){
@@ -112,7 +137,8 @@ class ProjectDocumentController extends Controller
 
 
     public function edit(Request $request, $id){
-
+        //For security checking
+        session()->put('pr_document_edit_id', $id);
 
         $employees = HrEmployee::where('hr_status_id',1)->get();
         $hrDocumentationIds = HrDocumentationProject::where('pr_document_id',$id)->get()->pluck('hr_documentation_id')->toArray();
@@ -135,8 +161,11 @@ class ProjectDocumentController extends Controller
 
 
     public function update(Request $request, $id){
+        if($id != session('pr_document_edit_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
+
         $input = $request->all();
-        
 
         if($request->filled('document_date')){
             $input ['document_date']= \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
@@ -249,6 +278,10 @@ class ProjectDocumentController extends Controller
 
 
     public function destroy($id){
+        if(!in_array($id, session('pr_document_delete_ids'))){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
+
 
         DB::transaction(function () use ($id) { 
 
@@ -273,10 +306,10 @@ class ProjectDocumentController extends Controller
 
 
 
-    public function refreshTable(){
-        $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))->get();
-        return view('project.document.list',compact('documentIds'));
-    }
+    // public function refreshTable(){
+    //     $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))->get();
+    //     return view('project.document.list',compact('documentIds'));
+    // }
 
 
 
