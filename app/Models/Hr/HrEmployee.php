@@ -138,6 +138,10 @@ class HrEmployee extends Model implements Auditable
 
     }
 
+    // public function employeeAppointmentProject(){
+    //     return $this->hasOne('App\Models\Hr\EmployeeProject')->oldest();
+    // }
+
     public function appointmentLetter(){
         return $this->hasManyThrough(
             'App\Models\Hr\HrDocumentName',                    //Final Model HrDocumentName
