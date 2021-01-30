@@ -19,6 +19,8 @@ class HrAppointment extends Model implements Auditable
 
     }
 
+    
+    
     // // public function designation(){
 
     // // 	 return $this->hasOneThrough('App\Models\Hr\HrDesignation', 'App\Models\Hr\HrAppointmentDetail');

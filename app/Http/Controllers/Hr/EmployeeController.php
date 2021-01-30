@@ -8,6 +8,14 @@ use App\Models\Common\Gender;
 use App\Models\Common\MaritalStatus;
 use App\Models\Common\Religion;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\EmployeeCategory;
+use App\Models\Hr\EmployeeManager;
+use App\Models\Hr\EmployeeDesignation;
+use App\Models\Hr\EmployeeDepartment;
+use App\Models\Hr\EmployeeGrade;
+use App\Models\Hr\EmployeeOffice;
+use App\Models\Hr\EmployeeSalary;
+use App\Models\Hr\EmployeeProject;
 use App\Models\Hr\HrContact;
 use App\Models\Hr\HrAppointment;
 use App\Models\Hr\HrStatus;
@@ -19,6 +27,42 @@ use App\Http\Requests\Hr\EmployeeStore;
 
 class EmployeeController extends Controller
 {
+    // public function insert(){
+
+    //     $employees = HrEmployee::where('hr_status_id',1)->with('hrAppointment')->get();
+        
+       
+    //     foreach ($employees as $employee){
+         
+    //         $input['effective_date'] = $employee->hrAppointment->joining_date;
+    //         $input['hr_employee_id'] = $employee->id;
+    //         $input['hod_id'] = $employee->hrAppointment->hr_manager_id;
+    //         $input['hr_designation_id'] = $employee->hrAppointment->hr_designation_id;
+    //         $input['office_id'] = $employee->hrAppointment->office_id;
+    //         $input['hr_category_id'] = $employee->hrAppointment->hr_category_id;
+    //         $input['hr_department_id'] = $employee->hrAppointment->hr_department_id;
+    //         $input['hr_salary_id'] = $employee->hrAppointment->hr_salary_id;
+    //         $input['pr_detail_id'] = $employee->hrAppointment->pr_detail_id;
+    //         $input['hr_grade_id'] = $employee->hrAppointment->hr_grade_id??'';
+
+    //         EmployeeManager::create($input);
+    //         EmployeeDesignation::create($input);
+    //         EmployeeOffice::create($input);
+    //         EmployeeCategory::create($input);
+    //         EmployeeDepartment::create($input);
+    //         EmployeeSalary::create($input);
+    //         EmployeeProject::create($input);
+            
+    //         if($input['hr_grade_id'] !=''){
+    //             EmployeeGrade::create($input);
+    //         }
+
+        
+    //     }
+    //     echo "data sucessfully update";
+    // }
+
+
     public function create(){
         session()->put('hr_employee_id', '');
     	$genders = Gender::all();

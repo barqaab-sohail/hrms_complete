@@ -9,7 +9,8 @@ use App\Models\Hr\HrSalary;
 use App\Models\Hr\HrDesignation;
 use App\Models\Hr\EmployeeDesignation;
 use App\Models\Hr\HrEmployee;
-use App\Models\Hr\HrManager;
+use App\Models\Hr\EmployeeManager;
+use App\Models\Hr\EmployeeProject;
 use App\Models\Hr\HrDepartment;
 use App\Models\Hr\HrLetterType;
 use App\Models\Project\PrDetail;
@@ -34,8 +35,9 @@ class AppointmentController extends Controller
         $hrGrades = HrGrade::all();
         $hrCategories = HrCategory::all();
         $hrEmployeeTypes = HrEmployeeType::all();
-    	$data = HrAppointment::where('hr_employee_id',$id)->first();
-       
+    	$data = HrAppointment::where('hr_employee_id',session('hr_employee_id'))->first();
+        $employeeProject = EmployeeProject::where('hr_employee_id',session('hr_employee_id'))->orderBy('created_at','asc')->first();
+        
         // $employeeDesignation = HrAppointment::where('hr_employee_id', session('hr_employee_id'))
         //     ->join('hr_appointment_details', 'hr_appointments.id', '=', 'hr_appointment_details.hr_appointment_id')
         //     ->join('hr_designations', 'hr_designations.id', '=', 'hr_appointment_details.hr_designation_id')
@@ -62,7 +64,7 @@ class AppointmentController extends Controller
 
 
         if($request->ajax()){
-            $view =  view('hr.appointment.edit', compact('data','salaries','designations','managers','departments','letterTypes','projects','offices','hrGrades','hrCategories','hrEmployeeTypes'))->render();
+            $view =  view('hr.appointment.edit', compact('data','salaries','designations','managers','departments','letterTypes','projects','offices','hrGrades','hrCategories','hrEmployeeTypes','employeeProject'))->render();
             return response()->json($view);
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
@@ -107,7 +109,7 @@ class AppointmentController extends Controller
 
                 EmployeeDesignation::updateOrCreate(['hr_employee_id' => session('hr_employee_id')],
                 $input);
-                HrManager::updateOrCreate(['hr_employee_id' => session('hr_employee_id')],
+                EmployeeManager::updateOrCreate(['hr_employee_id' => session('hr_employee_id')],
                 $input);
 
 

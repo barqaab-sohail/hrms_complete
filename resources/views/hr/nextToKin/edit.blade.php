@@ -41,7 +41,7 @@
                             <div class="col-md-12">
                                <label class="control-label text-right">Contact No<span class="text_requried">*</span></label>
                                 
-                               <input type="text" name="mobile" id="mobile" value="{{ old('mobile',$data->mobile??'') }}" class="form-control" data-validation=" required length"  data-validation-length="max12" placeholder="0345-0000000">
+                               <input type="text" name="mobile" id="mobile" value="{{ old('mobile',$data->mobile??'') }}" class="form-control" data-validation=" required length"  data-validation-length="max15" placeholder="0345-0000000">
 
                             </div>
                         </div>
