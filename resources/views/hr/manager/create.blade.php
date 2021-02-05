@@ -12,24 +12,7 @@
       </tr>
     </thead>
     <tbody>
-        @foreach($managers as $manager)
-        <tr>
-            <td>{{$manager->hrEmployee->first_name}} {{$manager->hrEmployee->last_name}}</td>
-            <td>{{$manager->effective_date}}</td>
-            <td>
-                <a class="btn btn-info btn-sm editManager" id="editManager{{$manager->id}}"href="{{route('manager.edit',$manager->id)}}"  title="Edit">Edit</a>
-            </td>
-            <td>
-                 @role('Super Admin')
-                 <form  id="formDeleteManager{{$manager->id}}" action="{{route('manager.destroy',$manager->id)}}" method="POST">
-                 @method('DELETE')
-                 @csrf
-                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete">Delete</button>
-                 </form>
-                 @endrole
-            </td>
-        </tr>
-        @endforeach
+        
     </tbody>
   </table>
 </div>
