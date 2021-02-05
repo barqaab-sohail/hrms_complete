@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Hr\HrAppointment;
 use App\Models\Hr\HrSalary;
 use App\Models\Hr\HrDesignation;
-use App\Models\Hr\EmployeeDesignation;
+//use App\Models\Hr\EmployeeDesignation;
 use App\Models\Hr\HrEmployee;
-use App\Models\Hr\EmployeeManager;
-use App\Models\Hr\EmployeeProject;
+//use App\Models\Hr\EmployeeManager;
+//use App\Models\Hr\EmployeeProject;
 use App\Models\Hr\HrDepartment;
 use App\Models\Hr\HrLetterType;
 use App\Models\Project\PrDetail;
@@ -35,36 +35,16 @@ class AppointmentController extends Controller
         $hrGrades = HrGrade::all();
         $hrCategories = HrCategory::all();
         $hrEmployeeTypes = HrEmployeeType::all();
-    	$data = HrAppointment::where('hr_employee_id',session('hr_employee_id'))->first();
-        $employeeProject = EmployeeProject::where('hr_employee_id',session('hr_employee_id'))->orderBy('created_at','asc')->first();
-        
-        // $employeeDesignation = HrAppointment::where('hr_employee_id', session('hr_employee_id'))
-        //     ->join('hr_appointment_details', 'hr_appointments.id', '=', 'hr_appointment_details.hr_appointment_id')
-        //     ->join('hr_designations', 'hr_designations.id', '=', 'hr_appointment_details.hr_designation_id')
-        //     ->select('hr_designations.*')
-        //     ->first();
+    	//$data = HrAppointment::where('hr_employee_id',session('hr_employee_id'))
+        //  ->first()->appointmentData(session('hr_employee_id'));
+        //dd($data);
+        $data = HrAppointment::where('hr_employee_id',session('hr_employee_id'))
+          ->with('employeeGrade')->get();
 
-        // $employeeHod = HrAppointment::where('hr_employee_id', session('hr_employee_id'))
-        // ->join('hr_appointment_details', 'hr_appointments.id', '=', 'hr_appointment_details.hr_appointment_id')
-        // ->join('hr_employees', 'hr_employees.id', '=', 'hr_appointment_details.hr_manager_id')
-        // ->select('hr_employees.*')
-        // ->first();
-
-        //  $employeeDepartment = HrAppointment::where('hr_employee_id', session('hr_employee_id'))
-        // ->join('hr_appointment_details', 'hr_appointments.id', '=', 'hr_appointment_details.hr_appointment_id')
-        // ->join('hr_departments', 'hr_departments.id', '=', 'hr_appointment_details.hr_department_id')
-        // ->select('hr_departments.*')
-        // ->first();
-
-        // $employeeSalary = HrAppointment::where('hr_employee_id', session('hr_employee_id'))
-        // ->join('hr_appointment_details', 'hr_appointments.id', '=', 'hr_appointment_details.hr_appointment_id')
-        // ->join('hr_salaries', 'hr_salaries.id', '=', 'hr_appointment_details.hr_salary_id')
-        // ->select('hr_salaries.*')
-        // ->first();
-
+        dd($data->employeeGrade->first->hr_grade_id);
 
         if($request->ajax()){
-            $view =  view('hr.appointment.edit', compact('data','salaries','designations','managers','departments','letterTypes','projects','offices','hrGrades','hrCategories','hrEmployeeTypes','employeeProject'))->render();
+            $view =  view('hr.appointment.edit', compact('data','salaries','designations','managers','departments','letterTypes','projects','offices','hrGrades','hrCategories','hrEmployeeTypes'))->render();
             return response()->json($view);
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
@@ -104,13 +84,13 @@ class AppointmentController extends Controller
         		  HrAppointment::create($input);
                 }
 
-                $input['effective_date']=$input['joining_date'];
-                $input['hod_id']=$input['hr_manager_id'];
+                // $input['effective_date']=$input['joining_date'];
+                // $input['hod_id']=$input['hr_manager_id'];
 
-                EmployeeDesignation::updateOrCreate(['hr_employee_id' => session('hr_employee_id')],
-                $input);
-                EmployeeManager::updateOrCreate(['hr_employee_id' => session('hr_employee_id')],
-                $input);
+                // EmployeeDesignation::updateOrCreate(['hr_employee_id' => session('hr_employee_id')],
+                // $input);
+                // EmployeeManager::updateOrCreate(['hr_employee_id' => session('hr_employee_id')],
+                // $input);
 
 
         	}); // end transcation

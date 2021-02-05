@@ -205,7 +205,7 @@ function formFunctions(){
         
         //Remove hyphens
         let input = ev.target.value.split("-").join("");
-        if(ev.target.value.length>12){
+        if(ev.target.value.length>15){
             input =  input.substring(0,input.length-1)
         }
         
