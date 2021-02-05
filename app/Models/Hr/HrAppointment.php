@@ -10,7 +10,7 @@ use DB;
 class HrAppointment extends Model implements Auditable
 {
    use \OwenIt\Auditing\Auditable;
-    protected $fillable = ['hr_employee_id', 'pr_detail_id','hr_letter_type_id','hr_manager_id','hr_designation_id','hr_department_id','hr_salary_id','office_id','reference_no','joining_date','expiry_date','hr_grade_id','hr_category_id','hr_employee_type_id','remarks'];
+    protected $fillable = ['hr_employee_id','hr_letter_type_id','hr_manager_id','reference_no','joining_date','expiry_date','hr_employee_type_id','remarks'];
 
 
 
@@ -36,39 +36,27 @@ class HrAppointment extends Model implements Auditable
     // }
 
     public function employeeGrade(){
-
         return $this->belongsTo('App\Models\Hr\EmployeeGrade','hr_employee_id','hr_employee_id');
     }
     public function employeeCategory(){
-
         return $this->belongsTo('App\Models\Hr\EmployeeCategory','hr_employee_id','hr_employee_id');
     }
     public function employeeDepartment(){
-
         return $this->belongsTo('App\Models\Hr\EmployeeDepartment','hr_employee_id','hr_employee_id');
     }
     public function employeeDesignation(){
-
         return $this->belongsTo('App\Models\Hr\EmployeeDesignation','hr_employee_id','hr_employee_id');
     }
-
     public function employeeManager(){
-
         return $this->belongsTo('App\Models\Hr\EmployeeManager','hr_employee_id','hr_employee_id');
     }
-
     public function employeeOffice(){
-
         return $this->belongsTo('App\Models\Hr\EmployeeOffice','hr_employee_id','hr_employee_id');
     }
-
     public function employeeProject(){
-
         return $this->belongsTo('App\Models\Hr\EmployeeProject','hr_employee_id','hr_employee_id');
     }
-
     public function employeeSalary(){
-
         return $this->belongsTo('App\Models\Hr\EmployeeSalary','hr_employee_id','hr_employee_id');
     }
 
