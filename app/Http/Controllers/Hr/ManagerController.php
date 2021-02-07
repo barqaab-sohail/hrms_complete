@@ -27,6 +27,7 @@ class ManagerController extends Controller
         
         if ($request->ajax()) {
             $data = EmployeeManager::where('hr_employee_id',session('hr_employee_id'))->latest()->with('hrEmployee','hodDesignation')->get();
+
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('Edit', function($row){
@@ -44,7 +45,7 @@ class ManagerController extends Controller
                     })
                     ->addColumn('fullName', function($row){                
                       
-                           return $row->hrEmployee->first_name.' '.$row->hrEmployee->last_name.' - '.$row->hodDesignation->name??'';
+                           return $row->hrEmployee->first_name.' '.$row->hrEmployee->last_name.' - '.$row->hodDesignation->last()->name??'';
                            
                     })
                     ->rawColumns(['Edit','Delete','fullName'])
@@ -90,7 +91,7 @@ class ManagerController extends Controller
     	DB::transaction(function () use ($id) {  
     		EmployeeManager::find($id)->delete();  		   	
     	}); // end transcation 
-        return response()->json(['success'=>'Month saved successfully.']);
+        return response()->json(['success'=>'data  delete successfully.']);
 
     }
 

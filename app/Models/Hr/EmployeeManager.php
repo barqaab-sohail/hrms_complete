@@ -16,7 +16,7 @@ class EmployeeManager extends Model implements Auditable
     }
 
     public function hodDesignation(){
-        return $this->hasOneThrough(
+        return $this->hasManyThrough(
             'App\Models\Hr\HrDesignation', //Final Model HrDocumentName
             'App\Models\Hr\EmployeeDesignation', //Model Through Access Final Model (Immediate Model)
             'hr_employee_id',              //Forein Key in Immediate Model of This Model

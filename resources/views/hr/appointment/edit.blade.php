@@ -76,10 +76,10 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">HOD<span class="text_requried">*</span></label>
-                                 <select  id="hr_manager_id"   name="hr_manager_id"  class="form-control selectTwo" data-validation="required">
+                                 <select  id="hod_id"   name="hod_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($employees as $manager)
-                                    <option value="{{$manager->id}}" {{(old("hr_manager_id",$data->employeeManager->hod_id??'')==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}} - {{$manager->employee_no}}</option>
+                                    <option value="{{$manager->id}}" {{(old("hod_id",$data->employeeManager->hod_id??'')==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}} - {{$manager->employee_no}}</option>
                                     @endforeach  
                                 </select>
                                  
