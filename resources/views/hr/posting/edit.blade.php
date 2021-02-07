@@ -21,7 +21,7 @@
                                  <select  id="hr_designation_id"   name="hr_designation_id" data-validation="required" class="form-control selectTwo">
                                     <option value=""></option>
                                     @foreach($designations as $designation)
-                                    <option value="{{$designation->id}}" {{(old("hr_designation_id", $data->hrDesignation->id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+                                    <option value="{{$designation->id}}" {{(old("hr_designation_id", $data->hrDesignation->last()->id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                                     @endforeach 
                                 </select>
                                 

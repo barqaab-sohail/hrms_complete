@@ -28,7 +28,7 @@ class AppointmentStore extends FormRequest
             'joining_date'=>'required|date',
             'expiry_date'=>'nullable|date|after:joining_date',
             'hr_designation_id'=>'required|numeric',
-            'hr_manager_id'=>'required|numeric',
+            'hod_id'=>'required|numeric',
             'hr_department_id'=>'required|numeric',
             'hr_category_id'=>'required',
             'hr_salary_id'=>'required|numeric',

@@ -10,7 +10,7 @@ use DB;
 class HrAppointment extends Model implements Auditable
 {
    use \OwenIt\Auditing\Auditable;
-    protected $fillable = ['hr_employee_id','hr_letter_type_id','hr_manager_id','reference_no','joining_date','expiry_date','hr_employee_type_id','remarks'];
+    protected $fillable = ['hr_employee_id','hr_letter_type_id','reference_no','joining_date','expiry_date','hr_employee_type_id','remarks'];
 
 
 

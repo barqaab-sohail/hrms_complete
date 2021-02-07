@@ -76,6 +76,7 @@ class AppointmentController extends Controller
                 if ($appointment){
 
                     HrAppointment::findOrFail($appointment->id)->update($input);
+                    $input['effective_date'] = $input ['joining_date'];
                     EmployeeGrade::where('hr_employee_id',session('hr_employee_id'))->first()->update($input);
                     EmployeeProject::where('hr_employee_id',session('hr_employee_id'))->first()->update($input);
                     EmployeeCategory::where('hr_employee_id',session('hr_employee_id'))->first()->update($input);

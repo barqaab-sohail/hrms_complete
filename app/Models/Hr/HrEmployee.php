@@ -108,11 +108,6 @@ class HrEmployee extends Model implements Auditable
 
     }
 
-    public function hrDriving(){
-
-        return $this->hasOne('App\Models\Hr\HrDriving');
-
-    }
 
      public function hrPassport(){
 
@@ -205,15 +200,30 @@ class HrEmployee extends Model implements Auditable
 
 
 
+    // public function hrDesignation(){
+    //     return $this->hasOneThrough(
+    //         'App\Models\Hr\HrDesignation',                  //Final Model HrDocumentName
+    //         'App\Models\Hr\HrAppointment',              //Model Through Access Final Model (Immediate Model)
+    //         'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+    //         'id',                                             //Final Model Primary Key
+    //         'id',
+    //         'hr_designation_id'                             //Forein Key in Immediate Model of Final Model
+    //     );
+    // }
+
     public function hrDesignation(){
-        return $this->hasOneThrough(
-            'App\Models\Hr\HrDesignation',                  //Final Model HrDocumentName
-            'App\Models\Hr\HrAppointment',              //Model Through Access Final Model (Immediate Model)
-            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
-            'id',                                             //Final Model Primary Key
-            'id',
-            'hr_designation_id'                             //Forein Key in Immediate Model of Final Model
+        return $this->hasManyThrough(
+            'App\Models\Hr\HrDesignation', //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeDesignation', //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',              //Forein Key in Immediate Model of This Model
+            'id',                          //Final Model Primary Key
+            'id',   //current model Primary Key of Final Model (it is called foreign key)
+            'hr_designation_id'           //Forein Key in Immediate Model of Final Model
         );
+    }
+
+    public function hrDriving(){
+        return $this->hasOne('App\Models\Hr\HrDriving');
     }
 
     public function manager(){

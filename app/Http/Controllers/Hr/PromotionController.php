@@ -13,7 +13,7 @@ use App\Models\Hr\HrGrade;
 use App\Models\Hr\HrCategory;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDepartment;
-use App\Models\Hr\HrPromotionDesignation;
+use App\Models\Hr\EmployeeDesignation;
 use App\Models\Hr\HrPromotionDepartment;
 use App\Models\Hr\HrPromotionSalary;
 use App\Models\Hr\HrPromotionManager;
@@ -94,7 +94,7 @@ class PromotionController extends Controller
             $input['hr_promotion_id']=$hrPromotion->id;
 
             if($request->filled('hr_designation_id')){
-                HrPromotionDesignation::create($input);
+                EmployeeDesignation::create($input);
             }
 
             if($request->filled('hr_department_id')){
