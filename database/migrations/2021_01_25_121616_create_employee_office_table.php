@@ -20,7 +20,7 @@ class CreateEmployeeOfficeTable extends Migration
             $table->bigInteger('office_id')->unsigned();
             $table->date('effective_date');
             $table->timestamps();        
-            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');;
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
             $table->foreign('office_id')->references('id')->on('offices');
         });
     }

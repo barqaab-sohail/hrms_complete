@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Hr;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Hr\HrAppointment;
+//use App\Models\Hr\HrAppointment;
+use App\Models\Hr\EmployeeAppointment;
 use App\Models\Hr\HrSalary;
 use App\Models\Hr\HrDesignation;
 use App\Models\Hr\HrEmployee;
@@ -41,7 +42,7 @@ class AppointmentController extends Controller
         $hrCategories = HrCategory::all();
         $hrEmployeeTypes = HrEmployeeType::all();
     	
-        $data = HrAppointment::where('hr_employee_id',session('hr_employee_id'))
+        $data = EmployeeAppointment::where('hr_employee_id',session('hr_employee_id'))
           ->first();
 
         if($request->ajax()){
@@ -68,37 +69,16 @@ class AppointmentController extends Controller
             $input ['expiry_date']= \Carbon\Carbon::parse($request->expiry_date)->format('Y-m-d');
             }
         $input['hr_employee_id']=session('hr_employee_id');
+        $input['effective_date']=$input ['joining_date'];
         
-        $appointment = HrAppointment::where('hr_employee_id',$id)->first();
+        $appointment = EmployeeAppointment::where('hr_employee_id',$id)->first();
        
             DB::transaction(function () use ($input, $appointment) {  
                 //check if appointment exist then update else create
-                if ($appointment){
 
-                    HrAppointment::findOrFail($appointment->id)->update($input);
-                    $input['effective_date'] = $input ['joining_date'];
-                    EmployeeGrade::where('hr_employee_id',session('hr_employee_id'))->first()->update($input);
-                    EmployeeProject::where('hr_employee_id',session('hr_employee_id'))->first()->update($input);
-                    EmployeeCategory::where('hr_employee_id',session('hr_employee_id'))->first()->update($input);
-                    EmployeeDesignation::where('hr_employee_id',session('hr_employee_id'))->first()->update($input);
-                    EmployeeDepartment::where('hr_employee_id',session('hr_employee_id'))->first()->update($input);
-                    EmployeeManager::where('hr_employee_id',session('hr_employee_id'))->first()->update($input);
-                    EmployeeOffice::where('hr_employee_id',session('hr_employee_id'))->first()->update($input);
-                    EmployeeSalary::where('hr_employee_id',session('hr_employee_id'))->first()->update($input);
-                }else{
-        		  HrAppointment::create($input);
-                  EmployeeGrade::create($input);
-                  EmployeeProject::create($input);
-                  EmployeeCategory::create($input);
-                  EmployeeDesignation::create($input);
-                  EmployeeDepartment::create($input);
-                  EmployeeManager::create($input);
-                  EmployeeOffice::create($input);
-                  EmployeeSalary::create($input);
-                  
-                }
-
-
+                EmployeeAppointment::updateOrCreate(
+                          ['id' => $appointment->id??''],
+                          $input);
 
         	}); // end transcation
 

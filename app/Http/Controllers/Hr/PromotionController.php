@@ -14,11 +14,11 @@ use App\Models\Hr\HrCategory;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDepartment;
 use App\Models\Hr\EmployeeDesignation;
-use App\Models\Hr\HrPromotionDepartment;
-use App\Models\Hr\HrPromotionSalary;
-use App\Models\Hr\HrPromotionManager;
-use App\Models\Hr\HrPromotionGrade;
-use App\Models\Hr\HrPromotionCategory;
+use App\Models\Hr\EmployeeDepartment;
+use App\Models\Hr\EmployeeSalary;
+use App\Models\Hr\EmployeeManager;
+use App\Models\Hr\EmployeeGrade;
+use App\Models\Hr\EmployeeCategory;
 use App\Http\Requests\Hr\PromotionStore;
 use DB;
 
@@ -33,9 +33,6 @@ class PromotionController extends Controller
 		$departments = HrDepartment::all();
         $hrGrades = HrGrade::all();
         $hrCategories = HrCategory::all();
-
-             
-       
        
         $hrPromotions = HrPromotion::where('hr_employee_id',session('hr_employee_id'))->get();
        
@@ -98,23 +95,23 @@ class PromotionController extends Controller
             }
 
             if($request->filled('hr_department_id')){
-                HrPromotionDepartment::create($input);
+                EmployeeDepartment::create($input);
             }
 
             if($request->filled('hr_salary_id')){
-                HrPromotionSalary::create($input);
+                EmployeeSalary::create($input);
             }
 
-            if($request->filled('hr_manager_id')){
-                HrPromotionManager::create($input);
+            if($request->filled('hod_id')){
+                EmployeeManager::create($input);
             }
 
             if($request->filled('hr_grade_id')){
-                HrPromotionGrade::create($input);
+                EmployeeGrade::create($input);
             }
 
             if($request->filled('hr_category_id')){
-                HrPromotionCategory::create($input);
+                EmployeeCategory::create($input);
             }
 
 

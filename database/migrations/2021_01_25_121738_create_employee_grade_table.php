@@ -20,7 +20,7 @@ class CreateEmployeeGradeTable extends Migration
             $table->bigInteger('hr_grade_id')->unsigned();
             $table->date('effective_date');
             $table->timestamps();        
-            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');;
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
             $table->foreign('hr_grade_id')->references('id')->on('hr_grades');
         });
     }
