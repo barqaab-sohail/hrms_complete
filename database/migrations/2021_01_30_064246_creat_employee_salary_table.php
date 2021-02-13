@@ -20,7 +20,7 @@ class CreatEmployeeSalaryTable extends Migration
             $table->bigInteger('hr_salary_id')->unsigned();
             $table->date('effective_date');
             $table->timestamps();        
-            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');;
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
             $table->foreign('hr_salary_id')->references('id')->on('hr_salaries');
         });
     }

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard','HomeController@index');
 Route::get('/hrms/testing','HomeController@testing');
-//Route::get ('insert','Hr\EmployeeController@insert');
+Route::get ('insert','Hr\EmployeeController@insert');
 
 Auth::routes();
 

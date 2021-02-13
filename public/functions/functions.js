@@ -66,9 +66,20 @@ function formFunctions(){
 
     });
 
-     //if Time not empty than enter time with format
+     //double click submission prevent
+    
+    (function(){
+    $('.form-prevent-multiple-submits').on('submit', function(){
 
+        $('.btn-prevent-multiple-submits').attr('disabled','ture');
+        $('.spinner',this).show();
+        //submit enalbe after 3 second
+        setTimeout(function(){
+            $('.btn-prevent-multiple-submits').removeAttr('disabled');
+            }, 3000);
+        })
 
+    })();
 
 
 
@@ -227,24 +238,6 @@ function formFunctions(){
     });
 
     
-
- //function to prevent double click on submit button
-(function(){
-    $('.form-prevent-multiple-submits').on('submit', function(){
-
-        $('.btn-prevent-multiple-submits').attr('disabled','ture');
-        $('.spinner',this).show();
-
-        //submit enalbe after 5 second
-        setTimeout(function(){
-            $('.btn-prevent-multiple-submits').removeAttr('disabled');
-            }, 5000);
-
-    })
-
-})();
-
-
 
 
 function resetForm(){

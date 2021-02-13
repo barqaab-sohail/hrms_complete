@@ -100,7 +100,6 @@
 $(document).ready(function(){
     
   refreshTable("{{route('exit.table')}}",500);
-  formFunctions();
 
     $('#formEditExit').on('submit', function(event){  
       var url = $(this).attr('action');

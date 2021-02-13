@@ -20,7 +20,7 @@ class CreatEmployeeProjectTable extends Migration
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->date('effective_date');
             $table->timestamps();        
-            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');;
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
             $table->foreign('pr_detail_id')->references('id')->on('pr_details');
         });
     }

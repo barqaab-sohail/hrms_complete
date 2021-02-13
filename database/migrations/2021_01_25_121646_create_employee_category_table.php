@@ -20,7 +20,7 @@ class CreateEmployeeCategoryTable extends Migration
             $table->bigInteger('hr_category_id')->unsigned();
             $table->date('effective_date');
             $table->timestamps();        
-            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');;
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
             $table->foreign('hr_category_id')->references('id')->on('hr_categories');
         });
     }

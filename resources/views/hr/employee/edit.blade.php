@@ -27,9 +27,7 @@
 
 
 $(document).ready(function() {
-
-
-	formFunctions();
+  formFunctions();
 
 	//form submit
 	$(document).on('submit','#formEditEmployee', function(e){	
@@ -37,43 +35,10 @@ $(document).ready(function() {
       
     // prevent default call from function formFunctions()
 	 	var url = $(this).attr('action');
-    console.log('EEEEEEE');
+  
 		$('.fa-spinner').show();
 	   	submitForm(this, url);
 	}); //end submit
-
-
-
-
-// //edit form load through ajax;
-// 	$(document).on('click','a[id^=edit]',function(e){
-//     console.log('edit click');
-// 		e.preventDefault();
-// 		var url = $(this).attr('href');
-// 		$.ajax({
-//            url:url,
-//            method:"GET",
-//            //dataType:'JSON',
-//            contentType: false,
-//            cache: false,
-//            processData: false,
-//            success:function(data)
-//                {
-//         		$(".addAjax").html(data);
-        		
-//         		formFunctions();
-        		
-//                },
-//             error: function (jqXHR, textStatus, errorThrown){
-//             	if (jqXHR.status == 401){
-//             		location.href = "{{route ('login')}}"
-//             		}      
-                          
-
-//                     }//end error
-//     	}); //end ajax	
-// 	});
-
 
 
 
@@ -110,58 +75,6 @@ $(document).ready(function() {
 
 	});
 
-
-	//ajax function
- //    function submitFormAjax(form, url){
- //        //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
- //        $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
- //            var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
-
- //            if (token) {
- //                return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Object
- //            }
- //        });
- 
- //        var data = new FormData(form)
-
- //       // ajax request
- //        $.ajax({
- //           url:url,
- //           method:"POST",
- //           data:data,
- //           //dataType:'JSON',
- //           contentType: false,
- //           cache: false,
- //           processData: false,
- //           success:function(data)
- //               {              	
- //               	$('#json_message').attr('class','alert alert-success').removeAttr('hidden').find('strong').text(data.message).siblings('i').removeAttr('hidden');
- //                $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
- //                $('html,body').scrollTop(0);
- //                $('.fa-spinner').hide();
- //               },
- //            error: function (jqXHR, textStatus, errorThrown) {
- //                    if (jqXHR.status == 401){
- //            		location.href = "{{route ('login')}}"
- //            		}      
- //                    var test = jqXHR.responseJSON // this object have two more objects one is errors and other is message.
-                    
- //                    var errorMassage = '';
-
- //                    //now saperate only errors object values from test object and store in variable errorMassage;
- //                    $.each(test.errors, function (key, value){
- //                      errorMassage += value ;
- //                    });
-                     
- //                    $('#json_message').attr('class','alert alert-danger').removeAttr('hidden').find('strong').text(errorMassage).siblings('i').removeAttr('hidden');
- //                    $('#json_message').find('i').click(function(){$('#json_message').attr('hidden','hidden');});
- //                    $('html,body').scrollTop(0);
- //                    $('.fa-spinner').hide();
-                                  
- //                }//end error
- //   		}); //end ajax
-	// }
-	 
 
 });
 </script>
