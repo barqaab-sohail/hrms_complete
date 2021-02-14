@@ -24,7 +24,7 @@ class ManagerController extends Controller
     }
 
     public function create(Request $request) {
-        
+
         if ($request->ajax()) {
             $data = EmployeeManager::where('hr_employee_id',session('hr_employee_id'))->latest()->with('hrEmployee','hodDesignation')->get();
 
@@ -87,6 +87,13 @@ class ManagerController extends Controller
 
     
     public function destroy ($id){
+
+        $employeeManager = EmployeeManager::where('hr_employee_id',session('hr_employee_id'))->first();
+
+        if($employeeManager->id==$id)
+        {
+            return response()->json(['error'=>'data  not deleted. data update from Appointment']);
+        }
 
     	DB::transaction(function () use ($id) {  
     		EmployeeManager::find($id)->delete();  		   	
