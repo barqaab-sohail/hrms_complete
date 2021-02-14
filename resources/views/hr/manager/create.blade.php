@@ -144,6 +144,10 @@ $(document).ready(function() {
             url: "{{ route('manager.store') }}"+'/'+hr_manager_id,
             success: function (data) {
                 table.draw();
+                if(data.error){
+                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+                }
+  
             },
             error: function (data) {
                 console.log('Error:', data);

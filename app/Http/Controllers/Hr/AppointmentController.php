@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Hr;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//use App\Models\Hr\HrAppointment;
 use App\Models\Hr\EmployeeAppointment;
 use App\Models\Hr\HrSalary;
 use App\Models\Hr\HrDesignation;
@@ -70,14 +69,56 @@ class AppointmentController extends Controller
             }
         $input['hr_employee_id']=session('hr_employee_id');
         $input['effective_date']=$input ['joining_date'];
+        $input['hod_id']=$input ['employee_manager_id'];
         
         $appointment = EmployeeAppointment::where('hr_employee_id',$id)->first();
+        $employeeManager = EmployeeManager::where('hr_employee_id',$id)->first();
+        $employeeDepartment = EmployeeDepartment::where('hr_employee_id',$id)->first();
+        $employeeDesignation = EmployeeDesignation::where('hr_employee_id',$id)->first();
+        $employeeSalary = EmployeeSalary::where('hr_employee_id',$id)->first();
+        $employeeOffice = EmployeeOffice::where('hr_employee_id',$id)->first();
+        $employeeCategory = EmployeeCategory::where('hr_employee_id',$id)->first();
+        $employeeProject = EmployeeProject::where('hr_employee_id',$id)->first();
+
+        $employeeGrade = EmployeeGrade::where('hr_employee_id',$id)->first();
        
-            DB::transaction(function () use ($input, $appointment) {  
+            DB::transaction(function () use ($input, $appointment, $employeeManager, $employeeDesignation, $employeeDepartment, $employeeSalary, $employeeOffice, $employeeCategory, $employeeProject, $employeeGrade) {  
                 //check if appointment exist then update else create
 
                 EmployeeAppointment::updateOrCreate(
                           ['id' => $appointment->id??''],
+                          $input);
+
+                EmployeeManager::updateOrCreate(
+                          ['id' => $employeeManager->id??''],
+                          $input);
+
+                EmployeeDepartment::updateOrCreate(
+                          ['id' => $employeeDepartment->id??''],
+                          $input);
+
+                EmployeeDesignation::updateOrCreate(
+                          ['id' => $employeeDesignation->id??''],
+                          $input);
+
+                EmployeeSalary::updateOrCreate(
+                          ['id' => $employeeSalary->id??''],
+                          $input);
+
+                EmployeeOffice::updateOrCreate(
+                          ['id' => $employeeOffice->id??''],
+                          $input);
+
+                EmployeeCategory::updateOrCreate(
+                          ['id' => $employeeCategory->id??''],
+                          $input);
+
+                EmployeeProject::updateOrCreate(
+                          ['id' => $employeeProject->id??''],
+                          $input);
+
+                EmployeeGrade::updateOrCreate(
+                          ['id' => $employeeGrade->id??''],
                           $input);
 
         	}); // end transcation
