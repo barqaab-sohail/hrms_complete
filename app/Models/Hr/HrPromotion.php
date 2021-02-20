@@ -15,72 +15,74 @@ class HrPromotion extends Model implements Auditable
 
      public function hrDesignation(){
         return $this->hasOneThrough(
-            'App\Models\Hr\HrDesignation',                  //Final Model HrDocumentName
-            'App\Models\Hr\HrPromotionDesignation',          //Model Through Access Final Model (Immediate Model)
+            'App\Models\Hr\EmployeeDesignation',                  //Final Model HrDocumentName
+            'App\Models\Hr\PromotionDesignation',          //Model Through Access Final Model (Immediate Model)
             'hr_promotion_id',                                 //Forein Key in Immediate Model of This Model
             'id',                                             //Final Model Primary Key
             'id',
-            'hr_designation_id'                             //Forein Key in Immediate Model of Final Model
-        );
-
-    }
-    
-    public function hrDepartment(){
-        return $this->hasOneThrough(
-            'App\Models\Hr\HrDepartment',                  //Final Model HrDocumentName
-            'App\Models\Hr\HrPromotionDepartment',          //Model Through Access Final Model (Immediate Model)
-            'hr_promotion_id',                                 //Forein Key in Immediate Model of This Model
-            'id',                                             //Final Model Primary Key
-            'id',
-            'hr_department_id'                             //Forein Key in Immediate Model of Final Model
+            'employee_designation_id'                             //Forein Key in Immediate Model of Final Model
         );
 
     }
 
     public function hrSalary(){
         return $this->hasOneThrough(
-            'App\Models\Hr\HrSalary',                  //Final Model HrDocumentName
-            'App\Models\Hr\HrPromotionSalary',          //Model Through Access Final Model (Immediate Model)
+            'App\Models\Hr\EmployeeSalary',                  //Final Model HrDocumentName
+            'App\Models\Hr\PromotionSalary',          //Model Through Access Final Model (Immediate Model)
             'hr_promotion_id',                                 //Forein Key in Immediate Model of This Model
             'id',                                             //Final Model Primary Key
             'id',
-            'hr_salary_id'                             //Forein Key in Immediate Model of Final Model
-        );
-
-    }
-
-    public function hrManager(){
-        return $this->hasOneThrough(
-            'App\Models\Hr\HrEmployee',                  //Final Model HrDocumentName
-            'App\Models\Hr\HrPromotionManager',          //Model Through Access Final Model (Immediate Model)
-            'hr_promotion_id',                                 //Forein Key in Immediate Model of This Model
-            'id',                                             //Final Model Primary Key
-            'id',
-            'hr_manager_id'                             //Forein Key in Immediate Model of Final Model
+            'employee_salary_id'                             //Forein Key in Immediate Model of Final Model
         );
 
     }
 
     public function hrGrade(){
         return $this->hasOneThrough(
-            'App\Models\Hr\HrGrade',                  //Final Model HrDocumentName
-            'App\Models\Hr\HrPromotionGrade',          //Model Through Access Final Model (Immediate Model)
+            'App\Models\Hr\EmployeeGrade',                  //Final Model HrDocumentName
+            'App\Models\Hr\PromotionGrade',          //Model Through Access Final Model (Immediate Model)
             'hr_promotion_id',                                 //Forein Key in Immediate Model of This Model
             'id',                                             //Final Model Primary Key
             'id',
-            'hr_grade_id'                             //Forein Key in Immediate Model of Final Model
+            'employee_grade_id'                             //Forein Key in Immediate Model of Final Model
         );
 
     }
 
-    public function hrCategory(){
+     public function hrManager(){
         return $this->hasOneThrough(
-            'App\Models\Hr\HrCategory',                  //Final Model HrDocumentName
-            'App\Models\Hr\HrPromotionCategory',          //Model Through Access Final Model (Immediate Model)
+            'App\Models\Hr\EmployeeManager',                  //Final Model HrDocumentName
+            'App\Models\Hr\PromotionManager',          //Model Through Access Final Model (Immediate Model)
             'hr_promotion_id',                                 //Forein Key in Immediate Model of This Model
             'id',                                             //Final Model Primary Key
             'id',
-            'hr_category_id'                             //Forein Key in Immediate Model of Final Model
+            'employee_manager_id'                             //Forein Key in Immediate Model of Final Model
+        );
+
+    }
+
+    
+    public function hrDepartment(){
+        return $this->hasOneThrough(
+            'App\Models\Hr\EmployeeDepartment',                  //Final Model HrDocumentName
+            'App\Models\Hr\PromotionDepartment',          //Model Through Access Final Model (Immediate Model)
+            'hr_promotion_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'employee_department_id'                             //Forein Key in Immediate Model of Final Model
+        );
+
+    }
+
+    
+    public function hrCategory(){
+        return $this->hasOneThrough(
+            'App\Models\Hr\EmployeeCategory',                  //Final Model HrDocumentName
+            'App\Models\Hr\PromotionCategory',          //Model Through Access Final Model (Immediate Model)
+            'hr_promotion_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'employee_category_id'                             //Forein Key in Immediate Model of Final Model
         );
 
     }

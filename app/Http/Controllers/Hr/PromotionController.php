@@ -19,6 +19,12 @@ use App\Models\Hr\EmployeeSalary;
 use App\Models\Hr\EmployeeManager;
 use App\Models\Hr\EmployeeGrade;
 use App\Models\Hr\EmployeeCategory;
+use App\Models\Hr\PromotionCategory;
+use App\Models\Hr\PromotionGrade;
+use App\Models\Hr\PromotionManager;
+use App\Models\Hr\PromotionSalary;
+use App\Models\Hr\PromotionDepartment;
+use App\Models\Hr\PromotionDesignation;
 use App\Http\Requests\Hr\PromotionStore;
 use DB;
 
@@ -57,8 +63,6 @@ class PromotionController extends Controller
     		$employee = HrEmployee::find(session('hr_employee_id'));
 			$employeeFullName = strtolower($employee->first_name) .'_'.strtolower($employee->last_name);
 
-
-
     	DB::transaction(function () use ($request,$input, $employeeFullName) { 
 
     			$extension = request()->document->getClientOriginalExtension();
@@ -91,29 +95,40 @@ class PromotionController extends Controller
             $input['hr_promotion_id']=$hrPromotion->id;
 
             if($request->filled('hr_designation_id')){
-                EmployeeDesignation::create($input);
+                $employeeDesignation = EmployeeDesignation::create($input);
+                $input['employee_designation_id']= $employeeDesignation->id;
+                PromotionDesignation::create($input);
             }
 
             if($request->filled('hr_department_id')){
-                EmployeeDepartment::create($input);
+                $employeeDepartment = EmployeeDepartment::create($input);
+                $input['employee_department_id']= $employeeDepartment->id;
+                PromotionDepartment::create($input);
             }
 
             if($request->filled('hr_salary_id')){
-                EmployeeSalary::create($input);
+                $employeeSalary = EmployeeSalary::create($input);
+                $input['employee_salary_id']= $employeeSalary->id;
+                PromotionSalary::create($input);
             }
 
-            if($request->filled('hod_id')){
-                EmployeeManager::create($input);
+            if($request->filled('hr_manager_id')){
+                $employeeManager = EmployeeManager::create($input);
+                $input['employee_manager_id']= $employeeManager->id;
+                PromotionManager::create($input);
             }
 
             if($request->filled('hr_grade_id')){
-                EmployeeGrade::create($input);
+                $employeeGrade = EmployeeGrade::create($input);
+                $input['employee_grade_id']= $employeeGrade->id;
+                PromotionGrade::create($input);
             }
 
             if($request->filled('hr_category_id')){
-                EmployeeCategory::create($input);
+                $employeeCategory = EmployeeCategory::create($input);
+                $input['employee_category_id']= $employeeCategory->id;
+                PromotionCategory::create($input);
             }
-
 
     	});  //end transaction
 
@@ -133,6 +148,7 @@ class PromotionController extends Controller
         $hrCategories = HrCategory::all();
 		$hrPromotions =  HrPromotion::where('hr_employee_id', session('hr_employee_id'))->get();
     	$data = HrPromotion::find($id);
+
 
     	if($request->ajax()){
 	    
@@ -160,53 +176,110 @@ class PromotionController extends Controller
         DB::transaction(function () use ($input, $id, $request) {  
 
             HrPromotion::findOrFail($id)->update($input);
+             $input['hr_employee_id']= session('hr_employee_id');
+             $input['hr_promotion_id']= $id;
+
+             //check desination filled or not
+            if($request->filled('hr_designation_id')){
+                $promotionDesignation = PromotionDesignation::where('hr_promotion_id',$id)->first();
+                $employeeDesignation = EmployeeDesignation::updateOrCreate(
+                        ['id'=> $promotionDesignation->employee_designation_id??''],       //It is find and update 
+                        $input);
+                $input['employee_designation_id']= $employeeDesignation->id;
+                PromotionDesignation::create($input);
+
+            }else{
+                $promotionDesignation = PromotionDesignation::where('hr_promotion_id',$id)->first();
+                if($promotionDesignation){
+                    $employeeDesignation = EmployeeDesignation::where('id',$promotionDesignation->employee_designation_id)->first();
+                    $promotionDesignation->delete();
+                    $employeeDesignation->delete();
+                }
+            }
 
             if($request->filled('hr_department_id')){
-                HrPromotionDepartment::updateOrCreate(
-                        ['hr_promotion_id'=> $id],       //It is find and update 
-                        $input); 
-            }else{
-                HrPromotionDepartment::where('hr_promotion_id',$id)->delete();
-            }
+                $promotionDepartment = PromotionDepartment::where('hr_promotion_id',$id)->first();
+                $employeeDepartment = EmployeeDepartment::updateOrCreate(
+                        ['id'=> $promotionDepartment->employee_department_id??''],       //It is find and update 
+                        $input);
+                $input['employee_department_id']= $employeeDepartment->id;
+                PromotionDepartment::create($input);
 
-            if($request->filled('hr_designation_id')){
-                HrPromotionDesignation::updateOrCreate(
-                        ['hr_promotion_id'=> $id],       //It is find and update 
-                        $input); 
             }else{
-                HrPromotionDesignation::where('hr_promotion_id',$id)->delete();
-            }
-
-            if($request->filled('hr_manager_id')){
-                HrPromotionManager::updateOrCreate(
-                        ['hr_promotion_id'=> $id],       //It is find and update 
-                        $input); 
-            }else{
-                HrPromotionManager::where('hr_promotion_id',$id)->delete();
-            }
-
-            if($request->filled('hr_salary_id')){
-                HrPromotionSalary::updateOrCreate(
-                        ['hr_promotion_id'=> $id],       //It is find and update 
-                        $input); 
-            }else{
-                HrPromotionSalary::where('hr_promotion_id',$id)->delete();
-            }
-
-            if($request->filled('hr_grade_id')){
-                HrPromotionGrade::updateOrCreate(
-                        ['hr_promotion_id'=> $id],       //It is find and update 
-                        $input); 
-            }else{
-                HrPromotionGrade::where('hr_promotion_id',$id)->delete();
+                $promotionDepartment = PromotionDepartment::where('hr_promotion_id',$id)->first();
+                if($promotionDepartment){
+                    $employeeDepartment = EmployeeDepartment::where('id',$promotionDepartment->employee_department_id)->first();
+                    $promotionDepartment->delete();
+                    $employeeDepartment->delete();
+                }
             }
 
             if($request->filled('hr_category_id')){
-                HrPromotionCategory::updateOrCreate(
-                        ['hr_promotion_id'=> $id],       //It is find and update 
-                        $input); 
+                $promotionCategory = PromotionCategory::where('hr_promotion_id',$id)->first();
+                $employeeCategory = EmployeeCategory::updateOrCreate(
+                        ['id'=> $promotionCategory->employee_category_id??''],       //It is find and update 
+                        $input);
+                $input['employee_category_id']= $employeeCategory->id;
+                PromotionCategory::create($input);
+
             }else{
-                HrPromotionCategory::where('hr_promotion_id',$id)->delete();
+                $promotionCategory = PromotionCategory::where('hr_promotion_id',$id)->first();
+                if($promotionCategory){
+                    $employeeCategory = EmployeeCategory::where('id',$promotionCategory->employee_category_id)->first();
+                    $promotionCategory->delete();
+                    $employeeCategory->delete();
+                }
+            }
+
+            if($request->filled('hr_manager_id')){
+                $promotionManager = PromotionManager::where('hr_promotion_id',$id)->first();
+                $employeeManager = EmployeeManager::updateOrCreate(
+                        ['id'=> $promotionManager->employee_manager_id??''],       //It is find and update 
+                        $input);
+                $input['employee_manager_id']= $employeeManager->id;
+                PromotionManager::create($input);
+
+            }else{
+                $promotionManager = PromotionManager::where('hr_promotion_id',$id)->first();
+                if($promotionManager){
+                    $employeeManager = EmployeeManager::where('id',$promotionManager->employee_manager_id)->first();
+                    $promotionManager->delete();
+                    $employeeManager->delete();
+                }
+            }
+
+            if($request->filled('hr_salary_id')){
+                $promotionSalary = PromotionSalary::where('hr_promotion_id',$id)->first();
+                $employeeSalary = EmployeeSalary::updateOrCreate(
+                        ['id'=> $promotionSalary->employee_salary_id??''],       //It is find and update 
+                        $input);
+                $input['employee_salary_id']= $employeeSalary->id;
+                PromotionSalary::create($input);
+
+            }else{
+                $promotionSalary = PromotionSalary::where('hr_promotion_id',$id)->first();
+                if($promotionSalary){
+                    $employeeSalary = EmployeeSalary::where('id',$promotionSalary->employee_salary_id)->first();
+                    $promotionSalary->delete();
+                    $employeeSalary->delete();
+                }
+            }
+
+            if($request->filled('hr_grade_id')){
+                $promotionGrade = PromotionGrade::where('hr_promotion_id',$id)->first();
+                $employeeGrade = EmployeeGrade::updateOrCreate(
+                        ['id'=> $promotionGrade->employee_grade_id??''],       //It is find and update 
+                        $input);
+                $input['employee_grade_id']= $employeeGrade->id;
+                PromotionGrade::create($input);
+
+            }else{
+                $promotionGrade = PromotionGrade::where('hr_promotion_id',$id)->first();
+                if($promotionGrade){
+                    $employeeGrade = EmployeeGrade::where('id',$promotionGrade->employee_grade_id)->first();
+                    $promotionGrade->delete();
+                    $employeeGrade->delete();
+                }
             }
 
         	if ($request->hasFile('document')){
@@ -261,9 +334,49 @@ class PromotionController extends Controller
         }
 
     	DB::transaction(function () use ($id) {  
+            $promotionSalary = PromotionSalary::where('hr_promotion_id',$id)->first();
+            $employeeSalary = EmployeeSalary::where('id',$promotionSalary->employee_salary_id??'')->first();
+
+            $promotionDesignation = PromotionDesignation::where('hr_promotion_id',$id)->first();
+            $employeeDesignation = EmployeeDesignation::where('id',$promotionDesignation->employee_designation_id??'')->first();
+
+            $promotionDepartment = PromotionDepartment::where('hr_promotion_id',$id)->first();
+            $employeeDepartment = EmployeeDepartment::where('id',$promotionDepartment->employee_department_id??'')->first();
+
+            $promotionCategory = PromotionCategory::where('hr_promotion_id',$id)->first();
+            $employeeCategory = EmployeeCategory::where('id',$promotionCategory->employee_category_id??'')->first();
+
+            $promotionGrade = PromotionGrade::where('hr_promotion_id',$id)->first();
+            $employeeGrade = EmployeeGrade::where('id',$promotionGrade->employee_grade_id??'')->first();
+
+            $promotionManager = PromotionManager::where('hr_promotion_id',$id)->first();
+            $employeeManager = EmployeeManager::where('id',$promotionManager->employee_manager_id??'')->first();
+                    
+
 
             $hrPromotion = HrPromotion::find($id);
+                if($employeeSalary){
+                $employeeSalary->delete();
+                }
+                if($employeeDesignation){
+                $employeeDesignation->delete();
+                }
+                if( $employeeDepartment){
+                $employeeDepartment->delete();
+                }
+                if($employeeCategory){
+                $employeeCategory->delete();
+                }
+                if($employeeGrade){
+                $employeeGrade->delete();
+                }
+                if($employeeManager){
+                $employeeManager->delete();
+                }
+
+
             $hrPromotion->delete();
+
             app('App\Http\Controllers\Hr\DocumentationController')->destroy($hrPromotion->hr_documentation_id);
             
         }); // end transcation

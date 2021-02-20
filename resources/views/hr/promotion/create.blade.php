@@ -23,8 +23,7 @@
                                     <option value="{{$designation->id}}" {{(old("hr_designation_id")==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                                     @endforeach 
                                 </select>
-                                
-                               
+                                      
                             </div>
                         </div>
                     </div>
@@ -87,10 +86,10 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">HOD</label>
-                                <select  id="hod_id"   name="hod_id"  class="form-control selectTwo" >
+                                <select  id="hr_manager_id"   name="hr_manager_id"  class="form-control selectTwo" >
                                     <option value=""></option>
                                     @foreach($managers as $manager)
-                                    <option value="{{$manager->id}}" {{(old("hod_id")==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
+                                    <option value="{{$manager->id}}" {{(old("hr_manager_id")==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
                                     @endforeach  
                                 </select>
                                  
