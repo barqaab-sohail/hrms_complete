@@ -81,7 +81,7 @@ $(document).ready(function() {
 
   	submitForm(this, url);
   	resetForm();
-  	refreshTable("{{route('promotion.table')}}",1000);
+  	//refreshTable("{{route('promotion.table')}}",1000);
     });
 
 

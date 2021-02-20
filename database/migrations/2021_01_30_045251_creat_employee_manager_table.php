@@ -17,11 +17,11 @@ class CreatEmployeeManagerTable extends Migration
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->bigInteger('hr_employee_id')->unsigned();
-            $table->bigInteger('hod_id')->unsigned();
+            $table->bigInteger('hr_manager_id')->unsigned();
             $table->date('effective_date');
             $table->timestamps();        
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
-            $table->foreign('hod_id')->references('id')->on('hr_employees');
+            $table->foreign('hr_manager_id')->references('id')->on('hr_employees');
         });
     }
 

@@ -69,7 +69,6 @@ class AppointmentController extends Controller
             }
         $input['hr_employee_id']=session('hr_employee_id');
         $input['effective_date']=$input ['joining_date'];
-        $input['hod_id']=$input ['employee_manager_id'];
         
         $appointment = EmployeeAppointment::where('hr_employee_id',$id)->first();
         $employeeManager = EmployeeManager::where('hr_employee_id',$id)->first();

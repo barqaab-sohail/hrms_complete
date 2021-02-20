@@ -21,7 +21,7 @@
                                  <select  id="hr_designation_id"   name="hr_designation_id" class="form-control selectTwo">
                                     <option value=""></option>
                                     @foreach($designations as $designation)
-                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hrDesignation->last()->id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+                                    <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hrDesignation->hr_designation_id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                                     @endforeach 
                                 </select>
                                 
@@ -51,7 +51,7 @@
                                 <select  id="hr_salary_id"   name="hr_salary_id" class="form-control selectTwo">
                                     <option value=""></option>
                                     @foreach($salaries as $salary)
-                                    <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hrSalary->id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
+                                    <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hrSalary->hr_salary_id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
                                     @endforeach
                               
                                 </select>
@@ -72,7 +72,7 @@
                                 <select  name="hr_grade_id"  class="form-control selectTwo">
                                     <option value=""></option>
                                     @foreach($hrGrades as $hrGrade)
-                                    <option value="{{$hrGrade->id}}" {{(old("hr_grade_id",$data->hrGrade->id??'')==$hrGrade->id? "selected" : "")}}>{{$hrGrade->name}}</option>
+                                    <option value="{{$hrGrade->id}}" {{(old("hr_grade_id",$data->hrGrade->hr_grade_id??'')==$hrGrade->id? "selected" : "")}}>{{$hrGrade->name}}</option>
                                     @endforeach 
                                 </select>
                                 
@@ -91,7 +91,7 @@
                                  <select  id="hod_id"   name="hod_id" class="form-control selectTwo" >
                                     <option value=""></option>
                                     @foreach($managers as $manager)
-                                    <option value="{{$manager->id}}" {{(old("hod_id",$data->hrManager->id??'')==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
+                                    <option value="{{$manager->id}}" {{(old("hod_id",$data->hrManager->hr_manager_id??'')==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
                                     @endforeach  
                                 </select>
                                  
@@ -107,7 +107,7 @@
                                  <select  id="hr_department_id"   name="hr_department_id" class="form-control selectTwo" >
                                     <option value=""></option>
                                     @foreach($departments as $department)
-                                    <option value="{{$department->id}}" {{(old("hr_department_id",$data->hrDepartment->id??'')==$department->id? "selected" : "")}}>{{$department->name}}</option>
+                                    <option value="{{$department->id}}" {{(old("hr_department_id",$data->hrDepartment->hr_department_id??'')==$department->id? "selected" : "")}}>{{$department->name}}</option>
                                     @endforeach  
                                 </select>
                                     
@@ -123,7 +123,7 @@
                                 <select  name="hr_category_id"  class="form-control selectTwo" >
                                     <option value=""></option>
                                     @foreach($hrCategories as $hrCategory)
-                                    <option value="{{$hrCategory->id}}" {{(old("hr_category_id",$data->hrCategory->id??'')==$hrCategory->id? "selected" : "")}}>{{$hrCategory->name}}</option>
+                                    <option value="{{$hrCategory->id}}" {{(old("hr_category_id",$data->hrCategory->hr_category_id??'')==$hrCategory->id? "selected" : "")}}>{{$hrCategory->name}}</option>
                                     @endforeach 
                                 </select>
                                     
@@ -201,15 +201,13 @@
 $(document).ready(function(){
      refreshTable("{{route('promotion.table')}}");
     //submit function
-
        $("#formPromotion").submit(function(e) { 
             e.preventDefault();
             var url = $(this).attr('action');
-            console.log('OK');
            
             $('.fa-spinner').show(); 
             submitForm(this, url);
-            refreshTable("{{route('promotion.table')}}",1000);
+            //refreshTable("{{route('promotion.table')}}",1000);
         });
        
 
