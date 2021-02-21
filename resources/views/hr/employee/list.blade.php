@@ -14,7 +14,8 @@
 				<tr>
 					<th>Id</th>
 					<th>Employee Name</th>
-					<th>Father Name</th>
+					<th>Designation/Position</th>
+					<th>Status</th>
 					<th>CNIC</th>
 					<th>Date of Joining</th>
 					<th>Employee No</th>
@@ -30,7 +31,8 @@
 						<tr>
 							<td>{{$employee->id}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
-							<td>{{$employee->father_name}}</td>
+							<td>{{$employee->employeeDesignation->last()->name??''}}</td>
+							<td>{{$employee->hr_status_id}}</td>
 							<td>{{$employee->cnic}}</td>
 							<td>{{$employee->hrAppointment->joining_date??''}}</td>
 							<td>{{$employee->employee_no??''}}</td>

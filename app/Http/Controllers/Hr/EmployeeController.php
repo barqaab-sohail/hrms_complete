@@ -121,7 +121,7 @@ class EmployeeController extends Controller
     }
 
     public function index(){
-    	$employees = HrEmployee::where('hr_status_id',1)->with('hrContactMobile','hrAppointment')->get();
+    	$employees = HrEmployee::with('employeeDesignation','hrContactMobile','hrAppointment')->get();
 
        
     	return view ('hr.employee.list',compact('employees'));
