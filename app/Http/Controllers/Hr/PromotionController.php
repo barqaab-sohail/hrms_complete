@@ -355,6 +355,7 @@ class PromotionController extends Controller
 
 
             $hrPromotion = HrPromotion::find($id);
+            $hrPromotion->delete();
                 if($employeeSalary){
                 $employeeSalary->delete();
                 }
@@ -374,10 +375,15 @@ class PromotionController extends Controller
                 $employeeManager->delete();
                 }
 
+            $hrDocument = HrDocumentation::findOrFail($hrPromotion->hr_documentation_id);
+            $path = public_path('storage/'.$hrDocument->path.$hrDocument->file_name);
+            if(File::exists($path)){
+                File::delete($path);
+            }
+            $hrDocument->forceDelete();
+            
 
-            $hrPromotion->delete();
-
-            app('App\Http\Controllers\Hr\DocumentationController')->destroy($hrPromotion->hr_documentation_id);
+            //app('App\Http\Controllers\Hr\DocumentationController')->destroy($hrPromotion->hr_documentation_id);
             
         }); // end transcation
 
