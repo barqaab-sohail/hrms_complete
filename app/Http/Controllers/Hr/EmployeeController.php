@@ -18,7 +18,6 @@ use App\Models\Hr\EmployeeOffice;
 use App\Models\Hr\EmployeeSalary;
 use App\Models\Hr\EmployeeProject;
 use App\Models\Hr\HrContact;
-use App\Models\Hr\HrAppointment;
 use App\Models\Hr\HrStatus;
 use App\Models\Hr\HrContactMobile;
 use App\Models\Hr\HrEmergency;
@@ -28,62 +27,62 @@ use App\Http\Requests\Hr\EmployeeStore;
 
 class EmployeeController extends Controller
 {
-    public function insert(){
+    // public function insert(){
 
 
-    $employees = HrEmployee::with('hrAppointment')->get();
+    // $employees = HrEmployee::with('hrAppointment')->get();
         
        
-    foreach ($employees as $employee){
-        if($employee->hrAppointment){
-            $input['hr_employee_id'] = $employee->id;  
-            $input['pr_detail_id']= $employee->hrAppointment->pr_detail_id;
-            $input['hr_letter_type_id']= $employee->hrAppointment->hr_letter_type_id;
-            $input['hr_manager_id']= $employee->hrAppointment->hr_manager_id;
-            $input['hr_designation_id']= $employee->hrAppointment->hr_designation_id;
-            $input['hr_department_id']= $employee->hrAppointment->hr_department_id;
-            $input['hr_salary_id']= $employee->hrAppointment->hr_salary_id;
-            $input['office_id']= $employee->hrAppointment->office_id;
-            $input['reference_no']= $employee->hrAppointment->reference_no;
-            $input['joining_date']= $employee->hrAppointment->joining_date;
-            $input['expiry_date']= $employee->hrAppointment->expiry_date;
-            $input['hr_grade_id']= $employee->hrAppointment->hr_grade_id;
-            $input['hr_category_id']= $employee->hrAppointment->hr_category_id;
-            $input['hr_employee_type_id']= $employee->hrAppointment->hr_employee_type_id;
-            $input['remakrs']= $employee->hrAppointment->remarks;
-            $input['created_at']= $employee->hrAppointment->created_at;
-            $input['updated_at']= $employee->hrAppointment->updated_at;
-            EmployeeAppointment::create($input);
+    // foreach ($employees as $employee){
+    //     if($employee->hrAppointment){
+    //         $input['hr_employee_id'] = $employee->id;  
+    //         $input['pr_detail_id']= $employee->hrAppointment->pr_detail_id;
+    //         $input['hr_letter_type_id']= $employee->hrAppointment->hr_letter_type_id;
+    //         $input['hr_manager_id']= $employee->hrAppointment->hr_manager_id;
+    //         $input['hr_designation_id']= $employee->hrAppointment->hr_designation_id;
+    //         $input['hr_department_id']= $employee->hrAppointment->hr_department_id;
+    //         $input['hr_salary_id']= $employee->hrAppointment->hr_salary_id;
+    //         $input['office_id']= $employee->hrAppointment->office_id;
+    //         $input['reference_no']= $employee->hrAppointment->reference_no;
+    //         $input['joining_date']= $employee->hrAppointment->joining_date;
+    //         $input['expiry_date']= $employee->hrAppointment->expiry_date;
+    //         $input['hr_grade_id']= $employee->hrAppointment->hr_grade_id;
+    //         $input['hr_category_id']= $employee->hrAppointment->hr_category_id;
+    //         $input['hr_employee_type_id']= $employee->hrAppointment->hr_employee_type_id;
+    //         $input['remakrs']= $employee->hrAppointment->remarks;
+    //         $input['created_at']= $employee->hrAppointment->created_at;
+    //         $input['updated_at']= $employee->hrAppointment->updated_at;
+    //         EmployeeAppointment::create($input);
 
          
-            $input['effective_date'] = $employee->hrAppointment->joining_date;
-            $input['hr_designation_id'] = $employee->hrAppointment->hr_designation_id;
-            $input['office_id'] = $employee->hrAppointment->office_id;
-            $input['hr_category_id'] = $employee->hrAppointment->hr_category_id;
-            $input['hr_department_id'] = $employee->hrAppointment->hr_department_id;
-            $input['hr_salary_id'] = $employee->hrAppointment->hr_salary_id;
-            $input['pr_detail_id'] = $employee->hrAppointment->pr_detail_id;
-            $input['hr_grade_id'] = $employee->hrAppointment->hr_grade_id??'';
+    //         $input['effective_date'] = $employee->hrAppointment->joining_date;
+    //         $input['hr_designation_id'] = $employee->hrAppointment->hr_designation_id;
+    //         $input['office_id'] = $employee->hrAppointment->office_id;
+    //         $input['hr_category_id'] = $employee->hrAppointment->hr_category_id;
+    //         $input['hr_department_id'] = $employee->hrAppointment->hr_department_id;
+    //         $input['hr_salary_id'] = $employee->hrAppointment->hr_salary_id;
+    //         $input['pr_detail_id'] = $employee->hrAppointment->pr_detail_id;
+    //         $input['hr_grade_id'] = $employee->hrAppointment->hr_grade_id??'';
 
-            EmployeeManager::create($input);
-            EmployeeDesignation::create($input);
-            EmployeeOffice::create($input);
-            EmployeeCategory::create($input);
-            EmployeeDepartment::create($input);
-            EmployeeSalary::create($input);
-            EmployeeProject::create($input);
+    //         EmployeeManager::create($input);
+    //         EmployeeDesignation::create($input);
+    //         EmployeeOffice::create($input);
+    //         EmployeeCategory::create($input);
+    //         EmployeeDepartment::create($input);
+    //         EmployeeSalary::create($input);
+    //         EmployeeProject::create($input);
             
-            if($input['hr_grade_id'] !=''){
-                EmployeeGrade::create($input);
-            }
-        }
+    //         if($input['hr_grade_id'] !=''){
+    //             EmployeeGrade::create($input);
+    //         }
+    //     }
         
-    }
-       echo "data sucessfully update";
+    // }
+    //    echo "data sucessfully update";
         
 
 
-    }
+    // }
 
 
     public function create(){
@@ -121,7 +120,7 @@ class EmployeeController extends Controller
     }
 
     public function index(){
-    	$employees = HrEmployee::with('employeeDesignation','hrContactMobile','hrAppointment')->get();
+    	$employees = HrEmployee::with('employeeDesignation','hrContactMobile','employeeAppointment')->get();
 
        
     	return view ('hr.employee.list',compact('employees'));

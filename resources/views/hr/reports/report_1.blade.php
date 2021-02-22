@@ -39,7 +39,7 @@
 							{{$employee->degreeAbove12->implode('degree_name',' + ')??''
 							}}</td>
 							<td>{{$employee->degreeYearAbove12->implode('to',' + ')??''}}</td>
-							<td>{{$employee->hrAppointment->joining_date??''}}</td>
+							<td>{{$employee->employeeAppointment->joining_date??''}}</td>
 							<td>{{$employee->hrMembership->membership_no??''}}</td>
 							<td>{{$employee->employee_no??''}}</td>
 

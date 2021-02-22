@@ -4,7 +4,6 @@ namespace App\Models\Hr;
 
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
-use App\Models\Hr\HrAppointment;
 
 
 class HrEmployee extends Model implements Auditable
@@ -108,9 +107,9 @@ class HrEmployee extends Model implements Auditable
 
 
 
-    public function hrAppointment(){
+    public function employeeAppointment(){
 
-        return $this->hasOne('App\Models\Hr\HrAppointment');
+        return $this->hasOne('App\Models\Hr\EmployeeAppointment');
 
     }
 
@@ -241,7 +240,7 @@ class HrEmployee extends Model implements Auditable
     public function manager(){
         return $this->hasOneThrough(
             'App\Models\Hr\HrEmployee',                  //Final Model HrDocumentName
-            'App\Models\Hr\HrAppointment',              //Model Through Access Final Model (Immediate Model)
+            'App\Models\Hr\EmployeeAppointment',              //Model Through Access Final Model (Immediate Model)
             'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
             'id',                                             //Final Model Primary Key
             'id',
@@ -253,7 +252,7 @@ class HrEmployee extends Model implements Auditable
     public function hrDepartment(){
         return $this->hasOneThrough(
             'App\Models\Hr\HrDepartment',                  //Final Model HrDocumentName
-            'App\Models\Hr\HrAppointment',              //Model Through Access Final Model (Immediate Model)
+            'App\Models\Hr\EmployeeAppointment',              //Model Through Access Final Model (Immediate Model)
             'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
             'id',                                             //Final Model Primary Key
             'id',
@@ -265,7 +264,7 @@ class HrEmployee extends Model implements Auditable
     public function hrSalary(){
         return $this->hasOneThrough(
             'App\Models\Hr\HrSalary',                  //Final Model HrDocumentName
-            'App\Models\Hr\HrAppointment',              //Model Through Access Final Model (Immediate Model)
+            'App\Models\Hr\EmployeeAppointment',              //Model Through Access Final Model (Immediate Model)
             'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
             'id',                                             //Final Model Primary Key
             'id',
