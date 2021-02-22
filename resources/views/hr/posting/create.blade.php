@@ -216,7 +216,7 @@ $(document).ready(function(){
                       
             $('.fa-spinner').show(); 
             submitForm(this, url,1);
-            refreshTable("{{route('posting.table')}}",1000);
+            //refreshTable("{{route('posting.table')}}",1000);
         });
 
 

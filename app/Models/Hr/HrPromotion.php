@@ -13,7 +13,7 @@ class HrPromotion extends Model implements Auditable
     protected $fillable = ['hr_employee_id','hr_documentation_id','effective_date','remarks'];
 
 
-     public function hrDesignation(){
+    public function hrDesignation(){
         return $this->hasOneThrough(
             'App\Models\Hr\EmployeeDesignation',                  //Final Model HrDocumentName
             'App\Models\Hr\PromotionDesignation',          //Model Through Access Final Model (Immediate Model)
@@ -49,7 +49,7 @@ class HrPromotion extends Model implements Auditable
 
     }
 
-     public function hrManager(){
+    public function hrManager(){
         return $this->hasOneThrough(
             'App\Models\Hr\EmployeeManager',                  //Final Model HrDocumentName
             'App\Models\Hr\PromotionManager',          //Model Through Access Final Model (Immediate Model)

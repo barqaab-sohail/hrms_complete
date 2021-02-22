@@ -13,12 +13,26 @@ use App\Models\Hr\HrSalary;
 use App\Models\Office\Office;
 use App\Models\Hr\HrPosting;
 use App\Models\Hr\HrDocumentation;
-use App\Models\Hr\HrPostingSalary;
-use App\Models\Hr\HrPostingDesignation;
-use App\Models\Hr\HrPostingDepartment;
-use App\Models\Hr\HrPostingManager;
-use App\Models\Hr\HrPostingProject;
-use App\Models\Hr\HrPostingOffice;
+
+use App\Models\Hr\EmployeeDesignation;
+use App\Models\Hr\EmployeeDepartment;
+use App\Models\Hr\EmployeeSalary;
+use App\Models\Hr\EmployeeManager;
+use App\Models\Hr\EmployeeProject;
+use App\Models\Hr\EmployeeOffice;
+
+use App\Models\Hr\PostingManager;
+use App\Models\Hr\PostingSalary;
+use App\Models\Hr\PostingDepartment;
+use App\Models\Hr\PostingDesignation;
+use App\Models\Hr\PostingProject;
+use App\Models\Hr\PostingOffice;
+// use App\Models\Hr\HrPostingSalary;
+// use App\Models\Hr\HrPostingDesignation;
+// use App\Models\Hr\HrPostingDepartment;
+// use App\Models\Hr\HrPostingManager;
+// use App\Models\Hr\HrPostingProject;
+// use App\Models\Hr\HrPostingOffice;
 use App\Http\Requests\Hr\PostingStore;
 use DB;
 
@@ -87,27 +101,39 @@ class PostingController extends Controller
             $input['hr_posting_id']=$hrPosting->id;
             
             if($request->filled('hr_designation_id')){
-                HrPostingDesignation::create($input);
+                $employeeDesignation = EmployeeDesignation::create($input);
+                $input['employee_designation_id']= $employeeDesignation->id;
+                PostingDesignation::create($input);
             }
 
             if($request->filled('hr_department_id')){
-                HrPostingDepartment::create($input);
+                $employeeDepartment = EmployeeDepartment::create($input);
+                $input['employee_department_id']= $employeeDepartment->id;
+               PostingDepartment::create($input);
             }
 
             if($request->filled('hr_salary_id')){
-                HrPostingSalary::create($input);
+                $employeeSalary = EmployeeSalary::create($input);
+                $input['employee_salary_id']= $employeeSalary->id;
+                PostingSalary::create($input);
             }
 
             if($request->filled('hr_manager_id')){
-                HrPostingManager::create($input);
+                $employeeManager = EmployeeManager::create($input);
+                $input['employee_manager_id']= $employeeManager->id;
+                PostingManager::create($input);
             }
 
             if($request->filled('pr_detail_id')){
-                HrPostingproject::create($input);
+                $employeeProject = EmployeeProject::create($input);
+                $input['employee_project_id']= $employeeProject->id;
+                Postingproject::create($input);
             }
 
             if($request->filled('office_id')){
-                HrPostingOffice::create($input);
+                $employeeOffice = EmployeeOffice::create($input);
+                $input['employee_office_id']= $employeeOffice->id;
+                PostingOffice::create($input);
             }
 
     	});  //end transaction
@@ -155,54 +181,125 @@ class PostingController extends Controller
     	DB::transaction(function () use ($id,$input,$request) { 
 
            HrPosting::findOrFail($id)->update($input);
+            $input['hr_employee_id']= session('hr_employee_id');
+            $input['hr_posting_id']= $id;
 
-           if($request->filled('pr_detail_id')){
-                HrPostingproject::updateOrCreate(
-                        ['hr_posting_id'=> $id],       //It is find and update 
-                        $input); 
-            }else{
-                HrPostingproject::where('hr_posting_id',$id)->delete();
-            }
+            if($request->filled('hr_designation_id')){
+                $postingDesignation = PostingDesignation::where('hr_posting_id',$id)->first();
+                $employeeDesignation = EmployeeDesignation::updateOrCreate(
+                        ['id'=> $postingDesignation->employee_designation_id??''],       //It is find and update 
+                        $input);
+                $input['employee_designation_id']= $employeeDesignation->id;
+                PostingDesignation::updateOrCreate(
+                        ['hr_posting_id'=> $postingDesignation->hr_posting_id??''],       //It is find and update 
+                        $input);
 
-            if($request->filled('office_id')){
-                HrPostingOffice::updateOrCreate(
-                        ['hr_posting_id'=> $id],       //It is find and update 
-                        $input); 
             }else{
-                HrPostingOffice::where('hr_posting_id',$id)->delete();
+                $postingDesignation = PostingDesignation::where('hr_posting_id',$id)->first();
+                if($postingDesignation){
+                    $employeeDesignation = EmployeeDesignation::where('id',$postingDesignation->employee_designation_id)->first();
+                    $postingDesignation->delete();
+                    $employeeDesignation->delete();
+                }
             }
 
             if($request->filled('hr_department_id')){
-                HrPostingDepartment::updateOrCreate(
-                        ['hr_posting_id'=> $id],       //It is find and update 
-                        $input); 
-            }else{
-                HrPostingDepartment::where('hr_posting_id',$id)->delete();
-            }
+                $postingDepartment = PostingDepartment::where('hr_posting_id',$id)->first();
+                $employeeDepartment = EmployeeDepartment::updateOrCreate(
+                        ['id'=> $postingDepartment->employee_department_id??''],       //It is find and update 
+                        $input);
+                $input['employee_department_id']= $employeeDepartment->id;
+                PostingDepartment::updateOrCreate(
+                        ['hr_posting_id'=> $postingDepartment->hr_posting_id??''],       //It is find and update 
+                        $input);
 
-            if($request->filled('hr_designation_id')){
-                HrPostingDesignation::updateOrCreate(
-                        ['hr_posting_id'=> $id],       //It is find and update 
-                        $input); 
             }else{
-                HrPostingDesignation::where('hr_posting_id',$id)->delete();
+                $postingDepartment = PostingDepartment::where('hr_posting_id',$id)->first();
+                if($postingDepartment){
+                    $employeeDepartment = EmployeeDepartment::where('id',$postingDepartment->employee_department_id)->first();
+                    $postingDepartment->delete();
+                    $employeeDepartment->delete();
+                }
             }
 
             if($request->filled('hr_manager_id')){
-                HrPostingManager::updateOrCreate(
-                        ['hr_posting_id'=> $id],       //It is find and update 
-                        $input); 
+                $postingManager = PostingManager::where('hr_posting_id',$id)->first();
+                $employeeManager = EmployeeManager::updateOrCreate(
+                        ['id'=> $postingManager->employee_manager_id??''],       //It is find and update 
+                        $input);
+                $input['employee_manager_id']= $employeeManager->id;
+                PostingManager::updateOrCreate(
+                        ['hr_posting_id'=> $postingManager->hr_posting_id??''],       //It is find and update 
+                        $input);
+
             }else{
-                HrPostingManager::where('hr_posting_id',$id)->delete();
+                $postingManager = PostingManager::where('hr_posting_id',$id)->first();
+                if($postingManager){
+                    $employeeManager = EmployeeManager::where('id',$postingManager->employee_manager_id)->first();
+                    $postingManager->delete();
+                    $employeeManager->delete();
+                }
             }
 
-             if($request->filled('hr_salary_id')){
-                HrPostingSalary::updateOrCreate(
-                        ['hr_posting_id'=> $id],       //It is find and update 
-                        $input); 
+            if($request->filled('hr_salary_id')){
+                $postingSalary = PostingSalary::where('hr_posting_id',$id)->first();
+                $employeeSalary = EmployeeSalary::updateOrCreate(
+                        ['id'=> $postingSalary->employee_salary_id??''],       //It is find and update 
+                        $input);
+                $input['employee_salary_id']= $employeeSalary->id;
+
+                PostingSalary::updateOrCreate(
+                        ['hr_posting_id'=> $postingSalary->hr_posting_id??''],       //It is find and update 
+                        $input);
+
             }else{
-                HrPostingSalary::where('hr_posting_id',$id)->delete();
+                $postingSalary = PostingSalary::where('hr_posting_id',$id)->first();
+                if($postingSalary){
+                    $employeeSalary = EmployeeSalary::where('id',$postingSalary->employee_salary_id)->first();
+                    $postingSalary->delete();
+                    $employeeSalary->delete();
+                }
             }
+
+            if($request->filled('pr_detail_id')){
+                $postingProject = PostingProject::where('hr_posting_id',$id)->first();
+                $employeeProject = EmployeeProject::updateOrCreate(
+                        ['id'=> $postingProject->employee_project_id??''],       //It is find and update 
+                        $input);
+                $input['employee_project_id']= $employeeProject->id;
+                PostingProject::updateOrCreate(
+                        ['hr_posting_id'=> $postingProject->hr_posting_id??''],       //It is find and update 
+                        $input);
+
+            }else{
+                $postingProject = PostingProject::where('hr_posting_id',$id)->first();
+                if($postingProject){
+                    $employeeProject = EmployeeProject::where('id',$postingProject->employee_project_id)->first();
+                    $postingProject->delete();
+                    $employeeProject->delete();
+                }
+            }
+
+            if($request->filled('office_id')){
+                $postingOffice = PostingOffice::where('hr_posting_id',$id)->first();
+                $employeeOffice = EmployeeOffice::updateOrCreate(
+                        ['id'=> $postingOffice->employee_office_id??''],       //It is find and update 
+                        $input);
+                $input['employee_office_id']= $employeeOffice->id;
+                PostingOffice::updateOrCreate(
+                        ['hr_posting_id'=> $postingOffice->hr_posting_id??''],       //It is find and update 
+                        $input);
+
+            }else{
+                $postingOffice = PostingOffice::where('hr_posting_id',$id)->first();
+                if($postingOffice){
+                    $employeeOffice = EmployeeOffice::where('id',$postingOffice->employee_office_id)->first();
+                    $postingOffice->delete();
+                    $employeeOffice->delete();
+                }
+            }
+
+           
 
             //if document 
             if($request->hasFile('document')){
@@ -262,10 +359,54 @@ class PostingController extends Controller
         }
 
     	DB::transaction(function () use ($id) {  
+            $postingSalary = PostingSalary::where('hr_posting_id',$id)->first();
+            $employeeSalary = EmployeeSalary::where('id',$postingSalary->employee_salary_id??'')->first();
+
+            $postingDesignation = PostingDesignation::where('hr_posting_id',$id)->first();
+            $employeeDesignation = EmployeeDesignation::where('id',$postingDesignation->employee_designation_id??'')->first();
+
+            $postingDepartment = PostingDepartment::where('hr_posting_id',$id)->first();
+            $employeeDepartment = EmployeeDepartment::where('id',$postingDepartment->employee_department_id??'')->first();
+
+            $postingManager = PostingManager::where('hr_posting_id',$id)->first();
+            $employeeManager = EmployeeManager::where('id',$postingManager->employee_manager_id??'')->first();
+
+            $postingOffice = PostingOffice::where('hr_posting_id',$id)->first();
+            $employeeOffice = EmployeeOffice::where('id',$postingOffice->employee_office_id??'')->first();
+
+            $postingProject = PostingProject::where('hr_posting_id',$id)->first();
+            $employeeProject = EmployeeProject::where('id',$postingProject->employee_project_id??'')->first();
+
 
     	 	$hrPosting = HrPosting::find($id);
             $hrPosting->delete();
-            app('App\Http\Controllers\Hr\DocumentationController')->destroy($hrPosting->hr_documentation_id);
+             if($employeeSalary){
+                $employeeSalary->delete();
+                }
+                if($employeeDesignation){
+                $employeeDesignation->delete();
+                }
+                if( $employeeDepartment){
+                $employeeDepartment->delete();
+                }
+                if($employeeProject){
+                $employeeProject->delete();
+                }
+                if($employeeOffice){
+                $employeeOffice->delete();
+                }
+                if($employeeManager){
+                $employeeManager->delete();
+                }
+
+            $hrDocument = HrDocumentation::findOrFail($hrPosting->hr_documentation_id);
+            $path = public_path('storage/'.$hrDocument->path.$hrDocument->file_name);
+            if(File::exists($path)){
+                File::delete($path);
+            }
+            $hrDocument->forceDelete();
+
+            //app('App\Http\Controllers\Hr\DocumentationController')->destroy($hrPosting->hr_documentation_id);
     		
     	 }); // end transcation
 
