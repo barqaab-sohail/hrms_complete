@@ -207,7 +207,7 @@ $(document).ready(function(){
            
             $('.fa-spinner').show(); 
             submitForm(this, url);
-            //refreshTable("{{route('promotion.table')}}",1000);
+            refreshTable("{{route('promotion.table')}}",1000);
         });
        
 

@@ -186,7 +186,9 @@ class PromotionController extends Controller
                         ['id'=> $promotionDesignation->employee_designation_id??''],       //It is find and update 
                         $input);
                 $input['employee_designation_id']= $employeeDesignation->id;
-                PromotionDesignation::create($input);
+                PromotionDesignation::updateOrCreate(
+                        ['hr_promotion_id'=> $promotionDesignation->hr_promotion_id??''],       //It is find and update 
+                        $input);
 
             }else{
                 $promotionDesignation = PromotionDesignation::where('hr_promotion_id',$id)->first();
@@ -203,7 +205,9 @@ class PromotionController extends Controller
                         ['id'=> $promotionDepartment->employee_department_id??''],       //It is find and update 
                         $input);
                 $input['employee_department_id']= $employeeDepartment->id;
-                PromotionDepartment::create($input);
+                PromotionDepartment::updateOrCreate(
+                        ['hr_promotion_id'=> $promotionDepartment->hr_promotion_id??''],       //It is find and update 
+                        $input);
 
             }else{
                 $promotionDepartment = PromotionDepartment::where('hr_promotion_id',$id)->first();
@@ -220,8 +224,9 @@ class PromotionController extends Controller
                         ['id'=> $promotionCategory->employee_category_id??''],       //It is find and update 
                         $input);
                 $input['employee_category_id']= $employeeCategory->id;
-                PromotionCategory::create($input);
-
+                PromotionCategory::updateOrCreate(
+                        ['hr_promotion_id'=> $promotionCategory->hr_promotion_id??''],       //It is find and update 
+                        $input);
             }else{
                 $promotionCategory = PromotionCategory::where('hr_promotion_id',$id)->first();
                 if($promotionCategory){
@@ -237,7 +242,9 @@ class PromotionController extends Controller
                         ['id'=> $promotionManager->employee_manager_id??''],       //It is find and update 
                         $input);
                 $input['employee_manager_id']= $employeeManager->id;
-                PromotionManager::create($input);
+                PromotionManager::updateOrCreate(
+                        ['hr_promotion_id'=> $promotionManager->hr_promotion_id??''],       //It is find and update 
+                        $input);
 
             }else{
                 $promotionManager = PromotionManager::where('hr_promotion_id',$id)->first();
@@ -254,7 +261,9 @@ class PromotionController extends Controller
                         ['id'=> $promotionSalary->employee_salary_id??''],       //It is find and update 
                         $input);
                 $input['employee_salary_id']= $employeeSalary->id;
-                PromotionSalary::create($input);
+                PromotionSalary::updateOrCreate(
+                        ['hr_promotion_id'=> $promotionSalary->hr_promotion_id??''],       //It is find and update 
+                        $input);
 
             }else{
                 $promotionSalary = PromotionSalary::where('hr_promotion_id',$id)->first();
@@ -271,7 +280,9 @@ class PromotionController extends Controller
                         ['id'=> $promotionGrade->employee_grade_id??''],       //It is find and update 
                         $input);
                 $input['employee_grade_id']= $employeeGrade->id;
-                PromotionGrade::create($input);
+                PromotionGrade::updateOrCreate(
+                        ['hr_promotion_id'=> $promotionGrade->hr_promotion_id??''],       //It is find and update 
+                        $input);
 
             }else{
                 $promotionGrade = PromotionGrade::where('hr_promotion_id',$id)->first();
