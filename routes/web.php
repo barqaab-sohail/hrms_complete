@@ -162,9 +162,9 @@ Route::group(['prefix' => 'hrms/admin', 'middleware' => 'auth', 'namespace'=>'Ad
 
 });
 
-//Admin Routes
+//Invoice Routes
 Route::group(['prefix' => 'invoice', 'middleware' => 'auth', 'namespace'=>'Invoice'], function(){
-	Route::resource('/', 'InvoiceController');
+	Route::resource('/invoice', 'InvoiceController');
 	Route::resource('/invoiceRights', 'InvoiceRightsController');
 
 });
