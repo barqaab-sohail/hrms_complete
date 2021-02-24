@@ -66,7 +66,7 @@ class LoginController extends Controller
         } 
         
         //check Employee is Onboard
-        if ($user->hrEmployee->hr_status_id != 'Onboard'){
+        if ($user->hrEmployee->hr_status_id != 'Active'){
               return view('auth.login')->withErrors("Please Contact to HR");
         }
       

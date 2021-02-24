@@ -27,7 +27,7 @@ class HrEmployee extends Model implements Auditable
     public function statusOptions()
     {
         return [
-            1 => 'Onboard',
+            1 => 'Active',
             2 => 'Resigned',
             3 => 'Terminated',
             4 => 'Retired',

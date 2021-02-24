@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHrPostingProjectTable extends Migration
+class CreateInvoiceRightTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateHrPostingProjectTable extends Migration
      */
     public function up()
     {
-        Schema::create('hr_posting_projects', function (Blueprint $table) {
+        Schema::create('invoice_rights', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->bigInteger('hr_posting_id')->unsigned();
             $table->bigInteger('pr_detail_id')->unsigned();
+            $table->bigInteger('hr_employee_id')->unsigned();
             $table->timestamps();
-            $table->foreign('hr_posting_id')->references('id')->on('hr_postings')->onDelete('cascade');
-            $table->foreign('pr_detail_id')->references('id')->on('pr_details');
+            $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });
     }
 
@@ -31,6 +31,6 @@ class CreateHrPostingProjectTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hr_posting_projects');
+        Schema::dropIfExists('invoice_rights');
     }
 }

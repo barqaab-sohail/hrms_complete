@@ -27,12 +27,6 @@ use App\Models\Hr\PostingDepartment;
 use App\Models\Hr\PostingDesignation;
 use App\Models\Hr\PostingProject;
 use App\Models\Hr\PostingOffice;
-// use App\Models\Hr\HrPostingSalary;
-// use App\Models\Hr\HrPostingDesignation;
-// use App\Models\Hr\HrPostingDepartment;
-// use App\Models\Hr\HrPostingManager;
-// use App\Models\Hr\HrPostingProject;
-// use App\Models\Hr\HrPostingOffice;
 use App\Http\Requests\Hr\PostingStore;
 use DB;
 
@@ -337,24 +331,17 @@ class PostingController extends Controller
                 if(File::exists($path)){
                     File::delete($path);
                 }
-
                 //Update file detail
                 HrDocumentation::findOrFail($hrDocument->id)->update($input);
-
-
-            }
-
-           
+            }      
     	});  //end transaction
 
     	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
 
     }
 
-
-
     public function destroy ($id){
-         if(!in_array($id, session('posting_delete_ids'))){
+        if(!in_array($id, session('posting_delete_ids'))){
             return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 
@@ -380,7 +367,7 @@ class PostingController extends Controller
 
     	 	$hrPosting = HrPosting::find($id);
             $hrPosting->delete();
-             if($employeeSalary){
+                if($employeeSalary){
                 $employeeSalary->delete();
                 }
                 if($employeeDesignation){
