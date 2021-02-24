@@ -36,7 +36,7 @@
     <link href="{{asset('Massets/css/hrstyle.css') }}" rel="stylesheet">
      <link href="{{asset('Massets/select2/select2.min.css') }}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
-    <link href="{{asset('Massets/css/colors/blue.css') }}" id="theme" rel="stylesheet">
+    <link href="{{asset('Massets/css/colors/default.css') }}" id="theme" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -113,7 +113,7 @@ thead th {
 
 @yield('footer')
     <div style="text-align:center">
-        <p>HRMS 4.0 - Developed by: BARQAAB IT</p>
+        <p>HRMS 5.10 - Developed by: BARQAAB IT</p>
     </div>
 </body>
 </html>
