@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Project\PrDetail;
 use App\Models\Invoice\InvoiceRight;
+use App\Http\Requests\Invoice\InvoiceRightStore;
 use DB;
 use DataTables;
 
@@ -20,7 +21,7 @@ class InvoiceRightsController extends Controller
     	return view ('invoice.rights', compact('projects', 'employees'));
     }
 
-    public function store (Request $request){
+    public function store (InvoiceRightStore $request){
 
         DB::transaction(function () use ($request) {  
         	

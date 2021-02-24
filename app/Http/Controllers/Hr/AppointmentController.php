@@ -79,9 +79,9 @@ class AppointmentController extends Controller
         $employeeCategory = EmployeeCategory::where('hr_employee_id',$id)->first();
         $employeeProject = EmployeeProject::where('hr_employee_id',$id)->first();
 
-        $employeeGrade = EmployeeGrade::where('hr_employee_id',$id)->first();
+        $employeeGrade = EmployeeGrade::where('effective_date',$input ['joining_date'])->first();
        
-            DB::transaction(function () use ($input, $appointment, $employeeManager, $employeeDesignation, $employeeDepartment, $employeeSalary, $employeeOffice, $employeeCategory, $employeeProject, $employeeGrade) {  
+            DB::transaction(function () use ($input, $request, $appointment, $employeeManager, $employeeDesignation, $employeeDepartment, $employeeSalary, $employeeOffice, $employeeCategory, $employeeProject, $employeeGrade) {  
                 //check if appointment exist then update else create
 
                 EmployeeAppointment::updateOrCreate(
@@ -115,10 +115,15 @@ class AppointmentController extends Controller
                 EmployeeProject::updateOrCreate(
                           ['id' => $employeeProject->id??''],
                           $input);
-
+                if($request->filled('hr_grade_id')){
                 EmployeeGrade::updateOrCreate(
                           ['id' => $employeeGrade->id??''],
                           $input);
+                }else{
+                  if($employeeGrade){
+                    $employeeGrade->delete();
+                  }
+                }
 
         	}); // end transcation
 
