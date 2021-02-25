@@ -18,7 +18,7 @@ class CreateInvoiceTable extends Migration
             $table->id();
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->bigInteger('invoice_type_id')->unsigned();
-            $table->bigInteger('cost_type_id')->unsigned();
+            $table->bigInteger('invoice_status_id')->unsigned()->default(1)->comment('1 Pending, 2 Received' );
             $table->string('invoice_no')->unique();
             $table->date('invoice_date');
             $table->text('description');
@@ -26,7 +26,7 @@ class CreateInvoiceTable extends Migration
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
             $table->foreign('invoice_type_id')->references('id')->on('invoice_types');
-            $table->foreign('cost_type_id')->references('id')->on('cost_types');
+            $table->foreign('invoice_status_id')->references('id')->on('invoice_statuses');
         });
     }
 
