@@ -30,7 +30,7 @@ class PermissionController extends Controller
 
     	}); // end transcation
 
-    	 return back()->with('message', 'Data Sucessfully Saved');
+    	 return back()->with('message', 'Data Successfully Saved');
     }
 
 
@@ -46,7 +46,7 @@ class PermissionController extends Controller
 
     	}); // end transcation
 
-       return back()->with('message', 'Data Sucessfully Deleted');
+       return back()->with('message', 'Data Successfully Deleted');
     }
 
 }

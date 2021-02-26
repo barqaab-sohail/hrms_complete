@@ -132,7 +132,7 @@ class PostingController extends Controller
 
     	});  //end transaction
 
-    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
 
     }
 
@@ -336,7 +336,7 @@ class PostingController extends Controller
             }      
     	});  //end transaction
 
-    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
 
     }
 
@@ -398,7 +398,7 @@ class PostingController extends Controller
     	 }); // end transcation
 
 
-        return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
+        return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Deleted']);
 
     }
 

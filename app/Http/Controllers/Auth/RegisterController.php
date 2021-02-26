@@ -88,7 +88,7 @@ class RegisterController extends Controller
                 ->where('email', $request->email)
                 ->update(['user_status' => 1, 'email_verified_at' =>  \Carbon\Carbon::now(),'password' => Hash::make($request->password) ]); 
 
-        return redirect()->route('login')->with('success', 'You are sucessfully registered')->with(['email'=>$request->email]);
+        return redirect()->route('login')->with('success', 'You are Successfully registered')->with(['email'=>$request->email]);
 
         }else{
 

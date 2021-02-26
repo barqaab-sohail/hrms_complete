@@ -127,7 +127,7 @@ class AppointmentController extends Controller
 
         	}); // end transcation
 
-          return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Update"]);
+          return response()->json(['status'=> 'OK', 'message' => "Data Successfully Update"]);
 
 
     }

@@ -9,6 +9,7 @@ use App\Models\Invoice\InvoiceRight;
 use App\Models\Invoice\InvoiceType;
 use App\Models\Invoice\CostType;
 use App\Models\Project\PrDetail;
+use App\Http\Requests\Invoice\InvoiceStore;
 
 class InvoiceController extends Controller
 {
@@ -21,6 +22,13 @@ class InvoiceController extends Controller
          $costTypes = CostType::all();
 
     	return view ('invoice.create', compact('projects','invoiceTypes','costTypes'));
+    }
+
+    public function store(InvoiceStore $request){
+
+
+    	return response()->json(['status'=> 'OK', 'message' => "$data Data Successfully Saved"]);
+
     }
 
 

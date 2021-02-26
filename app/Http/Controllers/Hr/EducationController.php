@@ -39,7 +39,7 @@ class EducationController extends Controller
             }); // end transcation
 
     		
-            return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+            return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
     }
 
 
@@ -94,7 +94,7 @@ class EducationController extends Controller
 
         }); // end transcation
         
-        return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
         }else{
             return response()->json(['status'=> 'Not OK', 'message' => "This degree is already saved"]);
         }
@@ -112,7 +112,7 @@ class EducationController extends Controller
         //HrEducation::find($id)->delete();
 
         
-        return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
+        return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Deleted']);
     }
 
 

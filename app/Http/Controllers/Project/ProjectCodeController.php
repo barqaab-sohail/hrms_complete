@@ -34,6 +34,6 @@ class ProjectCodeController extends Controller
 
 	
 
-		return response()->json(['status'=> 'OK', 'message' => "Project Code Generated Sucessfully", 'code'=>$projectCode]);
+		return response()->json(['status'=> 'OK', 'message' => "Project Code Generated Successfully", 'code'=>$projectCode]);
 	}
 }

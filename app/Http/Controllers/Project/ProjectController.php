@@ -64,7 +64,7 @@ class ProjectController extends Controller
     	}); // end transcation
 
 
-		return response()->json(['status'=> 'OK', 'message' => 'Project Sucessfully Saved']);
+		return response()->json(['status'=> 'OK', 'message' => 'Project Successfully Saved']);
 
 	}
 
@@ -110,7 +110,7 @@ class ProjectController extends Controller
     	}); // end transcation
 
         
-    	return response()->json(['status'=> 'OK', 'message' => "$id Data Sucessfully Updated"]);
+    	return response()->json(['status'=> 'OK', 'message' => "$id Data Successfully Updated"]);
         
 	}
 
@@ -119,7 +119,7 @@ class ProjectController extends Controller
 
 		
         PrDetail::findOrFail($id)->delete();
-		return back()->with('message', 'Data Sucessfully Updated');
+		return back()->with('message', 'Data Successfully Updated');
 
 	}
 

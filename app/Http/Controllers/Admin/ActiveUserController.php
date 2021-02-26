@@ -45,7 +45,7 @@ class ActiveUserController extends Controller
 
 			$loginUser->delete();
 			}
-			return response()->json(['status'=> 'OK', 'message' => "All Users Logout Sucessfully"]);
+			return response()->json(['status'=> 'OK', 'message' => "All Users Logout Successfully"]);
 		} else {
 
 			$user = Session::where('user_id', $id)->first();
@@ -53,7 +53,7 @@ class ActiveUserController extends Controller
 				
 				$user->update(array('user_id' => Null));
 
-				return response()->json(['status'=> 'OK', 'message' => "User Logout Sucessfully"]);
+				return response()->json(['status'=> 'OK', 'message' => "User Logout Successfully"]);
 			}else{
 				return response()->json(['status'=> 'Not OK', 'message' => "This User is not Login"]);
 			}

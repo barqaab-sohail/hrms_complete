@@ -70,7 +70,7 @@ class SubmissionController extends Controller
 
     	}); // end transcation
 
-		return response()->json(['status'=> 'OK', 'message' => "Submission Sucessfully Saved and Sumission No. is $submissionCode"]);
+		return response()->json(['status'=> 'OK', 'message' => "Submission Successfully Saved and Sumission No. is $submissionCode"]);
 	}
 
 
@@ -119,14 +119,14 @@ class SubmissionController extends Controller
 
     	}); // end transcation
 
-    	return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Updated']);
+    	return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Updated']);
         
 	}
 
 	public function destroy($id){
 
 		Submission::findOrFail($id)->delete();
-		return back()->with('message', 'Data Sucessfully Updated');
+		return back()->with('message', 'Data Successfully Updated');
 
 	}
 

@@ -37,7 +37,7 @@ class EmergencyController extends Controller
     	}); // end transcation
 
 
-      return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Updated']);
+      return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Updated']);
 
     }
 }

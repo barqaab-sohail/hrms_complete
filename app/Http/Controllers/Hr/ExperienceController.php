@@ -36,7 +36,7 @@ class ExperienceController extends Controller
             }); // end transcation
 
             
-            return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+            return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
     }
 
 
@@ -73,7 +73,7 @@ class ExperienceController extends Controller
 
         }); // end transcation
         
-        return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
+        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);
         
     }
 
@@ -86,7 +86,7 @@ class ExperienceController extends Controller
         HrExperience::find($id)->delete();
 
        
-        return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
+        return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Deleted']);
     }
 
 

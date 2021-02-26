@@ -54,7 +54,7 @@ class ContactController extends Controller
 
     	}); // end transcation
 
-    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
 
     }
 
@@ -98,7 +98,7 @@ class ContactController extends Controller
 
     	}); // end transcation
     	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
-    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated", 'dataTable'=>$hrContacts]);
+    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated", 'dataTable'=>$hrContacts]);
     }
 
 
@@ -109,7 +109,7 @@ class ContactController extends Controller
     	
     	HrContact::findOrFail($id)->delete(); 
 
-    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
+    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
     }
 
     public function refreshTable(){
