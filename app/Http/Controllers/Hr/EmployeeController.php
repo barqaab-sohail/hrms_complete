@@ -78,7 +78,7 @@ class EmployeeController extends Controller
     //     }
         
     // }
-    //    echo "data sucessfully update";
+    //    echo "data Successfully update";
         
 
 
@@ -116,7 +116,7 @@ class EmployeeController extends Controller
 
         //return response()->json(['url'=>url('/dashboard')]);
         
-    	return response()->json(['url'=> route("employee.edit",$employee),'message' => 'Data Sucessfully Saved']);
+    	return response()->json(['url'=> route("employee.edit",$employee),'message' => 'Data Successfully Saved']);
     }
 
     public function index(){
@@ -177,9 +177,9 @@ class EmployeeController extends Controller
     		}); // end transcation
         
         if($request->ajax()){
-    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
+    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);
         }else{
-            return back()->with('message', 'Data Sucessfully Updated');
+            return back()->with('message', 'Data Successfully Updated');
         }
     }
 
@@ -193,8 +193,8 @@ class EmployeeController extends Controller
 
         HrEmployee::findOrFail($id)->delete();
 
-       return back()->with('message', 'Data Sucessfully Deleted');
-        //return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
+       return back()->with('message', 'Data Successfully Deleted');
+        //return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Deleted']);
     }
 
     public function employeeCnic(Request $request){

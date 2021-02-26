@@ -49,7 +49,7 @@ class UserLoginController extends Controller
 
 		});
 
-		return response()->json(['status'=> 'OK', 'message' => "Permission Sucessfully Saved"]);
+		return response()->json(['status'=> 'OK', 'message' => "Permission Successfully Saved"]);
 
 	}
 
@@ -57,7 +57,7 @@ class UserLoginController extends Controller
 		$data = HrEmployee::find(session('hr_employee_id'));
 		$user = User::where('id',$data->user_id)->first();
 		$user->revokePermissionTo($id);
-		return response()->json(['status'=> 'OK', 'message' => "Permission Sucessfully Deleted"]);
+		return response()->json(['status'=> 'OK', 'message' => "Permission Successfully Deleted"]);
 
 	}
 

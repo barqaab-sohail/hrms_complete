@@ -139,7 +139,7 @@ class CvController extends Controller
 
 		});  //end transaction
 
-		return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+		return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
 				
 	}
 
@@ -355,7 +355,7 @@ class CvController extends Controller
 
 		});	//end transaction
 		
-    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
+    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);
 
     }
 

@@ -35,7 +35,7 @@ Route::resource('/','RegisterController',['only'=>['create','store']]);
 
 
 //HR Routes
-Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Hr'], function(){
+Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Hr'], function(){
 Route::post('/employeeCnic','EmployeeController@employeeCnic')->name('employee.cnic');
 //temporary
 Route::get('/employee/allEmployeeList', 'EmployeeController@allEmployeeList')->name('employee.allEmployeeList');
@@ -88,7 +88,7 @@ Route::get('/charts/category', 'HrChartController@category')->name('charts.categ
 });
 
 
-Route::group(['prefix' => 'input', 'middleware' => 'auth', 'namespace'=>'input'], function(){
+Route::group(['prefix' => 'input', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'input'], function(){
 	Route::resource('/inputMonth', 'InputMonthController');
 	Route::resource('/inputProject', 'InputProjectController');
 	Route::resource('/input', 'InputController');
@@ -100,7 +100,7 @@ Route::group(['prefix' => 'input', 'middleware' => 'auth', 'namespace'=>'input']
 
 
 //Self Services Routes
-Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Self'], function(){
+Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Self'], function(){
 
 	Route::get('/selfServices/task/{id}','SelfTaskController@updateStatus')->name('task.updateStatus');
 	Route::resource('/selfServices/task','SelfTaskController');
@@ -110,7 +110,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Self'], 
 
 //CV Routes
 
-Route::group(['prefix' => 'hrms/cvData', 'middleware' => 'auth', 'namespace'=>'Cv'], function(){
+Route::group(['prefix' => 'hrms/cvData', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Cv'], function(){
 Route::get('/autocomplete/fetch', 'CvController@fetch')->name('autocomplete.fetch');
 Route::post('/cvCnic','CvController@cvCnic')->name('cv.cnic');
 Route::get('/search','CvController@search')->name('cv.search');
@@ -126,7 +126,7 @@ Route::resource('/cvDocument', 'CvDocumentController');
 });
 
 //Projects Routes
-Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'Project'], function(){
+Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Project'], function(){
 Route::post('/project/import', 'ProjectController@import')->name('project.import');
 Route::resource('/project', 'ProjectController');
 Route::resource('/projectPartner', 'ProjectPartnerController');
@@ -146,7 +146,7 @@ Route::resource('/projectCode', 'ProjectCodeController');
 
 
 //Submission Routes
-Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'submission'], function(){
+Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'submission'], function(){
 	Route::resource('/submission', 'SubmissionController');
 	Route::resource('/submissionDocument', 'SubmissionDocumentController');
 	Route::get('/submissionDocument/refreshTable', 'SubmissionDocumentController@refreshTable')->name('submissionDocument.table');
@@ -154,7 +154,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => 'auth', 'namespace'=>'submissi
 });
 
 //Admin Routes
-Route::group(['prefix' => 'hrms/admin', 'middleware' => 'auth', 'namespace'=>'Admin'], function(){
+Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Admin'], function(){
 	Route::get('/lastLogin', 'ActiveUserController@lastLogin')->name('lastLogin.detail');
 	Route::get('/activeUser', 'ActiveUserController@index')->name('activeUser.index');
 	Route::get('/logoutAll/{id?}', 'ActiveUserController@logoutAll')->name('logout.all');
@@ -163,7 +163,7 @@ Route::group(['prefix' => 'hrms/admin', 'middleware' => 'auth', 'namespace'=>'Ad
 });
 
 //Invoice Routes
-Route::group(['prefix' => 'invoice', 'middleware' => 'auth', 'namespace'=>'Invoice'], function(){
+Route::group(['prefix' => 'invoice', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Invoice'], function(){
 	Route::resource('/invoice', 'InvoiceController');
 	Route::resource('/invoiceRights', 'InvoiceRightsController');
 
@@ -175,7 +175,7 @@ Route::group(['prefix' => 'invoice', 'middleware' => 'auth', 'namespace'=>'Invoi
 
 
 //General Routes
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth','XssSanitizer']], function(){
 Route::get('/country/states/{id?}', 'CountryController@getStates')->name('states');
 Route::get('/country/cities/{id?}', 'CountryController@getCities')->name('cities');
 });

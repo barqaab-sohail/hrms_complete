@@ -72,7 +72,7 @@ class ProjectConsultancyCostController extends Controller
 
     	}); // end transcation
 
-		return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+		return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
 	}
 
 
@@ -154,7 +154,7 @@ class ProjectConsultancyCostController extends Controller
 
     	}); // end transcation
 
-		return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
+		return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);
 
 	}
 
@@ -162,7 +162,7 @@ class ProjectConsultancyCostController extends Controller
 	public function destroy($id){
 
 		PrConsultancyCost::findOrFail($id)->delete();
-		return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
+		return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
 		
 	}
 

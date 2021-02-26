@@ -82,7 +82,7 @@ class DocumentationController extends Controller
 
     	});  //end transaction
 
-    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
 
     }
 
@@ -197,7 +197,7 @@ class DocumentationController extends Controller
 
         // });  //end transaction
 
-        return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
+        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);
 
 
 
@@ -218,7 +218,7 @@ class DocumentationController extends Controller
             File::delete($path);
         }
             $hrDocument->forceDelete();
-            return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
+            return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
 
     }
 

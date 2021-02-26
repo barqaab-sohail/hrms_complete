@@ -59,7 +59,7 @@ class CvDocumentController extends Controller
 			CvAttachment::create($attachment);
 
 		});  //end transaction
-        	return response()->json(['status'=> 'OK', 'message' => "Document Sucessfully Saved"]);
+        	return response()->json(['status'=> 'OK', 'message' => "Document Successfully Saved"]);
     }
 
     public function edit(Request $request, $id){
@@ -115,7 +115,7 @@ class CvDocumentController extends Controller
             }); // end transcation
 
         }
-        return response()->json(['status'=> 'OK', 'message' => "Document Sucessfully Updated"]);
+        return response()->json(['status'=> 'OK', 'message' => "Document Successfully Updated"]);
 
 
     }
@@ -133,7 +133,7 @@ class CvDocumentController extends Controller
                 File::delete($path);
             }
         $cvDocument->forceDelete();
-        return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Deleted"]);
+        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
 
     }
 

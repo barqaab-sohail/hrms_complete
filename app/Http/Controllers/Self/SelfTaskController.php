@@ -37,7 +37,7 @@ class SelfTaskController extends Controller
             SsTask::create($input);
         }); // end transcation
 
-    	return response()->json(['status'=> 'OK', 'message' => " Data Sucessfully Saved"]);
+    	return response()->json(['status'=> 'OK', 'message' => " Data Successfully Saved"]);
     }
 
     public function edit(Request $request, $id){
@@ -68,7 +68,7 @@ class SelfTaskController extends Controller
 
              SsTask::findOrFail($id)->update($input);
 
-            return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
+            return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);
 
 
     }
@@ -83,7 +83,7 @@ class SelfTaskController extends Controller
              $taskStatus->update(['status'=>0]);
         }
 
-        return response()->json(['status'=> 'OK', 'message' => "Status Sucessfully Changed"]);
+        return response()->json(['status'=> 'OK', 'message' => "Status Successfully Changed"]);
     }
 
 
@@ -92,6 +92,6 @@ class SelfTaskController extends Controller
         
         SsTask::findOrFail($id)->delete(); 
 
-        return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
+        return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Deleted']);
     }
 }

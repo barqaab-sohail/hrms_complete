@@ -121,7 +121,7 @@ class InputMonthController extends Controller
    //          DB::transaction(function () use ($input, &$data) {  
    //              $data = HrInputMonth::create($input);
    //          }); // end transcation
-   //  	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved", 'data'=>$data]);
+   //  	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved", 'data'=>$data]);
 
    //  }
 
@@ -136,7 +136,7 @@ class InputMonthController extends Controller
         
    //      $data = HrInputMonth::findOrFail($id);
 
-   //      return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved", 'data'=>$data]);
+   //      return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved", 'data'=>$data]);
 
    //  }
 

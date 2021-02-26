@@ -8,7 +8,7 @@
 	<div class="card-body">	
 		<div class="row">
             <div class="card-body" >
-                <form id= "createInvoice" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('invoice.store')}}" enctype="multipart/form-data">
+                <form id= "createInvoiceForm" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('invoice.store')}}" enctype="multipart/form-data">
                 @csrf
                     <div class="form-body">
                             
@@ -74,7 +74,7 @@
                                 <div class="form-group row">
                                     <div class="col-md-12">
                                         <label class="control-label text-right">Invoice No.<span class="text_requried">*</span></label><br>     
-                                        <input type="text" name="invoice" value="{{ old('invoice') }}" class="form-control exempted" data-validation="required" >
+                                        <input type="text" name="invoice_no" value="{{ old('invoice_no') }}" class="form-control exempted" data-validation="required" >
                                     </div>
                                 </div>
                             </div>
@@ -116,10 +116,10 @@
                                 <div class="form-group row">
                                     <div class="col-md-12 required">
                                         <label class="control-label text-right">Cost Type<span class="text_requried">*</span></label><br>
-                                            <select id="cost_type_id" name="cost_type_id[]" data-validation="required" class="form-control">
+                                            <select id="cost_type_id" name="cost_type_id" data-validation="required" class="form-control">
                                            <option></option>
                                             @foreach($costTypes as $costType)
-                                            <option value="{{$costType->id}}" {{(old("cost_type_id.0")==$costType->id? "selected" : "")}}>{{$costType->name}}</option>
+                                            <option value="{{$costType->id}}" {{(old("cost_type_id")==$costType->id? "selected" : "")}}>{{$costType->name}}</option>
                                             @endforeach
                                           
                                         </select>
@@ -132,8 +132,7 @@
                                 <div class="form-group row">
                                     <div class="col-md-12 ">
                                         <label class="control-label">Cost Excluding Sales Tax</label>
-                                        <input type="text" name="cost[]" value="{{old('cost.0')}}" class="form-control prc_1" >
-
+                                        <input type="text" name="cost" value="{{old('cost')}}" class="form-control prc_1" data-validation="required" >
                                     </div>
                                 </div>
                             </div>
@@ -142,23 +141,23 @@
                                 <div class="form-group row">
                                     <div class="col-md-12 ">
                                         <label class="control-label">Sales Tax</label>
-                                        <input type="text" name="sales_tax[]" value="{{old('sales_tax.0')}}" class="form-control prc_1">
+                                        <input type="text" name="sales_tax" value="{{old('sales_tax')}}" class="form-control prc_1" data-validation="required">
                                     </div>
                                 </div>
                             </div>
                             <!--/span 4-3 -->
                             <div class="col-md-6">
                                 <div class="form-group row">
-                                    <div class="col-md-4">
-                                         <label class="control-label">Total</label>
-                                        <input type="text" id='total_1' name="total[]" value="{{old('total.0')}}" class="form-control" readonly>
-                                    </div>
                                     <div class="col-md-8">
+                                         <label class="control-label">Total</label>
+                                        <input type="text" id='total_1' name="total" value="{{old('total')}}" class="form-control" readonly>
+                                    </div>
+                                    <!-- <div class="col-md-8">
                                     <br>
                                         <div class="float-right">
                                         <button type="button" name="add" id="add" class="btn btn-success add" >+</button>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
 
@@ -181,7 +180,7 @@
                                 <div class="form-group row">
                                     <div class="col-md-12 ">
                                         <label class="control-label">Escalation Cost</label>
-                                        <input type="text" name="esc_cost" value="{{old('esc_cost')}}" class="form-control prc_1" >
+                                        <input type="text" name="esc_cost" id="esc_cost" value="{{old('esc_cost')}}" class="form-control esc_1" >
 
                                     </div>
                                 </div>
@@ -191,14 +190,19 @@
                                 <div class="form-group row">
                                     <div class="col-md-12 ">
                                         <label class="control-label">Sales Tax</label>
-                                        <input type="text" name="esc_sales_tax" value="{{old('esc_sales_tax')}}" class="form-control">
+                                        <input type="text" name="esc_sales_tax" id="esc_sales_tax" value="{{old('esc_sales_tax')}}" class="form-control esc_1">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="d-flex justify-content-center">
-                            <h2><span id='total_invoice'></span></h2>
+                             <!--/span 4-2 -->
+                            <div class="col-md-4 hideDiv">
+                                <div class="form-group row">
+                                    <div class="col-md-8">
+                                         <label class="control-label">Total Escalation</label>
+                                        <input type="text" id='total_escalation' name="total" value="{{old('total')}}" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                       
                        
@@ -255,38 +259,38 @@ formFunctions();
 
     })
 
-    //Dynamic add Cost
+    // //Dynamic add Cost
     
-    // Add new element
-     $("#add").click(function(){
+    // // Add new element
+    //  $("#add").click(function(){
         
-      // Finding total number of elements added
-      var total_element = $(".cost").length;
+    //   // Finding total number of elements added
+    //   var total_element = $(".cost").length;
         
-      // last <div> with element class id
-      var lastid = $(".cost:last").attr("id");
-      var split_id = lastid.split("_");
-      var nextindex = Number(split_id[1]) + 1;
-      var max = 2;
-      // Check total number elements
-      if(total_element < max ){
-       //Clone Cost div and copy 
-        $('.cost').find('select').chosen('destroy');
-        var clone = $("#cost_1").clone();
-        clone.prop('id','cost_'+nextindex).find('input:text').val('');
-        clone.find('.prc_1').addClass('prc_2').removeClass('prc_1');
-        clone.find('#total_1').attr("id","total_2");
-        clone.find("#add").html('X').prop("class", "btn btn-danger remove remove_cost");
-        clone.insertAfter("div.cost:last");
-        $('.cost').find('select').chosen();
+    //   // last <div> with element class id
+    //   var lastid = $(".cost:last").attr("id");
+    //   var split_id = lastid.split("_");
+    //   var nextindex = Number(split_id[1]) + 1;
+    //   var max = 2;
+    //   // Check total number elements
+    //   if(total_element < max ){
+    //    //Clone Cost div and copy 
+    //     $('.cost').find('select').chosen('destroy');
+    //     var clone = $("#cost_1").clone();
+    //     clone.prop('id','cost_'+nextindex).find('input:text').val('');
+    //     clone.find('.prc_1').addClass('prc_2').removeClass('prc_1');
+    //     clone.find('#total_1').attr("id","total_2");
+    //     clone.find("#add").html('X').prop("class", "btn btn-danger remove remove_cost");
+    //     clone.insertAfter("div.cost:last");
+    //     $('.cost').find('select').chosen();
        
-      }
+    //   }
      
-    });
-     // Remove element
-     $(document).on("click", '.remove_cost', function(){
-     $(this).closest(".cost").remove();
-    }); 
+    // });
+    //  // Remove element
+    //  $(document).on("click", '.remove_cost', function(){
+    //  $(this).closest(".cost").remove();
+    // }); 
 	
     //automatic total
     $(".form-group").on("input", ".prc_1", function() {
@@ -302,42 +306,72 @@ formFunctions();
         $("#total_1").val(sum);
     });
 
-     //automatic total.
-    $(document).on("input", ".prc_2", function() {
-        var sum = 0;
-        $(".form-group .prc_2").each(function(){
+     //total escalation
+    $(".form-group").on("input", ".esc_1", function() {
+    var sum = 0;
+        $(".form-group .esc_1").each(function(){
             var inputVal = $(this).val();
-            inputVal=inputVal.replace(/\,/g,'') // remove comma
             if ($.isNumeric(inputVal)){
             sum += parseFloat(inputVal);
             }
         });
         sum = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
-        $("#total_2").val(sum);      
+        $("#total_escalation").val(sum);
     });
 
-    //total Invoice
-    $(document).on('keyup', ".prc_1, .prc_2", function(event){
-        var total_1=$("#total_1").val();
-        total_1=total_1.replace(/\,/g,'') // remove comma
-        var total_invoice=0;
-        if(typeof $("#total_2").val()==='undefined'){
-            total_invoice= parseInt(total_1);
-            total_invoice = total_invoice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
-            $("#total_invoice").text('Total Invoice: '+total_invoice);
-        }else{
-            var total_2=$("#total_2").val();
-            total_2=total_2.replace(/\,/g,'') // remove comma
-            total_invoice= parseInt(total_2)+parseInt(total_1);
-            total_invoice = total_invoice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
-            $("#total_invoice").text('Total Invoice: '+total_invoice);
-        }
+    //  //automatic total.
+    // $(document).on("input", ".prc_2", function() {
+    //     var sum = 0;
+    //     $(".form-group .prc_2").each(function(){
+    //         var inputVal = $(this).val();
+    //         inputVal=inputVal.replace(/\,/g,'') // remove comma
+    //         if ($.isNumeric(inputVal)){
+    //         sum += parseFloat(inputVal);
+    //         }
+    //     });
+    //     sum = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+    //     $("#total_2").val(sum);      
+    // });
+
+    // //total Invoice
+    // $(document).on('keyup', ".prc_1, .prc_2", function(event){
+    //     var total_1=$("#total_1").val();
+    //     total_1=total_1.replace(/\,/g,'') // remove comma
+    //     var total_invoice=0;
+    //     if(typeof $("#total_2").val()==='undefined'){
+    //         total_invoice= parseInt(total_1);
+    //         total_invoice = total_invoice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+    //         $("#total_invoice").text('Total Invoice: '+total_invoice);
+    //     }else{
+    //         var total_2=$("#total_2").val();
+    //         total_2=total_2.replace(/\,/g,'') // remove comma
+    //         total_invoice= parseInt(total_2)+parseInt(total_1);
+    //         total_invoice = total_invoice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+    //         $("#total_invoice").text('Total Invoice: '+total_invoice);
+    //     }
         
-    });
+    // });
 
+    // $(document).on('keyup', ".esc_1", function(event){
+    //     var total_1=$("#total_1").val();
+    //     total_1=total_1.replace(/\,/g,'') // remove comma
+    //     var total_invoice=0;
+    //     if(typeof $("#total_2").val()==='undefined'){
+    //         total_invoice= parseInt(total_1);
+    //         total_invoice = total_invoice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+    //         $("#total_invoice").text('Total Invoice: '+total_invoice);
+    //     }else{
+    //         var total_2=$("#total_2").val();
+    //         total_2=total_2.replace(/\,/g,'') // remove comma
+    //         total_invoice= parseInt(total_2)+parseInt(total_1);
+    //         total_invoice = total_invoice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+    //         $("#total_invoice").text('Total Invoice: '+total_invoice);
+    //     }
+        
+    // });
 
     //Enter Comma after three digit
-    $(document).on('keyup', ".prc_1, .prc_2", function(event){
+    $(document).on('keyup', ".prc_1, .esc_1", function(event){
     //$(".prc_1, .prc_2").keyup(function(event) {
 
       // skip for arrow keys
@@ -351,6 +385,18 @@ formFunctions();
         ;
       });
     });
+
+     //submit function
+     $("#createInvoiceForm").submit(function(e) { 
+        e.preventDefault();
+        var url = $(this).attr('action');
+        $('.fa-spinner').show(); 
+        submitForm(this, url,1);
+        $("#total_invoice").text('');
+    });
+
+
+   
 
             
 });

@@ -27,7 +27,7 @@ class InputProjectController extends Controller
             }); // end transcation
 
             
-            return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+            return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
     }
 
     public function show($id){

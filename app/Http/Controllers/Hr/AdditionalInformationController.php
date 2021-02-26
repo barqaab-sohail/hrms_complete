@@ -105,8 +105,8 @@ class AdditionalInformationController extends Controller
 
         }); // end transcation
 
-         $input = json_encode($input['licence_no']);
-      	return response()->json(['status'=> 'OK', 'message' => "$input Data Sucessfully Updated"]);
+         
+      	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);
 
 	}
 

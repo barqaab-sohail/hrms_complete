@@ -39,7 +39,7 @@ class ExitController extends Controller
             }); // end transcation
 
             
-            return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Saved"]);
+            return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
     }
 
     public function edit (Request $request, $id){
@@ -77,7 +77,7 @@ class ExitController extends Controller
     	}); // end transcation
 
     	
-    	return response()->json(['status'=> 'OK', 'message' => "Data Sucessfully Updated"]);
+    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);
     }
 
      public function destroy($id){
@@ -94,7 +94,7 @@ class ExitController extends Controller
         
 
        
-        return response()->json(['status'=> 'OK', 'message' => 'Data Sucessfully Deleted']);
+        return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Deleted']);
     }
 
 
