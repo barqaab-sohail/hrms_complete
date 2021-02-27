@@ -19,7 +19,7 @@ class CreateInvoiceCostTable extends Migration
             $table->bigInteger('invoice_id')->unsigned();
             $table->bigInteger('cost_type_id')->unsigned();
             $table->decimal('cost',12,2);
-            $table->decimal('sales_tax',10,2);
+            $table->decimal('sales_tax',12,2);
             $table->timestamps();
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreign('cost_type_id')->references('id')->on('cost_types');
