@@ -14,7 +14,7 @@ class DocumentationStore extends FormRequest
      */
     private $documentNames;
 
-     public function __construct(\Illuminate\Http\Request $request)
+    public function __construct(\Illuminate\Http\Request $request)
     {
         
         $this->documentNames =  HrDocumentName::all()->pluck('name')->toArray();

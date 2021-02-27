@@ -115,8 +115,8 @@
                                 <!--/span 4-1 -->
                                 <div class="form-group row">
                                     <div class="col-md-12 required">
-                                        <label class="control-label text-right">Cost Type<span class="text_requried">*</span></label><br>
-                                            <select id="cost_type_id" name="cost_type_id" data-validation="required" class="form-control">
+                                        <label class="control-label text-right">Cost Type<span class="text_requried ">*</span></label><br>
+                                            <select id="cost_type_id" name="cost_type_id" data-validation="required" class="form-control selectTwo">
                                            <option></option>
                                             @foreach($costTypes as $costType)
                                             <option value="{{$costType->id}}" {{(old("cost_type_id")==$costType->id? "selected" : "")}}>{{$costType->name}}</option>
@@ -131,11 +131,20 @@
                             <div class="col-md-2">
                                 <div class="form-group row">
                                     <div class="col-md-12 ">
-                                        <label class="control-label">Cost Excluding Sales Tax</label>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                             <!--/span 4-2 -->
+                            <div class="col-md-2">
+                                <div class="form-group row">
+                                    <div class="col-md-12 ">
+                                        <label class="control-label">Invoice Cost</label>
                                         <input type="text" name="cost" value="{{old('cost')}}" class="form-control prc_1" data-validation="required" >
                                     </div>
                                 </div>
                             </div>
+                             <!--/span 4-2 -->
                              <!--/span 4-2 -->
                             <div class="col-md-2">
                                 <div class="form-group row">
@@ -146,7 +155,7 @@
                                 </div>
                             </div>
                             <!--/span 4-3 -->
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group row">
                                     <div class="col-md-8">
                                          <label class="control-label">Total</label>
@@ -170,7 +179,7 @@
                                     <div class="col-md-12 required">
                                         <div class="form-check form-switch">
                                           <input class="form-check-input" type="checkbox" id="escalation">
-                                          <label class="form-check-label" for="escalation">if Escalation Amount included in the above cost</label>
+                                          <label class="form-check-label" for="escalation">if Escalation included in the above cost</label>
                                         </div>
                                     </div>
                                 </div>
@@ -199,7 +208,7 @@
                                 <div class="form-group row">
                                     <div class="col-md-8">
                                          <label class="control-label">Total Escalation</label>
-                                        <input type="text" id='total_escalation' name="total" value="{{old('total')}}" class="form-control" readonly>
+                                        <input type="text" id='total_escalation' name="esc_total" value="{{old('esc_total')}}" class="form-control" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -234,7 +243,7 @@
 $(document).ready(function() {
 
 formFunctions();
-     $('.cost').find('select').chosen();
+    // $('.cost').find('select').chosen();
      $('#divFrom, #divTo').hide();
 
      $('#escalation').click(function(){
@@ -258,6 +267,77 @@ formFunctions();
         }
 
     })
+
+     //Enter Comma after three digit and restrict only digit
+    // $(document).on('keyup', ".prc_1, .esc_1", function(event){
+    // //$(".prc_1, .prc_2").keyup(function(event) {
+
+    //   // skip for arrow keys
+    //   if(event.which >= 37 && event.which <= 40) return;
+
+    //   // format number
+    //   $(this).val(function(index, value) {
+    //     return value
+    //     .replace(/\D/g, "")
+    //     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    //     ;
+    //   });
+    // });
+
+    $('.prc_1').keyup(function(){
+         // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+
+    });
+
+
+        //automatic total
+    $(".form-group").on("input", ".prc_1", function() {
+        var sum = 0;
+        $(".form-group .prc_1").each(function(){
+            var inputVal = $(this).val();
+            inputVal=inputVal.replace(/\,/g,'') // remove comma
+            if ($.isNumeric(inputVal)){
+            sum += parseFloat(inputVal);
+            }
+        });
+        sum = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+        $("#total_1").val(sum);
+    });
+
+     //total escalation
+    $(".form-group").on("input", ".esc_1", function() {
+    var sum = 0;
+        $(".form-group .esc_1").each(function(){
+            var inputVal = $(this).val();
+            if ($.isNumeric(inputVal)){
+            sum += parseFloat(inputVal);
+            }
+        });
+        sum = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+        $("#total_escalation").val(sum);
+    });
+
+       //submit function
+     $("#createInvoiceForm").submit(function(e) { 
+        e.preventDefault();
+        var url = $(this).attr('action');
+        $('.fa-spinner').show(); 
+        submitForm(this, url);
+        $("#total_invoice").text('');
+    });
+
+
+
+
 
     // //Dynamic add Cost
     
@@ -292,33 +372,7 @@ formFunctions();
     //  $(this).closest(".cost").remove();
     // }); 
 	
-    //automatic total
-    $(".form-group").on("input", ".prc_1", function() {
-        var sum = 0;
-        $(".form-group .prc_1").each(function(){
-            var inputVal = $(this).val();
-            inputVal=inputVal.replace(/\,/g,'') // remove comma
-            if ($.isNumeric(inputVal)){
-            sum += parseFloat(inputVal);
-            }
-        });
-        sum = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
-        $("#total_1").val(sum);
-    });
-
-     //total escalation
-    $(".form-group").on("input", ".esc_1", function() {
-    var sum = 0;
-        $(".form-group .esc_1").each(function(){
-            var inputVal = $(this).val();
-            if ($.isNumeric(inputVal)){
-            sum += parseFloat(inputVal);
-            }
-        });
-        sum = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
-        $("#total_escalation").val(sum);
-    });
-
+   
     //  //automatic total.
     // $(document).on("input", ".prc_2", function() {
     //     var sum = 0;
@@ -370,33 +424,7 @@ formFunctions();
         
     // });
 
-    //Enter Comma after three digit
-    $(document).on('keyup', ".prc_1, .esc_1", function(event){
-    //$(".prc_1, .prc_2").keyup(function(event) {
-
-      // skip for arrow keys
-      if(event.which >= 37 && event.which <= 40) return;
-
-      // format number
-      $(this).val(function(index, value) {
-        return value
-        .replace(/\D/g, "")
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        ;
-      });
-    });
-
-     //submit function
-     $("#createInvoiceForm").submit(function(e) { 
-        e.preventDefault();
-        var url = $(this).attr('action');
-        $('.fa-spinner').show(); 
-        submitForm(this, url,1);
-        $("#total_invoice").text('');
-    });
-
-
-   
+      
 
             
 });

@@ -33,7 +33,7 @@ class InvoiceRightStore extends FormRequest
         return $rules;
     }
 
-     public function messages()
+    public function messages()
     {
         
         return [
