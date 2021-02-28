@@ -48,7 +48,7 @@ class InvoiceStore extends FormRequest
         'from'=>'nullable|date',
         'to'=>'nullable|date|after_or_equal:from',
         'esc_cost'=>'nullable|integer|lt:cost',
-        'esc_sales_tax'=>'nullable|integer|lt:esc_cost',
+        'esc_sales_tax'=>'nullable|integer|lte:esc_cost',
         'esc_total'=>'nullable|integer|lt:total',
 
         //'mobile' => 'required|unique:users,mobile,NULL,id,isd,' . $request->isd,
