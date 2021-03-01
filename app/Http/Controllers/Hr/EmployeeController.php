@@ -27,10 +27,30 @@ use App\Http\Requests\Hr\EmployeeStore;
 
 class EmployeeController extends Controller
 {
-    // public function insert(){
+    public function insert(){
+
+            $number=1;
+            $str_to_insert=0;
+            $pos=4;
 
 
-    // $employees = HrEmployee::with('hrAppointment')->get();
+    $employees = HrEmployee::where('hr_status_id',1)->get();
+    foreach($employees as $employee){
+            
+        if($employee->employee_no){
+            $length = strlen($employee->employee_no);
+
+            if ($length == 6){
+                $newstr = substr_replace($employee->employee_no, $str_to_insert, $pos, 0);
+                echo $employee->id.'-'.$newstr.'-'.$employee->employee_no;
+                echo '<br>';
+                $number = $number+1;
+
+                // $employee->employee_no = $newstr;
+                // $employee->save();
+            }
+        }
+    }
         
        
     // foreach ($employees as $employee){
@@ -78,11 +98,11 @@ class EmployeeController extends Controller
     //     }
         
     // }
-    //    echo "data Successfully update";
+        echo "data Successfully update";
         
 
 
-    // }
+    }
 
 
     public function create(){
