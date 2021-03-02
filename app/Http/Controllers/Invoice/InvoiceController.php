@@ -112,13 +112,17 @@ class InvoiceController extends Controller
     }
 
     public function edit($id){
-
-        $invoice = Invoice::with('invoiceCost')->find($id);
+        session()->put('edit_invoice', $id);
+        $invoice = Invoice::with('invoiceCost','invoicePeriod')->find($id);
         return response()->json($invoice);
     }
 
 
     public function update(InvoiceStore $request, $id){
+
+       if($id != session('edit_invoice')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
 
         $input = $request->all();
         if($request->filled('from')){
@@ -134,14 +138,19 @@ class InvoiceController extends Controller
 
         DB::transaction(function () use ($input, $id) {  
 
+
+
             Invoice::findOrFail($id)->update($input);
-            $input['invoice_id']= $id;
-
-            // InvoiceCost::create($input);
-
-            // if($input['from']){
-            //     InvoicePeriod::create($input);
-            // }
+            //$input['invoice_id']= $id;
+             InvoiceCost::where('invoice_id',$id)->first()->update($input);
+        
+            if($input['from']){
+                InvoicePeriod::updateOrCreate(
+                          ['invoice_id' => $id],
+                          $input);
+            }else{
+                InvoicePeriod::where('invoice_id',$id)->delete();
+            }
 
             // if($input['esc_cost']){
             //     InvoiceEscalation::create($input);

@@ -253,6 +253,11 @@
 
 <script>
 $(document).ready(function() {
+    $('#divFrom, #divTo, .hide_1, .hideDiv').hide();
+
+    $('#escalation').click(function(){
+        $('.hideDiv').toggle();
+    });
 
 formFunctions();
     $(function () {
@@ -275,12 +280,17 @@ formFunctions();
                   type: "POST",
                   dataType: 'json',
                   success: function (data) {
-             
+                    if(data.status == 'OK'){
+                        $('#json_message').html('<div id="j_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
+                    }
+                    else{
+                    $('#json_message').html('<div id="j_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');    
+                    }
                     table.draw();
 
                     //$('#invoiceRightsForm').trigger("reset");
                     
-                    $('#saveBtn').html('Add Rights');
+                    $('#saveBtn').html('Updated');
                 
                   },
                   error: function (data) {
@@ -311,6 +321,9 @@ formFunctions();
                     {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
                 ]
             });
+
+            $('#divFrom, #divTo, .hide_1, .hideDiv').hide();
+           
         });
 
         //Edit
@@ -323,6 +336,13 @@ formFunctions();
                 $('#invoiceEditForm').attr('action',action);
                 $('#saveBtn').text("Edit-Invoice");
                 $('#invoice_id').val(data.id);
+                
+              
+                    if(data.invoice_period){
+                      $('#from').val(data.invoice_period.from);
+                      $('#to').val(data.invoice_period.to);
+                    };
+
                 $('#invoice_type_id').val(data.invoice_type_id);
                 $('#invoice_no').val(data.invoice_no);
                 $('#invoice_date').val(data.invoice_date);
@@ -340,10 +360,8 @@ formFunctions();
                 
                 $('#invoice_type_id, #cost_type_id').trigger('change');
 
-
-
                 $('.hide_1').show();
-                console.log(data);
+                console.log(data)
             })
         }); //end edit
 
@@ -381,11 +399,7 @@ formFunctions();
 
 
     // $('.cost').find('select').chosen();
-     $('#divFrom, #divTo, .hide_1').hide();
-
-     $('#escalation').click(function(){
-        $('.hideDiv').toggle();
-    });
+   
 
     $("#invoice_type_id").change(function(){
         
@@ -396,7 +410,9 @@ formFunctions();
             $("#from").attr("data-validation","required");
             $('.hideDiv').show();
         }else{
+            $('#from, #to').val('');
             $('#divFrom, #divTo').hide();
+            $('#divFrom').val('');
             $('#divProject').addClass('col-md-8').removeClass('col-md-6');
             $("#to").removeAttr("data-validation");
             $("#from").removeAttr("data-validation");

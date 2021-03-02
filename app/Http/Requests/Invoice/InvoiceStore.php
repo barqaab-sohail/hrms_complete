@@ -41,7 +41,7 @@ class InvoiceStore extends FormRequest
          $rules = [
         'pr_detail_id'=> 'required',
         'invoice_type_id'=> 'required',
-        'invoice_no'=> 'required|unique:invoices',
+        'invoice_no'=> 'required|unique:invoices,invoice_no,'.session('edit_invoice'),
         'cost'=>'required|integer|between:300,9999999999',
         'sales_tax'=>'required|lt:cost|integer|between:50,9999999999',
         'total'=>'required|numeric',
