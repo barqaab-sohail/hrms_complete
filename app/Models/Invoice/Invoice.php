@@ -36,5 +36,9 @@ class Invoice extends Model implements Auditable
         return $this->hasOne('App\Models\Invoice\InvoiceCost');
     }
 
+    public function invoicePeriod(){
+        return $this->hasOne('App\Models\Invoice\InvoicePeriod');
+    }
+
 
 }
