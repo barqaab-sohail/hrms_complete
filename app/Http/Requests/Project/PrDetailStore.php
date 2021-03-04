@@ -32,7 +32,7 @@ class PrDetailStore extends FormRequest
             'pr_status_id'=>'required|numeric',
             'pr_role_id'=>'required|numeric',
             'contract_type_id'=>'required|numeric',
-            'project_no'=>'required|max:7',
+            'project_no'=>'required|max:4|unique:pr_details,project_no,'.session('pr_detail_id'),
             'share'=>'required',
         ];
     }
