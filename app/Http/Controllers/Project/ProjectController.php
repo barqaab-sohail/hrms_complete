@@ -102,6 +102,10 @@ class ProjectController extends Controller
         if($request->filled('actual_completion_date')){
             $input ['actual_completion_date']= \Carbon\Carbon::parse($request->actual_completion_date)->format('Y-m-d');
             }
+            // else{
+            //     $input ['actual_completion_date']= '';
+            // }
+            
 
         DB::transaction(function () use ($input, $id) {  
            

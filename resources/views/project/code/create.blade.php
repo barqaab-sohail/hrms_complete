@@ -29,15 +29,17 @@
                      
 
 		                        <div class="row">
+		                           
+		                            <!--/span-->
 		                            <div class="col-md-2">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Division<span class="text_requried">*</span></label>
+		                                       	<label class="control-label text-right">year<span class="text_requried">*</span></label>
 		                                        
-	                                           	<select  name="pr_division_id"  class="form-control selectTwo" data-validation="required">
+	                                           	<select  name="year"  class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
-                                                    @foreach($divisions as $division)
-													<option value="{{$division->code}}" {{(old("pr_division_id")==$division->id? "selected" : "")}}>{{$division->name}}</option>
+                                                    @foreach($years as $year)
+													<option value="{{$year}}" {{(old("year")==$year? "selected" : "")}}>{{$year}}</option>
                                                     @endforeach
                                                     
                                                     
@@ -47,40 +49,7 @@
 		                                </div>
 		                            </div>
 		                            <!--/span-->
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Project Category<span class="text_requried" data-validation="required">*</span></label>
-		                                       
-	                                           	<select  name="pr_category_id"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($categories as $category)
-													<option value="{{$category->code}}" {{(old("pr_category_id")==$category->id? "selected" : "")}}>{{$category->name}}</option>
-                                                    @endforeach
-                                                   
-                                                  
-                                                </select>
-		                                    </div>
-		                                </div>
-		                            </div>
-		                             <!--/span-->
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Work Type<span class="text_requried">*</span></label>
-		                                       	<select  name="pr_work_type_id"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($workTypes as $workType)
-													<option value="{{$workType->code}}" {{(old("pr_work_type_id")==$workType->id? "selected" : "")}}>{{$workType->name}}</option>
-                                                    @endforeach
-                                                    
-                                                </select>
-		                                        
-		                                        
-		                                    </div>
-		                                </div>
-		                            </div>
-		                            <!--/span-->
+		                           
 		                            <div class="col-md-2">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
