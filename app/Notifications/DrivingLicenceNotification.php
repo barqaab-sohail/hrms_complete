@@ -7,18 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class LicenceExpiry extends Notification
+class DrivingLicenceNotification extends Notification
 {
     use Queueable;
 
+     protected $employee;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($employee)
     {
-        //
+         $this->employee = $employee;
     }
 
     /**
@@ -35,18 +36,22 @@ class LicenceExpiry extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiablel
+     * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
+       
+
         return (new MailMessage)
-                    ->subject('List of Expire Driving Lience')
-                    ->from('noreply@barqaab.com', 'HRMS Admin')
-                    ->line('Your registration code is '. $this->otp)
-                    ->action('Notification Action', url('/'))
-                    ->line('If you did not request for registration, no further action is required.')
-                    ->line('Thank you for using HRMS');
+            ->subject('Mr. '.$this->employee->first_name . ' '.$this->employee->last_name
+                .' Driving Licence Expired on '.$this->employee->hrDriving->licence_expiry??'')
+            ->from('noreply@barqaab.com', 'HRMS Admin')
+            ->line('Mr. '.$this->employee->first_name . ' '.$this->employee->last_name
+                .' having employee no.'.$this->employee->employee_no.' Driving Licence Expired on '.$this->employee->hrDriving->licence_expiry??'')
+             ->line('CNIC. '.$this->employee->cnic)
+            ->line('This email is only for information please')
+            ->line('Thank you for using HRMS');
     }
 
     /**

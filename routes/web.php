@@ -32,7 +32,11 @@ Route::resource('/','RegisterController',['only'=>['create','store']]);
 // Route::resource('/appointment', 'AppointmentController');
 
 // });
+// Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Notification'], function(){
+// 	Route::get('/notificationList', 'NotificationController@index')->name('notificationList');
+// 	Route::get ('/showNotification/{id?}','NotificationController@show')->name('showNotification');
 
+// });
 
 //HR Routes
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Hr'], function(){
