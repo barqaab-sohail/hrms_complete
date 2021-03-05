@@ -4,8 +4,10 @@ namespace App\Console\Commands\Hr;
 
 use Illuminate\Console\Command;
 use App\Models\Hr\HrEmployee;
+use App\Notifications\DrivingLicenceNotification;
+use App\User;
 
-class LicenceExpiry extends Command
+class DrivingLicenceSchedule extends Command
 {
     /**
      * The name and signature of the console command.
@@ -38,6 +40,7 @@ class LicenceExpiry extends Command
      */
     public function handle()
     {
+       
         $employees = HrEmployee::where('hr_status_id',1)->with('hrDesignation')->get();
         $toDay = \Carbon\Carbon::now()->format('Y-m-d');
         
@@ -47,10 +50,13 @@ class LicenceExpiry extends Command
                 if($employee->hrDriving->licence_expiry??''!=''){
                     if($employee->hrDriving->licence_expiry<$toDay){
                 
-                        echo $employee->hrDriving->licence_expiry??'';
-                        echo $employee->first_name;
-                        echo $employee->last_name;
-                        echo '<br>';
+                        $administrator = User::where('email', 'sohail.afzal@barqaab.com')->first();
+                        $rasheed = User::where('email', 'muhammadrasheed2009@gmail.com')->first();
+                        $administrator->notify(New DrivingLicenceNotification($employee));
+                        $rasheed->notify(New DrivingLicenceNotification($employee));
+
+                       //print_r($employee);
+
                     }
                 }
             }
@@ -58,9 +64,5 @@ class LicenceExpiry extends Command
         }
 
 
-
-
-
-        echo 'testing command';
     }
 }
