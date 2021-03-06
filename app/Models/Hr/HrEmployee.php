@@ -70,6 +70,18 @@ class HrEmployee extends Model implements Auditable
         )->orderBy('employee_designations.id', 'asc');;
     }
 
+    public function employeeProject(){
+        return $this->hasOneThrough(
+            'App\Models\Project\PrDetail',                  //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeAppointment',              //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'pr_detail_id'                             //Forein Key in Immediate Model of Final Model
+        );
+
+    }
+
     public function hrContact(){
 
             return $this->hasMany('App\Models\Hr\HrContact');
