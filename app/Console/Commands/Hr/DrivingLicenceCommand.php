@@ -45,20 +45,24 @@ class DrivingLicenceCommand extends Command
         $toDay = \Carbon\Carbon::now()->format('Y-m-d');
         
         foreach ($employees as $key => $employee) {   
-            if($employee->hrDesignation->last()->name=='Driver'){
+            if($employee->hrDesignation->last()->name??''=='Driver'){
                 
                 if($employee->hrDriving->licence_expiry??''!=''){
                     if($employee->hrDriving->licence_expiry<$toDay){
                 
                         $administrator = User::where('email', 'sohail.afzal@barqaab.com')->first();
                         $rasheed = User::where('email', 'muhammadrasheed2009@gmail.com')->first();
-                        //$administrator->notify(New DrivingLicenceNotification($employee));
-                        $rasheed->notify(New DrivingLicenceNotification($employee));
-                       // echo $employee->first_name;
+                        $administrator->notify(New DrivingLicenceNotification($employee));
+                        //$rasheed->notify(New DrivingLicenceNotification($employee));
+                       
                        //print_r($employee);
+                        //echo $employee->first_name.' '.$employee->last_name;
+                        //echo '<br>';
 
  //Blue Host Command 
 //cd /home1/barqaabc/public_html/hrms && php artisan schedule:run >> /dev/null 2>&1
+
+//cd /home/barqaabp/public_html/hrms && php artisan licence:expiry >> /dev/null 2>&1
 
                     }
                 }
