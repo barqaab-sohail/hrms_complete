@@ -55,9 +55,9 @@ class DrivingLicenceCommand extends Command
                         $hrAssistance = User::where('email', 'athar@barqaab.com')->first();
                         $rasheed = User::where('email', 'muhammadrasheed2009@gmail.com')->first();
                         $administrator->notify(New DrivingLicenceNotification($employee));
-                        //$rasheed->notify(New DrivingLicenceNotification($employee));
-                        //$hrManager->notify(New DrivingLicenceNotification($employee));
-                        //$hrAssistance->notify(New DrivingLicenceNotification($employee));
+                        $rasheed->notify(New DrivingLicenceNotification($employee));
+                        $hrManager->notify(New DrivingLicenceNotification($employee));
+                        $hrAssistance->notify(New DrivingLicenceNotification($employee));
                        
                        //print_r($employee);
                         //echo $employee->first_name.' '.$employee->last_name;
