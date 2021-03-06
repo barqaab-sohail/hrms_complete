@@ -48,10 +48,10 @@ class DrivingLicenceNotification extends Notification
                 .' Driving Licence Expired on '.$this->employee->hrDriving->licence_expiry??'')
             ->from('noreply@barqaab.com', 'HRMS Admin')
             ->line('Mr. '.$this->employee->first_name . ' '.$this->employee->last_name
-                .' having employee no.'.$this->employee->employee_no.' Driving Licence Expired on '.$this->employee->hrDriving->licence_expiry??'')
-             ->line('CNIC. '.$this->employee->cnic)
-            ->line('This email is only for information please')
-            ->line('Thank you for using HRMS');
+                .' Driving Licence Expired on '.$this->employee->hrDriving->licence_expiry??'')
+            ->line('Employee No. '.$this->employee->employee_no)
+            ->line('CNIC No. '.$this->employee->cnic)
+            ->line('This is a system generated e-mail, therefore, please dont reply to it');
     }
 
     /**

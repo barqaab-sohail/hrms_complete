@@ -7,7 +7,7 @@ use App\Models\Hr\HrEmployee;
 use App\Notifications\DrivingLicenceNotification;
 use App\User;
 
-class DrivingLicenceSchedule extends Command
+class DrivingLicenceCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -52,10 +52,13 @@ class DrivingLicenceSchedule extends Command
                 
                         $administrator = User::where('email', 'sohail.afzal@barqaab.com')->first();
                         $rasheed = User::where('email', 'muhammadrasheed2009@gmail.com')->first();
-                        $administrator->notify(New DrivingLicenceNotification($employee));
+                        //$administrator->notify(New DrivingLicenceNotification($employee));
                         $rasheed->notify(New DrivingLicenceNotification($employee));
-
+                       // echo $employee->first_name;
                        //print_r($employee);
+
+ //Blue Host Command 
+//cd /home1/barqaabc/public_html/hrms && php artisan schedule:run >> /dev/null 2>&1
 
                     }
                 }
