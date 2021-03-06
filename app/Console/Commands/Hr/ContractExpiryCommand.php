@@ -53,9 +53,9 @@ class ContractExpiryCommand extends Command
                     $hrAssistance = User::where('email', 'athar@barqaab.com')->first();
                     $rasheed = User::where('email', 'muhammadrasheed2009@gmail.com')->first();
                     $administrator->notify(New ContractExpiryNotification($employee));
-                    //$rasheed->notify(New ContractExpiryNotification($employee));
-                    //$hrManager->notify(New ContractExpiryNotification($employee));
-                    //$hrAssistance->notify(New ContractExpiryNotification($employee));
+                    $rasheed->notify(New ContractExpiryNotification($employee));
+                    $hrManager->notify(New ContractExpiryNotification($employee));
+                    $hrAssistance->notify(New ContractExpiryNotification($employee));
                     //echo $employee->first_name.' '.$employee->last_name.'- Project: '.$employee->employeeProject->name;
                     //echo '<br>';
                 }
