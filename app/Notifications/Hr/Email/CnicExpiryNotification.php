@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Hr\Email;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class DrivingLicenceNotification extends Notification
+class CnicExpiryNotification extends Notification
 {
     use Queueable;
 
@@ -41,15 +41,14 @@ class DrivingLicenceNotification extends Notification
      */
     public function toMail($notifiable)
     {
-       
-
         return (new MailMessage)
-            ->subject('Mr. '.$this->employee->first_name . ' '.$this->employee->last_name
-                .' Driving Licence Expired on '.$this->employee->hrDriving->licence_expiry??'')
+            ->subject($this->employee->first_name . ' '.$this->employee->last_name
+                .' CNIC has been expired on '.$this->employee->cnic_expiry??'')
             ->from('noreply@barqaab.com', 'HRMS Admin')
-            ->line('Mr. '.$this->employee->first_name . ' '.$this->employee->last_name
-                .' Driving Licence Expired on '.$this->employee->hrDriving->licence_expiry??'')
+            ->line($this->employee->first_name . ' '.$this->employee->last_name
+                .' CNIC has been expired on '.$this->employee->cnic_expiry??'')
             ->line('Employee No. '.$this->employee->employee_no)
+            ->line('Name of Project. '.$this->employee->employeeProject->name)
             ->line('CNIC No. '.$this->employee->cnic)
             ->line('This is a system generated e-mail, therefore, please dont reply to it');
     }

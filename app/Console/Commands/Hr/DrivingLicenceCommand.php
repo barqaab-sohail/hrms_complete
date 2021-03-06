@@ -4,7 +4,7 @@ namespace App\Console\Commands\Hr;
 
 use Illuminate\Console\Command;
 use App\Models\Hr\HrEmployee;
-use App\Notifications\DrivingLicenceNotification;
+use App\Notifications\Hr\Email\DrivingLicenceNotification;
 use App\User;
 
 class DrivingLicenceCommand extends Command
@@ -51,9 +51,13 @@ class DrivingLicenceCommand extends Command
                     if($employee->hrDriving->licence_expiry<$toDay){
                 
                         $administrator = User::where('email', 'sohail.afzal@barqaab.com')->first();
+                        $hrManager = User::where('email', 'hr@barqaab.com')->first();
+                        $hrAssistance = User::where('email', 'athar@barqaab.com')->first();
                         $rasheed = User::where('email', 'muhammadrasheed2009@gmail.com')->first();
                         $administrator->notify(New DrivingLicenceNotification($employee));
                         //$rasheed->notify(New DrivingLicenceNotification($employee));
+                        //$hrManager->notify(New DrivingLicenceNotification($employee));
+                        //$hrAssistance->notify(New DrivingLicenceNotification($employee));
                        
                        //print_r($employee);
                         //echo $employee->first_name.' '.$employee->last_name;
