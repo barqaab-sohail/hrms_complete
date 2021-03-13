@@ -21,6 +21,7 @@ Route::get('/hrms/testing','HomeController@testing');
 
 Auth::routes();
 
+
 Route::prefix('code')->namespace('Auth')->name('otp.')->group(function(){
 Route::resource('/','RegisterController',['only'=>['create','store']]);
 });
