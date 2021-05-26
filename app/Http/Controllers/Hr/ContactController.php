@@ -90,7 +90,7 @@ class ContactController extends Controller
     		$hrContact = HrContact::findOrFail($id)->update($input);
     					HrContactMobile::where('hr_contact_id',$id)->first()->update($input);
     					if($request->filled('landline')){
-    					HrContactLandline::where('hr_contact_id',$id)->first()->update($input);
+    					HrContactLandline::updateOrCreate(['hr_contact_id'=>$id],$input);
     					}
     					if($request->filled('email')){
     					HrContactEmail::where('hr_contact_id',$id)->first()->update($input);
