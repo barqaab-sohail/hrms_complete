@@ -55,7 +55,7 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Designation<span class="text_requried">*</span></label>
+                                <label class="control-label text-right">Designation/Position<span class="text_requried">*</span></label>
                                  <select  id="hr_designation_id"   name="hr_designation_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($designations as $designation)
@@ -163,7 +163,7 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Letter Type<span class="text_requried">*</span></label>
+                                <label class="control-label text-right">Appointment Letter Type<span class="text_requried">*</span></label>
                                  <select  id="hr_letter_type_id"   name="hr_letter_type_id"  class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($letterTypes as $letterType)
