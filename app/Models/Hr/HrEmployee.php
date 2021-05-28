@@ -58,6 +58,18 @@ class HrEmployee extends Model implements Auditable
 
     }
 
+    public function hrContactLandline(){
+
+            return $this->hasOneThrough('App\Models\Hr\HrContactLandline', 'App\Models\Hr\HrContact');
+
+    }
+
+    public function hrEmergency(){
+
+        return $this->hasOne('App\Models\Hr\HrEmergency');
+
+    }
+
     public function employeeDesignation(){
         //return $this->hasOne('App\Models\Hr\EmployeeDesignation');
         return $this->hasManyThrough(
@@ -87,6 +99,23 @@ class HrEmployee extends Model implements Auditable
             return $this->hasMany('App\Models\Hr\HrContact');
 
     }
+
+    public function hrContactPermanent(){
+            return $this->hasOne('App\Models\Hr\HrContact')->where('hr_contact_type_id','=',1);
+    }
+
+    public function hrContactPermanentCity(){
+             return $this->hasOneThrough(
+            'App\Models\Common\City',                  //Final Model l
+            'App\Models\Hr\HrContact',              //Model Through Access Final Model (Immediate Model)   
+            'id',                                             //Final Model Primary Key
+            'id'  
+        )->where('hr_contact_type_id','=',1);
+
+    }
+
+
+
 
     public function hrEducation(){
 
@@ -144,17 +173,19 @@ class HrEmployee extends Model implements Auditable
 
     }
 
+
     public function hrBloodGroup(){
-
-        return $this->hasOne('App\Models\Hr\HrBloodGroup');
+        return $this->hasOneThrough(
+            'App\Models\Common\BloodGroup',                  //Final Model HrDocumentName
+            'App\Models\Hr\HrBloodGroup',              //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'blood_group_id'                             //Forein Key in Immediate Model of Final Model
+        );
 
     }
 
-    public function hrEmergency(){
-
-        return $this->hasOne('App\Models\Hr\HrEmergency');
-
-    }
 
     // public function employeeAppointmentProject(){
     //     return $this->hasOne('App\Models\Hr\EmployeeProject')->oldest();

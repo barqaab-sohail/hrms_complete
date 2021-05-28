@@ -34,7 +34,7 @@
 							<td>{{$employee->employeeDesignation->last()->name??''}}</td>
 							<td>{{$employee->hr_status_id}}</td>
 							<td>{{$employee->cnic}}</td>
-							<td>{{$employee->employeeAppointment->joining_date??''}}</td>
+							<td>{{date('d-M-Y', strtotime($employee->employeeAppointment->joining_date??''))}}</td>
 							<td>{{$employee->employee_no??''}}</td>
 							<td>{{$employee->hrContactMobile->mobile??''}}</td>
 							
