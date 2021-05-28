@@ -15,16 +15,19 @@
 					<th>Id</th>
 					<th>Employee Name</th>
 					<th>Father Name</th>
+					<th>Date of Birth</th>
 					<th>CNIC</th>
+					<th>Date of Joining</th>
+					<th>Permanent Address</th>
+
 					<th>Degree Name</th>
 					<th>Education Year</th>
-					<th>Date of Joining</th>
 					<th>PEC No</th>
 					<th>Employee No</th>
 					<th>Mobile</th>
-					
-					<th class="text-center"style="width:5%">Edit</th> 
-					<th class="text-center"style="width:5%">Delete</th>
+					<th>LandLine Number</th>
+					<th>Emergency Number</th>
+					<th>Blood Group</th>
 				
 				</tr>
 				</thead>
@@ -34,30 +37,30 @@
 							<td>{{$employee->id}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 							<td>{{$employee->father_name}}</td>
+							<td>{{$employee->date_of_birth}}</td>
 							<td>{{$employee->cnic}}</td>
+							<td>{{date('d-M-Y', strtotime($employee->employeeAppointment->joining_date??''))}}</td>
+
+							<td>{{$employee->hrContactPermanent->house??''}},
+								{{$employee->hrContactPermanent->street??''}},
+								{{$employee->hrContactPermanent->town??''}},
+								{{$employee->hrContactPermanent->tehsil??''}},
+								{{$employee->hrContactPermanentCity->name??''}},
+
+							</td>
 							<td>
 							{{$employee->degreeAbove12->implode('degree_name',' + ')??''
 							}}</td>
 							<td>{{$employee->degreeYearAbove12->implode('to',' + ')??''}}</td>
-							<td>{{$employee->employeeAppointment->joining_date??''}}</td>
 							<td>{{$employee->hrMembership->membership_no??''}}</td>
 							<td>{{$employee->employee_no??''}}</td>
 
 							<td>{{$employee->hrContactMobile->mobile??''}}</td>
-							
-							
-							<td class="text-center">
-								<a class="btn btn-info btn-sm" href="{{route('employee.edit',$employee->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
-							</td>
-							<td class="text-center">
-								 @role('Super Admin')
-								 <form  id="formDeleteContact{{$employee->id}}" action="{{route('employee.destroy',$employee->id)}}" method="POST">
-								 @method('DELETE')
-								 @csrf
-								 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
-								 </form>
-								 @endrole
-								 </td>
+
+							<td>{{$employee->hrContactLandline->landline??''}}</td>
+							<td>{{$employee->hrEmergency->mobile??''}}</td>
+							<td>{{$employee->hrBloodGroup->name??''}}</td>
+
 														
 						</tr>
 					@endforeach

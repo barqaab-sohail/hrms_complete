@@ -93,7 +93,7 @@ class ContactController extends Controller
     					HrContactLandline::updateOrCreate(['hr_contact_id'=>$id],$input);
     					}
     					if($request->filled('email')){
-    					HrContactEmail::where('hr_contact_id',$id)->first()->update($input);
+    					HrContactEmail::updateOrCreate(['hr_contact_id'=>$id],$input);
     					}
 
     	}); // end transcation
