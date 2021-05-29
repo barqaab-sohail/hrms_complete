@@ -41,7 +41,9 @@ Route::post('/employeeCnic','EmployeeController@employeeCnic')->name('employee.c
 Route::get('/employee/allEmployeeList', 'EmployeeController@allEmployeeList')->name('employee.allEmployeeList');
 
 //end temporary 
+Route::get('/employee/activeEmployeesList', 'EmployeeController@activeEmployeesList')->name('employee.activeEmployeesList');
 Route::resource('/employee', 'EmployeeController');
+
 //all Employee list including terminated/resigned/retired
 //Route::get('/employee/allEmployeeList', 'EmployeeController@allEmployeeList')->name('employee.allEmployeeList');
 

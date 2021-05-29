@@ -10,7 +10,8 @@ class HrEmployee extends Model implements Auditable
 {
     
     use \OwenIt\Auditing\Auditable;
-    protected $guarded = [];
+    protected $fillable = ['first_name', 'last_name', 'father_name', 'cnic', 'cnic_expiry', 'date_of_birth', 'employee_no', 'user_id', 'gender_id', 'hr_status_id', 'marital_status_id', 'religion_id', 'domicile_id'];
+
 
 
     //default value of hr_status_id=1
@@ -37,7 +38,10 @@ class HrEmployee extends Model implements Auditable
         ];
     }
 
-
+    public function getFormattedDateOfBirthAttribute()
+    {
+        return \Carbon\Carbon::parse($this->date_of_birth)->format('d-M-Y');
+    }
 
 
     public function user(){
