@@ -16,7 +16,7 @@
 					
 					<tr >
 						<th>Permission Name</th>
-						<th colspan="2" class="text-center"style="width:10%"> Actions </th> 
+						<th> Actions </th> 
 					</tr>
 					</thead>
 					<tbody>
@@ -47,6 +47,41 @@
 @endif
 <script>
 $(document).ready(function() {
+	  $('#myTable').DataTable({
+                stateSave: false,
+                dom: 'Blfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: [ 0]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: [ 0]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [ 0]
+                        }
+                    }, {
+                        extend: 'csvHtml5',
+                        exportOptions: {
+                            columns: [ 0]
+                        }
+                    },
+                ],
+                scrollY:        "300px",
+      			scrollX:        true,
+        		scrollCollapse: true,
+        		paging:         false,
+        		
+            });
+
 	 $("form").submit(function (e) {
          e.preventDefault();
       });
