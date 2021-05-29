@@ -146,11 +146,20 @@ class EmployeeController extends Controller
     	return view ('hr.employee.list',compact('employees'));
     }
 
+    public function activeEmployeesList(){
+        $employees = HrEmployee::where('hr_status_id',1)->with('employeeDesignation','hrContactMobile','employeeAppointment')->get();
+
+
+        return view ('hr.employee.activeEmployeesList',compact('employees'));
+    }
+
     public function allEmployeeList(){
         $employees = HrEmployee::all();
 
         return view ('hr.employee.allEmployeeList',compact('employees'));
     }
+
+
 
     public function missingDocuments(){
 

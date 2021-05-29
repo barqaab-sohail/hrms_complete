@@ -14,6 +14,11 @@ class EmployeeAppointment extends Model implements Auditable
         return $this->belongsTo('App\Models\Hr\HrEmployee');
     }
 
+    public function getFormattedJoiningDateAttribute()
+    {
+        return \Carbon\Carbon::parse($this->joining_date)->format('d-M-Y');
+    }
+
     // public function employeeGrade(){
     //     return $this->belongsTo('App\Models\Hr\EmployeeGrade');
     // }
