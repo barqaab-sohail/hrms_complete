@@ -121,6 +121,18 @@ class HrEmployee extends Model implements Auditable
 
     }
 
+    public function hrBloodGroup(){
+        return $this->hasOneThrough(
+            'App\Models\Common\BloodGroup',                  //Final Model HrDocumentName
+            'App\Models\Hr\HrBloodGroup',              //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'blood_group_id'                             //Forein Key in Immediate Model of Final Model
+        );
+
+    }
+
 
 
 
@@ -181,17 +193,7 @@ class HrEmployee extends Model implements Auditable
     }
 
 
-    public function hrBloodGroup(){
-        return $this->hasOneThrough(
-            'App\Models\Common\BloodGroup',                  //Final Model HrDocumentName
-            'App\Models\Hr\HrBloodGroup',              //Model Through Access Final Model (Immediate Model)
-            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
-            'id',                                             //Final Model Primary Key
-            'id',
-            'blood_group_id'                             //Forein Key in Immediate Model of Final Model
-        );
-
-    }
+  
 
 
     // public function employeeAppointmentProject(){
