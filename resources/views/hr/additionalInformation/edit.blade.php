@@ -71,7 +71,7 @@
                                  <select  name="blood_group_id" id="blood_group_id" class="form-control selectTwo">
                                     <option value=""></option>
                                 @foreach($bloodGroups as $bloodGroup)
-                                    <option value="{{$bloodGroup->id}}" {{(old("blood_group_id",$employee->hrBloodGroup->blood_group_id??'')==$bloodGroup->id? "selected" : "")}}>{{$bloodGroup->name}}</option>
+                                    <option value="{{$bloodGroup->id}}" {{(old("blood_group_id",$employee->hrBloodGroup->id??'')==$bloodGroup->id?"selected" : "")}}>{{$bloodGroup->name}}</option>
                                 @endforeach     
                                 </select> 
                             </div>
