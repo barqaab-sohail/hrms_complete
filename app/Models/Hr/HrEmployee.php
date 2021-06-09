@@ -111,10 +111,12 @@ class HrEmployee extends Model implements Auditable
 
     public function hrContactPermanentCity(){
              return $this->hasOneThrough(
-            'App\Models\Common\City',                  //Final Model l
-            'App\Models\Hr\HrContact',              //Model Through Access Final Model (Immediate Model)   
-            'id',                                             //Final Model Primary Key
-            'id'  
+            'App\Models\Common\City',                //Final Model l
+            'App\Models\Hr\HrContact',              //Model Through Access Final Model (Immediate Model)  
+            'hr_employee_id',
+            'id',                                   //Final Model Primary Key
+            'id',
+            'city_id'
         )->where('hr_contact_type_id','=',1);
 
     }
