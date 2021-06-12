@@ -106,6 +106,19 @@
 
 <!-- End Project -->
 
+<!-- Assets -->               
+                @can('asset edit record') 
+                <li class="{{Request::is('hrms/asset*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">Assets</span></a>
+                    <ul aria-expanded="false" class="collapse">  
+                        <li><a class="{{Request::is('hrms/assets/create')?'active':''}}" href="{{route('asset.create')}}">Add Asset</a></li>
+                        <li><a class="{{Request::is('hrms/assets/cv')?'active':''}}" href="{{route('asset.index')}}">List of Assets</a></li>
+                        
+                    </ul>
+                </li>
+                @endcan
+
+<!-- End CV -->
+
 
                 @can('Super Admin')
 <!-- Invoices -->

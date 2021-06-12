@@ -148,7 +148,7 @@
             refreshTable("{{route('documentation.table')}}",1500);
         });
         $( "#pdf" ).hide();
-            // Prepare the preview for profile picture
+        // Prepare the preview for profile picture
         $("#view").change(function(){
                 var fileName = this.files[0].name;
                 var fileType = this.files[0].type;

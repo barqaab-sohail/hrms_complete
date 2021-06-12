@@ -146,6 +146,16 @@ Route::resource('/projectCode', 'ProjectCodeController');
 
 });
 
+//Assets Routes
+
+Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Asset'], function(){
+Route::resource('/asset','AssetController');
+Route::get('/asset/sub_classes/{id?}', 'AssetController@getSubClasses');
+
+
+});
+
+
 
 //Submission Routes
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'submission'], function(){
@@ -180,6 +190,7 @@ Route::group(['prefix' => 'invoice', 'middleware' => ['auth','XssSanitizer'], 'n
 Route::group(['middleware' => ['auth','XssSanitizer']], function(){
 Route::get('/country/states/{id?}', 'CountryController@getStates')->name('states');
 Route::get('/country/cities/{id?}', 'CountryController@getCities')->name('cities');
+
 });
 
 //Route::get('/home', 'HomeController@index')->name('home');
