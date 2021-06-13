@@ -19,7 +19,7 @@ class CreateAsPurchasesTable extends Migration
             $table->bigInteger('asset_id')->unsigned();
             $table->bigInteger('as_purchase_condition_id')->unsigned();
             $table->date('purchase_date');
-            $table->integer('purchase_cost');
+            $table->integer('purchase_cost')->nullable();
             $table->timestamps();
             $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
             $table->foreign('as_purchase_condition_id')->references('id')->on('as_purchase_conditions')->onDelete('cascade');
