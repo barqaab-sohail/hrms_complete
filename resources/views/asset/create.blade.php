@@ -142,7 +142,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Asset Location<span class="text_requried">*</span></label>
 		                                        
-	                                           	<select  id="asset_location" class="form-control selectTwo" data-validation="required">
+	                                           	<select  name="asset_location" id="asset_location" class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     <option value="1">Placed at</option>
                                                      <option value="2">Handover to</option>  
@@ -206,7 +206,7 @@
 					                        <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="100" >
 					                        
 					                        </input>
-					                        <input type="file"  name="document" id="view" data-validation="required" class="" required hidden>
+					                        <input type="file"  name="document" id="view" data-validation="required" class="form-control" hidden>
 	
 					                        <h6 id="h6" class="card-title m-t-10">Click On Image to Add Image<span class="text_requried">*</span></h6>
 					                        </center>
@@ -253,7 +253,7 @@ $(document).ready(function() {
 	 	//preventDefault work through formFunctions;
 		url="{{route('asset.store')}}";
 		$('.fa-spinner').show();	
-	   	submitFormAjax(this, url,1);
+	   	submitFormAjax(this, url);
 	}); //end submit
 
 	//ajax function

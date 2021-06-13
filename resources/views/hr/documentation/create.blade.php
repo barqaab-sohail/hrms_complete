@@ -1,4 +1,4 @@
-@can('hr edit record')
+l@can('hr edit record')
 <div style="margin-top:10px; margin-right: 10px;">
     <button type="button"  id ="hideButton"  class="btn btn-info float-right">Add Document</button>
 </div>
@@ -73,7 +73,7 @@
                         <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
                         
                         </input>
-                        <input type="file"  name="document" id="view" data-validation="required" class="" required hidden>
+                        <input type="file"  name="document" id="view" data-validation="required" class="form-control" hidden>
                                                                         
 
                         <h6 id="h6" class="card-title m-t-10">Click On Image to Add Document<span class="text_requried">*</span></h6>

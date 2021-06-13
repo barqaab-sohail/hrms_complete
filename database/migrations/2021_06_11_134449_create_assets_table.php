@@ -17,8 +17,8 @@ class CreateAssetsTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('as_sub_class_id')->unsigned();
-            $table->string('name');
             $table->string('description');
+            $table->string('asset_code')->nullable()->unique();
             $table->timestamps();
             $table->foreign('as_sub_class_id')->references('id')->on('as_sub_classes')->onDelete('cascade');
         });
