@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Asset;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Http\Requests\Asset\AssetStore;
 use App\Models\Asset\Asset;
@@ -42,7 +43,7 @@ class AssetController extends Controller
     	return view ('asset.create', compact('asClasses','asSubClasses','asConditionTypes','asPurchaseConditions','asOwnerships','offices','employees'));
     }
 
-    public function store (AssetStore $request){
+    public function store (Request $request){
 
     	 $input = $request->all();
     	  if($request->filled('purchase_date')){
@@ -102,10 +103,27 @@ class AssetController extends Controller
 
             AsDocumentation::create($attachment);
     		
-
     	}); // end transcation
 
     	return response()->json(['url'=> route("asset.index"),'message' => 'Data Successfully Saved']);
+    }
+
+
+
+
+     public function destroy($id)
+    {
+        $asDocuments = AsDocumentation::where('asset_id',$id)->get();
+        foreach ($asDocuments as $asDocument) {
+            $path = public_path('storage/'.$asDocument->path.$asDocument->file_name);
+                if(File::exists($path)){
+                  File::delete($path);
+                }  
+        }
+        Asset::findOrFail($id)->delete();   
+
+    return back()->with('success', "Data successfully deleted");
+   
     }
 
     public function getSubClasses($id){
