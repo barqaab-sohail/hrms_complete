@@ -12,6 +12,8 @@
 			<table id="myTable" class="table table-bordered table-striped"  style="width:100%" >
 				<thead>
 				<tr>
+					<th>Id</th>
+					<th>Asset Code</th>
 					<th>Description</th>
 					<th>Asset Condition</th>
 					<th class="text-center"style="width:5%">Edit</th> 
@@ -23,9 +25,10 @@
 				@if($assets->count()!=0) 
 					@foreach($assets as $asset)
 						<tr>
-							
+							<td>{{$asset->id}}</td>
+							<td>{{$asset->asset_code??''}}</td>
 							<td>{{$asset->description}}</td>
-							<td>{{$asset->asset_condtions}}</td>
+							<td>{{$asset->asCondition->first()->name}}</td>
 							
 							<td class="text-center">
 								<a class="btn btn-info btn-sm" href="{{route('asset.edit',$asset->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
