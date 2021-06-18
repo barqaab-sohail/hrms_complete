@@ -33,7 +33,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Class<span class="text_requried">*</span></label>
 		                                        
-	                                           	<select  name="as_class_id"  id= "as_class" class="form-control selectTwo" data-validation="">
+	                                           	<select  name="as_class_id"  id= "as_class" class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     @foreach($asClasses as $class)
 													<option value="{{$class->id}}" {{(old("as_class_id")==$class->id? "selected" : "")}}>{{$class->name}}</option>
@@ -47,8 +47,8 @@
 		                            <div class="col-md-3">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Sub Classes<span class="text_requried" data-validation="">*</span></label> 
-	                                           	<select  name="as_sub_class_id"  id="as_sub_class"class="form-control selectTwo" data-validation="" data-placeholder="First Select Class">  
+		                                       	<label class="control-label text-right">Sub Classes<span class="text_requried">*</span></label> 
+	                                           	<select  name="as_sub_class_id"  id="as_sub_class"class="form-control selectTwo" data-validation="required" data-placeholder="First Select Class">  
                                                 </select>
 		                                    </div>
 		                                </div>
@@ -70,7 +70,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Description</label>
 		                                            
-		                                        <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control" data-validation="">
+		                                        <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control" data-validation="required">
 												
 		                                    </div>
 		                                </div>
@@ -95,7 +95,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Purchase Date<span class="text_requried">*</span></label>
 		                                        
-		                                        <input type="text" id="purchase_date" name="purchase_date" value="{{ old('purchase_date') }}" class="form-control date_input" data-validation="" readonly>
+		                                        <input type="text" id="purchase_date" name="purchase_date" value="{{ old('purchase_date') }}" class="form-control date_input" data-validation="required" readonly>
 												
 												<br>
 		                                        @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
@@ -108,7 +108,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Purchase Condition<span class="text_requried">*</span></label>
 		                                        
-	                                           	<select  name="as_purchase_condition_id" class="form-control selectTwo" data-validation="">
+	                                           	<select  name="as_purchase_condition_id" class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     @foreach($asPurchaseConditions as $asPurchaseCondition)
 													<option value="{{$asPurchaseCondition->id}}" {{(old("as_purchase_condition_id")==$asPurchaseCondition->id? "selected" : "")}}>{{$asPurchaseCondition->name}}</option>
@@ -124,7 +124,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Ownership<span class="text_requried">*</span></label>
 		                                        
-	                                           	<select  name="client_id" class="form-control selectTwo" data-validation="">
+	                                           	<select  name="client_id" class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     @foreach($asOwnerships as $asOwnership)
 													<option value="{{$asOwnership->id}}" {{(old("client_id")==$asOwnership->id? "selected" : "")}}>{{$asOwnership->name}}</option>
@@ -142,7 +142,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Asset Location<span class="text_requried">*</span></label>
 		                                        
-	                                           	<select  name="asset_location" id="asset_location" class="form-control selectTwo" data-validation="">
+	                                           	<select  name="asset_location" id="asset_location" class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     <option value="1">Placed at</option>
                                                      <option value="2">Handover to</option>  
@@ -189,7 +189,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Asset Condition<span class="text_requried">*</span></label>
 		                                        
-	                                           	<select  name="as_condition_type_id" class="form-control selectTwo" data-validation="">
+	                                           	<select  name="as_condition_type_id" class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     @foreach($asConditionTypes as $asConditinoType)
 													<option value="{{$asConditinoType->id}}" {{(old("as_condition_type_id")==$asConditinoType->id? "selected" : "")}}>{{$asConditinoType->name}}</option>
@@ -206,7 +206,7 @@
 					                        <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="100" >
 					                        
 					                        </input>
-					                        <input type="file"  name="document" id="view" data-validation="" class="form-control" hidden>
+					                        <input type="file"  name="document" id="view" data-validation="required" class="form-control" hidden>
 	
 					                        <h6 id="h6" class="card-title m-t-10">Click On Image to Add Image<span class="text_requried">*</span></h6>
 					                        </center>
@@ -351,7 +351,7 @@ $(document).ready(function() {
     	if(option==1){
     		$(".blank").addClass('hide');
     		$(".office").removeClass('hide');
-    		$("#office_id").attr("data-validation", "");
+    		$("#office_id").attr("data-validation", "required");
     		$("#hr_employee_id").removeAttr("data-validation");
     		$(".employee").addClass('hide');
     		$('#hr_employee_id').val('').select2('val', 'All');
@@ -359,7 +359,7 @@ $(document).ready(function() {
     	} else if(option==2){
     		$(".blank").addClass('hide');
     		$(".employee").removeClass('hide');
-    		$("#hr_employee_id").attr("data-validation", "");
+    		$("#hr_employee_id").attr("data-validation", "required");
     		$("#office_id").removeAttr("data-validation");
     		$(".office").addClass('hide');
     	} else{
