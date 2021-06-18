@@ -18,11 +18,11 @@
 					<th>Date of Birth</th>
 					<th>CNIC</th>
 					<th>Date of Joining</th>
-					<th>Permanent Address</th>
-
+					
 					<th>Degree Name</th>
 					<th>Education Year</th>
 					<th>PEC No</th>
+					<th>Expiry Date</th>
 					<th>Employee No</th>
 					<th>Mobile</th>
 					<th>LandLine Number</th>
@@ -41,22 +41,15 @@
 							<td>{{$employee->cnic}}</td>
 							<td>{{date('d-M-Y', strtotime($employee->employeeAppointment->joining_date??''))}}</td>
 
-							<td>{{$employee->hrContactPermanent->house??''}},
-								{{$employee->hrContactPermanent->street??''}},
-								{{$employee->hrContactPermanent->town??''}},
-								{{$employee->hrContactPermanent->tehsil??''}},
-								{{$employee->hrContactPermanentCity->name??''}},
-
-							</td>
+							
 							<td>
 							{{$employee->degreeAbove12->implode('degree_name',' + ')??''
 							}}</td>
 							<td>{{$employee->degreeYearAbove12->implode('to',' + ')??''}}</td>
 							<td>{{$employee->hrMembership->membership_no??''}}</td>
+							<td>{{$employee->hrMembership->expiry??''}}</td>
 							<td>{{$employee->employee_no??''}}</td>
-
 							<td>{{$employee->hrContactMobile->mobile??''}}</td>
-
 							<td>{{$employee->hrContactLandline->landline??''}}</td>
 							<td>{{$employee->hrEmergency->mobile??''}}</td>
 							<td>{{$employee->hrBloodGroup->name??''}}</td>
@@ -85,24 +78,24 @@ $(document).ready(function() {
                     {
                         extend: 'copyHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3,4,5,6,7,8,9,10,11,12,13,14]
                         }
                     },
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3,4,5,6,7,8,9,10,11,12,13,14]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3,4,5,6,7,8,9,10,11,12,13,14]
                         }
                     }, {
                         extend: 'csvHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3,4,5,6,7,8,9,10,11,12,13,14]
                         }
                     },
                 ],
