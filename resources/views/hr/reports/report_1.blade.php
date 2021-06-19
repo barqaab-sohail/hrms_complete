@@ -18,7 +18,7 @@
 					<th>Date of Birth</th>
 					<th>CNIC</th>
 					<th>Date of Joining</th>
-					
+					<th>Diviion</th>
 					<th>Degree Name</th>
 					<th>Education Year</th>
 					<th>PEC No</th>
@@ -28,6 +28,7 @@
 					<th>LandLine Number</th>
 					<th>Emergency Number</th>
 					<th>Blood Group</th>
+					<th class="text-center"style="width:5%">Edit</th> 
 				
 				</tr>
 				</thead>
@@ -40,6 +41,7 @@
 							<td>{{$employee->date_of_birth}}</td>
 							<td>{{$employee->cnic}}</td>
 							<td>{{date('d-M-Y', strtotime($employee->employeeAppointment->joining_date??''))}}</td>
+							<td>{{$employee->hrDepartment->name??''}}</td>
 
 							
 							<td>
@@ -53,6 +55,9 @@
 							<td>{{$employee->hrContactLandline->landline??''}}</td>
 							<td>{{$employee->hrEmergency->mobile??''}}</td>
 							<td>{{$employee->hrBloodGroup->name??''}}</td>
+							<td class="text-center">
+								<a class="btn btn-info btn-sm" href="{{route('employee.edit',$employee->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+							</td>
 
 														
 						</tr>
