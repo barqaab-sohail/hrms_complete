@@ -109,7 +109,7 @@ class AssetController extends Controller
     	return response()->json(['url'=> route("asset.index"),'message' => 'Data Successfully Saved']);
     }
 
-    public function edit($id){
+    public function edit(Request $request, $id){
     	session()->put('asset_id', $id);
     	$asClasses = AsClass::all();
     	$asSubClasses = AsSubClass::all();
@@ -119,8 +119,15 @@ class AssetController extends Controller
     	$offices = Office::all();
     	$employees = HrEmployee::all();
     	$data = Asset::find($id);
-      	//dd($data->asClass->as_class_id);
-    	return view ('asset.edit', compact('asClasses','asSubClasses','asConditionTypes','asPurchaseConditions','asOwnerships','offices','employees','data'));
+      	//dd(public_path($data->asDocumentation->path.$data->asDocumentation->file_name));
+
+        if($request->ajax()){      
+            return view ('asset.ajax', compact('asClasses','asSubClasses','asConditionTypes','asPurchaseConditions','asOwnerships','offices','employees','data'));   
+        }else{
+            return view ('asset.edit', compact('asClasses','asSubClasses','asConditionTypes','asPurchaseConditions','asOwnerships','offices','employees','data'));       
+        }
+
+    	
 
 
     }
@@ -195,11 +202,13 @@ class AssetController extends Controller
                 $attachment['extension']=$extension;
                 $attachment['asset_id']=$id;
 
-                $asDocumentation = AsDocumentation::where('asset_id',$id)->first();  
+                $asDocumentation = AsDocumentation::where('asset_id',$id)->first();
+                $oldDocumentPath =  $asDocumentation->path.$asDocumentation->file_name;
+                
                 AsDocumentation::findOrFail($asDocumentation->id)->update($attachment);
 
-                if(Storage::exists('public/'.$file_path)){
-                unlink(storage_path('app/public/'.$file_path));
+                if(File::exists(public_path('storage/'.$oldDocumentPath))){
+                    File::delete(public_path('storage/'.$oldDocumentPath));
                 }
             }
             
