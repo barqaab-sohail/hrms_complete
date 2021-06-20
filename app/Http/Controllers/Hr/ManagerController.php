@@ -69,8 +69,13 @@ class ManagerController extends Controller
 
          DB::transaction(function () use ($input) {  
         	
-            EmployeeManager::updateOrCreate(['id' => $input['hr_manager_id']],
-                $input); 
+            //EmployeeManager::updateOrCreate(['id' => $input['hr_manager_id']],
+            //    $input); 
+
+            EmployeeManager::updateOrCreate(['id' => $input['employee_manager_id']],
+                ['effective_date'=> $input['effective_date'],
+                'hr_manager_id'=> $input['hr_manager_id'],
+                'hr_employee_id'=> $input['hr_employee_id']]); 
             //$data = HrManager::create($input);
         }); // end transcation      
        return response()->json(['success'=>'Data saved successfully.']);

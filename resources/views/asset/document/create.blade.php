@@ -9,14 +9,14 @@
         {{csrf_field()}}
         <div class="form-body">
             
-            <h3 class="box-title">Document</h3>
+            <h3 class="box-title" id="formHeading">Document</h3>
             <hr class="m-t-0 m-b-40">
             <div class="row">
                 <div class="col-md-8">
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Document Description</label>
-                        
+                            <input type="hidden" name="as_document_id" id="as_document_id">
                             <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9">
                        
-                            <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save</button>
+                            <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" id="saveBtn" style="font-size:18px"></i>Save</button>
                                             
                         </div>
                     </div>
@@ -85,15 +85,113 @@
 
         $('#formDocument').hide();
 
-        $('#hideButton').click(function(){
+        
+
+//start function
+$(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('asDocument.create') }}",
+        columns: [
+            {data: "description", name: 'description'},
+            {data: 'document', name: 'document'},
+            {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
+            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
+
+        ],
+        order: [[ 1, "desc" ]]
+    });
+
+    $('#hideButton').click(function(){
             $('#formDocument').toggle();
-        });
+             $('#formDocument').trigger("reset");
+    });
+
+    $('body').unbind().on('click', '.editManager', function () {
+      var as_document_id = $(this).data('id');
+
+      $('#json_message_modal').html('');
+      $.get("{{ url('hrms/asset/asDocument') }}" +'/' + as_document_id +'/edit', function (data) {
+          $('#formHeading').html("Edit Document");
+          $('#saveBtn').val("edit-Document");
+          $('#as_document_id').val(data.as_document_id);
+          //$('#hr_manager_id').trigger('change');
+          //$('#effective_date').val(data.effective_date);
+          console.log(data);
+      })
+   });
+    $('#saveBtn').click(function (e) {
+        e.preventDefault();
+        $(this).html('Save');
+         
+        $.ajax({
+          data: $('#formDocument').serialize(),
+          url: "{{ route('asDocument.store') }}",
+          type: "POST",
+          dataType: 'json',
+          success: function (data) {
+     
+              $('#managerForm').trigger("reset");
+              $('#ajaxModel').modal('hide');
+              table.draw();
+        
+          },
+          error: function (data) {
+              console.log(data.responseJSON.errors);
+              var errorMassage = '';
+              $.each(data.responseJSON.errors, function (key, value){
+                errorMassage += value + '<br>';  
+                });
+                 $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
+    
+    $('body').on('click', '.deleteManager', function () {
+     
+        var employee_manager_id = $(this).data("id");
+        var con = confirm("Are You sure want to delete !");
+        if(con){
+          $.ajax({
+            type: "DELETE",
+            url: "{{ route('manager.store') }}"+'/'+employee_manager_id,
+            success: function (data) {
+                table.draw();
+                if(data.error){
+                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+                }
+  
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+          });
+        }
+    });
+     
+  });// end function
+
+
+
+
+
+
+
+
 
       
         //submit function
         $("#formDocument").submit(function(e) { 
             e.preventDefault();
-            var url = "{{route('cvDocument.store')}}";
+            //var url = "{{route('cvDocument.store')}}";
             $('.fa-spinner').show(); 
             submitForm(this, url,1);
             $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','150');

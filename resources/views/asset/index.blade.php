@@ -16,6 +16,7 @@
 					<th>Asset Code</th>
 					<th>Description</th>
 					<th>Asset Condition</th>
+					<th>Image</th>
 					<th class="text-center"style="width:5%">Edit</th> 
 					<th class="text-center"style="width:5%">Delete</th>
 				
@@ -29,6 +30,7 @@
 							<td>{{$asset->asset_code??''}}</td>
 							<td>{{$asset->description}}</td>
 							<td>{{$asset->asCondition->name}}</td>
+							<td><img src="{{asset(isset($asset->asDocumentation->file_name)? 'storage/'.$asset->asDocumentation->path.$asset->asDocumentation->file_name: 'Massets/images/document.png') }}" class="img-round picture-container picture-src"  id="ViewIMG{{$asset->id}}"  title="" width="100" ></td>
 							
 							<td class="text-center">
 								<a class="btn btn-info btn-sm" href="{{route('asset.edit',$asset->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
@@ -66,24 +68,24 @@ $(document).ready(function() {
                     {
                         extend: 'copyHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3]
                         }
                     },
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3]
                         }
                     }, {
                         extend: 'csvHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3]
                         }
                     },
                 ],
@@ -97,8 +99,12 @@ $(document).ready(function() {
             		rightColumns:2
         		}
             });
-            
-        });
+
+	//function view from list table
+        $(function(){
+			$("[id^='ViewIMG']").EZView();
+		});        
+});
 
 
 </script>
