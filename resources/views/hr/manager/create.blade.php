@@ -27,11 +27,11 @@
             <div class="modal-body">
               <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
                 <form id="managerForm" name="manageForm" action="{{route('manager.store')}}"class="form-horizontal">
-                   <input type="hidden" name="hr_manager_id" id="hr_manager_id">
+                   <input type="hidden" name="employee_manager_id" id="employee_manager_id">
                    <input type="hidden" name="hr_employee_id" id="hr_employee_id" value="{{session('hr_employee_id')}}">
                     <div class="form-group">
                         <label class="control-label text-right">HOD<span class="text_requried">*</span></label><br>
-                          <select  name="hod_id"  id="hod_id" class="form-control selectTwo" data-validation="required">
+                          <select  name="hr_manager_id"  id="hr_manager_id" class="form-control selectTwo" data-validation="required">
                               <option value=""></option>
                               @foreach ($employees as $employee)
                               <option value="{{$employee->id}}">{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}} -  {{$employee->hrDesignation->last()->name??''}}</option>
@@ -71,7 +71,7 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "{{ route('manager.create') }}",
         columns: [
-            {data: "fullName", name: 'hod_id'},
+            {data: "fullName", name: 'hr_manager_id'},
             {data: 'effective_date', name: 'effective_date'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
@@ -83,10 +83,10 @@ $(document).ready(function() {
     $('#createNewManager').click(function () {
         $('#json_message_modal').html('');
         $('#saveBtn').val("create-HOD");
-        $('#hr_manager_id').val('');
+        $('#employee_manager_id').val('');
 
         $('#managerForm').trigger("reset");
-        $('#hod_id').trigger('change');
+        $('#hr_manager_id').trigger('change');
         $('#modelHeading').html("Create New HOD");
         $('#ajaxModel').modal('show');
     });
@@ -98,9 +98,9 @@ $(document).ready(function() {
           $('#modelHeading').html("Edit HOD");
           $('#saveBtn').val("edit-HOD");
           $('#ajaxModel').modal('show');
-          $('#hr_manager_id').val(data.id);
-          $('#hod_id').val(data.hod_id);
-          $('#hod_id').trigger('change');
+          $('#employee_manager_id').val(data.id);
+          $('#hr_manager_id').val(data.hr_manager_id);
+          $('#hr_manager_id').trigger('change');
           $('#effective_date').val(data.effective_date);
           console.log(data);
       })
@@ -136,12 +136,12 @@ $(document).ready(function() {
     
     $('body').on('click', '.deleteManager', function () {
      
-        var hr_manager_id = $(this).data("id");
+        var employee_manager_id = $(this).data("id");
         var con = confirm("Are You sure want to delete !");
         if(con){
           $.ajax({
             type: "DELETE",
-            url: "{{ route('manager.store') }}"+'/'+hr_manager_id,
+            url: "{{ route('manager.store') }}"+'/'+employee_manager_id,
             success: function (data) {
                 table.draw();
                 if(data.error){

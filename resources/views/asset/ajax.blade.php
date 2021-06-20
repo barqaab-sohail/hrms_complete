@@ -47,7 +47,7 @@
                         <div class="col-md-12">
                            	<label class="control-label text-right">Asset Code</label>
                                 
-                            <input type="text" id="asset_code" name="asset_code" value="{{ old('asset_code', $data->asset_code) }}" class="form-control" >
+                            <input type="text" id="asset_code" name="asset_code" value="{{ old('asset_code', $data->asset_code) }}" class="form-control" readonly>
 							
                         </div>
                     </div>
@@ -334,6 +334,29 @@ $(document).ready(function() {
           });//end ajax
         }
     });
+
+
+  //get asset code
+
+  $('#as_sub_class').change(function(){
+      var cid = $(this).val();
+        if(cid){
+          $.ajax({
+             type:"get",
+             url: "{{url('hrms/asset/as_code')}}"+"/"+cid,
+
+             success:function(res)
+             {       
+                if(res)
+                  {
+                    $("#asset_code").val(res.assetCode);
+                  }
+             }
+
+          });//end ajax
+        }
+    });
+    
 
     $('#asset_location').change(function(){
     	 var option = $(this).val();

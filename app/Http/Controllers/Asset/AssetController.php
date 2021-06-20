@@ -246,4 +246,22 @@ class AssetController extends Controller
 
 
     }
+
+    public function asCode($asSubClass){
+
+        $asSubClass = AsSubClass::where('id',$asSubClass)->first();
+
+
+        $count = 1;
+       // $code = $code.'0'; //200
+        $asCode =  $asSubClass->as_class_id.'-'. $asSubClass->id.'-';
+       // $asCode = $asCode.$count;
+
+        while(Asset::where('asset_code',$asCode.$count)->count()>0){ 
+            $count++;  
+        }
+        $asCode = $asCode.$count;
+
+        return response()->json([ 'assetCode'=>$asCode]);
+    }
 }
