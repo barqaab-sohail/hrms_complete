@@ -150,7 +150,7 @@ Route::resource('/projectCode', 'ProjectCodeController');
 
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Asset'], function(){
 Route::resource('/asset','AssetController');
-Route::resource('/asset/asDocument','AssetDocumentController');
+Route::resource('/asDocument','AssetDocumentController');
 Route::get('/asset/sub_classes/{id?}', 'AssetController@getSubClasses');
 Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
 

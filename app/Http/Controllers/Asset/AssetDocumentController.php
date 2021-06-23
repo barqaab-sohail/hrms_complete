@@ -10,14 +10,21 @@ use DataTables;
 class AssetDocumentController extends Controller
 {
     
+   
+	public function index(){
+    	
+       $view =  view('asset.document.create')->render();
+        return response()->json($view);
+    }
 
     public function create(Request $request){
 
     	if ($request->ajax()) {
             $data = AsDocumentation::where('asset_id',session('asset_id'))->latest()->get();
 
-            return DataTables::of($data)
+            return  DataTables::of($data)
                     ->addIndexColumn()
+                    
                     ->addColumn('Edit', function($row){
    
                            $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editDocument">Edit</a>';
@@ -31,12 +38,20 @@ class AssetDocumentController extends Controller
                            
                             return $btn;
                     })
-                    ->rawColumns(['Edit','Delete'])
+                    ->addColumn('document', function($row){                
+                         $url= asset('storage/'.$row->path.$row->file_name);
+                           return '<img  id="ViewIMG" src="'.$url.'" width=50/>';
+                           
+                    })
+                    ->rawColumns(['Edit','Delete','document'])
                     ->make(true);
+          
         }
         
         $view =  view('asset.document.create')->render();
         return response()->json($view);
 
     }
+
+
 }
