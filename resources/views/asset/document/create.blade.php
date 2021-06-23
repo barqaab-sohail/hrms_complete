@@ -72,20 +72,30 @@
         </div>
     </form>
     
-    <div class="col-md-12 table-container">
-                 
-    </div>
+<br>
+<table class="table table-bordered data-table" width=100%>
+    <thead>
+      <tr>
+          <th>Description</th>
+          <th>View</th>
+          <th>Edit</th>
+          <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+        
+    </tbody>
+</table>
+
    
 </div>
         
-<script>
-    $(document).ready(function(){
+<script type="text/javascript">
+$(document).ready(function(){
 
-        formFunctions();
+       // formFunctions();
 
-        $('#formDocument').hide();
-
-        
+       $('#formDocument').hide();    
 
 //start function
 $(function () {
@@ -100,7 +110,7 @@ $(function () {
         ajax: "{{ route('asDocument.create') }}",
         columns: [
             {data: "description", name: 'description'},
-            {data: 'document', name: 'document'},
+            {data: "document", name: 'document'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
 
@@ -116,7 +126,6 @@ $(function () {
     $('body').unbind().on('click', '.editManager', function () {
       var as_document_id = $(this).data('id');
 
-      $('#json_message_modal').html('');
       $.get("{{ url('hrms/asset/asDocument') }}" +'/' + as_document_id +'/edit', function (data) {
           $('#formHeading').html("Edit Document");
           $('#saveBtn').val("edit-Document");
@@ -138,7 +147,6 @@ $(function () {
           success: function (data) {
      
               $('#managerForm').trigger("reset");
-              $('#ajaxModel').modal('hide');
               table.draw();
         
           },
@@ -236,6 +244,11 @@ $(function () {
             }
             
         });
+
+     
+
+      
+
     });//end document ready
         function readURL(input) {
             var fileName = input.files[0].name;
@@ -272,7 +285,11 @@ $(function () {
         $("#wizardPicturePreview" ).click (function() {
            $("input[id='view']").click();
         });
-      
+
+
+      $(document).on('click','#ViewIMG', function(){  
+        $('#ViewIMG').EZView();
+      });
             
             
 </script>
