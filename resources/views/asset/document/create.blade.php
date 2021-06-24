@@ -39,7 +39,7 @@
                         <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
                         
                         </input>
-                        <input type="file"  name="document" id="view" data-validation="required" class="" required hidden>
+                        <input type="file"  name="document" id="view" class="form-control" hidden>
                                                                         
 
                         <h6 id="h6" class="card-title m-t-10">Click On Image to Add Document<span class="text_requried">*</span></h6>
@@ -123,21 +123,25 @@ $(function () {
              $('#formDocument').trigger("reset");
     });
 
-    $('body').unbind().on('click', '.editManager', function () {
+    $('body').unbind().on('click', '.editDocument', function () {
       var as_document_id = $(this).data('id');
 
-      $.get("{{ url('hrms/asset/asDocument') }}" +'/' + as_document_id +'/edit', function (data) {
+      $.get("{{ url('hrms/asDocument') }}" +'/' + as_document_id +'/edit', function (data) {
+          $('#formDocument').show(); 
+          var testing = '/'+ data.path + data.file_name; 
+          var test = `{{asset('storage/')}}${testing}`;
           $('#formHeading').html("Edit Document");
-          $('#saveBtn').val("edit-Document");
+          $('#description').val(data.description);
+          $('#wizardPicturePreview').attr("src", test);
           $('#as_document_id').val(data.as_document_id);
-          //$('#hr_manager_id').trigger('change');
-          //$('#effective_date').val(data.effective_date);
-          console.log(data);
+          console.log(test);
       })
    });
-    $('#saveBtn').click(function (e) {
+    
+      $("#formDocument").submit(function(e) {
         e.preventDefault();
         $(this).html('Save');
+        console.log('click');
          
         $.ajax({
           data: $('#formDocument').serialize(),
@@ -187,26 +191,6 @@ $(function () {
      
   });// end function
 
-
-
-
-
-
-
-
-
-      
-        //submit function
-        $("#formDocument").submit(function(e) { 
-            e.preventDefault();
-            //var url = "{{route('cvDocument.store')}}";
-            $('.fa-spinner').show(); 
-            submitForm(this, url,1);
-            $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','150');
-             $('#pdf').attr('src','');
-            $('#h6').text('Click On Image to Add Document');
-            refreshTable("{{route('cvDocument.table')}}",900);
-        });
 
         $( "#pdf" ).hide();
             // Prepare the preview for profile picture
@@ -287,8 +271,8 @@ $(function () {
         });
 
 
-      $(document).on('click','#ViewIMG', function(){  
-        $('#ViewIMG').EZView();
+      $(document).on('click','#ViewPDF, #ViewIMG', function(){  
+        $('#ViewPDF, #ViewIMG').EZView();
       });
             
             

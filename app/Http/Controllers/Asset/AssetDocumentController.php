@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Asset\AsDocumentation;
 use DataTables;
+use DB;
 
 class AssetDocumentController extends Controller
 {
@@ -51,6 +52,41 @@ class AssetDocumentController extends Controller
         $view =  view('asset.document.create')->render();
         return response()->json($view);
 
+    }
+
+    public function store (Request $request){
+
+        $input = $request->all();
+
+         DB::transaction(function () use ($input, $request) {  
+
+             //add image
+                $extension = request()->document->getClientOriginalExtension();
+                $fileName = time().'.'.$extension;
+                $folderName = "asset/".strtolower('2')."/";
+                //store file
+                $request->file('document')->storeAs('public/'.$folderName,$fileName);
+                
+                $file_path = storage_path('app/public/'.$folderName.$fileName);
+
+                $attachment['description']='image';
+                $attachment['file_name']=$fileName;
+                $attachment['size']=$request->file('document')->getSize();
+                $attachment['path']=$folderName;
+                $attachment['extension']=$extension;
+                $attachment['asset_id']=$asset->id;
+
+            AsDocumentation::updateOrCreate(['id' => $input['as_document_id']],
+                $attachment); 
+           
+        }); // end transcation      
+       return response()->json(['success'=>'Data saved successfully.']);
+    }
+
+    public function edit($id)
+    {
+        $document = AsDocumentation::find($id);
+        return response()->json($document);
     }
 
 
