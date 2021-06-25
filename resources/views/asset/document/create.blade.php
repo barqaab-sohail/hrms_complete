@@ -17,7 +17,8 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Document Description</label>
                             <input type="hidden" name="as_document_id" id="as_document_id">
-                            <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control" data-validation="required" placeholder="Enter Document Detail" >
+
+                            <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control exempted" data-validation="required" placeholder="Enter Document Detail" >
                         </div>
                     </div>
                 </div>
@@ -38,7 +39,6 @@
                         <center >
                         <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
                         
-                        </input>
                         <input type="file"  name="document" id="view" class="form-control" hidden>
                                                                         
 
@@ -97,109 +97,13 @@ $(document).ready(function(){
 
        $('#formDocument').hide();    
 
-//start function
-$(function () {
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-    });
-    var table = $('.data-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('asDocument.create') }}",
-        columns: [
-            {data: "description", name: 'description'},
-            {data: "document", name: 'document'},
-            {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
-            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
-
-        ],
-        order: [[ 1, "desc" ]]
-    });
-
-    $('#hideButton').click(function(){
-            $('#formDocument').toggle();
-             $('#formDocument').trigger("reset");
-    });
-
-    $('body').unbind().on('click', '.editDocument', function () {
-      var as_document_id = $(this).data('id');
-
-      $.get("{{ url('hrms/asDocument') }}" +'/' + as_document_id +'/edit', function (data) {
-          $('#formDocument').show(); 
-          var testing = '/'+ data.path + data.file_name; 
-          var test = `{{asset('storage/')}}${testing}`;
-          $('#formHeading').html("Edit Document");
-          $('#description').val(data.description);
-          $('#wizardPicturePreview').attr("src", test);
-          $('#as_document_id').val(data.as_document_id);
-          console.log(test);
-      })
-   });
-    
-      $("#formDocument").submit(function(e) {
-        e.preventDefault();
-        $(this).html('Save');
-        console.log('click');
-         
-        $.ajax({
-          data: $('#formDocument').serialize(),
-          url: "{{ route('asDocument.store') }}",
-          type: "POST",
-          dataType: 'json',
-          success: function (data) {
-     
-              $('#managerForm').trigger("reset");
-              table.draw();
-        
-          },
-          error: function (data) {
-              console.log(data.responseJSON.errors);
-              var errorMassage = '';
-              $.each(data.responseJSON.errors, function (key, value){
-                errorMassage += value + '<br>';  
-                });
-                 $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
-
-              $('#saveBtn').html('Save Changes');
-          }
-      });
-    });
-    
-    $('body').on('click', '.deleteManager', function () {
-     
-        var employee_manager_id = $(this).data("id");
-        var con = confirm("Are You sure want to delete !");
-        if(con){
-          $.ajax({
-            type: "DELETE",
-            url: "{{ route('manager.store') }}"+'/'+employee_manager_id,
-            success: function (data) {
-                table.draw();
-                if(data.error){
-                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
-                }
-  
-            },
-            error: function (data) {
-                console.log('Error:', data);
-            }
-          });
-        }
-    });
-     
-  });// end function
-
-
         $( "#pdf" ).hide();
             // Prepare the preview for profile picture
         $("#view").change(function(){
                 var fileName = this.files[0].name;
                 var fileType = this.files[0].type;
                 var fileSize = this.files[0].size;
-                //var fileType = fileName.split('.').pop();
-                console.log(fileType);
+                
             //Restrict File Size Less Than 2MB
             if (fileSize> 4096000){
                 alert('File Size is bigger than 4MB');
@@ -229,11 +133,123 @@ $(function () {
             
         });
 
-     
+    });//end document ready
+
+      //start function
+$(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('asDocument.create') }}",
+        columns: [
+            {data: "description", name: 'description'},
+            {data: "document", name: 'document'},
+            {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
+            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
+
+        ],
+        order: [[ 1, "desc" ]]
+    });
+
+    $('#hideButton').click(function(){
+            $('#formDocument').toggle();
+            $('#formDocument').trigger("reset");
+            $( "#pdf" ).hide();
+              document.getElementById("wizardPicturePreview").src="{{asset('Massets/images/document.png')}}"; 
+              document.getElementById("h6").innerHTML = "Click On Image to Add Document";
+    });
+
+    $('body').unbind().on('click', '.editDocument', function () {
+      var as_document_id = $(this).data('id');
+
+      $.get("{{ url('hrms/asDocument') }}" +'/' + as_document_id +'/edit', function (data) {
+          $('#formDocument').show(); 
+          var file_extension = data.extension;
+          var file_path = '/'+ data.path + data.file_name; 
+          var file_name = `{{asset('storage/')}}${file_path}`;
+          $('#formHeading').html("Edit Document");
+          $('#description').val(data.description);
+          $('#as_document_id').val(data.id);
+          if(file_extension == 'pdf'){
+             $( "#pdf" ).show();
+             $('embed').attr('src', file_name);
+          }else{
+             $('#wizardPicturePreview').attr("src", file_name);
+          }
 
       
+      })
+   });
+    
+      $("#formDocument").submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
 
-    });//end document ready
+        $.ajax({
+          data: formData,
+          url: "{{ route('asDocument.store') }}",
+          type: "POST",
+          //dataType: 'json',
+           contentType: false,
+           cache: false,
+           processData: false,
+          success: function (data) {
+     
+              $('#formDocument').trigger("reset");
+              $( "#pdf" ).hide();
+              document.getElementById("wizardPicturePreview").src="{{asset('Massets/images/document.png')}}"; 
+              document.getElementById("h6").innerHTML = "Click On Image to Add Document";
+              $('#formDocument').toggle();
+              $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');  
+
+              table.draw();
+        
+          },
+          error: function (data) {
+              console.log(data.responseJSON.errors);
+              var errorMassage = '';
+              $.each(data.responseJSON.errors, function (key, value){
+                errorMassage += value + '<br>';  
+                });
+                 $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
+    
+    $('body').on('click', '.deleteDocument', function () {
+     
+        var as_document_id = $(this).data("id");
+        var con = confirm("Are You sure want to delete !");
+        if(con){
+          $.ajax({
+            type: "DELETE",
+            url: "{{ route('asDocument.store') }}"+'/'+as_document_id,
+            success: function (data) {
+                table.draw();
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');
+                if(data.error){
+                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+                }
+  
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+          });
+        }
+    });
+     
+  });// end function
+
+
+
         function readURL(input) {
             var fileName = input.files[0].name;
             var fileType = input.files[0].type;
@@ -256,6 +272,7 @@ $(function () {
                     var reader = new FileReader();
                     
                         reader.onload = function (e) {
+                            
                             $('embed').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
                         }
                         reader.readAsDataURL(input.files[0]);

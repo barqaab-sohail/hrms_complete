@@ -40,8 +40,15 @@ class AssetDocumentController extends Controller
                             return $btn;
                     })
                     ->addColumn('document', function($row){                
-                         $url= asset('storage/'.$row->path.$row->file_name);
-                           return '<img  id="ViewIMG" src="'.$url.'" width=50/>';
+                        
+                        $url= asset('storage/'.$row->path.$row->file_name);
+                        $pdfMono = asset('Massets/images/document.png');
+                        if($row->extension == 'pdf'){
+                            return '<img  id="ViewPDF" src="'.$pdfMono.'" href="'.$url.'" width=30/>';
+                        }else{
+                            return '<img  id="ViewIMG" src="'.$url.'" width=30/>';
+                        }
+                        
                            
                     })
                     ->rawColumns(['Edit','Delete','document'])
@@ -61,6 +68,7 @@ class AssetDocumentController extends Controller
          DB::transaction(function () use ($input, $request) {  
 
              //add image
+            if ($request->hasFile('document')){
                 $extension = request()->document->getClientOriginalExtension();
                 $fileName = time().'.'.$extension;
                 $folderName = "asset/".strtolower('2')."/";
@@ -68,18 +76,21 @@ class AssetDocumentController extends Controller
                 $request->file('document')->storeAs('public/'.$folderName,$fileName);
                 
                 $file_path = storage_path('app/public/'.$folderName.$fileName);
-
-                $attachment['description']='image';
                 $attachment['file_name']=$fileName;
                 $attachment['size']=$request->file('document')->getSize();
                 $attachment['path']=$folderName;
                 $attachment['extension']=$extension;
-                $attachment['asset_id']=$asset->id;
 
-            AsDocumentation::updateOrCreate(['id' => $input['as_document_id']],
+                $attachment['asset_id']=session('asset_id');
+                $attachment['description']=$input['description'];
+                AsDocumentation::updateOrCreate(['id' => $input['as_document_id']],
                 $attachment); 
+            } 
+
+                
            
-        }); // end transcation      
+        }); // end transcation     
+
        return response()->json(['success'=>'Data saved successfully.']);
     }
 
@@ -87,6 +98,22 @@ class AssetDocumentController extends Controller
     {
         $document = AsDocumentation::find($id);
         return response()->json($document);
+    }
+
+    public function destroy ($id){
+        $documentImage = AsDocumentation::where('id',$id)->first();
+        if(AsDocumentation::where('asset_id',session('asset_id'))->count()<2 || strtolower($documentImage->description) =='image')
+        {
+            return response()->json(['error'=>'You cannot delete asset image']);
+        }
+
+        $asDocumentation = AsDocumentation::where('asset_id',$id)->first();
+
+        DB::transaction(function () use ($id) {  
+            AsDocumentation::find($id)->delete();           
+        }); // end transcation 
+        return response()->json(['success'=>'data  delete successfully.']);
+
     }
 
 
