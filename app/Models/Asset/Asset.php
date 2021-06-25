@@ -35,7 +35,7 @@ class Asset extends Model implements Auditable
 
     public function asOwnership(){
 
-        return $this->hasOneThrough('App\Models\Common\Client', 'App\Models\Asset\asOwnership',
+        return $this->hasOneThrough('App\Models\Common\Client', 'App\Models\Asset\AsOwnership',
             'asset_id',
             'id',
             'id',
