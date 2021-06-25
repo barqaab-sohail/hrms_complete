@@ -199,7 +199,7 @@
                         
                         <img src="{{asset(isset($data->asDocumentation->file_name)? 'storage/'.$data->asDocumentation->path.$data->asDocumentation->file_name: 'Massets/images/document.png') }}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="100" >
                        
-                        <input type="file"  name="document" id="view" @if(!$data->asDocumentation->file_name)data-validation="required" @endif class="form-control" hidden>
+                        <input type="file"  name="document" id="view" data-validation="{{isset($data->asDocumentation['file_name'])? '':'required'}}" class="form-control" hidden>
 
                         <h6 id="h6" class="card-title m-t-10">Click On Image to Add Image<span class="text_requried">*</span></h6>
                         </center>

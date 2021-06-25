@@ -203,13 +203,19 @@ class AssetController extends Controller
                 $attachment['asset_id']=$id;
 
                 $asDocumentation = AsDocumentation::where('asset_id',$id)->first();
-                $oldDocumentPath =  $asDocumentation->path.$asDocumentation->file_name;
-                
-                AsDocumentation::findOrFail($asDocumentation->id)->update($attachment);
 
-                if(File::exists(public_path('storage/'.$oldDocumentPath))){
-                    File::delete(public_path('storage/'.$oldDocumentPath));
+                if($asDocumentation){
+                    $oldDocumentPath =  $asDocumentation->path.$asDocumentation->file_name;
+                    AsDocumentation::findOrFail($asDocumentation->id)->update($attachment);
+
+                    if(File::exists(public_path('storage/'.$oldDocumentPath))){
+                        File::delete(public_path('storage/'.$oldDocumentPath));
+                    }
+                    
+                }else{
+                    AsDocumentation::create($attachment);
                 }
+               
             }
             
         }); // end transcation
