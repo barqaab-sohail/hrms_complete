@@ -14,7 +14,6 @@ class AssetSeeder extends Seeder
         $this->call(AsClassSeeder::class);
         $this->call(AsSubClassSeeder::class);
         $this->call(AsConditionTypeSeeder::class);
-        $this->call(AsDocumentNameSeeder::class);
         $this->call(AsPurchaseConditionSeeder::class);
     }
 }
