@@ -58,18 +58,19 @@ class LoginController extends Controller
         //Override loing function for Additional code
         $user = user::all()->where ('email',$request->email)->first();
 
-        // 2 for check User is not block by HR and 0 Check User is Registered
-        if ($user->user_status==2){
-              return view('auth.login')->withErrors("Please Contact to HR");
-        } elseif($user->user_status==0){
-            return view('auth.register')->withErrors("You are not registered user, please registration first");
-        } 
-        
-        //check Employee is Onboard
-        if ($user->hrEmployee->hr_status_id != 'Active'){
-              return view('auth.login')->withErrors("Please Contact to HR");
+        if($user){
+            // 2 for check User is not block by HR and 0 Check User is Registered
+            if ($user->user_status==2){
+                  return view('auth.login')->withErrors("Please Contact to HR");
+            } elseif($user->user_status==0){
+                return view('auth.register')->withErrors("You are not registered user, please registration first");
+            } 
+            
+            //check Employee is Onboard
+            if ($user->hrEmployee->hr_status_id != 'Active'){
+                  return view('auth.login')->withErrors("Please Contact to HR");
+            }
         }
-      
         //end additional code
 
 

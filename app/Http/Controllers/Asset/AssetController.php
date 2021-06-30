@@ -36,53 +36,45 @@ class AssetController extends Controller
     	$asClasses = AsClass::all();
     	$asSubClasses = AsSubClass::all();
     	$asConditionTypes = AsConditionType::all();
-    	$asPurchaseConditions = AsPurchaseCondition::all();
     	$asOwnerships = Client::all();
     	$offices = Office::all();
     	$employees = HrEmployee::all();
         
-    	return view ('asset.create', compact('asClasses','asSubClasses','asConditionTypes','asPurchaseConditions','asOwnerships','offices','employees'));
+    	return view ('asset.create', compact('asClasses','asSubClasses','asConditionTypes','asOwnerships','offices','employees'));
     }
 
     public function store (Request $request){
 
-    	 $input = $request->all();
-    	  if($request->filled('purchase_date')){
-            $input ['purchase_date']= \Carbon\Carbon::parse($request->purchase_date)->format('Y-m-d');
-            }
+    	$input = $request->all();
+    	  
 
     	DB::transaction(function () use ($input, $request) {  
+            $today = \Carbon\Carbon::today();
 
             $asset=Asset::create($input);
             AsCondition::create([
                 'asset_id'=>$asset->id,
                 'as_condition_type_id'=> $input['as_condition_type_id'],
-                'date'=> $input['purchase_date']
+                'date'=>  $today
                 ]);
-            $purchaseCost = (int)str_replace(',', '', $input['purchase_cost']);
-            AsPurchase::create([
-                'asset_id'=>$asset->id,
-                'as_purchase_condition_id'=> $input['as_purchase_condition_id'],
-                'purchase_cost'=> $purchaseCost,
-                'purchase_date'=> $input['purchase_date']
-                ]);
+         
             AsOwnership::create([
                 'asset_id'=>$asset->id,
                 'client_id'=> $input['client_id'],
-                'date'=> $input['purchase_date']
+                'date'=>  $today
                 ]);
             if($request->filled('hr_employele_id')){
             AsAllocation::create([
                 'asset_id'=>$asset->id,
                 'hr_employele_id'=> $input['hr_employele_id'],
-                'date'=> $input['purchase_date']
+                'date'=>  $today
                 ]);  
             }
             if($request->filled('office_id')){
             AsLocation::create([
                 'asset_id'=>$asset->id,
                 'office_id'=> $input['office_id'],
-                'date'=> $input['purchase_date']
+                'date'=>  $today
                 ]);  
             }
 
@@ -114,17 +106,15 @@ class AssetController extends Controller
     	$asClasses = AsClass::all();
     	$asSubClasses = AsSubClass::all();
     	$asConditionTypes = AsConditionType::all();
-    	$asPurchaseConditions = AsPurchaseCondition::all();
     	$asOwnerships = Client::all();
     	$offices = Office::all();
     	$employees = HrEmployee::all();
     	$data = Asset::find($id);
-      	//dd(public_path($data->asDocumentation->path.$data->asDocumentation->file_name));
 
         if($request->ajax()){      
-            return view ('asset.ajax', compact('asClasses','asSubClasses','asConditionTypes','asPurchaseConditions','asOwnerships','offices','employees','data'));   
+            return view ('asset.ajax', compact('asClasses','asSubClasses','asConditionTypes','asOwnerships','offices','employees','data'));   
         }else{
-            return view ('asset.edit', compact('asClasses','asSubClasses','asConditionTypes','asPurchaseConditions','asOwnerships','offices','employees','data'));       
+            return view ('asset.edit', compact('asClasses','asSubClasses','asConditionTypes','asOwnerships','offices','employees','data'));       
         }
 
     	
@@ -136,35 +126,24 @@ class AssetController extends Controller
     public function update (Request $request, $id){
 
          $input = $request->all();
-          if($request->filled('purchase_date')){
-            $input ['purchase_date']= \Carbon\Carbon::parse($request->purchase_date)->format('Y-m-d');
-            }
 
         DB::transaction(function () use ($input, $request, $id) {  
-
+            $today = \Carbon\Carbon::today();
+            
             Asset::findOrFail($id)->update($input);
 
             $asCondition = AsCondition::where('asset_id',$id)->first(); 
             AsCondition::findOrFail($asCondition->id)->update([
                 'as_condition_type_id'=> $input['as_condition_type_id'],
-                'date'=> $input['purchase_date']
+                'date'=>  $today
                 ]);
 
-
-
-            $purchaseCost = (int)str_replace(',', '', $input['purchase_cost']);
-            $asPurchase = AsPurchase::where('asset_id',$id)->first(); 
-            AsPurchase::findOrFail($asPurchase->id)->update([
-                'as_purchase_condition_id'=> $input['as_purchase_condition_id'],
-                'purchase_cost'=> $purchaseCost,
-                'purchase_date'=> $input['purchase_date']
-                ]);
 
 
             $asOwnership = AsOwnership::where('asset_id',$id)->first(); 
             AsOwnership::findOrFail($asOwnership->id)->update([
                 'client_id'=> $input['client_id'],
-                'date'=> $input['purchase_date']
+                'date'=>  $today
                 ]);
 
             if($request->filled('hr_employele_id')){
@@ -172,7 +151,7 @@ class AssetController extends Controller
             $asAllocation = AsAllocation::where('asset_id',$id)->first(); 
             AsAllocation::findOrFail($asAllocation->id)->update([
                 'hr_employele_id'=> $input['hr_employele_id'],
-                'date'=> $input['purchase_date']
+                'date'=>  $today
                 ]);  
             }
             if($request->filled('office_id')){
@@ -180,7 +159,7 @@ class AssetController extends Controller
             $asLocation = AsLocation::where('asset_id',$id)->first();    
             AsLocation::findOrFail($asLocation->id)->update([
                 'office_id'=> $input['office_id'],
-                'date'=> $input['purchase_date']
+                'date'=>  $today
                 ]);  
             }
 
