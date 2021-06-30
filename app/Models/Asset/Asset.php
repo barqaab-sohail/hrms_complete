@@ -52,14 +52,16 @@ class Asset extends Model implements Auditable
     //Location at the time of Purhcase
     public function asLocationFirst(){
 
-        return $this->hasOne('App\Models\Asset\AsLocation')->where('date',$this->asPurchase->purchase_date);
+        return $this->hasOne('App\Models\Asset\AsLocation');
     }
 
     //Allocation at the time of Purhcase
     public function asAllocationFirst(){
 
-        return $this->hasOne('App\Models\Asset\AsAllocation')->where('date',$this->asPurchase->purchase_date);
+        return $this->hasOne('App\Models\Asset\AsAllocation');
     }
+
+
 
 
     public function asSubClass(){
@@ -73,6 +75,11 @@ class Asset extends Model implements Auditable
     
     public function asDocumentation(){
         return $this->hasOne('App\Models\Asset\AsDocumentation');
+    }
+
+    public function asLocation(){
+
+        return $this->hasMany('App\Models\Asset\AsLocation');
     }
 
 }

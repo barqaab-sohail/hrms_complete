@@ -111,7 +111,6 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 });
 
 //CV Routes
-
 Route::group(['prefix' => 'hrms/cvData', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Cv'], function(){
 Route::get('/autocomplete/fetch', 'CvController@fetch')->name('autocomplete.fetch');
 Route::post('/cvCnic','CvController@cvCnic')->name('cv.cnic');
@@ -151,6 +150,9 @@ Route::resource('/projectCode', 'ProjectCodeController');
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Asset'], function(){
 Route::resource('/asset','AssetController');
 Route::resource('/asDocument','AssetDocumentController');
+Route::resource('/asPurchase','AsPurchaseController');
+Route::resource('/asLocation','AsLocationController');
+Route::resource('/asOwnership','AsOwnershipController');
 Route::get('/asset/sub_classes/{id?}', 'AssetController@getSubClasses');
 Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
 
