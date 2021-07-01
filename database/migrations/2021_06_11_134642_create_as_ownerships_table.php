@@ -18,10 +18,12 @@ class CreateAsOwnershipsTable extends Migration
             $table->id();
             $table->bigInteger('asset_id')->unsigned();
             $table->bigInteger('client_id')->unsigned();
+             $table->bigInteger('pr_detail_id')->unsigned()->nullable();
             $table->date('date');
             $table->timestamps();
             $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('pr_detail_id')->references('id')->on('pr_details');
         });
     }
 

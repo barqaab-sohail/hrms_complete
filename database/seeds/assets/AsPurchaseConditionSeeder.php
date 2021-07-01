@@ -15,7 +15,6 @@ class AsPurchaseConditionSeeder extends Seeder
         $asPurchaseConditions = array(
         	array('name' => 'New'),
         	array('name' => 'Used'),
-        	array('name' => 'Installments'),
         );
         DB::table('as_purchase_conditions')->insert($asPurchaseConditions);
     }

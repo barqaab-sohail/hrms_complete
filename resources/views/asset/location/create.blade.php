@@ -12,6 +12,7 @@
             <h3 class="box-title" id="formHeading">Location</h3>
             <hr class="m-t-0 m-b-40">
             <div class="row">
+             <input type="hidden" name="as_location_id" id="as_location_id"/>
                  <div class="col-md-2">
                                     <div class="form-group row">
                                         <div class="col-md-12">
@@ -166,28 +167,27 @@ $(function () {
     $('#hideButton').click(function(){
             $('#formLocation').toggle();
             $('#formLocation').trigger("reset");
-            $( "#pdf" ).hide();
-              document.getElementById("wizardPicturePreview").src="{{asset('Massets/images/document.png')}}"; 
-              document.getElementById("h6").innerHTML = "Click On Image to Add Document";
+          
     });
 
-    $('body').unbind().on('click', '.editDocument', function () {
-      var as_document_id = $(this).data('id');
+    $('body').unbind().on('click', '.editLocation', function () {
+      var as_location_id = $(this).data('id');
 
-      $.get("{{ url('hrms/asDocument') }}" +'/' + as_document_id +'/edit', function (data) {
+      $.get("{{ url('hrms/asLocation') }}" +'/' + as_location_id +'/edit', function (data) {
           $('#formLocation').show(); 
-          var file_extension = data.extension;
-          var file_path = '/'+ data.path + data.file_name; 
-          var file_name = `{{asset('storage/')}}${file_path}`;
-          $('#formHeading').html("Edit Document");
-          $('#description').val(data.description);
-          $('#as_document_id').val(data.id);
-          if(file_extension == 'pdf'){
-             $( "#pdf" ).show();
-             $('embed').attr('src', file_name);
-          }else{
-             $('#wizardPicturePreview').attr("src", file_name);
+          $('#formHeading').html("Edit Location");
+          $('#as_location_id').val(data.id);
+          if(data.office_id){
+            
+            $('#asset_location').val('1');
+            $('#office_id').val(data.office_id);
+            $('#office_id').trigger('change');
+            $('#asset_location').trigger('change');
+            $('#date').val(data.date);
+            console.log(data);
           }
+         
+          
 
       
       })
@@ -199,7 +199,7 @@ $(function () {
 
         $.ajax({
           data: formData,
-          url: "{{ route('asDocument.store') }}",
+          url: "{{ route('asLocation.store') }}",
           type: "POST",
           //dataType: 'json',
            contentType: false,
@@ -208,9 +208,6 @@ $(function () {
           success: function (data) {
      
               $('#formLocation').trigger("reset");
-              $( "#pdf" ).hide();
-              document.getElementById("wizardPicturePreview").src="{{asset('Massets/images/document.png')}}"; 
-              document.getElementById("h6").innerHTML = "Click On Image to Add Document";
               $('#formLocation').toggle();
               $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');  
 
@@ -230,14 +227,14 @@ $(function () {
       });
     });
     
-    $('body').on('click', '.deleteDocument', function () {
+    $('body').on('click', '.deleteLocation', function () {
      
-        var as_document_id = $(this).data("id");
+        var as_location_id = $(this).data("id");
         var con = confirm("Are You sure want to delete !");
         if(con){
           $.ajax({
             type: "DELETE",
-            url: "{{ route('asDocument.store') }}"+'/'+as_document_id,
+            url: "{{ route('asLocation.store') }}"+'/'+as_location_id,
             success: function (data) {
                 table.draw();
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');

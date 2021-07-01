@@ -8,7 +8,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class AsOwnership extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    protected $fillable = ['asset_id','client_id', 'date'];
+    protected $fillable = ['asset_id','client_id','pr_detail_id', 'date'];
 
 
     public function asOwnership(){

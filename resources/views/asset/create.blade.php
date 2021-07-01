@@ -77,129 +77,10 @@
 		                            </div>
 		                        </div><!--/End Row-->
 
-		                        <div class="row">
-		                             <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Purchase Cost</label>
-		                                        <input type="text" name="purchase_cost" id="purchase_cost" value="{{ old('purchase_cost') }}" class="form-control" placeholder="Enter Total Cost">
-	                                           	
-                                     
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-
-		                            <div class="col-md-3">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Purchase Date<span class="text_requried">*</span></label>
-		                                        
-		                                        <input type="text" id="purchase_date" name="purchase_date" value="{{ old('purchase_date') }}" class="form-control date_input" data-validation="required" readonly>
-												
-												<br>
-		                                        @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
-		                                    </div>
-		                            	</div>
-		                            </div>
-
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Purchase Condition<span class="text_requried">*</span></label>
-		                                        
-	                                           	<select  name="as_purchase_condition_id" class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($asPurchaseConditions as $asPurchaseCondition)
-													<option value="{{$asPurchaseCondition->id}}" {{(old("as_purchase_condition_id")==$asPurchaseCondition->id? "selected" : "")}}>{{$asPurchaseCondition->name}}</option>
-                                                    @endforeach     
-                                                </select>
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-
-		                             <div class="col-md-5">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Ownership<span class="text_requried">*</span></label>
-		                                        
-	                                           	<select  name="client_id" class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($asOwnerships as $asOwnership)
-													<option value="{{$asOwnership->id}}" {{(old("client_id")==$asOwnership->id? "selected" : "")}}>{{$asOwnership->name}}</option>
-                                                    @endforeach     
-                                                </select>
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div><!--/End Row-->
+		                       
 
 		                        <div class="row">
-		                             <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Asset Location<span class="text_requried">*</span></label>
-		                                        
-	                                           	<select  name="asset_location" id="asset_location" class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    <option value="1">Placed at</option>
-                                                     <option value="2">Handover to</option>  
-                                                </select>
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-		                            <div class="col-md-3 blank">
-		                            </div>
-		                            <div class="col-md-3 hide office">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Office<span class="text_requried">*</span></label>
-		                                        
-	                                           	<select  name="office_id" id="office_id" class="form-control selectTwo">
-                                                    <option value=""></option>
-                                                    @foreach($offices as $office)
-													<option value="{{$office->id}}" {{(old("office_id")==$office->id? "selected" : "")}}>{{$office->name}}</option>
-                                                    @endforeach     
-                                                </select>
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-		                            <div class="col-md-3 hide employee">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Employee<span class="text_requried">*</span></label>
-		                                        
-	                                           	<select  name="hr_employee_id" id="hr_employee_id" class="form-control selectTwo">
-                                                    <option value=""></option>
-                                                    @foreach($employees as $employee)
-													<option value="{{$employee->id}}" {{(old("hr_employee_id")==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}}</option>
-                                                    @endforeach     
-                                                </select>
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Asset Condition<span class="text_requried">*</span></label>
-		                                        
-	                                           	<select  name="as_condition_type_id" class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($asConditionTypes as $asConditinoType)
-													<option value="{{$asConditinoType->id}}" {{(old("as_condition_type_id")==$asConditinoType->id? "selected" : "")}}>{{$asConditinoType->name}}</option>
-                                                    @endforeach     
-                                                </select>
-												
-		                                    </div>
-		                                </div>
-		                            </div>
-
+		                            <div class="col-md-2"></div>
 		                            <div class="col-md-5">
 		                                 <div class="form-group row">
 					                        <center >
@@ -368,45 +249,7 @@ $(document).ready(function() {
     });
 
 
-    $('#asset_location').change(function(){
-    	 var option = $(this).val();
-    	if(option==1){
-    		$(".blank").addClass('hide');
-    		$(".office").removeClass('hide');
-    		$("#office_id").attr("data-validation", "required");
-    		$("#hr_employee_id").removeAttr("data-validation");
-    		$(".employee").addClass('hide');
-    		$('#hr_employee_id').val('').select2('val', 'All');
-
-    	} else if(option==2){
-    		$(".blank").addClass('hide');
-    		$(".employee").removeClass('hide');
-    		$("#hr_employee_id").attr("data-validation", "required");
-    		$("#office_id").removeAttr("data-validation");
-    		$(".office").addClass('hide');
-    	} else{
-    		$(".blank").removeClass('hide');
-    		$(".employee").addClass('hide');
-    		$(".office").addClass('hide');
-    		$("#office_id").removeAttr("data-validation");
-    		$("#hr_employee_id").removeAttr("data-validation");
-    	}
-
-    });
-
-    $('#purchase_cost').keyup(function(event) {
-
-	    // skip for arrow keys
-	    if(event.which >= 37 && event.which <= 40) return;
-
-	    // format number
-	    $(this).val(function(index, value) {
-	      return value
-	      .replace(/\D/g, "")
-	      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-	      ;
-	    });
-  	});
+    
 
   	//Image Perview
 
