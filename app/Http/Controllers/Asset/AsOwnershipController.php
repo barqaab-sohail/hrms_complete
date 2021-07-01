@@ -24,15 +24,13 @@ class AsOwnershipController extends Controller
 
     public function create(Request $request){
 
-
-    	// $data = Asset::join('as_allocations','as_allocations.asset_id','assets.id')
-     //        		->join('as_locations','as_locations.asset_id','assets.id')
-     //        		->latest()->get();
         
     	if ($request->ajax()) {
 
+    		 // $posts = Post::join('users', 'posts.user_id', '=', 'users.id')
+       //      ->select(['posts.id', 'posts.title', 'users.name', 'users.email', 'posts.created_at', 'posts.updated_at']);
          
-    		$data = AsOwnership::with('asProject')->where('asset_id',session('asset_id'))->latest()->get();
+    		$data = AsOwnership::where('asset_id',session('asset_id'))->latest()->get();
 
             return  DataTables::of($data)
                     ->addIndexColumn()
@@ -64,13 +62,7 @@ class AsOwnershipController extends Controller
                         return $btn;  
                            
                     })
-                    ->addColumn('porjectName', function($row){                
-                        
-                        $btn = $row->asPrject->id??'';
-                            
-                        return $btn;  
-                           
-                    })
+                   
                     
                     ->rawColumns(['Edit','Delete','ownership','date','projectName'])
                     ->make(true);
@@ -91,21 +83,16 @@ class AsOwnershipController extends Controller
 
         DB::transaction(function () use ($input, $request) {  
         	
+            $prDetail=null;
+            if($request->filled('pr_detail_id')){
+                $prDetail = $input ['pr_detail_id'];
+            }
+
             AsOwnership::updateOrCreate(['id' => $input['as_ownership_id']],
                 ['date'=> $input['date'],
                 'client_id'=> $input['client_id'],
+                'pr_detail_id'=> $prDetail,
                 'asset_id'=> session('asset_id')]); 
-
-            $asProject = AsProject::where('as_ownership_id',$input['as_ownership_id'])->first();
-           
-           if($request->filled('pr_detail_id')){
-
-           		AsProject::updateOrCreate(['id' => $asProject->id??''],
-                ['as_ownership_id'=> $input['as_ownership_id'],
-                'pr_detail_id'=> $input['pr_detail_id']]); 
-
-           }
-
 
         }); // end transcation      
        return response()->json(['success'=>"Data saved successfully."]);

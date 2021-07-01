@@ -41,7 +41,7 @@
               </div>
             </div> <!-- End Row -->
 
-            <div class="row hide">
+            <div class="row">
               
               <div class="col-md-11">
                 <div class="form-group row">
@@ -126,7 +126,7 @@ $(function () {
         ],
         order: [[ 1, "desc" ]]
     });
-
+    
     $('#hideButton').click(function(){
             $('#formOwnership').toggle();
             $('#formOwnership').trigger("reset");
@@ -142,12 +142,11 @@ $(function () {
         
           $('#formHeading').html("Edit Ownership");
           $('#ownership').val(data.client_id);
+          $('#pr_detail_id').val(data.pr_detail_id);
+          $('#pr_detail_id').trigger('change');
           $('#ownership').trigger('change');
           $('#date').val(data.date);
           $('#as_ownership_id').val(data.id);
-          if(data.client_id!='20'){
-           $('.hide').removeClass('hide');
-          }
           console.log(data);
 
       
@@ -157,6 +156,7 @@ $(function () {
       $("#formOwnership").submit(function(e) {
         e.preventDefault();
         var formData = new FormData(this);
+        console.log(formData);
 
         $.ajax({
           data: formData,

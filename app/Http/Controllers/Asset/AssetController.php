@@ -35,48 +35,44 @@ class AssetController extends Controller
     	session()->put('asset_id', '');
     	$asClasses = AsClass::all();
     	$asSubClasses = AsSubClass::all();
-    	$asConditionTypes = AsConditionType::all();
-    	$asOwnerships = Client::all();
-    	$offices = Office::all();
-    	$employees = HrEmployee::all();
         
-    	return view ('asset.create', compact('asClasses','asSubClasses','asConditionTypes','asOwnerships','offices','employees'));
+    	return view ('asset.create', compact('asClasses','asSubClasses'));
     }
 
     public function store (Request $request){
 
     	$input = $request->all();
     	  
-
-    	DB::transaction(function () use ($input, $request) {  
+        $asset='';
+    	DB::transaction(function () use ($input, $request, &$asset) {  
             $today = \Carbon\Carbon::today();
 
             $asset=Asset::create($input);
-            AsCondition::create([
-                'asset_id'=>$asset->id,
-                'as_condition_type_id'=> $input['as_condition_type_id'],
-                'date'=>  $today
-                ]);
+            // AsCondition::create([
+            //     'asset_id'=>$asset->id,
+            //     'as_condition_type_id'=> $input['as_condition_type_id'],
+            //     'date'=>  $today
+            //     ]);
          
-            AsOwnership::create([
-                'asset_id'=>$asset->id,
-                'client_id'=> $input['client_id'],
-                'date'=>  $today
-                ]);
-            if($request->filled('hr_employele_id')){
-            AsAllocation::create([
-                'asset_id'=>$asset->id,
-                'hr_employele_id'=> $input['hr_employele_id'],
-                'date'=>  $today
-                ]);  
-            }
-            if($request->filled('office_id')){
-            AsLocation::create([
-                'asset_id'=>$asset->id,
-                'office_id'=> $input['office_id'],
-                'date'=>  $today
-                ]);  
-            }
+            // AsOwnership::create([
+            //     'asset_id'=>$asset->id,
+            //     'client_id'=> $input['client_id'],
+            //     'date'=>  $today
+            //     ]);
+            // if($request->filled('hr_employele_id')){
+            // AsAllocation::create([
+            //     'asset_id'=>$asset->id,
+            //     'hr_employele_id'=> $input['hr_employele_id'],
+            //     'date'=>  $today
+            //     ]);  
+            // }
+            // if($request->filled('office_id')){
+            // AsLocation::create([
+            //     'asset_id'=>$asset->id,
+            //     'office_id'=> $input['office_id'],
+            //     'date'=>  $today
+            //     ]);  
+            // }
 
             //add image
                 $extension = request()->document->getClientOriginalExtension();
@@ -98,23 +94,19 @@ class AssetController extends Controller
     		
     	}); // end transcation
 
-    	return response()->json(['url'=> route("asset.index"),'message' => 'Data Successfully Saved']);
+    	return response()->json(['url'=> route("asset.edit",$asset),'message' => 'Data Successfully Saved']);
     }
 
     public function edit(Request $request, $id){
     	session()->put('asset_id', $id);
     	$asClasses = AsClass::all();
     	$asSubClasses = AsSubClass::all();
-    	$asConditionTypes = AsConditionType::all();
-    	$asOwnerships = Client::all();
-    	$offices = Office::all();
-    	$employees = HrEmployee::all();
     	$data = Asset::find($id);
 
         if($request->ajax()){      
-            return view ('asset.ajax', compact('asClasses','asSubClasses','asConditionTypes','asOwnerships','offices','employees','data'));   
+            return view ('asset.ajax', compact('asClasses','asSubClasses','data'));   
         }else{
-            return view ('asset.edit', compact('asClasses','asSubClasses','asConditionTypes','asOwnerships','offices','employees','data'));       
+            return view ('asset.edit', compact('asClasses','asSubClasses','data'));       
         }
 
     	
@@ -132,36 +124,36 @@ class AssetController extends Controller
             
             Asset::findOrFail($id)->update($input);
 
-            $asCondition = AsCondition::where('asset_id',$id)->first(); 
-            AsCondition::findOrFail($asCondition->id)->update([
-                'as_condition_type_id'=> $input['as_condition_type_id'],
-                'date'=>  $today
-                ]);
+            // $asCondition = AsCondition::where('asset_id',$id)->first(); 
+            // AsCondition::findOrFail($asCondition->id)->update([
+            //     'as_condition_type_id'=> $input['as_condition_type_id'],
+            //     'date'=>  $today
+            //     ]);
 
 
 
-            $asOwnership = AsOwnership::where('asset_id',$id)->first(); 
-            AsOwnership::findOrFail($asOwnership->id)->update([
-                'client_id'=> $input['client_id'],
-                'date'=>  $today
-                ]);
+            // $asOwnership = AsOwnership::where('asset_id',$id)->first(); 
+            // AsOwnership::findOrFail($asOwnership->id)->update([
+            //     'client_id'=> $input['client_id'],
+            //     'date'=>  $today
+            //     ]);
 
-            if($request->filled('hr_employele_id')){
+            // if($request->filled('hr_employele_id')){
 
-            $asAllocation = AsAllocation::where('asset_id',$id)->first(); 
-            AsAllocation::findOrFail($asAllocation->id)->update([
-                'hr_employele_id'=> $input['hr_employele_id'],
-                'date'=>  $today
-                ]);  
-            }
-            if($request->filled('office_id')){
+            // $asAllocation = AsAllocation::where('asset_id',$id)->first(); 
+            // AsAllocation::findOrFail($asAllocation->id)->update([
+            //     'hr_employele_id'=> $input['hr_employele_id'],
+            //     'date'=>  $today
+            //     ]);  
+            // }
+            // if($request->filled('office_id')){
 
-            $asLocation = AsLocation::where('asset_id',$id)->first();    
-            AsLocation::findOrFail($asLocation->id)->update([
-                'office_id'=> $input['office_id'],
-                'date'=>  $today
-                ]);  
-            }
+            // $asLocation = AsLocation::where('asset_id',$id)->first();    
+            // AsLocation::findOrFail($asLocation->id)->update([
+            //     'office_id'=> $input['office_id'],
+            //     'date'=>  $today
+            //     ]);  
+            // }
 
             //Edit image
             if ($request->hasFile('document')){
