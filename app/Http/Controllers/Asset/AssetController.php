@@ -11,15 +11,7 @@ use App\Models\Asset\AsClass;
 use App\Models\Asset\AsSubClass;
 use App\Models\Asset\AsConditionType;
 use App\Models\Asset\AsCondition;
-use App\Models\Asset\AsPurchaseCondition;
-use App\Models\Asset\AsPurchase;
-use App\Models\Asset\AsOwnership;
-use App\Models\Asset\AsLocation;
-use App\Models\Asset\AsAllocation;
 use App\Models\Asset\AsDocumentation;
-use App\Models\Common\Client;
-use App\Models\Office\Office;
-use App\Models\Hr\HrEmployee;
 use DB;
 use Storage;
 
@@ -39,7 +31,7 @@ class AssetController extends Controller
     	return view ('asset.create', compact('asClasses','asSubClasses'));
     }
 
-    public function store (Request $request){
+    public function store (AssetStore $request){
 
     	$input = $request->all();
     	  
@@ -48,36 +40,11 @@ class AssetController extends Controller
             $today = \Carbon\Carbon::today();
 
             $asset=Asset::create($input);
-            // AsCondition::create([
-            //     'asset_id'=>$asset->id,
-            //     'as_condition_type_id'=> $input['as_condition_type_id'],
-            //     'date'=>  $today
-            //     ]);
-         
-            // AsOwnership::create([
-            //     'asset_id'=>$asset->id,
-            //     'client_id'=> $input['client_id'],
-            //     'date'=>  $today
-            //     ]);
-            // if($request->filled('hr_employele_id')){
-            // AsAllocation::create([
-            //     'asset_id'=>$asset->id,
-            //     'hr_employele_id'=> $input['hr_employele_id'],
-            //     'date'=>  $today
-            //     ]);  
-            // }
-            // if($request->filled('office_id')){
-            // AsLocation::create([
-            //     'asset_id'=>$asset->id,
-            //     'office_id'=> $input['office_id'],
-            //     'date'=>  $today
-            //     ]);  
-            // }
-
+            
             //add image
                 $extension = request()->document->getClientOriginalExtension();
                 $fileName = time().'.'.$extension;
-                $folderName = "asset/".strtolower(request()->as_class_id)."/";
+                $folderName = "asset/".$asset->id."/";
                 //store file
                 $request->file('document')->storeAs('public/'.$folderName,$fileName);
                 
@@ -115,7 +82,7 @@ class AssetController extends Controller
     }
 
 
-    public function update (Request $request, $id){
+    public function update (AssetStore $request, $id){
 
          $input = $request->all();
 
@@ -124,43 +91,12 @@ class AssetController extends Controller
             
             Asset::findOrFail($id)->update($input);
 
-            // $asCondition = AsCondition::where('asset_id',$id)->first(); 
-            // AsCondition::findOrFail($asCondition->id)->update([
-            //     'as_condition_type_id'=> $input['as_condition_type_id'],
-            //     'date'=>  $today
-            //     ]);
-
-
-
-            // $asOwnership = AsOwnership::where('asset_id',$id)->first(); 
-            // AsOwnership::findOrFail($asOwnership->id)->update([
-            //     'client_id'=> $input['client_id'],
-            //     'date'=>  $today
-            //     ]);
-
-            // if($request->filled('hr_employele_id')){
-
-            // $asAllocation = AsAllocation::where('asset_id',$id)->first(); 
-            // AsAllocation::findOrFail($asAllocation->id)->update([
-            //     'hr_employele_id'=> $input['hr_employele_id'],
-            //     'date'=>  $today
-            //     ]);  
-            // }
-            // if($request->filled('office_id')){
-
-            // $asLocation = AsLocation::where('asset_id',$id)->first();    
-            // AsLocation::findOrFail($asLocation->id)->update([
-            //     'office_id'=> $input['office_id'],
-            //     'date'=>  $today
-            //     ]);  
-            // }
-
             //Edit image
             if ($request->hasFile('document')){
 
                 $extension = request()->document->getClientOriginalExtension();
                 $fileName = time().'.'.$extension;
-                $folderName = "asset/".strtolower(request()->as_class_id)."/";
+                $folderName = "asset/".$id."/";
                 //store file
                 $request->file('document')->storeAs('public/'.$folderName,$fileName);
                 

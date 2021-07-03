@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Common\Client;
 use App\Models\Asset\AsOwnership;
+use App\Http\Requests\Asset\AsOwnershipStore;
 use App\Models\Asset\AsProject;
 use App\Models\Project\PrDetail;
 use DataTables;
@@ -74,7 +75,7 @@ class AsOwnershipController extends Controller
 
     } 
 
-    public function store (Request $request){
+    public function store (AsOwnershipStore $request){
 
     	$input = $request->all();
     	if($request->filled('date')){

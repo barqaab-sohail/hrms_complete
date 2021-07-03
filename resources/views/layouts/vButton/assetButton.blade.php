@@ -9,8 +9,6 @@
             <a type="submit" role="button" id="addDocument" href="{{route('asDocument.index')}}" class="btn btn-info" {Request::is('hrms/asset/asDocument')?'style=background-color:#737373':''}}>Documents</a>
             <a type="submit" role="button" id="addMaintenance" href="#" class="btn btn-info" {Request::is('')?'style=background-color:#737373':''}}>Maintenance</a>
 
-          
-            
             <br>
             
            

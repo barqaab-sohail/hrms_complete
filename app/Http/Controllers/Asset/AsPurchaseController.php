@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Asset;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Asset\AsPurchaseCondition;
+use App\Http\Requests\Asset\AsPurchaseStore;
 use App\Models\Asset\AsPurchase;
 use App\Models\Asset\Asset;
 use DB;
@@ -29,7 +30,7 @@ class AsPurchaseController extends Controller
 	        }
     }
 
-    public function update(Request $request, $id){
+    public function update(AsPurchaseStore $request, $id){
 
         //ensure client end is is not changed
         if($id != session('asset_id')){

@@ -17,11 +17,13 @@ class CreateAsLocationsTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('asset_id')->unsigned();
-            $table->bigInteger('office_id')->unsigned();
+            $table->bigInteger('office_id')->unsigned()->nullable();
+            $table->bigInteger('hr_employee_id')->unsigned()->nullable();
             $table->date('date');
             $table->timestamps();
             $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
-            $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
+            $table->foreign('office_id')->references('id')->on('offices');
+            $table->foreign('hr_employee_id')->references('id')->on('hr_employees');
         });
     }
 

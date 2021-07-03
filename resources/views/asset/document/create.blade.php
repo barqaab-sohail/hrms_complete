@@ -159,6 +159,8 @@ $(function () {
     $('#hideButton').click(function(){
             $('#formDocument').toggle();
             $('#formDocument').trigger("reset");
+            $('#as_document_id').val('');
+            $("#formDocument").attr("method", "POST");
             $( "#pdf" ).hide();
               document.getElementById("wizardPicturePreview").src="{{asset('Massets/images/document.png')}}"; 
               document.getElementById("h6").innerHTML = "Click On Image to Add Document";
@@ -166,7 +168,7 @@ $(function () {
 
     $('body').unbind().on('click', '.editDocument', function () {
       var as_document_id = $(this).data('id');
-
+       $("#formDocument").attr("method", "PUT");
       $.get("{{ url('hrms/asDocument') }}" +'/' + as_document_id +'/edit', function (data) {
           $('#formDocument').show(); 
           var file_extension = data.extension;
@@ -216,7 +218,7 @@ $(function () {
               $.each(data.responseJSON.errors, function (key, value){
                 errorMassage += value + '<br>';  
                 });
-                 $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
 
               $('#saveBtn').html('Save Changes');
           }

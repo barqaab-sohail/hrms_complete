@@ -122,6 +122,7 @@ $(document).ready(function(){
           $(".office").removeClass('hide');
           $("#office_id").attr("data-validation", "required");
           $("#hr_employee_id").removeAttr("data-validation");
+          $("#hr_employee_id").val('');
           $(".employee").addClass('hide');
           $('#hr_employee_id').val('').select2('val', 'All');
 
@@ -130,6 +131,7 @@ $(document).ready(function(){
           $(".employee").removeClass('hide');
           $("#hr_employee_id").attr("data-validation", "required");
           $("#office_id").removeAttr("data-validation");
+          $("#office_id").val('');
           $(".office").addClass('hide');
         } else{
           $(".blank").removeClass('hide');
@@ -167,29 +169,36 @@ $(function () {
     $('#hideButton').click(function(){
             $('#formLocation').toggle();
             $('#formLocation').trigger("reset");
+             $('.selectTwo').val('').select2('val', 'All');
+            $('#as_location_id').val('');
           
     });
 
     $('body').unbind().on('click', '.editLocation', function () {
+
+
       var as_location_id = $(this).data('id');
 
       $.get("{{ url('hrms/asLocation') }}" +'/' + as_location_id +'/edit', function (data) {
           $('#formLocation').show(); 
           $('#formHeading').html("Edit Location");
-          $('#as_location_id').val(data.id);
-          if(data.office_id){
-            
+         console.log(as_location_id);
+          if(data.office_id){ 
+            $('#as_location_id').val(data.id);
             $('#asset_location').val('1');
             $('#office_id').val(data.office_id);
             $('#office_id').trigger('change');
             $('#asset_location').trigger('change');
             $('#date').val(data.date);
-            console.log(data);
+          }else if(data.hr_employee_id){
+            $('#as_allocation_id').val(data.id);
+            $('#asset_location').val('2');
+            $('#hr_employee_id').val(data.hr_employee_id);
+            $('#hr_employee_id').trigger('change');
+            $('#asset_location').trigger('change');
+            $('#date').val(data.date);
           }
-         
-          
 
-      
       })
    });
     
@@ -230,6 +239,7 @@ $(function () {
     $('body').on('click', '.deleteLocation', function () {
      
         var as_location_id = $(this).data("id");
+
         var con = confirm("Are You sure want to delete !");
         if(con){
           $.ajax({

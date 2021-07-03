@@ -1,8 +1,20 @@
 <?php
 use App\Models\Cv\CvSpecialization;
 use App\Models\CV\CvDetail;
+use App\Models\Hr\HrEmployee;
+use App\Models\Office\Office;
 
+function employeeFullName($id){
+	$hremployee = HrEmployee::find($id);
+		if($hremployee){
+		return $hremployee->first_name. ' '.$hremployee->last_name;
+		}
+}
 
+function officeName($id){
+	$office = Office::find($id);
+	return $office->name;
+}
 
 function cvSpecilizationName($id){
 

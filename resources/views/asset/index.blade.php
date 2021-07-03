@@ -28,9 +28,9 @@
 						<tr>
 							<td>{{$asset->id}}</td>
 							<td>{{$asset->asset_code??''}}</td>
-							<td>{{$asset->description}}</td>
-							<td>{{$asset->asCondition->name}}</td>
-							<td><img src="{{asset(isset($asset->asDocumentation->file_name)? 'storage/'.$asset->asDocumentation->path.$asset->asDocumentation->file_name: 'Massets/images/document.png') }}" class="img-round picture-container picture-src"  id="ViewIMG{{$asset->id}}"  title="" width="100" ></td>
+							<td>{{$asset->description??''}}</td>
+							<td>{{$asset->asCondition->name??''}}</td>
+							<td><img src="{{asset(isset($asset->asDocumentation->file_name)? 'storage/'.$asset->asDocumentation->path.$asset->asDocumentation->file_name: 'Massets/images/document.png') }}" class="img-round picture-container picture-src"  id="ViewIMG{{$asset->id}}"  title="" width="50" ></td>
 							
 							<td class="text-center">
 								<a class="btn btn-info btn-sm" href="{{route('asset.edit',$asset->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>

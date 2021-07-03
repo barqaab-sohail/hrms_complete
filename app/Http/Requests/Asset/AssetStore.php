@@ -27,16 +27,16 @@ class AssetStore extends FormRequest
         'as_class_id'=> 'required',
         'as_sub_class_id'=> 'required',
         'description'=> 'required|max:190',
-        'purchase_date'=> 'required|date',
-        'as_purchase_condition_id'=> 'required',
-        'client_id'=> 'required',
-        'asset_location'=> 'required',
-        'hr_employee_id'=> "required_if:asset_location,2",
-        'office_id'=> "required_if:asset_location,1",
-        'as_condition_type_id'=> 'required',
-        'document'=>'required|file|max:1000|mimes:jpg,png,jpeg'
+       
         
         ];
+
+         //If method is POST then document is required otherwise in Patch method document is nullable.
+            if ($this->getMethod() == 'POST') {
+                $rules += [ 'document'=>'required|file|max:1000|mimes:jpg,png,jpeg'];
+            }else{
+                 $rules += [ 'document'=>'nullable|file|max:1000|mimes:jpg,png,jpeg'];
+            }
 
     
         return $rules;

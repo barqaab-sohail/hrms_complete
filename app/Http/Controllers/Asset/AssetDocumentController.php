@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Asset;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Models\Asset\AsDocumentation;
+use App\Models\Asset\Asset;
+use App\Http\Requests\Asset\AsDocumentStore;
 use DataTables;
 use DB;
+use Storage;
 
 class AssetDocumentController extends Controller
 {
@@ -61,17 +65,18 @@ class AssetDocumentController extends Controller
 
     }
 
-    public function store (Request $request){
+    public function store (AsDocumentStore $request){
+        $asset = Asset::where('id',session('asset_id'))->first();
 
         $input = $request->all();
 
-         DB::transaction(function () use ($input, $request) {  
+         DB::transaction(function () use ($input, $request, $asset) {  
 
              //add image
             if ($request->hasFile('document')){
                 $extension = request()->document->getClientOriginalExtension();
                 $fileName = time().'.'.$extension;
-                $folderName = "asset/".strtolower('2')."/";
+                $folderName = "asset/".$asset->id."/";
                 //store file
                 $request->file('document')->storeAs('public/'.$folderName,$fileName);
                 
@@ -83,9 +88,27 @@ class AssetDocumentController extends Controller
 
                 $attachment['asset_id']=session('asset_id');
                 $attachment['description']=$input['description'];
-                AsDocumentation::updateOrCreate(['id' => $input['as_document_id']],
-                $attachment); 
-            } 
+
+                $asDocumentation = AsDocumentation::where('id',request()->as_document_id)->first();
+
+                if($asDocumentation){
+                    $oldDocumentPath =  $asDocumentation->path.$asDocumentation->file_name;
+                    AsDocumentation::findOrFail($asDocumentation->id)->update($attachment);
+
+                    if(File::exists(public_path('storage/'.$oldDocumentPath))){
+                        File::delete(public_path('storage/'.$oldDocumentPath));
+                    }
+                    
+                }else{
+                    AsDocumentation::create($attachment);
+                }
+            }
+            
+            if($input['as_document_id']){
+
+                 AsDocumentation::findOrFail($input['as_document_id'])->update($input);
+
+            }
 
                 
            
