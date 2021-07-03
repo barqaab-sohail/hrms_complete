@@ -70,14 +70,12 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Description</label>
 		                                            
-		                                        <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control" data-validation="required">
+		                                        <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control exempted" data-validation="required">
 												
 		                                    </div>
 		                                </div>
 		                            </div>
 		                        </div><!--/End Row-->
-
-		                       
 
 		                        <div class="row">
 		                            <div class="col-md-2"></div>
