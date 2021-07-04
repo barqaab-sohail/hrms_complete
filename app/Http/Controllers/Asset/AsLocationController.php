@@ -82,6 +82,11 @@ class AsLocationController extends Controller
 
     public function store (AsLocationStore $request){
 
+         if($request->office_id && $request->hr_employee_id){
+
+             return response()->json(['error'=>"Office or Employee, One value must empty."]);
+        }
+
         $input = $request->all();
         if($request->filled('date')){
             $input ['date']= \Carbon\Carbon::parse($request->date)->format('Y-m-d');

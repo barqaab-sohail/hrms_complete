@@ -182,16 +182,14 @@ $(function () {
       $.get("{{ url('hrms/asLocation') }}" +'/' + as_location_id +'/edit', function (data) {
           $('#formLocation').show(); 
           $('#formHeading').html("Edit Location");
-         console.log(as_location_id);
+           $('#as_location_id').val(data.id);
           if(data.office_id){ 
-            $('#as_location_id').val(data.id);
             $('#asset_location').val('1');
             $('#office_id').val(data.office_id);
             $('#office_id').trigger('change');
             $('#asset_location').trigger('change');
             $('#date').val(data.date);
           }else if(data.hr_employee_id){
-            $('#as_allocation_id').val(data.id);
             $('#asset_location').val('2');
             $('#hr_employee_id').val(data.hr_employee_id);
             $('#hr_employee_id').trigger('change');
@@ -215,12 +213,16 @@ $(function () {
            cache: false,
            processData: false,
           success: function (data) {
-     
-              $('#formLocation').trigger("reset");
-              $('#formLocation').toggle();
-              $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');  
+              if(data.error){
+                $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');
+              }else{
 
-              table.draw();
+                $('#formLocation').trigger("reset");
+                $('#formLocation').toggle();
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');  
+
+                table.draw();
+              }
         
           },
           error: function (data) {
@@ -229,7 +231,7 @@ $(function () {
               $.each(data.responseJSON.errors, function (key, value){
                 errorMassage += value + '<br>';  
                 });
-                 $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
 
               $('#saveBtn').html('Save Changes');
           }
