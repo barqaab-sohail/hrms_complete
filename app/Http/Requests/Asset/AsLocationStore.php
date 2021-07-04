@@ -23,12 +23,15 @@ class AsLocationStore extends FormRequest
      */
     public function rules()
     {
+       
+
         $rules = [
      
         'office_id'=> 'required_without:hr_employee_id',
         'hr_employee_id'=> 'required_without:office_id',
-           'date'=> 'required',
+        'date'=> 'required',
         ];
+
         return $rules;
     }
 }

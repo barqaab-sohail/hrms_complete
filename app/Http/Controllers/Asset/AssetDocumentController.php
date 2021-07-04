@@ -130,10 +130,14 @@ class AssetDocumentController extends Controller
             return response()->json(['error'=>'You cannot delete asset image']);
         }
 
-        $asDocumentation = AsDocumentation::where('asset_id',$id)->first();
+        DB::transaction(function () use ($id) {
+        	$asDocumentation = AsDocumentation::where('id',$id)->first();
+         	$asDocumentPath =  $asDocumentation->path.$asDocumentation->file_name;
+            $asDocumentation->delete(); 
 
-        DB::transaction(function () use ($id) {  
-            AsDocumentation::find($id)->delete();           
+            if(File::exists(public_path('storage/'.$asDocumentPath))){
+                        File::delete(public_path('storage/'.$asDocumentPath));
+                    }         
         }); // end transcation 
         return response()->json(['success'=>'data  delete successfully.']);
 

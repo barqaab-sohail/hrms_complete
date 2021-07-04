@@ -60,7 +60,6 @@ class AssetController extends Controller
             AsDocumentation::create($attachment);
     		
     	}); // end transcation
-
     	return response()->json(['url'=> route("asset.edit",$asset),'message' => 'Data Successfully Saved']);
     }
 
