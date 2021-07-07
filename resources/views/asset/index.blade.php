@@ -15,7 +15,7 @@
 					<th>Id</th>
 					<th>Asset Code</th>
 					<th>Description</th>
-					<th>Asset Condition</th>
+					<th>Barcode</th>
 					<th>Image</th>
 					<th class="text-center"style="width:5%">Edit</th> 
 					<th class="text-center"style="width:5%">Delete</th>
@@ -29,7 +29,7 @@
 							<td>{{$asset->id}}</td>
 							<td>{{$asset->asset_code??''}}</td>
 							<td>{{$asset->description??''}}</td>
-							<td>{{$asset->asCondition->name??''}}</td>
+							<td><img src="data:image/png;base64,{{DNS1D::getBarcodePNG("$asset->asset_code", 'C39+',1,33,array(0,0,0), true)}}" alt="barcode" /></td>
 							<td><img src="{{asset(isset($asset->asDocumentation->file_name)? 'storage/'.$asset->asDocumentation->path.$asset->asDocumentation->file_name: 'Massets/images/document.png') }}" class="img-round picture-container picture-src"  id="ViewIMG{{$asset->id}}"  title="" width="50" ></td>
 							
 							<td class="text-center">
@@ -68,24 +68,24 @@ $(document).ready(function() {
                     {
                         extend: 'copyHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3]
+                            columns: [ 0, 1, 2,3,4]
                         }
                     },
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3]
+                            columns: [ 0, 1, 2,3,4]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3]
+                            columns: [ 0, 1, 2,3,4]
                         }
                     }, {
                         extend: 'csvHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3]
+                            columns: [ 0, 1, 2,3,4]
                         }
                     },
                 ],
@@ -97,7 +97,8 @@ $(document).ready(function() {
         		fixedColumns:   {
             		leftColumns: 1,
             		rightColumns:2
-        		}
+        		},
+        		
             });
 
 	//function view from list table
