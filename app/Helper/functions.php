@@ -7,9 +7,10 @@ use App\Models\Office\Office;
 function employeeFullName($id){
 	$hremployee = HrEmployee::find($id);
 		if($hremployee){
-		return $hremployee->first_name. ' '.$hremployee->last_name;
+		return $hremployee->first_name. ' '.$hremployee->last_name.' - '.$hremployee->employeeDesignation->last()->name??'';
 		}
 }
+
 
 function officeName($id){
 	$office = Office::find($id);
