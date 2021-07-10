@@ -1,35 +1,22 @@
 <!-- Modal -->
-<div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="assetClassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Designation</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Class</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
        
-           <form id="designationModalFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
+           <form id="classModalFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
                   {{csrf_field()}}
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-12">
-                        <label class="control-label text-right">Name of Designation<span class="text_requried">*</span></label><br>
-                        <input type="text" name="name" id="designation_name" value="{{ old('name') }}" class="form-control" placeholder="Enter Designation Name" required>
-                      </div>
-                    </div>                                                                
-                  </div>
-                  <div class="form-body">
-                    <div class="form-group row">
-                      <div class="col-md-12">
-                        <label class="control-label text-right">Level<span class="text_requried">*</span></label><br>
-                         <select  name="level" id="designation_level" class="form-control selectTwo">
-                            <option value=""></option>
-                            @for ($i = 1; $i < 16; $i++)
-                            <option value="{{$i}}">{{$i}}</option>
-                            @endfor 
-                        </select>
+                        <label class="control-label text-right">Name of Class<span class="text_requried">*</span></label><br>
+                        <input type="text" name="name" id="class_name" value="{{ old('name') }}" class="form-control" placeholder="Enter Asset Class Name" required>
                       </div>
                     </div>                                                                
                   </div>
@@ -58,9 +45,9 @@
 $(document).ready(function(){
 
 
-    $('#designationModalFrom').on('submit', function(event){
+    $('#classModalFrom').on('submit', function(event){
        
-      var url = "{{route('designation.store')}}"
+      var url = "{{route('asset.storeClass')}}"
         event.preventDefault();
               //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
               $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
@@ -83,29 +70,29 @@ $(document).ready(function(){
                  processData: false,
                  success:function(data){
                      
-                      if(data.designations ==''){
+                      if(data.classes ==''){
                           $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                           $('.spinner').hide();
                            $('.btn-prevent-multiple-submits').removeAttr('disabled');
-                          $('#designationModal').modal('toggle');
+                          $('#assetClassModal').modal('toggle');
+                          $('#class_name').val('');
                           $('html,body').scrollTop(0);
                       }else{
-                          $("#hr_designation_id").empty();
-                          $("#hr_designation_id").append('<option value="">Select Designation</option>');
-                          $.each(data.designations, function(key,value){
+                          $("#as_class_id").empty();
+                          $("#as_class_id").append('<option value="">Select Class</option>');
+                          $.each(data.classes, function(key,value){
                                       //console.log(key+'-'+value);
-                                   $("#hr_designation_id").append('<option value="'+key+'">'+value+'</option>');
+                                   $("#as_class_id").append('<option value="'+key+'">'+value+'</option>');
                           });
-                          $('#hr_designation_id').select2('destroy');
-                          selectTwo('#hr_designation_id');
+                          $('#as_class_id').select2('destroy');
+                          selectTwo('#as_class_id');
 
                           $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                            $('.spinner').hide();
                            $('.btn-prevent-multiple-submits').removeAttr('disabled');
                            //after sucessfull save clear input fields
-                            $('#designation_name').val('');
-                            $('#designation_level').select2('val', 'All');
-                          $('#designationModal').modal('toggle');
+                            $('#class_name').val('');
+                          $('#assetClassModal').modal('toggle');
                         clearMessage(); 
                       }
 
@@ -123,7 +110,11 @@ $(document).ready(function(){
                       errorMassage += value + '<br>';  
                       });
                        $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
-                       $('html,body').scrollTop(0);                
+                       $('html,body').scrollTop(0);
+                        $('.spinner').hide();
+                           $('.btn-prevent-multiple-submits').removeAttr('disabled');
+                       $('#assetClassModal').modal('toggle');
+                      $('#class_name').val('');                
                           
                   }//end error
               }); //end ajax
@@ -131,19 +122,6 @@ $(document).ready(function(){
      
     }); //end submit
 
-  $('#total_salary').keyup(function(event) {
-
-    // skip for arrow keys
-    if(event.which >= 37 && event.which <= 40) return;
-
-    // format number
-    $(this).val(function(index, value) {
-      return value
-      .replace(/\D/g, "")
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      ;
-    });
-  });
 
 
 

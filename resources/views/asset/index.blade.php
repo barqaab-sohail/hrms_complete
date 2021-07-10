@@ -58,12 +58,11 @@
 <script>
 $(document).ready(function() {
 	
-            $('#myTable').DataTable({
+           var test = $('#myTable').DataTable({
 
                 stateSave: false,
         
                 dom: 'Blfrtip',
-				columnDefs: [ { type: 'date', 'targets': [5] } ],
                 buttons: [
                     {
                         extend: 'copyHtml5',
@@ -80,7 +79,8 @@ $(document).ready(function() {
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4]
+                            columns: [ 0, 1, 2,3,4],
+                             stripHtml: false
                         }
                     }, {
                         extend: 'csvHtml5',
@@ -100,7 +100,7 @@ $(document).ready(function() {
         		},
         		
             });
-
+           console.log(test);
 	//function view from list table
         $(function(){
 			$("[id^='ViewIMG']").EZView();

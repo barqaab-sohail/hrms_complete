@@ -271,7 +271,6 @@
         </form>
         
             @include('hr.appointment.salModal')
-
             @can('hr add designation')
             @include('hr.appointment.designationModal')
             @endcan
