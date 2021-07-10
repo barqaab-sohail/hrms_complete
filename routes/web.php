@@ -148,6 +148,7 @@ Route::resource('/projectCode', 'ProjectCodeController');
 //Assets Routes
 
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Asset'], function(){
+Route::post('/assetStoreClass','AssetController@storeClass')->name('asset.storeClass');
 Route::resource('/asset','AssetController');
 Route::resource('/asDocument','AssetDocumentController');
 Route::resource('/asPurchase','AsPurchaseController');

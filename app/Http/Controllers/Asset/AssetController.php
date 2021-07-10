@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Http\Requests\Asset\AssetStore;
+use App\Http\Requests\Asset\ClassStore;
 use App\Models\Asset\Asset;
 use App\Models\Asset\AsClass;
 use App\Models\Asset\AsSubClass;
@@ -175,5 +176,30 @@ class AssetController extends Controller
         $asCode = $asCode.$count;
 
         return response()->json([ 'assetCode'=>$asCode]);
+    }
+
+     public function storeClass (ClassStore $request){
+        $newClass = preg_replace('/[^A-Za-z0-9\- ]/', '', $request->name);
+        $class = AsClass::where('name', $newClass)->first();
+       
+        if($class == null){
+            
+             DB::transaction(function () use ($request, $newClass) {  
+
+                 AsClass::create(['name'=>$newClass]);
+
+            }); // end transcation   
+
+            $classes = DB::table("as_classes")
+                ->pluck("name");
+        
+            return response()->json(['classes'=> $classes, 'message'=>"$newClass Successfully Entered"]);
+        }else{
+
+            return response()->json(['classes'=> '', 'message'=>"$newClass is already entered"]);
+           
+        }
+      
+        
     }
 }

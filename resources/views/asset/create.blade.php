@@ -32,12 +32,16 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Class<span class="text_requried">*</span></label>
 		                                        
-	                                           	<select  name="as_class_id"  id= "as_class" class="form-control selectTwo" data-validation="required">
+	                                           	<select  name="as_class_id"  id= "as_class_id" class="form-control selectTwo" data-validation="required">
                                                     <option value=""></option>
                                                     @foreach($asClasses as $class)
-													<option value="{{$class->id}}" {{(old("as_class_id")==$class->id? "selected" : "")}}>{{$class->name}}</option>
+													                         <option value="{{$class->id}}" {{(old("as_class_id")==$class->id? "selected" : "")}}>{{$class->name}}</option>
                                                     @endforeach     
-                                                </select>
+                                              </select>
+                                              @can('asset add class')
+                                              <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#assetClassModal"><i class="fas fa-plus"></i>
+                                              </button>
+                                              @endcan 
 												
 		                                    </div>
 		                                </div>
@@ -47,8 +51,12 @@
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Sub Classes<span class="text_requried">*</span></label> 
-	                                           	<select  name="as_sub_class_id"  id="as_sub_class"class="form-control selectTwo" data-validation="required" data-placeholder="First Select Class">  
-                                                </select>
+	                                           	<select  name="as_sub_class_id"  id="as_sub_class_id"class="form-control selectTwo" data-validation="required" data-placeholder="First Select Class">  
+                                              </select>
+                                              @can('asset add class')
+                                              <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#assetSubClassModal"><i class="fas fa-plus"></i>
+                                              </button>
+                                              @endcan 
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -111,6 +119,9 @@
 		                        </div>
 		                    </div>
 		                </form>
+                    @can('asset add class')
+                    @include('asset.classModal')
+                    @endcan
 		        	</div> <!-- end card body -->    
 		        </div> <!-- end col-lg-12 -->
 		    </div> <!-- end row -->
@@ -193,7 +204,7 @@ $(document).ready(function() {
 
 	//Add Sub_Class
 
-	$('#as_class').change(function(){
+	$('#as_class_id').change(function(){
       var cid = $(this).val();
         if(cid){
           $.ajax({
@@ -206,14 +217,14 @@ $(document).ready(function() {
              	console.log(res);
                   if(res)
                   {
-                    $("#as_sub_class").empty();
-                      $("#as_sub_class").append('<option value="">Select Sub Classes</option>');
+                    $("#as_sub_class_id").empty();
+                      $("#as_sub_class_id").append('<option value="">Select Sub Classes</option>');
                       $.each(res,function(key,value){
-                          $("#as_sub_class").append('<option value="'+key+'">'+value+'</option>');
+                          $("#as_sub_class_id").append('<option value="'+key+'">'+value+'</option>');
                           
                       });
-                       $('#as_sub_class').select2('destroy');
-                       $('#as_sub_class').select2(
+                       $('#as_sub_class_id').select2('destroy');
+                       $('#as_sub_class_id').select2(
                        	 {width: "100%",
        					 theme: "classic"});
 
@@ -226,7 +237,7 @@ $(document).ready(function() {
 
 	//get asset code
 
-	$('#as_sub_class').change(function(){
+	$('#as_sub_class_id').change(function(){
       var cid = $(this).val();
         if(cid){
           $.ajax({
