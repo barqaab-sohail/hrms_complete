@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Http\Requests\Asset\AssetStore;
 use App\Http\Requests\Asset\ClassStore;
+use App\Http\Requests\Asset\SubClassStore;
 use App\Models\Asset\Asset;
 use App\Models\Asset\AsClass;
 use App\Models\Asset\AsSubClass;
@@ -190,13 +191,36 @@ class AssetController extends Controller
 
             }); // end transcation   
 
-            $classes = DB::table("as_classes")
-                ->pluck("name");
+            $classes = DB::table("as_classes")->orderBy('id')
+                ->pluck("id","name");
         
             return response()->json(['classes'=> $classes, 'message'=>"$newClass Successfully Entered"]);
         }else{
 
             return response()->json(['classes'=> '', 'message'=>"$newClass is already entered"]);
+           
+        }
+    }
+
+     public function storeSubClass (SubClassStore $request){
+        $newSubClass = preg_replace('/[^A-Za-z0-9\- ]/', '', $request->name);
+        $subClass = AsSubClass::where('as_class_id',$request->as_class_id)->where('name', $newSubClass)->first();
+       
+        if($subClass == null){
+            
+             DB::transaction(function () use ($request, $newSubClass) {  
+
+                 AsSubClass::create(['name'=>$newSubClass, 'as_class_id'=>$request->as_class_id]);
+
+            }); // end transcation   
+
+            $subClasses = DB::table("as_sub_classes")->where('as_class_id',$request->as_class_id)->orderBy('id')
+                ->pluck("id","name");
+        
+            return response()->json(['subClasses'=> $subClasses, 'message'=>"$newSubClass Successfully Entered"]);
+        }else{
+
+            return response()->json(['subClasses'=> '', 'message'=>"$newSubClass is already entered"]);
            
         }
       
