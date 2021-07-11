@@ -1,22 +1,34 @@
 <!-- Modal -->
-<div class="modal fade" id="assetClassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="assetSubClassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Class</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Sub Class</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
        
-           <form id="classModalFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
+           <form id="subClassModalFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
                   {{csrf_field()}}
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-12">
-                        <label class="control-label text-right">Name of Class<span class="text_requried">*</span></label><br>
-                        <input type="text" name="name" id="class_name" value="{{ old('name') }}" class="form-control" placeholder="Enter Asset Class Name" required>
+                          <select  name="as_class_id"  id= "modal_as_class_id" class="form-control selectTwo" data-validation="required">
+                              <option value=""></option>
+                              @foreach($asClasses as $class)
+                             <option value="{{$class->id}}" {{(old("as_class_id")==$class->id? "selected" : "")}}>{{$class->name}}</option>
+                              @endforeach     
+                          </select>
+                      </div>
+                    </div>                                                                
+                  </div>
+                   <div class="form-body">
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label class="control-label text-right">Name of Sub Class<span class="text_requried">*</span></label><br>
+                        <input type="text" name="name" id="sub_class_name" value="{{ old('name') }}" class="form-control" placeholder="Enter Asset Sub Class Name" required>
                       </div>
                     </div>                                                                
                   </div>
@@ -45,9 +57,9 @@
 $(document).ready(function(){
 
 
-    $('#classModalFrom').on('submit', function(event){
+    $('#subClassModalFrom').on('submit', function(event){
        
-      var url = "{{route('asset.storeClass')}}"
+      var url = "{{route('asset.storeSubClass')}}"
         event.preventDefault();
               //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
               $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
@@ -70,30 +82,32 @@ $(document).ready(function(){
                  processData: false,
                  success:function(data){
                      
-                      if(data.classes ==''){
+                      if(data.subClasses ==''){
                           $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                           $('.spinner').hide();
                            $('.btn-prevent-multiple-submits').removeAttr('disabled');
-                          $('#assetClassModal').modal('toggle');
-                          $('#class_name').val('');
+                          $('#assetSubClassModal').modal('toggle');
+                          $('#modal_as_class_id').val('').select2('val', 'All');
+                          $('#sub_class_name').val('');
                           $('html,body').scrollTop(0);
                       }else{
                           $("#as_sub_class_id").empty();
-                          $("#as_class_id").empty();
-                          $("#as_class_id").append('<option value="">Select Class</option>');
-                          $.each(data.classes, function(value,key){
-                                      //console.log(key+'-'+value);
-                                   $("#as_class_id").append('<option value="'+key+'">'+value+'</option>');
-                          });
-                          $('#as_class_id').select2('destroy');
-                          selectTwo('#as_class_id');
+                         // $("#as_class_id").empty();
+                          // $("#as_sub_class_id").append('<option value="">Select Class</option>');
+                          // $.each(data.subClasses, function(value,key){
+                          //             //console.log(key+'-'+value);
+                          //          $("#as_sub_class_id").append('<option value="'+key+'">'+value+'</option>');
+                          // });
+                          // $('#as_sub_class_id').select2('destroy');
+                          // selectTwo('#as_sub_class_id');
 
                           $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                            $('.spinner').hide();
                            $('.btn-prevent-multiple-submits').removeAttr('disabled');
                            //after sucessfull save clear input fields
-                            $('#class_name').val('');
-                          $('#assetClassModal').modal('toggle');
+                            $('#sub_class_name').val('');
+                            $('#modal_as_class_id').val('').select2('val', 'All');
+                          $('#assetSubClassModal').modal('toggle');
                         clearMessage(); 
                       }
 
@@ -114,8 +128,8 @@ $(document).ready(function(){
                        $('html,body').scrollTop(0);
                         $('.spinner').hide();
                            $('.btn-prevent-multiple-submits').removeAttr('disabled');
-                       $('#assetClassModal').modal('toggle');
-                      $('#class_name').val('');                
+                       $('#assetSubClassModal').modal('toggle');
+                      $('#sub_class_name').val('');                
                           
                   }//end error
               }); //end ajax
