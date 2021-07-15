@@ -121,6 +121,7 @@
 		                </form>
                     @can('asset add class')
                     @include('asset.classModal')
+                    @include('asset.subClassModal')
                     @endcan
 		        	</div> <!-- end card body -->    
 		        </div> <!-- end col-lg-12 -->
