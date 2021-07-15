@@ -128,7 +128,7 @@ class ProjectController extends Controller
 	}
 
 
-	function import(Request $request)
+	public function import(Request $request)
     {
      	
      $this->validate($request, [
@@ -141,6 +141,44 @@ class ProjectController extends Controller
      	Excel::import(new ProjectsImport, $path);
          
     return back()->with('success', 'Excel Data Imported successfully.');
+    }
+
+    public function search(){
+
+        return view ('project.search.search');
+    }
+
+    public function result(Request $request){
+    
+        
+        if($request->filled('reference_no')){
+        $query = $request->input('reference_no');
+            
+            $result = DB::table('pr_documents')
+            ->where('reference_no', 'LIKE', "%{$query}%")
+            ->get();
+            return view('project.search.searchResult',compact('result'));
+
+        }else if ($request->filled('description')){
+           $query = $request->input('description'); 
+            
+            $result = DB::table('pr_documents')
+            ->where('description', 'LIKE', "%{$query}%")
+            ->get();
+            return view('project.search.searchResult',compact('result'));
+
+       }else if ($request->filled('document_date')){
+        $query = \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
+
+            $result = DB::table('pr_documents')
+            ->where('document_date', 'LIKE', "%{$query}%")
+            ->get();
+            return view('project.search.searchResult',compact('result'));
+
+       }
+
+       
+
     }
 
 
