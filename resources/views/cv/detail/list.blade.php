@@ -24,7 +24,7 @@
 					<tr>
 						<th>Id</th>
 						<th>Name</th>
-						<th>Father's Name</th>
+						<th>Education</th>
 						<th>Contact No.</th>
 						<th>CNIC</th>
 						
@@ -39,7 +39,7 @@
 							<tr>
 								<td>{{$cv->id}}</td>
 								<td>{{$cv->full_name}}</td>
-								<td>{{$cv->father_name??''}}</td>
+								<td>{{$cv->cvEducation->implode('degree_name',' + ')??''}}</td>
 								
 								
 								<td>{{$cv->cvPhone->first()->phone??''}}</td>

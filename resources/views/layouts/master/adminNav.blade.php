@@ -97,6 +97,8 @@
                         <li><a  class="{{Request::is('hrms/project/create')?'active':''}}" href="{{route('project.create')}}">Add Project</a></li>
                         <li><a  class="{{Request::is('hrms/project')?'active':''}}" href="{{route('project.index')}}">List of Projects</a></li>
 
+                        <li><a  class="{{Request::is('hrms/project/search')?'active':''}}" href="{{route('project.search')}}">Search</a></li>
+
                         <li><a  class="{{Request::is('hrms/projectCode')?'active':''}}" href="{{route('projectCode.create')}}">Project Code Calculator</a></li>
                    
                                                

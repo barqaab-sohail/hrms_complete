@@ -30,8 +30,7 @@
 							<td>{{$asset->asset_code??''}}</td>
 							<td>{{$asset->description??''}}</td>
 							<td><img src="data:image/png;base64,{{DNS1D::getBarcodePNG("$asset->asset_code", 'C39+',1,33,array(0,0,0), true)}}" alt="barcode" /></td>
-							<td><img src="{{asset(isset($asset->asDocumentation->file_name)? 'storage/'.$asset->asDocumentation->path.$asset->asDocumentation->file_name: 'Massets/images/document.png') }}" class="img-round picture-container picture-src"  id="ViewIMG{{$asset->id}}"  title="" width="50" ></td>
-							
+							<td><img src="{{asset(isset($asset->asDocumentation->file_name)? 'storage/'.$asset->asDocumentation->path.$asset->asDocumentation->file_name: 'Massets/images/document.png') }}" class="img-round picture-container picture-src"  id="ViewIMG{{$asset->id}}"  title="" width="50" ></td>	
 							<td class="text-center">
 								<a class="btn btn-info btn-sm" href="{{route('asset.edit',$asset->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 							</td>
@@ -58,11 +57,12 @@
 <script>
 $(document).ready(function() {
 	
-           var test = $('#myTable').DataTable({
+            $('#myTable').DataTable({
 
                 stateSave: false,
         
                 dom: 'Blfrtip',
+				columnDefs: [ { type: 'date', 'targets': [5] } ],
                 buttons: [
                     {
                         extend: 'copyHtml5',
@@ -79,8 +79,7 @@ $(document).ready(function() {
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4],
-                             stripHtml: false
+                            columns: [ 0, 1, 2,3,4]
                         }
                     }, {
                         extend: 'csvHtml5',
@@ -100,7 +99,7 @@ $(document).ready(function() {
         		},
         		
             });
-           console.log(test);
+
 	//function view from list table
         $(function(){
 			$("[id^='ViewIMG']").EZView();
