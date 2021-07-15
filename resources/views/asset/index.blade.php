@@ -78,6 +78,24 @@ $(document).ready(function() {
                     },
                     {
                         extend: 'pdfHtml5',
+                        title: 'Document Tittle',
+                        customize: function (doc) {
+
+                        	if (doc) {
+	        					for (var i = 1; i < doc.content[1].table.body.length; i++) {
+	 
+	            					var tmptext = doc.content[1].table.body[i][0].text;
+	            					tmptext = tmptext.substring(10, tmptext.indexOf("width=") - 2);
+						            doc.content[1].table.body[i][0] = {
+						                margin: [0, 0, 0, 12],
+						                alignment: 'center',
+						                image: tmptext,
+						                width: 60,
+						                height: 58
+						            };
+	        					}
+    						}
+                        },
                         exportOptions: {
                             columns: [ 0, 1, 2,3,4]
                         }
