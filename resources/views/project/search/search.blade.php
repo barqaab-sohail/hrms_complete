@@ -40,9 +40,6 @@
 		                    <div class="col-md-12 required">
 		                    	<label class="control-label">Date</label>
 		                    	<input type="text" name="document_date"  value="{{ old('document_date') }}" class="form-control date_input" data-validation="required" >
-                            	<br>
-                            	<i class="fas fa-trash-alt text_requried"></i> 
-		                    
 
 		                    </div>
 		                </div>

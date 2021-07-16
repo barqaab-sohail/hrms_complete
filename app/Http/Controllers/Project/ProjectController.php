@@ -175,6 +175,12 @@ class ProjectController extends Controller
             ->get();
             return view('project.search.searchResult',compact('result'));
 
+       } else{
+
+            $result = DB::table('pr_documents')
+            ->get();
+            return view('project.search.searchResult',compact('result'));
+
        }
 
        
