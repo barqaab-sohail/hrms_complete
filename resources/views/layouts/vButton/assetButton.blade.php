@@ -7,7 +7,8 @@
              <a type="submit" role="button" id="addOwnership" href="{{route('asOwnership.index',session('asset_id'))}}" class="btn btn-info" {Request::is('hrms/asOwnership')?'style=background-color:#737373':''}}>Ownership</a>
             <a type="submit" role="button" id="addLocation" href="{{route('asLocation.index',session('asset_id'))}}" class="btn btn-info" {Request::is('hrms/asLocation')?'style=background-color:#737373':''}}>Asset Location</a>
             <a type="submit" role="button" id="addDocument" href="{{route('asDocument.index')}}" class="btn btn-info" {Request::is('hrms/asset/asDocument')?'style=background-color:#737373':''}}>Documents</a>
-            <a type="submit" role="button" id="addMaintenance" href="#" class="btn btn-info" {Request::is('')?'style=background-color:#737373':''}}>Maintenance</a>
+            <a type="submit" role="button" id="addMaintenance" href="{{route('asMaintenance.index')}}"  class="btn btn-info" {Request::is('hrms/asset/asMaintenance')?'style=background-color:#737373':''}}>Maintenance</a>
+            <a type="submit" role="button" id="addMaintenance" href="{{route('asCondition.index')}}"  class="btn btn-info" {Request::is('hrms/asset/asCondition')?'style=background-color:#737373':''}}>Condition</a>
 
             <br>
             
