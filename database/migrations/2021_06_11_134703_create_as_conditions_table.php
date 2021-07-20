@@ -18,7 +18,7 @@ class CreateAsConditionsTable extends Migration
             $table->id();
             $table->bigInteger('asset_id')->unsigned();
             $table->bigInteger('as_condition_type_id')->unsigned();
-            $table->date('date');
+            $table->date('condition_date');
             $table->timestamps();
             $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
             $table->foreign('as_condition_type_id')->references('id')->on('as_condition_types')->onDelete('cascade');

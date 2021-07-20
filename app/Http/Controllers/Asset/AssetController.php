@@ -11,8 +11,6 @@ use App\Http\Requests\Asset\SubClassStore;
 use App\Models\Asset\Asset;
 use App\Models\Asset\AsClass;
 use App\Models\Asset\AsSubClass;
-use App\Models\Asset\AsConditionType;
-use App\Models\Asset\AsCondition;
 use App\Models\Asset\AsDocumentation;
 use DB;
 use Storage;
