@@ -158,6 +158,7 @@ Route::resource('/asPurchase','AsPurchaseController');
 Route::resource('/asLocation','AsLocationController');
 Route::resource('/asOwnership','AsOwnershipController');
 Route::resource('/asMaintenance','AsMaintenanceController');
+Route::resource('/asCondition','AsConditionController');
 Route::get('/asset/sub_classes/{id?}', 'AssetController@getSubClasses');
 Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
 
