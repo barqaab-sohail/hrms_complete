@@ -37,7 +37,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Date</span></label>
                         
-                            <input type="text" name="document_date"  value="{{ old('document_date') }}" class="form-control date_input" readonly placeholder="Enter Document Detail">
+                            <input type="text" name="document_date"  value="{{ old('document_date') }}" class="form-control date_input" readonly placeholder="Enter Document Detail" data-validation="required">
                             <br>
                             @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
                             
