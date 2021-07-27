@@ -54,6 +54,7 @@ class DocumentationStore extends FormRequest
             'description'=>'not_in:'.$this->documentNames,
             //'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
             'hr_document_name_id' => 'required|unique_with:hr_document_name_hr_documentation,hr_employee_id',
+            'document_date' => 'required|date',
              
         ];
     }

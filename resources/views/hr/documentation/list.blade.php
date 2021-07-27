@@ -11,6 +11,7 @@
 				
 					<tr>
 						<th>Document Name</th>
+						<th>Date</th>
 						<th>View</th>
 						@can('hr edit documentation')			 
 						<th class="text-center"style="width:5%">Edit</th>
@@ -24,6 +25,7 @@
 					@foreach($documentIds as $documentId)
 					<tr>
 						<td>{{$documentId->description}}</td>
+						<td>{{$documentId->document_date}}</td>
 						@if($documentId->extension!='pdf')
 						<td><img  id="ViewIMG" src="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" href="{{asset(isset($documentId->file_name)?  'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30/></td>
 						@else
@@ -69,6 +71,7 @@
 	      			scrollX:        true,
 	        		scrollCollapse: true,
 	        		paging:         false,
+	        		"order": [[ 1, "desc" ]],
 	        		fixedColumns:   {
 	            		leftColumns: 1,
 	            		rightColumns:2
