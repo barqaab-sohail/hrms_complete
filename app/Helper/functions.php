@@ -17,6 +17,8 @@ function officeName($id){
 	return $office->name;
 }
 
+
+
 function cvSpecilizationName($id){
 
     $cvSpecialization = CvSpecialization::find($id);
