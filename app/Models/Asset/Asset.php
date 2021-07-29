@@ -23,6 +23,14 @@ class Asset extends Model implements Auditable
 
     }
 
+    //Current Location of Asset
+    public function asCurrentLocation(){
+
+        return $this->hasOne('App\Models\Asset\AsLocation')->orderby('date', 'desc');
+
+    }
+
+
     public function asPurchaseCondition(){
 
         return $this->hasOneThrough('App\Models\Asset\AsPurchaseCondition', 'App\Models\Asset\AsPurchase',
@@ -49,11 +57,7 @@ class Asset extends Model implements Auditable
         return $this->hasOne('App\Models\Asset\AsSubClass','id','as_sub_class_id');
     }
 
-    //Location at the time of Purhcase
-    public function asLocationFirst(){
-
-        return $this->hasOne('App\Models\Asset\AsLocation');
-    }
+    
 
     //Allocation at the time of Purhcase
     public function asAllocationFirst(){
