@@ -43,6 +43,10 @@ Route::get('/employee/allEmployeeList', 'EmployeeController@allEmployeeList')->n
 //end temporary 
 Route::get('/employee/activeEmployeesList', 'EmployeeController@activeEmployeesList')->name('employee.activeEmployeesList');
 Route::resource('/employee', 'EmployeeController');
+Route::get('/alertList','HrAlertController@alertList')->name('hrAlert.list');
+Route::get('/cnicExpiryDetail','HrAlertController@cnicExpiryDetail')->name('hrAlert.cnicExpiryDetail');
+Route::get('/appointmentExpiry','HrAlertController@appointmentExpiry')->name('hrAlert.appointmentExpiry');
+
 
 //all Employee list including terminated/resigned/retired
 //Route::get('/employee/allEmployeeList', 'EmployeeController@allEmployeeList')->name('employee.allEmployeeList');

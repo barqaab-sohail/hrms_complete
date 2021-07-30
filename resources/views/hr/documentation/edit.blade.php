@@ -5,7 +5,7 @@
 @endcan
 
 
-<div class="card-body" id="hideDiv">
+<div class="card-body">
 
     <form method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('documentation.update',$data->id)}}" id="formEditDocument" enctype="multipart/form-data">
     @method('PATCH')
@@ -38,7 +38,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Date<span class="text_requried">*</span></label>
                         
-                            <input type="text" name="document_date"  value="{{ old('document_date',$data->document_date) }}" class="form-control date_input" readonly data-validation="required" placeholder="Enter Document Detail">
+                            <input type="text" name="document_date"  id="document_date" value="{{ old('document_date',$data->document_date) }}" class="form-control date_input" readonly data-validation="required" placeholder="Enter Document Detail">
                             <br>
                             @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan 
                             
@@ -75,7 +75,7 @@
              <div class="row">
                 <div class="col-md-8 pdfView">
                     @if($data->extension == 'pdf')
-                    <iframe src="{{asset('storage/'.$data->path.$data->file_name)}}" height="300" width="100%"/>
+                    <iframe src="{{asset('storage/'.$data->path.$data->file_name)}}" height="300" width="100%" id="iframe"/>
                     @endif
                 </div>
 				<div class="col-md-1">
@@ -125,19 +125,26 @@
             </div>
         </div>
     </form>
-    <div class="row">
-              <div class="col-md-12 table-container">
-                             
-            
-               
-            </div>
+  
+    <div class="col-md-12 table-container">
+       
     </div>
+
 </div>
         
 <script>
     $(document).ready(function(){
         
         refreshTable("{{route('documentation.table')}}");
+
+         $('#formEditDocument').show();
+        $('#hideButton').click(function(){
+          $('#formEditDocument').toggle();
+          resetForm();
+          $("#wizardPicturePreview").attr("src","{{asset('Massets/images/document.png')}}");
+          $("#h6").text('Click On Image to Add Document');
+
+        });
 
         $("form").submit(function (e) {
          e.preventDefault();

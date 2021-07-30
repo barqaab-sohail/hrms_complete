@@ -11,6 +11,24 @@ function employeeFullName($id){
 		}
 }
 
+function appointmentExpiryTotal(){
+
+		$nextTenDays = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
+		$employees = HrEmployee::where('hr_status_id',1)->with('employeeAppointment')->get();
+        $total = 0;
+        $today = \Carbon\Carbon::now();
+        foreach ($employees as $key => $employee) {                   
+            if($employee->employeeAppointment->expiry_date??''!=''){
+                if($employee->employeeAppointment->expiry_date<$nextTenDays){
+            		$total++;    
+                }
+            }
+            
+        }
+        
+	return $total;
+}
+
 
 function officeName($id){
 	$office = Office::find($id);
