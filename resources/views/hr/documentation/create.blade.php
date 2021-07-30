@@ -5,7 +5,7 @@
 @endcan
 
 
-<div class="card-body" id="hideDiv">
+<div class="card-body">
 
     <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formDocument" enctype="multipart/form-data">
         {{csrf_field()}}
@@ -105,20 +105,22 @@
             </div>
         </div>
     </form>
-</div>
-<div class="row">
-        <div class="col-md-12 table-container">    
-        </div>
+
+    <div class="col-md-12 table-container">    
     </div>
         
+</div>
+
 <script>
     $(document).ready(function(){
         
         refreshTable("{{route('documentation.table')}}");
         
-        $('#hideDiv').hide();
+        $('#formDocument').hide();
             $('#hideButton').click(function(){
-          $('#hideDiv').toggle();
+          $('#formDocument').toggle();
+          resetForm();
+           $("#wizardPicturePreview").attr("src","{{asset('Massets/images/document.png')}}");
         });
 
 

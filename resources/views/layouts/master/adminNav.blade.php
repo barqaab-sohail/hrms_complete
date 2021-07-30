@@ -34,6 +34,7 @@
                    
                     @canany(['hr edit record','hr delete record'])
                         <li><a  class="{{Request::is('hrms/employee/create')?'active':''}}" href="{{route('employee.create')}}">Add Employee</a></li>
+                        <li><a  class="{{Request::is('hrms/alertList')?'active':''}}" href="{{route('hrAlert.list')}}">Alerts</a></li>
                         <li><a  class="{{Request::is('hrms/employee')?'active':''}}" href="{{route('employee.index')}}">List of Employees</a></li>
                     @endcanany
                       
