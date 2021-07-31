@@ -39,11 +39,12 @@
 
             @can('hr edit exit')
             <a type="submit" id="addExit"  role="button" href="{{route('exit.create')}}" class="btn btn-info" {{Request::is('hrms/exit/create/')?'style=background-color:#737373':''}}>Exit</a>
+            <a type="submit" role="button" id="addManager" href="{{route('manager.index')}}" class="btn btn-info" {{Request::is('hrms/manager/index')?'style=background-color:#737373':''}}>HOD</a>
             @endcan
 
 
             @can('Super Admin')   
-            <a type="submit" role="button" id="addManager" href="{{route('manager.index')}}" class="btn btn-info" {{Request::is('hrms/manager/index')?'style=background-color:#737373':''}}>HOD</a>
+            
 
             <a type="submit" id="addUserLogin" role="button" href="{{route('userLogin.edit',session('hr_employee_id'))}}" class="btn btn-info" {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Login Detail</a> 
             @endcan
