@@ -1,6 +1,6 @@
 
     <div style="margin-top:10px; margin-right: 10px;">
-        <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">List of Employees</button>
+        <button type="button"  id ="hideButton"  class="btn btn-info float-right">Add Trasnfer/Posting</button>
     </div>
          
     <div class="card-body">
@@ -17,8 +17,8 @@
                     <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label class="control-label text-right">Designation<span class="text_requried">*</span></label>
-                                 <select  id="hr_designation_id"   name="hr_designation_id" data-validation="required" class="form-control selectTwo">
+                                <label class="control-label text-right">Designation</label>
+                                 <select  id="hr_designation_id"   name="hr_designation_id" class="form-control selectTwo">
                                     <option value=""></option>
                                     @foreach($designations as $designation)
                                     <option value="{{$designation->id}}" {{(old("hr_designation_id", $data->hrDesignation->hr_designation_id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>

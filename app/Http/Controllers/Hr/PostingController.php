@@ -87,6 +87,7 @@ class PostingController extends Controller
                 $input['size']=$request->file('document')->getSize();
                 $input['path']=$folderName;
                 $input['extension']=$extension;
+                $input['document_date'] = $input ['effective_date'];
 
             $hrDocumentation = HrDocumentation::create($input);  
             $input['hr_documentation_id'] = $hrDocumentation->id;
@@ -320,7 +321,7 @@ class PostingController extends Controller
                 $input['size']=$request->file('document')->getSize();
                 $input['path']=$folderName;
                 $input['extension']=$extension;
-
+                $input['document_date'] = $input ['effective_date'];
                 
 
                 $hrPosting = HrPosting::find($id);
@@ -333,7 +334,14 @@ class PostingController extends Controller
                 }
                 //Update file detail
                 HrDocumentation::findOrFail($hrDocument->id)->update($input);
-            }      
+            }else
+             //only document date change
+            {
+                $input['document_date'] = $input ['effective_date'];
+                $hrPosting = HrPosting::find($id);
+                $hrDocument = HrDocumentation::findOrFail($hrPosting->hr_documentation_id);
+                HrDocumentation::findOrFail($hrDocument->id)->update($input);
+            }     
     	});  //end transaction
 
     	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);

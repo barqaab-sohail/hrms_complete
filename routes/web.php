@@ -186,6 +186,8 @@ Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth','XssSanitizer'],
 	Route::get('/activeUser', 'ActiveUserController@index')->name('activeUser.index');
 	Route::get('/logoutAll/{id?}', 'ActiveUserController@logoutAll')->name('logout.all');
 	Route::resource('/permission', 'PermissionController');
+	Route::get('/audit/search', 'AuditController@search')->name('audit.search');
+	Route::get('/result', 'AuditController@result')->name('audit.result');
 
 });
 

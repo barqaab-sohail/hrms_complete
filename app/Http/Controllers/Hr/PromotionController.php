@@ -83,6 +83,7 @@ class PromotionController extends Controller
 				$input['file_name']=$fileName;
 				$input['size']=$request->file('document')->getSize();
 				$input['path']=$folderName;
+                $input['document_date'] = $input ['effective_date'];
 				$input['extension']=$extension;
 				$input['hr_employee_id']=session('hr_employee_id');
 
@@ -318,6 +319,7 @@ class PromotionController extends Controller
                 $input['size']=$request->file('document')->getSize();
                 $input['path']=$folderName;
                 $input['extension']=$extension;
+                $input['document_date'] = $input ['effective_date'];
 
                 $hrPromotion = HrPromotion::find($id);
 
@@ -331,7 +333,14 @@ class PromotionController extends Controller
                 //Update file detail
                 HrDocumentation::findOrFail($hrDocument->id)->update($input);
 
-        	}
+        	}else
+            //only document date change
+            {
+                $input['document_date'] = $input ['effective_date'];
+                $hrPromotion = HrPromotion::find($id);
+                $hrDocument = HrDocumentation::findOrFail($hrPromotion->hr_documentation_id);
+                HrDocumentation::findOrFail($hrDocument->id)->update($input);
+            }
             
 
         }); // end transcation
