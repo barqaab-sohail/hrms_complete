@@ -45,6 +45,7 @@ class HrAlertController extends Controller
                 if($employee->employeeAppointment->expiry_date<$nextTenDays){
             		$data [] = array(
 					"employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
+                    "employee_project"=>$employee->employeeProject->name,
 					"appointment_expiry_date" => $employee->employeeAppointment->expiry_date,
 					);  	
                     

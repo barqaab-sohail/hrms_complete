@@ -17,6 +17,7 @@
                     
                       <tr >
                           <th>Employee Name</th>
+                          <th>Project</th>
                           <th>Expiry Date</th>
                       </tr>
                     </thead>
@@ -86,6 +87,8 @@ $('#appointmentExpiryDetail').click(function(){
           $('#alertDetail > tbody').append(
               '<tr><td>'
               + this.employee_name
+              + '</td><td>'
+              + this.employee_project
               + '</td><td>'
               + this.appointment_expiry_date
               + '</td></tr>'
