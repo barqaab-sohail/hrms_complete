@@ -1,6 +1,6 @@
 
     <div style="margin-top:10px; margin-right: 10px;">
-        <button type="button"  id ="hideButton"  class="btn btn-info float-right">Add Promotion</button>
+        <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Promotion</button>
     </div>
          
     <div class="card-body" id="hideDiv">

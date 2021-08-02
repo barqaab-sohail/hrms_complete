@@ -9,7 +9,7 @@
 		<h4 class="card-title">List of Employees</h4>
 
 		<div class="table-responsive m-t-40">	
-			<table id="myTable" class="table table-bordered table-striped"  style="width:100%" >
+			<table id="myTable" class="table table-bordered table-striped">
 				<thead>
 				<tr>
 					<th>Id</th>
@@ -34,7 +34,7 @@
 							<td>{{$employee->employeeDesignation->last()->name??''}}</td>
 							<td>{{$employee->hr_status_id}}</td>
 							<td>{{$employee->cnic}}</td>
-							<td>{{$employee->employeeAppointment->formatted_joining_date??''}}</td>
+							<td>{{isset($employee->employeeAppointment->joining_date)?date('d-M-Y', strtotime($employee->employeeAppointment->joining_date)):''}}</td>
 							<td>{{$employee->employee_no??''}}</td>
 							<td>{{$employee->hrContactMobile->mobile??''}}</td>
 							
@@ -97,7 +97,7 @@ $(document).ready(function() {
                     },
                 ],
                
-                scrollY:        "300px",
+                scrollY:        "400px",
       			scrollX:        true,
         		scrollCollapse: true,
         		paging:         false,

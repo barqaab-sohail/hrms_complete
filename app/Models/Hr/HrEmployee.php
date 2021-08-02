@@ -324,6 +324,11 @@ class HrEmployee extends Model implements Auditable
         );
 
     }
+
+
+    public function hod(){
+          return $this->hasOne('App\Models\Hr\EmployeeManager')->orderBy('effective_date', 'DESC');
+    }
     
    
 }

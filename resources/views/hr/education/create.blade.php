@@ -1,6 +1,6 @@
 
     <div style="margin-top:10px; margin-right: 10px;">
-        <button type="button"  id ="hideButton"  class="btn btn-info float-right">Add Education</button>
+        <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Education</button>
     </div>
          
     <div class="card-body" id="hideDiv">

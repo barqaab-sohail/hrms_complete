@@ -1,6 +1,6 @@
 
 <div class="card-body">
-  <button type="button" class="btn btn-info"  id ="createNewManager" data-toggle="modal" >Add New HOD</button>
+  <button type="button" class="btn btn-success"  id ="createNewManager" data-toggle="modal" >Add New HOD</button>
   <br>
   <table class="table table-bordered data-table">
     <thead>

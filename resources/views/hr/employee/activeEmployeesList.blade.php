@@ -15,8 +15,9 @@
 					<th>Id</th>
 					<th>Employee Name</th>
 					<th>Designation/Position</th>
-					<th>Status</th>
+					<th>Category</th>
 					<th>CNIC</th>
+					<th>HOD</th>
 					<th>Date of Joining</th>
 					<th>Employee No</th>
 					<th>Mobile</th>
@@ -32,8 +33,9 @@
 							<td>{{$employee->id}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 							<td>{{$employee->employeeDesignation->last()->name??''}}</td>
-							<td>{{$employee->hr_status_id}}</td>
+							<td>{{$employee->employeeAppointment->hr_category_id??''}}</td>
 							<td>{{$employee->cnic}}</td>
+							<td>{{employeeFullName($employee->hod->hr_manager_id??'')}}</td>
 							<td>{{$employee->employeeAppointment->formatted_joining_date??''}}</td>
 							<td>{{$employee->employee_no??''}}</td>
 							<td>{{$employee->hrContactMobile->mobile??''}}</td>
