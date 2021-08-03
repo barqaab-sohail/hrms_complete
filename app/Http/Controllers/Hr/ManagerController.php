@@ -45,7 +45,7 @@ class ManagerController extends Controller
                     })
                     ->addColumn('fullName', function($row){                
                       
-                           return $row->hrEmployee->first_name.' '.$row->hrEmployee->last_name.' - '.$row->hodDesignation->last()->name??'';
+                           return employeeFullName($row->hr_manager_id);
                            
                     })
                     ->rawColumns(['Edit','Delete','fullName'])
