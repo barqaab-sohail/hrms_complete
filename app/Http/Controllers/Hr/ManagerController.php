@@ -12,6 +12,22 @@ use DataTables;
 class ManagerController extends Controller
 {
     
+    public function hodDetail(){
+
+        $users = HrEmployee::where('hr_status_id',1)->get();
+        return view ('hr.manager.hodDetail',compact('users'));
+    }
+
+
+    public function hodResult(Request $request){
+       
+        if($request->filled('hod')){
+        $result = checkHod($request->hod);
+        return view('hr.manager.hodResult',compact('result'));
+        }
+    }
+
+
     public function index() {
     	
        	$employees = HrEmployee::all();

@@ -28,6 +28,7 @@
                         <!-- <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>
                       
                         <li><a  class="{{Request::is('hrms/employee/allEmployeeList')?'active':''}}" href="{{route('employee.allEmployeeList')}}">All Employees</a></li> -->
+                        <li><a  class="{{Request::is('hrms/employee/manager/hodDetail')?'active':''}}" href="{{route('hod.hodDetail')}}">HOD Detail</a></li>
 
                         <li><a  class="{{Request::is('hrms/employee/activeEmployeesList')?'active':''}}" href="{{route('employee.activeEmployeesList')}}">Active Employees List</a></li>
                     @endcan

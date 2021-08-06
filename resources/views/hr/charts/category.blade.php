@@ -1,39 +1,4 @@
-@extends('layouts.master.master')
-@section('title', 'BARQAAB HR')
 
-
-@section('Heading')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.css"/>
- 
-
-
-  <h3 class="text-themecolor">Dashboard</h3>
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="javascript:void(0)"></a></li>
-    
-    
-  </ol>
-@stop
-@section('content')
-	<div class="card">
-		<div class="card-body">
-		            
-                <br>
-                <br>
-        <div class="row">
-        <h1>Total Employee: {{$employees}}</h1>
-            <div class="col-md-6">
-    		    <div id="piechart" style="width: 700px; height: 500px;"></div>
-            </div>
-             <div class="col-md-6">
-            <div id="lineChart" style="width: 700px; height: 500px;"></div>
-            </div>
-        </div>
-   
-        			
-		</div>
-	</div>
-@stop
 @push('scripts')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -48,9 +13,9 @@
         //Pie chart data
         var data = google.visualization.arrayToDataTable([
           ['Description', 'Quantity'],
-          ['Category A Employees',     categoryA],
-          ['Category B Employees',      categoryB],
-          ['Category C Employees',      categoryC]
+          ['Category A Employees'+ ' = ' + categoryA,     categoryA],
+          ['Category B Employees'+ ' = ' + categoryB,      categoryB],
+          ['Category C Employees'+ ' = ' + categoryC,      categoryC]
           
         ]);
 
@@ -78,12 +43,12 @@
            isStacked: true,
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        var chart = new google.visualization.PieChart(document.getElementById('categoryChart'));
         //bar chart object
         //var chart1 = new google.visualization.ColumnChart(document.getElementById('lineChart'));
 
         chart.draw(data, options);
-        chart1.draw(data1, options1);
+        //chart1.draw(data1, options1);
       }
     </script>
 

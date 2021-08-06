@@ -31,44 +31,41 @@
 	</div>
 	<div class="card">
 		<div class="card-body">
-			<!--<div class="float-right">
-				<input id="month" class="form-control" value="" type="month">
+				
+			<div class="row">
+                <div class="col-md-6">	
+					<div id="ageChart" style="width: 900px; height: 500px;"></div>
+				</div>
+				<div class="col-md-6">
+					<div id="categoryChart" style="width: 700px; height: 500px;"></div>
+				<div>
 			</div>
-			<h4 class="card-title">Salaries</h4>
-			-->
-			
+               
+				<div id="engineerChart" style="width: 900px; height: 500px;"></div>
+				
+				@include('hr.charts.category')
+				@include('hr.charts.ageChart')
+				@include('hr.charts.engineerChart')
 		</div>
 	</div>
 	
 @can('Super Admin')
 	<!--TASK -->
-		<div class="card">
-			<div class="card-body">
-			
-	        
-		          	<!-- Button trigger modal -->
+	<div class="card">
+		<div class="card-body">
+          	<!-- Button trigger modal -->
+          	<button type="button" class="btn btn-info float-right"  data-toggle="modal" data-target="#taskModal"> 
+            Add New Task
+          	</button>
+          
+          	<!-- Modeal Include-->
+          	@include('self.task.modal')
+          	@include('self.task.editModal')
 
-		          	<button type="button" class="btn btn-info float-right"  data-toggle="modal" data-target="#taskModal"> 
-		            Add New Task
-		          	</button>
-		          
-		          	<!-- Modeal Include-->
-		          	@include('self.task.modal')
-		          	@include('self.task.editModal')
-	  				
-
-	  					<div id="append_data" class="table-responsive m-t-40 table-container">
-	  				
-            	         
-            			
-           				 </div>
-       			
-
-	      		</div>
-	
-			</div>	
-	
-		</div>
+			<div id="append_data" class="table-responsive m-t-40 table-container">
+			</div>
+      	</div>
+	</div>	
 	<!--End TASK -->
 @endcan
 
@@ -83,6 +80,19 @@ $(document).ready(function () {
 	//var url = "{{route('task.index')}}";
 	//refreshTable("{{route('task.index')}}");
 	//load_data();
+
+	$('#myDataTable').DataTable({
+        stateSave: false,
+        dom: 'flrti',
+        scrollY:        "500px",
+			scrollX:        true,
+		scrollCollapse: true,
+		paging:         false,
+		fixedColumns:   {
+    		leftColumns: 1,
+    		rightColumns:2
+		}
+	});
 });
 	
 
@@ -115,7 +125,7 @@ $(document).ready(function () {
                  
             });
         });
-  }
+  	}
 
 </script>
 @endpush
