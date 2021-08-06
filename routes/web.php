@@ -62,6 +62,8 @@ Route::get('/contact/refreshTable', 'ContactController@refreshTable')->name('con
 Route::resource('/contact', 'ContactController');
 Route::resource('/emergency', 'EmergencyController');
 Route::resource('/nextToKin', 'NextToKinController');
+Route::get('/employee/manager/hodDetail', 'ManagerController@hodDetail')->name('hod.hodDetail');
+Route::get('/employee/manager/result', 'ManagerController@hodResult')->name('hod.result');
 Route::resource('/manager', 'ManagerController');
 Route::get('/promotion/refreshTable', 'PromotionController@refreshTable')->name('promotion.table');
 Route::resource('/promotion', 'PromotionController');

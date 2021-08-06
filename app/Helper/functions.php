@@ -2,6 +2,7 @@
 use App\Models\Cv\CvSpecialization;
 use App\Models\CV\CvDetail;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\EmployeeManager;
 use App\Models\Office\Office;
 
 function employeeFullName($id){
@@ -14,6 +15,20 @@ function employeeFullName($id){
 			
 			return $fullName.' - '.$designation;
 		}
+}
+
+function checkHod($id){
+
+	//$hod = EmployeeManager::where('hr_manager_id',$id)->get();
+
+	$result = collect(HrEmployee::join('employee_managers','employee_managers.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','employee_managers.hr_manager_id','employee_managers.effective_date')->where('hr_status_id',1)->orderBy('effective_date','desc')->get());
+	$resultUnique = ($result->unique('id'));
+	$resultUnique->values()->all();
+	$result = $resultUnique->where('hr_manager_id',$id);
+
+	return $result;
+
+
 }
 
 function appointmentExpiryTotal(){

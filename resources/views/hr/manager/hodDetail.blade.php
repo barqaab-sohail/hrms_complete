@@ -1,14 +1,14 @@
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
 @section('Heading')
-	<h3 class="text-themecolor">Search User Log</h3>
+	<h3 class="text-themecolor">Reporting Employee Detail</h3>
 @stop
 @section('content')
 <div class="card">
 	<div class="card-body">	
-		<h4 class="card-title">Search User Log</h4>
+		<h4 class="card-title">Reporting Employee Detail</h4>
 		<hr>
-		<form id="auditSearch" method="get" class="form-horizontal form-prevent-multiple-submits" action="{{route('audit.result')}}" enctype="multipart/form-data">
+		<form id="hodSearch" method="get" class="form-horizontal form-prevent-multiple-submits" action="{{route('hod.result')}}" enctype="multipart/form-data">
             {{csrf_field()}}
             <div class="form-body">
 
@@ -17,26 +17,16 @@
 		            	<!--/span 5-1 -->
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
-		                   		<label class="control-label text-right">User Name</label><br>
-		                   		<select  name="user"  class="form-control" data-validation="required">
+		                   		<label class="control-label text-right">HOD Name</label><br>
+		                   		<select  name="hod"  class="form-control" data-validation="required">
 		                            <option value=""></option>
-		                            @foreach($users as $user)
-									<option value="{{$user->id}}" {{(old("user")==$user->id? "selected" : "")}}>{{employeeFullName($user->hrEmployee->id)}}</option>
+		                            @foreach($users as $hod)
+									<option value="{{$hod->id}}" {{(old("hod")==$hod->id? "selected" : "")}}>{{employeeFullName($hod->id)}}</option>
 		                            @endforeach
 		                        </select>    
 		                    </div>
 		                </div>
 		            </div>     
-		            <div class="col-md-3">
-		            	<!--/span 5-1 -->
-		                <div class="form-group row">
-		                    <div class="col-md-12 required">
-		                   		<label class="control-label text-right">Number of Records</label><br>
-		                   		<input type="text" name="total_records" id="total_records" value="{{ old('total_records') }}" class="form-control" placeholder="Enter Total Number of Records" data-validation="required">
-		                   		
-		                    </div>
-		                </div>
-		            </div>                  
 		        </div>
 		    </div>
 
@@ -73,22 +63,9 @@ $(document).ready(function(){
 	$('select').select2();
 	formFunctions();
 
-	$('#total_records').keyup(function(event) {
-
-	    // skip for arrow keys
-	    if(event.which >= 37 && event.which <= 40) return;
-
-	    // format number
-	    $(this).val(function(index, value) {
-	      return value
-	      .replace(/\D/g, "")
-	      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-	      ;
-	    });
-  	});
 
 	//submit function
-      $("#auditSearch").submit(function(e) { 
+      $("#hodSearch").submit(function(e) { 
       e.preventDefault();
       $('.fa-spinner').show();
       var url = $(this).attr('action');
@@ -106,7 +83,7 @@ $(document).ready(function(){
 	        $.ajax({
 	           url:url,
 	           method:"GET",
-	           data: $('#auditSearch').serialize(),
+	           data: $('#hodSearch').serialize(),
 	           //dataType:'JSON',
 	           contentType: false,
 	           cache: false,
@@ -137,21 +114,6 @@ $(document).ready(function(){
 	    }); //end ajax
       
     });
-
-    $(".date_input").datepicker({
-     onSelect: function(value, ui) {
-        $(this).siblings('i').show();
-        var today = new Date(), 
-            age = today.getFullYear() - ui.selectedYear;
-        $('#age').text(age+' years total age');
-    },
-    dateFormat: 'D, d-M-yy',
-    yearRange: '1935:'+ (new Date().getFullYear()+15),
-    changeMonth: true,
-    changeYear: true,
-
-    });
-
 
 
 });
