@@ -10,6 +10,7 @@ use App\Models\Common\Religion;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\EmployeeAppointment;
 use App\Models\Hr\EmployeeCategory;
+use App\Models\Hr\HrCategory;
 use App\Models\Hr\EmployeeManager;
 use App\Models\Hr\EmployeeDesignation;
 use App\Models\Hr\EmployeeDepartment;
@@ -241,6 +242,23 @@ class EmployeeController extends Controller
 
         }
 
+    }
+
+    public function category(){
+        $categories = HrCategory::all();
+        return view ('hr.employee.categoryWise',compact('categories'));
+    }
+
+
+    public function categorySearch(Request $request){
+       
+        if($request->filled('category')){
+        $result = collect(HrEmployee::join('employee_categories','employee_categories.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','employee_categories.hr_category_id','employee_categories.effective_date')->where('hr_status_id',1)->orderBy('effective_date','desc')->get());
+            $resultUnique = ($result->unique('id'));
+            $resultUnique->values()->all();
+            $result = $resultUnique->where('hr_category_id',$request->category);
+        return view('hr.employee.categoryResult',compact('result'));
+        }
     }
 
 }
