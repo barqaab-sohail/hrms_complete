@@ -29,25 +29,34 @@
 			
 		</div>
 	</div>
-	<div class="card">
-		<div class="card-body">
+	
 				
 			<div class="row">
-                <div class="col-md-6">	
+  				<div class="col-sm-6">
 					<div id="ageChart" style="width: 900px; height: 500px;"></div>
 				</div>
-				<div class="col-md-6">
-					<div id="categoryChart" style="width: 700px; height: 500px;"></div>
-				<div>
+				<div class="col-sm-6">
+					<div id="engineerChart" style="width: 900px; height: 500px;"></div>
+				</div>
+					
 			</div>
+			<div class="row">
+  				<div class="col-sm-6">
+					<div id="categoryChart" style="width: 900px; height: 500px;"></div>
+				</div>
+				<div class="col-sm-6">
+					<div id="departmentChart" style="width: 900px; height: 500px;"></div>
+				</div>
+					
+			</div>
+				
+					
                
-				<div id="engineerChart" style="width: 900px; height: 500px;"></div>
 				
 				@include('hr.charts.category')
 				@include('hr.charts.ageChart')
 				@include('hr.charts.engineerChart')
-		</div>
-	</div>
+				@include('hr.charts.departmentChart')
 	
 @can('Super Admin')
 	<!--TASK -->

@@ -71,7 +71,10 @@
 	      			scrollX:        true,
 	        		scrollCollapse: true,
 	        		paging:         false,
-	        		"order": [[ 1, "desc" ]],
+	        		columnDefs: [
+       					{ type: 'date-dd-mmm-yyyy', targets: 1 }
+     					],
+     				"order": [[ 1, "desc" ]],
 	        		fixedColumns:   {
 	            		leftColumns: 1,
 	            		rightColumns:2

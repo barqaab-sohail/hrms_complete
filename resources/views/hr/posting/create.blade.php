@@ -91,7 +91,7 @@
                                 <select  id="hr_manager_id"   name="hr_manager_id"  class="form-control selectTwo" >
                                     <option value=""></option>
                                     @foreach($managers as $manager)
-                                    <option value="{{$manager->id}}" {{(old("hr_manager_id")==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}}</option>
+                                    <option value="{{$manager->id}}" {{(old("hr_manager_id")==$manager->id? "selected" : "")}}>{{employeeFullName($manager->id)}}</option>
                                     @endforeach  
                                 </select>
                                  

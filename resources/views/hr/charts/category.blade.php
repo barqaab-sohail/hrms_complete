@@ -13,9 +13,9 @@
         //Pie chart data
         var data = google.visualization.arrayToDataTable([
           ['Description', 'Quantity'],
-          ['Category A Employees'+ ' = ' + categoryA,     categoryA],
-          ['Category B Employees'+ ' = ' + categoryB,      categoryB],
-          ['Category C Employees'+ ' = ' + categoryC,      categoryC]
+          ['Category A Employees',     categoryA],
+          ['Category B Employees',      categoryB],
+          ['Category C Employees',      categoryC]
           
         ]);
 

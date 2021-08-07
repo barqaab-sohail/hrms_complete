@@ -15,6 +15,7 @@
 					<th>Id</th>
 					<th>Employee Name</th>
 					<th>Designation/Position</th>
+					<th>Date of Birth</th>
 					<th>Status</th>
 					<th>CNIC</th>
 					<th>Date of Joining</th>
@@ -32,6 +33,7 @@
 							<td>{{$employee->id}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 							<td>{{$employee->employeeDesignation->last()->name??''}}</td>
+							<td>{{$employee->date_of_birth}}</td>
 							<td>{{$employee->hr_status_id}}</td>
 							<td>{{$employee->cnic}}</td>
 							<td>{{isset($employee->employeeAppointment->joining_date)?date('d-M-Y', strtotime($employee->employeeAppointment->joining_date)):''}}</td>
@@ -66,7 +68,6 @@
 $(document).ready(function() {
 	
             $('#myTable').DataTable({
-
                 stateSave: false,
         
                 dom: 'Blfrtip',

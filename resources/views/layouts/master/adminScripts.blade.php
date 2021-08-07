@@ -31,6 +31,7 @@
 <script src="{{asset('Massets/plugins/d3/d3.min.js') }}"></script>
 <script src="{{asset('Massets/plugins/c3-master/c3.min.js') }}"></script>
 
+
 <!--CDN ChartJS 
  -->
 <script src="http://www.chartjs.org/dist/2.7.3/Chart.bundle.js"></script>
@@ -80,6 +81,8 @@
  <!-- js functions -->
 <script src="{{asset('functions/functions.js') }}"></script>
 
+ <!-- Datatable Date formate(dd-mmm-yyyy) Sotring -->
+<script src="https://cdn.datatables.net/plug-ins/1.10.25/sorting/date-dd-MMM-yyyy.js"></script>
 
 
 <script src="https://cdn.tiny.cloud/1/6k6kj2mbbmwv1jqeh7sqe7jf29uemxfwvq4kzdpz5a4j9gm1/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
