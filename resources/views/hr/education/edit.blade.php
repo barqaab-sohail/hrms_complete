@@ -1,15 +1,12 @@
 
-    <div style="margin-top:10px; margin-right: 10px;">
-        <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-success float-right" data-toggle="tooltip" title="Back to List">List of Employees</button>
-    </div>
-         
+        
     <div class="card-body">
         <form id= "education" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('education.update',$data->id)}}" enctype="multipart/form-data">
         @method('PATCH')
         @csrf
             <div class="form-body">
                     
-                <h3 class="box-title">Add Education</h3>
+                <h3 class="box-title">Edit Education</h3>
                 
                 <hr class="m-t-0 m-b-40">
 

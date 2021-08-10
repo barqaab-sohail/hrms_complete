@@ -3,7 +3,7 @@
         <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Trasnfer/Posting</button>
     </div>
          
-    <div class="card-body" id="hideDiv">
+    <div class="card-body">
         <form id= "formPosting" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('posting.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
@@ -205,9 +205,10 @@
 $(document).ready(function(){
      refreshTable("{{route('posting.table')}}");
 
-    $('#hideDiv').hide();
+    $('#formPosting').hide();
     $('#hideButton').click(function(){
-          $('#hideDiv').toggle();
+          $('#formPosting').toggle();
+          resetForm();
     });
     //submit function
         $("#formPosting").submit(function(e) { 

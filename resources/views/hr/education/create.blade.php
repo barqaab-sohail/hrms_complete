@@ -3,7 +3,7 @@
         <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Education</button>
     </div>
          
-    <div class="card-body" id="hideDiv">
+    <div class="card-body">
         <form id= "education" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('education.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
@@ -165,9 +165,11 @@ $(document).ready(function(){
     
     refreshTable("{{route('education.table')}}");
     $('#education_id').chosen();
-    $('#hideDiv').hide();
+
+    $('#education').hide();
     $('#hideButton').click(function(){
-          $('#hideDiv').toggle();
+          $('#education').toggle();
+          resetForm();
     });
    
     $('#marks_obtain, #total_marks').on('change',function(){

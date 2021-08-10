@@ -3,7 +3,7 @@
        <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Experience</button>
     </div>
          
-    <div class="card-body" id="hideDiv">
+    <div class="card-body">
         <form id= "experience" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('experience.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
@@ -126,9 +126,11 @@
 <script>
 $(document).ready(function(){
     refreshTable("{{route('experience.table')}}");
-    $('#hideDiv').hide();
+
+    $('#experience').hide();
     $('#hideButton').click(function(){
-          $('#hideDiv').toggle();
+          $('#experience').toggle();
+          resetForm()
     });
  
     //submit function

@@ -256,7 +256,7 @@ function resetForm(){
     $('input').removeClass('error');
     $("input[style='border-color: rgb(185, 74, 72);']").css('border-color','').siblings("span").attr('class','help-block').remove();
     $('iframe').remove();
-    $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").fadeIn('slow').attr('width','100%');
+    //$('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}").attr('width','100%');
 
 }
 

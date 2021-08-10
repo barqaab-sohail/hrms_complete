@@ -98,8 +98,8 @@ $(document).ready(function() {
                     },
                 ],
                
-                scrollY:        "400px",
-      			scrollX:        true,
+         //        scrollY:        "400px",
+      			// scrollX:        true,
         		scrollCollapse: true,
         		paging:         false,
         		fixedColumns:   {

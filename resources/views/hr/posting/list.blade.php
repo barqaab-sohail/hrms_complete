@@ -11,7 +11,7 @@
 			
 			<div class="table-responsive">
 				
-				<table id="myTable" class="table-primary table-bordered table-striped" width="100%" cellspacing="0">
+				<table id="myTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
 					<thead>
 					
 					<tr >

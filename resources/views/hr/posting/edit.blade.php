@@ -1,7 +1,4 @@
 
-    <div style="margin-top:10px; margin-right: 10px;">
-        <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Trasnfer/Posting</button>
-    </div>
          
     <div class="card-body">
         <form id= "formPosting" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('posting.update',$data->id)}}" enctype="multipart/form-data">

@@ -3,7 +3,7 @@
         <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Promotion</button>
     </div>
          
-    <div class="card-body" id="hideDiv">
+    <div class="card-body">
         <form id= "formPromotion" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('promotion.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
@@ -198,9 +198,10 @@
 <script>
 $(document).ready(function(){
     refreshTable("{{route('promotion.table')}}");
-    $('#hideDiv').hide();
+    $('#formPromotion').hide();
     $('#hideButton').click(function(){
-          $('#hideDiv').toggle();
+          $('#formPromotion').toggle();
+          resetForm();
     });
 
     //submit function
