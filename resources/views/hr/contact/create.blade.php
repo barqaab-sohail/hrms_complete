@@ -3,7 +3,7 @@
         <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Contact</button>
     </div>
          
-    <div class="card-body" id="hideDiv">
+    <div class="card-body">
         <form id= "formContact" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('contact.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="form-body">
@@ -172,10 +172,11 @@ $(document).ready(function(){
     
     refreshTable("{{route('contact.table')}}",300);
     
-    $('#hideDiv').hide();
-    $('#hideButton').click(function(){
-          $('#hideDiv').toggle();
 
+    $('#formContact').hide();
+    $('#hideButton').click(function(){
+        $('#formContact').toggle();
+        resetForm();
     });
 
       //submit function

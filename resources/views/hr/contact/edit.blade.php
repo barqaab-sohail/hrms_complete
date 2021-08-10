@@ -1,7 +1,3 @@
-
-    <div style="margin-top:10px; margin-right: 10px;">
-        <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-success float-right" data-toggle="tooltip" title="Back to List">List of Employees</button>
-    </div>
          
     <div class="card-body">
         <form id= "formEditContact" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('contact.update',$data->id??'')}}" enctype="multipart/form-data">

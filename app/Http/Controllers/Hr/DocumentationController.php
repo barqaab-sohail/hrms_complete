@@ -15,7 +15,7 @@ use DB;
 class DocumentationController extends Controller
 {
     public function create(Request $request){
-
+     
     	$documentNames = HrDocumentName::all();
 
         if($request->ajax()){

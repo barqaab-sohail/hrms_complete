@@ -16,12 +16,22 @@ class ExitController extends Controller
     	$hrExits =  HrExit::where('hr_employee_id', session('hr_employee_id'))->get();
     	$employee = HrEmployee::find(session('hr_employee_id'));
     	$hrStatuses = HrStatus::all();
+       
     	return view ('hr.exit.create', compact('hrStatuses','hrExits','employee'));
 
     }
 
 
     public function store(Request $request){
+
+            //check if this emplyee has any subordinate
+            if($request->hr_status_id != 1){
+                 $hodDetail = checkHod(session('hr_employee_id'));
+
+                 if(count($hodDetail) != 0){
+                     return response()->json(['status'=> 'Not OK', 'message' => "You cannot change status without changes HOD"]);
+                 } 
+            }
 
             $input = $request->all();
             $input['hr_employee_id']=session('hr_employee_id');
@@ -62,6 +72,15 @@ class ExitController extends Controller
     	 //ensure client end id is not changed
         if($id != session('exit_edit_id')){
             return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
+
+        //check if this emplyee has any subordinate
+        if($request->hr_status_id != 1){
+             $hodDetail = checkHod(session('hr_employee_id'));
+
+             if(count($hodDetail) != 0){
+                 return response()->json(['status'=> 'Not OK', 'message' => "You cannot change status without changes HOD"]);
+             } 
         }
 
         $input = $request->all();
