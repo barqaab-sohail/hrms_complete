@@ -84,18 +84,31 @@ class HrEmployee extends Model implements Auditable
             'id',                          //Final Model Primary Key
             'id',   //current model Primary Key of Final Model (it is called foreign key)
             'hr_designation_id'           //Forein Key in Immediate Model of Final Model
-        )->orderBy('employee_designations.id', 'asc');;
+        )->orderBy('employee_designations.id', 'asc');
     }
 
+    public function employeeOffice(){
+        //return $this->hasOne('App\Models\Hr\EmployeeDesignation');
+        return $this->hasManyThrough(
+            'App\Models\Office\Office', //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeOffice', //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',              //Forein Key in Immediate Model of This Model
+            'id',                          //Final Model Primary Key
+            'id',   //current model Primary Key of Final Model (it is called foreign key)
+            'office_id'           //Forein Key in Immediate Model of Final Model
+        )->orderBy('employee_offices.id', 'asc');
+    }
+
+
     public function employeeProject(){
-        return $this->hasOneThrough(
+        return $this->hasManyThrough(
             'App\Models\Project\PrDetail',                  //Final Model HrDocumentName
-            'App\Models\Hr\EmployeeAppointment',              //Model Through Access Final Model (Immediate Model)
+            'App\Models\Hr\EmployeeProject',              //Model Through Access Final Model (Immediate Model)
             'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
             'id',                                             //Final Model Primary Key
             'id',
             'pr_detail_id'                             //Forein Key in Immediate Model of Final Model
-        );
+        )->orderBy('employee_projects.id', 'asc');
 
     }
 

@@ -50,6 +50,7 @@ class EditCvDetailStore extends FormRequest
             'donor_experience'=>'nullable|numeric',
             'membership_name.*'=>'nullable|distinct',
             'barqaab_employment' => 'required',
+             'ref_detail'=> 'nullable|max:190',
             'cv_submission_date'=>'nullable|date|before_or_equal:'.$today,
             'cv' => 'nullable|file|max:4000|mimes:doc,docx,pdf',
 

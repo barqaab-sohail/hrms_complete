@@ -1,14 +1,14 @@
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
 @section('Heading')
-	<h3 class="text-themecolor">Categorywise Employee Detail</h3>
+	<h3 class="text-themecolor">Employee Search</h3>
 @stop
 @section('content')
 <div class="card">
 	<div class="card-body">	
-		<h4 class="card-title">Categorywise Employee Detail</h4>
+		<h4 class="card-title">Employee Search</h4>
 		<hr>
-		<form id="categirtSearch" method="get" class="form-horizontal form-prevent-multiple-submits" action="{{route('employee.categorySearch')}}" enctype="multipart/form-data">
+		<form id="employeeSearch" method="get" class="form-horizontal form-prevent-multiple-submits" action="{{route('employee.result')}}" enctype="multipart/form-data">
             {{csrf_field()}}
             <div class="form-body">
 
@@ -18,12 +18,48 @@
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
 		                   		<label class="control-label text-right">Name of Category</label><br>
-		                   		<select  name="category"  class="form-control" data-validation="required">
+		                   		<select  name="category"  id="category" class="form-control">
 		                            <option value=""></option>
 		                            @foreach($categories as $category)
 									<option value="{{$category->id}}" {{(old("category")==$category->id? "selected" : "")}}>Category - {{$category->name}}</option>
 		                            @endforeach
 		                        </select>    
+		                    </div>
+		                </div>
+		            </div>     
+		            <!--Span-2
+		             -->
+		            <div class="col-md-3">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12 required">
+		                   		<label class="control-label text-right">Name of Degree</label><br>
+		                   		<select  name="degree"  id="degree" class="form-control" >
+		                            <option value=""></option>
+		                            
+		                            @foreach($degrees as $degree)
+									<option value="{{$degree->id}}" {{(old("degree")==$degree->id? "selected" : "")}}>{{$degree->degree_name}}</option>
+		                            @endforeach
+		                          
+		                        </select>
+		                    </div>
+		                </div>
+		            </div>     
+		             <!--Span-3
+		             -->
+		            <div class="col-md-3">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12 required">
+		                   		<label class="control-label text-right">Name of Designation</label><br>
+		                   		<select  name="designation"  id="designation" class="form-control" >
+		                            <option value=""></option>
+		                            
+		                            @foreach($designations as $designation)
+									<option value="{{$designation->id}}" {{(old("designation")==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
+		                            @endforeach
+		                          
+		                        </select>
 		                    </div>
 		                </div>
 		            </div>     
@@ -64,8 +100,37 @@ $(document).ready(function(){
 	formFunctions();
 
 
+    	
+  	// $('#degree').change(function(){
+  	// 	if($('#designation').val() != null){
+  	// 	$('#designation').val('').select2('val', 'All');
+  	// 	}
+  	// 	if($('#category').val()!= null){
+  	// 	$('#category').val('').select2('val', 'All');
+  	// 	}
+  	// });
+
+  	// $('#category').change(function(){
+  	// 	if($('#designation').val() != null){
+  	// 	$('#designation').val('').select2('val', 'All');
+  	// 	}
+  	// 	if($('#degree').val()!= null){
+  	// 	$('#degree').val('').select2('val', 'All');
+  	// 	}
+  	// });
+  	
+  	// $('#designation').change(function(){
+  	// 	if($('#category').val() != null){
+  	// 	$('#category').val('').select2('val', 'All');
+  	// 	}
+  	// 	if($('#degree').val()!= null){
+  	// 	$('#degree').val('').select2('val', 'All');
+  	// 	}
+  	// });
+
+
 	//submit function
-      $("#categirtSearch").submit(function(e) { 
+      $("#employeeSearch").submit(function(e) { 
       e.preventDefault();
       $('.fa-spinner').show();
       var url = $(this).attr('action');
@@ -83,7 +148,7 @@ $(document).ready(function(){
 	        $.ajax({
 	           url:url,
 	           method:"GET",
-	           data: $('#categirtSearch').serialize(),
+	           data: $('#employeeSearch').serialize(),
 	           //dataType:'JSON',
 	           contentType: false,
 	           cache: false,

@@ -92,7 +92,7 @@ class ExperienceController extends Controller
 
     public function refreshTable(){
 
-       $hrExperiences = HrExperience::where('hr_employee_id',session('hr_employee_id'))->get();
+       $hrExperiences = HrExperience::where('hr_employee_id',session('hr_employee_id'))->orderby('to','desc')->get();
        
        $ids = $hrExperiences->pluck('id')->toArray();
         //For security checking

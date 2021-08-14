@@ -15,6 +15,7 @@ use App\Models\Cv\CvDiscipline;
 use App\Models\Cv\CvStage;
 use App\Models\Cv\CvDetail;
 use App\Models\Cv\CvSkill;
+use App\Models\Cv\CvReference;
 use App\Models\Cv\CvExperience;
 use App\Models\Cv\CvContact;
 use App\Models\Cv\CvPhone;
@@ -45,7 +46,7 @@ class CvController extends Controller
 
 	public function store(CvDetailStore $request){
 		
-		$input = $request->only('full_name','father_name','cnic','foreign_experience','donor_experience','barqaab_employment','comments');
+		$input = $request->only('full_name','father_name','cnic','foreign_experience','donor_experience','barqaab_employment','comments','ref_detail');
 		 if($request->filled('date_of_birth')){
             $input ['date_of_birth']= \Carbon\Carbon::parse($request->date_of_birth)->format('Y-m-d');
             }
@@ -63,12 +64,23 @@ class CvController extends Controller
 		$cvDetail=CvDetail::create($input);
 
 		//add skill
-		foreach ($request->input('skill')as $skill){
-			cvSkill::create([
+		if($request->filled('skill')){
+			foreach ($request->input('skill')as $skill){
+				CvSkill::create([
+					'cv_detail_id'=> $cvDetail->id,
+					'skill_name'=> $skill
+					]);
+			}
+		}
+
+		//add Reference
+		if($request->filled('ref_detail')){
+			CvReference::create([
 				'cv_detail_id'=> $cvDetail->id,
-				'skill_name'=> $skill
+				'ref_detail'=> $input['ref_detail']
 				]);
 		}
+
 		//add education
 			for ($i=0;$i<count($request->input('degree_name'));$i++){
 			$educationId = $request->input("degree_name.$i");
@@ -89,11 +101,13 @@ class CvController extends Controller
 			}
 
 		//add membership
+		if($request->filled('membership_name')){
 			for ($i=0;$i<count($request->input('membership_name'));$i++){
 			$membershipId = $request->input("membership_name.$i");
 			$membershipNumber = $request->input("membership_number.$i");
 			$cvDetail->membership()->attach($membershipId, ['membership_number'=>$membershipNumber]);			
 			}
+		}
 
 		//add contact
 			$contact = $request->only('address','city_id','state_id','country_id','email');
@@ -175,7 +189,7 @@ class CvController extends Controller
 
     public function update(EditCvDetailStore $request, $id){
 
-	    	$input = $request->only('full_name','father_name','cnic','foreign_experience','donor_experience','barqaab_employment','comments');
+	    	$input = $request->only('full_name','father_name','cnic','foreign_experience','donor_experience','barqaab_employment','comments','ref_detail');
 			 if($request->filled('date_of_birth')){
 	            $input ['date_of_birth']= \Carbon\Carbon::parse($request->date_of_birth)->format('Y-m-d');
 	            }
@@ -196,6 +210,18 @@ class CvController extends Controller
 			$contact['cv_detail_id'] = $id;
 			$cvContact = CvContact::where('cv_detail_id',$id)->first();	
 			CvContact::findOrFail($cvContact->id)->update($contact);
+
+			//update CV Reference
+			if($request->filled('ref_detail')){
+				$cvReference = CvReference::where('cv_detail_id',$id)->first();	
+					CvReference::updateOrCreate(
+    			         	['id' => $cvReference->id??''],
+    			         	['cv_detail_id' => $id, 
+    			         	'ref_detail'=>$input['ref_detail']]);
+			}else{
+				$cvReference = CvReference::where('cv_detail_id',$id)->first();
+				CvReference::findOrFail($cvReference->id)->delete(); 
+			}
 
 
 

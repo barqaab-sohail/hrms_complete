@@ -8,6 +8,8 @@ use App\Models\Common\Gender;
 use App\Models\Common\MaritalStatus;
 use App\Models\Common\Religion;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\HrEducation;
+use App\Models\Hr\HrDesignation;
 use App\Models\Hr\EmployeeAppointment;
 use App\Models\Hr\EmployeeCategory;
 use App\Models\Hr\HrCategory;
@@ -22,6 +24,7 @@ use App\Models\Hr\HrContact;
 use App\Models\Hr\HrStatus;
 use App\Models\Hr\HrContactMobile;
 use App\Models\Hr\HrEmergency;
+use App\Models\Common\Education;
 use DB;
 use App\Http\Requests\Hr\EmployeeStore;
 
@@ -112,6 +115,13 @@ class EmployeeController extends Controller
     	$maritalStatuses = MaritalStatus::all();
     	$religions = Religion::all();
         
+        // check variable size
+        // $data = HrEmployee::where('hr_status_id',1)->take(50)->get();
+        // $serializedFoo = serialize($data);
+        // $size = mb_strlen($serializedFoo, '8bit');
+        // dd($size);
+
+
     	return view ('hr.employee.create', compact('genders','maritalStatuses','religions'));
     }
 
@@ -141,9 +151,31 @@ class EmployeeController extends Controller
     }
 
     public function index(){
-    	$employees = HrEmployee::with('employeeDesignation','hrContactMobile','employeeAppointment')->get();
+      
+    	$data = HrEmployee::with('employeeDesignation','hrContactMobile','employeeAppointment','employeeProject','employeeOffice')
+        ->select('id','employee_no','first_name','last_name','cnic','date_of_birth','hr_status_id')
+        ->get();
 
-       
+        $index = 0; // array index
+        $empArray = array();
+
+        foreach ($data as $emp){
+            $empArray[$index]['id'] = $emp['id'];
+            $empArray[$index]['employee_no'] = $emp->employee_no??'';
+            $empArray[$index]['first_name'] = $emp->first_name;
+            $empArray[$index]['last_name'] = $emp->last_name;
+            $empArray[$index]['designation'] = $emp->employeeDesignation->last()->name??'';
+            $empArray[$index]['project'] = $emp->employeeProject->last()->name??'';
+            $empArray[$index]['office'] = $emp->employeeOffice->last()->name??'';
+            $empArray[$index]['date_of_birth'] = $emp->date_of_birth;
+            $empArray[$index]['hr_status_id'] = $emp->hr_status_id;
+            $empArray[$index]['cnic'] = $emp->cnic;
+            $empArray[$index]['joining_date'] = $emp->employeeAppointment->joining_date??'';
+            $empArray[$index]['mobile'] = $emp->hrContactMobile->mobile??'';
+            $index++;
+        }
+
+        $employees = collect($empArray);
     	return view ('hr.employee.list',compact('employees'));
     }
 
@@ -244,20 +276,47 @@ class EmployeeController extends Controller
 
     }
 
-    public function category(){
+    public function search(){
+
         $categories = HrCategory::all();
-        return view ('hr.employee.categoryWise',compact('categories'));
+        $degrees = Education::all();
+        $designations = HrDesignation::all();
+        return view ('hr.employee.search.search',compact('categories','degrees','designations'));
     }
 
 
-    public function categorySearch(Request $request){
+    public function result(Request $request){
+        
        
         if($request->filled('category')){
-        $result = collect(HrEmployee::join('employee_categories','employee_categories.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','employee_categories.hr_category_id','employee_categories.effective_date')->where('hr_status_id',1)->orderBy('effective_date','desc')->get());
+        $result = collect(HrEmployee::join('employee_categories','employee_categories.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','employee_categories.hr_category_id','employee_categories.effective_date as cat')->where('hr_status_id',1)->orderBy('cat','desc')->get());
             $resultUnique = ($result->unique('id'));
             $resultUnique->values()->all();
             $result = $resultUnique->where('hr_category_id',$request->category);
-        return view('hr.employee.categoryResult',compact('result'));
+        return view('hr.employee.search.result',compact('result'));
+        }
+
+        if($request->filled('designation')){
+        $result = collect(HrEmployee::join('employee_designations','employee_designations.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','employee_designations.hr_designation_id','employee_designations.effective_date')->where('hr_status_id',1)->orderBy('effective_date','desc')->get());
+            $resultUnique = ($result->unique('id'));
+            $resultUnique->values()->all();
+            $result = $resultUnique->where('hr_designation_id',$request->designation);
+        return view('hr.employee.search.result',compact('result'));
+        }
+
+        if($request->filled('degree')){
+            
+            $data = $request->all();
+
+            $result = HrEmployee::join('hr_educations','hr_educations.hr_employee_id','hr_employees.id')->select('hr_employees.*','hr_educations.education_id','hr_educations.to')
+            ->when($data['degree'], function ($query) use ($data){
+                                return $query->where('education_id','=',$data['degree']);
+                                })
+
+            ->where('hr_status_id',1)->get();
+
+            return view('hr.employee.search.result',compact('result'));
+
         }
     }
 

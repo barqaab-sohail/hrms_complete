@@ -15,7 +15,15 @@ use DB;
 class DocumentationController extends Controller
 {
     public function create(Request $request){
-     
+
+        $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->get();
+
+        $Ids = $documentIds->pluck('id')->toArray();
+        //For security checking
+        session()->put('document_delete_ids', $Ids);
+
+
+
     	$documentNames = HrDocumentName::all();
 
         if($request->ajax()){
@@ -211,7 +219,7 @@ class DocumentationController extends Controller
             return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 
-    	$hrDocument = HrDocumentation::findOrFail($id);
+    	$hrDocument = HrDocumentation::where('id',$id)->where('hr_employee_id',session('hr_employee_id'))->first();
 
         $path = public_path('storage/'.$hrDocument->path.$hrDocument->file_name);
         if(File::exists($path)){
@@ -223,6 +231,7 @@ class DocumentationController extends Controller
     }
 
     public function refreshTable(){
+        
         $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->get();
 
         $Ids = $documentIds->pluck('id')->toArray();
