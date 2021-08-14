@@ -120,7 +120,8 @@ class EducationController extends Controller
     public function refreshTable(){
 
     	
-        $hrEducations = HrEducation::where('hr_employee_id',session('hr_employee_id'))->get();
+        $hrEducations = HrEducation::where('hr_employee_id',session('hr_employee_id'))->orderby('to','desc')->get();
+
         $educationIds = $hrEducations->pluck('id')->toArray();
         //For security checking
         session()->put('education_delete_ids', $educationIds);

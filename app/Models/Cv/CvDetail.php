@@ -64,6 +64,11 @@ class CvDetail extends Model implements Auditable
         return $this->hasOne('App\Models\Cv\CvContact');
     }
 
+    public function cvReference()
+    {
+        return $this->hasOne('App\Models\Cv\CvReference');
+    }
+
     public function cvSkill()
     {
         return $this->hasMany('App\Models\Cv\CvSkill');

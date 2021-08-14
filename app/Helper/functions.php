@@ -3,6 +3,8 @@ use App\Models\Cv\CvSpecialization;
 use App\Models\CV\CvDetail;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\EmployeeManager;
+use App\Models\Hr\EmployeeDesignation;
+use App\Models\Hr\HrDesignation;
 use App\Models\Office\Office;
 
 function employeeFullName($id){
@@ -15,6 +17,15 @@ function employeeFullName($id){
 			
 			return $fullName.' - '.$designation;
 		}
+}
+
+function employeeProjectWithoutOverhead($id){
+	$hremployee = HrEmployee::find($id);
+	if($hremployee->employeeProject->last()->name??'' =='overhead'){
+		return '';
+	}
+	return $hremployee->employeeProject->last()->name??'';
+	
 }
 
 function checkHod($id){

@@ -480,12 +480,21 @@
                         </div>
                     </div>
                 </div>
-                 <!--/span 7-3 --> 
-                 <div class="col-md-6">
+                <!--/span 7-3 --> 
+                 <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
-                       		<label class="control-label text-right">Comments</label><br>
-                       		<input type="text"  name="comments" data-validation="length"  data-validation-length="max190" value="{{ old('comments', $data->comments) }}" class="form-control" >
+                       		<label class="control-label text-right">CV Reference</label><br>
+                       		<input type="text"  name="ref_detail" data-validation="length"  data-validation-length="max190" value="{{ old('ref_detail', $data->cvReference->cv_detail??'') }}" class="form-control exempted" >
+                        </div>
+                    </div>
+                </div>
+                <!--/span 7-4 --> 
+                 <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Comments</label><br>
+                            <input type="text"  name="comments" data-validation="length"  data-validation-length="max190" value="{{ old('comments', $data->comments) }}" class="form-control exempted" >
                         </div>
                     </div>
                 </div>

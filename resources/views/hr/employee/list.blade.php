@@ -12,14 +12,14 @@
 			<table id="myTable" class="table table-bordered table-striped">
 				<thead>
 				<tr>
-					<th>Id</th>
+					<th>Employee No</th>
 					<th>Employee Name</th>
 					<th>Designation/Position</th>
+					<th>Project/Office</th>
 					<th>Date of Birth</th>
 					<th>Status</th>
 					<th>CNIC</th>
 					<th>Date of Joining</th>
-					<th>Employee No</th>
 					<th>Mobile</th>
 					
 					<th class="text-center"style="width:5%">Edit</th> 
@@ -30,23 +30,28 @@
 				<tbody>
 					@foreach($employees as $employee)
 						<tr>
-							<td>{{$employee->id}}</td>
-							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
-							<td>{{$employee->employeeDesignation->last()->name??''}}</td>
-							<td>{{$employee->date_of_birth}}</td>
-							<td>{{$employee->hr_status_id}}</td>
-							<td>{{$employee->cnic}}</td>
-							<td>{{isset($employee->employeeAppointment->joining_date)?date('d-M-Y', strtotime($employee->employeeAppointment->joining_date)):''}}</td>
-							<td>{{$employee->employee_no??''}}</td>
-							<td>{{$employee->hrContactMobile->mobile??''}}</td>
+							<td>{{$employee['employee_no']}}</td>
+							<td>{{$employee['first_name']}} {{$employee['last_name']}}</td>
+							<td>{{$employee['designation']}}</td>
+							@if($employee['project']=='overhead')
+							<td>{{$employee['office']}}</td>
+							@else
+							<td>{{$employee['project']}}</td>
+							@endif
+							
+							<td>{{$employee['date_of_birth']}}</td>
+							<td>{{$employee['hr_status_id']}}</td>
+							<td>{{$employee['cnic']}}</td>
+							<td>{{$employee['joining_date']}}</td>
+							<td>{{$employee['mobile']}}</td>
 							
 							
 							<td class="text-center">
-								<a class="btn btn-info btn-sm" href="{{route('employee.edit',$employee->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+								<a class="btn btn-info btn-sm" href="{{route('employee.edit',$employee['id'])}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 							</td>
 							<td class="text-center">
 								 @role('Super Admin')
-								 <form  id="formDeleteContact{{$employee->id}}" action="{{route('employee.destroy',$employee->id)}}" method="POST">
+								 <form  id="formDeleteContact{{$employee['id']}}" action="{{route('employee.destroy',$employee['id'])}}" method="POST">
 								 @method('DELETE')
 								 @csrf
 								 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
@@ -56,10 +61,11 @@
 														
 						</tr>
 					@endforeach
-				
+					
 				</tbody>
 			</table>
 		</div>
+		
 	</div>
 </div>
 
@@ -69,31 +75,31 @@ $(document).ready(function() {
 	
             $('#myTable').DataTable({
                 stateSave: false,
-        
+        		"order": [[ 1, "asc" ]],
                 dom: 'Blfrtip',
 				columnDefs: [ { type: 'date', 'targets': [5] } ],
                 buttons: [
                     {
                         extend: 'copyHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3,4,5,6,7,8]
                         }
                     },
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3,4,5,6,7,8]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3,4,5,6,7,8]
                         }
                     }, {
                         extend: 'csvHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3,4,5,6,7,8]
                         }
                     },
                 ],

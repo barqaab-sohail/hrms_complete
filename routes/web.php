@@ -47,8 +47,8 @@ Route::get('/employee/alertList','HrAlertController@alertList')->name('hrAlert.l
 Route::get('/cnicExpiryDetail','HrAlertController@cnicExpiryDetail')->name('hrAlert.cnicExpiryDetail');
 Route::get('/appointmentExpiry','HrAlertController@appointmentExpiry')->name('hrAlert.appointmentExpiry');
 
-Route::get('/employee/category','EmployeeController@category')->name('employee.category');
-Route::get('/employee/categorySearch','EmployeeController@categorySearch')->name('employee.categorySearch');
+Route::get('/employee/search','EmployeeController@search')->name('employee.search');
+Route::get('/employee/search/result','EmployeeController@result')->name('employee.result');
 
 Route::resource('/employee', 'EmployeeController');
 

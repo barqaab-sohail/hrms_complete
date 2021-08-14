@@ -49,6 +49,7 @@ class CvDetailStore extends FormRequest
             'membership_name.*'=>'nullable|distinct',
             'barqaab_employment' => 'required',
              'skill.*' => 'nullable|max:190',
+            'ref_detail'=> 'nullable|max:190',
             'cv_submission_date'=>'nullable|date|before_or_equal:'.$today,
             'cv' => 'required|file|max:4000|mimes:doc,docx,pdf',
 

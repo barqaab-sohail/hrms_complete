@@ -433,12 +433,21 @@
 		                                        </div>
 		                                    </div>
 		                                </div>
-		                                 <!--/span 7-3 --> 
-		                                 <div class="col-md-6">
+		                                <!--/span 7-3 --> 
+		                                 <div class="col-md-3">
+		                                    <div class="form-group row">
+		                                        <div class="col-md-12">
+		                                       		<label class="control-label text-right">CV Reference</label><br>
+		                                       		<input type="text"  name="ref_detail" value="{{ old('ref_detail') }}" class="form-control exempted"  data-validation="length"  data-validation-length="max190"  class="form-control" >
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                                <!--/span 7-8 --> 
+		                                 <div class="col-md-3">
 		                                    <div class="form-group row">
 		                                        <div class="col-md-12">
 		                                       		<label class="control-label text-right">Comments</label><br>
-		                                       		<input type="text"  name="comments" value="{{ old('comments') }}" class="form-control"  data-validation="length"  data-validation-length="max190"  class="form-control" >
+		                                       		<input type="text"  name="comments" value="{{ old('comments') }}" class="form-control exempted"  data-validation="length"  data-validation-length="max190"  class="form-control" >
 		                                        </div>
 		                                    </div>
 		                                </div>
