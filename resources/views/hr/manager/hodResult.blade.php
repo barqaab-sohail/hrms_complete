@@ -23,7 +23,7 @@
                     @foreach($result as $emp)
                     <tr>
                         <td>{{$emp->id}}</td>
-                        <td>{{employeeFullName($emp->id)}}</td>
+                        <td>{{$emp->first_name. ' '.$emp->last_name .' - '. $emp->employeeDesignation->last()->name??''}}</td>
                         <td>{{employeeFullName($emp->hr_manager_id)}}</td>
                         <td>{{$emp->effective_date}}</td>                   
                     </tr>

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Models\Hr\HrDocumentName;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\HrPromotion;
+use App\Models\Hr\HrPosting;
 use App\Models\Hr\HrDocumentation;
 use App\Models\Hr\HrDocumentNameDocumentation;
 use App\Http\Requests\Hr\DocumentationStore;
@@ -221,12 +223,29 @@ class DocumentationController extends Controller
 
     	$hrDocument = HrDocumentation::where('id',$id)->where('hr_employee_id',session('hr_employee_id'))->first();
 
-        $path = public_path('storage/'.$hrDocument->path.$hrDocument->file_name);
-        if(File::exists($path)){
-            File::delete($path);
-        }
+            
+
+        $hrDocumentPosting = HrPosting::where('hr_documentation_id',$id)->first();
+        $hrDocumentPromotion =HrPromotion::where('hr_documentation_id',$id)->first();
+
+        if($hrDocumentPromotion || $hrDocumentPosting){
+
+            return response()->json(['status'=> 'Not OK', 'message' => "You cannot delete this document from here"]);
+        }else
+        {
+            
+            $path = public_path('storage/'.$hrDocument->path.$hrDocument->file_name);
+            if(File::exists($path)){
+                File::delete($path);
+            }
+
             $hrDocument->forceDelete();
+            
             return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
+        }
+        
+
+       
 
     }
 

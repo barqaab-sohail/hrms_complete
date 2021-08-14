@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Hr;
 
 use App\Http\Controllers\Controller;
@@ -167,10 +166,10 @@ class EmployeeController extends Controller
             $empArray[$index]['designation'] = $emp->employeeDesignation->last()->name??'';
             $empArray[$index]['project'] = $emp->employeeProject->last()->name??'';
             $empArray[$index]['office'] = $emp->employeeOffice->last()->name??'';
-            $empArray[$index]['date_of_birth'] = $emp->date_of_birth;
+            $empArray[$index]['date_of_birth'] = \Carbon\Carbon::parse($emp->date_of_birth)->format('M d, Y');
             $empArray[$index]['hr_status_id'] = $emp->hr_status_id;
             $empArray[$index]['cnic'] = $emp->cnic;
-            $empArray[$index]['joining_date'] = $emp->employeeAppointment->joining_date??'';
+            $empArray[$index]['joining_date'] = \Carbon\Carbon::parse($emp->employeeAppointment->joining_date??'')->format('M d, Y');
             $empArray[$index]['mobile'] = $emp->hrContactMobile->mobile??'';
             $index++;
         }

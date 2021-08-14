@@ -14,8 +14,8 @@ class ManagerController extends Controller
     
     public function hodDetail(){
 
-        $users = HrEmployee::where('hr_status_id',1)->get();
-        return view ('hr.manager.hodDetail',compact('users'));
+        $employees = HrEmployee::with('employeeDesignation')->where('hr_status_id',1)->select('id','first_name','last_name')->get();
+        return view ('hr.manager.hodDetail',compact('employees'));
     }
 
 
