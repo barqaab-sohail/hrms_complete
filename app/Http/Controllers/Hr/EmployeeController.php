@@ -113,7 +113,7 @@ class EmployeeController extends Controller
     	$genders = Gender::all();
     	$maritalStatuses = MaritalStatus::all();
     	$religions = Religion::all();
-        
+
         // check variable size
         // $data = HrEmployee::where('hr_status_id',1)->take(50)->get();
         // $serializedFoo = serialize($data);
@@ -136,6 +136,7 @@ class EmployeeController extends Controller
             }
             
             $input ['hr_status_id']=HrStatus::where('name','On Board')->first()->id;
+            $input ['employee_no'] = generateEmployeeId();
 
             $employee='';
     	DB::transaction(function () use ($input, &$employee) {  

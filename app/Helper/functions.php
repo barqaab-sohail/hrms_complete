@@ -19,13 +19,14 @@ function employeeFullName($id){
 		}
 }
 
-function employeeProjectWithoutOverhead($id){
-	$hremployee = HrEmployee::find($id);
-	if($hremployee->employeeProject->last()->name??'' =='overhead'){
-		return '';
-	}
-	return $hremployee->employeeProject->last()->name??'';
+function generateEmployeeId(){
+	$employeeId = 1000490;
 	
+	while(HrEmployee::where('employee_no',$employeeId)->count()>0){ 
+            $employeeId++;  
+    }
+
+    return $employeeId;
 }
 
 function checkHod($id){
