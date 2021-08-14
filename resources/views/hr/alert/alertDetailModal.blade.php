@@ -17,7 +17,7 @@
                     
                       <tr >
                           <th>Employee Name</th>
-                          <th>Project</th>
+                          <th id="project">Project</th>
                           <th>Expiry Date</th>
                       </tr>
                     </thead>
@@ -50,6 +50,7 @@ $('#cnicExpiryDetail').click(function(){
 
         $('#alert_name').text(data.full_name);
         $("#tbody").empty();
+        $('#project').remove();
                 
         $.each(data.cnicExpiry, function() {
           $('#alertDetail > tbody').append(

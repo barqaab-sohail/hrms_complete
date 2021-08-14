@@ -81,8 +81,7 @@ class HrReportsController extends Controller
                         ->distinct('id')
                         ->get();
         
-
-             return view('hr.reports.searchEmployee.result',compact('result'));
+            return view('hr.reports.searchEmployee.result',compact('result'));
 
        
     }

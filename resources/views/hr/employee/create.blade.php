@@ -148,17 +148,7 @@
 		                                    </div>
 		                                </div>
 		                            </div>
-		                              <!--/span-->
-		                            <div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Employee No</label>
-		                                            
-		                                        <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no') }}" class="form-control"  placeholder="Enter Employee No" >
-												
-		                                    </div>
-		                                </div>
-		                            </div>
+		                            
 		                        </div><!--/End Row-->
 		                    </div> <!--/End Form Boday-->
 
