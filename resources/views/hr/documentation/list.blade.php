@@ -62,7 +62,7 @@
 <script>
     $(document).ready(function(){
     	var id = window.location.href.replace ( /[^\d.]/g, '' );
-        var table = '{{route("documentation.table",":id")}}'.replace(':id', id);
+        //var table = '{{route("documentation.table",":id")}}'.replace(':id', id);
 
 	    $('#myDataTable').DataTable({
 	                stateSave: false,

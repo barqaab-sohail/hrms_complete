@@ -76,6 +76,7 @@ $(document).ready(function() {
             $('#myTable').DataTable({
                 stateSave: false,
         		"order": [[ 1, "asc" ]],
+        			
                 dom: 'Blfrtip',
 				columnDefs: [ { type: 'date', 'targets': [5] } ],
                 buttons: [

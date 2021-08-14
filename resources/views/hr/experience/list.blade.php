@@ -83,7 +83,7 @@ $(document).ready(function() {
 
   	submitForm(this, url);
   	resetForm();
-  	refreshTable("{{route('education.table')}}",500);
+  	refreshTable("{{route('experience.table')}}",500);
     });
 
 

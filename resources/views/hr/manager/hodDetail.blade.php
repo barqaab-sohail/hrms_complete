@@ -20,8 +20,8 @@
 		                   		<label class="control-label text-right">HOD Name</label><br>
 		                   		<select  name="hod"  class="form-control" data-validation="required">
 		                            <option value=""></option>
-		                            @foreach($users as $hod)
-									<option value="{{$hod->id}}" {{(old("hod")==$hod->id? "selected" : "")}}>{{employeeFullName($hod->id)}}</option>
+		                            @foreach($employees as $hod)
+									<option value="{{$hod->id}}" {{(old("hod")==$hod->id? "selected" : "")}}>{{$hod->first_name. ' '.$hod->last_name .' - '. $hod->employeeDesignation->last()->name??''}}</option>
 		                            @endforeach
 		                        </select>    
 		                    </div>

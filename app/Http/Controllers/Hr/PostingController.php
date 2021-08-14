@@ -38,7 +38,7 @@ class PostingController extends Controller
     	$designations = HrDesignation::all();
     	$departments = HrDepartment::all();
     	$projects = PrDetail::all();
-    	$managers = HrEmployee::all();
+    	$managers = HrEmployee::with('employeeDesignation')->get();
     	$salaries = HrSalary::all();
     	$offices = Office::all();
     	$hrPostings = HrPosting::where('hr_employee_id',session('hr_employee_id'))->get();
