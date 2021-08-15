@@ -26,7 +26,7 @@ use App\Models\Hr\HrEmergency;
 use App\Models\Common\Education;
 use DB;
 use App\Http\Requests\Hr\EmployeeStore;
-
+use DataTables;
 
 class EmployeeController extends Controller
 {
@@ -150,33 +150,46 @@ class EmployeeController extends Controller
     	return response()->json(['url'=> route("employee.edit",$employee),'message' => 'Data Successfully Saved']);
     }
 
-    public function index(){
-      
-    	$data = HrEmployee::with('employeeDesignation','hrContactMobile','employeeAppointment','employeeProject','employeeOffice')
-        ->select('id','employee_no','first_name','last_name','cnic','date_of_birth','hr_status_id')
-        ->get();
+    public function index(Request $request){
 
-        $index = 0; // array index
-        $empArray = array();
-
-        foreach ($data as $emp){
-            $empArray[$index]['id'] = $emp['id'];
-            $empArray[$index]['employee_no'] = $emp->employee_no??'';
-            $empArray[$index]['first_name'] = $emp->first_name;
-            $empArray[$index]['last_name'] = $emp->last_name;
-            $empArray[$index]['designation'] = $emp->employeeDesignation->last()->name??'';
-            $empArray[$index]['project'] = $emp->employeeProject->last()->name??'';
-            $empArray[$index]['office'] = $emp->employeeOffice->last()->name??'';
-            $empArray[$index]['date_of_birth'] = \Carbon\Carbon::parse($emp->date_of_birth)->format('M d, Y');
-            $empArray[$index]['hr_status_id'] = $emp->hr_status_id;
-            $empArray[$index]['cnic'] = $emp->cnic;
-            $empArray[$index]['joining_date'] = \Carbon\Carbon::parse($emp->employeeAppointment->joining_date??'')->format('M d, Y');
-            $empArray[$index]['mobile'] = $emp->hrContactMobile->mobile??'';
-            $index++;
+        if($request->ajax()){
+            $data = HrEmployee::latest()->get();        
+            return DataTables::of($data)
+            ->addColumn('action', function($data){
+                        $button = '<button type="button" name="edit" id="'.$data->id.'" class="edit btn btn-primary btn-sm">Edit</button>';
+                        $button .= '&nbsp;&nbsp;&nbsp;<button type="button" name="edit" id="'.$data->id.'" class="delete btn btn-danger btn-sm">Delete</button>';
+                        return $button;
+                    })
+            ->rawColumns(['action'])
+            ->make(true);
         }
+       return view ('hr.employee.listDataTable');
 
-        $employees = collect($empArray);
-    	return view ('hr.employee.list',compact('employees'));
+    	// $data = HrEmployee::with('employeeDesignation','hrContactMobile','employeeAppointment','employeeProject','employeeOffice')
+     //    ->select('id','employee_no','first_name','last_name','cnic','date_of_birth','hr_status_id')
+     //    ->get();
+
+     //    $index = 0; // array index
+     //    $empArray = array();
+
+     //    foreach ($data as $emp){
+     //        $empArray[$index]['id'] = $emp['id'];
+     //        $empArray[$index]['employee_no'] = $emp->employee_no??'';
+     //        $empArray[$index]['first_name'] = $emp->first_name;
+     //        $empArray[$index]['last_name'] = $emp->last_name;
+     //        $empArray[$index]['designation'] = $emp->employeeDesignation->last()->name??'';
+     //        $empArray[$index]['project'] = $emp->employeeProject->last()->name??'';
+     //        $empArray[$index]['office'] = $emp->employeeOffice->last()->name??'';
+     //        $empArray[$index]['date_of_birth'] = \Carbon\Carbon::parse($emp->date_of_birth)->format('M d, Y');
+     //        $empArray[$index]['hr_status_id'] = $emp->hr_status_id;
+     //        $empArray[$index]['cnic'] = $emp->cnic;
+     //        $empArray[$index]['joining_date'] = \Carbon\Carbon::parse($emp->employeeAppointment->joining_date??'')->format('M d, Y');
+     //        $empArray[$index]['mobile'] = $emp->hrContactMobile->mobile??'';
+     //        $index++;
+     //    }
+
+     //    $employees = collect($empArray);
+    	// return view ('hr.employee.list',compact('employees'));
     }
 
     public function activeEmployeesList(){
