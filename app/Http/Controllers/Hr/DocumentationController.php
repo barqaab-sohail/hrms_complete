@@ -18,7 +18,21 @@ class DocumentationController extends Controller
 {
     public function create(Request $request){
 
+
         $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->get();
+
+        // $documentNames = HrDocumentNameDocumentation::where('hr_employee_id',session('hr_employee_id'))->get();
+
+        // $list = array();
+        // $index = 0; 
+        
+        // foreach ($documentNames as $name){
+        //     $list[$index] = $name['hr_document_name_id'];
+        //     $index++;
+        // }
+
+        // dd($list);
+
 
         $Ids = $documentIds->pluck('id')->toArray();
         //For security checking
@@ -133,25 +147,79 @@ class DocumentationController extends Controller
         }else{
              $data->hrDocumentName()->detach();
         }
-          
         
-          
-        if ($request->hasFile('document')){
+        $employee = HrEmployee::find(session('hr_employee_id'));
+            $employeeFullName = strtolower($employee->first_name) .'_'.strtolower($employee->last_name);
 
 
-        }else{
+        DB::transaction(function () use ($request, $input, $employeeFullName, $data, $id) { 
 
-               HrDocumentation::findOrFail($id)->update($input);
-                if($request->hr_document_name_id!='Other'){
-                    $hrDocumentNameId = $request->input("hr_document_name_id");
+            if ($request->hasFile('document')){
 
-                    //hr_employee_id is add due to validtaion before enter into database
-                    $data->hrDocumentName()->detach();
-                    $data->hrDocumentName()->attach($hrDocumentNameId, ['hr_employee_id'=>session('hr_employee_id')]);
+                    $extension = request()->document->getClientOriginalExtension();
 
-                }
+                    $fileName =session('hr_employee_id').'-'.strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s','', $input['description'])).'-'. time().'.'.$extension;
+                    $folderName = "hr/documentation/".session('hr_employee_id').'-'.$employeeFullName."/";
 
-        }
+                    //store file
+                    $request->file('document')->storeAs('public/'.$folderName,$fileName);
+                    
+                    $file_path = storage_path('app/public/'.$folderName.$fileName);
+                
+                    $input['content']='';
+                                                
+                        if ($extension =='pdf'){
+                            $reader = new \Asika\Pdf2text;
+                            $input['content'] = mb_strtolower($reader->decode($file_path));
+                        }
+
+                    $input['file_name']=$fileName;
+                    $input['size']=$request->file('document')->getSize();
+                    $input['path']=$folderName;
+                    $input['extension']=$extension;
+                    $input['hr_employee_id']=session('hr_employee_id');
+
+                
+                    HrDocumentation::findOrFail($id)->update($input);  
+                    if($request->hr_document_name_id!='Other'){
+                        $hrDocumentNameId = $request->input("hr_document_name_id");
+
+                        //hr_employee_id is add due to validtaion before enter into database
+                        $data->hrDocumentName()->detach();
+                        $data->hrDocumentName()->attach($hrDocumentNameId, ['hr_employee_id'=>session('hr_employee_id')]);
+
+                    }
+
+
+            }else{
+
+                   HrDocumentation::findOrFail($id)->update($input);
+                    if($request->hr_document_name_id!='Other'){
+                        $hrDocumentNameId = $request->input("hr_document_name_id");
+
+                        //hr_employee_id is add due to validtaion before enter into database
+                        $data->hrDocumentName()->detach();
+                        $data->hrDocumentName()->attach($hrDocumentNameId, ['hr_employee_id'=>session('hr_employee_id')]);
+
+                    }
+
+            }
+
+            $hrPromotion = HrPromotion::where('hr_documentation_id',$id)->first();
+            if($hrPromotion){
+               $input['remarks']= $input['description'];
+               $input['effective_date']=  $input ['document_date'];
+               HrPromotion::findOrFail($hrPromotion->id)->update($input);
+            }
+
+            $hrPosting = HrPosting::where('hr_documentation_id',$id)->first();
+            if($hrPosting){
+               $input['remarks']= $input['description'];
+               $input['effective_date']=  $input ['document_date'];
+               HrPosting::findOrFail($hrPosting->id)->update($input);
+            }
+
+        });  //end transaction
 
         // $data = HrDocumentation::find($id);
         // $input = $request->only('hr_document_name_id','description','document');

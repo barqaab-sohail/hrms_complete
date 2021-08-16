@@ -14,17 +14,19 @@
 				<tr>
 					<th>Employee ID</th>
 					<th>Employee Name</th>
-					<!-- <th>Designation/Position</th>
-					<th>Project/Office</th> -->
+					<th>Designation/Position</th>
+					<th>Project/Office</th>
 					<th>Date of Birth</th>
 					<th>Status</th>
 					<th>CNIC</th>
-					<!-- <th>Date of Joining</th>
-					<th>Mobile</th> -->
+					<th>Date of Joining</th>
+					<th>Mobile</th>
 					
 					<th class="text-center"style="width:5%">Edit</th> 
+
+					@role('Super Admin')
 					<th class="text-center"style="width:5%">Delete</th>
-				
+					@endrole
 				</tr>
 				</thead>
 			</table>
@@ -44,13 +46,18 @@ $(document).ready(function() {
 	  	},
 	  	columns: [
 		   {data: 'employee_no', name: 'employee_no'},
-		   {data: 'first_name', name: 'first_name'},
+		   {data: 'full_name', name: 'full_name'},
+		   {data: 'designation', name: 'designation'},
+		   {data: 'project', name: 'project'},
 		   {data: 'date_of_birth', name: 'date_of_birth'},
 		   {data: 'hr_status_id', name: 'status'},
 		   {data: 'cnic', name: 'cnic'},
-		   {data: 'action',name: 'action',
-		    orderable: false
-		   }
+		   {data: 'date_of_joining', name: 'date_of_joining'},
+		   {data: 'mobile', name: 'mobile'},
+		   {data: 'edit',name: 'edit', orderable: false },
+		   @role('Super Admin')
+		   {data: 'delete',name: 'delete', orderable: false }
+		   @endrole
 	  	]
  	});
 

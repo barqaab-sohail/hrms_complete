@@ -151,16 +151,47 @@ class EmployeeController extends Controller
     }
 
     public function index(Request $request){
-
+       
         if($request->ajax()){
-            $data = HrEmployee::latest()->get();        
+            $data = HrEmployee::with('employeeDesignation','employeeProject','employeeOffice','employeeAppointment','hrContactMobile')->latest()->get();        
             return DataTables::of($data)
-            ->addColumn('action', function($data){
-                        $button = '<button type="button" name="edit" id="'.$data->id.'" class="edit btn btn-primary btn-sm">Edit</button>';
-                        $button .= '&nbsp;&nbsp;&nbsp;<button type="button" name="edit" id="'.$data->id.'" class="delete btn btn-danger btn-sm">Delete</button>';
+
+            ->addColumn('full_name',function($data){
+                return $data->first_name . ' '. $data->last_name;
+            })
+            ->addColumn('designation',function($data){
+                return $data->employeeDesignation->last()->name??'';
+            })
+            ->addColumn('project',function($data){
+                
+               $project = isset($data->employeeProject->last()->name)?$data->employeeProject->last()->name:'';
+               if($project =='overhead'){
+                return $data->employeeOffice->last()->name??'';
+                }else{
+                     return $data->employeeProject->last()->name??'';
+                }
+
+            })
+            ->addColumn('date_of_birth',function($data){
+                return \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y');
+            })
+            ->addColumn('date_of_joining',function($data){
+                return \Carbon\Carbon::parse($data->employeeAppointment->joining_date??'')->format('M d, Y');
+            })
+            ->addColumn('mobile',function($data){
+                return $data->hrContactMobile->mobile??'';
+            })
+            ->addColumn('edit', function($data){
+                        $button = '<a class="btn btn-info btn-sm" href="'.route('employee.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
                         return $button;
                     })
-            ->rawColumns(['action'])
+            ->addColumn('delete', function($data){
+                        $button = '<form  id="formDeleteContact'.$data->id.'"  action="'.route('employee.destroy',$data->id).'" method="POST">'.method_field('DELETE').csrf_field().'
+                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
+                                 </form>';
+                        return $button;
+                    })
+            ->rawColumns(['full_name','designation','project','date_of_birth','date_of_joining','mobile','edit','delete'])
             ->make(true);
         }
        return view ('hr.employee.listDataTable');
@@ -261,11 +292,6 @@ class EmployeeController extends Controller
     public function destroy($id)
     {   
         
-        //ensure client end is is not changed
-        if($id != session('hr_employee_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
-
         HrEmployee::findOrFail($id)->delete();
 
        return back()->with('message', 'Data Successfully Deleted');

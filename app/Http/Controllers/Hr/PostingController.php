@@ -337,6 +337,7 @@ class PostingController extends Controller
             }else
              //only document date change
             {
+                $input['description']=$input['remarks'];
                 $input['document_date'] = $input ['effective_date'];
                 $hrPosting = HrPosting::find($id);
                 $hrDocument = HrDocumentation::findOrFail($hrPosting->hr_documentation_id);
