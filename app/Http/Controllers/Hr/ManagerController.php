@@ -80,7 +80,7 @@ class ManagerController extends Controller
 
     	$input = $request->all();
     	if($request->filled('effective_date')){
-            $input ['effective_date']= \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
+            $input ['effective_date'] = \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
         }
 
          DB::transaction(function () use ($input) {  

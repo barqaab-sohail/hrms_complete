@@ -331,11 +331,13 @@ class PromotionController extends Controller
                 }
 
                 //Update file detail
+               
                 HrDocumentation::findOrFail($hrDocument->id)->update($input);
 
         	}else
             //only document date change
             {
+                $input['description']=$input['remarks'];
                 $input['document_date'] = $input ['effective_date'];
                 $hrPromotion = HrPromotion::find($id);
                 $hrDocument = HrDocumentation::findOrFail($hrPromotion->hr_documentation_id);

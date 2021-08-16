@@ -140,7 +140,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Description / Remarks<span class="text_requried">*</span></label>
-                                <input type="text"  name="remarks" id="forward_slash" value="{{ old('remarks',$data->remarks??'') }}"  class="form-control" data-validation="required length" data-validation-length="max100" placeholder="Enter Remarks if any">
+                                <input type="text"  name="remarks" id="forward_slash" value="{{ old('remarks',$data->remarks??'') }}"  class="form-control exempted" data-validation="required length" data-validation-length="max100" placeholder="Enter Remarks if any">
                                 
                                
                             </div>
