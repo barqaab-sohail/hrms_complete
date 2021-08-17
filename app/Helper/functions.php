@@ -20,7 +20,7 @@ function employeeFullName($id){
 }
 
 function generateEmployeeId(){
-	$employeeId = 1000490;
+	$employeeId = 1000403;
 	
 	while(HrEmployee::where('employee_no',$employeeId)->count()>0){ 
             $employeeId++;  

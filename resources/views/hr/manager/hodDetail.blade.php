@@ -21,7 +21,7 @@
 		                   		<select  name="hod"  class="form-control" data-validation="required">
 		                            <option value=""></option>
 		                            @foreach($employees as $hod)
-									<option value="{{$hod->id}}" {{(old("hod")==$hod->id? "selected" : "")}}>{{$hod->first_name. ' '.$hod->last_name .' - '. $hod->employeeDesignation->last()->name??''}}</option>
+									<option value="{{$hod->id}}" {{(old("hod")==$hod->id? "selected" : "")}}>{{$hod->first_name. ' '.$hod->last_name .' - '}}{{$hod->employeeDesignation->last()->name??''}}</option>
 		                            @endforeach
 		                        </select>    
 		                    </div>

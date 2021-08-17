@@ -139,7 +139,7 @@
                         <div class="col-md-12">
                            	<label class="control-label text-right">Employee ID</label>
                                 
-                            <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no', $data->employee_no) }}" class="form-control"  placeholder="Enter Employee No" >
+                            <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no', $data->employee_no) }}" class="form-control"  placeholder="Enter Employee No" readonly>
 							
                         </div>
                     </div>
