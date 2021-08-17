@@ -24,6 +24,7 @@ use App\Models\Hr\HrStatus;
 use App\Models\Hr\HrContactMobile;
 use App\Models\Hr\HrEmergency;
 use App\Models\Common\Education;
+use App\Models\Project\PrDetail;
 use DB;
 use App\Http\Requests\Hr\EmployeeStore;
 use DataTables;
@@ -320,7 +321,11 @@ class EmployeeController extends Controller
         $categories = HrCategory::all();
         $degrees = Education::all();
         $designations = HrDesignation::all();
-        return view ('hr.employee.search.search',compact('categories','degrees','designations'));
+        $projects = PrDetail::all();
+       
+        $managerIds = EmployeeManager::all()->pluck('hr_manager_id')->toArray();
+        $employees = HrEmployee::wherein('id',$managerIds)->get();
+        return view ('hr.employee.search.search',compact('categories','degrees','designations','projects','employees'));
     }
 
 
@@ -355,6 +360,26 @@ class EmployeeController extends Controller
             ->where('hr_status_id',1)->get();
 
             return view('hr.employee.search.result',compact('result'));
+
+        }
+
+        if($request->filled('project')){
+            
+            $result = collect(HrEmployee::join('employee_projects','employee_projects.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','employee_projects.pr_detail_id','employee_projects.effective_date')->where('hr_status_id',1)->orderBy('effective_date','desc')->get());
+            $resultUnique = ($result->unique('id'));
+            $resultUnique->values()->all();
+            $result = $resultUnique->where('pr_detail_id',$request->project);
+        return view('hr.employee.search.result',compact('result'));
+
+        }
+
+        if($request->filled('manager')){
+            
+            $result = collect(HrEmployee::join('employee_managers','employee_managers.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','employee_managers.hr_manager_id','employee_managers.effective_date')->where('hr_status_id',1)->orderBy('effective_date','desc')->get());
+            $resultUnique = ($result->unique('id'));
+            $resultUnique->values()->all();
+            $result = $resultUnique->where('hr_manager_id',$request->manager);
+        return view('hr.employee.search.result',compact('result'));
 
         }
     }

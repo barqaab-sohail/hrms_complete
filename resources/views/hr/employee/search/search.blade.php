@@ -12,13 +12,13 @@
             {{csrf_field()}}
             <div class="form-body">
 
-				<div class="row Search" >
+				<div class="row" >
 					<div class="col-md-3">
 		            	<!--/span 5-1 -->
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
 		                   		<label class="control-label text-right">Name of Category</label><br>
-		                   		<select  name="category"  id="category" class="form-control">
+		                   		<select  name="category"  id="category" class="form-control searchSelect">
 		                            <option value=""></option>
 		                            @foreach($categories as $category)
 									<option value="{{$category->id}}" {{(old("category")==$category->id? "selected" : "")}}>Category - {{$category->name}}</option>
@@ -34,7 +34,7 @@
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
 		                   		<label class="control-label text-right">Name of Degree</label><br>
-		                   		<select  name="degree"  id="degree" class="form-control" >
+		                   		<select  name="degree"  id="degree" class="form-control searchSelect" >
 		                            <option value=""></option>
 		                            
 		                            @foreach($degrees as $degree)
@@ -52,7 +52,7 @@
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
 		                   		<label class="control-label text-right">Name of Designation</label><br>
-		                   		<select  name="designation"  id="designation" class="form-control" >
+		                   		<select  name="designation"  id="designation" class="form-control searchSelect" >
 		                            <option value=""></option>
 		                            
 		                            @foreach($designations as $designation)
@@ -60,6 +60,40 @@
 		                            @endforeach
 		                          
 		                        </select>
+		                    </div>
+		                </div>
+		            </div>     
+		            <!--Span-4
+		             -->
+		            <div class="col-md-3">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12 required">
+		                   		<label class="control-label text-right">Name of Project</label><br>
+		                   		<select  name="project"  id="project" class="form-control searchSelect" >
+		                            <option value=""></option>
+		                            
+		                            @foreach($projects as $project)
+									<option value="{{$project->id}}" {{(old("project")==$project->id? "selected" : "")}}>{{$project->name}}</option>
+		                            @endforeach
+		                          
+		                        </select>
+		                    </div>
+		                </div>
+		            </div>     
+		        </div>
+		        <div class="row" >
+					<div class="col-md-3">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12 required">
+		                   		<label class="control-label text-right">Name of HOD</label><br>
+		                   		<select  name="manager"  id="manager" class="form-control searchSelect">
+		                            <option value=""></option>
+		                            @foreach($employees as $manager)
+									<option value="{{$manager->id}}" {{(old("manager")==$manager->id? "selected" : "")}}>{{employeeFullName($manager->id)}}</option>
+		                            @endforeach
+		                        </select>    
 		                    </div>
 		                </div>
 		            </div>     
@@ -99,38 +133,20 @@ $(document).ready(function(){
 	$('select').select2();
 	formFunctions();
 
+	$('select').change(function(){	
+		$(this).removeClass('searchSelect');
+  		$('.searchSelect').each(function () {
+  			//console.log(this.id)
+        	$(this).val('').select2('val', 'All');
+    	});
+    	$(this).addClass('searchSelect');
+  	});
 
     	
-  	// $('#degree').change(function(){
-  	// 	if($('#designation').val() != null){
-  	// 	$('#designation').val('').select2('val', 'All');
-  	// 	}
-  	// 	if($('#category').val()!= null){
-  	// 	$('#category').val('').select2('val', 'All');
-  	// 	}
-  	// });
-
-  	// $('#category').change(function(){
-  	// 	if($('#designation').val() != null){
-  	// 	$('#designation').val('').select2('val', 'All');
-  	// 	}
-  	// 	if($('#degree').val()!= null){
-  	// 	$('#degree').val('').select2('val', 'All');
-  	// 	}
-  	// });
-  	
-  	// $('#designation').change(function(){
-  	// 	if($('#category').val() != null){
-  	// 	$('#category').val('').select2('val', 'All');
-  	// 	}
-  	// 	if($('#degree').val()!= null){
-  	// 	$('#degree').val('').select2('val', 'All');
-  	// 	}
-  	// });
-
 
 	//submit function
       $("#employeeSearch").submit(function(e) { 
+
       e.preventDefault();
       $('.fa-spinner').show();
       var url = $(this).attr('action');
