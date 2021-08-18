@@ -74,7 +74,7 @@
 	        	// 	columnDefs: [
        			// 		{ type: 'date-dd-mmm-yyyy', targets: 1 }
      					// ],
-     				"order": [[ 1, "desc" ]],
+     				"order": [[ 1, "asc" ]],
 	        		fixedColumns:   {
 	            		leftColumns: 1,
 	            		rightColumns:2
