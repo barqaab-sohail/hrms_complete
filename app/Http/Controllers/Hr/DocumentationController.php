@@ -21,17 +21,23 @@ class DocumentationController extends Controller
 
         $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->get();
 
-        // $documentNames = HrDocumentNameDocumentation::where('hr_employee_id',session('hr_employee_id'))->get();
+        // $order = array('Appointment Letter', 'HR Form', 'CNIC Front', 'CNIC Back','Original CV','Picture','Educational Documents','Experience Certificates');
 
-        // $list = array();
-        // $index = 0; 
-        
-        // foreach ($documentNames as $name){
-        //     $list[$index] = $name['hr_document_name_id'];
-        //     $index++;
+        // $documentIds = $documentIds->sort(function ($a, $b) use ($order) {
+        //       $pos_a = array_search($a->description, $order);
+        //       $pos_b = array_search($b->description, $order);
+        //       return $pos_a - $pos_b;
+        // });
+
+        // $documentIds = $documentIds->sortByDesc('document_date');
+  
+        // $documentIds->all();
+
+        // foreach ($documentIds as $id){
+        //     echo $id->description;
+        //     echo '<br>';
         // }
-
-        // dd($list);
+        // dd();
 
 
         $Ids = $documentIds->pluck('id')->toArray();
