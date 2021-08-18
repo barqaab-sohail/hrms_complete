@@ -9595,6 +9595,7 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever:after,input[type=checkbo
 
 .sidebar-nav ul li ul li a.active {
   padding: 10px 35px 10px 15px;
-  color:red;
+  background-color:#737373;
+  color:white;
 }
 

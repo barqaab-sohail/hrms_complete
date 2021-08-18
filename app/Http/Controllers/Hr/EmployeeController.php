@@ -152,10 +152,11 @@ class EmployeeController extends Controller
     }
 
     public function index(Request $request){
-       
+   
         if($request->ajax()){
-            $data = HrEmployee::with('employeeDesignation','employeeProject','employeeOffice','employeeAppointment','hrContactMobile')->latest()->get();        
+            $data = HrEmployee::with('employeeDesignation','employeeProject','employeeOffice','employeeAppointment','hrContactMobile')->orderBy('hr_status_id','asc')->get();       
             return DataTables::of($data)
+            ->addIndexColumn()
 
             ->addColumn('full_name',function($data){
                 return $data->first_name . ' '. $data->last_name;
@@ -183,7 +184,7 @@ class EmployeeController extends Controller
                 return $data->hrContactMobile->mobile??'';
             })
             ->addColumn('edit', function($data){
-                        $button = '<a class="btn btn-info btn-sm" href="'.route('employee.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+                        $button = '<a class="btn btn-success btn-sm" href="'.route('employee.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
                         return $button;
                     })
             ->addColumn('delete', function($data){

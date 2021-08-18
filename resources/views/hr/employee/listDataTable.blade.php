@@ -1,17 +1,18 @@
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
 @section('Heading')
-	<h3 class="text-themecolor">List of Employees</h3>
+	<!-- <h3 class="text-themecolor">List of Employees</h3> -->
 @stop
 @section('content')
 <div class="card">
 	<div class="card-body">	
-		<h4 class="card-title">List of Employees</h4>
+		<h4 class="card-title" style="color:black">List of Employees</h4>
 
 		<div class="table-responsive m-t-40">	
 			<table id="myTable" class="table table-bordered table-striped">
 				<thead>
 				<tr>
+					<th>Sr. #</th>
 					<th>Employee ID</th>
 					<th>Employee Name</th>
 					<th>Designation/Position</th>
@@ -45,18 +46,19 @@ $(document).ready(function() {
 	   	url: "{{ route('employee.index') }}",
 	  	},
 	  	columns: [
+		   { data: 'DT_RowIndex', name: 'DT_RowIndex' },
 		   {data: 'employee_no', name: 'employee_no'},
 		   {data: 'full_name', name: 'full_name'},
 		   {data: 'designation', name: 'designation'},
 		   {data: 'project', name: 'project'},
 		   {data: 'date_of_birth', name: 'date_of_birth'},
-		   {data: 'hr_status_id', name: 'status'},
+		   {data: 'hr_status_id', name: 'status',orderable: true},
 		   {data: 'cnic', name: 'cnic'},
 		   {data: 'date_of_joining', name: 'date_of_joining'},
 		   {data: 'mobile', name: 'mobile'},
-		   {data: 'edit',name: 'edit', orderable: false },
+		   {data: 'edit',name: 'edit', orderable: false, searchable: false },
 		   @role('Super Admin')
-		   {data: 'delete',name: 'delete', orderable: false }
+		   {data: 'delete',name: 'delete', orderable: false, searchable: false }
 		   @endrole
 	  	]
  	});
