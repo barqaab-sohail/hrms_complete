@@ -33,7 +33,7 @@ class EmployeeStore extends FormRequest
             'gender_id'=> 'required',
             'marital_status_id'=> 'required',
             'religion_id'=> 'required',
-            'employee_no' => 'unique:hr_employees,employee_no,'.session('hr_employee_id'),
+            'employee_no' => 'min:7|max:7|unique:hr_employees,employee_no,'.session('hr_employee_id'),
         ];
     }
 
