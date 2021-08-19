@@ -168,8 +168,8 @@
                     <ul aria-expanded="false" class="collapse">  
                         <li><a class="{{Request::is('hrms/admin/activeUser')?'active':''}}" href="{{route('activeUser.index')}}">Active User List</a></li>
                         <li><a class="{{Request::is('hrms/admin/lastLogin')?'active':''}}" href="{{route('lastLogin.detail')}}">Last Login Detail</a></li>
-                        <li><a class="{{Request::is('hrms/admin/permission')?'active':''}}" href="{{route('permission.index')}}">Permission</a></li>
-
+                        <li><a class="{{Request::is('hrms/admin/permission/employeePermission')?'active':''}}" href="{{route('permission.search')}}">Emplolyee Permission</a></li>
+                        <li><a class="{{Request::is('hrms/admin/permission')?'active':''}}" href="{{route('permission.index')}}">Permissions</a></li>
                         <li><a class="{{Request::is('hrms/admin/audit/search')?'active':''}}" href="{{route('audit.search')}}">Search User Log</a></li>
                                                
                     </ul>
