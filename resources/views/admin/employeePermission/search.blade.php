@@ -21,7 +21,7 @@
 		                   		<select  name="employee"  id="employee" class="form-control searchSelect">
 		                            <option value=""></option>
 		                            @foreach($employees as $employee)
-									<option value="{{$employee->id}}" {{(old("employee")==$employee->id? "selected" : "")}}>{{employeeFullName($employee->id)}}</option>
+									<option value="{{$employee->id}}" {{(old("employee")==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employeeDesignation->last()->name??''}}</option>
 		                            @endforeach
 		                        </select>    
 		                    </div>

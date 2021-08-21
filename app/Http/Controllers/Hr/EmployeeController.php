@@ -329,6 +329,19 @@ class EmployeeController extends Controller
         return view ('hr.employee.search.search',compact('categories','degrees','designations','projects','employees'));
     }
 
+    public function userData($id){
+
+        $genders = Gender::all();
+        $maritalStatuses = MaritalStatus::all();
+        $religions = Religion::all();
+        $data = HrEmployee::find($id);
+        session()->put('hr_employee_id', $data->id);
+      
+
+        return view ('hr.employee.edit', compact('genders','maritalStatuses','religions','data'));       
+       
+    }
+
 
     public function result(Request $request){
         

@@ -168,7 +168,8 @@
 
 <script>
 $(document).ready(function(){
-  
+    isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
+
     //submit function
         $('#licence_no').on('change',function(){
 

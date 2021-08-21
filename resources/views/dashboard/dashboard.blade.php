@@ -30,7 +30,7 @@
 		</div>
 	</div>
 	
-				
+		@can('hr view graph')		
 			<div class="row">
   				<div class="col-sm-6">
 					<div id="ageChart" style="width: 900px; height: 500px;"></div>
@@ -57,7 +57,7 @@
 				@include('hr.charts.ageChart')
 				@include('hr.charts.engineerChart')
 				@include('hr.charts.departmentChart')
-	
+		@endcan
 @can('Super Admin')
 	<!--TASK -->
 	<div class="card">

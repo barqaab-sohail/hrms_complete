@@ -95,6 +95,7 @@ $(document).ready(function(){
   //    e.preventDefault();
   // });
 
+    isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
 
       //submit function
       $("#formContact").submit(function(e) { 

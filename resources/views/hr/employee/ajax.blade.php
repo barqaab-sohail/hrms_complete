@@ -163,4 +163,6 @@
     </form>
 </div> <!-- end card body -->    
 
-
+<script type="text/javascript">
+   isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
+</script>

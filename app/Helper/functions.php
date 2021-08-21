@@ -29,6 +29,7 @@ function generateEmployeeId(){
     return $employeeId;
 }
 
+
 function checkHod($id){
 
 	//$hod = EmployeeManager::where('hr_manager_id',$id)->get();

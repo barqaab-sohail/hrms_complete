@@ -288,6 +288,7 @@
 
 <script>
 $(document).ready(function(){
+    isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
 
     //Add Comma only for Display
     $("#hr_salary_id option").each(function()

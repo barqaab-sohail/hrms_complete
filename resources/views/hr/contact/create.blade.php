@@ -171,8 +171,8 @@
 $(document).ready(function(){
     
     refreshTable("{{route('contact.table')}}",300);
-    
-
+    isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
+     
     $('#formContact').hide();
     $('#hideButton').click(function(){
         $('#formContact').toggle();
