@@ -28,6 +28,9 @@
 
 $(document).ready(function() {
   formFunctions();
+  isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
+
+  
 
 	//form submit
 	$(document).on('submit','#formEditEmployee', function(e){	

@@ -68,17 +68,21 @@
 @endif
 <script>
 $(document).ready(function() {
-	 $("form").submit(function (e) {
-         e.preventDefault();
-      });
+	
+	isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
+	 
 
-	 $('a[id^=edit]').click(function (e){
+	$("form").submit(function (e) {
+         e.preventDefault();
+    });
+	
+
+	$('a[id^=edit]').click(function (e){
         e.preventDefault();
         console.log('edit');
         var url = $(this).attr('href');
         getAjaxData(url);
-
-      });
+    });
 
   	$("form[id^=deleteContact]").submit(function(e) { 
   	e.preventDefault();
@@ -90,6 +94,7 @@ $(document).ready(function() {
   	 refreshTable("{{route('contact.table')}}",300);
   	 
     });
+
 
 });
 </script>

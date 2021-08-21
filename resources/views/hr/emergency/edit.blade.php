@@ -86,6 +86,7 @@
 $(document).ready(function(){
   
   
+    isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
 
 
       $("form").submit(function (e) {

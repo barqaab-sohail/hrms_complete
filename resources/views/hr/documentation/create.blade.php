@@ -113,7 +113,8 @@
 
 <script>
     $(document).ready(function(){
-        
+        isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
+
         refreshTable("{{route('documentation.table')}}");
         
         $('#formDocument').hide();

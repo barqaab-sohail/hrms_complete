@@ -13,6 +13,7 @@
                 <thead>
                 <tr>
                     <th>Permission Name</th>
+                    <th> Delete </th> 
                 
                 </tr>
                 </thead>
@@ -20,6 +21,15 @@
                     @foreach($result as $permission)
                         <tr>
                             <td>{{$permission->name}}</td>
+                            <td class="text-center">
+                                 @can('hr edit record')
+                                 <form  id="deletePermission{{$permission->id}}{{$userId}}" action="{{route('employeePermission.destroy',['id'=>$permission->id, 'userId'=>$userId])}}" method="POST">
+                                 @method('DELETE')
+                                 @csrf
+                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
+                                 </form>
+                                 @endcan
+                            </td>
                                                         
                         </tr>
                     @endforeach
@@ -71,6 +81,14 @@ $(document).ready(function() {
                     leftColumns: 1,
                     rightColumns:2
                 }
+    });
+
+    $("form[id^=deletePermission]").submit(function(e) { 
+    e.preventDefault();
+    var url = $(this).attr('action');
+    $('.fa-spinner').show(); 
+    submitForm(this, url);
+    
     });
 
 });

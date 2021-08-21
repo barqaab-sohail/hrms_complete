@@ -16,6 +16,23 @@ function fromPreventDefault(){
     });
 }
 
+function isUserData(id, url){
+
+    if (id.indexOf(url) >= 0 ){
+        $('input[type="text"]').prop('readonly', true);
+        $('select').each(function(){
+          $('option').each(function() {
+              if(!this.selected) {
+                  $(this).remove();
+              }
+          });
+        });
+       // $('a[data-original-title="Edit"]').remove();
+      $('a.btn').remove();
+      $('button').remove();
+    }//end if
+}
+
 
 function selectTwo(parameter ='.selectTwo'){
     $(parameter).select2({

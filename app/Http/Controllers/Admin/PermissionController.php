@@ -9,7 +9,6 @@ use App\Models\Hr\HrEmployee;
 use App\Models\Admin\ModelHasPermission;
 use App\Http\Requests\Admin\PermissionStore;
 use App\User;
-
 use DB;
 
 class PermissionController extends Controller
@@ -37,7 +36,7 @@ class PermissionController extends Controller
 
 
 
-
+    //this function is used for delete specific permissions.  This function is not used for employee permission delete
     public function destroy($id){
 
     	
@@ -53,28 +52,36 @@ class PermissionController extends Controller
 
     public function search(){
 
-        $employees = HrEmployee::all();
+        $employees = HrEmployee::with('employeeDesignation')->get();
 
         return view ('admin.employeePermission.search',compact('employees'));
     }
 
 
     public function result(Request $request){
-        
-        // foreach ($permissions as $permission){
-        //     dd($permission->name);
 
-        // }
-
-         //dd($permissions);
         if($request->filled('employee')){
         $employee = HrEmployee::find($request->employee);
         $user = User::where('id', $employee->user_id)->first();
         $result = $user->getAllPermissions();
-        return view('admin.employeePermission.result',compact('result'));
+        $userId = $user->id;
+        
+        return view('admin.employeePermission.result',compact('result','userId'));
         }
-
         
     }
+
+
+    public function employeePermissionDestroy($id, $userId){
+        
+        $user = User::find($userId);
+        $user->revokePermissionTo($id);
+
+        return response()->json(['status'=> 'OK', 'message' => "Employee Permission Successfully Deleted"]);
+
+    }
+
+
+
 
 }
