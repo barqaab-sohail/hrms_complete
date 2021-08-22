@@ -93,7 +93,7 @@ $(document).ready(function(){
                           $("#hr_designation_id").empty();
                           $("#hr_designation_id").append('<option value="">Select Designation</option>');
                           $.each(data.designations, function(key,value){
-                                      //console.log(key+'-'+value);
+                                      
                                    $("#hr_designation_id").append('<option value="'+key+'">'+value+'</option>');
                           });
                           $('#hr_designation_id').select2('destroy');

@@ -213,7 +213,6 @@ $(function () {
         
           },
           error: function (data) {
-              console.log(data.responseJSON.errors);
               var errorMassage = '';
               $.each(data.responseJSON.errors, function (key, value){
                 errorMassage += value + '<br>';  
@@ -242,7 +241,7 @@ $(function () {
   
             },
             error: function (data) {
-                console.log('Error:', data);
+                
             }
           });
         }

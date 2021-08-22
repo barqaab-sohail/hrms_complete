@@ -188,7 +188,7 @@ $(document).ready(function(){
 
     $('#formEditContact').on('submit', function(event){  
       var url = $(this).attr('action');
-     $('.fa-spinner').show();     //console.log(url);
+     $('.fa-spinner').show();     
      event.preventDefault();
       submitForm(this, url);
       refreshTable("{{route('contact.table')}}",300);

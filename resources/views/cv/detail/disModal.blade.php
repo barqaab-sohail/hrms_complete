@@ -76,7 +76,7 @@ $('#disModalFrom').on('submit', function(event){
                       $("#discipline_name").empty();
                       $("#discipline_name").append('<option value="">Select Discipline</option>');
                       $.each(data.disciplines, function(key,value){
-                                  //console.log(key+'-'+value);
+                                  
                                $("#discipline_name").append('<option value="'+key+'">'+value+'</option>');
                       });
                       $('#discipline_name').chosen('destroy');

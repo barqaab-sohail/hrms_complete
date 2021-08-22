@@ -189,7 +189,6 @@ $(document).ready(function() {
              success:function(res)
              {       
                   
-             	console.log(res);
                   if(res)
                   {
                     $("#as_sub_class").empty();

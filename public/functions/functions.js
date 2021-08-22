@@ -27,8 +27,6 @@ function isUserData(id, url){
               }
           });
         });
-       // $('a[data-original-title="Edit"]').remove();
-      $('a.btn').remove();
       $('button').remove();
     }//end if
 }

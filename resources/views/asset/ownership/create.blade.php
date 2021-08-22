@@ -147,7 +147,7 @@ $(function () {
           $('#ownership').trigger('change');
           $('#date').val(data.date);
           $('#as_ownership_id').val(data.id);
-          console.log(data);
+          
 
       
       })
@@ -156,7 +156,6 @@ $(function () {
       $("#formOwnership").submit(function(e) {
         e.preventDefault();
         var formData = new FormData(this);
-        console.log(formData);
 
         $.ajax({
           data: formData,
@@ -177,7 +176,6 @@ $(function () {
         
           },
           error: function (data) {
-              console.log(data.responseJSON.errors);
               var errorMassage = '';
               $.each(data.responseJSON.errors, function (key, value){
                 errorMassage += value + '<br>';  
@@ -206,7 +204,7 @@ $(function () {
   
             },
             error: function (data) {
-                console.log('Error:', data);
+                
             }
           });
         }

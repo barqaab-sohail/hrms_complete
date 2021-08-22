@@ -110,7 +110,7 @@ formFunctions();
 		        
 		          },
 		          error: function (data) {
-		              console.log(data.responseJSON.errors);
+		             
 		              var errorMassage = '';
 		              $.each(data.responseJSON.errors, function (key, value){
 		                errorMassage += value + '<br>';  
@@ -160,7 +160,7 @@ formFunctions();
   
             },
             error: function (data) {
-                console.log('Error:', data);
+                
             }
           });
         }

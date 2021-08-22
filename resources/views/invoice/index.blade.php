@@ -294,7 +294,7 @@ formFunctions();
                 
                   },
                   error: function (data) {
-                      console.log(data.responseJSON.errors);
+            
                       var errorMassage = '';
                       $.each(data.responseJSON.errors, function (key, value){
                         errorMassage += value + '<br>';  
@@ -361,7 +361,7 @@ formFunctions();
                 $('#invoice_type_id, #cost_type_id').trigger('change');
 
                 $('.hide_1').show();
-                console.log(data)
+                
             })
         }); //end edit
 
@@ -386,7 +386,7 @@ formFunctions();
   
             },
             error: function (data) {
-                console.log('Error:', data);
+                
             }
           });
         }

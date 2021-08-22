@@ -184,7 +184,7 @@ $(document).ready(function(){
 
     //submit function
      $("#education").submit(function(e) { 
-        console.log('it is submitted add education');
+        
         e.preventDefault();
         var url = $(this).attr('action');
         $('.fa-spinner').show(); 

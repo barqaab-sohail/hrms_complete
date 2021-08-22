@@ -538,7 +538,7 @@ $(document).ready(function(){
           data:{query:query, _token:_token},
 	         	success:function(data){
 		          	if(data.status == 'Not Ok'){
-		          		console.log(data.status);
+		          		
 		           		$('#cnicCheck').fadeIn();  
 		                  $('#cnicCheck').html('This CNIC is already entered');
 		            }

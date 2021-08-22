@@ -74,7 +74,6 @@ $('#cnicExpiryDetail').click(function(){
 
 $('#appointmentExpiryDetail').click(function(){ 
   var url = $(this).attr('href');
-  console.log(url);
      $.ajax({
      url:url,
      dataType:"json",

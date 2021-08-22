@@ -82,7 +82,6 @@ $(document).ready(function(){
                           $("#as_class_id").empty();
                           $("#as_class_id").append('<option value="">Select Class</option>');
                           $.each(data.classes, function(value,key){
-                                      //console.log(key+'-'+value);
                                    $("#as_class_id").append('<option value="'+key+'">'+value+'</option>');
                           });
                           $('#as_class_id').select2('destroy');

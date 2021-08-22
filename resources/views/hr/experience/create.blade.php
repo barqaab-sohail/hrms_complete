@@ -138,7 +138,6 @@ $(document).ready(function(){
  
     //submit function
      $("#experience").submit(function(e) { 
-        console.log('it is submitted add experience');
         e.preventDefault();
         var url = $(this).attr('action');
         $('.fa-spinner').show(); 

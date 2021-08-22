@@ -102,7 +102,7 @@ $(document).ready(function() {
           $('#hr_manager_id').val(data.hr_manager_id);
           $('#hr_manager_id').trigger('change');
           $('#effective_date').val(data.effective_date);
-          console.log(data);
+         
       })
    });
     $('#saveBtn').click(function (e) {
@@ -122,7 +122,7 @@ $(document).ready(function() {
         
           },
           error: function (data) {
-              console.log(data.responseJSON.errors);
+              
               var errorMassage = '';
               $.each(data.responseJSON.errors, function (key, value){
                 errorMassage += value + '<br>';  
@@ -150,7 +150,7 @@ $(document).ready(function() {
   
             },
             error: function (data) {
-                console.log('Error:', data);
+                
             }
           });
         }

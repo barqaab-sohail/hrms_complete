@@ -60,12 +60,14 @@ $(document).ready(function() {
            processData: false,
            success:function(data)
                {
-        		
-            $(".addAjax").html(data);
-        		$('a[id^=add]').css('background-color','');
-        		$('#'+id).css('background-color','#737373');
-        		formFunctions();
-        		
+          		    if(data.status == 'Not Ok'){
+                    $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
+                  }else{
+                  $(".addAjax").html(data);
+              		$('a[id^=add]').css('background-color','');
+              		$('#'+id).css('background-color','#737373');
+              		formFunctions();
+        		      }
                },
             error: function (jqXHR, textStatus, errorThrown){
             	if (jqXHR.status == 401){

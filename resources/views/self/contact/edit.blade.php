@@ -223,7 +223,6 @@ $('#editFormSsContact').on('submit', function(event){
     $('.fa-spinner').show();
  	var url = $(this).attr('action');
  	event.preventDefault();
- 	console.log(url);
 	submitForm(this, url);
 	//refreshTable("{{route('selfContact.table')}}",300);
 	

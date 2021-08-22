@@ -68,7 +68,7 @@ $(document).ready(function() {
         e.preventDefault();
        
         var url = $(this).attr('href');
-         console.log(url);
+        
         getAjaxData(url);
        
       });

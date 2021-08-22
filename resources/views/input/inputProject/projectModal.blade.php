@@ -116,8 +116,7 @@ $(document).ready(function(){
                  cache: false,
                  processData: false,
                  success:function(data){
-                     // $("#inputTable tbody").prepend('<tr><td>'++'</td><td>'++'</td><td>'++'</td><td>'++'</td></tr>');
-                     console.log(data);
+                    
                      var num = parseInt($("#inputTable tr:last-child td:first-child").html())+1;
                         if(!num){num=1;}
                       var editUrl='{{route("input.edit",":id")}}';

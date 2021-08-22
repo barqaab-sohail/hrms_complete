@@ -11,22 +11,6 @@ use DataTables;
 
 class ManagerController extends Controller
 {
-    
-    public function hodDetail(){
-
-        $employees = HrEmployee::with('employeeDesignation')->where('hr_status_id',1)->select('id','first_name','last_name')->get();
-        return view ('hr.manager.hodDetail',compact('employees'));
-    }
-
-
-    public function hodResult(Request $request){
-       
-        if($request->filled('hod')){
-        $result = checkHod($request->hod);
-        return view('hr.manager.hodResult',compact('result'));
-        }
-    }
-
 
     public function index() {
     	

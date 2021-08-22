@@ -94,7 +94,7 @@ $(document).ready(function() {
 
 	$('#formProject').on('submit', function(event){
 	 	//preventDefault work through formFunctions;
-	 	console.log('submit');
+	 	
 		url="{{route('projectCode.store')}}";
 		$('.fa-spinner').show();	
 	   	submitFormAjax(this, url,1);

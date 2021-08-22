@@ -92,14 +92,7 @@ $(document).ready(function(){
                           $('html,body').scrollTop(0);
                       }else{
                           $("#as_sub_class_id").empty();
-                         // $("#as_class_id").empty();
-                          // $("#as_sub_class_id").append('<option value="">Select Class</option>');
-                          // $.each(data.subClasses, function(value,key){
-                          //             //console.log(key+'-'+value);
-                          //          $("#as_sub_class_id").append('<option value="'+key+'">'+value+'</option>');
-                          // });
-                          // $('#as_sub_class_id').select2('destroy');
-                          // selectTwo('#as_sub_class_id');
+                    
 
                           $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                            $('.spinner').hide();

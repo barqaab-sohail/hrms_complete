@@ -103,7 +103,7 @@ $(document).ready(function(){
 
     $('#formEditExit').on('submit', function(event){  
       var url = $(this).attr('action');
-     $('.fa-spinner').show();     //console.log(url);
+     $('.fa-spinner').show();     
      event.preventDefault();
       submitForm(this, url);
       refreshTable("{{route('exit.table')}}",5000);
