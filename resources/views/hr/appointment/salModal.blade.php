@@ -80,7 +80,7 @@ $(document).ready(function(){
                           $("#hr_salary_id").empty();
                           $("#hr_salary_id").append('<option value="">Select Salary</option>');
                           $.each(data.salaries, function(key,value){
-                                      //console.log(key+'-'+value);
+                                
                                    $("#hr_salary_id").append('<option value="'+key+'">'+value+'</option>');
                           });
                           $('#hr_salary_id').select2('destroy');

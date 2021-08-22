@@ -91,7 +91,7 @@ $('#eduModalFrom').on('submit', function(event){
                       $("#degree_name").empty();
                       $("#degree_name").append('<option value="">Select Degree</option>');
                       $.each(data.degrees, function(key,value){
-                                  //console.log(key+'-'+value);
+                                 
                                $("#degree_name").append('<option value="'+key+'">'+value+'</option>');
                       });
                       $('#degree_name').chosen('destroy');

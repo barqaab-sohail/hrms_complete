@@ -13,10 +13,6 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
      * Show the application dashboard.
@@ -25,7 +21,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        
+
+
+
         $countBelowForty = ageChart()['countBelowForty'];
         $countBelowFifty = ageChart()['countBelowFifty'];
         $countBelowSixty = ageChart()['countBelowSixty'];
@@ -51,9 +49,4 @@ class HomeController extends Controller
         return view('dashboard.dashboard',compact('countBelowForty','countBelowFifty','countBelowSixty','countBelowSeventy','countAboveSeventy','categoryA','categoryB','categoryC','allEmployees','pecRegisteredEngineers','associatedEngineers','finance','power','water'));
     }
 
-
-    public function testing()
-    {
-        return view('dashboard.dashboard1');
-    }
 }

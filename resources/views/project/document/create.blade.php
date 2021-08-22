@@ -190,7 +190,6 @@ $(document).ready(function(){
             $('a[id^=documentList]').not(this).find('i').attr('class','fa fa-folder fa-3x')
 
             var url = $(this).attr('href');
-            console.log(url);
             var $el = $(this).find( "i" ).toggleClass('fa-folder-open');
             if ($el.hasClass('fa-folder-open')) {
                 refreshTable(url);
@@ -206,7 +205,6 @@ $(document).ready(function(){
       
         //submit function
         $("#formDocument").submit(function(e) { 
-            console.log('submit');
             e.preventDefault();
             var url = "{{route('projectDocument.store')}}";
             $('.fa-spinner').show(); 

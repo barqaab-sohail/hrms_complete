@@ -12,7 +12,6 @@
 			<table id="myTable" class="table table-bordered table-striped">
 				<thead>
 				<tr>
-					<th>Sr. #</th>
 					<th>Employee ID</th>
 					<th>Employee Name</th>
 					<th>Designation/Position</th>
@@ -46,7 +45,6 @@ $(document).ready(function() {
 	   	url: "{{ route('employee.index') }}",
 	  	},
 	  	columns: [
-		   { data: 'DT_RowIndex', name: 'DT_RowIndex' },
 		   {data: 'employee_no', name: 'employee_no'},
 		   {data: 'full_name', name: 'full_name'},
 		   {data: 'designation', name: 'designation'},

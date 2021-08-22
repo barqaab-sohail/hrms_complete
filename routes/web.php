@@ -15,14 +15,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/dashboard','HomeController@index');
-Route::get('/hrms/testing','HomeController@testing');
+Route::get('/dashboard','HomeController@index')->middleware('auth');
 //Route::get ('insert','Hr\EmployeeController@insert');
 
 Auth::routes();
 
-
-Route::prefix('code')->namespace('Auth')->name('otp.')->group(function(){
+Route::group(['prefix' => 'code', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Auth','name' =>'opt.'], function(){
 Route::resource('/','RegisterController',['only'=>['create','store']]);
 });
 
@@ -66,8 +64,7 @@ Route::get('/contact/refreshTable', 'ContactController@refreshTable')->name('con
 Route::resource('/contact', 'ContactController');
 Route::resource('/emergency', 'EmergencyController');
 Route::resource('/nextToKin', 'NextToKinController');
-Route::get('/employee/manager/hodDetail', 'ManagerController@hodDetail')->name('hod.hodDetail');
-Route::get('/employee/manager/result', 'ManagerController@hodResult')->name('hod.result');
+
 Route::resource('/manager', 'ManagerController');
 Route::get('/promotion/refreshTable', 'PromotionController@refreshTable')->name('promotion.table');
 Route::resource('/promotion', 'PromotionController');

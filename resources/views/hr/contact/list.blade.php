@@ -23,9 +23,9 @@
 						<th>Province</th>
 						<th>Country</th>
 						 
- 
+ 						@can('hr edit contact')
 						<th colspan="2" class="text-center"style="width:10%"> Actions </th> 
- 
+						@endcan 
 
 					</tr>
 					</thead>
@@ -40,7 +40,7 @@
 								<td>{{$hrContact->state->name}}</td>
 								<td>{{$hrContact->country->name}}</td>
 								
-
+								@can('hr edit contact')
 								 <td class="text-center">
 								 <a class="btn btn-info btn-sm" id="editContact" href="{{route('contact.edit',$hrContact->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 								 </td>
@@ -53,7 +53,7 @@
 								 </form>
 								 @endcan
 								 </td>
-								  						
+								 @endcan				
 							</tr>
 						@endforeach
 					
@@ -79,7 +79,6 @@ $(document).ready(function() {
 
 	$('a[id^=edit]').click(function (e){
         e.preventDefault();
-        console.log('edit');
         var url = $(this).attr('href');
         getAjaxData(url);
     });

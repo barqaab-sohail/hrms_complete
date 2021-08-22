@@ -63,7 +63,6 @@
 		$('a[id^=editContact]').click(function (e){
         e.preventDefault();
        	var url = $(this).attr('href');
-       	console.log(url);
        	getAjaxData(url);
         refreshTable("{{route('selfContact.table')}}",500);	     
        

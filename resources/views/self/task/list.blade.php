@@ -75,7 +75,6 @@ $(document).ready(function() {
 	 $('a[id^=editTask]').click(function (e){
         e.preventDefault();
         var url = $(this).attr('href');
-        console.log(url);
         $.ajax({
            url:url,
            method:"GET",
@@ -124,7 +123,6 @@ $(document).ready(function() {
         e.preventDefault();
        
         var url = $(this).attr('href');
-         console.log(url);
         getAjaxMessage(url);
         
 	  	setTimeout(function(){

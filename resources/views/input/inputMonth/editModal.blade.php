@@ -117,7 +117,7 @@ $(document).ready(function(){
                   
                   $("#editModal").modal('hide');
                   tableTr
-                  console.log(res.data['id']);
+                 
 
                 }
                 else{

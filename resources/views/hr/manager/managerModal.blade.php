@@ -118,7 +118,7 @@ $(document).ready(function() {
                         '</td><td>'+'<button class="btn btn-info btn-sm" id="editManager'+data[0]['id']+' href='+editUrl+ ' title="Edit">Edit</button>'
                         +'</td><td><form id=formDeleteManager'+data[0]['id']+' action='+deleteAction+
                         ' method="POST">@csrf<button type="submit" onclick="return confirm(\'Are you Sure to Delete\')" class="btn btn-danger btn-sm" href= data-toggle="tooltip" data-original-title="Delete">Delete</button></form></td></tr>'); 
-              console.log(data[0]['hr_employee']['first_name']);
+             
               
               resetForm();
               $('#ajaxModel').modal('hide');
@@ -145,7 +145,7 @@ $(document).ready(function() {
            processData: false,
            success:function(data)
                {        
-                console.log(data[0]['hr_employee_id']);
+                
               $('#managerForm').trigger("reset");
               $('#modelHeading').html("Edit HOD");
               $('#hr_manager_id').val(data[0]['id']);
@@ -178,89 +178,6 @@ $(document).ready(function() {
 
 
 
-  // $(function () {
-  //     $.ajaxSetup({
-  //         headers: {
-  //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-  //         }
-  //   });
-  //   var table = $('.data-table').DataTable({
-  //       processing: true,
-  //       serverSide: true,
-  //       ajax: "{{ route('inputMonth.create') }}",
-  //       columns: [
-  //           {data: 'hod_id', name: 'hod_id'},
-  //           {data: 'effective_date', name: 'effective_date'},
-  //           {data: 'action', name: 'action', orderable: false, searchable: false},
-
-  //       ],
-  //   });
-  //   $('#createNewManager').click(function () {
-  //       $('#json_message_modal').html('');
-  //       $('#saveBtn').val("create-HOD");
-  //       $('#hr_manager_id').val('');
-  //       $('#managerForm').trigger("reset");
-  //       $('#modelHeading').html("Create New HOD");
-  //       $('#ajaxModel').modal('show');
-  //   });
-  //   $('body').on('click', '.editManager', function () {
-  //     var manager_id = $(this).data('id');
-  //     $('#json_message_modal').html('');
-  //     $.get("{{ url('manager') }}" +'/' + manager_id +'/edit', function (data) {
-  //         $('#modelHeading').html("Edit HOD");
-  //         $('#saveBtn').val("edit-HOD");
-  //         $('#ajaxModel').modal('show');
-  //         $('#hr_manager_id').val(data.id);
-  //         $('#hod_id').val(data.hod_id);
-  //         $('#effective_date').val(data.effective_date);
-  //     })
-  //  });
-  //   $('#saveBtn').click(function (e) {
-  //       e.preventDefault();
-  //       $(this).html('Save');
-    
-  //       $.ajax({
-  //         data: $('#managerForm').serialize(),
-  //         url: "{{ route('manager.store') }}",
-  //         type: "POST",
-  //         dataType: 'json',
-  //         success: function (data) {
-     
-  //             $('#managerForm').trigger("reset");
-  //             $('#ajaxModel').modal('hide');
-  //             table.draw();
-         
-  //         },
-  //         error: function (data) {
-  //             console.log(data.responseJSON.errors);
-  //             var errorMassage = '';
-  //             $.each(data.responseJSON.errors, function (key, value){
-  //               errorMassage += value + '<br>';  
-  //               });
-  //                $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
-
-  //             $('#saveBtn').html('Save Changes');
-  //         }
-  //     });
-  //   });
-    
-  //   $('body').on('click', '.deleteManager', function () {
-     
-  //       var hr_manager_id = $(this).data("id");
-  //       confirm("Are You sure want to delete !");
-      
-  //       $.ajax({
-  //           type: "DELETE",
-  //           url: "{{ route('manager.store') }}"+'/'+hr_manager_id,
-  //           success: function (data) {
-  //               table.draw();
-  //           },
-  //           error: function (data) {
-  //               console.log('Error:', data);
-  //           }
-  //       });
-  //   });
-     
-  // });
+  
 });
 </script>

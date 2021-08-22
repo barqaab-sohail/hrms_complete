@@ -76,7 +76,7 @@ $('#spcModalFrom').on('submit', function(event){
                       $("#speciality_name").empty();
                       $("#speciality_name").append('<option value="">Select Speciality</option>');
                       $.each(data.specializations, function(key,value){
-                                  //console.log(key+'-'+value);
+                        
                                $("#speciality_name").append('<option value="'+key+'">'+value+'</option>');
                       });
                       $('#speciality_name').chosen('destroy');

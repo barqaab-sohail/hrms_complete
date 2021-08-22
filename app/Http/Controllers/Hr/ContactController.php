@@ -17,7 +17,12 @@ use DB;
 
 class ContactController extends Controller
 {
-    
+    public function __construct()
+    {
+        // $this->middleware('EditContactPermission')->only('update', 'store','create','edit');
+    }
+
+
     public function create(Request $request){
 
     	$countries = Country::all();

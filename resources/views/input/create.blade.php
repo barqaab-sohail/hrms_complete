@@ -145,7 +145,7 @@
                         '</td><td><form id=deleteForm'+key+' action='+"{{route('input.destroy','')}}"+
                         '/'+res['hr_input'][key]['id']+' method="POST"><a class="btn btn-primary"href='
                           +editUrl+'>Edit</a>@csrf @method("DELETE")<button type="submit" class="btn btn-danger">Delete</button></form></td></tr>');  
-                            //console.log(val['first_name']);
+                           
                     }); 
                   }
              }
@@ -181,7 +181,7 @@
                     $('#inputTable tr').each(function(i) {
                       $(this).children('td:first-child').text(i);
                     });
-                   // console.log(tr);
+                   
                   }     
              }
 

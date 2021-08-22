@@ -69,7 +69,6 @@ $(document).ready(function() {
 
 	 $('a[id^=edit]').click(function (e){
         e.preventDefault();
-        console.log('edit');
         var url = $(this).attr('href');
         getAjaxData(url);
    

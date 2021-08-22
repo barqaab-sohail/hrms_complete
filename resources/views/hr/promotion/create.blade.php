@@ -210,7 +210,7 @@ $(document).ready(function(){
        $("#formPromotion").submit(function(e) { 
             e.preventDefault();
             var url = $(this).attr('action');
-            console.log('OK');
+            
            
             $('.fa-spinner').show(); 
             submitForm(this, url,1);

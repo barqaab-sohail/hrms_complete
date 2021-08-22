@@ -147,7 +147,7 @@ $(document).ready(function() {
          
           },
           error: function (data) {
-              console.log(data.responseJSON.errors);
+             
               var errorMassage = '';
               $.each(data.responseJSON.errors, function (key, value){
                 errorMassage += value + '<br>';  
@@ -171,7 +171,7 @@ $(document).ready(function() {
                 table.draw();
             },
             error: function (data) {
-                console.log('Error:', data);
+                
             }
         });
     });

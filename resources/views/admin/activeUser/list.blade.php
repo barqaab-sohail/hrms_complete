@@ -67,10 +67,9 @@
 	<script>
         $(document).ready(function() {
         	$('#logoutAll').click(function (e){
-        		console.log('click');
+        		
         		e.preventDefault();
         		var url ="{{route('logout.all')}}";
-        		console.log(url);
         		getAjaxMessage(url);
 
         	});
@@ -80,7 +79,6 @@
         		        		
         		var url = $(this).attr('action');
         		e.preventDefault();
-        		console.log(url);
         		getAjaxMessage(url);
 
         	});

@@ -39,7 +39,6 @@ $(document).ready(function() {
       
     // prevent default call from function formFunctions()
 	 	var url = "{{route('submission.update',$data->id)}}";
-   		console.log('Submit');
 		$('.fa-spinner').show();
 	   	submitForm(this, url);
 	}); //end submit
@@ -52,7 +51,6 @@ $(document).ready(function() {
 		var url = $(this).attr('href');
 		var id = $(this).attr('id');
 		e.preventDefault();
-		console.log('get');
 		$.ajax({
            url:url,
            method:"GET",

@@ -66,7 +66,6 @@ $(document).ready(function(){
 	$('select').change(function(){	
 		$(this).removeClass('searchSelect');
   		$('.searchSelect').each(function () {
-  			//console.log(this.id)
         	$(this).val('').select2('val', 'All');
     	});
     	$(this).addClass('searchSelect');

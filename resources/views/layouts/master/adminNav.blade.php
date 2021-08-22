@@ -24,14 +24,13 @@
 <!-- HR -->               
                 <li class="{{Request::is('hrms/employee*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fas fa-user"></i><span class="hide-menu">Human Resource</span></a>
                     <ul aria-expanded="false" class="collapse">
+                    @can('hr user data') 
                     <li><a  class="{{Request::is('hrms/employee/user/data')?'active':''}}" href="{{route('user.data',Auth::User()->hrEmployee->id)}}">User Data</a></li>
+                    @endcan
                     @can('hr active employees') 
                         <!-- <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>
                       
                         <li><a  class="{{Request::is('hrms/employee/allEmployeeList')?'active':''}}" href="{{route('employee.allEmployeeList')}}">All Employees</a></li> -->
-                        <li><a  class="{{Request::is('hrms/employee/manager/hodDetail')?'active':''}}" href="{{route('hod.hodDetail')}}">HOD Detail</a></li>
-
-
                         
                         <li><a  class="{{Request::is('hrms/employee/search')?'active':''}}" href="{{route('employee.search')}}">Search Employee</a></li>
 

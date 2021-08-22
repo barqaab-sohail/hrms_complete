@@ -31,83 +31,7 @@ use DataTables;
 
 class EmployeeController extends Controller
 {
-    // public function insert(){
-
-    //         $number=1;
-    //         $str_to_insert=0;
-    //         $pos=4;
-
-
-    // $employees = HrEmployee::where('hr_status_id',1)->get();
-    // foreach($employees as $employee){
-            
-    //     if($employee->employee_no){
-    //         $length = strlen($employee->employee_no);
-
-    //         if ($length == 6){
-    //             $newstr = substr_replace($employee->employee_no, $str_to_insert, $pos, 0);
-    //             echo $employee->id.'-'.$newstr.'-'.$employee->employee_no;
-    //             echo '<br>';
-    //             $number = $number+1;
-
-    //             $employee->employee_no = $newstr;
-    //             $employee->save();
-    //         }
-    //     }
-    // }
-        
-       
-    // foreach ($employees as $employee){
-    //     if($employee->hrAppointment){
-    //         $input['hr_employee_id'] = $employee->id;  
-    //         $input['pr_detail_id']= $employee->hrAppointment->pr_detail_id;
-    //         $input['hr_letter_type_id']= $employee->hrAppointment->hr_letter_type_id;
-    //         $input['hr_manager_id']= $employee->hrAppointment->hr_manager_id;
-    //         $input['hr_designation_id']= $employee->hrAppointment->hr_designation_id;
-    //         $input['hr_department_id']= $employee->hrAppointment->hr_department_id;
-    //         $input['hr_salary_id']= $employee->hrAppointment->hr_salary_id;
-    //         $input['office_id']= $employee->hrAppointment->office_id;
-    //         $input['reference_no']= $employee->hrAppointment->reference_no;
-    //         $input['joining_date']= $employee->hrAppointment->joining_date;
-    //         $input['expiry_date']= $employee->hrAppointment->expiry_date;
-    //         $input['hr_grade_id']= $employee->hrAppointment->hr_grade_id;
-    //         $input['hr_category_id']= $employee->hrAppointment->hr_category_id;
-    //         $input['hr_employee_type_id']= $employee->hrAppointment->hr_employee_type_id;
-    //         $input['remakrs']= $employee->hrAppointment->remarks;
-    //         $input['created_at']= $employee->hrAppointment->created_at;
-    //         $input['updated_at']= $employee->hrAppointment->updated_at;
-    //         EmployeeAppointment::create($input);
-
-         
-    //         $input['effective_date'] = $employee->hrAppointment->joining_date;
-    //         $input['hr_designation_id'] = $employee->hrAppointment->hr_designation_id;
-    //         $input['office_id'] = $employee->hrAppointment->office_id;
-    //         $input['hr_category_id'] = $employee->hrAppointment->hr_category_id;
-    //         $input['hr_department_id'] = $employee->hrAppointment->hr_department_id;
-    //         $input['hr_salary_id'] = $employee->hrAppointment->hr_salary_id;
-    //         $input['pr_detail_id'] = $employee->hrAppointment->pr_detail_id;
-    //         $input['hr_grade_id'] = $employee->hrAppointment->hr_grade_id??'';
-
-    //         EmployeeManager::create($input);
-    //         EmployeeDesignation::create($input);
-    //         EmployeeOffice::create($input);
-    //         EmployeeCategory::create($input);
-    //         EmployeeDepartment::create($input);
-    //         EmployeeSalary::create($input);
-    //         EmployeeProject::create($input);
-            
-    //         if($input['hr_grade_id'] !=''){
-    //             EmployeeGrade::create($input);
-    //         }
-    //     }
-        
-    // }
-    //     echo "data Successfully update";
-        
-
-
-    // }
-
+   
 
     public function create(){
         session()->put('hr_employee_id', '');
@@ -145,8 +69,6 @@ class EmployeeController extends Controller
     		$employee = HrEmployee::create($input);
 
     	}); // end transcation
-
-        //return response()->json(['url'=>url('/dashboard')]);
         
     	return response()->json(['url'=> route("employee.edit",$employee),'message' => 'Data Successfully Saved']);
     }
@@ -156,7 +78,6 @@ class EmployeeController extends Controller
         if($request->ajax()){
             $data = HrEmployee::with('employeeDesignation','employeeProject','employeeOffice','employeeAppointment','hrContactMobile')->orderBy('hr_status_id','asc')->get();       
             return DataTables::of($data)
-            ->addIndexColumn()
 
             ->addColumn('full_name',function($data){
                 return $data->first_name . ' '. $data->last_name;
@@ -197,32 +118,6 @@ class EmployeeController extends Controller
             ->make(true);
         }
        return view ('hr.employee.listDataTable');
-
-    	// $data = HrEmployee::with('employeeDesignation','hrContactMobile','employeeAppointment','employeeProject','employeeOffice')
-     //    ->select('id','employee_no','first_name','last_name','cnic','date_of_birth','hr_status_id')
-     //    ->get();
-
-     //    $index = 0; // array index
-     //    $empArray = array();
-
-     //    foreach ($data as $emp){
-     //        $empArray[$index]['id'] = $emp['id'];
-     //        $empArray[$index]['employee_no'] = $emp->employee_no??'';
-     //        $empArray[$index]['first_name'] = $emp->first_name;
-     //        $empArray[$index]['last_name'] = $emp->last_name;
-     //        $empArray[$index]['designation'] = $emp->employeeDesignation->last()->name??'';
-     //        $empArray[$index]['project'] = $emp->employeeProject->last()->name??'';
-     //        $empArray[$index]['office'] = $emp->employeeOffice->last()->name??'';
-     //        $empArray[$index]['date_of_birth'] = \Carbon\Carbon::parse($emp->date_of_birth)->format('M d, Y');
-     //        $empArray[$index]['hr_status_id'] = $emp->hr_status_id;
-     //        $empArray[$index]['cnic'] = $emp->cnic;
-     //        $empArray[$index]['joining_date'] = \Carbon\Carbon::parse($emp->employeeAppointment->joining_date??'')->format('M d, Y');
-     //        $empArray[$index]['mobile'] = $emp->hrContactMobile->mobile??'';
-     //        $index++;
-     //    }
-
-     //    $employees = collect($empArray);
-    	// return view ('hr.employee.list',compact('employees'));
     }
 
     public function activeEmployeesList(){

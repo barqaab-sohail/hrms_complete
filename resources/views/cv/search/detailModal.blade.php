@@ -48,7 +48,6 @@
 $('button[name=edit]').click(function(){ 
   var id = $(this).attr('id');
   var url = "{{route('cv.getData')}}"+"/"+id;
-  console.log(url);
 
      $.ajax({
      url:url,
