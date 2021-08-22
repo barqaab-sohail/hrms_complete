@@ -41,6 +41,7 @@ $(document).ready(function() {
 	$('#myTable').DataTable({
   		processing: true,
   		serverSide: true,
+  		order: [[ 5, 'desc' ]],
 	  	ajax: {
 	   	url: "{{ route('employee.index') }}",
 	  	},
@@ -50,7 +51,7 @@ $(document).ready(function() {
 		   {data: 'designation', name: 'designation'},
 		   {data: 'project', name: 'project'},
 		   {data: 'date_of_birth', name: 'date_of_birth'},
-		   {data: 'hr_status_id', name: 'status',orderable: true},
+		   {data: 'hr_status_id', name: 'status', orderable: true},
 		   {data: 'cnic', name: 'cnic'},
 		   {data: 'date_of_joining', name: 'date_of_joining'},
 		   {data: 'mobile', name: 'mobile'},
