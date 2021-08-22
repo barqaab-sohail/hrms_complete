@@ -118,6 +118,7 @@ class EmployeeController extends Controller
             ->make(true);
         }
        return view ('hr.employee.listDataTable');
+       
     }
 
     public function activeEmployeesList(){

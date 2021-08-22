@@ -12,7 +12,7 @@
         
           <div class="table-responsive">
 
-                <table id="alertDetail" class="table-primary table-bordered table-striped" width="100%" cellspacing="0">
+                <table id="alertDetail" class="table table-bordered table-striped" width="100%" cellspacing="0">
                     <thead >
                     
                       <tr >
