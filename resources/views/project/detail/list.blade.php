@@ -31,7 +31,6 @@
 				    </table>
 			    </div>
 			</form>
-	
 		</div>
 
 
@@ -46,6 +45,9 @@
 				<tr>
 					<th>Project Name</th>
 					<th>Project No</th>
+					<th>Client Name</th>
+					<th>Commencement Date</th>
+					<th>Status</th>
 					<th class="text-center"style="width:5%">Edit</th> 
 					@role('Super Admin')
 					<th class="text-center"style="width:5%">Delete</th>
@@ -55,24 +57,24 @@
 				<tbody>
 					
 					@if(Auth::User()->can('pr edit power'))
-							@php
-							$projects = $projects->merge($powerProjects);
-							@endphp
+						@php
+						$projects = $projects->merge($powerProjects);
+						@endphp
 					@endif	
 					@if(Auth::User()->can('pr edit water'))
-							@php
-							$projects = $projects->merge($waterProjects);
-							@endphp				
+						@php
+						$projects = $projects->merge($waterProjects);
+						@endphp				
 					@endif
-
-
 
 					@foreach($projects as $project)
 					
-
 						<tr>
 							<td>{{$project->name}}</td>
 							<td>{{$project->project_no}}</td>
+							<td>{{$project->client->name??''}}</td>
+							<td>{{$project->formatted_commencement_date}}</td>
+							<td>{{$project->prRole->name??''}}</td>
 														
 							<td class="text-center">
 								<a class="btn btn-info btn-sm" href="{{route('project.edit',$project->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
