@@ -12,14 +12,13 @@
             <table id="myDataTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
                 <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>Employee Id</th>
                     <th>Employee Name</th>
                     <th>Designation/Position</th>
                     <th>Date of Birth</th>
                     <th>Status</th>
                     <th>CNIC</th>
                     <th>Date of Joining</th>
-                    <th>Employee No</th>
                     <th>Mobile</th>
                     
                     <th class="text-center"style="width:5%">Edit</th> 
@@ -30,14 +29,13 @@
                 <tbody>
                     @foreach($result as $employee)
                         <tr>
-                            <td>{{$employee->id}}</td>
+                            <td>{{$employee->employee_no??''}}</td>
                             <td>{{$employee->first_name}} {{$employee->last_name}}</td>
                             <td>{{$employee->employeeDesignation->last()->name??''}}</td>
-                            <td>{{$employee->date_of_birth}}</td>
+                            <td>{{$employee->formatted_date_of_birth}}</td>
                             <td>{{$employee->hr_status_id}}</td>
                             <td>{{$employee->cnic}}</td>
-                            <td>{{isset($employee->employeeAppointment->joining_date)?date('d-M-Y', strtotime($employee->employeeAppointment->joining_date)):''}}</td>
-                            <td>{{$employee->employee_no??''}}</td>
+                            <td>{{isset($employee->employeeAppointment->joining_date)?date('M d, Y', strtotime($employee->employeeAppointment->joining_date)):''}}</td>
                             <td>{{$employee->hrContactMobile->mobile??''}}</td>
                             
                             

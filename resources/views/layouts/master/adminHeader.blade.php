@@ -35,7 +35,6 @@
             <!-- User profile and Notification Right Side -->
             <!-- ============================================================== -->
             <ul class="navbar-nav my-lg-0">
-                @can('Super Admin')
 
                 <!-- Message -->
                 <li class="nav-item dropdown"> 
@@ -52,18 +51,17 @@
                 <!-- Notification -->
                 <li class="nav-item dropdown"> 
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark"  href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-bell" ></i><span class="badge badge-pill badge-danger">4</span>
+                    <i class="fas fa-bell" ></i><span class="badge badge-pill badge-danger">{{appointmentExpiryTotal()}}</span>
                     </a>
                      <div class="dropdown-menu dropdown-menu-right scale-up">
                         <ul class="dropdown-user">
-                            <li><a href=""  class="link" data-toggle="tooltip" title="Notification List"><i class="fa fa-tv"></i>View Notifications</a></li>
+                            <li><a href=""  class="link" data-toggle="tooltip" title="Notification List">{{appointmentExpiryTotal()}} Employees Contract are Expired</a></li>
                             <!-- <li><a href=""  class="link" data-toggle="tooltip" title="Create Notification"><i class="fa fa-bell"></i> Create Notification</a></li>
                             <li><a href=""  class="link" data-toggle="tooltip" title="Send Notification to HR"><i class="fas fa-arrow-right"></i> Send Message to HR</a></li>       -->               
                         </ul>                     
                     </div>                 
                 </li>
 
-                @endcan
                 <!-- Employee Picture -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -88,5 +86,4 @@
             </ul>
         </div>
     </nav>
-    
 </header>

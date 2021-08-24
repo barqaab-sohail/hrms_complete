@@ -41,7 +41,7 @@ class HrEmployee extends Model implements Auditable
 
     public function getFormattedDateOfBirthAttribute()
     {
-        return \Carbon\Carbon::parse($this->date_of_birth)->format('d-M-Y');
+        return \Carbon\Carbon::parse($this->date_of_birth)->format('M d, Y');
     }
 
 
@@ -85,6 +85,17 @@ class HrEmployee extends Model implements Auditable
             'id',   //current model Primary Key of Final Model (it is called foreign key)
             'hr_designation_id'           //Forein Key in Immediate Model of Final Model
         )->orderBy('employee_designations.id', 'asc');
+    }
+
+    public function employeeCategory(){
+        return $this->hasManyThrough(
+            'App\Models\Hr\HrCategory', //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeCategory', //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',              //Forein Key in Immediate Model of This Model
+            'id',                          //Final Model Primary Key
+            'id',   //current model Primary Key of Final Model (it is called foreign key)
+            'hr_category_id'           //Forein Key in Immediate Model of Final Model
+        )->orderBy('employee_categories.id', 'asc');
     }
 
     public function employeeOffice(){

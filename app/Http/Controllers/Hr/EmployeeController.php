@@ -34,11 +34,12 @@ class EmployeeController extends Controller
    
 
     public function create(){
+
         session()->put('hr_employee_id', '');
     	$genders = Gender::all();
     	$maritalStatuses = MaritalStatus::all();
     	$religions = Religion::all();
-
+       
         // check variable size
         // $data = HrEmployee::where('hr_status_id',1)->take(50)->get();
         // $serializedFoo = serialize($data);
@@ -221,7 +222,7 @@ class EmployeeController extends Controller
         $projects = PrDetail::all();
        
         $managerIds = EmployeeManager::all()->pluck('hr_manager_id')->toArray();
-        $employees = HrEmployee::wherein('id',$managerIds)->get();
+        $employees = HrEmployee::where('hr_status_id',1)->wherein('id',$managerIds)->get();
         return view ('hr.employee.search.search',compact('categories','degrees','designations','projects','employees'));
     }
 

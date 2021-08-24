@@ -21,35 +21,18 @@
 				<tbody>
 					
 					<tr>
-						<td>CNIC Expiry List</td>
-						
-						<td class="text-center">
-							<a class="btn btn-info btn-sm" href="{{route('hrReports.cnicExpiryList')}}"  title="Show"><i class="fas fa-pencil-alt text-white "></i></a>
-						</td>
-																				
+						<td><a href="{{route('hrReports.cnicExpiryList')}}"style="color:black">CNIC Expiry List</a></td>															
 					</tr>
 					<tr>
-						<td>Missing Document List</td>
-						
-						<td class="text-center">
-							<a class="btn btn-info btn-sm" href="{{route('hrReports.missingDocumentList')}}"  title="Show"><i class="fas fa-pencil-alt text-white "></i></a>
-						</td>
+						<td><a href="{{route('hrReports.missingDocumentList')}}" style="color:black">Missing Document List</a></td>
 																				
 					</tr>
 
 					<tr>
-						<td>Search Employee</td>
-						
-						<td class="text-center">
-							<a class="btn btn-info btn-sm" href="{{route('hrReports.searchEmployee')}}"  title="Show"><i class="fas fa-pencil-alt text-white "></i></a>
-						</td>														
+						<td><a href="{{route('hrReports.searchEmployee')}}" style="color:black">Search Employee</a></td>												
 					</tr>
 					<tr>
-						<td>Report_1 (Father Name, CNIC, Degree, Degree Year, DOJ, PEC, Employee No., Contact No.)</td>
-						
-						<td class="text-center">
-							<a class="btn btn-info btn-sm" href="{{route('hrReports.report_1')}}"  title="Show"><i class="fas fa-pencil-alt text-white "></i></a>
-						</td>
+						<td><a href="{{route('hrReports.report_1')}}" style="color:black">Report_1 (Father Name, CNIC, Degree, Degree Year, DOJ, PEC, Employee No., Contact No.)</a></td>
 					</tr>
 				
 				</tbody>
