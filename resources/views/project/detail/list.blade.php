@@ -43,8 +43,8 @@
 			<table id="myTable" class="table table-bordered table-striped"  style="width:100%" >
 				<thead>
 				<tr>
-					<th>Project Name</th>
 					<th>Project No</th>
+					<th>Project Name</th>
 					<th>Client Name</th>
 					<th>Commencement Date</th>
 					<th>Status</th>
@@ -70,8 +70,8 @@
 					@foreach($projects as $project)
 					
 						<tr>
-							<td>{{$project->name}}</td>
 							<td>{{$project->project_no}}</td>
+							<td><a href="{{route('project.edit',$project->id)}}" style="color:grey">{{$project->name}}</a></td>
 							<td>{{$project->client->name??''}}</td>
 							<td>{{$project->formatted_commencement_date}}</td>
 							<td>{{$project->prRole->name??''}}</td>

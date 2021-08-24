@@ -32,8 +32,7 @@
                       
                         <li><a  class="{{Request::is('hrms/employee/allEmployeeList')?'active':''}}" href="{{route('employee.allEmployeeList')}}">All Employees</a></li> -->
                         
-                        <li><a  class="{{Request::is('hrms/employee/search')?'active':''}}" href="{{route('employee.search')}}">Search Employee</a></li>
-
+                       
                         <li><a  class="{{Request::is('hrms/employee/activeEmployeesList')?'active':''}}" href="{{route('employee.activeEmployeesList')}}">Active Employees List</a></li>
                     @endcan
                    
@@ -41,6 +40,7 @@
                         <li><a  class="{{Request::is('hrms/employee/create')?'active':''}}" href="{{route('employee.create')}}">Add Employee</a></li>
                         <li><a  class="{{Request::is('hrms/employee/alertList')?'active':''}}" href="{{route('hrAlert.list')}}">Alerts</a></li>
                         <li><a  class="{{Request::is('hrms/employee')?'active':''}}" href="{{route('employee.index')}}">List of Employees</a></li>
+                        <li><a  class="{{Request::is('hrms/employee/search')?'active':''}}" href="{{route('employee.search')}}">Search</a></li>
                     @endcanany
                       
                     </ul>
@@ -84,9 +84,7 @@
                     <ul aria-expanded="false" class="collapse">  
                         <li><a class="{{Request::is('hrms/cvData/cv/create')?'active':''}}" href="{{route('cv.create')}}">Add CV</a></li>
                         <li><a class="{{Request::is('hrms/cvData/cv')?'active':''}}" href="{{route('cv.index')}}">List of CVs</a></li>
-                         @can('Super Admin')
                          <li><a class="{{Request::is('hrms/cvData/search')?'active':''}}" href="{{route('cv.search')}}">Search</a></li>
-                         @endcan
                         
                     </ul>
                 </li>
@@ -103,10 +101,7 @@
                         <li><a  class="{{Request::is('hrms/project/create')?'active':''}}" href="{{route('project.create')}}">Add Project</a></li>
                         <li><a  class="{{Request::is('hrms/project')?'active':''}}" href="{{route('project.index')}}">List of Projects</a></li>
 
-                        <li><a  class="{{Request::is('hrms/project/search')?'active':''}}" href="{{route('project.search')}}">Search</a></li>
-
-                        <li><a  class="{{Request::is('hrms/projectCode')?'active':''}}" href="{{route('projectCode.create')}}">Project Code Calculator</a></li>
-                   
+                        <li><a  class="{{Request::is('hrms/project/search')?'active':''}}" href="{{route('project.search')}}">Search Documentation</a></li>                  
                                                
                     </ul>
                 </li>

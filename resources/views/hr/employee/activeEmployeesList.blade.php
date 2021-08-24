@@ -12,7 +12,7 @@
 			<table id="myTable" class="table table-bordered table-striped"  style="width:100%" >
 				<thead>
 				<tr>
-					<th>Id</th>
+					<th>Employee Id</th>
 					<th>Employee Name</th>
 					<th>Designation/Position</th>
 					<th>Category</th>
@@ -30,10 +30,10 @@
 				<tbody>
 					@foreach($employees as $employee)
 						<tr>
-							<td>{{$employee->id}}</td>
+							<td>{{$employee->employee_no}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 							<td>{{$employee->employeeDesignation->last()->name??''}}</td>
-							<td>{{$employee->employeeAppointment->hr_category_id??''}}</td>
+							<td>{{$employee->employeeCategory->last()->name??''}}</td>
 							<td>{{$employee->cnic}}</td>
 							<td>{{employeeFullName($employee->hod->hr_manager_id??'')}}</td>
 							<td>{{$employee->employeeAppointment->formatted_joining_date??''}}</td>

@@ -4,7 +4,7 @@
           
             
             <a type="submit" role="button" id="addProject" href="{{route('project.edit',session('pr_detail_id'))}}" class="btn btn-info" {{Request::is('hrms/project/*/edit')?'style=background-color:#737373':''}}>Project Detail</a>
-            <a type="submit" role="button" id="addDocument" href="{{route('projectDocument.create')}}" class="btn btn-info" {Request::is('hrms/projectDocument/create')?'style=background-color:#737373':''}}>Documents</a>
+            <a type="submit" role="button" id="addDocument" href="{{route('projectDocument.create')}}" class="btn btn-info" {Request::is('hrms/projectDocument/create')?'style=background-color:#737373':''}}>Documentation</a>
             
             
             @can('Super Admin')

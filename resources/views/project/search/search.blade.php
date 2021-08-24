@@ -39,7 +39,7 @@
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
 		                    	<label class="control-label">Date</label>
-		                    	<input type="text" name="document_date"  value="{{ old('document_date') }}" class="form-control date_input" data-validation="required" >
+		                    	<input type="text" name="document_date"  value="{{ old('document_date') }}" class="form-control date_input" data-validation="required"  autocomplete="off">
 
 		                    </div>
 		                </div>
