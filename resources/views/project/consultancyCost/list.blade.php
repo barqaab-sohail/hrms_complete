@@ -40,7 +40,7 @@
 						</td>
 						
 						<td class="text-center">
-						 <a class="btn btn-info btn-sm" id="editConsultancyCost" href="{{route('projectConsultancyCost.edit',$prConsultancyCost->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
+						 <a class="btn btn-success btn-sm" id="editConsultancyCost" href="{{route('projectConsultancyCost.edit',$prConsultancyCost->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 						 </td>
 						
 						 <td class="text-center">

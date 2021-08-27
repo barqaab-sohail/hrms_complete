@@ -1,7 +1,7 @@
         
     
     <div class="card-body">
-            <button type="button" id="addButton" class="btn btn-info float-right">Add Consultancy Cost</button>
+            <button type="button" id="addButton" class="btn btn-success float-right">Add Consultancy Cost</button>
 
         <h3 class="box-title">Consultancy Cost</h3>
         

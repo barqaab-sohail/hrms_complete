@@ -55,7 +55,7 @@
                     </a>
                      <div class="dropdown-menu dropdown-menu-right scale-up">
                         <ul class="dropdown-user">
-                            <li><a href=""  class="link" data-toggle="tooltip" title="Notification List">{{appointmentExpiryTotal()}} Employees Contract are Expired</a></li>
+                            <li><a  href="{{route('hrAlert.list')}}"  class="link" data-toggle="tooltip" title="Notification List">{{appointmentExpiryTotal()}} Employees Contract are Expired</a></li>
                             <!-- <li><a href=""  class="link" data-toggle="tooltip" title="Create Notification"><i class="fa fa-bell"></i> Create Notification</a></li>
                             <li><a href=""  class="link" data-toggle="tooltip" title="Send Notification to HR"><i class="fas fa-arrow-right"></i> Send Message to HR</a></li>       -->               
                         </ul>                     

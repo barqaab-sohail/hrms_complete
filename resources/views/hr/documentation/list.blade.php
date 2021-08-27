@@ -35,7 +35,7 @@
 						
 						@can('hr edit documentation')
 						<td class="text-center">
-						 <a class="btn btn-info btn-sm" id="editDocument" @if (empty($documentId->hrDocumentationProject->id??'')) href="{{route('documentation.edit',$documentId->id)}}"@else href="" @endif data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white " disabled></i></a>
+						 <a class="btn btn-success btn-sm" id="editDocument" @if (empty($documentId->hrDocumentationProject->id??'')) href="{{route('documentation.edit',$documentId->id)}}"@else href="" @endif data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white " disabled></i></a>
 						 </td>
 						 @endcan
 						 
@@ -71,6 +71,7 @@
 	      			scrollX:        true,
 	        		scrollCollapse: true,
 	        		paging:         false,
+	        		
 	        	// 	columnDefs: [
        			// 		{ type: 'date-dd-mmm-yyyy', targets: 1 }
      					// ],

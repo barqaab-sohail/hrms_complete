@@ -38,7 +38,7 @@
 								</td>
 
 								<td class="text-center">
-								 <a class="btn btn-info btn-sm" id="editTask={{$task->id}}" href="{{route('task.edit',$task->id)}}" data-toggle="modal" data-target="#editTaskModal"  data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
+								 <a class="btn btn-success btn-sm" id="editTask={{$task->id}}" href="{{route('task.edit',$task->id)}}" data-toggle="modal" data-target="#editTaskModal"  data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 								</td>
 								
 								 

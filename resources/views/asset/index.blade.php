@@ -36,7 +36,7 @@
 							<td><img src="data:image/png;base64,{{DNS1D::getBarcodePNG("$asset->asset_code", 'C39+',1,33,array(0,0,0), true)}}" alt="barcode" /></td>
 							<td><img src="{{asset(isset($asset->asDocumentation->file_name)? 'storage/'.$asset->asDocumentation->path.$asset->asDocumentation->file_name: 'Massets/images/document.png') }}" class="img-round picture-container picture-src"  id="ViewIMG{{$asset->id}}"  title="" width="50" ></td>	
 							<td class="text-center">
-								<a class="btn btn-info btn-sm" href="{{route('asset.edit',$asset->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+								<a class="btn btn-success btn-sm" href="{{route('asset.edit',$asset->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 							</td>
 							<td class="text-center">
 								 @role('Super Admin')

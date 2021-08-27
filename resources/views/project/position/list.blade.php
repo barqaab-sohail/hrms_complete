@@ -28,7 +28,7 @@
 								<td>{{$prPosition->total_mm}}</td>
 
 								 <td class="text-center">
-								 <a class="btn btn-info btn-sm" id="editPosition" href="{{route('projectPosition.edit',$prPosition->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
+								 <a class="btn btn-success btn-sm" id="editPosition" href="{{route('projectPosition.edit',$prPosition->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 								 </td>
 								 <td class="text-center">
 								

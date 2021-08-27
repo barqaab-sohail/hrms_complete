@@ -42,7 +42,7 @@
 							
 							
 							<td class="text-center">
-								<a class="btn btn-info btn-sm" href="{{route('employee.edit',$employee->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+								<a class="btn btn-success btn-sm" href="{{route('employee.edit',$employee->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 							</td>
 							<td class="text-center">
 								 @role('Super Admin')
@@ -77,24 +77,24 @@ $(document).ready(function() {
                     {
                         extend: 'copyHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3,4,5,6,7,8]
                         }
                     },
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                           columns: [ 0, 1, 2,3,4,5,6,7,8]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3,4,5,6,7,8]
                         }
                     }, {
                         extend: 'csvHtml5',
                         exportOptions: {
-                            columns: [ 0, 1, 2,3,4,5,6,7]
+                            columns: [ 0, 1, 2,3,4,5,6,7,8]
                         }
                     },
                 ],

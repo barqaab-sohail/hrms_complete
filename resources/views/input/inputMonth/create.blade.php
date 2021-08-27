@@ -86,7 +86,7 @@
 						        		<td>{{$year->month}}-{{$year->year}}</td>
 						        		<td>{{$year->is_lock}}</td>
 						        		<td class="text-center">
-								 			<a class="btn btn-info btn-sm" id="editMonthInput{{$year->id}}" url= "{{route('inputMonth.edit',$year->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
+								 			<a class="btn btn-success btn-sm" id="editMonthInput{{$year->id}}" url= "{{route('inputMonth.edit',$year->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 								 		</td>
 						        	<td class="text-center">
 								 			<form id="deleteInputMonth{{$year->id}}" action="{{route('inputMonth.destroy',$year->id)}}" method="POST">
@@ -147,7 +147,7 @@
                	$("#inputTable tbody:last-child").append(
                		'<tr><td>'+res.data['month']+'-'+res.data['year']+
                         '</td><td>'+res.data['is_lock']+
-                        '</td><td class="text-center"><a class="btn btn-info btn-sm" id=editMonthInput'+res.data['id']+'url= data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>'+
+                        '</td><td class="text-center"><a class="btn btn-success btn-sm" id=editMonthInput'+res.data['id']+'url= data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>'+
                         '</td><td class="text-center"><form id="deleteInputMonth+" action="+" method="POST">@method("DELETE")@csrf<button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"><i class="fas fa-trash"></i></button></form></td></tr>'); 
 
                 }

@@ -20,7 +20,7 @@
 					        <input type="file" name="select_file" />
 					       	</td>
 					       	<td width="30%" align="left">
-					        <input type="submit" name="upload" class="btn btn-info" value="Upload">
+					        <input type="submit" name="upload" class="btn btn-success" value="Upload">
 					       	</td>
 					    </tr>
 					    <tr>
@@ -47,7 +47,7 @@
 					<th>Project Name</th>
 					<th>Client Name</th>
 					<th>Commencement Date</th>
-					<th>Status</th>
+					<th>JV/Independent</th>
 					<th class="text-center"style="width:5%">Edit</th> 
 					@role('Super Admin')
 					<th class="text-center"style="width:5%">Delete</th>
@@ -77,7 +77,7 @@
 							<td>{{$project->prRole->name??''}}</td>
 														
 							<td class="text-center">
-								<a class="btn btn-info btn-sm" href="{{route('project.edit',$project->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+								<a class="btn btn-success btn-sm" href="{{route('project.edit',$project->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 							</td>
 							@role('Super Admin')
 							<td class="text-center">

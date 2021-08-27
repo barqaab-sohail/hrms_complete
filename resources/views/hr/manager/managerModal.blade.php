@@ -1,6 +1,6 @@
 
 <div class="card-body">
-  <button type="button" class="btn btn-info"  id ="createNewManager" data-toggle="modal" >Add New HOD</button>
+  <button type="button" class="btn btn-success"  id ="createNewManager" data-toggle="modal" >Add New HOD</button>
   <br>
   <table class="table table-bordered data-table">
     <thead>
@@ -17,7 +17,7 @@
             <td>{{$manager->hrEmployee->first_name}} {{$manager->hrEmployee->last_name}}</td>
             <td>{{$manager->effective_date}}</td>
             <td>
-                <a class="btn btn-info btn-sm" id="editManager{{$manager->id}}"href="{{route('manager.edit',$manager->id)}}"  title="Edit">Edit</a>
+                <a class="btn btn-success btn-sm" id="editManager{{$manager->id}}"href="{{route('manager.edit',$manager->id)}}"  title="Edit">Edit</a>
             </td>
             <td>
                  @role('Super Admin')
@@ -115,7 +115,7 @@ $(document).ready(function() {
 
                       $(".data-table tbody").append('<tr><td>'+data[0]['hr_employee']['first_name']+' '+data[0]['hr_employee']['last_name']+
                         '</td><td>'+data[0]['effective_date']+
-                        '</td><td>'+'<button class="btn btn-info btn-sm" id="editManager'+data[0]['id']+' href='+editUrl+ ' title="Edit">Edit</button>'
+                        '</td><td>'+'<button class="btn btn-success btn-sm" id="editManager'+data[0]['id']+' href='+editUrl+ ' title="Edit">Edit</button>'
                         +'</td><td><form id=formDeleteManager'+data[0]['id']+' action='+deleteAction+
                         ' method="POST">@csrf<button type="submit" onclick="return confirm(\'Are you Sure to Delete\')" class="btn btn-danger btn-sm" href= data-toggle="tooltip" data-original-title="Delete">Delete</button></form></td></tr>'); 
              
