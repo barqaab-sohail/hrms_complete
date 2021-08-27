@@ -56,7 +56,7 @@
 							<td>{{$employee->hrEmergency->mobile??''}}</td>
 							<td>{{$employee->hrBloodGroup->name??''}}</td>
 							<td class="text-center">
-								<a class="btn btn-info btn-sm" href="{{route('employee.edit',$employee->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+								<a class="btn btn-success btn-sm" href="{{route('employee.edit',$employee->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 							</td>
 
 														

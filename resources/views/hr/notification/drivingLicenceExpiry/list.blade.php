@@ -39,7 +39,7 @@
 								<td>{{date('d-M-Y',strtotime($notification->created_at))}}</td>
 								<td>
 								
-								 <a class="btn btn-info btn-sm" href="{{route('showNotification',['id'=>$notification->id])}}" data-toggle="tooltip" data-original-title="View"> <i class="fas fa-tv"></i></a>
+								 <a class="btn btn-success btn-sm" href="{{route('showNotification',['id'=>$notification->id])}}" data-toggle="tooltip" data-original-title="View"> <i class="fas fa-tv"></i></a>
 								 @if($notification->read_at==NULL)
 								 <span class="badge badge-danger">New</span>
 								 @endif

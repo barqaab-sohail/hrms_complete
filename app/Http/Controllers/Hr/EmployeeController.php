@@ -81,7 +81,10 @@ class EmployeeController extends Controller
             return DataTables::of($data)
 
             ->addColumn('full_name',function($data){
-                return $data->first_name . ' '. $data->last_name;
+                $full_name = '<a href="'.route('employee.edit',$data->id).'" style="color:grey">'.$data->first_name . ' '. $data->last_name.'</a>';
+
+                return $full_name;
+                //return $data->first_name . ' '. $data->last_name;
             })
             ->addColumn('designation',function($data){
                 return $data->employeeDesignation->last()->name??'';
@@ -89,10 +92,16 @@ class EmployeeController extends Controller
             ->addColumn('project',function($data){
                 
                $project = isset($data->employeeProject->last()->name)?$data->employeeProject->last()->name:'';
-               if($project =='overhead'){
-                return $data->employeeOffice->last()->name??'';
+               if($project==''){
+                    return '';
+               }
+               else if($project =='overhead'){
+                    return $data->employeeOffice->last()->name??'';
+
                 }else{
-                     return $data->employeeProject->last()->name??'';
+                    $link = '<a href="'.route('project.edit',$data->employeeProject->last()->id??'').'" style="color:grey">'.$data->employeeProject->last()->name??''.'</';
+                     return $link;
+                    //return $data->employeeProject->last()->name??'';
                 }
 
             })

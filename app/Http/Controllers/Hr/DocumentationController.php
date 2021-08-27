@@ -19,7 +19,7 @@ class DocumentationController extends Controller
     public function create(Request $request){
 
 
-        $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->get();
+        $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->orderBy('document_date','desc')->get();
 
         // $order = array('Appointment Letter', 'HR Form', 'CNIC Front', 'CNIC Back','Original CV','Picture','Educational Documents','Experience Certificates');
 

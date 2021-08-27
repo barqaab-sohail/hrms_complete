@@ -39,7 +39,12 @@
 							<tr>
 								<td>{{$cv->id}}</td>
 								<td>{{$cv->full_name}}</td>
-								<td>{{$cv->cvEducation->implode('degree_name',' + ')??''}}</td>
+								<td>
+								@foreach ($cv->cvEducation as $education)
+									{{$education->degree_name??''}}
+									<br>
+								@endforeach
+								</td>
 								
 								
 								<td>{{$cv->cvPhone->first()->phone??''}}</td>
@@ -51,7 +56,7 @@
 
 								@can('cv edit record')
 								<td class="text-center">
-									<a class="btn btn-info btn-sm" href="{{route('cv.edit',$cv->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+									<a class="btn btn-success btn-sm" href="{{route('cv.edit',$cv->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 								</td>
 								@endcan
 								@can('cv delete record')

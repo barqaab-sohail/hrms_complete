@@ -27,7 +27,7 @@
 								<td>{{$permissionId->name}}</td>
 							
 								<td>
-								 <a class="btn btn-info btn-sm" href="{{route('permission.edit',$permissionId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
+								 <a class="btn btn-success btn-sm" href="{{route('permission.edit',$permissionId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 								 </td>
 								  
 								 <td>

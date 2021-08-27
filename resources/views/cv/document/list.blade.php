@@ -37,7 +37,7 @@
 						@if($documentId->document_name != 'Original CV')
 						<td class="text-center">
 						
-						 <a class="btn btn-info btn-sm" id="editDocument" href="{{route('cvDocument.edit',$documentId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
+						 <a class="btn btn-success btn-sm" id="editDocument" href="{{route('cvDocument.edit',$documentId->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 						
 						 </td>
 						

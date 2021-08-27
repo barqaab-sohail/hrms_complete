@@ -36,7 +36,7 @@
 							
 							
 							<td class="text-center">
-								<a class="btn btn-info btn-sm" id="editContact{{$contact->id}}" href="{{route('selfContact.edit',$contact->id)}}" title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+								<a class="btn btn-success btn-sm" id="editContact{{$contact->id}}" href="{{route('selfContact.edit',$contact->id)}}" title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
 							</td>
 							<td class="text-center">
 								

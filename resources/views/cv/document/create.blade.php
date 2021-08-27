@@ -1,6 +1,6 @@
 @can('cv edit record')
 <div style="margin-top:10px; margin-right: 10px;">
-    <button type="button"  id ="hideButton"  class="btn btn-info float-right">Add Document</button>
+    <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Document</button>
 </div>
 @endcan
 

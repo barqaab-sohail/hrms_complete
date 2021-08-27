@@ -201,7 +201,7 @@
                                                     </select>
                                                     <br>
 					                                @can('cv edit record')
-					                                <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#eduModal"><i class="fas fa-plus"></i>
+					                                <button type="button" class="btn btn-sm btn-success"  data-toggle="modal" data-target="#eduModal"><i class="fas fa-plus"></i>
 		          									</button>
 		          									@endcan 
 
@@ -264,7 +264,7 @@
                                                       
                                                     </select>
                                                     @can('cv edit record')
-					                                <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#spcModal"><i class="fas fa-plus"></i>
+					                                <button type="button" class="btn btn-sm btn-success"  data-toggle="modal" data-target="#spcModal"><i class="fas fa-plus"></i>
 		          									</button>
 		          									@endcan 
 
@@ -290,7 +290,7 @@
                                                       
                                                     </select>
                                                     @can('cv edit record')
-					                                <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#disModal"><i class="fas fa-plus"></i>
+					                                <button type="button" class="btn btn-sm btn-success"  data-toggle="modal" data-target="#disModal"><i class="fas fa-plus"></i>
 		          									</button>
 		          									@endcan 
 		                                        

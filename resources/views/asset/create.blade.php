@@ -15,7 +15,7 @@
 			<div class="row">
 		        <div class="col-lg-12">
 		            <div style="margin-top:10px; margin-right: 10px;">
-		                <button type="button" onclick="window.location.href='{{route('asset.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">List of Asset</button>
+		                <button type="button" onclick="window.location.href='{{route('asset.index')}}'" class="btn btn-success float-right" data-toggle="tooltip" title="Back to List">List of Asset</button>
 		            </div>
 		            <div class="card-body">
 		                <form id= "formAsset" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
@@ -39,7 +39,7 @@
                                                     @endforeach     
                                               </select>
                                               @can('asset add class')
-                                              <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#assetClassModal"><i class="fas fa-plus"></i>
+                                              <button type="button" class="btn btn-sm btn-success"  data-toggle="modal" data-target="#assetClassModal"><i class="fas fa-plus"></i>
                                               </button>
                                               @endcan 
 												
@@ -54,7 +54,7 @@
 	                                           	<select  name="as_sub_class_id"  id="as_sub_class_id"class="form-control selectTwo" data-validation="required" data-placeholder="First Select Class">  
                                               </select>
                                               @can('asset add class')
-                                              <button type="button" class="btn btn-sm btn-info"  data-toggle="modal" data-target="#assetSubClassModal"><i class="fas fa-plus"></i>
+                                              <button type="button" class="btn btn-sm btn-success"  data-toggle="modal" data-target="#assetSubClassModal"><i class="fas fa-plus"></i>
                                               </button>
                                               @endcan 
 		                                    </div>

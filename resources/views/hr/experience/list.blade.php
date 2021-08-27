@@ -33,7 +33,7 @@
 								<td>{{$experience->to}}</td>
 								@can('hr edit education')
 								<td class="text-center">
-								 <a class="btn btn-info btn-sm" id="editExperience" href="{{route('experience.edit',$experience->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
+								 <a class="btn btn-success btn-sm" id="editExperience" href="{{route('experience.edit',$experience->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
 								 </td>
 								@endcan
 								 

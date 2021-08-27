@@ -4,8 +4,8 @@
           
           
 
-            <a type="submit" role="button" id="addCv" href="{{route('cv.edit',session('cv_detail_id'))}}" class="btn btn-info" {{Request::is('hrms/cvData/cv/*/edit')?'style=background-color:#737373':''}}>CV Detail</a>
-            <a type="submit" role="button" id="addDocument" href="{{route('cvDocument.create')}}" class="btn btn-info" {Request::is('hrms/cvData/cvDocument/create')?'style=background-color:#737373':''}}>Documents</a>
+            <a type="submit" role="button" id="addCv" href="{{route('cv.edit',session('cv_detail_id'))}}" class="btn btn-success" {{Request::is('hrms/cvData/cv/*/edit')?'style=background-color:#737373':''}}>CV Detail</a>
+            <a type="submit" role="button" id="addDocument" href="{{route('cvDocument.create')}}" class="btn btn-success" {Request::is('hrms/cvData/cvDocument/create')?'style=background-color:#737373':''}}>Documents</a>
           
             
             <br>
@@ -13,7 +13,7 @@
            
          <style>
             
-        .btn-info:active { background-color: red; }
+        .btn-success:active { background-color: red; }
             
         </style>
 

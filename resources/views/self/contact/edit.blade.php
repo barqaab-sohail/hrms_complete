@@ -2,7 +2,7 @@
 
 <div class="card card-outline-info ">
 	<div style="margin-top:10px; margin-right: 10px;">
-                <a style="color:white" id ="addContact" href="{{route('selfContact.create')}}"class="btn btn-info float-right">Go to Add Contact Page</a>
+                <a style="color:white" id ="addContact" href="{{route('selfContact.create')}}"class="btn btn-success float-right">Go to Add Contact Page</a>
 	</div>
 
 	<div class="row">

@@ -15,7 +15,7 @@
 			<div class="row">
 		        <div class="col-lg-12">
 		            <div style="margin-top:10px; margin-right: 10px;">
-		                <button type="button" onclick="window.location.href='{{route('submission.index')}}'" class="btn btn-info float-right" data-toggle="tooltip" title="Back to List">List of Submission</button>
+		                <button type="button" onclick="window.location.href='{{route('submission.index')}}'" class="btn btn-success float-right" data-toggle="tooltip" title="Back to List">List of Submission</button>
 		            </div>
 		                 
 		            <div class="card-body">

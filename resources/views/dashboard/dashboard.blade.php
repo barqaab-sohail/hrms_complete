@@ -63,7 +63,7 @@
 	<div class="card">
 		<div class="card-body">
           	<!-- Button trigger modal -->
-          	<button type="button" class="btn btn-info float-right"  data-toggle="modal" data-target="#taskModal"> 
+          	<button type="button" class="btn btn-success float-right"  data-toggle="modal" data-target="#taskModal"> 
             Add New Task
           	</button>
           
