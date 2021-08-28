@@ -46,6 +46,26 @@ class EmployeeController extends Controller
         // $size = mb_strlen($serializedFoo, '8bit');
         // dd($size);
 
+        $ids = array();
+        $index = 0;
+        for($i=1000001; $i<1000411; $i++){
+            $ids[$index] = $i;
+             $index++;
+        }
+
+        $employees = HrEmployee::whereNotIn('employee_no', $ids)->get();
+
+        $employeeNo = 1000411;
+        foreach ($employees as $employee){
+
+            $employee->employee_no = $employeeNo;
+            $employee->save();
+            $employeeNo++;
+        }
+
+        dd('You have Sucessfully Updated Employee No next Employee No is '. $employeeNo);
+
+
 
     	return view ('hr.employee.create', compact('genders','maritalStatuses','religions'));
     }
