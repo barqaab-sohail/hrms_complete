@@ -81,7 +81,7 @@ function cnicExpiryTotal(){
 
 function drivingLicenceExpiryTotal(){
 	$nextTenDays = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
-		$employees =  HrEmployee::where('hr_status_id',1)->with('employeeDesignation')->get();
+		$employees =  HrEmployee::where('hr_status_id',1)->with('employeeDesignation','hrDriving')->get();
         $total = 0;
         $today = \Carbon\Carbon::now();
         foreach ($employees as $key => $employee) {                   
@@ -91,12 +91,31 @@ function drivingLicenceExpiryTotal(){
 		        		$total++;    
 		            }
 		        }
-            }
-            
-        }
-        
+            }  
+        }   
 	return $total;
 }
+
+function pecCardExpiryTotal(){
+	$nextTenDays = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
+		$employees =  HrEmployee::where('hr_status_id',1)->with('hrMembership')->get();
+        $total = 0;
+        $today = \Carbon\Carbon::now();
+        foreach ($employees as $key => $employee) {                   
+            
+        	if($employee->hrMembership->expiry??''!=''){
+	            if($employee->hrMembership->expiry<$nextTenDays){
+	        		$total++;    
+	            }
+	        }
+             
+        }   
+	return $total;
+}
+
+
+
+
 
 function officeName($id){
 	$office = Office::find($id);
