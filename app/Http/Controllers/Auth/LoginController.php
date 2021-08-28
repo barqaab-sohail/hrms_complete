@@ -63,7 +63,7 @@ class LoginController extends Controller
             if ($user->user_status==2){
                   return view('auth.login')->withErrors("Please Contact to HR");
             } elseif($user->user_status==0){
-                return view('auth.register')->withErrors("You are not registered user, please registration first");
+                return view('auth.register')->withErrors("You are not registered user, please registration first.  Enter email address as per HR Record");
             } 
             
             //check Employee is Onboard
