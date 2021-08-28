@@ -22,11 +22,13 @@ class HrAlertController extends Controller
 
 	public function cnicExpiryDetail(){
 		$nextTenDays = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
-		$employees = HrEmployee::where('hr_status_id',1)->where('cnic_expiry','<',$nextTenDays)->get();
+		$employees = HrEmployee::where('hr_status_id',1)->where('cnic_expiry','<',$nextTenDays)->with('employeeProject','employeeOffice')->get();
 
       	foreach ($employees as $employee){
     		$data [] = array(
 				"employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
+                "employee_project"=>$employee->employeeProject->last()->name??'',
+                "employee_office"=>$employee->employeeOffice->last()->name??'',
 				"cnic_expiry_date" =>\Carbon\Carbon::parse( $employee->cnic_expiry)->format('M d, Y'),
 			);  			
     	}
@@ -40,7 +42,7 @@ class HrAlertController extends Controller
 
 	public function appointmentExpiry(){
 		$nextTenDays = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
-		$employees = HrEmployee::where('hr_status_id',1)->with('employeeAppointment','employeeProject')->get();
+		$employees = HrEmployee::where('hr_status_id',1)->with('employeeAppointment','employeeOffice','employeeProject')->get();
 
 		foreach ($employees as $key => $employee) {                   
             if($employee->employeeAppointment->expiry_date??''!=''){
@@ -48,6 +50,7 @@ class HrAlertController extends Controller
             		$data [] = array(
 					"employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
                     "employee_project"=>$employee->employeeProject->last()->name??'',
+                    "employee_office"=>$employee->employeeOffice->last()->name??'',
 					"appointment_expiry_date" =>  \Carbon\Carbon::parse( $employee->employeeAppointment->expiry_date)->format('M d, Y'),
 					);  	
                     
@@ -65,7 +68,7 @@ class HrAlertController extends Controller
 
     public function drivingLicenceExpiry(){
         $nextTenDays = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
-        $employees = HrEmployee::where('hr_status_id',1)->with('employeeDesignation','employeeProject')->get();
+        $employees = HrEmployee::where('hr_status_id',1)->with('employeeDesignation','employeeProject','employeeOffice','hrDriving')->get();
 
         foreach ($employees as $key => $employee) {                   
             if($employee->employeeDesignation->last()->name??''=='Driver'){
@@ -74,6 +77,7 @@ class HrAlertController extends Controller
                         $data [] = array(
                         "employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
                         "employee_project"=>$employee->employeeProject->last()->name??'',
+                        "employee_office"=>$employee->employeeOffice->last()->name??'',
                         "licence_expiry_date" => \Carbon\Carbon::parse($employee->hrDriving->licence_expiry)->format('M d, Y'),
                         );      
                         
@@ -91,7 +95,7 @@ class HrAlertController extends Controller
 
     public function pecCardExpiry(){
         $nextTenDays = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
-        $employees = HrEmployee::where('hr_status_id',1)->with('hrMembership','employeeProject')->get();
+        $employees = HrEmployee::where('hr_status_id',1)->with('hrMembership','employeeOffice','employeeProject')->get();
 
         foreach ($employees as $key => $employee) {                   
             
@@ -100,6 +104,7 @@ class HrAlertController extends Controller
                     $data [] = array(
                     "employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
                     "employee_project"=>$employee->employeeProject->last()->name??'',
+                    "employee_office"=>$employee->employeeOffice->last()->name??'',
                     "pec_expiry_date" => \Carbon\Carbon::parse($employee->hrMembership->expiry)->format('M d, Y'),
                     );      
                     
