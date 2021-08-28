@@ -44,9 +44,12 @@ class HomeController extends Controller
         $power = departmentChart()['power'];
         $water = departmentChart()['water'];
 
-
+        $cnicExpiryTotal = cnicExpiryTotal();
+        $drivingLicenceExpiryTotal = drivingLicenceExpiryTotal();
+        $appointmentExpiryTotal = appointmentExpiryTotal();
+        $totalAerts = cnicExpiryTotal()+appointmentExpiryTotal()+drivingLicenceExpiryTotal();
        
-        return view('dashboard.dashboard',compact('countBelowForty','countBelowFifty','countBelowSixty','countBelowSeventy','countAboveSeventy','categoryA','categoryB','categoryC','allEmployees','pecRegisteredEngineers','associatedEngineers','finance','power','water'));
+        return view('dashboard.dashboard',compact('countBelowForty','countBelowFifty','countBelowSixty','countBelowSeventy','countAboveSeventy','categoryA','categoryB','categoryC','allEmployees','pecRegisteredEngineers','associatedEngineers','finance','power','water','drivingLicenceExpiryTotal','cnicExpiryTotal','appointmentExpiryTotal','totalAerts'));
     }
 
 }

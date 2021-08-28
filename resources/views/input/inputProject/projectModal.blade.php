@@ -128,7 +128,7 @@ $(document).ready(function(){
                         '</td><td>'+data['input']+
                         '</td><td>'+data['remarks']+
                         '</td><td><form id=deleteForm'+num+' action='+"{{route('input.destroy','')}}"+
-                        '/'+data['id']+' method="POST"><a class="btn btn-primary"href='
+                        '/'+data['id']+' method="POST"><a class="btn btn-success"href='
                           +editUrl+'>Edit</a>@csrf @method("DELETE")<button type="submit" class="btn btn-danger">Delete</button></form></td></tr>');  
 
                      $('#hr_employee_id, #hr_designation_id').val('').select2('val', 'All');
