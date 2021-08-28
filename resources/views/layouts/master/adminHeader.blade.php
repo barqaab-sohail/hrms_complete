@@ -35,7 +35,7 @@
             <!-- User profile and Notification Right Side -->
             <!-- ============================================================== -->
             <ul class="navbar-nav my-lg-0">
-
+                @can('Super Admin')
                 <!-- Message -->
                 <li class="nav-item dropdown"> 
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark"  href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,7 +47,7 @@
                         </ul>                     
                     </div>                 
                 </li> 
-
+                @endcan
                 <!-- Notification -->
                 <li class="nav-item dropdown"> 
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark"  href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -55,10 +55,10 @@
                     </a>
                      <div class="dropdown-menu dropdown-menu-right scale-up">
                         <ul class="dropdown-user">
-                            <li><a  href="{{route('hrAlert.list')}}"  class="link" data-toggle="tooltip" title="For Detail Plese Click">{{appointmentExpiryTotal()}} Employees Contract are Expired</a></li>
-                            <li><a  href="{{route('hrAlert.list')}}"  class="link" data-toggle="tooltip" title="Notification List">{{cnicExpiryTotal()}} Employees CNIC are Expired</a></li>
-                            <li><a  href="{{route('hrAlert.list')}}"  class="link" data-toggle="tooltip" title="Notification List">{{drivingLicenceExpiryTotal()}} Driver Licence are Expired</a></li>
-                            <li><a  href="{{route('hrAlert.list')}}"  class="link" data-toggle="tooltip" title="Notification List">{{pecCardExpiryTotal()}} PEC Card are Expired</a></li>
+                            <li><a  href="{{route('hrAlert.list')}}"  class="link" data-toggle="tooltip" title="Click for detail">{{appointmentExpiryTotal()}} Employees Contract are Expired</a></li>
+                            <li><a  href="{{route('hrAlert.list')}}"  class="link" data-toggle="tooltip" title="Click for detail">{{cnicExpiryTotal()}} Employees CNIC are Expired</a></li>
+                            <li><a  href="{{route('hrAlert.list')}}"  class="link" data-toggle="tooltip" title="Click for detail">{{drivingLicenceExpiryTotal()}} Driver Licence are Expired</a></li>
+                            <li><a  href="{{route('hrAlert.list')}}"  class="link" data-toggle="tooltip" title="Click for detail">{{pecCardExpiryTotal()}} PEC Card are Expired</a></li>
                             <!-- <li><a href=""  class="link" data-toggle="tooltip" title="Create Notification"><i class="fa fa-bell"></i> Create Notification</a></li>
                             <li><a href=""  class="link" data-toggle="tooltip" title="Send Notification to HR"><i class="fas fa-arrow-right"></i> Send Message to HR</a></li>       -->               
                         </ul>                     

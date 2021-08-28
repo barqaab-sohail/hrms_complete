@@ -20,14 +20,14 @@
 				
 				<tbody>
 					<tr>
-						<td>Employee CNIC Expired or Near to Expire Next 10 Days</td>
+						<td>CNIC Expired or Near to Expire Next 10 Days</td>
 						<td>{{$totalCnicExpire}}</td> 
 						<td class="text-center">
 							<button type="button" name="edit" id="cnicExpiryDetail" href="{{route('hrAlert.cnicExpiryDetail')}}" class="edit btn btn-success btn-sm">Detail</button>
 						</td>													
 					</tr>
 					<tr>
-						<td>Employee Appointment Contract Expired or Near to Expire Next 10 Days</td>
+						<td>Appointment Contract Expired or Near to Expire Next 10 Days</td>
 						<td>{{$appointmentExpiryTotal}}</td> 
 						<td class="text-center">
 							<button type="button" name="edit" id="appointmentExpiryDetail" href="{{route('hrAlert.appointmentExpiry')}}" class="edit btn btn-success btn-sm">Detail</button>

@@ -17,7 +17,7 @@
                     
                       <tr >
                           <th>Employee Name</th>
-                          <th id="project">Project</th>
+                          <th id="project">Project/Office</th>
                           <th>Expiry Date</th>
                       </tr>
                     </thead>
@@ -50,12 +50,20 @@ $('#cnicExpiryDetail').click(function(){
 
         $('#alert_name').text(data.full_name);
         $("#tbody").empty();
-        $('#project').remove();
+        // $('#project').remove();
                 
         $.each(data.cnicExpiry, function() {
+          var office='';
+          if (this.employee_project == 'overhead'){
+            office = this.employee_office;
+          }else{
+             office = this.employee_project;
+          }
           $('#alertDetail > tbody').append(
               '<tr><td>'
               + this.employee_name
+              + '</td><td>'
+              + office
               + '</td><td>'
               + this.cnic_expiry_date
               + '</td></tr>'
@@ -84,11 +92,17 @@ $('#appointmentExpiryDetail').click(function(){
         $("#tbody").empty();
                 
         $.each(data.appointmentExpiry, function() {
+          var office='';
+          if (this.employee_project == 'overhead'){
+            office = this.employee_office;
+          }else{
+             office = this.employee_project;
+          }
           $('#alertDetail > tbody').append(
               '<tr><td>'
               + this.employee_name
               + '</td><td>'
-              + this.employee_project
+              + office
               + '</td><td>'
               + this.appointment_expiry_date
               + '</td></tr>'
@@ -115,11 +129,18 @@ $('#drivingLicenceExpiryTotal').click(function(){
         $("#tbody").empty();
                 
         $.each(data.drivingLicenceExpiryTotal, function() {
+          var office='';
+          if (this.employee_project == 'overhead'){
+            office = this.employee_office;
+          }else{
+             office = this.employee_project;
+          }
+
           $('#alertDetail > tbody').append(
               '<tr><td>'
               + this.employee_name
               + '</td><td>'
-              + this.employee_project
+              + office
               + '</td><td>'
               + this.licence_expiry_date
               + '</td></tr>'
@@ -143,11 +164,17 @@ $('#pecCardExpiry').click(function(){
         $("#tbody").empty();
                 
         $.each(data.pecCardExpiry, function() {
+          var office='';
+          if (this.employee_project == 'overhead'){
+            office = this.employee_office;
+          }else{
+             office = this.employee_project;
+          }
           $('#alertDetail > tbody').append(
               '<tr><td>'
               + this.employee_name
               + '</td><td>'
-              + this.employee_project
+              + office
               + '</td><td>'
               + this.pec_expiry_date
               + '</td></tr>'
