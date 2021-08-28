@@ -44,6 +44,8 @@ Route::get('/employee/activeEmployeesList', 'EmployeeController@activeEmployeesL
 Route::get('/employee/alertList','HrAlertController@alertList')->name('hrAlert.list');
 Route::get('/cnicExpiryDetail','HrAlertController@cnicExpiryDetail')->name('hrAlert.cnicExpiryDetail');
 Route::get('/appointmentExpiry','HrAlertController@appointmentExpiry')->name('hrAlert.appointmentExpiry');
+Route::get('/licenceExpiry','HrAlertController@drivingLicenceExpiry')->name('hrAlert.licenceExpiry');
+Route::get('/pecCardExpiry','HrAlertController@pecCardExpiry')->name('hrAlert.pecCardExpiry');
 
 Route::get('/employee/search','EmployeeController@search')->name('employee.search');
 Route::get('/employee/search/result','EmployeeController@result')->name('employee.result');

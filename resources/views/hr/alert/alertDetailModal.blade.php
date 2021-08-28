@@ -103,6 +103,61 @@ $('#appointmentExpiryDetail').click(function(){
     })
 });
 
+$('#drivingLicenceExpiryTotal').click(function(){ 
+  var url = $(this).attr('href');
+     $.ajax({
+     url:url,
+     dataType:"json",
+     
+     success:function(data){
+
+        $('#alert_name').text(data.full_name);
+        $("#tbody").empty();
+                
+        $.each(data.drivingLicenceExpiryTotal, function() {
+          $('#alertDetail > tbody').append(
+              '<tr><td>'
+              + this.employee_name
+              + '</td><td>'
+              + this.employee_project
+              + '</td><td>'
+              + this.licence_expiry_date
+              + '</td></tr>'
+          );
+        });
+        $('#alertDetailModel').modal('show');
+
+     }
+    })
+});
+
+$('#pecCardExpiry').click(function(){ 
+  var url = $(this).attr('href');
+     $.ajax({
+     url:url,
+     dataType:"json",
+     
+     success:function(data){
+
+        $('#alert_name').text(data.full_name);
+        $("#tbody").empty();
+                
+        $.each(data.pecCardExpiry, function() {
+          $('#alertDetail > tbody').append(
+              '<tr><td>'
+              + this.employee_name
+              + '</td><td>'
+              + this.employee_project
+              + '</td><td>'
+              + this.pec_expiry_date
+              + '</td></tr>'
+          );
+        });
+        $('#alertDetailModel').modal('show');
+
+     }
+    })
+});
 
 
 

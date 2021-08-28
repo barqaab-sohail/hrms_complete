@@ -14,8 +14,10 @@ class HrAlertController extends Controller
     	$totalCnicExpire = HrEmployee::where('hr_status_id',1)->where('cnic_expiry','<',$nextTenDays)->count();
 
     	$appointmentExpiryTotal = appointmentExpiryTotal();
+        $drivingLicenceExpiryTotal = drivingLicenceExpiryTotal();
+        $pecCardExpiryTotal = pecCardExpiryTotal();
     	
-    	return view('hr.alert.list',compact('totalCnicExpire','appointmentExpiryTotal'));
+    	return view('hr.alert.list',compact('totalCnicExpire','appointmentExpiryTotal','drivingLicenceExpiryTotal','pecCardExpiryTotal'));
 	}
 
 	public function cnicExpiryDetail(){
@@ -25,7 +27,7 @@ class HrAlertController extends Controller
       	foreach ($employees as $employee){
     		$data [] = array(
 				"employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
-				"cnic_expiry_date" => $employee->cnic_expiry,
+				"cnic_expiry_date" =>\Carbon\Carbon::parse( $employee->cnic_expiry)->format('M d, Y'),
 			);  			
     	}
 
@@ -46,7 +48,7 @@ class HrAlertController extends Controller
             		$data [] = array(
 					"employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
                     "employee_project"=>$employee->employeeProject->last()->name??'',
-					"appointment_expiry_date" => $employee->employeeAppointment->expiry_date,
+					"appointment_expiry_date" =>  \Carbon\Carbon::parse( $employee->employeeAppointment->expiry_date)->format('M d, Y'),
 					);  	
                     
                 }
@@ -60,4 +62,58 @@ class HrAlertController extends Controller
 
     	return response()->json(['status'=> 'Ok', 'full_name'=>'Appointment Expiry Detail', 'appointmentExpiry'=>$data]);
 	}
+
+    public function drivingLicenceExpiry(){
+        $nextTenDays = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
+        $employees = HrEmployee::where('hr_status_id',1)->with('employeeDesignation','employeeProject')->get();
+
+        foreach ($employees as $key => $employee) {                   
+            if($employee->employeeDesignation->last()->name??''=='Driver'){
+                if($employee->hrDriving->licence_expiry??''!=''){
+                    if($employee->hrDriving->licence_expiry<$nextTenDays){
+                        $data [] = array(
+                        "employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
+                        "employee_project"=>$employee->employeeProject->last()->name??'',
+                        "licence_expiry_date" => \Carbon\Carbon::parse($employee->hrDriving->licence_expiry)->format('M d, Y'),
+                        );      
+                        
+                    }
+                }
+            }   
+        }
+
+        usort($data, function($a, $b) {
+            return strtotime($a['licence_expiry_date']) - strtotime($b['licence_expiry_date']);
+        });
+
+        return response()->json(['status'=> 'Ok', 'full_name'=>'Driver Licence Expiry Detail', 'drivingLicenceExpiryTotal'=>$data]);
+    }
+
+    public function pecCardExpiry(){
+        $nextTenDays = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
+        $employees = HrEmployee::where('hr_status_id',1)->with('hrMembership','employeeProject')->get();
+
+        foreach ($employees as $key => $employee) {                   
+            
+            if($employee->hrMembership->expiry??''!=''){
+                if($employee->hrMembership->expiry<$nextTenDays){
+                    $data [] = array(
+                    "employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
+                    "employee_project"=>$employee->employeeProject->last()->name??'',
+                    "pec_expiry_date" => \Carbon\Carbon::parse($employee->hrMembership->expiry)->format('M d, Y'),
+                    );      
+                    
+                }
+            }
+             
+        }
+
+        usort($data, function($a, $b) {
+            return strtotime($a['pec_expiry_date']) - strtotime($b['pec_expiry_date']);
+        });
+
+        return response()->json(['status'=> 'Ok', 'full_name'=>'PEC Card Expiry Detail', 'pecCardExpiry'=>$data]);
+    }
+
+
 }
