@@ -65,7 +65,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>
+                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>
                                     {{ __('Submit') }}
                                 </button>
                             </div>

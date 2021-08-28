@@ -31,7 +31,7 @@
 
                                 <td>{{$cvDetail->cvEducation->implode('degree_name',' + ')}}</td>
                                 <td class="text-center">{{age($cvDetail->date_of_birth)}}</td>
-                                <td class="text-center">    <button type="button" name="edit" id="{{$cvDetail->id}}" class="edit btn btn-primary btn-sm">Detail</button>
+                                <td class="text-center">    <button type="button" name="edit" id="{{$cvDetail->id}}" class="edit btn btn-success btn-sm">Detail</button>
                                 </td> 
                                 <td class="text-center">
                                     <a class="btn btn-success btn-sm" href="{{route('cv.edit',$cvDetail->id)}}"  title="Edit"><i class="fas fa-list text-white "></i></a>
