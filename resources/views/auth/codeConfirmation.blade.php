@@ -10,7 +10,7 @@
                 <div class="card-body">
                 @include('layouts.auth.message')
 
-                    <form method="POST" action="{{ route('otp.store') }}"  class="form-prevent-multiple-submits">
+                    <form method="POST" action="{{route('opt.store')}}"  class="form-prevent-multiple-submits">
                         @csrf
 
                         <div class="form-group row">
@@ -31,7 +31,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{Session::get('email')!=null?Session::get('email'):old('email')}}" readonly>
+                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{$email}}" readonly>
 
                                 @if ($errors->has('email'))
                                     <span class="invalid-feedback" role="alert">

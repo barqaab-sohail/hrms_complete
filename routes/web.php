@@ -20,11 +20,12 @@ Route::get('/dashboard','HomeController@index')->middleware('auth');
 
 Auth::routes();
 
-Route::group(['prefix' => 'code', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Auth','name' =>'opt.'], function(){
-Route::resource('/','RegisterController',['only'=>['create','store']]);
-});
-
-
+// Route::group(['prefix' => 'code', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Auth','name' =>'opt.'], function(){
+// Route::resource('/','RegisterController',['only'=>['create','store']]);
+// });
+Route::get('code/','Auth\RegisterController@create')->name('opt.create');
+Route::post('code/','Auth\RegisterController@register')->name('opt.request');
+Route::post('code/','Auth\RegisterController@store')->name('opt.store');
 // Route::prefix('hrms/')->namespace('Hr')->group(function(){
 // Route::resource('/employee', 'EmployeeController');
 // Route::resource('/education', 'EducationController');
