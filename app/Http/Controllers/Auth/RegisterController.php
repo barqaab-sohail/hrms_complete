@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use App\Http\Requests\Auth\StoreOTP;
+use App\Http\Requests\StoreOTP;
 use App\User;
 use App\employee;
 use App\Notifications\MailNotification;
@@ -71,10 +71,11 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create()
+    protected function create(Request $request)
     {
+        $email = $request->email;
 
-      return view('auth.codeConfirmation');
+        return view('auth.codeConfirmation',compact('email'));
     }
 
     public function store(StoreOTP $request){
@@ -82,8 +83,6 @@ class RegisterController extends Controller
         $user = user::all()->where('email',$request->email)->first();
        
         if ($user->code == $request->otp){
-         
-
             DB::table('users')
                 ->where('email', $request->email)
                 ->update(['user_status' => 1, 'email_verified_at' =>  \Carbon\Carbon::now(),'password' => Hash::make($request->password) ]); 
@@ -103,7 +102,7 @@ class RegisterController extends Controller
            
          $test = DB::table('users')
                     ->where('email', $request->email)->first();
-        
+         
         if ($test == null)
         {
             return view('auth.register')->withErrors("This Email Address is not Found. Please Contact to HR");
@@ -112,15 +111,12 @@ class RegisterController extends Controller
         else
         {
 
-
             if($test->user_status==1)
             {
-
                  return view('auth.login')->withErrors("You are already Registered.  Please Enter Email and Password");
-
             }elseif($test->user_status==0)
             {
-            $otpcode = rand (10000,65000);
+                $otpcode = rand (10000,65000);
 
             DB::table('users')
                 ->where('email', $request->email)
@@ -133,8 +129,7 @@ class RegisterController extends Controller
 
             $message = 'Verification code is send to your email address.  Please enter below for varification';
 
-              
-            return Redirect::route('otp.create')->with( ['message' => $message, 'email'=>$email] );
+            return view('auth.codeConfirmation',compact('email','message'));//Redirect::route('otp.create')->with( ['message' => $message, 'email'=>$email] );
             
             }else{
                 return view('auth.register')->withErrors("Please Contact to HR");
