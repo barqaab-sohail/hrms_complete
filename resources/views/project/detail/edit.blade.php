@@ -1,7 +1,7 @@
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
 @section('Heading')
-	<h3 class="text-themecolor">Projects</h3>
+	<h3 class="text-themecolor">Project Name</h3>
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item"><a href="javascript:void(0)">{{$data->name??''}}</a></li>
 		
