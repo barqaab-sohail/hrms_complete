@@ -16,9 +16,9 @@
                     <thead >
                     
                       <tr >
-                          <th>Employee Name</th>
-                          <th id="project">Project/Office</th>
-                          <th>Expiry Date</th>
+                          <th style="font-weight:bold">Employee Name</th>
+                          <th id="project" style="font-weight:bold">Project/Office</th>
+                          <th style="font-weight:bold">Expiry Date</th>
                       </tr>
                     </thead>
                     <tbody id="tbody">

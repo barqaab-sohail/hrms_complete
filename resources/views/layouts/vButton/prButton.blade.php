@@ -4,6 +4,8 @@
           
             
             <a type="submit" role="button" id="addProject" href="{{route('project.edit',session('pr_detail_id'))}}" class="btn btn-success" {{Request::is('hrms/project/*/edit')?'style=background-color:#737373':''}}>Project Detail</a>
+            <a type="submit" role="button" id="addProgress" href="{{route('projectProgress.chart')}}" class="btn btn-success" {Request::is('hrms/projectProgress/chart')?'style=background-color:#737373':''}}>Progress Status</a>
+            <a type="submit" role="button" id="addInvoice" href="{{route('projectInvoice.chart')}}" class="btn btn-success" {Request::is('hrms/projectInvoice/chart')?'style=background-color:#737373':''}}>Invoice Status</a>
             <a type="submit" role="button" id="addDocument" href="{{route('projectDocument.create')}}" class="btn btn-success" {Request::is('hrms/projectDocument/create')?'style=background-color:#737373':''}}>Documentation</a>
             
             

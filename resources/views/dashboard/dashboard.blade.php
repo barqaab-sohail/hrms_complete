@@ -31,8 +31,8 @@
 	</div>
 	
 		@can('hr view graph')		
-			<div id="invoice" style="width: 100%; height: 500px;"></div>
-			<div id="s-curve" style="width: 100%; height: 500px;"></div>
+			
+			
 			<div class="row">
   				<div class="col-sm-6">
 					<div id="ageChart" style="width: 900px; height: 500px;"></div>
@@ -52,9 +52,7 @@
 					
 			</div>
 				
-					
-               @include('project.charts.invoiceChart')
-				@include('project.charts.sCurve')
+		
 				@include('hr.charts.category')
 				@include('hr.charts.ageChart')
 				@include('hr.charts.engineerChart')
