@@ -10,9 +10,7 @@
         <div class="row">
             <div id="s-curve" style="width: 100%; height: 500px;"></div>
         </div><!--/End Row-->
-
-                
-      
+     
 	</div> <!-- end card body --> 
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -43,6 +41,8 @@
           ['02-2021',  100,      94.10]
         ]);
 
+        var view = new google.visualization.DataView(data);
+
         var options = {
           title: 'Project Progress',
           curveType: 'function',
@@ -53,7 +53,7 @@
         var chart = new google.visualization.LineChart(document.getElementById('s-curve'));
 
         chart.draw(data, options);
-        
+
       }
 
 </script>
