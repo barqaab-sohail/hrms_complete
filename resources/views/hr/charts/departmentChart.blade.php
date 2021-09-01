@@ -23,10 +23,11 @@
         colorsHex = ['#e94922','#4f328a','#00a49f'];
   
         var options = {
-          title: 'Departmentwise Chart',
+          title: 'Department Wise Chart',
           colors: colorsHex,
           pieHole: 0.4,
           pieSliceText: 'value',
+          legend:{position:'top'}
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('departmentChart'));

@@ -26,10 +26,11 @@
 
         colorsHex = ['#1e8449','#007fff','#17c9ff','#e3890b','#f22e07'];  
         var options = {
-          title: 'Agewise Chart'+ ' - (Total Employee = '+ total+')',
+          title: 'Age Wise Chart'+ ' - (Total Employee = '+ total+')',
           colors: colorsHex,
           is3D: true,
-          pieSliceText: 'value'
+          pieSliceText: 'value',
+          legend:{position:'left'}
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('ageChart'));

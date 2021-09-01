@@ -22,7 +22,8 @@
           title: 'PEC Registered Engineer Chart',
           colors: colorsHex,
           is3D: true,
-          pieSliceText: 'value'
+          pieSliceText: 'value',
+          legend:{position:'top'}
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('engineerChart'));

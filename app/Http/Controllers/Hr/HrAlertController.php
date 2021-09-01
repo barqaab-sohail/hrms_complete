@@ -26,7 +26,7 @@ class HrAlertController extends Controller
 
       	foreach ($employees as $employee){
     		$data [] = array(
-				"employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
+				"employee_name" => employeeFullName($employee->id),
                 "employee_project"=>$employee->employeeProject->last()->name??'',
                 "employee_office"=>$employee->employeeOffice->last()->name??'',
 				"cnic_expiry_date" =>\Carbon\Carbon::parse( $employee->cnic_expiry)->format('M d, Y'),
@@ -48,7 +48,7 @@ class HrAlertController extends Controller
             if($employee->employeeAppointment->expiry_date??''!=''){
                 if($employee->employeeAppointment->expiry_date<$nextTenDays){
             		$data [] = array(
-					"employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
+					"employee_name" => employeeFullName($employee->id),
                     "employee_project"=>$employee->employeeProject->last()->name??'',
                     "employee_office"=>$employee->employeeOffice->last()->name??'',
 					"appointment_expiry_date" =>  \Carbon\Carbon::parse( $employee->employeeAppointment->expiry_date)->format('M d, Y'),
@@ -75,7 +75,7 @@ class HrAlertController extends Controller
                 if($employee->hrDriving->licence_expiry??''!=''){
                     if($employee->hrDriving->licence_expiry<$nextTenDays){
                         $data [] = array(
-                        "employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
+                        "employee_name" => employeeFullName($employee->id),
                         "employee_project"=>$employee->employeeProject->last()->name??'',
                         "employee_office"=>$employee->employeeOffice->last()->name??'',
                         "licence_expiry_date" => \Carbon\Carbon::parse($employee->hrDriving->licence_expiry)->format('M d, Y'),
@@ -102,7 +102,7 @@ class HrAlertController extends Controller
             if($employee->hrMembership->expiry??''!=''){
                 if($employee->hrMembership->expiry<$nextTenDays){
                     $data [] = array(
-                    "employee_name" => employeeFullName($employee->id).' - '.$employee->employee_no,
+                    "employee_name" => employeeFullName($employee->id),
                     "employee_project"=>$employee->employeeProject->last()->name??'',
                     "employee_office"=>$employee->employeeOffice->last()->name??'',
                     "pec_expiry_date" => \Carbon\Carbon::parse($employee->hrMembership->expiry)->format('M d, Y'),

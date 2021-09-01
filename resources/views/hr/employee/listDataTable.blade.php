@@ -22,7 +22,6 @@
 					<th>Date of Joining</th>
 					<th>Mobile</th>
 					<th class="text-center"style="width:5%">Edit</th> 
-
 					@role('Super Admin')
 					<th class="text-center"style="width:5%">Delete</th>
 					@endrole
