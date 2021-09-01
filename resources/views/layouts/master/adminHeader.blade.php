@@ -47,7 +47,7 @@
                         </ul>                     
                     </div>                 
                 </li> 
-                @endcan
+               
                 <!-- Notification -->
                 <li class="nav-item dropdown"> 
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark"  href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -64,7 +64,7 @@
                         </ul>                     
                     </div>                 
                 </li>
-
+                @endcan
                 <!-- Employee Picture -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

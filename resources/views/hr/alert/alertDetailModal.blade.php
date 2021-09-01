@@ -40,7 +40,13 @@
 
 //$(document).on('click', 'button[id^=detail]',function(){ 
 
-$('#cnicExpiryDetail').click(function(){ 
+$('#cnicExpiryDetail').click(function(e){ 
+        e.preventDefault();
+        $('#alertDetail').DataTable({
+            "destroy": true,
+        });
+
+
   var url = $(this).attr('href');
      $.ajax({
      url:url,
@@ -69,18 +75,19 @@ $('#cnicExpiryDetail').click(function(){
               + '</td></tr>'
           );
         });
-
-      
         $('#alertDetailModel').modal('show');
-
-
      }
     })
 
     
 });
 
-$('#appointmentExpiryDetail').click(function(){ 
+$('#appointmentExpiryDetail').click(function(e){ 
+  e.preventDefault();
+    $('#alertDetail').DataTable({
+        "destroy": true,
+    });
+
   var url = $(this).attr('href');
      $.ajax({
      url:url,
@@ -117,7 +124,12 @@ $('#appointmentExpiryDetail').click(function(){
     })
 });
 
-$('#drivingLicenceExpiryTotal').click(function(){ 
+$('#drivingLicenceExpiryTotal').click(function(e){ 
+    e.preventDefault();
+    $('#alertDetail').DataTable({
+            "destroy": true,
+    });
+
   var url = $(this).attr('href');
      $.ajax({
      url:url,
@@ -152,8 +164,13 @@ $('#drivingLicenceExpiryTotal').click(function(){
     })
 });
 
-$('#pecCardExpiry').click(function(){ 
-  var url = $(this).attr('href');
+$('#pecCardExpiry').click(function(e){ 
+    e.preventDefault();
+    $('#alertDetail').DataTable({
+          "destroy": true,
+    });
+
+    var url = $(this).attr('href');
      $.ajax({
      url:url,
      dataType:"json",

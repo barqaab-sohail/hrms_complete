@@ -41,7 +41,7 @@
           ['02-2021',  100,      94.10]
         ]);
 
-        var view = new google.visualization.DataView(data);
+        
 
         var options = {
           title: 'Project Progress',

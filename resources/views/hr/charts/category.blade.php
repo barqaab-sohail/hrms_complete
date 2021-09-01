@@ -31,10 +31,11 @@
         colorsHex = ['#e94922','#4f328a','#00a49f'];
   
         var options = {
-          title: 'Categorywise Chart',
+          title: 'Category Wise Chart',
           colors: colorsHex,
           pieHole: 0.4,
           pieSliceText: 'value',
+          legend:{position:'left'}
         };
 
         var options1 = {

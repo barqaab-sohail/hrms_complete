@@ -14,38 +14,26 @@
 				<tr>
 					<th>Detail of Alerts</th>
 					<th class="text-center"style="width:5%">Total</th> 
-					<th class="text-center"style="width:5%">Detail</th>
 				</tr>
 				</thead>
 				
 				<tbody>
 					<tr>
-						<td>CNIC Expired or Near to Expire Next 10 Days</td>
+						<td><a id="cnicExpiryDetail" href="{{route('hrAlert.cnicExpiryDetail')}}" style="color:grey">CNIC Expired or Near to Expire Next 10 Days</a></td>
 						<td>{{$totalCnicExpire}}</td> 
-						<td class="text-center">
-							<button type="button" name="edit" id="cnicExpiryDetail" href="{{route('hrAlert.cnicExpiryDetail')}}" class="edit btn btn-success btn-sm">Detail</button>
-						</td>													
+																		
 					</tr>
 					<tr>
-						<td>Appointment Contract Expired or Near to Expire Next 10 Days</td>
-						<td>{{$appointmentExpiryTotal}}</td> 
-						<td class="text-center">
-							<button type="button" name="edit" id="appointmentExpiryDetail" href="{{route('hrAlert.appointmentExpiry')}}" class="edit btn btn-success btn-sm">Detail</button>
-						</td>													
+						<td><a id="appointmentExpiryDetail" href="{{route('hrAlert.appointmentExpiry')}}" style="color:grey">Appointment Contract Expired or Near to Expire Next 10 Days</a></td>
+						<td>{{$appointmentExpiryTotal}}</td>
 					</tr>
                     <tr>
-                        <td>Driver Licence Expired or Near to Expire Next 10 Days</td>
-                        <td>{{$drivingLicenceExpiryTotal}}</td> 
-                        <td class="text-center">
-                            <button type="button" name="edit" id="drivingLicenceExpiryTotal" href="{{route('hrAlert.licenceExpiry')}}" class="edit btn btn-success btn-sm">Detail</button>
-                        </td>                                                   
+                        <td><a id="drivingLicenceExpiryTotal" href="{{route('hrAlert.licenceExpiry')}}" style="color:grey">Driver Licence Expired or Near to Expire Next 10 Days</a></td>
+                        <td>{{$drivingLicenceExpiryTotal}}</td>
                     </tr>
                      <tr>
-                        <td>PEC Card Expired or Near to Expire Next 10 Days</td>
-                        <td>{{$pecCardExpiryTotal}}</td> 
-                        <td class="text-center">
-                            <button type="button" name="edit" id="pecCardExpiry" href="{{route('hrAlert.pecCardExpiry')}}" class="edit btn btn-success btn-sm">Detail</button>
-                        </td>                                                   
+                        <td><a id="pecCardExpiry" href="{{route('hrAlert.pecCardExpiry')}}" style="color:grey">PEC Card Expired or Near to Expire Next 10 Days</a></td>
+                        <td>{{$pecCardExpiryTotal}}</td>               
                     </tr>
 				
 				</tbody>
