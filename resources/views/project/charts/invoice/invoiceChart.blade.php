@@ -8,6 +8,7 @@
         <hr class="m-t-0 m-b-40">
 
         <div class="row">
+            <div id="pendingInvoice" style="width: 100%; height: 500px;"></div>
             <div id="invoice" style="width: 100%; height: 500px;"></div>
         </div><!--/End Row-->
 
@@ -15,191 +16,160 @@
       <table id="myTable" class="table table-bordered table-striped"  style="width:100%" >
         <thead>
           <tr>
-            <th>Invoice No</th>
+            <th>Invoice Month</th>
+            <th>Total Invoice</th>
             <th>Man Month Cost</th>
             <th>Direct Cost</th>
             <th>Sales Tax</th>
-            <th>Total Invoice</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>BQB/SHK/2039/325,325-A</td>
+            <td>Dec19, Jan20, Feb20</td>
+            <td>6,765,652</td>
             <td>2,881,571</td>
             <td>3,105,732</td>
             <td>778,349</td>
-            <td>6,765,652</td>
+            
             <td>Received</td>         
           </tr>
           <tr>
-            <td>BQB/SHK/2039/347,347-A</td>
+            <td>Mar20, Apr20</td>
+            <td>3,976,607</td>
             <td>2,274,316</td>
             <td>1,244,805</td>
             <td>457,486</td>
-            <td>3,976,607</td>
+            
             <td>Received</td>         
           </tr>
            <tr>
-            <td>BQB/SHK/2039/360,377</td>
+            <td>May-20</td>
+            <td>2,788,754</td>
             <td>1,137,158</td>
             <td>1,330,766</td>
             <td>320,830</td>
-            <td>2,788,754</td>
+            
             <td>Received</td>         
           </tr>
           <tr>
-            <td>BQB/SHK/2039/401,401-A</td>
+            <td>Jun-20</td>
+            <td>2,818,734</td>
             <td>1,039,042</td>
             <td>1,455,413</td>
             <td>324,279</td>
-            <td>2,818,734</td>
+            
             <td>Received</td>         
           </tr>
           <tr>
-            <td>BQB/SHK/2039/425,425-A</td>
+            <td>Jul20, Aug20</td>
+            <td>4,723,246</td>
             <td>2,177,261</td>
             <td>2,002,603</td>
             <td>543,382</td>
-            <td>4,723,246</td>
+            
             <td>Received</td>         
           </tr>
           <tr>
-            <td>BQB/</td>
+            <td>Sep-20</td>
+            <td>3,272,703</td>
             <td>1,670,513</td>
             <td>1,225,684</td>
             <td>376,506</td>
-            <td>3,272,703</td>
+            
             <td>Received</td>         
           </tr>
           <tr>
-            <td>BQB/SHK/2039/475, 475A</td>
+            <td>Oct-20</td>
+            <td>3,187,641</td>
             <td>1,644,612</td>
             <td>1,176,309</td>
             <td>366,720</td>
-            <td>3,187,641</td>
+            
             <td>Received</td>         
           </tr>
           <tr>
-            <td>BQB/SHK/2039/490, 490A</td>
+            <td>Nov-20</td>
+            <td>3,299,229</td>
             <td>1,766,824</td>
             <td>1,152,848</td>
             <td>379,557</td>
-            <td>3,299,229</td>
+           
             <td>Received</td>         
           </tr>
           <tr>
-            <td>BQB/SHK/2039/515, 515A</td>
+            <td>Dec-20</td>
+            <td>3,657,687</td>
             <td>1,958,737</td>
             <td>1,278,154</td>
             <td>420,796</td>
-            <td>3,657,687</td>
+            
             <td>Received</td>         
           </tr>
           <tr>
-            <td>&A</td>
+            <td>Jan-21</td>
+            <td>3,819,626</td>
             <td>2,030,133</td>
             <td>1,350,067</td>
             <td>439,426</td>
-            <td>3,819,626</td>
+            
             <td>Received</td>         
           </tr>
           <tr>
-            <td>569 & 569A</td>
-            <td>1,965,013</td>
+            <td>Feb-21</td>
+            <td>3,787,118</td>
+            <td>2,107,998</td>
             <td>1,243,434</td>
-            <td>417,098</td>
-            <td>3,625,545</td>
+            <td>435,686</td>
+           
             <td>Received</td>         
           </tr>
           <tr>
-            <td>570</td>
-            <td>142,985</td>
-            <td></td>
-            <td>18,588</td>
-            <td>161,573</td>
-            <td>Received</td>         
-          </tr>
-          <tr>
-            <td>597 & 597-A</td>
-            <td>2,354,573</td>
+            <td>Mar-21</td>
+            <td>4,494,139</td>
+            <td>2,515,127</td>
             <td>1,461,987</td>
-            <td>496,153</td>
-            <td>4,312,713</td>
+            <td>517,025</td>
+           
             <td>Received</td>         
           </tr>
           <tr>
-            <td>598</td>
-            <td>160,554</td>
-            <td></td>
-            <td>20,872</td>
-            <td>181,426</td>
-            <td>Received</td>         
-          </tr>
-          <tr>
-            <td>625 & 625-A</td>
-            <td>2,887,473</td>
+            <td>Apr-21</td>
+            <td>5,109,262</td>
+            <td>3,158,945</td>
             <td>1,362,526</td>
-            <td>552,500</td>
-            <td>4,802,499</td>
+            <td>587,791</td>
+            
             <td>Received</td>         
           </tr>
           <tr>
-            <td>626</td>
-            <td>271,472</td>
-            <td></td>
-            <td>35,291</td>
-            <td>306,763</td>
-            <td>Pending</td>         
-          </tr>
-          <tr>
-            <td>648 & 648A</td>
-            <td>2,916,676</td>
+            <td>May-21</td>
+            <td>5,006,917</td>
+            <td>3,200,356</td>
             <td>1,230,544</td>
-            <td>539,139</td>
-            <td>4,686,359 </td>
+            <td>576,017</td>
+           
             <td>Pending</td>         
           </tr>
           <tr>
-            <td>648B</td>
-            <td>283,680</td>
-            <td></td>
-            <td>36,878</td>
-            <td>320,558</td>
-            <td>Pending</td>         
-          </tr>
-          <tr>
-            <td>659 & 659A</td>
-            <td>2,441,537</td>
+            <td>Jun-21</td>
+            <td>4,788,247</td>
+            <td>2,628,363</td>
             <td>1,609,024</td>
-            <td>526,573</td>
-            <td>4,577,134</td>
+            <td>550,860</td>
+           
             <td>Pending</td>         
           </tr>
           <tr>
-            <td>659B</td>
-            <td> 186,826 </td>
-            <td></td>
-            <td>24,287</td>
-            <td>211,113</td>
-            <td>Pending</td>         
-          </tr>
-          <tr>
-            <td>684 &684B</td>
-            <td>2,796,263</td>
+            <td>Jul-21</td>
+            <td>5,344,065</td>
+            <td>3,147,956 </td>
             <td>1,581,305</td>
-            <td>569,084</td>
-            <td>4,946,652</td>
+            <td>614,804</td>
+           
             <td>Pending</td>         
           </tr>
-          <tr>
-            <td>684A</td>
-            <td>351,693</td>
-            <td></td>
-            <td>45,720</td>
-            <td>397,413</td>
-            <td>Pending</td>         
-          </tr>
+         
           
         
         </tbody>
@@ -218,13 +188,46 @@
 
     
       google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart1);
+      
+
+
+      //Pending Invoice
+      google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
       
-       function drawChart() {
+      function drawChart() {
+        
+
+        var total = "15,139,229";
+
+        var data1 = google.visualization.arrayToDataTable([
+          ['Invoice Month', 'Pending Amount'],
+          ['May-21',     5006917],
+          ['June-21',     4788247],
+          ['July-21',     5344065]
+          
+        ]);
+
+        colorsHex = ['#1e8449','#007fff','#17c9ff','#e3890b','#f22e07'];  
+        var options1 = {
+          title: 'Pending Invoice Detail'+ ' - (Total Pending Invoice = '+ total+')',
+          colors: colorsHex,
+          is3D: true,
+          pieSliceText: 'value',
+          legend:{position:'left'}
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('pendingInvoice'));
+
+        chart.draw(data1, options1);
+      }
+
+      function drawChart1() {
 
         var data = google.visualization.arrayToDataTable([
         ["Element", "Millon", { role: "style" } ],
-        ["Invoice Pending",  15445992, "Red"],
+        ["Invoice Pending",  15139229, "Red",],
         ["Invoice Received",   51393635, "yellow"],
         ["Invoice Raised",   66839627, "green"]
       ]);
@@ -238,11 +241,12 @@
                        2]);
 
       var options = {
-        title: "Invoice Status in Rupees Millon",
+        title: "Invoice Status in Rupees upto July 2021",
         bar: {groupWidth: "95%"},
         legend: { position: "none" },
       };
         var chart = new google.visualization.BarChart(document.getElementById('invoice'));
+
 
         chart.draw(view, options);
       }
@@ -252,7 +256,8 @@ $(document).ready(function() {
 
   
             $('#myTable').DataTable({
-         
+              "pageLength": 30,
+              "order": [[ 5, "asc" ]],
              "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  
