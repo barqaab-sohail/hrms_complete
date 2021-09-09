@@ -252,7 +252,7 @@ class EmployeeController extends Controller
         
        
         if($request->filled('category')){
-        $result = collect(HrEmployee::join('employee_categories','employee_categories.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','employee_categories.hr_category_id','employee_categories.effective_date as cat')->where('hr_status_id',1)->orderBy('cat','desc')->get());
+        $result = collect(HrEmployee::join('employee_categories','employee_categories.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','employee_categories.hr_category_id','employee_categories.effective_date as cat')->whereIn('hr_status_id',array(1,5))->orderBy('cat','desc')->get());
             $resultUnique = ($result->unique('id'));
             $resultUnique->values()->all();
             $result = $resultUnique->where('hr_category_id',$request->category);
