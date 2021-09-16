@@ -15,7 +15,7 @@
 					<th>Id</th>
 					<th>Asset Code</th>
 					<th>Description</th>
-					<th>Location</th>
+					<th>Location/Allocation</th>
 					<th>Barcode</th>
 					<th>Image</th>
 					<th class="text-center"style="width:5%">Edit</th> 
