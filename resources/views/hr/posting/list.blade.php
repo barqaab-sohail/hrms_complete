@@ -28,7 +28,7 @@
 							<tr>
 								
 								<td>{{$posting->remarks}}</td>
-								<td>{{$posting->effective_date}}</td>
+								<td>{{date('M d, Y', strtotime($posting->effective_date))}}</td>
 								
 								@can('hr edit posting')
 								<td class="text-center">

@@ -15,6 +15,7 @@
                     <th>Employee Id</th>
                     <th>Employee Name</th>
                     <th>Designation/Position</th>
+                    <th>Division</th>
                     <th>Date of Birth</th>
                     <th>Status</th>
                     <th>CNIC</th>
@@ -32,6 +33,7 @@
                             <td>{{$employee->employee_no??''}}</td>
                             <td>{{$employee->first_name}} {{$employee->last_name}}</td>
                             <td>{{$employee->employeeDesignation->last()->name??''}}</td>
+                            <td>{{$employee->employeeDepartment->last()->name??''}}</td>
                             <td>{{$employee->formatted_date_of_birth}}</td>
                             <td>{{$employee->hr_status_id}}</td>
                             <td>{{$employee->cnic}}</td>
