@@ -12,14 +12,14 @@
 			<table id="myTable" class="table table-bordered table-striped"  style="width:100%" >
 				<thead>
 				<tr>
-					<th>Employee Id</th>
+					<th>Sr. No.</th>
 					<th>Employee Name</th>
 					<th>Designation/Position</th>
 					<th>Category</th>
 					<th>CNIC</th>
 					<th>HOD</th>
 					<th>Date of Joining</th>
-					<th>Employee No</th>
+					<th>Employee Id</th>
 					<th>Mobile</th>
 					
 					<th class="text-center"style="width:5%">Edit</th> 
@@ -28,16 +28,20 @@
 				</tr>
 				</thead>
 				<tbody>
+					@php
+						$serial = 1;
+					@endphp
+
 					@foreach($employees as $employee)
 						<tr>
-							<td>{{$employee->employee_no}}</td>
+							<td>{{$serial++}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 							<td>{{$employee->employeeDesignation->last()->name??''}}</td>
 							<td>{{$employee->employeeCategory->last()->name??''}}</td>
 							<td>{{$employee->cnic}}</td>
 							<td>{{employeeFullName($employee->hod->hr_manager_id??'')}}</td>
 							<td>{{$employee->employeeAppointment->formatted_joining_date??''}}</td>
-							<td>{{$employee->employee_no??''}}</td>
+							<td>{{$employee->employee_no}}</td>
 							<td>{{$employee->hrContactMobile->mobile??''}}</td>
 							
 							

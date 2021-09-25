@@ -26,7 +26,7 @@
 						@foreach($hrPromotions as $promotion)
 							<tr>
 								<td>{{$promotion->remarks}}</td>
-								<td>{{$promotion->effective_date}}</td>
+								<td>{{date('M d, Y', strtotime($promotion->effective_date))}}</td>
 								
 								@can('hr edit promotion')
 								<td class="text-center">
