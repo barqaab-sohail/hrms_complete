@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Common\Gender;
 use App\Models\Common\MaritalStatus;
@@ -98,9 +99,14 @@ class EmployeeController extends Controller
                     return $data->employeeOffice->last()->name??'';
 
                 }else{
-                    $link = '<a href="'.route('project.edit',$data->employeeProject->last()->id??'').'" style="color:grey">'.$data->employeeProject->last()->name??''.'</';
+
+                    if(Auth::user()->hasPermissionTo('hr edit documentation')){
+                    $link = '<a href="'.route('project.edit',$data->employeeProject->last()->id??'').'" style="color:grey">'.$data->employeeProject->last()->name??''.'</a>';
                      return $link;
-                    //return $data->employeeProject->last()->name??'';
+                    } else{
+                        return $data->employeeProject->last()->name??'';
+                    }
+
                 }
 
             })
@@ -114,9 +120,15 @@ class EmployeeController extends Controller
                 return $data->hrContactMobile->mobile??'';
             })
             ->addColumn('edit', function($data){
+
+                    if(Auth::user()->hasPermissionTo('hr edit documentation')){
+                        
                         $button = '<a class="btn btn-success btn-sm" href="'.route('employee.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+
                         return $button;
-                    })
+                    } 
+
+            })
             ->addColumn('delete', function($data){
                         $button = '<form  id="formDeleteContact'.$data->id.'"  action="'.route('employee.destroy',$data->id).'" method="POST">'.method_field('DELETE').csrf_field().'
                                  <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>

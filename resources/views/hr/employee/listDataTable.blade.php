@@ -21,7 +21,11 @@
 					<th>CNIC</th>
 					<th>Date of Joining</th>
 					<th>Mobile</th>
-					<th class="text-center"style="width:5%">Edit</th> 
+
+					@can('hr edit documentation')
+					<th class="text-center"style="width:5%">Edit</th>
+					@endcan
+
 					@role('Super Admin')
 					<th class="text-center"style="width:5%">Delete</th>
 					@endrole
@@ -53,7 +57,9 @@ $(document).ready(function() {
 		   {data: 'cnic', name: 'cnic'},
 		   {data: 'date_of_joining', name: 'date_of_joining'},
 		   {data: 'mobile', name: 'mobile'},
+		   @can('hr edit documentation')
 		   {data: 'edit',name: 'edit', orderable: false, searchable: false },
+		   @endcan
 		   @role('Super Admin')
 		   {data: 'delete',name: 'delete', orderable: false, searchable: false }
 		   @endrole
