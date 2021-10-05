@@ -1,8 +1,8 @@
-
-<div style="margin-top:10px; margin-right: 10px;">
-    <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Document</button>
-</div>
-
+@can('pr edit documentation')
+    <div style="margin-top:10px; margin-right: 10px;">
+        <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Document</button>
+    </div>
+@endcan
 
 <div class="card-body" id="hideDiv">
     <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formDocument" enctype="multipart/form-data">

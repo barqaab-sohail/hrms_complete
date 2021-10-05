@@ -1,7 +1,7 @@
-@can('hr edit record')
-<div style="margin-top:10px; margin-right: 10px;">
-    <a type="button" style="color:white;" id ="hideButton"  class="btn btn-success float-right">Add Document</a>
-</div>
+@can('pr edit documentation')
+    <div style="margin-top:10px; margin-right: 10px;">
+        <a type="button" style="color:white;" id ="hideButton"  class="btn btn-success float-right">Add Document</a>
+    </div>
 @endcan
 
 
