@@ -56,12 +56,12 @@
 				</thead>
 				<tbody>
 					
-					@if(Auth::User()->can('pr edit power'))
+					@if(Auth::User()->can('pr edit power') || Auth::User()->can('pr view power'))
 						@php
 						$projects = $projects->merge($powerProjects);
 						@endphp
 					@endif	
-					@if(Auth::User()->can('pr edit water'))
+					@if(Auth::User()->can('pr edit water') || Auth::User()->can('pr view water'))
 						@php
 						$projects = $projects->merge($waterProjects);
 						@endphp				

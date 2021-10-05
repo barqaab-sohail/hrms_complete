@@ -24,4 +24,6 @@ class HrDocumentation extends Model implements Auditable
         return $this->belongsToMany('App\Models\Hr\HrDocumentName');
         
     }
+
+    
 }

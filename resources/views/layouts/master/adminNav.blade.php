@@ -101,15 +101,21 @@
 <!-- End CV -->
  
 <!-- Project -->
-                @canany(['pr edit power','pr edit water'])
+                @canany(['pr edit power','pr edit water', 'pr view water', 'pr view power'])
                <li class="{{Request::is('hrms/project*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fas fa-cubes"></i><span class="hide-menu">Projects</span></a>
                     <ul aria-expanded="false" class="collapse">
                    
-                   
+                        @canany(['pr add water', 'pr add power'])
                         <li><a  class="{{Request::is('hrms/project/create')?'active':''}}" href="{{route('project.create')}}">Add Project</a></li>
-                        <li><a  class="{{Request::is('hrms/project')?'active':''}}" href="{{route('project.index')}}">List of Projects</a></li>
+                         @endcanany
 
-                        <li><a  class="{{Request::is('hrms/project/search')?'active':''}}" href="{{route('project.search')}}">Search Documentation</a></li>                  
+                        @canany(['pr view water', 'pr view power'])
+                        <li><a  class="{{Request::is('hrms/project')?'active':''}}" href="{{route('project.index')}}">List of Projects</a></li>
+                         @endcanany
+
+                        @can('Super Admin')
+                        <li><a  class="{{Request::is('hrms/project/search')?'active':''}}" href="{{route('project.search')}}">Search Documentation</a></li> 
+                        @endcan                 
                                                
                     </ul>
                 </li>

@@ -182,7 +182,7 @@
             </div> <!--/End Form Boday-->
 
             <hr>
-
+            @canany(['pr edit water', 'pr edit power'])
             <div class="form-actions">
                 <div class="row">
                     <div class="col-md-6">
@@ -194,6 +194,7 @@
                     </div>
                 </div>
             </div>
+            @endcanany
         </form>
 	</div> <!-- end card body -->    
 

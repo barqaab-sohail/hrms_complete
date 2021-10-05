@@ -130,7 +130,6 @@ class DocumentationController extends Controller
             return back()->withError('Please contact to administrator, SSE_JS');
         }
 
-
     }
 
 
@@ -325,7 +324,12 @@ class DocumentationController extends Controller
 
     public function refreshTable(){
         
-        $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->get();
+        $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->orderByRaw('ISNULL(document_date), document_date ASC')->get();
+
+        // foreach ($documentIds as $document){
+        //     echo $document->document_date . '<br>';
+        // }
+        // dd();
 
         $Ids = $documentIds->pluck('id')->toArray();
         //For security checking
