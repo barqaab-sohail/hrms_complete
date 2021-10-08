@@ -25,7 +25,7 @@
 					@foreach($documentIds as $documentId)
 					<tr>
 						<td>{{$documentId->description}}</td>
-						<td>{{$documentId->document_date??''}}</td>
+						<td>{{isset($documentId->document_date)?date('M d, Y', strtotime($documentId->document_date)):''}}</td>
 						@if($documentId->extension!='pdf')
 						<td><img  id="ViewIMG" src="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" href="{{asset(isset($documentId->file_name)?  'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30/></td>
 						@else
@@ -71,11 +71,7 @@
 	      			scrollX:        true,
 	        		scrollCollapse: true,
 	        		paging:         false,
-	        		
-	        	// 	columnDefs: [
-       			// 		{ type: 'date-dd-mmm-yyyy', targets: 1 }
-     					// ],
-     				 "order": [[ 1, "asc" ]],
+	        		bSort: 			false,
 	        		fixedColumns:   {
 	            		leftColumns: 1,
 	            		rightColumns:2
