@@ -165,4 +165,13 @@ function getDivision($id){
 }
 
 
+function countPdfPages($path) {
+
+  $pdftext = json_decode(file_get_contents($path));
+
+  $num = preg_match_all("/\/Page\W/", $pdftext, $dummy);
+
+  return $num;
+
+}
 

@@ -19,6 +19,7 @@
                           <th style="font-weight:bold">Employee Name</th>
                           <th id="project" style="font-weight:bold">Project/Office</th>
                           <th style="font-weight:bold">Expiry Date</th>
+                          <th style="font-weight:bold">Mobile</th>
                       </tr>
                     </thead>
                     <tbody id="tbody">
@@ -72,6 +73,8 @@ $('#cnicExpiryDetail').click(function(e){
               + office
               + '</td><td>'
               + this.cnic_expiry_date
+              + '</td><td>'
+              + this.mobile
               + '</td></tr>'
           );
         });
@@ -112,6 +115,8 @@ $('#appointmentExpiryDetail').click(function(e){
               + office
               + '</td><td>'
               + this.appointment_expiry_date
+              + '</td><td>'
+              + this.mobile
               + '</td></tr>'
           );
         });
@@ -155,6 +160,8 @@ $('#drivingLicenceExpiryTotal').click(function(e){
               + office
               + '</td><td>'
               + this.licence_expiry_date
+              + '</td><td>'
+              + this.mobile
               + '</td></tr>'
           );
         });
@@ -194,6 +201,8 @@ $('#pecCardExpiry').click(function(e){
               + office
               + '</td><td>'
               + this.pec_expiry_date
+              + '</td><td>'
+              + this.mobile
               + '</td></tr>'
           );
         });

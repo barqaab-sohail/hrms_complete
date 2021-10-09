@@ -30,6 +30,7 @@ class HrAlertController extends Controller
                 "employee_project"=>$employee->employeeProject->last()->name??'',
                 "employee_office"=>$employee->employeeOffice->last()->name??'',
 				"cnic_expiry_date" =>\Carbon\Carbon::parse( $employee->cnic_expiry)->format('M d, Y'),
+                "mobile"=>$employee->hrContactMobile->mobile??'',
 			);  			
     	}
 
@@ -52,6 +53,7 @@ class HrAlertController extends Controller
                     "employee_project"=>$employee->employeeProject->last()->name??'',
                     "employee_office"=>$employee->employeeOffice->last()->name??'',
 					"appointment_expiry_date" =>  \Carbon\Carbon::parse( $employee->employeeAppointment->expiry_date)->format('M d, Y'),
+                    "mobile"=>$employee->hrContactMobile->mobile??'',
 					);  	
                     
                 }
@@ -79,6 +81,7 @@ class HrAlertController extends Controller
                         "employee_project"=>$employee->employeeProject->last()->name??'',
                         "employee_office"=>$employee->employeeOffice->last()->name??'',
                         "licence_expiry_date" => \Carbon\Carbon::parse($employee->hrDriving->licence_expiry)->format('M d, Y'),
+                        "mobile"=>$employee->hrContactMobile->mobile??'',
                         );      
                         
                     }
@@ -106,6 +109,7 @@ class HrAlertController extends Controller
                     "employee_project"=>$employee->employeeProject->last()->name??'',
                     "employee_office"=>$employee->employeeOffice->last()->name??'',
                     "pec_expiry_date" => \Carbon\Carbon::parse($employee->hrMembership->expiry)->format('M d, Y'),
+                    "mobile"=>$employee->hrContactMobile->mobile??'',
                     );      
                     
                 }
