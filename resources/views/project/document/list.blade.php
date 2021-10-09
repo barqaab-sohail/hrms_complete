@@ -13,6 +13,7 @@
 						<th>Description</th>
 						<th>Reference No.</th>
 						<th>Date</th>
+						<th>Size (MB)</th>
 						<th>View</th>
 						@can('pr edit document')			 
 						<th class="text-center"style="width:5%">Edit</th>
@@ -28,6 +29,7 @@
 						<td>{{$documentId->description}}</td>
 						<td>{{$documentId->reference_no}}</td>
 						<td>{{$documentId->document_date}}</td>
+						<td>{{round(($documentId->size/1000000),2)}}</td>
 						@if(($documentId->extension == "jpg")||($documentId->extension == "jpeg")||($documentId->extension == "png"))
 						<td><img  id="ViewIMG" src="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" href="{{asset(isset($documentId->file_name)?  'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30/></td>
 						@elseif ($documentId->extension == 'pdf')
