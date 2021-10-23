@@ -26,7 +26,7 @@ class PrConsultancyCostStore extends FormRequest
         return [
             
             'pr_cost_type_id'=>'required|numeric',
-            'man_month_cost'=>'required',
+            'total_cost'=>'required',
             
         ];
     }

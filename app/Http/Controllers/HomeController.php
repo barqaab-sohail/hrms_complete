@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Charts\Hr\DepartmentChart;
+//use Illuminate\Support\Facades\Route;
 
 class HomeController extends Controller
 {
@@ -22,7 +23,8 @@ class HomeController extends Controller
     public function index()
     {
 
-
+        // $allRoutes = Route::getRoutes();
+        // dd($allRoutes);
 
         $countBelowForty = ageChart()['countBelowForty'];
         $countBelowFifty = ageChart()['countBelowFifty'];

@@ -141,6 +141,10 @@ Route::resource('/cvDocument', 'CvDocumentController');
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Project'], function(){
 Route::post('/project/import', 'ProjectController@import')->name('project.import');
 Route::get('/project/search', 'ProjectController@search')->name('project.search');
+
+Route::resource('/project rights', 'ProjectRightController');
+
+
 Route::get('/result', 'ProjectController@result')->name('project.result');
 Route::resource('/project', 'ProjectController');
 Route::resource('/projectPartner', 'ProjectPartnerController');
@@ -153,12 +157,14 @@ Route::get('/projectPosition/refreshTable', 'ProjectPositionController@refreshTa
 Route::resource('/projectPosition', 'ProjectPositionController');
 Route::get('/projectConsultancyCost/refreshTable', 'ProjectConsultancyCostController@refreshTable')->name('projectConsultancyCost.table');
 Route::resource('/projectConsultancyCost', 'ProjectConsultancyCostController');
-Route::get('/projectProgress/chart', 'ProjectProgressController@chart')->name('projectProgress.chart');
+
 Route::get('/projectInvoice/chart', 'ProjectInvoiceController@chart')->name('projectInvoice.chart');
 
-
+Route::get('/projectProgressChart', 'Progress\ActivityController@chart')->name('projectProgress.chart');
 
 });
+
+
 
 //Assets Routes
 
@@ -209,9 +215,6 @@ Route::group(['prefix' => 'invoice', 'middleware' => ['auth','XssSanitizer'], 'n
 	Route::resource('/invoiceRights', 'InvoiceRightsController');
 
 });
-
-
-
 
 
 

@@ -19,6 +19,29 @@ function employeeFullName($id){
 		}
 }
 
+function rights(){
+	$rights = [	0 => 'No Rights', 
+				1 => 'View Rights', 
+				2 => 'Add Rights', 
+				3 => 'Delete Rights'
+			];
+
+	return $rights;
+
+}
+
+function addComma($id){
+
+	if($id){
+
+		return number_format($id);
+	}else
+	{
+		return '';
+	}
+}
+
+
 function generateEmployeeId(){
 	$employeeId = 1000750;
 	
