@@ -10,49 +10,38 @@ class PrConsultancyCost extends Model implements Auditable
     
     use \OwenIt\Auditing\Auditable;
     
-   protected $fillable = ['pr_detail_id', 'pr_cost_type_id','partner_id'];
+   protected $fillable = ['pr_detail_id', 'pr_cost_type_id','total_cost','remarks'];
 
 
-   public function prConsultancyCostMm(){
+   public function prManMonthCost(){
 
-        return $this->hasOne('App\Models\Project\PrConsultancyCostMm');
-
-    }
-
-    public function prConsultancyCostDirect(){
-
-        return $this->hasOne('App\Models\Project\PrConsultancyCostDirect');
+        return $this->hasOne('App\Models\Project\PrManMonthCost');
 
     }
 
-    public function prConsultancyCostTax(){
+    public function prDirectCost(){
 
-        return $this->hasOne('App\Models\Project\PrConsultancyCostTax');
-
-    }
-
-     public function prConsultancyCostContingency(){
-
-        return $this->hasOne('App\Models\Project\PrConsultancyCostContingency');
+        return $this->hasOne('App\Models\Project\PrDirectCost');
 
     }
 
-    public function prConsultancyCostType(){
+    public function prSalesTax(){
+
+        return $this->hasOne('App\Models\Project\PrSalesTax');
+
+    }
+
+     public function prContingency(){
+
+        return $this->hasOne('App\Models\Project\PrContingency');
+
+    }
+
+    public function prCostType(){
 
         return $this->belongsTo('App\Models\Project\PrCostType', 'pr_cost_type_id');
 
     }
-
-    public function prFirmName(){
-
-        return $this->belongsTo('App\Models\Common\Partner', 'partner_id');
-
-    }
-
-
-    // public function prConsultancyCostType(){
-    //     return $this->belongsTo('App\Models\Project\PrCostType');
-    // }
 
 
 }

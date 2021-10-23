@@ -17,7 +17,6 @@ class ProjectCodeController extends Controller
 	    $categories = PrCategory::all();
 	    $divisions = PrDivision::all();
 	    $workTypes = PrWorkType::all();
-
 	    $years =  array();
 	    $number=1999;
 	    	for ($i=0;$i<22;$i++){
