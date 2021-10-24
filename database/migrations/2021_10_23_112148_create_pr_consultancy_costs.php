@@ -19,7 +19,7 @@ class CreatePrConsultancyCosts extends Migration
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->bigInteger('pr_cost_type_id')->unsigned();
             $table->decimal('total_cost',12,2);
-            $table->string('remarks');
+            $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('pr_cost_type_id')->references('id')->on('pr_cost_types');
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
