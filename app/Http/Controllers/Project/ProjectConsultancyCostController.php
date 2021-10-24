@@ -143,7 +143,10 @@ class ProjectConsultancyCostController extends Controller
 
 	public function edit($id){
 
-		$consultancyCost = PrConsultancyCost::with('prManMonthCost','prDirectCost','prSalesTax','prContingency','prCostType')->find($id);
+		//$consultancyCost = PrConsultancyCost::with('prManMonthCost','prDirectCost','prSalesTax','prContingency','prCostType')->find($id);
+
+        $consultancyCost = PrConsultancyCost::join('pr_man_month_costs','pr_man_month_costs.pr_consultancy_cost_id','=','pr_consultancy_costs.id')->where('pr_consultancy_cost_id',$id)
+           ->first();
 
         return response()->json($consultancyCost);
 
