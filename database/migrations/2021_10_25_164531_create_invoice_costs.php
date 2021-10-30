@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrManMonthCosts extends Migration
+class CreateInvoiceCosts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreatePrManMonthCosts extends Migration
      */
     public function up()
     {
-        Schema::create('pr_man_month_costs', function (Blueprint $table) {
+        Schema::create('invoice_costs', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->bigInteger('pr_consultancy_cost_id')->unsigned();
-            $table->decimal('man_month_cost',12,0);
+            $table->bigInteger('invoice_id')->unsigned();
+            $table->decimal('cost',12,0);
+            $table->decimal('sales_tax',12,0);
             $table->timestamps();
-            $table->foreign('pr_consultancy_cost_id')->references('id')->on('pr_consultancy_costs')->onDelete('cascade');
-
+            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
         });
     }
 
@@ -31,6 +31,6 @@ class CreatePrManMonthCosts extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pr_man_month_costs');
+        Schema::dropIfExists('invoice_costs');
     }
 }

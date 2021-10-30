@@ -187,7 +187,7 @@ class HrEmployee extends Model implements Auditable
             'id',                                             //Final Model Primary Key
             'id',
             'education_id'                             //Forein Key in Immediate Model of Final Model
-        )->where('educations.level','>',12);
+        )->where('educations.level','>=',12);
 
     }
 
@@ -197,7 +197,7 @@ class HrEmployee extends Model implements Auditable
                      $join->on('hr_educations.education_id', '=', 'educations.id');
 
                 })
-                ->where('educations.level','>',12);
+                ->where('educations.level','>=',12);
 
     }
 

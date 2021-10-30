@@ -1,6 +1,6 @@
 
 <div class="card-body">
-  <button type="button" class="btn btn-success"  id ="createConsultancyCost" data-toggle="modal" >Add Consultancy Cost</button>
+  <button type="button" class="btn btn-success float-right"  id ="createConsultancyCost" data-toggle="modal" >Add Consultancy Cost</button>
   <br>
   <table class="table table-bordered data-table">
     <thead>
@@ -34,7 +34,7 @@
                 <form id="consultancyCostForm" name="consultancyCostForm" action="{{route('projectConsultancyCost.store')}}"class="form-horizontal">
                    
                    <input type="hidden" name="cost_id" id="cost_id">
-                   <input type="hidden" name="pr_detail_id" id="pr_detail_id" value="{{session('pr_detail_id')}}">
+                 
                     <div class="form-group">
                         <label class="control-label text-right">Cost Type<span class="text_requried">*</span></label>
                         <select  id="pr_cost_type_id"   name="pr_cost_type_id"  class="form-control selectTwo" data-validation="required">
@@ -135,7 +135,8 @@ $(document).ready(function() {
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
 
         ],
-        order: [[ 1, "desc" ]]
+     
+        order: [[ 0, "desc" ]]
     });
 
     $('#createConsultancyCost').click(function () {
@@ -143,13 +144,13 @@ $(document).ready(function() {
         $('#saveBtn').val("Create Cost");
         $('#pr_cost_type_id').val('');
         $('#pr_cost_type_id').trigger('change');
+        $('#cost_id').val('');
         $('#consultancyCostForm').trigger("reset");
         $('#modelHeading').html("Create New Cost");
         $('#ajaxModel').modal('show');
     });
     $('body').unbind().on('click', '.editCost', function () {
       var cost_id = $(this).data('id');
-
       $('#json_message_modal').html('');
       $.get("{{ url('hrms/projectConsultancyCost') }}" +'/' + cost_id +'/edit', function (data) {
           $('#modelHeading').html("Edit Consultancy Cost");
@@ -158,11 +159,16 @@ $(document).ready(function() {
           $('#cost_id').val(data.id);
           $('#pr_cost_type_id').val(data.pr_cost_type_id);
           $('#pr_cost_type_id').trigger('change');
-          $('#total_cost').val(data.total_cost);
-          $('#man_month_cost').val(data.man_month_cost);
-          $('#direct_cost').val(data.direct_cost);
-          $('#contingency').val(data.contingency);
-          $('#sales_tax').val(data.sales_tax);
+          var totalCost = (data.total_cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          $('#total_cost').val(totalCost);
+          var manMonthCost = (data.man_month_cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          $('#man_month_cost').val(manMonthCost);
+          var directCost = (data.direct_cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          $('#direct_cost').val(directCost);
+          var contingency = (data.contingency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          $('#contingency').val(contingency);
+          var salesTax = (data.sales_tax).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          $('#sales_tax').val(salesTax);
           $('#remarks').val(data.remarks);
               console.log(data);
          

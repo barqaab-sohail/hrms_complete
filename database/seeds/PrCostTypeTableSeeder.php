@@ -13,8 +13,8 @@ class PrCostTypeTableSeeder extends Seeder
     {
         DB::table('pr_cost_types')->delete();  
         $prCostTypes = array(
-        	array('name' => 'Original Contract Cost'),
-        	array('name' => 'Amendment'),
+        	array('name' => 'Original Cost'),
+        	array('name' => 'Amendment Cost'),
         );
         DB::table('pr_cost_types')->insert($prCostTypes);
     }

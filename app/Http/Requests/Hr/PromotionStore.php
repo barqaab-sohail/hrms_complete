@@ -23,7 +23,7 @@ class PromotionStore extends FormRequest
      */
     public function rules()
     {
-         $rules = [
+        $rules = [
             
             
             'effective_date' => 'required',

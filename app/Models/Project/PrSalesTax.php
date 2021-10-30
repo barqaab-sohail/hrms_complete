@@ -8,5 +8,5 @@ use OwenIt\Auditing\Contracts\Auditable;
 class PrSalesTax extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    protected $fillable = ['sales_tax'];
+    protected $fillable = ['pr_consultancy_cost_id','sales_tax'];
 }

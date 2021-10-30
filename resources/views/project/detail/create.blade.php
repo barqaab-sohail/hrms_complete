@@ -3,9 +3,7 @@
 @section('Heading')
 	<h3 class="text-themecolor">Projects</h3>
 	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="javascript:void(0)">New Project Detail</a></li>
-		
-		
+		<li class="breadcrumb-item"><a href="javascript:void(0)">New Project Detail</a></li>	
 	</ol>
 @stop
 @section('content')

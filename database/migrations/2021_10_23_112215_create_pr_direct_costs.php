@@ -17,7 +17,7 @@ class CreatePrDirectCosts extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('pr_consultancy_cost_id')->unsigned();
-            $table->decimal('direct_cost',12,2);
+            $table->decimal('direct_cost',12,0);
             $table->timestamps();
             $table->foreign('pr_consultancy_cost_id')->references('id')->on('pr_consultancy_costs')->onDelete('cascade');
         });

@@ -9,5 +9,5 @@ class PrDirectCost extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['direct_cost'];
+    protected $fillable = ['pr_consultancy_cost_id','direct_cost'];
 }

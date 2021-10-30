@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use App\Models\Project\PrCostType;
 use App\Models\Project\PrDetail;
 use App\Models\Project\PrConsultancyCost;
@@ -58,14 +59,16 @@ class ProjectConsultancyCostController extends Controller
                            return addComma($row->total_cost??'');
                            
                     })
+
                     ->addColumn('man_month_cost', function($row){                
-                      
+                        if($row->prManMonthCost->man_month_cost??''){
                            return addComma($row->prManMonthCost->man_month_cost??'');
+                        }
                            
                     })
                     ->addColumn('direct_cost', function($row){                
-                      
-                           return addComma($row->prDirectoCost->direct_cost??'');
+
+                           return addComma($row->prDirectCost->direct_cost??'');
                            
                     })
                     ->addColumn('sales_tax', function($row){                
@@ -96,8 +99,6 @@ class ProjectConsultancyCostController extends Controller
 		$input = $request->all();
 		
         $input['pr_detail_id']=session('pr_detail_id');
-
-       
         $input ['total_cost']= intval(str_replace( ',', '', $request->total_cost));
         
 		
@@ -131,9 +132,36 @@ class ProjectConsultancyCostController extends Controller
                 ['pr_consultancy_cost_id'=> $prConsultancyCost->id,
                 'man_month_cost'=> $input['man_month_cost']
                 ]); 
+            }else{
+                PrManMonthCost::where('pr_consultancy_cost_id',$prConsultancyCost->id)->delete();
             }
 
+            if($request->filled('direct_cost')){
+                PrDirectCost::updateOrCreate(['pr_consultancy_cost_id' => $prConsultancyCost->id],
+                ['pr_consultancy_cost_id'=> $prConsultancyCost->id,
+                'direct_cost'=> $input['direct_cost']
+                ]); 
+            }else{
+                PrDirectCost::where('pr_consultancy_cost_id',$prConsultancyCost->id)->delete();
+            }
 
+            if($request->filled('sales_tax')){
+                PrSalesTax::updateOrCreate(['pr_consultancy_cost_id' => $prConsultancyCost->id],
+                ['pr_consultancy_cost_id'=> $prConsultancyCost->id,
+                'sales_tax'=> $input['sales_tax']
+                ]); 
+            }else{
+                PrSalesTax::where('pr_consultancy_cost_id',$prConsultancyCost->id)->delete();
+            }
+
+            if($request->filled('contingency')){
+                PrContingency::updateOrCreate(['pr_consultancy_cost_id' => $prConsultancyCost->id],
+                ['pr_consultancy_cost_id'=> $prConsultancyCost->id,
+                'contingency'=> $input['contingency']
+                ]); 
+            }else{
+                PrContingency::where('pr_consultancy_cost_id',$prConsultancyCost->id)->delete();
+            }
 
     	}); // end transcation
 
@@ -143,10 +171,28 @@ class ProjectConsultancyCostController extends Controller
 
 	public function edit($id){
 
-		//$consultancyCost = PrConsultancyCost::with('prManMonthCost','prDirectCost','prSalesTax','prContingency','prCostType')->find($id);
+		
+        $manMonthCost = PrManMonthCost::where('pr_consultancy_cost_id',$id)->select('man_month_cost')->first();
+        $manMonthCost = new Collection($manMonthCost);
 
-        $consultancyCost = PrConsultancyCost::join('pr_man_month_costs','pr_man_month_costs.pr_consultancy_cost_id','=','pr_consultancy_costs.id')->where('pr_consultancy_cost_id',$id)
-           ->first();
+        $directCost = PrDirectCost::where('pr_consultancy_cost_id',$id)->select('direct_cost')->first();
+        $directCost = new Collection($directCost);
+
+        $salesTax = PrSalesTax::where('pr_consultancy_cost_id',$id)->select('sales_tax')->first();
+        $salesTax = new Collection($salesTax);
+
+        $contingency = PrContingency::where('pr_consultancy_cost_id',$id)->select('contingency')->first();
+        $contingency = new Collection($contingency);
+
+        
+        $consultancyCost= PrConsultancyCost::find($id);
+        $consultancyCost = new Collection ($consultancyCost);
+        
+
+        $consultancyCost = $consultancyCost->merge($manMonthCost);
+        $consultancyCost = $consultancyCost->merge($directCost);
+        $consultancyCost = $consultancyCost->merge($salesTax);
+        $consultancyCost = $consultancyCost->merge($contingency);
 
         return response()->json($consultancyCost);
 
