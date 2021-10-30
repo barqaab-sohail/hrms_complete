@@ -10,15 +10,21 @@
 @stop
 @section('content')
 <div class="row">
+    <div class="col-lg-2">
+	@include('layouts.vButton.prButtonDropDown')
+</div>
+</div>
+
+<div class="row">
     <div class="col-lg-12">
         <div class="card card-outline-info">
 			<div class="row">
-				<div class="col-lg-2">
-					@include('layouts.vButton.prButton')
+				<!-- <div class="col-lg-2">
+					
 				</div>
 
-
-		        <div class="col-lg-10 addAjax">
+ -->
+		        <div class="col-lg-12 addAjax">
 		            @include('project.detail.ajax')
 		        </div> <!-- end col-lg-12 -->
 		    </div> <!-- end row -->

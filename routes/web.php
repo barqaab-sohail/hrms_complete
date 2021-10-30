@@ -158,7 +158,11 @@ Route::resource('/projectPosition', 'ProjectPositionController');
 Route::get('/projectConsultancyCost/refreshTable', 'ProjectConsultancyCostController@refreshTable')->name('projectConsultancyCost.table');
 Route::resource('/projectConsultancyCost', 'ProjectConsultancyCostController');
 
-Route::get('/projectInvoice/chart', 'ProjectInvoiceController@chart')->name('projectInvoice.chart');
+Route::get('/projectInvoice/chart', 'Invoice\InvoiceController@chart')->name('projectInvoice.chart');
+Route::resource('/projectInvoice', 'Invoice\InvoiceController');
+Route::resource('/projectPayment', 'Payment\PaymentController');
+
+
 
 Route::get('/projectProgressChart', 'Progress\ActivityController@chart')->name('projectProgress.chart');
 

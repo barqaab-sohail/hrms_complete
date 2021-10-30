@@ -9,5 +9,5 @@ class PrContingency extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['contingency'];
+    protected $fillable = ['pr_consultancy_cost_id','contingency'];
 }

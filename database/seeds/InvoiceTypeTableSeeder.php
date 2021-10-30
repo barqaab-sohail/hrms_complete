@@ -13,10 +13,10 @@ class InvoiceTypeTableSeeder extends Seeder
     {
         DB::table('invoice_types')->delete();  
         $invoiceTypes = array(
-        	array('name' => 'Monthly'),
-        	array('name' => 'Percentage Wise'),
-        	array('name' => 'Activities Wise'),
-        	array('name' => 'Other'),
+        	array('name' => 'Remuneration (Salary Cost)'),
+            array('name' => 'Reimbursable (Direct Cost)'),
+            array('name' => 'Escalations'),
+            array('name' => 'Both Remuneration & Reimbursable')
         );
         DB::table('invoice_types')->insert($invoiceTypes);
     }

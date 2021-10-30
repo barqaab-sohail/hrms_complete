@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrConsultancyCosts extends Migration
+class CreateInvoices extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,18 @@ class CreatePrConsultancyCosts extends Migration
      */
     public function up()
     {
-        Schema::create('pr_consultancy_costs', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('pr_detail_id')->unsigned();
-            $table->bigInteger('pr_cost_type_id')->unsigned();
-            $table->decimal('total_cost',12,0);
-            $table->string('remarks')->nullable();
+            $table->bigInteger('invoice_type_id')->unsigned();
+            $table->string('invoice_no');
+            $table->date('invoice_date');
+            $table->mediumText('description')->nullable();
+            $table->mediumText('reference')->nullable();
             $table->timestamps();
-            $table->foreign('pr_cost_type_id')->references('id')->on('pr_cost_types');
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
-           
+            $table->foreign('invoice_type_id')->references('id')->on('invoice_types');
         });
     }
 
@@ -34,6 +35,6 @@ class CreatePrConsultancyCosts extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pr_consultancy_costs');
+        Schema::dropIfExists('invoices');
     }
 }
