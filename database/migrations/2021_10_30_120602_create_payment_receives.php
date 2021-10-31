@@ -18,6 +18,7 @@ class CreatePaymentReceives extends Migration
             $table->id();
             $table->bigInteger('invoice_id')->unsigned();
             $table->bigInteger('pr_detail_id')->unsigned();
+             $table->bigInteger('payment_status_id')->unsigned();
             $table->decimal('amount',12,0);
             $table->date('payment_date');
             $table->string('cheque_no')->nullable();
@@ -25,6 +26,7 @@ class CreatePaymentReceives extends Migration
             $table->timestamps();
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
              $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
+             $table->foreign('payment_status_id')->references('id')->on('payment_statuses');
         });
     }
 

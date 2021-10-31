@@ -11,6 +11,7 @@
           <th>Value Exc. Sales Tax</th>
           <th>Sales Tax</th>
           <th>Total Value</th>
+          <th>Payment Status</th>l
           <th>Edit</th>
           <th>Delete</th>
       </tr>
@@ -146,6 +147,7 @@ $(document).ready(function() {
             {data: "cost", name: 'cost'},
             {data: "sales_tax", name: 'sales_tax'},
             {data: "total_value", name: 'total_value'},
+            {data: "payment_status", name: 'payment_status'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
 

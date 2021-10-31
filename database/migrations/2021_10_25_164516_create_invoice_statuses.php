@@ -16,13 +16,12 @@ class CreateInvoiceStatuses extends Migration
         Schema::create('invoice_statuses', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->bigInteger('invoice_id')->unsigned();
-            $table->bigInteger('payment_status_id')->unsigned();
+            $table->bigInteger('invoice_id')->unsigned(); 
             $table->date('date');
              $table->string('remarks');
             $table->timestamps();
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
-            $table->foreign('payment_status_id')->references('id')->on('payment_statuses');
+            
         });
     }
 
