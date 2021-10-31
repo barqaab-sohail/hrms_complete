@@ -78,8 +78,13 @@ class InvoiceController extends Controller
                            return addComma($total);
                            
                     })
+                    ->addColumn('payment_status', function($row){                
+                      
+                           return $row->paymentStatus->name??'Pending';
+                           
+                    })
                  
-                    ->rawColumns(['Edit','Delete','invoice_type_id','cost','sales_tax','total_value'])
+                    ->rawColumns(['Edit','Delete','invoice_type_id','cost','sales_tax','total_value','payment_status'])
                     ->make(true);
         }
 
@@ -121,11 +126,7 @@ class InvoiceController extends Controller
             ]);
 
 
-            InvoiceStatus::updateOrCreate(['invoice_id' => $invoice->id],
-            ['invoice_id'=> $invoice->id,
-            'payment_status_id'=> 1,
-            'date'=> $input['invoice_date']
-            ]);
+             
 
     	}); // end transcation
 

@@ -11,16 +11,16 @@ class Invoice extends Model implements Auditable
     
    	protected $fillable = ['pr_detail_id', 'invoice_type_id','invoice_no','invoice_date','description','reference'];
 
-   	// public function invoiceType(){
+   	public function paymentStatus(){
 
-    //     return $this->hasOneThrough('App\Models\Project\Invoice\InvoiceType',
-    //     	'App\Models\Project\Invoice\InvoiceCost',
-    //     	'invoice_id',
-    //     	'id',
-    //     	'id',
-    //     	'invoice_type_id'
-    //     	);
-    // }
+        return $this->hasOneThrough('App\Models\Project\Payment\PaymentStatus',
+        	'App\Models\Project\Payment\PaymentReceive',
+        	'invoice_id',
+        	'id',
+        	'id',
+        	'payment_status_id'
+        	);
+    }
 
     Public function invoiceType(){
 

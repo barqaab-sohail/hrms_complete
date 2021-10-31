@@ -35,16 +35,17 @@
                    <input type="hidden" name="payment_id" id="payment_id">
                     <div class="form-group">
                         <label class="control-label text-right">Invoice No<span class="text_requried">*</span></label>
-                        <select  id="invoice_no"   name="invoice_no"  class="form-control selectTwo" data-validation="required">
+                        <select  id="invoice_id"   name="invoice_id"  class="form-control selectTwo" data-validation="required">
                             <option value=""></option>
                             @foreach($invoices as $invoice)
-                            <option value="{{$invoice->id}}" {{(old("invoice_no")==$invoice->id? "selected" : "")}}>{{$invoice->invoice_no}}</option>
+                            <option value="{{$invoice->id}}" {{(old("invoice_id")==$invoice->id? "selected" : "")}}>{{$invoice->invoice_no}}</option>
                             @endforeach 
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Total Amount Reeived<span class="text_requried">*</span></label>
                         <input type="text" name="amount"  id="amount" value="{{old('total_value')}}" class="form-control" >
+                        <span id="total_invoice" class="text_requried"></span>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Payment Date<span class="text_requried">*</span></label>
@@ -53,14 +54,23 @@
                         <i class="fas fa-trash-alt text_requried"></i> 
                     </div>
                     <div class="form-group">
-                      <label class="control-label">Cheque No<span class="text_requried">*</span></label>
-                      <input type="text" name="cheque_no" id="cost" value="{{old('cheque_no')}}" class="form-control prc_1" >
+                      <label class="control-label">Cheque No</label>
+                      <input type="text" name="cheque_no" id="cheque_no" value="{{old('cheque_no')}}" class="form-control prc_1" >
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Cheque Date<span class="text_requried">*</span></label>
+                        <label class="control-label">Cheque Date</label>
                         <input type="text" name="cheque_date" id="cheque_date" value="{{ old('cheque_date') }}" class="form-control date_input" data-validation="required" readonly >
                         <br>
                         <i class="fas fa-trash-alt text_requried"></i> 
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label text-right">Payment Status<span class="text_requried">*</span></label>
+                        <select  id="payment_status_id"   name="payment_status_id"  class="form-control selectTwo" data-validation="required">
+                            <option value=""></option>
+                            @foreach($paymentStatuses as $paymentStatus)
+                            <option value="{{$paymentStatus->id}}" {{(old("payment_status_id")==$paymentStatus->id? "selected" : "")}}>{{$paymentStatus->name}}</option>
+                            @endforeach 
+                        </select>
                     </div>
                     
                     <div class="col-sm-offset-2 col-sm-10">
@@ -128,6 +138,10 @@ $(document).ready(function() {
         $('#json_message_modal').html('');
         $('#saveBtn').val("Create Invoice");
         $('#payment_id').val('');
+        $('#invoice_id').val('');
+        $('#payment_status_id').val('');
+        $('#invoice_id').trigger('change');
+        $('#payment_status_id').trigger('change');
         $('#paymentForm').trigger("reset");
         $('#modelHeading').html("Create New Payment");
         $('#ajaxModel').modal('show');

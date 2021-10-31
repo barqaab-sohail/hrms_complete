@@ -1,4 +1,4 @@
-<div class="dropdown">
+<div class="dropdown1">
     <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <span id="show" style="font-size:20px"></span>
   </button>
@@ -72,12 +72,18 @@ $(document).ready(function() {
   $('#show').text($("a[id='addProject']").text());
 
 
-   $(".dropdown").hover(function(){
+   $(".dropdown1").hover(function(){
+        $(this).addClass('dropdown');
         var dropdownMenu = $(this).children(".dropdown-menu");
         if(dropdownMenu.is(":visible")){
             dropdownMenu.parent().toggleClass("open");
-        }
+
+            $('.dropdown-item').click(function(){
+                $(".dropdown").removeClass("dropdown");
+            });
+        }   
     });
+
 
 });
 
