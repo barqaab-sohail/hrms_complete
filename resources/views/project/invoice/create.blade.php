@@ -1,6 +1,8 @@
 
 <div class="card-body">
+  @if(projectInvoiceRight(session('pr_detail_id'))==2)
   <button type="button" class="btn btn-success float-right"  id ="createInvoice" data-toggle="modal" >Add Invoice</button>
+  @endif
   <br>
   <table class="table table-bordered data-table">
     <thead>
@@ -11,9 +13,11 @@
           <th>Value Exc. Sales Tax</th>
           <th>Sales Tax</th>
           <th>Total Value</th>
-          <th>Payment Status</th>l
+          <th>Payment Status</th>
+          @if(projectInvoiceRight(session('pr_detail_id'))==3)
           <th>Edit</th>
           <th>Delete</th>
+          @endif
       </tr>
     </thead>
     <tbody>
@@ -148,8 +152,10 @@ $(document).ready(function() {
             {data: "sales_tax", name: 'sales_tax'},
             {data: "total_value", name: 'total_value'},
             {data: "payment_status", name: 'payment_status'},
+            @if(projectInvoiceRight(session('pr_detail_id'))==3)
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
+            @endif
 
         ],
      

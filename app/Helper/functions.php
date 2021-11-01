@@ -1,22 +1,25 @@
 <?php
 use App\Models\Cv\CvSpecialization;
+use Illuminate\Support\Facades\Auth;
 use App\Models\CV\CvDetail;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\EmployeeManager;
 use App\Models\Hr\EmployeeDesignation;
+use App\Models\Project\PrDetail;
+use App\Models\Project\PrRight;
 use App\Models\Hr\HrDesignation;
 use App\Models\Office\Office;
 
 function employeeFullName($id){
 	$hremployee = HrEmployee::find($id);
-		if($hremployee){
-			
-			$fullName = $hremployee->first_name. ' '.$hremployee->last_name;
+	if($hremployee){
+		
+		$fullName = $hremployee->first_name. ' '.$hremployee->last_name;
 
-			$designation = isset($hremployee->employeeDesignation->last()->name)?$hremployee->employeeDesignation->last()->name:'';
-			
-			return $fullName.' - '.$designation;
-		}
+		$designation = isset($hremployee->employeeDesignation->last()->name)?$hremployee->employeeDesignation->last()->name:'';
+		
+		return $fullName.' - '.$designation;
+	}
 }
 
 function rights(){
@@ -27,6 +30,25 @@ function rights(){
 			];
 
 	return $rights;
+}
+
+function projectIds($user){
+
+	$projectIds = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->get()->pluck('pr_detail_id')->toArray();
+
+	return $projectIds;
+
+}
+
+function projectInvoiceRight($project){
+
+	$projectInvoiceRight = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->where('pr_detail_id',$project)->first();
+	if($projectInvoiceRight){
+		return $projectInvoiceRight->invoice;
+	}else
+	{
+		return false;
+	}
 
 }
 

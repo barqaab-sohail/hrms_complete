@@ -25,6 +25,8 @@
             <a type="submit" role="button" id="addConsultancyCost" href="{{route('projectConsultancyCost.index')}}" class="btn btn-success" {Request::is('hrms/projectConsultancyCost/index')?'style=background-color:#737373':''}}>Consultancy Cost</a>
             <a type="submit" role="button" id="addInvoice" href="{{route('projectInvoice.index')}}" class="btn btn-success" {Request::is('hrms/projectInvoice/index')?'style=background-color:#737373':''}}>Invoices</a>
             <a type="submit" role="button" id="addPosition" href="{{route('projectPosition.create')}}" class="btn btn-success" {Request::is('hrms/projectPosition/create')?'style=background-color:#737373':''}}>Position</a>
+            
+
             @endcan
         
             <br>

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Project\Invoice;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use App\Http\Requests\Project\Invoice\InvoiceStore;
 use App\Models\Project\PrDetail;
 use App\Models\Project\Invoice\Invoice;
