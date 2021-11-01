@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Charts\Hr\DepartmentChart;
+use Illuminate\Support\Facades\Auth;
 //use Illuminate\Support\Facades\Route;
 
 class HomeController extends Controller
@@ -46,7 +47,13 @@ class HomeController extends Controller
         $power = departmentChart()['power'];
         $water = departmentChart()['water'];
 
-       
+        
+        // $results = projectInvoiceRight(2);
+        // // // foreach ($results as $result){
+        // // //     echo $result->pr_detail_id.'<br>';
+        // // // }
+        // dd ($results);
+
         return view('dashboard.dashboard',compact('countBelowForty','countBelowFifty','countBelowSixty','countBelowSeventy','countAboveSeventy','categoryA','categoryB','categoryC','allEmployees','pecRegisteredEngineers','associatedEngineers','finance','power','water'));
     }
 

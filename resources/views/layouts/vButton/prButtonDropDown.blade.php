@@ -28,11 +28,16 @@
                 @endif
                 <a type="submit" role="button" style="color:white" id="addConsultancyCost" href="{{route('projectConsultancyCost.index')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/projectConsultancyCost/index')?'style=background-color:#737373':''}}>Consultancy Cost</a>
 
+                @if(projectInvoiceRight(session('pr_detail_id')))
                 <a type="submit" role="button" style="color:white" id="addInvoice" href="{{route('projectInvoice.index')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/projectInvoice/index')?'style=background-color:#737373':''}}>Invoices</a>
+                @endif
+
 
                 <a type="submit" role="button" style="color:white" id="addPayment" href="{{route('projectPayment.index')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/projectPayment/index')?'style=background-color:#737373':''}}>Payments</a>
-
+                <a type="submit" role="button" style="color:white" id="addRights" href="{{route('projectRights.index')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/project/projectRights/index')?'style=background-color:#737373':''}}>Rights</a>
                 <a type="submit" role="button" style="color:white" id="addPosition" href="{{route('projectPosition.create')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/projectPosition/create')?'style=background-color:#737373':''}}>Position</a>
+
+
                 @endcan
             
                 <br>

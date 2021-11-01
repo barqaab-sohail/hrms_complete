@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Project;
-
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project\PrRole;
@@ -22,11 +22,14 @@ class ProjectController extends Controller
 
 	public function index(){
     //$user = User::permission()
-		$projects =collect();
+	$projects =collect();
     $waterProjects = PrDetail::with('client','prRole')->where('pr_division_id',1)->whereNotIn('name', array('overhead'))->get();
     
-    $powerProjects = PrDetail::with('client','prRole')->where('pr_division_id',2)->get();
-		return view ('project.detail.list', compact('projects','waterProjects','powerProjects'));
+    //$powerProjects = PrDetail::with('client','prRole')->where('pr_division_id',2)->get();
+    $prDetailIds = projectIds(Auth::user()->hrEmployee->id);
+    $powerProjects = PrDetail::wherein('id',$prDetailIds)->get();
+	
+    return view ('project.detail.list', compact('projects','waterProjects','powerProjects'));
 
 	}
 

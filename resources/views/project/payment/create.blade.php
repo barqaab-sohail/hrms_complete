@@ -44,7 +44,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Total Amount Reeived<span class="text_requried">*</span></label>
-                        <input type="text" name="amount"  id="amount" value="{{old('total_value')}}" class="form-control" >
+                        <input type="text" name="amount"  id="amount" value="{{old('amount')}}" class="form-control" data-validation="required">
                         <span id="total_invoice" class="text_requried"></span>
                     </div>
                     <div class="form-group">
@@ -84,7 +84,9 @@
 </div>
 
 <script type="text/javascript">
+
 $(document).ready(function() {
+
   
   //only number value entered
     $('#amount').on('change, keyup', function() {
@@ -147,6 +149,7 @@ $(document).ready(function() {
         $('#ajaxModel').modal('show');
     });
     $('body').unbind().on('click', '.editPayment', function () {
+      
       var payment_id = $(this).data('id');
       $('#json_message_modal').html('');
       $.get("{{ url('hrms/projectPayment') }}" +'/' + payment_id +'/edit', function (data) {
@@ -154,25 +157,20 @@ $(document).ready(function() {
           $('#saveBtn').val("edit-Payment");
           $('#ajaxModel').modal('show');
           $('#payment_id').val(data.id);
-          $('#invoice_no').val(data.invoice_no);
-          $('#invoice_date').val(data.invoice_date);
-          $('#invoice_type_id').val(data.invoice_type_id);
-          $('#invoice_type_id').trigger('change');
-          $('#reference').val(data.reference);
-          $('#description').val(data.description);
-          var cost = (data.cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          $('#cost').val(cost);
-          var salesTax = (data.sales_tax).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          $('#sales_tax').val(salesTax); 
-          //+ convert string to number
-          var totalValue = (+(data.cost) + +(data.sales_tax));
-          totalValue = (totalValue).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          $('#total_value').val(totalValue); 
-
+          $('#invoice_id').val(data.invoice_id);
+          $('#invoice_id').trigger('change');
+          $('#payment_date').val(data.payment_date);
+          $('#cheque_no').val(data.cheque_no);
+          $('#cheque_date').val(data.cheque_date);
+          $('#payment_status_id').val(data.payment_status_id);
+          $('#payment_status_id').trigger('change');
+          var amount = (data.amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          $('#amount').val(amount);
       })
    });
     $('#saveBtn').click(function (e) {
         e.preventDefault();
+
         $(this).html('Save');
          
         $.ajax({
@@ -200,7 +198,7 @@ $(document).ready(function() {
       });
     });
     
-    $('body').on('click', '.deleteInvoice', function () {
+    $('body').on('click', '.deletePayment', function () {
      
         var payment_id = $(this).data("id");
         var con = confirm("Are You sure want to delete !");

@@ -9,7 +9,7 @@ class PaymentReceive extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     
-   	protected $fillable = ['invoice_id','pr_detail_id','payment_status_id', 'amount','date','cheque_no','cheque_date'];
+   	protected $fillable = ['invoice_id','pr_detail_id','payment_status_id', 'amount','payment_date','cheque_no','cheque_date'];
 
 
    	Public function invoice(){

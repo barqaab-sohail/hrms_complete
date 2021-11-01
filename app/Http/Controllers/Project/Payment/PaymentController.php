@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Project\Payment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Requests\Project\Payment\PaymentStore;
 use App\Models\Project\Invoice\Invoice;
 use App\Models\Project\Payment\PaymentReceive;
 use App\Models\Project\Payment\PaymentStatus;
@@ -31,13 +32,13 @@ class PaymentController extends Controller
                     ->addIndexColumn()
                     ->addColumn('Edit', function($row){
    
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editInvoice">Edit</a>';
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editPayment">Edit</a>';
                                                      
                             return $btn;
                     })
                     ->addColumn('Delete', function($row){                
                       
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteInvoice">Delete</a>';
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deletePayment">Delete</a>';
                             
                            
                             return $btn;
@@ -65,7 +66,7 @@ class PaymentController extends Controller
 
 	}
 
-    public function store(Request $request){
+    public function store(PaymentStore $request){
 
         $input = $request->all();
         
@@ -96,6 +97,16 @@ class PaymentController extends Controller
 
         return response()->json(['success'=>'Data saved successfully.']);
     }
+
+    public function edit($id){
+
+		$paymentReceive= PaymentReceive::find($id);
+ 
+        return response()->json($paymentReceive);
+
+	}
+
+
 
     public function destroy($id){
 

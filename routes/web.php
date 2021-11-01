@@ -142,7 +142,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 Route::post('/project/import', 'ProjectController@import')->name('project.import');
 Route::get('/project/search', 'ProjectController@search')->name('project.search');
 
-Route::resource('/project rights', 'ProjectRightController');
+
 
 
 Route::get('/result', 'ProjectController@result')->name('project.result');
@@ -161,6 +161,7 @@ Route::resource('/projectConsultancyCost', 'ProjectConsultancyCostController');
 Route::get('/projectInvoice/chart', 'Invoice\InvoiceController@chart')->name('projectInvoice.chart');
 Route::resource('/projectInvoice', 'Invoice\InvoiceController');
 Route::resource('/projectPayment', 'Payment\PaymentController');
+Route::resource('/projectRights', 'ProjectRightController');
 
 
 

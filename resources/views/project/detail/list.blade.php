@@ -68,6 +68,7 @@
 					@endif
 
 					@foreach($projects as $project)
+
 					
 						<tr>
 							<td>{{$project->project_no}}</td>
