@@ -98,8 +98,12 @@
                         @endcanany
 
 
+                        @can('pr limited access')
+                        <li><a  class="{{Request::is('hrms/project/selectedProjects')?'active':''}}" href="{{route('project.selected')}}">Selected Projects</a></li>
+                        @endcan
+
                         @can('Super Admin')
-                        <li><a  class="{{Request::is('hrms/project/projectRights/index')?'active':''}}" href="{{route('projectRights.index')}}">Project Rights</a></li> 
+                        <li><a  class="{{Request::is('hrms/project/projectRights')?'active':''}}" href="{{route('projectRights.index')}}">Project Rights</a></li> 
                         <li><a  class="{{Request::is('hrms/project/search')?'active':''}}" href="{{route('project.search')}}">Search Documentation</a></li> 
                         @endcan                 
                                                

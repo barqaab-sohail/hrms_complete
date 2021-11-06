@@ -33,6 +33,15 @@ class ProjectController extends Controller
 
 	}
 
+    public function selectedProjects(){
+   
+    $prDetailIds = projectIds(Auth::user()->hrEmployee->id);
+    $projects = PrDetail::wherein('id',$prDetailIds)->get();
+    
+    return view ('project.detail.selectedProjects', compact('projects'));
+
+    }
+
 	public function create(){
 
 		session()->put('pr_detail_id', '');

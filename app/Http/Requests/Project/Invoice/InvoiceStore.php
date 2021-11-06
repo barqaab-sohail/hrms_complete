@@ -27,9 +27,7 @@ class InvoiceStore extends FormRequest
               
             'invoice_date' => 'required',
             'invoice_no' => 'required',
-            'reference' => 'required',
-            'description' => 'required',
-            'cost' => 'required',
+            'amount' => 'required',
             'sales_tax' => 'required',
             'invoice_type_id' => 'required',
         ];

@@ -9,5 +9,5 @@ class PaymentDeduction extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     
-   	protected $fillable = ['invoice_id', 'withholding_tax','sales_tax','others','remarks'];
+   	protected $fillable = ['payment_receive_id', 'pr_detail_id','withholding_tax','sales_tax','others','remarks'];
 }

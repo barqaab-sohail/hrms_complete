@@ -17,4 +17,12 @@ class PaymentReceive extends Model implements Auditable
         return $this->belongsTo('App\Models\Project\Invoice\Invoice' );
 
     }
+
+    Public function deduction(){
+
+        return $this->hasOne('App\Models\Project\Payment\PaymentDeduction' );
+
+    }
+
+
 }

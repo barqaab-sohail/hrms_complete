@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
+use App\Models\Common\Right;
+use App\Http\Requests\Project\Rights\ProjectRightsStore;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Project\PrDetail;
 use App\Models\Project\PrRight;
+use App\Models\Admin\Permission;
 use App\User;
 use DB;
 use DataTables;
@@ -19,12 +22,11 @@ class ProjectRightController extends Controller
        
        	$employees = HrEmployee::where('hr_status_id',1)->with('employeeDesignation')->get();
        	$projects = PrDetail::whereNotIn('name', array('overhead'))->get();
+       	$rights = Right::all();
 
-       	$progressRights = rights();
-       	$invoiceRights = rights();
-
-        $view =  view('project.rights.create',compact('employees','projects','progressRights','invoiceRights'))->render();
-        return response()->json($view);
+       	// return view('project.rights.create',compact('employees','projects','progressRights','invoiceRights'));
+        $view =  view('project.rights.create',compact('employees','projects','rights'))->render();
+        return $view;
     }
 
     public function create(Request $request){
@@ -60,8 +62,14 @@ class ProjectRightController extends Controller
                         //employeeFullName($row->pr_detail_id);
                            
                     })
+                    ->addColumn('invoice', function($row){                
+                      return rightsName($row->invoice);
+                    })
+                    ->addColumn('progress', function($row){                
+                      return rightsName($row->progress);
+                    })
                  
-                    ->rawColumns(['Edit','Delete','hr_employee_id','pr_detail_id'])
+                    ->rawColumns(['Edit','Delete','hr_employee_id','pr_detail_id','invoice','progress'])
                     ->make(true);
         }
 
@@ -77,7 +85,7 @@ class ProjectRightController extends Controller
 
 	}
 
-	public function store(Request $request){
+	public function store(ProjectRightsStore $request){
 
         $input = $request->all();
 
@@ -90,6 +98,15 @@ class ProjectRightController extends Controller
                 'invoice'=> $input['invoice']
                 
             ]);
+            
+            $prLimitedAccess = Permission::where('name','pr limited access')->first();
+
+            if($prLimitedAccess){
+            	$employee = HrEmployee::where('id',$input['hr_employee_id'])->first();
+            	$user = User::where('id',$employee->user_id)->first();
+            	$user->givePermissionTo($prLimitedAccess->id);
+            }
+
 
         }); // end transcation
 
@@ -100,14 +117,25 @@ class ProjectRightController extends Controller
 
 		$prRight= PrRight::find($id);
  
-        return response()->json($prRight);
+    return response()->json($prRight);
 
 	}
 
 	public function destroy($id){
+		$prRight = PrRight::find ($id);
+		$employee = HrEmployee::find($prRight->hr_employee_id);
+		$user = User::find($employee->user_id);
+		$prLimitedAccess = Permission::where('name','pr limited access')->first();
 
-        PrRight::findOrFail($id)->delete();
-        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
+		$totalProjectRights = PrRight::where('hr_employee_id',$employee->id)->count();
+		
+		if ($totalProjectRights == 1){
+			$user->revokePermissionTo($prLimitedAccess->id);
+		}
+		
+		PrRight::findOrFail($id)->delete();
+
+        return response()->json(['success' => "1 Data Successfully Deleted"]);
         
     }
 

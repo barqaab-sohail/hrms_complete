@@ -44,4 +44,8 @@ class Invoice extends Model implements Auditable
         return $this->hasOne('App\Models\Project\Payment\PaymentReceive');
     }
 
+    public function invoiceSalesTax(){
+        return $this->hasMany('App\Models\Project\Payment\InvoiceSalesTax');
+    }
+
 }
