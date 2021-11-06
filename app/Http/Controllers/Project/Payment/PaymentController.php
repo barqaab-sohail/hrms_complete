@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use App\Http\Requests\Project\Payment\PaymentStore;
 use App\Models\Project\Invoice\Invoice;
 use App\Models\Project\Payment\PaymentReceive;
+use App\Models\Project\Payment\PaymentDeduction;
 use App\Models\Project\Payment\PaymentStatus;
 use DB;
 use DataTables;
@@ -15,6 +16,16 @@ use DataTables;
 class PaymentController extends Controller
 {
     
+    public function getInvoiceValue($id)
+    {
+        
+        $invoice = Invoice::find($id);
+        $totalInvoiceValue = $invoice->invoiceCost->amount + $invoice->invoiceCost->sales_tax;
+        
+        $totalInvoiceValue = addComma($totalInvoiceValue);
+        return response()->json($totalInvoiceValue);
+    }
+
     public function index() {
        
        	$invoices = Invoice::where('pr_detail_id',session('pr_detail_id'))->get();
@@ -49,13 +60,21 @@ class PaymentController extends Controller
                            
                     })
                     ->addColumn('total_deduction', function($row){                
+                        $withholdingTax = (int)$row->deduction->withholding_tax??'';
+                        $salesTax = (int)$row->deduction->sales_tax??'';
+                        $others = (int)$row->deduction->others??'';
+                        $totalDeduction = $withholdingTax + $salesTax + $others;
+                           return addComma($totalDeduction);
+                           
+                    })
+                    ->addColumn('amount', function($row){                
                       
-                           return '';
+                           return addComma($row->amount??'');
                            
                     })
                     
                  
-                    ->rawColumns(['Edit','Delete','invoice_no','total_deduction'])
+                    ->rawColumns(['Edit','Delete','amount','invoice_no','total_deduction'])
                     ->make(true);
         }
 
@@ -72,6 +91,10 @@ class PaymentController extends Controller
         
         $input['pr_detail_id']=session('pr_detail_id');
         $input ['amount']= intval(str_replace( ',', '', $request->amount));
+        $input ['withholding_tax']= intval(str_replace( ',', '', $request->withholding_tax));
+        $input ['sales_tax']= intval(str_replace( ',', '', $request->sales_tax));
+        $input ['other_deduction']= intval(str_replace( ',', '', $request->other_deduction));
+
         if($request->filled('payment_date')){
             $input ['payment_date']= \Carbon\Carbon::parse($request->payment_date)->format('Y-m-d');
         }
@@ -93,6 +116,17 @@ class PaymentController extends Controller
                 
             ]);
 
+            PaymentDeduction::updateOrCreate(['payment_receive_id' =>  $paymentReceive->id],
+                ['pr_detail_id'=> $input['pr_detail_id'],
+                'withholding_tax'=> $input['withholding_tax'],
+                'sales_tax'=> $input['sales_tax'],
+                'others'=> $input['other_deduction'],
+                'remarks'=> $input['remarks']
+                
+            ]);
+
+
+
         }); // end transcation
 
         return response()->json(['success'=>'Data saved successfully.']);
@@ -101,7 +135,12 @@ class PaymentController extends Controller
     public function edit($id){
 
 		$paymentReceive= PaymentReceive::find($id);
- 
+        $paymentReceive = new Collection ($paymentReceive);
+
+        $paymentDeduction = PaymentDeduction::where('payment_receive_id',$id)->select(['withholding_tax','sales_tax','others'])->first();
+        $paymentDeduction = new Collection($paymentDeduction);
+        
+        $paymentReceive = $paymentReceive->merge($paymentDeduction);
         return response()->json($paymentReceive);
 
 	}

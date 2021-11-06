@@ -2,15 +2,16 @@
     <div style="margin-top:10px; margin-right: 10px;">
         <button type="button" onclick="window.location.href='{{route('project.index')}}'" class="btn btn-success float-right" data-toggle="tooltip" title="Back to List">List of Projects</button>
     </div>
+
          
     <div class="card-body">
         <form id= "formProject" method="post" action="{{route('project.update',$data->id)}}" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
-         @method('PATCH')
+        @method('PATCH')
         @csrf
             <div class="form-body">
                     
                 <h3 class="box-title">Project Information</h3>
-                
+               
                 <hr class="m-t-0 m-b-40">
 
                 <div class="row">

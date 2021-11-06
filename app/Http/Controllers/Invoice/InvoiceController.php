@@ -9,7 +9,6 @@ use App\Models\Invoice\InvoiceRight;
 use App\Models\Invoice\InvoiceType;
 use App\Models\Invoice\CostType;
 use App\Models\Invoice\Invoice;
-use App\Models\Invoice\InvoiceEscalation;
 use App\Models\Invoice\InvoiceCost;
 use App\Models\Invoice\InvoicePeriod;
 use App\Models\Project\PrDetail;
@@ -19,7 +18,8 @@ use DataTables;
 
 class InvoiceController extends Controller
 {
-     public function index(){
+
+    public function index(){
 
         $prDetailIds = InvoiceRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->get()->pluck('pr_detail_id')->toArray();
 
@@ -103,9 +103,6 @@ class InvoiceController extends Controller
         		InvoicePeriod::create($input);
         	}
 
-        	if($input['esc_cost']){
-        		InvoiceEscalation::create($input);
-        	}
 
         }); // end transcation
 
@@ -155,9 +152,6 @@ class InvoiceController extends Controller
                 InvoicePeriod::where('invoice_id',$id)->delete();
             }
 
-            // if($input['esc_cost']){
-            //     InvoiceEscalation::create($input);
-            // }
 
         }); // end transcation
 

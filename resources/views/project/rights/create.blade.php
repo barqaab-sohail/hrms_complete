@@ -1,22 +1,29 @@
-
-<div class="card-body">
-  <button type="button" class="btn btn-success float-right"  id ="createRights" data-toggle="modal" >Add Rights</button>
-  <br>
-  <table class="table table-bordered data-table">
-    <thead>
-      <tr>
-          <th>Employee Name</th>
-          <th>Project Name</th>
-          <th>Invoice Rights</th>
-          <th>Progress Rights</th>
-          <th>Edit</th>
-          <th>Delete</th>
-      </tr>
-    </thead>
-    <tbody>
-        
-    </tbody>
-  </table>
+@extends('layouts.master.master')
+@section('title', 'BARQAAB HR')
+@section('Heading')
+  <!-- <h3 class="text-themecolor">List of Employees</h3> -->
+@stop
+@section('content')
+<div class="card">
+  <div class="card-body">
+    <button type="button" class="btn btn-success float-right"  id ="createRights" data-toggle="modal" >Add Rights</button>
+    <br>
+    <table class="table table-bordered data-table">
+      <thead>
+        <tr>
+            <th>Employee Name</th>
+            <th>Project Name</th>
+            <th>Invoice Rights</th>
+            <th>Progress Rights</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+          
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <div class="modal fade" id="ajaxModel" aria-hidden="true">
@@ -53,8 +60,8 @@
                         <label class="control-label text-right">Progress Rights<span class="text_requried">*</span></label>
                         <select  id="progress"   name="progress"  class="form-control selectTwo" data-validation="required">
                             <option value=""></option>
-                            @foreach($progressRights as $key => $value)
-                            <option value="{{$key}}" {{(old("rights")==$key? "selected" : "")}}>{{$value}}</option>
+                            @foreach($rights as $right)
+                            <option value="{{$right->id}}" {{(old("progress")==$right->id? "selected" : "")}}>{{$right->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -62,8 +69,8 @@
                         <label class="control-label text-right">Invoice Rights<span class="text_requried">*</span></label>
                         <select  id="invoice"   name="invoice"  class="form-control selectTwo" data-validation="required">
                             <option value=""></option>
-                            @foreach($invoiceRights as $key => $value)
-                            <option value="{{$key}}" {{(old("rights")==$key? "selected" : "")}}>{{$value}}</option>
+                            @foreach($rights as $right)
+                            <option value="{{$right->id}}" {{(old("invoice")==$right->id? "selected" : "")}}>{{$right->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -82,6 +89,7 @@
 
 $(document).ready(function() {
 
+formFunctions();
 
   $(function () {
       $.ajaxSetup({
@@ -116,7 +124,7 @@ $(document).ready(function() {
         $('#hr_employee_id').trigger('change');
         $('#pr_detail_id').trigger('change');
         $('#progress').trigger('change');
-        $('#inovice').trigger('change');
+        $('#invoice').trigger('change');
         $('#projectRightsForm').trigger("reset");
         $('#modelHeading').html("Create New Right");
         $('#ajaxModel').modal('show');
@@ -125,7 +133,7 @@ $(document).ready(function() {
       
       var right_id = $(this).data('id');
       $('#json_message_modal').html('');
-      $.get("{{ url('hrms/projectRights') }}" +'/' + right_id +'/edit', function (data) {
+      $.get("{{ url('hrms/project/projectRights') }}" +'/' + right_id +'/edit', function (data) {
           $('#modelHeading').html("Edit Right");
           $('#saveBtn').val("edit-right");
           $('#ajaxModel').modal('show');
@@ -195,3 +203,4 @@ $(document).ready(function() {
   });
 });
 </script>
+@stop

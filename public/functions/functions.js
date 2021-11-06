@@ -151,7 +151,7 @@ function formFunctions(){
     });
 
     //Title Case of all inputs type text and remove extra spaces
-    $("input[type=text]:not('.exempted')").keyup(function() {
+    $("input[type=text]:not('.exempted, .notCapital')").keyup(function() {
         var result = this.value.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
         $(this).val(result);
     }).blur(function() {

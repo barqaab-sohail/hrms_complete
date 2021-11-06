@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Project\Invoice;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use App\Http\Requests\Project\Invoice\InvoiceStore;
 use App\Models\Project\PrDetail;
@@ -59,9 +60,9 @@ class InvoiceController extends Controller
                            return $row->invoiceType->name??'';
                            
                     })
-                    ->addColumn('cost', function($row){                
+                    ->addColumn('amount', function($row){                
                       
-                           return addComma($row->invoiceCost->cost??'');
+                           return addComma($row->invoiceCost->amount??'');
                            
                     })
                     ->addColumn('sales_tax', function($row){                
@@ -71,8 +72,8 @@ class InvoiceController extends Controller
                     })
                      ->addColumn('total_value', function($row){                
                       		$salesTax= (int)$row->invoiceCost->sales_tax??'';
-                      		$cost = (int)$row->invoiceCost->cost??'';
-                      		$total = $salesTax + $cost;
+                      		$amount = (int)$row->invoiceCost->amount??'';
+                      		$total = $salesTax + $amount;
 
                            return addComma($total);
                            
@@ -83,7 +84,7 @@ class InvoiceController extends Controller
                            
                     })
                  
-                    ->rawColumns(['Edit','Delete','invoice_type_id','cost','sales_tax','total_value','payment_status'])
+                    ->rawColumns(['Edit','Delete','invoice_type_id','amount','sales_tax','total_value','payment_status'])
                     ->make(true);
         }
 
@@ -100,7 +101,7 @@ class InvoiceController extends Controller
 		$input = $request->all();
 		
         $input['pr_detail_id']=session('pr_detail_id');
-        $input ['cost']= intval(str_replace( ',', '', $request->cost));
+        $input ['amount']= intval(str_replace( ',', '', $request->amount));
         $input ['sales_tax']= intval(str_replace( ',', '', $request->sales_tax));
         if($request->filled('invoice_date')){
             $input ['invoice_date']= \Carbon\Carbon::parse($request->invoice_date)->format('Y-m-d');
@@ -120,7 +121,7 @@ class InvoiceController extends Controller
  
             InvoiceCost::updateOrCreate(['invoice_id' => $invoice->id],
             ['invoice_id'=> $invoice->id,
-            'cost'=> $input['cost'],
+            'amount'=> $input['amount'],
             'sales_tax'=> $input['sales_tax']
             ]);
 
@@ -137,7 +138,7 @@ class InvoiceController extends Controller
 		$invoice= Invoice::find($id);
         $invoice = new Collection ($invoice);
 
-        $invoiceCost = InvoiceCost::where('invoice_id',$id)->select(['cost','sales_tax'])->first();
+        $invoiceCost = InvoiceCost::where('invoice_id',$id)->select(['amount','sales_tax'])->first();
         $invoiceCost = new Collection($invoiceCost);
 
      

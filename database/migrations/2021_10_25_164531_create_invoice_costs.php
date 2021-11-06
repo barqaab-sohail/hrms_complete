@@ -17,7 +17,7 @@ class CreateInvoiceCosts extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('invoice_id')->unsigned();
-            $table->decimal('cost',12,0);
+            $table->decimal('amount',12,0);
             $table->decimal('sales_tax',12,0);
             $table->timestamps();
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');

@@ -16,14 +16,14 @@ class CreatePaymentDeductions extends Migration
         Schema::create('payment_deductions', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->bigInteger('invoice_id')->unsigned();
+            $table->bigInteger('payment_receive_id')->unsigned();
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->decimal('withholding_tax',12,0);
             $table->decimal('sales_tax',12,0);
-            $table->decimal('others',12,0);
+            $table->decimal('others',12,0)->nullable();
             $table->string('remarks')->nullable();
             $table->timestamps();
-            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
+            $table->foreign('payment_receive_id')->references('id')->on('payment_receives')->onDelete('cascade');
              $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
         });
     }

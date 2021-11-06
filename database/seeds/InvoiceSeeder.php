@@ -13,5 +13,7 @@ class InvoiceSeeder extends Seeder
     {
         $this->call(PaymentStatusTableSeeder::class);
         $this->call(InvoiceTypeTableSeeder::class);
+        $this->call(RightsTableSeeder::class);
+        $this->call(PrCostTypeTableSeeder::class);
     }
 }

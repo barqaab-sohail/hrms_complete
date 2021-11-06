@@ -1,6 +1,6 @@
 
 <div class="card-body">
-  @if(projectInvoiceRight(session('pr_detail_id'))==2)
+  @if(projectInvoiceRight(session('pr_detail_id'))==3 || projectInvoiceRight(session('pr_detail_id'))==4)
   <button type="button" class="btn btn-success float-right"  id ="createInvoice" data-toggle="modal" >Add Invoice</button>
   @endif
   <br>
@@ -14,10 +14,13 @@
           <th>Sales Tax</th>
           <th>Total Value</th>
           <th>Payment Status</th>
-          @if(projectInvoiceRight(session('pr_detail_id'))==3)
+          @if(projectInvoiceRight(session('pr_detail_id'))==3 || projectInvoiceRight(session('pr_detail_id'))==4)
           <th>Edit</th>
+          @endif
+          @if(projectInvoiceRight(session('pr_detail_id'))==4)
           <th>Delete</th>
           @endif
+          
       </tr>
     </thead>
     <tbody>
@@ -35,75 +38,100 @@
             </div>
             <div class="modal-body">
               <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
-                <form id="invoiceForm" name="invoiceForm" action="{{route('projectInvoice.store')}}"class="form-horizontal">
+              <form id="invoiceForm" name="invoiceForm" action="{{route('projectInvoice.store')}}"class="form-horizontal">
                    
-                   <input type="hidden" name="invoice_id" id="invoice_id">
-                 
-                    <div class="form-group">
-                        <label class="control-label">Invoice No.<span class="text_requried">*</span></label>
-                        <input type="text" name="invoice_no" id="invoice_no"  value="{{old('invoice_no')}}" class="form-control exempted" data-validation="required" >
+                  <input type="hidden" name="invoice_id" id="invoice_id">
+                  <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Invoice No.<span class="text_requried">*</span></label>
+                            <input type="text" name="invoice_no" id="invoice_no"  value="{{old('invoice_no')}}" class="form-control exempted" data-validation="required" >
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Invoice Date<span class="text_requried">*</span></label>
-                        <input type="text" name="invoice_date" id="invoice_date" value="{{ old('invoice_date') }}" class="form-control date_input" data-validation="required" readonly >
-                        <br>
-                        <i class="fas fa-trash-alt text_requried"></i> 
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Invoice Date<span class="text_requried">*</span></label>
+                            <input type="text" name="invoice_date" id="invoice_date" value="{{ old('invoice_date') }}" class="form-control date_input" data-validation="required" readonly >
+                            <br>
+                            <i class="fas fa-trash-alt text_requried"></i> 
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label text-right">Invoice Type<span class="text_requried">*</span></label>
-                        <select  id="invoice_type_id"   name="invoice_type_id"  class="form-control selectTwo" data-validation="required">
-                            <option value=""></option>
-                            @foreach($invoiceTypes as $invoiceType)
-                            <option value="{{$invoiceType->id}}" {{(old("invoice_type_id")==$invoiceType->id? "selected" : "")}}>{{$invoiceType->name}}</option>
-                            @endforeach 
-                        </select>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label text-right">Invoice Type<span class="text_requried">*</span></label>
+                            <select  id="invoice_type_id"   name="invoice_type_id"  class="form-control selectTwo" data-validation="required">
+                                <option value=""></option>
+                                @foreach($invoiceTypes as $invoiceType)
+                                <option value="{{$invoiceType->id}}" {{(old("invoice_type_id")==$invoiceType->id? "selected" : "")}}>{{$invoiceType->name}}</option>
+                                @endforeach 
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Reference<span class="text_requried">*</span></label>
-                        <textarea  rows=3 cols=5  name="reference" id="reference"   class="form-control" data-validation="required" >{{old('reference')}}</textarea>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label class="control-label">Reference</label>
+                          <textarea  rows=3 cols=5  name="reference" id="reference"   class="form-control">{{old('reference')}}</textarea>
+                      </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Description<span class="text_requried">*</span></label>
-                        <textarea  rows=3 cols=5 type="text" name="description" id="description" class="form-control" data-validation="required" >{{old('description')}}</textarea>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label class="control-label">Description</label>
+                          <textarea  rows=3 cols=5 type="text" name="description" id="description" class="form-control" >{{old('description')}}</textarea>
+                      </div>
                     </div>
-
-                    <div class="form-group">
-                      <label class="control-label">Value Excluding Sales Tax<span class="text_requried">*</span></label>
-                      <input type="text" name="cost" id="cost" value="{{old('cost')}}" class="form-control prc_1" data-validation="required">
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="control-label">Value Excluding Sales Tax<span class="text_requried">*</span></label>
+                        <input type="text" name="amount" id="amount" value="{{old('amount')}}" class="form-control prc_1" data-validation="required">
+                      </div>
                     </div>
-
-                    <div class="form-group">
-                      <label class="control-label">Sales Tax<span class="text_requried">*</span></label>
-                      <input type="text" name="sales_tax"  id="sales_tax" value="{{old('sales_tax')}}" class="form-control prc_1" data-validation="required">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="control-label">Sales Tax<span class="text_requried">*</span></label>
+                        <input type="text" name="sales_tax"  id="sales_tax" value="{{old('sales_tax')}}" class="form-control prc_1" data-validation="required">
+                      </div>
                     </div>
-                    <div class="form-group">
-                      <label class="control-label">Total Value</label>
-                      <input type="text" name="total_value"  id="total_value" value="{{old('total_value')}}" readonly class="form-control" >
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="control-label">Total Value</label>
+                        <input type="text" name="total_value"  id="total_value" value="{{old('total_value')}}" readonly class="form-control" >
+                      </div>
                     </div>
+                  </div>
 
                     
-                    <div class="col-sm-offset-2 col-sm-10">
-                     <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
-                     </button>
-                    </div>
-                </form>
+                  <div class="col-sm-offset-2 col-sm-10">
+                   <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
+                   </button>
+                  </div>
+              </form>
             </div>
         </div>
     </div>
 </div>
+<style>
+  .modal-dialog {
+    max-width: 80%;
+    display: flex;
+}
+</style>
 
 <script type="text/javascript">
 $(document).ready(function() {
   
   //only number value entered
-    $('#cost, #sales_tax').on('change, keyup', function() {
+    $('#amount, #sales_tax').on('change, keyup', function() {
     var currentInput = $(this).val();
     var fixedInput = currentInput.replace(/[A-Za-z!@#$%^&*()]/g, '');
     $(this).val(fixedInput);
     });
 
     //Enter Comma after three digit
-    $('#cost, #sales_tax').keyup(function(event) {
+    $('#amount, #sales_tax').keyup(function(event) {
 
       // skip for arrow keys
       if(event.which >= 37 && event.which <= 40) return;
@@ -148,12 +176,14 @@ $(document).ready(function() {
             {data: "invoice_no", name: 'invoice_no'},
             {data: "invoice_date", name: 'invoice_date'},
             {data: "invoice_type", name: 'invoice_type'},
-            {data: "cost", name: 'cost'},
+            {data: "amount", name: 'amount'},
             {data: "sales_tax", name: 'sales_tax'},
             {data: "total_value", name: 'total_value'},
             {data: "payment_status", name: 'payment_status'},
-            @if(projectInvoiceRight(session('pr_detail_id'))==3)
+             @if(projectInvoiceRight(session('pr_detail_id'))==3 || projectInvoiceRight(session('pr_detail_id'))==4)
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
+            @endif
+            @if(projectInvoiceRight(session('pr_detail_id'))==4)
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
             @endif
 
@@ -173,7 +203,7 @@ $(document).ready(function() {
     $('body').unbind().on('click', '.editInvoice', function () {
       var invoice_id = $(this).data('id');
       $('#json_message_modal').html('');
-      $.get("{{ url('hrms/projectInvoice') }}" +'/' + invoice_id +'/edit', function (data) {
+      $.get("{{ url('hrms/project/projectInvoice') }}" +'/' + invoice_id +'/edit', function (data) {
           $('#modelHeading').html("Edit Invoice");
           $('#saveBtn').val("edit-Invoice");
           $('#ajaxModel').modal('show');
@@ -184,12 +214,12 @@ $(document).ready(function() {
           $('#invoice_type_id').trigger('change');
           $('#reference').val(data.reference);
           $('#description').val(data.description);
-          var cost = (data.cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          $('#cost').val(cost);
+          var amount = (data.amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          $('#amount').val(amount);
           var salesTax = (data.sales_tax).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           $('#sales_tax').val(salesTax); 
           //+ convert string to number
-          var totalValue = (+(data.cost) + +(data.sales_tax));
+          var totalValue = (+(data.amount) + +(data.sales_tax));
           totalValue = (totalValue).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           $('#total_value').val(totalValue); 
 

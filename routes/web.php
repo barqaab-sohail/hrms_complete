@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/dashboard','HomeController@index')->middleware('auth');
+Route::get('/dashboard','HomeController@index')->middleware('auth')->name('dashboard');
 //Route::get ('insert','Hr\EmployeeController@insert');
 
 Auth::routes();
@@ -138,15 +138,16 @@ Route::resource('/cvDocument', 'CvDocumentController');
 });
 
 //Projects Routes
-Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Project'], function(){
-Route::post('/project/import', 'ProjectController@import')->name('project.import');
-Route::get('/project/search', 'ProjectController@search')->name('project.search');
+Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Project'], function(){
+Route::post('/import', 'ProjectController@import')->name('project.import');
+Route::get('/search', 'ProjectController@search')->name('project.search');
 
 
 
 
 Route::get('/result', 'ProjectController@result')->name('project.result');
-Route::resource('/project', 'ProjectController');
+Route::get('/selectedProjects', 'ProjectController@selectedProjects')->name('project.selected');
+
 Route::resource('/projectPartner', 'ProjectPartnerController');
 
 Route::get('/projectDocument/refreshTable', 'ProjectDocumentController@refreshTable')->name('projectDocument.table');
@@ -159,14 +160,17 @@ Route::get('/projectConsultancyCost/refreshTable', 'ProjectConsultancyCostContro
 Route::resource('/projectConsultancyCost', 'ProjectConsultancyCostController');
 
 Route::get('/projectInvoice/chart', 'Invoice\InvoiceController@chart')->name('projectInvoice.chart');
+
+Route::get('/invoiceValue/{id?}', 'Payment\PaymentController@getInvoiceValue')->name('invoiceValue');
 Route::resource('/projectInvoice', 'Invoice\InvoiceController');
 Route::resource('/projectPayment', 'Payment\PaymentController');
-Route::resource('/projectRights', 'ProjectRightController');
+Route::resource('projectRights', 'ProjectRightController');
 
 
 
 Route::get('/projectProgressChart', 'Progress\ActivityController@chart')->name('projectProgress.chart');
 
+Route::resource('/project', 'ProjectController');
 });
 
 

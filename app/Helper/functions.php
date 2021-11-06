@@ -10,6 +10,7 @@ use App\Models\Project\PrRight;
 use App\Models\Hr\HrDesignation;
 use App\Models\Office\Office;
 
+
 function employeeFullName($id){
 	$hremployee = HrEmployee::find($id);
 	if($hremployee){
@@ -22,14 +23,18 @@ function employeeFullName($id){
 	}
 }
 
-function rights(){
-	$rights = [	0 => 'No Rights', 
-				1 => 'View Rights', 
-				2 => 'Add Rights', 
-				3 => 'Delete Rights'
-			];
-
-	return $rights;
+function rightsName($id){
+	if($id == 1){
+		return 'No Access';
+	}else if ($id ==2){
+		return 'View Record';
+	}else if ($id ==3){
+		return 'Edit Record';
+	}else if ($id ==4){
+		return 'Delete Record';
+	}else{
+		return '';
+	}
 }
 
 function projectIds($user){
@@ -44,12 +49,30 @@ function projectInvoiceRight($project){
 
 	$projectInvoiceRight = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->where('pr_detail_id',$project)->first();
 	if($projectInvoiceRight){
-		return $projectInvoiceRight->invoice;
+		if ($projectInvoiceRight->invoice == 1){
+			return false;
+		} else{
+			return $projectInvoiceRight->invoice;
+		}
+		
 	}else
 	{
 		return false;
 	}
+}
 
+function projectProgressRight($project){
+	$projectProgressRight = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->where('pr_detail_id',$project)->first();
+	if($projectProgressRight){
+		if ($projectProgressRight->progress == 1){
+			return false;
+		} else{
+			return $projectProgressRight->progress;
+		}	
+	}else
+	{
+		return false;
+	}
 }
 
 function addComma($id){
@@ -62,6 +85,12 @@ function addComma($id){
 		return '';
 	}
 }
+
+function removeComma($id){
+	$value = intval(str_replace( ',', '', $id));
+	return $value;
+}
+
 
 
 function generateEmployeeId(){
