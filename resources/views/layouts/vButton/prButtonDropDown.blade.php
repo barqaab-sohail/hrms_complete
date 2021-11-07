@@ -23,10 +23,11 @@
 
                 @if(projectInvoiceRight(session('pr_detail_id')))
                 <a type="submit" role="button" style="color:white" id="addInvoice" href="{{route('projectInvoice.index')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/projectInvoice/index')?'style=background-color:#737373':''}}>Invoices</a>
+                 <a type="submit" role="button" style="color:white" id="addPayment" href="{{route('projectPayment.index')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/projectPayment/index')?'style=background-color:#737373':''}}>Payments</a>
                 @endif
 
                 @if(projectProgressRight(session('pr_detail_id')))
-                <a type="submit" role="button" style="color:white" id="addPayment" href="{{route('projectPayment.index')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/projectPayment/index')?'style=background-color:#737373':''}}>Payments</a>
+                 <a type="submit" role="button" style="color:white" id="addPayment" href="{{route('projectProgressActivities.index')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/projectProgressActivities/index')?'style=background-color:#737373':''}}>Progress Activities</a>
                 @endif
                 
                 
