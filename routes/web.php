@@ -165,6 +165,7 @@ Route::get('/invoiceValue/{id?}', 'Payment\PaymentController@getInvoiceValue')->
 Route::resource('/projectInvoice', 'Invoice\InvoiceController');
 Route::resource('/projectPayment', 'Payment\PaymentController');
 Route::resource('projectRights', 'ProjectRightController');
+Route::resource('/projectProgressActivities', 'Progress\ActivitiesController');
 
 
 

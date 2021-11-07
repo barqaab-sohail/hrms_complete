@@ -7,11 +7,25 @@ use Illuminate\Foundation\Http\FormRequest;
 class PaymentStore extends FormRequest
 {
     
-     public function __construct(\Illuminate\Http\Request $request)
+   public function getValidatorInstance()
     {
-        
-        $this->amount =  removeComma($this->amount);
-        $this->total_invoice_value =  removeComma($this->total_invoice_value);
+        $this->cleanAmount();
+        return parent::getValidatorInstance();
+    }
+
+    protected function cleanAmount()
+    {
+        if($this->request->has('amount')){
+            $this->merge([
+                'amount' => intval(str_replace( ',', '', $this->request->get('amount')))
+            ]);
+        }
+
+        if($this->request->has('total_invoice_value')){
+            $this->merge([
+                'total_invoice_value' => intval(str_replace( ',', '', $this->request->get('total_invoice_value')))
+            ]);
+        }
 
     }
     /**
@@ -34,7 +48,7 @@ class PaymentStore extends FormRequest
          $rules = [
               
             'invoice_id' => 'required',
-            'amount' => 'required|max:'.$this->total_invoice_value,
+            'amount' => "required|lte:total_invoice_value",
             'total_invoice_value'=>'required',
             'payment_date' => 'required',
             'payment_status_id' => 'required',
@@ -51,7 +65,9 @@ class PaymentStore extends FormRequest
         
         return [
             'invoice_id.required' => ' Invoice No is required',
-            'amount.max' => 'Net Amount Received must be less than or equal to '.$this->total_invoice_value,
+            'amount.lte' => ' Net Amount Recived is less than or equal to '.addComma($this->total_invoice_value),
+            
+           
         ];
     }
 }
