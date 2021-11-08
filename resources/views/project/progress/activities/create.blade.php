@@ -33,7 +33,7 @@
                   <div class="row">
                     <div class="col-md-9">
                       <div class="form-group">
-                        <label class="control-label">Activity Nane</label>
+                        <label class="control-label">Activity Name</label>
                         <input type="text" name="name" id="name" value="{{old('name')}}" class="form-control notCapital" data-validation="required">
                       </div>
                     </div>
