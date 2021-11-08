@@ -166,6 +166,7 @@ Route::resource('/projectInvoice', 'Invoice\InvoiceController');
 Route::resource('/projectPayment', 'Payment\PaymentController');
 Route::resource('projectRights', 'ProjectRightController');
 Route::resource('/projectProgressActivities', 'Progress\ActivitiesController');
+Route::resource('/monthlyProgress', 'Progress\MonthlyProgressController');
 
 
 

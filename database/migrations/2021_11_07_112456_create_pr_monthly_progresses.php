@@ -18,8 +18,8 @@ class CreatePrMonthlyProgresses extends Migration
             $table->id();
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->bigInteger('pr_progress_activity_id')->unsigned();
-            $table->tinyInteger('completed')->unsigned();
-            $table->tinyInteger('targeted')->unsigned();
+            $table->tinyInteger('scheduled')->unsigned();
+            $table->tinyInteger('actual')->unsigned();
             $table->date('date');
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');

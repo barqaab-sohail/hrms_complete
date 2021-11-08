@@ -27,7 +27,8 @@
                 @endif
 
                 @if(projectProgressRight(session('pr_detail_id')))
-                 <a type="submit" role="button" style="color:white" id="addPayment" href="{{route('projectProgressActivities.index')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/projectProgressActivities/index')?'style=background-color:#737373':''}}>Progress Activities</a>
+                 <a type="submit" role="button" style="color:white" id="addProgress Activities" href="{{route('projectProgressActivities.index')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/projectProgressActivities/index')?'style=background-color:#737373':''}}>Progress Activities</a>
+                 <a type="submit" role="button" style="color:white" id="addMonthlyProgress" href="{{route('monthlyProgress.index')}}" class="dropdown-item btn btn-success projetButton" {Request::is('hrms/monthlyProgress/index')?'style=background-color:#737373':''}}>Monthly Progress</a>
                 @endif
                 
                 

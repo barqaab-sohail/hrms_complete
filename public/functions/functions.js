@@ -64,7 +64,7 @@ function formFunctions(){
      //get Date from Database and set as "Saturday, 24-August-2019"
     var weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
     
-     var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     
     //if Date not empty than enter date with format 'Wednesday, 10-August-2010'
 
@@ -80,6 +80,21 @@ function formFunctions(){
         }
 
     });
+
+    $(".date_input").each(function(){
+        if ($(this).val()!=''){
+        var Date1 = new Date($(this).val());
+        $(this).val(
+        weekday[Date1.getDay()]+", "+
+        Date1.getDate()+"-"+months[Date1.getMonth()]
+        +"-"+Date1.getFullYear());
+        }else{
+            $(this).siblings('i').hide();
+        }
+
+    });
+
+    
 
      //double click submission prevent
     
