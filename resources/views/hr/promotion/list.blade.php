@@ -17,6 +17,7 @@
 					<tr >
 						<th>Description / Remarks</th>
 						<th>Effective Date</th>
+						<th>Letter / Order</th>
 						<th class="text-center">Edit</th>
 						<th class="text-center">Delete</th>
 						
@@ -27,7 +28,7 @@
 							<tr>
 								<td>{{$promotion->remarks}}</td>
 								<td>{{date('M d, Y', strtotime($promotion->effective_date))}}</td>
-								
+								<td><img  id="ViewPDF" src="{{asset('Massets/images/document.png')}}" href="{{asset(isset($promotion->hrDocumentation->file_name)? 'storage/'.$promotion->hrDocumentation->path.$promotion->hrDocumentation->file_name: 'Massets/images/document.png') }}" width=30/></td>
 								@can('hr edit promotion')
 								<td class="text-center">
 								 <a class="btn btn-success btn-sm" id="editEducation" href="{{route('promotion.edit',$promotion->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
@@ -84,7 +85,11 @@ $(document).ready(function() {
   	refreshTable("{{route('promotion.table')}}",1000);
     });
 
+  	  //function view from list table
+  	$(function(){
 
+			 $('#ViewPDF, #ViewIMG').EZView();
+	});
 
 
 });

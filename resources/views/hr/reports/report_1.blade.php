@@ -14,6 +14,7 @@
 				<tr>
 					<th>Id</th>
 					<th>Employee Name</th>
+					<th>Designation</th>
 					<th>Father Name</th>
 					<th>Date of Birth</th>
 					<th>CNIC</th>
@@ -37,6 +38,7 @@
 						<tr>
 							<td>{{$employee->id}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
+							<td>{{$employee->employeeDesignation->last()->name??''}}</td>
 							<td>{{$employee->father_name}}</td>
 							<td>{{$employee->date_of_birth}}</td>
 							<td>{{$employee->cnic}}</td>
@@ -77,6 +79,7 @@ $(document).ready(function() {
 	
             $('#myTable').DataTable({
                 stateSave: false,
+                "ordering": false,
         
                 dom: 'Blfrtip',
                 buttons: [

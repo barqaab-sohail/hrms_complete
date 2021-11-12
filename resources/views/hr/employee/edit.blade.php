@@ -7,17 +7,20 @@
 @stop
 @section('content')
 <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-2">
+      @include('layouts.vButton.hrButton')
+    </div>
+</div>
+
+
+<div class="row justify-content-end">
+    <div class="col-lg-12 reducedCol">
         <div class="card card-outline-info">
-			<div class="row">
-		      <div class="col-lg-2">
-					@include('layouts.vButton.hrButton')
-				  </div>
-      	
-		      <div class="col-lg-10 addAjax">
-		        @include('hr.employee.ajax')
-		      </div> <!-- end col-lg-10 -->
-		    </div> <!-- end row -->
+          <div class="row">
+  		      <div class="col-lg-12 addAjax">
+  		        @include('hr.employee.ajax')
+  		      </div> <!-- end col-lg-12 -->
+  		    </div> <!-- end row -->
         </div> <!-- end card card-outline-info -->
     </div> <!-- end col-lg-12 -->
 </div> <!-- end row -->

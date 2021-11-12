@@ -324,7 +324,7 @@ class DocumentationController extends Controller
 
     public function refreshTable(){
         
-        $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->orderByRaw('ISNULL(document_date), document_date ASC')->get();
+        $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->orderByRaw('ISNULL(document_date), document_date desc')->get();
 
         // foreach ($documentIds as $document){
         //     echo $document->document_date . '<br>';

@@ -68,6 +68,9 @@ class ProjectRightController extends Controller
                     ->addColumn('progress', function($row){                
                       return rightsName($row->progress);
                     })
+                    ->addColumn('payment', function($row){                
+                      return rightsName($row->payment);
+                    })
                  
                     ->rawColumns(['Edit','Delete','hr_employee_id','pr_detail_id','invoice','progress'])
                     ->make(true);
@@ -95,8 +98,8 @@ class ProjectRightController extends Controller
                 ['pr_detail_id'=> $input['pr_detail_id'],
                 'hr_employee_id'=> $input['hr_employee_id'],
                 'progress'=> $input['progress'],
-                'invoice'=> $input['invoice']
-                
+                'invoice'=> $input['invoice'],
+                'payment'=> $input['payment']  
             ]);
             
             $prLimitedAccess = Permission::where('name','pr limited access')->first();
@@ -135,7 +138,7 @@ class ProjectRightController extends Controller
 		
 		PrRight::findOrFail($id)->delete();
 
-        return response()->json(['success' => "1 Data Successfully Deleted"]);
+        return response()->json(['success' => "Data Successfully Deleted"]);
         
     }
 

@@ -12,11 +12,11 @@
 <div class="row">
     <div class="col-lg-2">
 	@include('layouts.vButton.prButtonDropDown')
-</div>
+	</div>
 </div>
 
-<div class="row">
-    <div class="col-lg-12">
+<div class="row justify-content-end">
+    <div class="col-lg-12 reducedCol">
         <div class="card card-outline-info">
 			<div class="row">
 				<!-- <div class="col-lg-2">

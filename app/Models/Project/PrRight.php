@@ -9,7 +9,7 @@ class PrRight extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['pr_detail_id','hr_employee_id','progress','invoice'];
+    protected $fillable = ['pr_detail_id','hr_employee_id','progress','invoice','payment'];
 
     
     // //default value of 1, which is "No Access"

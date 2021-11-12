@@ -1,6 +1,8 @@
 
 <div class="card-body">
+ @if(projectPaymentRight(session('pr_detail_id'))==3 || projectPaymentRight(session('pr_detail_id'))==4)
   <button type="button" class="btn btn-success float-right"  id ="createPayment" data-toggle="modal" >Add Payment</button>
+  @endif
   <br>
   <table class="table table-bordered data-table">
     <thead>
@@ -11,8 +13,12 @@
           <th>Cheque No.</th>
           <th>Cheque Date</th>
           <th>Total Deduction</th>
+          @if(projectPaymentRight(session('pr_detail_id'))==3 || projectPaymentRight(session('pr_detail_id'))==4)
           <th>Edit</th>
+          @endif
+          @if(projectPaymentRight(session('pr_detail_id'))==4)
           <th>Delete</th>
+          @endif
       </tr>
     </thead>
     <tbody>
@@ -205,8 +211,12 @@ $(document).ready(function() {
             {data: "cheque_no", name: 'cheque_no'},
             {data: "cheque_date", name: 'cheque_date'},
             {data: "total_deduction", name: 'total_deduction'},
+            @if(projectPaymentRight(session('pr_detail_id'))==3 || projectPaymentRight(session('pr_detail_id'))==4)
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
+            @endif
+            @if(projectPaymentRight(session('pr_detail_id'))==4)
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
+            @endif
 
         ],
      

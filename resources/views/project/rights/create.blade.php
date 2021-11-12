@@ -14,6 +14,7 @@
             <th>Employee Name</th>
             <th>Project Name</th>
             <th>Invoice Rights</th>
+            <th>Payment Rights</th>
             <th>Progress Rights</th>
             <th>Edit</th>
             <th>Delete</th>
@@ -74,6 +75,15 @@
                             @endforeach
                         </select>
                     </div>
+                     <div class="form-group">
+                        <label class="control-label text-right">Payment Rights<span class="text_requried">*</span></label>
+                        <select  id="payment"   name="payment"  class="form-control selectTwo" data-validation="required">
+                            <option value=""></option>
+                            @foreach($rights as $right)
+                            <option value="{{$right->id}}" {{(old("payment")==$right->id? "selected" : "")}}>{{$right->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     
                     <div class="col-sm-offset-2 col-sm-10">
                      <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
@@ -105,6 +115,7 @@ formFunctions();
             {data: "hr_employee_id", name: 'hr_employee_id'},
             {data: "pr_detail_id", name: 'pr_detail_id'},
             {data: "invoice", name: 'invoice'},
+            {data: "payment", name: 'payment'},
             {data: "progress", name: 'progress'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
@@ -121,10 +132,12 @@ formFunctions();
         $('#pr_detail_id').val('');
         $('#progress').val('');
         $('#invoice').val('');
+        $('#payment').val('');
         $('#hr_employee_id').trigger('change');
         $('#pr_detail_id').trigger('change');
         $('#progress').trigger('change');
         $('#invoice').trigger('change');
+        $('#payment').trigger('change');
         $('#projectRightsForm').trigger("reset");
         $('#modelHeading').html("Create New Right");
         $('#ajaxModel').modal('show');
@@ -146,6 +159,8 @@ formFunctions();
           $('#progress').trigger('change');
           $('#invoice').val(data.invoice);
           $('#invoice').trigger('change');
+          $('#payment').val(data.payment);
+          $('#payment').trigger('change');
       })
    });
     $('#saveBtn').click(function (e) {
