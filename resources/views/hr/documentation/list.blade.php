@@ -35,18 +35,21 @@
 						
 						@can('hr edit documentation')
 						<td class="text-center">
-						 <a class="btn btn-success btn-sm" id="editDocument" @if (empty($documentId->hrDocumentationProject->id??'')) href="{{route('documentation.edit',$documentId->id)}}"@else href="" @endif data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white " disabled></i></a>
+						@if(promotionDocument($documentId->id) && postingDocument($documentId->id))
+							<a class="btn btn-success btn-sm" id="editDocument" @if (empty($documentId->hrDocumentationProject->id??'')) href="{{route('documentation.edit',$documentId->id)}}"@else href="" @endif data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white " disabled></i></a>
+						 @endif
 						 </td>
 						 @endcan
 						 
 						@can('hr delete documentation')
 						 <td class="text-center">
-						 <form id="deleteDocument{{$documentId->id}}" action="{{route('documentation.destroy',$documentId->id)}}" method="POST">
-						 @method('DELETE')
-						 @csrf
-						 <button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete" @if(!empty($documentId->hrDocumentationProject->id??'')) disabled @endif><i class="fas fa-trash-alt "></i></button>
-						 </form>
-
+						 @if(promotionDocument($documentId->id) && postingDocument($documentId->id))
+						 	<form id="deleteDocument{{$documentId->id}}" action="{{route('documentation.destroy',$documentId->id)}}" method="POST">
+							@method('DELETE')
+							@csrf
+							<button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete" @if(!empty($documentId->hrDocumentationProject->id??'')) disabled @endif><i class="fas fa-trash-alt "></i></button>
+							</form>
+						 @endif
 						 </td>
 						 @endcan
 													

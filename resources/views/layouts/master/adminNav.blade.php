@@ -99,7 +99,7 @@
 
 
                         @can('pr limited access')
-                        <li><a  class="{{Request::is('hrms/project/selectedProjects')?'active':''}}" href="{{route('project.selected')}}">Selected Projects</a></li>
+                        <li><a  class="{{Request::is('hrms/project/selectedProjects')?'active':''}}" href="{{route('project.selected')}}">List of Allowed Projects</a></li>
                         @endcan
 
                         @can('Super Admin')

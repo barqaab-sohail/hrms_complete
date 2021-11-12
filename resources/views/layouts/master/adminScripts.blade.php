@@ -107,3 +107,31 @@
 
 
 </script>
+
+<!-- Sub Menue Button -->
+<script type="text/javascript">
+   
+
+$(document).ready(function() {
+    $('.dropdown-item').on('click', function(){
+    $('#dropdownSubMenueText').text($(this).text());
+    });
+      var showText = $('.dropdownSubMenue').find('a:first').text();
+      $('#dropdownSubMenueText').text(showText);
+      $(".dropdownSubMenue").hover(function(){
+            $('.reducedCol').removeClass('col-lg-12').addClass('col-lg-10');
+            $(this).addClass('dropdown');
+
+            var dropdownMenu = $(this).children(".dropdown-menu");
+            if(dropdownMenu.is(":visible")){
+                  dropdownMenu.parent().toggleClass("open");
+                  $('.dropdown-item').click(function(){
+                  $(".dropdown").removeClass("dropdown");
+                  });
+            }else{
+                  $('.reducedCol').removeClass('col-lg-10').addClass('col-lg-12');
+            }
+      });
+
+});
+</script>

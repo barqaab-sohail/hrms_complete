@@ -133,7 +133,7 @@
                         </div>
                     </div>
                 </div>
-                  <!--/span-->
+                <!--/span-->
                 <div class="col-md-2">
                     <div class="form-group row">
                         <div class="col-md-12">
@@ -141,6 +141,14 @@
                                 
                             <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no', $data->employee_no) }}" class="form-control"  placeholder="Enter Employee No">
 							
+                        </div>
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-2">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <img src="{{asset('storage/'.$data->employeePicture())}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" class="profile-pic" width="50%"/></a>
                         </div>
                     </div>
                 </div>

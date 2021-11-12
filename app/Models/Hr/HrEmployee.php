@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
 
+
 class HrEmployee extends Model implements Auditable
 {
     
@@ -364,6 +365,16 @@ class HrEmployee extends Model implements Auditable
 
     public function hod(){
           return $this->hasOne('App\Models\Hr\EmployeeManager')->orderBy('effective_date', 'DESC');
+    }
+
+    public function employeePicture(){
+        $picture = HrDocumentation::where([['description','Picture'],['hr_employee_id',session('hr_employee_id')]])->first();
+        if($picture){
+        $picturePath = $picture->path.$picture->file_name;
+        }else{
+            $picturePath='';
+        }
+        return $picturePath;
     }
     
    

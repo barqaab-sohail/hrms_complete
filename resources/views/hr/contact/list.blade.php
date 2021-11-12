@@ -16,13 +16,9 @@
 					
 					<tr >
 						<th>Contact Type</th>
-						<th>House No</th>
-						<th>Street No</th>
-						<th>Town/Village</th>
-						<th>City</th>
-						<th>Province</th>
-						<th>Country</th>
-						 
+						<th>Address</th> 
+						<th>Mobile</th> 
+						<th>Email</th> 
  						@can('hr edit contact')
 						<th colspan="2" class="text-center"style="width:10%"> Actions </th> 
 						@endcan 
@@ -33,12 +29,9 @@
 						@foreach($hrContacts as $hrContact)
 							<tr>
 								<td>{{$hrContact->hrContactType->name}}</td>
-								<td>{{$hrContact->house}}</td>
-								<td>{{$hrContact->street}}</td>
-								<td>{{$hrContact->town}}</td>
-								<td>{{$hrContact->city->name}}</td>
-								<td>{{$hrContact->state->name}}</td>
-								<td>{{$hrContact->country->name}}</td>
+								<td>{{$hrContact->house??''}} {{$hrContact->street??''}} {{$hrContact->town??''}} {{$hrContact->state->name??''}} {{$hrContact->country->name??''}}</td>
+								<td>{{$hrContact->mobile->mobile??''}}</td>
+								<td>{{$hrContact->email->email??''}}</td>
 								
 								@can('hr edit contact')
 								 <td class="text-center">

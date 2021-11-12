@@ -40,7 +40,7 @@ class PromotionController extends Controller
         $hrGrades = HrGrade::all();
         $hrCategories = HrCategory::all();
        
-        $hrPromotions = HrPromotion::where('hr_employee_id',session('hr_employee_id'))->get();
+        $hrPromotions = HrPromotion::where('hr_employee_id',session('hr_employee_id'))->with('hrDocumentation')->orderByRaw('ISNULL(effective_date), effective_date desc')->get();
        
 		
 	        if($request->ajax()){
@@ -417,7 +417,7 @@ class PromotionController extends Controller
 
     public function refreshTable(){
 
-    	$hrPromotions = HrPromotion::where('hr_employee_id',session('hr_employee_id'))->get();
+    	$hrPromotions = HrPromotion::where('hr_employee_id',session('hr_employee_id'))->with('hrDocumentation')->orderByRaw('ISNULL(effective_date), effective_date desc')->get();
         $ids = $hrPromotions->pluck('id')->toArray();
         //For security checking
         session()->put('promotion_delete_ids', $ids);

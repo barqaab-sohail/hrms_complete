@@ -77,7 +77,26 @@ class EmployeeController extends Controller
     public function index(Request $request){
    
         if($request->ajax()){
-            $data = HrEmployee::with('employeeDesignation','employeeProject','employeeOffice','employeeAppointment','hrContactMobile')->orderBy('hr_status_id','asc')->get();       
+            $data = HrEmployee::with('employeeDesignation','employeeProject','employeeOffice','employeeAppointment','hrContactMobile')->get();   
+
+            //first sort with respect to Designation
+            $designations = employeeDesignationArray();
+            $data = $data->sort(function ($a, $b) use ($designations) {
+              $pos_a = array_search($a->employeeDesignation->last()->name??'', $designations);
+              $pos_b = array_search($b->employeeDesignation->last()->name??'', $designations);
+              return $pos_a - $pos_b;
+            });
+
+            //second sort with respect to Hr Status
+            $hrStatuses = array('On Board','Resigned','Terminated','Retired','Long Leave','Manmonth Ended','Death');
+
+            $data = $data->sort(function ($a, $b) use ($hrStatuses) {
+              $pos_a = array_search($a->hr_status_id??'', $hrStatuses);
+              $pos_b = array_search($b->hr_status_id??'', $hrStatuses);
+              return $pos_a - $pos_b;
+            });
+
+
             return DataTables::of($data)
 
             ->addColumn('full_name',function($data){

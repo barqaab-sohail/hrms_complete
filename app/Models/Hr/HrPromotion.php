@@ -87,5 +87,9 @@ class HrPromotion extends Model implements Auditable
 
     }
 
+    public function HrDocumentation(){
+        return $this->belongsTo('App\Models\Hr\HrDocumentation');
+    }
+
 
 }
