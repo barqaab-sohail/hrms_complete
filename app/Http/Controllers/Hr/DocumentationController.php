@@ -21,13 +21,6 @@ class DocumentationController extends Controller
 
         $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->orderBy('document_date','desc')->get();
 
-        // $order = array('Appointment Letter', 'HR Form', 'CNIC Front', 'CNIC Back','Original CV','Picture','Educational Documents','Experience Certificates');
-
-        // $documentIds = $documentIds->sort(function ($a, $b) use ($order) {
-        //       $pos_a = array_search($a->description, $order);
-        //       $pos_b = array_search($b->description, $order);
-        //       return $pos_a - $pos_b;
-        // });
 
         // $documentIds = $documentIds->sortByDesc('document_date');
   
@@ -325,6 +318,14 @@ class DocumentationController extends Controller
     public function refreshTable(){
         
         $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->orderByRaw('ISNULL(document_date), document_date desc')->get();
+
+        $order = array('Joining Report','Appointment Letter', 'HR Form', 'CNIC Front', 'CNIC Back','Original CV','BARQAAB CV','Engineering Degree MSc','Engineering Degree BSc','Educational Documents','Experience Certificates','PEC Letter','PEC Front','PEC Back','Pec Letter','Picture','Driving License Front','Driving License Back','Application');
+
+        $documentIds = $documentIds->sort(function ($a, $b) use ($order) {
+              $pos_a = array_search($a->description, $order);
+              $pos_b = array_search($b->description, $order);
+              return $pos_a - $pos_b;
+        });
 
         // foreach ($documentIds as $document){
         //     echo $document->document_date . '<br>';

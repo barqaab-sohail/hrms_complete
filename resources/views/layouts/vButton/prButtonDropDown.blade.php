@@ -28,7 +28,7 @@
                 @endif
 
                 @if(projectProgressRight(session('pr_detail_id')))
-                 <a type="submit" role="button" style="color:white" id="addProgress Activities" href="{{route('projectProgressActivities.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectProgressActivities/index')?'style=background-color:#737373':''}}>Progress Activities</a>
+                 <a type="submit" role="button" style="color:white" id="addProgressActivities" href="{{route('projectProgressActivities.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectProgressActivities/index')?'style=background-color:#737373':''}}>Progress Activities</a>
                  <a type="submit" role="button" style="color:white" id="addMonthlyProgress" href="{{route('monthlyProgress.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/monthlyProgress/index')?'style=background-color:#737373':''}}>Monthly Progress</a>
                 @endif
                 
@@ -38,11 +38,6 @@
                 <a type="submit" role="button" style="color:white" id="addPosition" href="{{route('projectPartner.create')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPartner/create')?'style=background-color:#737373':''}}>Partner Detail</a>
                 @endif
                 <a type="submit" role="button" style="color:white" id="addConsultancyCost" href="{{route('projectConsultancyCost.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectConsultancyCost/index')?'style=background-color:#737373':''}}>Consultancy Cost</a>
-
-               
-
-
-               
 
                 <a type="submit" role="button" style="color:white" id="addPosition" href="{{route('projectPosition.create')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPosition/create')?'style=background-color:#737373':''}}>Position</a>
 
