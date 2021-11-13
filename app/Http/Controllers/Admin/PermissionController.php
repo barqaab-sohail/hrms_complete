@@ -25,7 +25,7 @@ class PermissionController extends Controller
     public function store (PermissionStore $request){
 
     	DB::transaction(function () use ($request) { 
-    	
+    	   \Artisan::call('cache:clear');
 	    	Permission::create(['name'=>$request->name, 'guard_name'=>'web']);
 	    	
 
