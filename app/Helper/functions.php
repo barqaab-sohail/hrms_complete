@@ -23,13 +23,6 @@ function rightsName($id){
 	}
 }
 
-function projectIds($user){
-
-	$projectIds = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->get()->pluck('pr_detail_id')->toArray();
-
-	return $projectIds;
-
-}
 
 function projectInvoiceRight($project){
 
