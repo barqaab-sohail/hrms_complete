@@ -54,8 +54,7 @@
 					@endrole
 				</tr>
 				</thead>
-				<tbody>
-					
+				<tbody>	
 					@if(Auth::User()->can('pr edit power') || Auth::User()->can('pr view power'))
 						@php
 						$projects = $projects->merge($powerProjects);
