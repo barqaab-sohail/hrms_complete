@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Project\Invoice;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use App\Http\Requests\Project\Invoice\InvoiceStore;
 use App\Models\Project\PrDetail;
 use App\Models\Project\Invoice\Invoice;
 use App\Models\Project\Invoice\InvoiceType;
+use App\Models\Project\Invoice\InvoiceDocument;
 use App\Models\Project\Invoice\InvoiceCost;
 use App\Models\Project\Invoice\InvoiceStatus;
 use DB;
@@ -70,7 +72,7 @@ class InvoiceController extends Controller
                            return addComma($row->invoiceCost->sales_tax??'');
                            
                     })
-                     ->addColumn('total_value', function($row){                
+                    ->addColumn('total_value', function($row){                
                       		$salesTax= (int)$row->invoiceCost->sales_tax??'';
                       		$amount = (int)$row->invoiceCost->amount??'';
                       		$total = $salesTax + $amount;
@@ -83,8 +85,19 @@ class InvoiceController extends Controller
                            return $row->paymentStatus->name??'Pending';
                            
                     })
+                    ->addColumn('invoice_document', function($row){                
+                      
+                        if($row->invoiceDocument)
+                        {
+                             $doc= "<img  id=\"ViewPDF$row->id\" src=". url('Massets/images/document.png')." href=".url('/storage/'.$row->invoiceDocument->path)." width=30/>";
+                             return $doc;
+                        }
+
+                        return '';  
+                           
+                    })
                  
-                    ->rawColumns(['Edit','Delete','invoice_type_id','amount','sales_tax','total_value','payment_status'])
+                    ->rawColumns(['Edit','Delete','invoice_type_id','amount','sales_tax','total_value','payment_status','invoice_document'])
                     ->make(true);
         }
 
@@ -110,6 +123,7 @@ class InvoiceController extends Controller
 
      	DB::transaction(function () use ($input, $request) {  
 
+            
     		$invoice = Invoice::updateOrCreate(['id' => $input['invoice_id']],
                 ['pr_detail_id'=> $input['pr_detail_id'],
                 'invoice_type_id'=> $input['invoice_type_id'],
@@ -125,6 +139,22 @@ class InvoiceController extends Controller
             'sales_tax'=> $input['sales_tax']
             ]);
 
+            if ($request->hasFile('document')){
+                $extension = request()->document->getClientOriginalExtension();
+                $fileName = $input['invoice_no'].'-'. time().'.'.$extension;
+                $folderName = "project/".session('pr_detail_id')."/invoice/";
+                //store file
+                $request->file('document')->storeAs('public/'.$folderName,$fileName);  
+                $file_path = storage_path('app/public/'.$folderName.$fileName);
+
+                InvoiceDocument::updateOrCreate(['invoice_id' => $invoice->id],
+                ['invoice_id'=> $invoice->id,
+                'pr_detail_id'=> $input['pr_detail_id'],
+                'extension'=> $extension,
+                'path'=> $folderName.$fileName,
+                'size'=> $request->file('document')->getSize()
+                ]);
+            }
 
              
 
@@ -141,9 +171,11 @@ class InvoiceController extends Controller
         $invoiceCost = InvoiceCost::where('invoice_id',$id)->select(['amount','sales_tax'])->first();
         $invoiceCost = new Collection($invoiceCost);
 
-     
-       
+        $invoiceDocument = InvoiceDocument::where('invoice_id',$id)->select('path')->first();
+        $invoiceDocument = new Collection($invoiceDocument);
+
         $invoice = $invoice->merge($invoiceCost);
+        $invoice = $invoice->merge($invoiceDocument);
         
         return response()->json($invoice);
 
@@ -156,7 +188,21 @@ class InvoiceController extends Controller
 
 	public function destroy($id){
 
-		Invoice::findOrFail($id)->delete();
+        DB::transaction(function () use ($id) { 
+
+            $invoiceDocument = InvoiceDocument::where('invoice_id',$id)->first();
+
+            $path = public_path('storage/'.$invoiceDocument->path);
+
+            if(File::exists($path)){
+                    File::delete($path);
+            }
+
+            Invoice::findOrFail($id)->delete();
+
+        });  //end transaction
+
+
 		return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
 		
 	}

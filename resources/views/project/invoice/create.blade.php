@@ -14,6 +14,7 @@
           <th>Sales Tax</th>
           <th>Total Value</th>
           <th>Payment Status</th>
+          <th>Document</th>
           @if(projectInvoiceRight(session('pr_detail_id'))==3 || projectInvoiceRight(session('pr_detail_id'))==4)
           <th>Edit</th>
           @endif
@@ -102,7 +103,27 @@
                       </div>
                     </div>
                   </div>
-
+                  <!--/row-->
+                  <div class="row">
+                    <div class="col-md-8 pdfView">
+                    <embed id="pdf" src=""  type="application/pdf" height="300" width="100%" />
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group row">
+                            <center >
+                            <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src"  id="wizardPicturePreview"  title="" width="150" >
+                            </input>
+                            <input type="file"  name="document" id="view" data-validation="required" class="" hidden>
+                                                                            
+                            <h6 id="h6" class="card-title m-t-10">Click On Image to Add Document<span class="text_requried">*</span></h6>
+                    
+                            </center>  
+                        </div>
+                    </div>                                    
+                  </div>
+                  <!--end row-->
                     
                   <div class="col-sm-offset-2 col-sm-10">
                    <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
@@ -121,7 +142,11 @@
 </style>
 
 <script type="text/javascript">
+
+
 $(document).ready(function() {
+  //function view from list table
+  
   
   //only number value entered
     $('#amount, #sales_tax').on('change, keyup', function() {
@@ -180,6 +205,7 @@ $(document).ready(function() {
             {data: "sales_tax", name: 'sales_tax'},
             {data: "total_value", name: 'total_value'},
             {data: "payment_status", name: 'payment_status'},
+            {data: "invoice_document", name: 'invoice_document'},
              @if(projectInvoiceRight(session('pr_detail_id'))==3 || projectInvoiceRight(session('pr_detail_id'))==4)
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             @endif
@@ -189,16 +215,25 @@ $(document).ready(function() {
 
         ],
      
-        order: [[ 0, "desc" ]]
+        order: [[ 0, "desc" ]],
+        drawCallback:function(){
+          if($('[id^="ViewPDF"]').length > 0) {
+            $('[id^="ViewPDF"]').EZView();
+          }
+        }
     });
+   
 
     $('#createInvoice').click(function () {
         $('#json_message_modal').html('');
         $('#saveBtn').val("Create Invoice");
         $('#invoice_id').val('');
         $('#invoiceForm').trigger("reset");
+        $('#invoice_type_id').trigger('change');
         $('#modelHeading').html("Create New Invoice");
         $('#ajaxModel').modal('show');
+        document.getElementById("pdf").src='';
+        document.getElementById("h6").innerHTML = "PDF Document is Attached";
     });
     $('body').unbind().on('click', '.editInvoice', function () {
       var invoice_id = $(this).data('id');
@@ -222,18 +257,26 @@ $(document).ready(function() {
           var totalValue = (+(data.amount) + +(data.sales_tax));
           totalValue = (totalValue).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           $('#total_value').val(totalValue); 
-
+          var docUrl = "{{asset("")}}"+"storage/"+data.path;
+          $( "#pdf" ).show();
+          document.getElementById("pdf").src=docUrl;
+          //$('#pdf').trigger('change');
+         
       })
    });
     $('#saveBtn').click(function (e) {
         e.preventDefault();
         $(this).html('Save');
-         
+        var data = new FormData($("#invoiceForm")[0]); 
         $.ajax({
-          data: $('#invoiceForm').serialize(),
+          data: data,
           url: "{{ route('projectInvoice.store') }}",
           type: "POST",
-          dataType: 'json',
+          async: false, 
+          cache: false, 
+          contentType: false, 
+          processData: false, 
+          //dataType: 'json',
           success: function (data) {
      
               $('#invoiceForm').trigger("reset");
@@ -277,5 +320,75 @@ $(document).ready(function() {
     });
      
   });
+  
+  $("#pdf" ).hide();
+            // Prepare the preview for profile picture
+        $("#view").change(function(){
+                var fileName = this.files[0].name;
+                var fileType = this.files[0].type;
+                var fileSize = this.files[0].size;
+                //var fileType = fileName.split('.').pop();
+                
+            //Restrict File Size Less Than 2MB
+            if (fileSize> 300000){
+                alert('File Size is bigger than 300KB');
+                $(this).val('');
+            }else{
+                //Restrict File Type
+               if(fileType=='application/pdf')
+                {
+                readURL(this);// for Default Image
+                document.getElementById("h6").innerHTML = "PDF Document is Attached";
+                document.getElementById("pdf").src="{{asset('Massets/images/document.png')}}";  
+                $( "#pdf" ).show();
+                }else{
+                    alert('Only PDF Allowed');
+                $(this).val('');
+                }
+            }
+            
+        });
+
+
+        function readURL(input) {
+            var fileName = input.files[0].name;
+            var fileType = input.files[0].type;
+            //var fileType = fileName.split('.').pop();
+                                
+            if (fileType !='application/pdf'){
+            //Read URL if image
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    
+                        reader.onload = function (e) {
+                            $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow').attr('width','100%');
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                }
+                    
+            }else{
+               
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    
+                        reader.onload = function (e) {
+                            $('embed').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                }   
+                document.getElementById("wizardPicturePreview").src="{{asset('Massets/images/document.png')}}"; 
+                document.getElementById("h6").innerHTML = "PDF File is Attached";
+                 $('#wizardPicturePreview').attr('width','150');
+            }           
+        }
+            
+        $("#wizardPicturePreview" ).click (function() {
+           $("input[id='view']").click();
+         });
+
+    
+
+
+
 });
 </script>

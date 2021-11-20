@@ -26,10 +26,11 @@ class InvoiceStore extends FormRequest
          $rules = [
               
             'invoice_date' => 'required',
-            'invoice_no' => 'required',
+            'invoice_no'=>'required|unique:invoices,invoice_no,'.$this->invoice_id,
             'amount' => 'required',
             'sales_tax' => 'required',
             'invoice_type_id' => 'required',
+            'document'=>'nullable|file|max:300'
         ];
 
     return $rules;
