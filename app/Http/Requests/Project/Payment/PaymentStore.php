@@ -52,6 +52,9 @@ class PaymentStore extends FormRequest
             'total_invoice_value'=>'required',
             'payment_date' => 'required',
             'payment_status_id' => 'required',
+            'withholding_tax'=> 'required',
+            'sales_tax'=> 'required',
+            'other_deduction'=> 'required'
     
         ];
 

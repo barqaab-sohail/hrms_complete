@@ -13,6 +13,7 @@
           <th>Cheque No.</th>
           <th>Cheque Date</th>
           <th>Total Deduction</th>
+          <th>Payment Status</th>
           @if(projectPaymentRight(session('pr_detail_id'))==3 || projectPaymentRight(session('pr_detail_id'))==4)
           <th>Edit</th>
           @endif
@@ -211,6 +212,7 @@ $(document).ready(function() {
             {data: "cheque_no", name: 'cheque_no'},
             {data: "cheque_date", name: 'cheque_date'},
             {data: "total_deduction", name: 'total_deduction'},
+            {data: "payment_status", name: 'payment_status'},
             @if(projectPaymentRight(session('pr_detail_id'))==3 || projectPaymentRight(session('pr_detail_id'))==4)
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             @endif

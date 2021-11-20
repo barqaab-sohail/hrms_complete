@@ -28,7 +28,10 @@ class PaymentController extends Controller
 
     public function index() {
        
-       	$invoices = Invoice::where('pr_detail_id',session('pr_detail_id'))->get();
+       	// $invoices = Invoice::where('pr_detail_id',session('pr_detail_id'))->get();
+
+        $invoices = pendingInvoices(session('pr_detail_id'));
+
         $paymentStatuses = PaymentStatus::all();
         $view =  view('project.payment.create',compact('invoices','paymentStatuses'))->render();
         return response()->json($view);
@@ -72,9 +75,14 @@ class PaymentController extends Controller
                            return addComma($row->amount??'');
                            
                     })
+                    ->addColumn('payment_status', function($row){                
+                      
+                           return $row->paymentStatus->name??'';
+                           
+                    })
                     
                  
-                    ->rawColumns(['Edit','Delete','amount','invoice_no','total_deduction'])
+                    ->rawColumns(['Edit','Delete','amount','invoice_no','total_deduction','payment_status'])
                     ->make(true);
         }
 

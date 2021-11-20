@@ -24,5 +24,11 @@ class PaymentReceive extends Model implements Auditable
 
     }
 
+    Public function paymentStatus(){
+
+        return $this->belongsTo('App\Models\Project\Payment\PaymentStatus' );
+
+    }
+
 
 }

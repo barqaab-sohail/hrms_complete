@@ -14,10 +14,10 @@
 				<tr>
 					<th>Id</th>
 					<th>Employee Name</th>
+					<th>Project</th>
 					<th>CNIC Front</th>
 					<th>Appointment Letter</th>
 					<th>HR Form</th>
-					<th>Division</th>
 					<th>Engineering Degree</th>
 					<th>Educational Documents</th>
 					<th>Mobile</th>
@@ -33,10 +33,10 @@
 						<tr>
 							<td>{{$employee->id}}</td>
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
+							<td>{{$employee->employeeProject->last()->name??''}}</td>
 							<td class="text-center">{{$employee->cnicFront->first()->laravel_through_key??'Missing'}}</td>
 							<td class="text-center">{{$employee->appointmentLetter->first()->laravel_through_key??'Missing'}}</td>
 							<td class="text-center">{{$employee->hrForm->first()->laravel_through_key??'Missing'}}</td>
-							<td class="text-center">{!!getDivision(substr($employee->employee_no,0,2))!!}</td>
 							<td class="text-center">{{$employee->engineeringDegree->first()->laravel_through_key??'Missing'}}</td>
 							<td class="text-center">{{$employee->educationalDocuments->first()->laravel_through_key??'Missing'}}</td>
 							<td class="text-center">{{$employee->hrContactMobile->mobile??''}}</td>

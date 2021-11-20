@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Project;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Project\PrRight;
 use App\Models\Project\PrRole;
 use App\Models\Project\PrStatus;
 use App\Models\Project\PrDetail;
@@ -32,10 +33,8 @@ class ProjectController extends Controller
 	}
 
     public function selectedProjects(){
-   
-    $prDetailIds = projectIds(Auth::user()->hrEmployee->id);
-    $projects = PrDetail::wherein('id',$prDetailIds)->get();
-    
+    $projectIds = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->pluck('pr_detail_id')->toArray();
+    $projects = PrDetail::wherein('id',$projectIds)->get();
     return view ('project.detail.selectedProjects', compact('projects'));
 
     }

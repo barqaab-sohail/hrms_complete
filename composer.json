@@ -61,7 +61,8 @@
          "files":[
             "app/Helper/DocxConversion.php",
             "app/Helper/chartFunctions.php",
-            "app/Helper/Hr/hrFunctions.php"
+            "app/Helper/Hr/hrFunctions.php",
+            "app/Helper/Project/prFunctions.php"
             ],
         "psr-4": {
             "Tests\\": "tests/"
