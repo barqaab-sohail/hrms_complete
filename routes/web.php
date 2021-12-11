@@ -69,6 +69,9 @@ Route::resource('/emergency', 'EmergencyController');
 Route::resource('/nextToKin', 'NextToKinController');
 
 Route::resource('/manager', 'ManagerController');
+Route::post('/employeeSalaryImport', 'EmployeeSalaryController@import')->name('employeeSalaryImport');
+Route::resource('/employeeSalary', 'EmployeeSalaryController');
+
 Route::get('/promotion/refreshTable', 'PromotionController@refreshTable')->name('promotion.table');
 Route::resource('/promotion', 'PromotionController');
 Route::get('/exit/refreshTable', 'ExitController@refreshTable')->name('exit.table');

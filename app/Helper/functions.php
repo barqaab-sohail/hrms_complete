@@ -23,21 +23,8 @@ function rightsName($id){
 }
 
 
-function projectInvoiceRight($project){
 
-	$projectInvoiceRight = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->where('pr_detail_id',$project)->first();
-	if($projectInvoiceRight){
-		if ($projectInvoiceRight->invoice == 1){
-			return false;
-		} else{
-			return $projectInvoiceRight->invoice;
-		}
-		
-	}else
-	{
-		return false;
-	}
-}
+
 function projectPaymentRight($project){
 
 	$projectPaymentRight = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->where('pr_detail_id',$project)->first();

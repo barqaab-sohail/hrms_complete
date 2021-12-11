@@ -10,6 +10,7 @@ use DB;
 
 class SalaryController extends Controller
 {
+    
     public function store (SalaryStore $request){
 
        $totalSalary = (int)str_replace(',', '', $request->total_salary);

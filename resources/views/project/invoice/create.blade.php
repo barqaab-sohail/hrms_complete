@@ -1,6 +1,6 @@
 
 <div class="card-body">
-  @if(projectInvoiceRight(session('pr_detail_id'))==3 || projectInvoiceRight(session('pr_detail_id'))==4)
+  @if(isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id')))
   <button type="button" class="btn btn-success float-right"  id ="createInvoice" data-toggle="modal" >Add Invoice</button>
   @endif
   <br>
@@ -15,10 +15,10 @@
           <th>Total Value</th>
           <th>Payment Status</th>
           <th>Document</th>
-          @if(projectInvoiceRight(session('pr_detail_id'))==3 || projectInvoiceRight(session('pr_detail_id'))==4)
+          @if(isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id')))
           <th>Edit</th>
           @endif
-          @if(projectInvoiceRight(session('pr_detail_id'))==4)
+          @if(isDeleteInvoice(session('pr_detail_id')))
           <th>Delete</th>
           @endif
           
@@ -206,10 +206,10 @@ $(document).ready(function() {
             {data: "total_value", name: 'total_value'},
             {data: "payment_status", name: 'payment_status'},
             {data: "invoice_document", name: 'invoice_document'},
-             @if(projectInvoiceRight(session('pr_detail_id'))==3 || projectInvoiceRight(session('pr_detail_id'))==4)
+             @if(isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id')))
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             @endif
-            @if(projectInvoiceRight(session('pr_detail_id'))==4)
+            @if(isDeleteInvoice(session('pr_detail_id')))
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
             @endif
 

@@ -19,7 +19,7 @@
                 <a type="submit" role="button" style="color:white" id="addDocument" href="{{route('projectDocument.create')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectDocument/create')?'style=background-color:#737373':''}}>Documentation</a>
                 @endcan
 
-                @if(projectInvoiceRight(session('pr_detail_id')))
+                @if(isViewInvoice(session('pr_detail_id')))
                 <a type="submit" role="button" style="color:white" id="addInvoice" href="{{route('projectInvoice.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectInvoice/index')?'style=background-color:#737373':''}}>Invoices</a>
                 @endif
 

@@ -319,7 +319,7 @@ class DocumentationController extends Controller
         
         $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->orderByRaw('ISNULL(document_date), document_date desc')->get();
 
-        $order = array('Joining Report','Appointment Letter', 'HR Form', 'CNIC Front', 'CNIC Back','Original CV','BARQAAB CV','Engineering Degree MSc','Engineering Degree BSc','Educational Documents','Experience Certificates','PEC Letter','PEC Front','PEC Back','Pec Letter','Picture','Driving License Front','Driving License Back','Application');
+        $order = array('Joining Report','Appointment Letter', 'HR Form', 'CNIC Front', 'CNIC Back','Original CV','BARQAAB CV','Engineering Degree MSc','Engineering Degree BSc','Educational Documents','Experience Certificates','PEC Letter','PEC Front','PEC Back','Pec Letter','Picture','Driving License Front','Driving License Back','Application','Domicile');
 
         $documentIds = $documentIds->sort(function ($a, $b) use ($order) {
               $pos_a = array_search($a->description, $order);
@@ -327,6 +327,7 @@ class DocumentationController extends Controller
               return $pos_a - $pos_b;
         });
 
+       $documentIds = $documentIds->sortByDesc('document_date');
         // foreach ($documentIds as $document){
         //     echo $document->document_date . '<br>';
         // }
