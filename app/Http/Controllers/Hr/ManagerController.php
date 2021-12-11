@@ -67,6 +67,8 @@ class ManagerController extends Controller
             $input ['effective_date'] = \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
         }
 
+        
+
          DB::transaction(function () use ($input) {  
         	
             //EmployeeManager::updateOrCreate(['id' => $input['hr_manager_id']],
