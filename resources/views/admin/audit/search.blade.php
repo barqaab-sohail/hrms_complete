@@ -13,12 +13,12 @@
             <div class="form-body">
 
 				<div class="row Search" >
-					<div class="col-md-5">
+					<div class="col-md-4">
 		            	<!--/span 5-1 -->
 		                <div class="form-group row">
-		                    <div class="col-md-12 required">
+		                    <div class="col-md-12">
 		                   		<label class="control-label text-right">User Name</label><br>
-		                   		<select  name="user"  class="form-control" data-validation="required">
+		                   		<select  name="user"  class="form-control searchSelect">
 		                            <option value=""></option>
 		                            @foreach($users as $user)
 									<option value="{{$user->id}}" {{(old("user")==$user->id? "selected" : "")}}>{{employeeFullName($user->hrEmployee->id)}}</option>
@@ -26,7 +26,21 @@
 		                        </select>    
 		                    </div>
 		                </div>
-		            </div>     
+		            </div>
+		            <div class="col-md-5">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12">
+		                   		<label class="control-label text-right">Model Name</label><br>
+		                   		<select  name="model"  class="form-control searchSelect">
+		                            <option value=""></option>
+		                            @foreach($models as $model)
+									<option value="{{$model}}">{{$model}}</option>
+		                            @endforeach
+		                        </select>    
+		                    </div>
+		                </div>
+		            </div>          
 		            <div class="col-md-3">
 		            	<!--/span 5-1 -->
 		                <div class="form-group row">
@@ -72,6 +86,16 @@ $(document).ready(function(){
 	$('.fa-spinner').hide();
 	$('select').select2();
 	formFunctions();
+
+	$('select').change(function(){	
+		
+		$(this).removeClass('searchSelect');
+  		$('.searchSelect').each(function () {
+  			
+        	$(this).val('').select2('val', 'All');
+    	});
+    	$(this).addClass('searchSelect');
+  	});
 
 	$('#total_records').keyup(function(event) {
 
@@ -137,21 +161,6 @@ $(document).ready(function(){
 	    }); //end ajax
       
     });
-
-    $(".date_input").datepicker({
-     onSelect: function(value, ui) {
-        $(this).siblings('i').show();
-        var today = new Date(), 
-            age = today.getFullYear() - ui.selectedYear;
-        $('#age').text(age+' years total age');
-    },
-    dateFormat: 'D, d-M-yy',
-    yearRange: '1935:'+ (new Date().getFullYear()+15),
-    changeMonth: true,
-    changeYear: true,
-
-    });
-
 
 
 });

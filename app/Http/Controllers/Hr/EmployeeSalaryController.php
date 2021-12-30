@@ -123,7 +123,7 @@ class EmployeeSalaryController extends Controller
      	$path = $request->file('select_file')->getRealPath();
         
 
-     	Excel::import(new EmployeeSalaryImport, $path);
+     	\Excel::import(new EmployeeSalaryImport, $path);
          
     	return back()->with('success', 'Excel Data Imported successfully.');
     }

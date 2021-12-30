@@ -2,17 +2,23 @@
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrPromotion;
 use App\Models\Hr\HrPosting;
+use App\User;
 
 
 function employeeFullName($id){
 	$hremployee = HrEmployee::find($id);
-	if($hremployee){
-		
+	if($hremployee){	
 		$fullName = $hremployee->first_name. ' '.$hremployee->last_name;
-
 		$designation = isset($hremployee->employeeDesignation->last()->name)?$hremployee->employeeDesignation->last()->name:'';
-		
 		return $fullName.' - '.$designation;
+	}
+}
+
+function userFullName($id){
+	$user = User::find($id);
+	if($user){	
+		$fullName = $user->hrEmployee->first_name. ' '.$user->hrEmployee->last_name;
+		return $fullName;
 	}
 }
 

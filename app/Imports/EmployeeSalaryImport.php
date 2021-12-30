@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use App\Models\Hr\HrSalary;
 use App\Models\Hr\HrEmployee;
 
-class EmployeeSalaryImport implements ToModel, WithHeadingRow, WithValidation
+class EmployeeSalaryImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -19,7 +19,7 @@ class EmployeeSalaryImport implements ToModel, WithHeadingRow, WithValidation
     public function model(array $row)
     {
         
-        $hrEmployee = HrEmployee::where('employee_no',$row['Employee No'])->first();
+        $hrEmployee = HrEmployee::where('employee_no',$row['No'])->first();
         $row['hr_employee_id'] =  $hrEmployee->id;
 
         //remove comma from current salary column.
