@@ -13,6 +13,7 @@
                 <thead>
                 
                     <tr>
+                        <th>User Name</th>
                         <th>Event</th>
                         <th>Auditable Type</th>
                         <th>Auditable Id</th>
@@ -24,6 +25,7 @@
                 <tbody>
                     @foreach($result as $audit)
                     <tr>
+                        <td>{{userFullName($audit->user_id)}}</td>
                         <td>{{$audit->event}}</td>
                         <td>{{$audit->auditable_type}}</td>
                         <td>{{$audit->auditable_id}}</td>
