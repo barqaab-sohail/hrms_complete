@@ -104,7 +104,7 @@ Route::get('/charts/category', 'HrChartController@category')->name('charts.categ
 });
 
 
-Route::group(['prefix' => 'input', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'input'], function(){
+Route::group(['prefix' => 'input', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Input'], function(){
 	Route::resource('/inputMonth', 'InputMonthController');
 	Route::resource('/inputProject', 'InputProjectController');
 	Route::resource('/input', 'InputController');
@@ -201,7 +201,7 @@ Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
 
 
 //Submission Routes
-Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'submission'], function(){
+Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Submission'], function(){
 	Route::resource('/submission', 'SubmissionController');
 	Route::resource('/submissionDocument', 'SubmissionDocumentController');
 	Route::get('/submissionDocument/refreshTable', 'SubmissionDocumentController@refreshTable')->name('submissionDocument.table');
