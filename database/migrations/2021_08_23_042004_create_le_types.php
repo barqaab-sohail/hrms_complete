@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLeStatusTypes extends Migration
+class CreateLeTypes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreateLeStatusTypes extends Migration
      */
     public function up()
     {
-        Schema::create('le_status_types', function (Blueprint $table) {
+        Schema::create('le_types', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->string('name');
+            $table->integer('annual_total');
+            $table->integer('accumulative_limit');
+            $table->string('from_date');
+            $table->string('to_date');
             $table->timestamps();
         });
     }
@@ -28,6 +32,6 @@ class CreateLeStatusTypes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('le_status_types');
+        Schema::dropIfExists('le_types');
     }
 }

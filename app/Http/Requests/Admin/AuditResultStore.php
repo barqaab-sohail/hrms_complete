@@ -28,7 +28,6 @@ class AuditResultStore extends FormRequest
 
         $rules = [
      
-        'user'=> 'required',
         'total_records'=> 'required|numeric',
         ];
 
