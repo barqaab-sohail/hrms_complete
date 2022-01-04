@@ -19,9 +19,9 @@ class SalaryController extends Controller
       
         if($salary == null){
             
-             DB::transaction(function () use ($totalSalary) {  
+            DB::transaction(function () use ($totalSalary) {  
 
-                 HrSalary::create(['total_salary'=>$totalSalary]);
+                HrSalary::create(['total_salary'=>$totalSalary]);
 
             }); // end transcation   
 

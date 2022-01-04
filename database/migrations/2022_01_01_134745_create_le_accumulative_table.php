@@ -19,6 +19,7 @@ class CreateLeAccumulativeTable extends Migration
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->bigInteger('le_type_id')->unsigned();
             $table->integer('accumulative_total');
+            $table->date('date');
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees');
             $table->foreign('le_type_id')->references('id')->on('le_types');

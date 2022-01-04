@@ -170,7 +170,6 @@ class EmployeeController extends Controller
 
     public function allEmployeeList(){
         $employees = HrEmployee::all();
-
         return view ('hr.employee.allEmployeeList',compact('employees'));
     }
 

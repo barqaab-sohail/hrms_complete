@@ -14,7 +14,7 @@ class EmployeeSalaryController extends Controller
 {
     
 
-     public function index() {
+    public function index() {
         
         $hrSalaries = HrSalary::all();
         
