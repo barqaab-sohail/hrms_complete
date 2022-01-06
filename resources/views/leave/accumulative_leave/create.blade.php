@@ -1,24 +1,30 @@
-
-<div class="card-body">
-  
-  <button type="button" class="btn btn-success float-right"  id ="createAddAccumulativeLeave" data-toggle="modal" >Add Accumulative Leave</button>
-  <br>
-  <table class="table table-striped data-table">
-    <thead>
-      <tr>
-          <th>Employee Name</th>
-          <th>Leave Type</th>
-          <th>Accumulative Leaves</th>
-          <th>Date</th>
-          <th>Edit</th>
-          <th>Delete</th>
-      </tr>
-    </thead>
-    <tbody>
-        
-    </tbody>
-  </table>
-</div>
+@extends('layouts.master.master')
+@section('title', 'BARQAAB HR')
+@section('Heading')
+  <h3 class="text-themecolor"></h3>
+@stop
+@section('content')
+<div class="card">
+  <div class="card-body">
+    
+    <button type="button" class="btn btn-success float-right"  id ="createAddAccumulativeLeave" data-toggle="modal" >Add Accumulative Leave</button>
+    <br>
+    <table class="table table-striped data-table">
+      <thead>
+        <tr>
+            <th>Employee Name</th>
+            <th>Leave Type</th>
+            <th>Accumulative Leaves</th>
+            <th>Date</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+          
+      </tbody>
+    </table>
+  </div>
 
 <div class="modal fade" id="ajaxModel" aria-hidden="true">
     <div class="modal-dialog">
@@ -79,7 +85,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-
+  formFunctions();
   //only number value entered
     $('#accumulative_total').on('change, keyup', function() {
     var currentInput = $(this).val();
@@ -96,11 +102,11 @@ $(document).ready(function() {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('accumulativesLeave.index') }}",
+        ajax: "{{ route('accumulativesLeave.create') }}",
         columns: [
-            {data: "hr_employee_id", name: 'hr_employee_id'},
-            {data: "accumulative_total", name: 'accumulative_total'},
+            {data: "fullName", name: 'fullName'},
             {data: "le_type_id", name: 'le_type_id'},
+            {data: "accumulative_total", name: 'accumulative_total'},
             {data: 'date', name: 'date'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
@@ -115,6 +121,12 @@ $(document).ready(function() {
         $('#le_accumulative_id').val('');
         $('#leaveForm').trigger("reset");
         $('#hr_employee_id').val('');
+        $('#hr_employee_id').trigger('change');
+        $('#le_type_id').val('');
+        $('#le_type_id').trigger('change');
+        $('#accumulative_total').val('');
+        $('#date').val('');
+
         $('#modelHeading').html("Create Accumulative Leave");
         $('#ajaxModel').modal('show');
     });
@@ -138,7 +150,7 @@ $(document).ready(function() {
          
         $.ajax({
           data: $('#leaveForm').serialize(),
-          url: "{{ route('employeeSalary.store') }}",
+          url: "{{ route('accumulativesLeave.store') }}",
           type: "POST",
           dataType: 'json',
           success: function (data) {
@@ -161,14 +173,14 @@ $(document).ready(function() {
       });
     });
     
-    $('body').on('click', '.deleteSalary', function () {
+    $('body').on('click', '.deleteAccumulativeLeave', function () {
      
         var le_accumulative_id = $(this).data("id");
         var con = confirm("Are You sure want to delete !");
         if(con){
           $.ajax({
             type: "DELETE",
-            url: "{{ route('employeeSalary.store') }}"+'/'+le_accumulative_id,
+            url: "{{ route('accumulativesLeave.store') }}"+'/'+le_accumulative_id,
             success: function (data) {
                 table.draw();
                 if(data.error){
@@ -186,3 +198,4 @@ $(document).ready(function() {
   });
 });
 </script>
+@stop
