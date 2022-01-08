@@ -133,14 +133,18 @@ $(document).ready(function() {
     $('body').unbind().on('click', '.editAccumulativeLeave', function () {
       var le_accumulative_id = $(this).data('id');
 
+
       $('#json_message_modal').html('');
       $.get("{{ url('hrms/accumulativesLeave') }}" +'/' + le_accumulative_id +'/edit', function (data) {
           $('#modelHeading').html("Edit Accumulative Leave");
           $('#saveBtn').val("edit-Accumulative-Leave");
           $('#ajaxModel').modal('show');
           $('#le_accumulative_id').val(data.id);
-          var totalSalary = (data.hr_salary.total_salary).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          $('#hr_salary').val(totalSalary);
+          $('#hr_employee_id').val(data.hr_employee_id);
+          $('#hr_employee_id').trigger('change');
+          $('#le_type_id').val(data.le_type_id);
+          $('#le_type_id').trigger('change');
+          $('#accumulative_total').val(data.accumulative_total);
           $('#date').val(data.date);
       })
    });

@@ -85,6 +85,22 @@ class AccumulativesLeaveController extends Controller
     }
 
 
+     public function edit($id)
+    {
+        $manager = LeAccumulative::find($id);
+        return response()->json($manager);
+    }
+
+
+    public function destroy ($id){
+
+       
+        DB::transaction(function () use ($id) {  
+            LeAccumulative::find($id)->delete();           
+        }); // end transcation 
+        return response()->json(['success'=>'data  delete successfully.']);
+
+    }
 
 
 }
