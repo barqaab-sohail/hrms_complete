@@ -10,6 +10,7 @@ use App\Models\Leave\LeType;
 use DB;
 use DataTables;
 
+
 class AccumulativesLeaveController extends Controller
 {
     public function index() {  
