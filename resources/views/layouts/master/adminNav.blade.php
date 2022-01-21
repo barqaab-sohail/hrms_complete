@@ -135,8 +135,9 @@
                     <ul aria-expanded="false" class="collapse">
                         @can('lev edit record') 
                         <li><a class="{{Request::is('hrms/submission/create')?'active':''}}" href="{{route('leave.create')}}">Apply Leave</a></li>
-
+                        <li><a class="{{Request::is('hrms/leave')?'active':''}}" href="{{route('leave.index')}}">List of Leaves</a></li>
                         <li><a class="{{Request::is('hrms/accumulativesLeave')?'active':''}}" href="{{route('accumulativesLeave.index')}}">Accumulatives Leave</a></li>
+                        <li><a class="{{Request::is('hrms/leaveBalance')?'active':''}}" href="{{route('leaveBalance.index')}}">Leave Balance</a></li>
                         @endcan
                                                
                     </ul>

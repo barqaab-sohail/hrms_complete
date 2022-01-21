@@ -201,8 +201,12 @@ Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
 
 //Leave Routes
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Leave'], function(){
-	Route::resource('/leave', 'LeaveController');
+	Route::resource('/leave', 'LeaveController', ['except' => ['show']]);
+	Route::get('/leaveType/{id?}', 'LeaveController@leaveType')->name('leaveType');
+
 	Route::resource('accumulativesLeave', 'AccumulativesLeaveController');
+	Route::resource('leaveBalance', 'LeaveBalanceController');
+
 	
 });
 
@@ -242,6 +246,7 @@ Route::group(['prefix' => 'invoice', 'middleware' => ['auth','XssSanitizer'], 'n
 Route::group(['middleware' => ['auth','XssSanitizer']], function(){
 Route::get('/country/states/{id?}', 'CountryController@getStates')->name('states');
 Route::get('/country/cities/{id?}', 'CountryController@getCities')->name('cities');
+
 
 });
 
