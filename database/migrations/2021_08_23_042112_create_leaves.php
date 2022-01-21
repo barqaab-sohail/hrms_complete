@@ -18,13 +18,12 @@ class CreateLeaves extends Migration
             $table->id();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->bigInteger('le_type_id')->unsigned();
-            $table->date('leave_date');
-            $table->integer('leave_year');
             $table->date('from');
             $table->date('to');
+            $table->float('days');
             $table->string('reason');
-            $table->string('contact_no');
-            $table->string('address');
+            $table->string('contact_no')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
              $table->foreign('le_type_id')->references('id')->on('le_types');

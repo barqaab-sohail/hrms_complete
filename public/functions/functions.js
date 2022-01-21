@@ -407,6 +407,7 @@ function submitForm(form, url,reset=0){
            success:function(data){
                 if(data.status == 'OK'){
                 $('#json_message').html('<div id="j_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
+                console.log(data.data);
                 }
                 else{
                 $('#json_message').html('<div id="j_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');    

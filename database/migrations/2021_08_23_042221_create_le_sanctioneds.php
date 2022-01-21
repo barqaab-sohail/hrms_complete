@@ -23,7 +23,7 @@ class CreateLeSanctioneds extends Migration
             $table->timestamps();
             $table->foreign('manager_id')->references('id')->on('hr_employees');
             $table->foreign('leave_id')->references('id')->on('leaves')->onDelete('cascade');
-            $table->foreign('le_status_id')->references('id')->on('le_statuses')->onDelete('cascade');
+            $table->foreign('le_status_id')->references('id')->on('le_statuses');
         });
     }
 
