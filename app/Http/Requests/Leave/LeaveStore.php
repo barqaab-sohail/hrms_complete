@@ -55,6 +55,11 @@ class LeaveStore extends FormRequest
         }elseif($request->le_type_id==3){
             $this->leaveBalance = 365 - Leave::where('hr_employee_id',$request->hr_employee_id)->where('le_type_id',3)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->sum('days');
         }
+
+
+        if($request->filled('from')){
+           $this->from= \Carbon\Carbon::parse($request->from)->format('Y-m-d');
+        }
     }
    
     public function authorize()
@@ -74,9 +79,9 @@ class LeaveStore extends FormRequest
         $rules = [
             'hr_employee_id'=> 'required',
             'le_type_id'=> 'required',
-            'from'=> 'required|date',
-            'to'=> 'required|after_or_equal:from',
-            'days'=>'required|numeric|max:'.$this->leaveBalance,
+            'from'=> 'required|date|unique_with:leaves,hr_employee_id',
+            'to'=> 'required|after_or_equal:from||unique_with:leaves,hr_employee_id',
+            'days'=>'required|numeric|not_in:0|max:'.$this->leaveBalance,
             'reason'=> 'required',
         ];
 
@@ -86,9 +91,24 @@ class LeaveStore extends FormRequest
     public function messages()
     {  
         return [
-            'to.after_or_equal' => "To date must be equal or greater than from date - ".$this->yearFrom . '-'. $this->yearTo,
-            
+            'to.after_or_equal' => "To date must be equal or greater than from date",
+            'days.max'=>'You have not '.$this->days.' days Leave Balance',
+            'days.not_in'=>'Days must be greater than zero'.$this->from,
+            'from.unique_with'=> 'These days Employee Leave already exist',
+            'to.unique_with'=> 'These days Employee Leave already exist',
+
         ];
+    }
+
+    protected function getValidatorInstance()
+    {
+    $data = $this->all();
+    $data['from'] = \Carbon\Carbon::parse($this->from)->format('Y-m-d');
+    $data['to'] = \Carbon\Carbon::parse($this->to)->format('Y-m-d');
+    $this->getInputSource()->replace($data);
+
+    /*modify data before send to validator*/
+    return parent::getValidatorInstance();
     }
 
 }

@@ -16,6 +16,10 @@ class Leave extends Model  implements Auditable
 
     }
 
+    public function leSanctioned(){
+        return $this->hasOne('App\Models\Leave\LeSanctioned');
+    }
+
     public function employeeDesignation(){
         //return $this->hasOne('App\Models\Hr\EmployeeDesignation');
         return $this->hasManyThrough(

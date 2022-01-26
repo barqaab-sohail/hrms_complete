@@ -44,8 +44,14 @@ class LeaveController extends Controller
                 return $data->employeeDesignation->last()->name??'';
             })
             ->addColumn('status',function($data){
-                return 'pending'; 
-                //$data->employeeDesignation->last()->name??'';
+
+                
+            if($data->leSanctioned){
+                return leaveStatusType($data->leSanctioned->le_status_type_id);
+            }
+
+            return 'Pending'; 
+                
             })
            
             ->addColumn('edit', function($data){
@@ -78,7 +84,7 @@ class LeaveController extends Controller
                 ->pluck("name","id");
             }else {
             	$states = DB::table("le_types")
-            	->whereIn('id',array(1,3))
+            	->whereIn('id',array(1,3,4))
                 ->pluck("name","id");
             }
 	    return response()->json($states);
@@ -88,42 +94,35 @@ class LeaveController extends Controller
 
 
 		$input = $request->all();
-		
-		if($request->filled('from')){
-            $input ['from']= \Carbon\Carbon::parse($request->from)->format('Y-m-d');
-        }
-        if($request->filled('to')){
-            $input ['to']= \Carbon\Carbon::parse($request->to)->format('Y-m-d');
-        }
 
 		DB::transaction(function () use ($input, $request) {  
            
            $leaveId = Leave::create($input);
 
-           if($request->has('perform_duty_id')){
+   //         if($request->has('perform_duty_id')){
 				
-				LePerformDuty::create([
-					'leave_id'=>$leaveId->id,
-					'hr_employee_id'=>$input ['perform_duty_id']
-					]);
-			}
+			// 	LePerformDuty::create([
+			// 		'leave_id'=>$leaveId->id,
+			// 		'hr_employee_id'=>$input ['perform_duty_id']
+			// 		]);
+			// }
 
-           if($request->has('halfFrom')){
+   //         if($request->has('halfFrom')){
 				
-				LeHalfDay::create([
-					'leave_id'=>$leaveId->id,
-					'date'=>$input ['from']
-					]);
-			}
+			// 	LeHalfDay::create([
+			// 		'leave_id'=>$leaveId->id,
+			// 		'date'=>$input ['from']
+			// 		]);
+			// }
 
-			if($request->has('halfTo')){
+			// if($request->has('halfTo')){
 				
-				LeHalfDay::create([
-					'leave_id'=>$leaveId->id,
-					'date'=>$input ['to']
-					]);
+			// 	LeHalfDay::create([
+			// 		'leave_id'=>$leaveId->id,
+			// 		'date'=>$input ['to']
+			// 		]);
 
-			}
+			// }
 
     	}); // end transcation
 

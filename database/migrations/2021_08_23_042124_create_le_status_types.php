@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLeStatuses extends Migration
+class CreateLeStatusTypes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateLeStatuses extends Migration
      */
     public function up()
     {
-        Schema::create('le_statuses', function (Blueprint $table) {
+        Schema::create('le_status_types', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->string('name');
@@ -28,6 +28,6 @@ class CreateLeStatuses extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('le_statuses');
+        Schema::dropIfExists('le_status_types');
     }
 }
