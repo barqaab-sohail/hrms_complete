@@ -13,6 +13,15 @@ function casualLeave($id){
 	}
 }
 
+function leaveStatusType($id){
+
+	if($id == 1){
+		return 'Approved';
+	}else if ($id ==2){
+		return 'Rejected';
+	}
+}
+
 function checkLeave($employeeId, $from, $to, $leaveType){
 
 

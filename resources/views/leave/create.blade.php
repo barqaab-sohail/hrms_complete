@@ -45,13 +45,28 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Leave From</label>
                                             <input type="text" id="from" name="from" value="{{ old('from') }}" class="form-control date_input1" data-validation="required" readonly>
-                                            <div class="form-check form-switch float-right">
-                                            <input class="form-check-input" type="checkbox" name="halfFrom" id="halfFrom">
-                                            <label class="form-check-label" for="halfFrom">Half Day</label>
-                                            </div>
 
-                                            <i class="fas fa-trash-alt text_requried"></i>
-												
+                                           
+                                              <div class="form-check form-switch float-right divHalfFrom" >
+                                                <input class="form-check-input" type="checkbox" name="halfFrom" id="halfFrom">
+                                                <label class="form-check-label" for="halfFrom">Half Day</label>
+                                              </div>
+
+                                              <i class="fas fa-trash-alt text_requried"></i>
+                                              
+                                              <br>
+                                              
+                                              <div class="form-check form-switch float-right" id="radioFromHalf">
+
+                                                <div class="form-check form-switch form-check-inline" >
+                                                  <input class="form-check-input" type="radio" name="from_day_half_leave" id="1stHalf" value="From Day 1st Half Leave">
+                                                  <label class="form-check-label" for="1stHalf">1st Half</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="from_day_half_leave" id="2ndHalf" value="From Day 2nd Half Leave">
+                                                  <label class="form-check-label" for="2ndHalf">2nd Half</label>
+                                                </div>
+                                              </div>
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -60,35 +75,50 @@
                                         <div class="col-md-12">
                                             <label class="control-label text-right">Leave To</label>
                                             <input type="text" id="to" name="to" value="{{ old('to') }}" class="form-control date_input1" data-validation="required" readonly>
-                                            <div class="form-check form-switch float-right">
-                                            <input class="form-check-input" type="checkbox" name="halfTo" id="halfTo">
-                                            <label class="form-check-label" for="halfTo">Half Day</label>
-                                            </div>
 
-                                            <i class="fas fa-trash-alt text_requried"></i>
-                        
+                                           
+                                              <div class="form-check form-switch float-right divHalfTo" >
+                                                <input class="form-check-input" type="checkbox" name="halfTo" id="halfTo">
+                                                <label class="form-check-label" for="halfTo">Half Day</label>
+                                              </div>
+
+                                              <i class="fas fa-trash-alt text_requried"></i>
+                                              
+                                              <br>
+                                              
+                                              <div class="form-check form-switch float-right" id="radioToHalf">
+
+                                                <div class="form-check form-switch form-check-inline" >
+                                                  <input class="form-check-input" type="radio" name="to_day_half_leave" id="1stHalfTo" value="To Day 1st Half Leave">
+                                                  <label class="form-check-label" for="1stHalfTo">1st Half</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="to_day_half_leave" id="2ndHalfTo" value="To Day 2nd Half Leave">
+                                                  <label class="form-check-label" for="2ndHalfTo">2nd Half</label>
+                                                </div>
+                                              </div>
                                         </div>
                                     </div>
-                                  </div>
-                                  <div class="col-md-1">
-                                    <div class="form-group row">
-                                        <div class="col-md-12">
-                                            <label class="control-label text-right">Days</label>
-                                            <input type="text" id="days" name="days" value="{{ old('days') }}" class="form-control" readonly>
-                        
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <!--/span-->
-                                  <div class="col-md-2">
-                                      <div class="form-group row">
-                                          <div class="col-md-12">
-                                              <label class="control-label text-right">Leave Type<span class="text_requried">*</span></label> 
-                                                <select  name="le_type_id"  id="le_type_id"class="form-control selectTwo" data-validation="required" data-placeholder="First Select Employee">  
-                                                </select>
-                                          </div>
+                                </div>
+                                <div class="col-md-1">
+                                  <div class="form-group row">
+                                      <div class="col-md-12">
+                                          <label class="control-label text-right">Days</label>
+                                          <input type="text" id="days" name="days" value="{{ old('days') }}" class="form-control" readonly>
+                      
                                       </div>
                                   </div>
+                                </div>
+                                <!--/span-->
+                                <div class="col-md-2">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="control-label text-right">Leave Type<span class="text_requried">*</span></label> 
+                                              <select  name="le_type_id"  id="le_type_id"class="form-control selectTwo" data-validation="required" data-placeholder="First Select Employee">  
+                                              </select>
+                                        </div>
+                                    </div>
+                                </div>
 		                        </div><!--/End Row-->
                             <div class="row">
                                 <div class="col-md-12">
@@ -162,14 +192,13 @@
 <script>
 $(document).ready(function() {
 
-	
+	$('.divHalfFrom, #radioFromHalf, .divHalfTo, #radioToHalf').hide();
 	//All Basic Form Implementatin i.e validation etc.
 	formFunctions();
 
    $(".date_input1").each(function(){
         if (!$(this).val()!=''){
             $(this).siblings('i').hide();
-            $(this).siblings('.form-switch').hide();
         }
 
     });
@@ -179,7 +208,9 @@ $(document).ready(function() {
         if(confirm("Are you sure to clear date")){
         $(this).siblings('input').val("");
         $(this).hide();
-        $(this).siblings('.form-switch').hide();
+        $('.divHalfFrom, #radioFromHalf, .divHalfTo, #radioToHalf').hide();
+        $('input[name="halfTo"]').prop('checked', false);
+        $('input[name="halfFrom"]').prop('checked', false);
         $(this).siblings('span').text("");
         }
     });
@@ -187,10 +218,12 @@ $(document).ready(function() {
    $(".date_input1").datepicker({
      onSelect: function(value, ui) {
         $(this).siblings('i').show();
-        $(this).siblings('.form-switch').show();
+      
+        $(this).siblings('#radioFromHalf').hide();
         var start = new Date($('#from').val());
         var end = new Date($('#to').val());
         if($('#to').val()!='' && $('#from').val()!=''){
+        $('.divHalfFrom, .divHalfTo').show();
         var diff = new Date(end - start);
         // get days 
         var days = diff/1000/60/60/24 + 1;
@@ -211,10 +244,13 @@ $(document).ready(function() {
             var days = $('#days').val();
                   days = parseFloat(days) - 0.5;
               $('#days').val(days);
+              $('#radioFromHalf').show();
             }else{
               var days = $('#days').val();
                   days = parseFloat(days) + 0.5;
               $('#days').val(days);
+              $('#radioFromHalf').hide();
+              $('input[name="from_day_half_leave"]').prop('checked', false);
             }
     });
 
@@ -223,10 +259,13 @@ $(document).ready(function() {
             var days = $('#days').val();
                   days = parseFloat(days) - 0.5;
               $('#days').val(days);
+              $('#radioToHalf').show();
             }else{
               var days = $('#days').val();
                   days = parseFloat(days) + 0.5;
               $('#days').val(days);
+              $('#radioToHalf').hide();
+              $('input[name="to_day_half_leave"]').prop('checked', false);
             }
     });
 
