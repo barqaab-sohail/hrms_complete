@@ -26,6 +26,7 @@ use App\Models\Hr\HrContactMobile;
 use App\Models\Hr\HrEmergency;
 use App\Models\Common\Education;
 use App\Models\Project\PrDetail;
+use App\Models\Hr\HrDocumentation;
 use DB;
 use App\Http\Requests\Hr\EmployeeStore;
 use DataTables;
@@ -260,7 +261,8 @@ class EmployeeController extends Controller
         $projects = PrDetail::all();
        
         $managerIds = EmployeeManager::all()->pluck('hr_manager_id')->toArray();
-        $employees = HrEmployee::where('hr_status_id',1)->wherein('id',$managerIds)->get();
+        $employees = HrEmployee::where('hr_status_id',1)->wherein('id',$managerIds)->get(['id','first_name','last_name']);
+
         return view ('hr.employee.search.search',compact('categories','degrees','designations','projects','employees'));
     }
 
@@ -328,9 +330,29 @@ class EmployeeController extends Controller
             $resultUnique = ($result->unique('id'));
             $resultUnique->values()->all();
             $result = $resultUnique->where('hr_manager_id',$request->manager);
+            
+
+        return view('hr.employee.search.result',compact('result'));
+        }
+
+        if($request->filled('employee')){
+            $result = HrEmployee::where('id',$request->employee)->get();
         return view('hr.employee.search.result',compact('result'));
 
         }
+
+        if ($request->filled('document_name')){
+           $query = $request->input('document_name'); 
+            
+            $result = HrDocumentation::with('hrEmployee')->where('description', 'LIKE', "%{$query}%")
+            ->get();
+
+            $documents=false;
+
+           return view('hr.employee.search.result',compact('result','documents'));
+       }
+
+
     }
 
 }

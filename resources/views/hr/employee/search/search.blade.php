@@ -97,6 +97,29 @@
 		                    </div>
 		                </div>
 		            </div>     
+		            <div class="col-md-3">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12 required">
+		                   		<label class="control-label text-right">Name of Employee</label><br>
+		                   		<select  name="employee"  id="employee" class="form-control searchSelect">
+		                            <option value=""></option>
+		                            @foreach($employees as $employee)
+									<option value="{{$employee->id}}" {{(old("employee")==$employee->id? "selected" : "")}}>{{employeeFullName($employee->id)}}</option>
+		                            @endforeach
+		                        </select>    
+		                    </div>
+		                </div>
+		            </div>     
+		            <div class="col-md-3">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12 required">
+		                   		<label class="control-label text-right">Name of Documents</label><br>
+		                   		<input type="text"  name="document_name" id="document_name"  value="{{ old('document_name') }}"  class="form-control" placeholder="Enter Document Name">
+		                    </div>
+		                </div>
+		            </div>     
 		        </div>
 		    </div>
 
@@ -135,11 +158,18 @@ $(document).ready(function(){
 
 	$('select').change(function(){	
 		$(this).removeClass('searchSelect');
+		$('#document_name').val('');
   		$('.searchSelect').each(function () {
   			
         	$(this).val('').select2('val', 'All');
     	});
     	$(this).addClass('searchSelect');
+  	});
+
+  	$('#document_name').focus(function(){
+  		$('.searchSelect').each(function () {
+        	$(this).val('').select2('val', 'All');
+    	});
   	});
 
     	
