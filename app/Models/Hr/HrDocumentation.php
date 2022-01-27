@@ -25,5 +25,9 @@ class HrDocumentation extends Model implements Auditable
         
     }
 
+    public function hrEmployee(){
+        return $this->belongsTo('App\Models\Hr\HrEmployee');
+    }
+
     
 }
