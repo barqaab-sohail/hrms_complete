@@ -74,7 +74,7 @@
 		                            <option value=""></option>
 		                            
 		                            @foreach($projects as $project)
-									<option value="{{$project->id}}" {{(old("project")==$project->id? "selected" : "")}}>{{$project->name}}</option>
+									<option value="{{$project->id}}" {{(old("project")==$project->id? "selected" : "")}}>{{$project->project_no??''}} - {{$project->name}}</option>
 		                            @endforeach
 		                          
 		                        </select>
@@ -90,8 +90,8 @@
 		                   		<label class="control-label text-right">Name of HOD</label><br>
 		                   		<select  name="manager"  id="manager" class="form-control searchSelect">
 		                            <option value=""></option>
-		                            @foreach($employees as $manager)
-									<option value="{{$manager->id}}" {{(old("manager")==$manager->id? "selected" : "")}}>{{employeeFullName($manager->id)}}</option>
+		                            @foreach($managers as $manager)
+									<option value="{{$manager->id}}" {{(old("manager")==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}} - {{$manager->employeeDesignation->last()->name??''}}</option>
 		                            @endforeach
 		                        </select>    
 		                    </div>
@@ -105,7 +105,7 @@
 		                   		<select  name="employee"  id="employee" class="form-control searchSelect">
 		                            <option value=""></option>
 		                            @foreach($employees as $employee)
-									<option value="{{$employee->id}}" {{(old("employee")==$employee->id? "selected" : "")}}>{{employeeFullName($employee->id)}}</option>
+									<option value="{{$employee->id}}" {{(old("employee")==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employeeDesignation->last()->name??''}}</option>
 		                            @endforeach
 		                        </select>    
 		                    </div>
@@ -160,15 +160,18 @@ $(document).ready(function(){
 		$(this).removeClass('searchSelect');
 		$('#document_name').val('');
   		$('.searchSelect').each(function () {
-  			
+  			if($(this).val()){
         	$(this).val('').select2('val', 'All');
+        	}
     	});
     	$(this).addClass('searchSelect');
   	});
 
   	$('#document_name').focus(function(){
   		$('.searchSelect').each(function () {
+        	if($(this).val()){
         	$(this).val('').select2('val', 'All');
+        	}
     	});
   	});
 

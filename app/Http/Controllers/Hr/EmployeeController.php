@@ -258,12 +258,14 @@ class EmployeeController extends Controller
         $categories = HrCategory::all();
         $degrees = Education::all();
         $designations = HrDesignation::all();
-        $projects = PrDetail::all();
+        $projects = PrDetail::select('id','name','project_no')->get();
        
         $managerIds = EmployeeManager::all()->pluck('hr_manager_id')->toArray();
-        $employees = HrEmployee::where('hr_status_id',1)->wherein('id',$managerIds)->get(['id','first_name','last_name']);
+        $managers = HrEmployee::where('hr_status_id',1)->wherein('id',$managerIds)->with('employeeDesignation')->get(['id','first_name','last_name']);
 
-        return view ('hr.employee.search.search',compact('categories','degrees','designations','projects','employees'));
+        $employees = HrEmployee::select('id','first_name','last_name')->with('employeeDesignation')->get();
+
+        return view ('hr.employee.search.search',compact('categories','degrees','designations','projects','managers','employees'));
     }
 
     public function userData($id){
@@ -347,6 +349,7 @@ class EmployeeController extends Controller
             $result = HrDocumentation::with('hrEmployee')->where('description', 'LIKE', "%{$query}%")
             ->get();
 
+            //this variable used only for goting to else part of result blade.
             $documents=false;
 
            return view('hr.employee.search.result',compact('result','documents'));
