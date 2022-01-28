@@ -108,6 +108,7 @@
 
     });
     </script>
+<!-- Following part is for Documents Detail -->
 @else
 
     <hr>         
