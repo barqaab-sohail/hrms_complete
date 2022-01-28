@@ -274,7 +274,12 @@ $(document).ready(function() {
 	 	//preventDefault work through formFunctions;
 		url="{{route('leave.store')}}";
 		$('.fa-spinner').show();	
-	  submitForm(this, url);
+	  submitForm(this, url, 1);
+    if ($('#json_message').is(':empty')){
+      $(".date_input1").siblings('i').hide();
+      $('.divHalfFrom, #radioFromHalf, .divHalfTo, #radioToHalf').hide();
+    }
+    
 	}); //end submit
 
 	
