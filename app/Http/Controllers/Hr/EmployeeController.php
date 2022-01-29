@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Common\Gender;
 use App\Models\Common\MaritalStatus;
 use App\Models\Common\Religion;
+use App\Models\Common\BloodGroup;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrEducation;
 use App\Models\Hr\HrDesignation;
@@ -253,22 +254,7 @@ class EmployeeController extends Controller
 
     }
 
-    public function search(){
-
-        $categories = HrCategory::all();
-        $degrees = Education::all();
-        $designations = HrDesignation::all();
-        $projects = PrDetail::select('id','name','project_no')->get();
-       
-        $managerIds = EmployeeManager::all()->pluck('hr_manager_id')->toArray();
-        $managers = HrEmployee::where('hr_status_id',1)->wherein('id',$managerIds)->with('employeeDesignation')->get(['id','first_name','last_name']);
-
-        $employees = HrEmployee::select('id','first_name','last_name')->with('employeeDesignation')->get();
-
-        return view ('hr.employee.search.search',compact('categories','degrees','designations','projects','managers','employees'));
-    }
-
-    public function userData($id){
+     public function userData($id){
 
         $genders = Gender::all();
         $maritalStatuses = MaritalStatus::all();
@@ -279,6 +265,22 @@ class EmployeeController extends Controller
 
         return view ('hr.employee.edit', compact('genders','maritalStatuses','religions','data'));       
        
+    }
+
+    public function search(){
+
+        $categories = HrCategory::all();
+        $bloodGroups = BloodGroup::all();
+        $degrees = Education::all();
+        $designations = HrDesignation::all();
+        $projects = PrDetail::select('id','name','project_no')->get();
+       
+        $managerIds = EmployeeManager::all()->pluck('hr_manager_id')->toArray();
+        $managers = HrEmployee::where('hr_status_id',1)->wherein('id',$managerIds)->with('employeeDesignation')->get(['id','first_name','last_name']);
+
+        $employees = HrEmployee::select('id','first_name','last_name')->with('employeeDesignation')->get();
+
+        return view ('hr.employee.search.search',compact('categories','degrees','designations','projects','managers','employees','bloodGroups'));
     }
 
 
@@ -339,6 +341,12 @@ class EmployeeController extends Controller
 
         if($request->filled('employee')){
             $result = HrEmployee::where('id',$request->employee)->get();
+        return view('hr.employee.search.result',compact('result'));
+
+        }
+
+        if($request->filled('blood_group')){
+            $result = HrEmployee::join('hr_blood_groups','hr_blood_groups.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','hr_blood_groups.blood_group_id')->where('hr_status_id',1)->where('blood_group_id',$request->blood_group)->get();
         return view('hr.employee.search.result',compact('result'));
 
         }

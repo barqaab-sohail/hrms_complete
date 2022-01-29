@@ -14,14 +14,12 @@
                         <th>Employee Id</th>
                         <th>Employee Name</th>
                         <th>Designation/Position</th>
-                        <th>Division</th>
+                        <th>Division/Department</th>
                         <th>Date of Birth</th>
                         <th>Status</th>
                         <th>CNIC</th>
                         <th>Date of Joining</th>
                         <th>Mobile</th>
-                        
-                        <th class="text-center"style="width:5%">Edit</th> 
                         <th class="text-center"style="width:5%">Delete</th>
                     
                     </tr>
@@ -30,7 +28,11 @@
                         @foreach($result as $employee)
                             <tr>
                                 <td>{{$employee->employee_no??''}}</td>
-                                <td>{{$employee->first_name}} {{$employee->last_name}}</td>
+                                <td>
+                                    <a href="{{route('employee.edit',$employee->id)}}"  style="color:grey" title="Edit">
+                                    {{$employee->first_name}} {{$employee->last_name}}
+                                    </a>
+                                </td>
                                 <td>{{$employee->employeeDesignation->last()->name??''}}</td>
                                 <td>{{$employee->employeeDepartment->last()->name??''}}</td>
                                 <td>{{$employee->formatted_date_of_birth}}</td>
@@ -39,10 +41,6 @@
                                 <td>{{isset($employee->employeeAppointment->joining_date)?date('M d, Y', strtotime($employee->employeeAppointment->joining_date)):''}}</td>
                                 <td>{{$employee->hrContactMobile->mobile??''}}</td>
                                 
-                                
-                                <td class="text-center">
-                                    <a class="btn btn-success btn-sm" href="{{route('employee.edit',$employee->id)}}"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
-                                </td>
                                 <td class="text-center">
                                      @role('Super Admin')
                                      <form  id="formDeleteContact{{$employee->id}}" action="{{route('employee.destroy',$employee->id)}}" method="POST">

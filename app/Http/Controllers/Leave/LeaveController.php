@@ -99,30 +99,31 @@ class LeaveController extends Controller
            
            $leaveId = Leave::create($input);
 
-   //         if($request->has('perform_duty_id')){
+           if($request->filled('perform_duty_id')){
 				
-			// 	LePerformDuty::create([
-			// 		'leave_id'=>$leaveId->id,
-			// 		'hr_employee_id'=>$input ['perform_duty_id']
-			// 		]);
-			// }
+				LePerformDuty::create([
+					'leave_id'=>$leaveId->id,
+					'hr_employee_id'=>$input ['perform_duty_id']
+					]);
+			}
 
-   //         if($request->has('halfFrom')){
+           if($request->filled('halfFrom')){
 				
-			// 	LeHalfDay::create([
-			// 		'leave_id'=>$leaveId->id,
-			// 		'date'=>$input ['from']
-			// 		]);
-			// }
+				LeHalfDay::create([
+					'leave_id'=>$leaveId->id,
+					'date'=>$input ['from'],
+                     'description'=>'Half Day Leave on '. $input ['from']
+					]);
+			}
 
-			// if($request->has('halfTo')){
+			if($request->filled('halfTo')){
 				
-			// 	LeHalfDay::create([
-			// 		'leave_id'=>$leaveId->id,
-			// 		'date'=>$input ['to']
-			// 		]);
-
-			// }
+				LeHalfDay::create([
+					'leave_id'=>$leaveId->id,
+					'date'=>$input ['to'],
+                    'description'=>'Half Day Leave on '. $input ['to']
+					]);
+			}
 
     	}); // end transcation
 

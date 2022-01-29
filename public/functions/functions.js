@@ -385,7 +385,7 @@ function getAjaxMessage(url){
         }); //end ajax  
 }
 
-function submitForm(form, url,reset=0){
+function submitForm(form, url,reset=0, callback){
         //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
         $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
             var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
@@ -417,7 +417,6 @@ function submitForm(form, url,reset=0){
             $('html,body').scrollTop(0);
             $('.fa-spinner').hide();
             clearMessage();
-
            },
             error: function (jqXHR, textStatus, errorThrown){
                 if (jqXHR.status == 401){
@@ -437,6 +436,10 @@ function submitForm(form, url,reset=0){
                     
             }//end error
     }); //end ajax
+
+    if (typeof callback === 'function') { 
+        callback(); 
+    }
 }
 
 
