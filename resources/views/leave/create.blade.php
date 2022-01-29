@@ -56,17 +56,7 @@
                                               
                                               <br>
                                               
-                                              <div class="form-check form-switch float-right" id="radioFromHalf">
-
-                                                <div class="form-check form-switch form-check-inline" >
-                                                  <input class="form-check-input" type="radio" name="from_day_half_leave" id="1stHalf" value="From Day 1st Half Leave">
-                                                  <label class="form-check-label" for="1stHalf">1st Half</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                  <input class="form-check-input" type="radio" name="from_day_half_leave" id="2ndHalf" value="From Day 2nd Half Leave">
-                                                  <label class="form-check-label" for="2ndHalf">2nd Half</label>
-                                                </div>
-                                              </div>
+                                             
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -83,20 +73,6 @@
                                               </div>
 
                                               <i class="fas fa-trash-alt text_requried"></i>
-                                              
-                                              <br>
-                                              
-                                              <div class="form-check form-switch float-right" id="radioToHalf">
-
-                                                <div class="form-check form-switch form-check-inline" >
-                                                  <input class="form-check-input" type="radio" name="to_day_half_leave" id="1stHalfTo" value="To Day 1st Half Leave">
-                                                  <label class="form-check-label" for="1stHalfTo">1st Half</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                  <input class="form-check-input" type="radio" name="to_day_half_leave" id="2ndHalfTo" value="To Day 2nd Half Leave">
-                                                  <label class="form-check-label" for="2ndHalfTo">2nd Half</label>
-                                                </div>
-                                              </div>
                                         </div>
                                     </div>
                                 </div>
@@ -192,7 +168,7 @@
 <script>
 $(document).ready(function() {
 
-	$('.divHalfFrom, #radioFromHalf, .divHalfTo, #radioToHalf').hide();
+	$('.divHalfFrom, .divHalfTo').hide();
 	//All Basic Form Implementatin i.e validation etc.
 	formFunctions();
 
@@ -208,7 +184,7 @@ $(document).ready(function() {
         if(confirm("Are you sure to clear date")){
         $(this).siblings('input').val("");
         $(this).hide();
-        $('.divHalfFrom, #radioFromHalf, .divHalfTo, #radioToHalf').hide();
+        $('.divHalfFrom, .divHalfTo').hide();
         $('input[name="halfTo"]').prop('checked', false);
         $('input[name="halfFrom"]').prop('checked', false);
         $(this).siblings('span').text("");
@@ -218,8 +194,9 @@ $(document).ready(function() {
    $(".date_input1").datepicker({
      onSelect: function(value, ui) {
         $(this).siblings('i').show();
-      
-        $(this).siblings('#radioFromHalf').hide();
+          $('input[name="halfTo"]').prop('checked', false);
+          $('input[name="halfFrom"]').prop('checked', false);
+
         var start = new Date($('#from').val());
         var end = new Date($('#to').val());
         if($('#to').val()!='' && $('#from').val()!=''){
@@ -239,46 +216,37 @@ $(document).ready(function() {
 
     });
 
-   $("#halfFrom").change(function() {  
+   $("#halfFrom, #halfTo").change(function() {  
             if(this.checked) {
-            var days = $('#days').val();
-                  days = parseFloat(days) - 0.5;
-              $('#days').val(days);
-              $('#radioFromHalf').show();
-            }else{
               var days = $('#days').val();
-                  days = parseFloat(days) + 0.5;
+              days = parseFloat(days) - 0.5;
               $('#days').val(days);
-              $('#radioFromHalf').hide();
-              $('input[name="from_day_half_leave"]').prop('checked', false);
+            }
+            else{
+             var days = $('#days').val();
+              days = parseFloat(days) + 0.5;
+              $('#days').val(days);
             }
     });
 
-   $("#halfTo").change(function() {  
-            if(this.checked) {
-            var days = $('#days').val();
-                  days = parseFloat(days) - 0.5;
-              $('#days').val(days);
-              $('#radioToHalf').show();
-            }else{
-              var days = $('#days').val();
-                  days = parseFloat(days) + 0.5;
-              $('#days').val(days);
-              $('#radioToHalf').hide();
-              $('input[name="to_day_half_leave"]').prop('checked', false);
-            }
-    });
+
 
 
 	$('#formLeave').on('submit', function(event){
 	 	//preventDefault work through formFunctions;
 		url="{{route('leave.store')}}";
-		$('.fa-spinner').show();	
-	  submitForm(this, url, 1);
-    if ($('#json_message').is(':empty')){
-      $(".date_input1").siblings('i').hide();
-      $('.divHalfFrom, #radioFromHalf, .divHalfTo, #radioToHalf').hide();
-    }
+		$('.fa-spinner').show();
+
+	  submitForm(this, url, 1, function(){
+      setTimeout(function(){
+        if($('#j_message').hasClass("alert-success")){
+          $(".date_input1").siblings('i').hide();
+          $('.divHalfFrom, .divHalfTo').hide();
+          }
+      }, 1000);
+    });
+    
+    
     
 	}); //end submit
 

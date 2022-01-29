@@ -1,17 +1,69 @@
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
 @section('Heading')
-	<h3 class="text-themecolor">Employee Search</h3>
+	<h3 class="text-themecolor">Search</h3>
 @stop
 @section('content')
 <div class="card">
 	<div class="card-body">	
-		<h4 class="card-title">Employee Search</h4>
+		<h4 class="card-title">Search</h4>
 		<hr>
 		<form id="employeeSearch" method="get" class="form-horizontal form-prevent-multiple-submits" action="{{route('employee.result')}}" enctype="multipart/form-data">
             {{csrf_field()}}
             <div class="form-body">
-
+            	<div class="row" >
+		            <div class="col-md-3">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12 required">
+		                   		<label class="control-label text-right">Name of Employee</label><br>
+		                   		<select  name="employee"  id="employee" class="form-control searchSelect">
+		                            <option value=""></option>
+		                            @foreach($employees as $employee)
+									<option value="{{$employee->id}}" {{(old("employee")==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employeeDesignation->last()->name??''}}</option>
+		                            @endforeach
+		                        </select>    
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="col-md-3">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12 required">
+		                   		<label class="control-label text-right">Name of Documents</label><br>
+		                   		<input type="text"  name="document_name" id="document_name"  value="{{ old('document_name') }}"  class="form-control" placeholder="Enter Document Name">
+		                    </div>
+		                </div>
+		            </div>     
+		            <div class="col-md-3">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12 required">
+		                   		<label class="control-label text-right">Blood Group</label><br>
+		                   		<select  name="blood_group"  id="blood_group" class="form-control searchSelect">
+		                            <option value=""></option>
+		                            @foreach($bloodGroups as $bloodGroup)
+									<option value="{{$bloodGroup->id}}" {{(old("blood_group")==$bloodGroup->id? "selected" : "")}}>{{$bloodGroup->name}}</option>
+		                            @endforeach
+		                        </select>    
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="col-md-3">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12 required">
+		                   		<label class="control-label text-right">Name of HOD</label><br>
+		                   		<select  name="manager"  id="manager" class="form-control searchSelect">
+		                            <option value=""></option>
+		                            @foreach($managers as $manager)
+									<option value="{{$manager->id}}" {{(old("manager")==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}} - {{$manager->employeeDesignation->last()->name??''}}</option>
+		                            @endforeach
+		                        </select>    
+		                    </div>
+		                </div>
+		            </div>            
+		        </div>
 				<div class="row" >
 					<div class="col-md-3">
 		            	<!--/span 5-1 -->
@@ -51,7 +103,7 @@
 		            	<!--/span 5-1 -->
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
-		                   		<label class="control-label text-right">Name of Designation</label><br>
+		                   		<label class="control-label text-right">Name of Designation/Position</label><br>
 		                   		<select  name="designation"  id="designation" class="form-control searchSelect" >
 		                            <option value=""></option>
 		                            
@@ -78,45 +130,6 @@
 		                            @endforeach
 		                          
 		                        </select>
-		                    </div>
-		                </div>
-		            </div>     
-		        </div>
-		        <div class="row" >
-					<div class="col-md-3">
-		            	<!--/span 5-1 -->
-		                <div class="form-group row">
-		                    <div class="col-md-12 required">
-		                   		<label class="control-label text-right">Name of HOD</label><br>
-		                   		<select  name="manager"  id="manager" class="form-control searchSelect">
-		                            <option value=""></option>
-		                            @foreach($managers as $manager)
-									<option value="{{$manager->id}}" {{(old("manager")==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}} - {{$manager->employeeDesignation->last()->name??''}}</option>
-		                            @endforeach
-		                        </select>    
-		                    </div>
-		                </div>
-		            </div>     
-		            <div class="col-md-3">
-		            	<!--/span 5-1 -->
-		                <div class="form-group row">
-		                    <div class="col-md-12 required">
-		                   		<label class="control-label text-right">Name of Employee</label><br>
-		                   		<select  name="employee"  id="employee" class="form-control searchSelect">
-		                            <option value=""></option>
-		                            @foreach($employees as $employee)
-									<option value="{{$employee->id}}" {{(old("employee")==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employeeDesignation->last()->name??''}}</option>
-		                            @endforeach
-		                        </select>    
-		                    </div>
-		                </div>
-		            </div>     
-		            <div class="col-md-3">
-		            	<!--/span 5-1 -->
-		                <div class="form-group row">
-		                    <div class="col-md-12 required">
-		                   		<label class="control-label text-right">Name of Documents</label><br>
-		                   		<input type="text"  name="document_name" id="document_name"  value="{{ old('document_name') }}"  class="form-control" placeholder="Enter Document Name">
 		                    </div>
 		                </div>
 		            </div>     
