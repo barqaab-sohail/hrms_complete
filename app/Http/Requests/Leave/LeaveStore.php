@@ -55,11 +55,6 @@ class LeaveStore extends FormRequest
         }elseif($request->le_type_id==3){
             $this->leaveBalance = 365 - Leave::where('hr_employee_id',$request->hr_employee_id)->where('le_type_id',3)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->sum('days');
         }
-
-
-        if($request->filled('from')){
-           $this->from= \Carbon\Carbon::parse($request->from)->format('Y-m-d');
-        }
     }
    
     public function authorize()
@@ -79,8 +74,8 @@ class LeaveStore extends FormRequest
         $rules = [
             'hr_employee_id'=> 'required',
             'le_type_id'=> 'required',
-            'from'=> 'required|date|unique_with:leaves,hr_employee_id',
-            'to'=> 'required|after_or_equal:from||unique_with:leaves,hr_employee_id',
+            'from'=> 'required|date|unique_with:leaves,hr_employee_id,'.session('leave_id'),
+            'to'=> 'required|after_or_equal:from||unique_with:leaves,hr_employee_id,'.session('leave_id'),
             'days'=>'required|numeric|not_in:0|max:'.$this->leaveBalance,
             'reason'=> 'required',
         ];
@@ -94,8 +89,8 @@ class LeaveStore extends FormRequest
             'to.after_or_equal' => "To date must be equal or greater than from date",
             'days.max'=>'You have not '.$this->days.' days Leave Balance',
             'days.not_in'=>'Days must be greater than zero'.$this->from,
-            'from.unique_with'=> 'These days Employee Leave already exist',
-            'to.unique_with'=> 'These days Employee Leave already exist',
+            'from.unique_with'=> 'These days Employee Leave already exist ',
+            'to.unique_with'=> 'These days Employee Leave already exist ',
 
         ];
     }

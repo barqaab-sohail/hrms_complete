@@ -131,7 +131,7 @@
 <!-- End Asset -->
 
 <!-- Leave -->
-                <li class="{{Request::is('hrms/*leave*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-book" aria-hidden="true"></i><span class="hide-menu">Leave</span></a>
+                <li class="{{Request::is('hrms/*leave*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-book" aria-hidden="true"></i><span class="hide-menu">Leave Management</span></a>
                     <ul aria-expanded="false" class="collapse">
                         @can('lev edit record') 
                         <li><a class="{{Request::is('hrms/leave/create')?'active':''}}" href="{{route('leave.create')}}">Apply Leave</a></li>

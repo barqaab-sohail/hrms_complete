@@ -8,5 +8,5 @@ use OwenIt\Auditing\Contracts\Auditable;
 class LeHalfDay extends Model  implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    protected $fillable = ['leave_id', 'date','description']; 
+    protected $fillable = ['leave_id', 'time','description']; 
 }

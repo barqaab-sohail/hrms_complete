@@ -17,7 +17,7 @@ class CreateLeHalfDays extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('leave_id')->unsigned();
-            $table->date('date');
+            $table->string('time');
             $table->string('description')->nullable();
             $table->timestamps();
             $table->foreign('leave_id')->references('id')->on('leaves')->onDelete('cascade');

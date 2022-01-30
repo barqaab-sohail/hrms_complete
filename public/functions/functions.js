@@ -68,7 +68,7 @@ function formFunctions(){
     
     //if Date not empty than enter date with format 'Wednesday, 10-August-2010'
 
-    $(".date_input").each(function(){
+    $(".date_input, .date_input1").each(function(){
         if ($(this).val()!=''){
         var Date1 = new Date($(this).val());
         $(this).val(
