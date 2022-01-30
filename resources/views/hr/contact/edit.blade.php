@@ -76,7 +76,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">City<span class="text_requried">*</span></label>
                                 <select class="form-control selectTwo" name="city_id" data-placeholder="First Select Province" data-validation="required"  id="city">
-                                        <option value=""></option>
+                                    <option value=""></option>
                                     @foreach($cities as $city)
                                         <option value="{{$city->id}}" {{(old("city_id",$data->city_id??'')==$city->id? "selected" : "")}}>{{$city->name}}</option>
                                     @endforeach
