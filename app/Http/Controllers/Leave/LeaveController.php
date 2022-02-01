@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Leave\LeaveStore;
 use App\Models\Leave\Leave;
 use App\Models\Leave\LeHalfDay;
+use App\Models\Leave\LeStatusType;
 use App\Models\Leave\LeType;
 use App\Models\Leave\LePerformDuty;
 use App\Models\Hr\HrEmployee;
@@ -48,12 +49,15 @@ class LeaveController extends Controller
             })
             ->addColumn('status',function($data){
 
-                
-            if($data->leSanctioned){
-                return leaveStatusType($data->leSanctioned->le_status_type_id);
-            }
+            	$status='';
 
-            return 'Pending'; 
+	            if($data->leSanctioned){
+	                $status = leaveStatusType($data->leSanctioned->le_status_type_id);
+	            }else{
+	            	$status = 'Pending';
+	            }
+
+            return '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editStatus">'.$status.'</a>';
                 
             })
            
@@ -94,7 +98,6 @@ class LeaveController extends Controller
 	}
 
 	public function store (LeaveStore $request){
-
 
 		$input = $request->all();
 

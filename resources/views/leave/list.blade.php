@@ -31,36 +31,143 @@
 	</div>
 </div>
 
+<!-- Model -->
+<div class="modal fade" id="ajaxModel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modelHeading"></h4>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+              <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
+                <form id="leaveStatusForm" name="manageForm" action="{{route('manager.store')}}"class="form-horizontal">
+                   <input type="hidden" name="leave_id" id="leave_id">
+                   
+                    <div class="form-group">
+                        <label class="control-label text-right">Leave Status<span class="text_requried">*</span></label><br>
+                          <select  name="le_status_type_id"  id="le_status_type_id" class="form-control selectTwo" data-validation="required">
+                          
+                          </select>
+                    </div>
+                    <div class="form-group hide">
+                        <label class="control-label text-right">Reason</label>
+                        <input type="text" name="reason" value="{{ old('reason') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Please enter reason">    
+                    </div>
+                    
+                    <div class="col-sm-offset-2 col-sm-10">
+                     <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save
+                     </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
 
 <script>
+
+
+
 $(document).ready(function() {
-	$('#myTable').DataTable({
-  		processing: true,
-  		serverSide: true,
-  		order: [[ 5, 'desc' ]],
-	  	ajax: {
-	   	url: "{{ route('leave.index') }}",
-	  	},
-	  	columns: [
-		   {data: 'employee_no', name: 'employee_no'},
-		   {data: 'full_name', name: 'full_name'},
-		   {data: 'designation', name: 'designation'},
-		   {data: 'from', name: 'from'},
-		   {data: 'to', name: 'to'},
-		   {data: 'days', name: 'days'},
-		   {data: 'status', name: 'status'},
-		   {data: 'edit',name: 'edit', orderable: false, searchable: false },
-		   @role('Super Admin')
-		   {data: 'delete',name: 'delete', orderable: false, searchable: false }
-		   @endrole
-	  	]
- 	});
+
+	$(function () {
+      	$.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    	});
+
+	    var table = $('#myTable').DataTable({
+	  		processing: true,
+	  		serverSide: true,
+	  		order: [[ 5, 'desc' ]],
+		  	ajax: {
+		   	url: "{{ route('leave.index') }}",
+		  	},
+		  	columns: [
+			   {data: 'employee_no', name: 'employee_no'},
+			   {data: 'full_name', name: 'full_name'},
+			   {data: 'designation', name: 'designation'},
+			   {data: 'from', name: 'from'},
+			   {data: 'to', name: 'to'},
+			   {data: 'days', name: 'days'},
+			   {data: 'status', name: 'status'},
+			   {data: 'edit',name: 'edit', orderable: false, searchable: false },
+			   @role('Super Admin')
+			   {data: 'delete',name: 'delete', orderable: false, searchable: false }
+			   @endrole
+		  	]
+ 		});
+
+ 		$('body').unbind().on('click', '.editStatus', function () {
+      	var leave_id = $(this).data('id');
+      	$('.hide').hide();
+	    $('#json_message_modal').html('');
+
+	     	$.get("{{route('leaveStatus.index')}}", function (data) {
+
+	          if(data)
+	            {
+	                $("#le_status_type_id").empty();
+	                $("#le_status_type_id").append('<option value=""></option>');
+	                $.each(data,function(key,value){
+	                  
+	                    $("#le_status_type_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+	                });
+	                $('#le_status_type_id').select2();
+	            }
+			})         
+	        $('#ajaxModel').modal('show');
+
+	   	});
+
+	   	$('#saveBtn').click(function (e) {
+        e.preventDefault();
+        $(this).html('Save');
+         
+	        $.ajax({
+	          data: $('#leaveStatusForm').serialize(),
+	          url: "{{ route('leaveStatus.store') }}",
+	          type: "POST",
+	          dataType: 'json',
+	          success: function (data) {
+	     
+	              $('#leaveStatusForm').trigger("reset");
+	              $('#ajaxModel').modal('hide');
+	              table.draw();
+	        
+	          },
+	          error: function (data) {
+	              
+	              var errorMassage = '';
+	              $.each(data.responseJSON.errors, function (key, value){
+	                errorMassage += value + '<br>';  
+	                });
+	                 $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+
+	              $('#saveBtn').html('Save Changes');
+	          }
+	      	});
+    	});    
+     
+  	}); // end function
+
+  	$('#le_status_type_id').change(function (){
+
+  		if($(this).val() == 2){
+  			$('.hide').show();
+  		}else{
+  			$('.hide').hide();
+  		}
+
+  	});
 
 
+}); //End document ready function
 
-
-
-});
 
 
 </script>
