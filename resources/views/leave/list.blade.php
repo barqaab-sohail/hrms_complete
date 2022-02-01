@@ -47,12 +47,14 @@
                     <div class="form-group">
                         <label class="control-label text-right">Leave Status<span class="text_requried">*</span></label><br>
                           <select  name="le_status_type_id"  id="le_status_type_id" class="form-control selectTwo" data-validation="required">
+                          <option value="1">Approved</option>
+                          <option value="2">Rejected</option>
                           
                           </select>
                     </div>
                     <div class="form-group hide">
-                        <label class="control-label text-right">Reason</label>
-                        <input type="text" name="reason" value="{{ old('reason') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Please enter reason">    
+                        <label class="control-label text-right">Remarks</label>
+                        <input type="text" name="remarks" id="remarks" value="{{ old('remarks') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Please enter remarks">    
                     </div>
                     
                     <div class="col-sm-offset-2 col-sm-10">
@@ -104,23 +106,27 @@ $(document).ready(function() {
 
  		$('body').unbind().on('click', '.editStatus', function () {
       	var leave_id = $(this).data('id');
+      
       	$('.hide').hide();
 	    $('#json_message_modal').html('');
 
-	     	$.get("{{route('leaveStatus.index')}}", function (data) {
+	    	$.get("{{ url('hrms/leaveStatus') }}" +'/' + leave_id +'/edit', function (data) {
 
-	          if(data)
-	            {
-	                $("#le_status_type_id").empty();
-	                $("#le_status_type_id").append('<option value=""></option>');
-	                $.each(data,function(key,value){
-	                  
-	                    $("#le_status_type_id").append('<option value="'+value.id+'">'+value.name+'</option>');
-	                });
-	                $('#le_status_type_id').select2();
-	            }
+	    		if(data.le_status_type_id){
+	    			
+	    			
+	    			if(data.le_status_type_id == 2){
+	    				$('#remarks').val(data.remarks);
+	    				$("#le_status_type_id").val("2").change();
+	    				$('.hide').show();
+	    			}else{
+	    				$("#le_status_type_id").val("1").change();
+	    			}
+	    		}
 			})         
+	        
 	        $('#ajaxModel').modal('show');
+	        $('#leave_id').val(leave_id);
 
 	   	});
 
@@ -134,8 +140,6 @@ $(document).ready(function() {
 	          type: "POST",
 	          dataType: 'json',
 	          success: function (data) {
-	     
-	              $('#leaveStatusForm').trigger("reset");
 	              $('#ajaxModel').modal('hide');
 	              table.draw();
 	        
@@ -160,6 +164,7 @@ $(document).ready(function() {
   		if($(this).val() == 2){
   			$('.hide').show();
   		}else{
+  			$('#remarks').val('');
   			$('.hide').hide();
   		}
 
