@@ -203,7 +203,7 @@ Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Leave'], function(){
 	Route::resource('/leave', 'LeaveController', ['except' => ['show']]);
 	Route::get('/leaveType/{id?}', 'LeaveController@leaveType')->name('leaveType');
-
+	Route::resource('leaveStatus', 'LeaveStatusController');
 	Route::resource('accumulativesLeave', 'AccumulativesLeaveController');
 	Route::resource('leaveBalance', 'LeaveBalanceController');
 
