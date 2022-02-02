@@ -35,9 +35,10 @@ class LeaveController extends Controller
            
             return DataTables::of($data)
             ->addColumn('employee_no', function($data){
+                
                 $employee_no = $data->hrEmployee->employee_no;
-
                 return $employee_no;
+                 
             })
             ->addColumn('full_name', function($data){
                 $full_name = $data->hrEmployee->first_name . ' '. $data->hrEmployee->last_name;
