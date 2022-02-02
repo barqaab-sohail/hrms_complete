@@ -43,13 +43,17 @@
               <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
                 <form id="leaveStatusForm" name="manageForm" action="{{route('manager.store')}}"class="form-horizontal">
                    <input type="hidden" name="leave_id" id="leave_id">
+                   	<div class="form-group">
+                        <label class="control-label text-right">HOD<span class="text_requried">*</span></label><br>
+                          <select  name="manager_id"  id="manager_id" class="form-control selectTwo" data-validation="required" readonly>
+                          </select>
+                    </div>
                    
                     <div class="form-group">
                         <label class="control-label text-right">Leave Status<span class="text_requried">*</span></label><br>
                           <select  name="le_status_type_id"  id="le_status_type_id" class="form-control selectTwo" data-validation="required">
                           <option value="1">Approved</option>
                           <option value="2">Rejected</option>
-                          
                           </select>
                     </div>
                     <div class="form-group hide">
@@ -105,17 +109,21 @@ $(document).ready(function() {
  		});
 
  		$('body').unbind().on('click', '.editStatus', function () {
-      	var leave_id = $(this).data('id');
-      
-      	$('.hide').hide();
-	    $('#json_message_modal').html('');
+	      	var leave_id = $(this).data('id');
+	      
+	      	$('.hide').hide();
+		    $('#json_message_modal').html('');
+		    $("#manager_id").empty();
 
 	    	$.get("{{ url('hrms/leaveStatus') }}" +'/' + leave_id +'/edit', function (data) {
+	    		
+	    		if(data.manager.id){
+	    			var designation = data.manager.employee_designation[data.manager.employee_designation.length-1].name;
+	    			$('#manager_id').append('<option value="'+data.manager.id+'">'+data.manager.first_name+' '+data.manager.last_name+' - '+designation+'</option>');
+	    		}
 
-	    		if(data.le_status_type_id){
-	    			
-	    			
-	    			if(data.le_status_type_id == 2){
+	    		if(data.leaveStatus.le_status_type_id){
+	    			if(data.leaveStatus.le_status_type_id == 2){
 	    				$('#remarks').val(data.remarks);
 	    				$("#le_status_type_id").val("2").change();
 	    				$('.hide').show();
@@ -155,6 +163,27 @@ $(document).ready(function() {
 	              $('#saveBtn').html('Save Changes');
 	          }
 	      	});
+    	});
+
+    	$('body').on('click', '.deleteLeave', function () {
+	        var leave_id = $(this).data("id");
+	        var con = confirm("Are You sure want to delete !");
+	        if(con){
+	          $.ajax({
+	            type: "DELETE",
+	            url: "{{ route('leave.store') }}"+'/'+leave_id,
+	            success: function (data) {
+	                table.draw();
+	                if(data.error){
+	                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+	                }
+	  
+	            },
+	            error: function (data) {
+	                
+	            }
+	          });
+	        }
     	});    
      
   	}); // end function
