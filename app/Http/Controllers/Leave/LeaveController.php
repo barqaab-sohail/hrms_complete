@@ -69,10 +69,10 @@ class LeaveController extends Controller
 
             })
             ->addColumn('delete', function($data){
-                        $button = '<form  id="formDeleteLeave'.$data->id.'"  action="'.route('leave.destroy',$data->id).'" method="POST">'.method_field('DELETE').csrf_field().'
-                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
-                                 </form>';
-                        return $button;
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteLeave">Delete</a>';                            
+                    return $btn;
+
                     })
             ->rawColumns(['employee_no','full_name','designation','status','edit','delete'])
             ->make(true);
@@ -220,7 +220,8 @@ class LeaveController extends Controller
     		Leave::find($id)->delete();
     		   	
     	}); // end transcation
-        
-       return back()->with('message', 'Data Successfully Updated');
+       
+       return response()->json(['success'=>'data  delete successfully.']);
+       
     }
 }

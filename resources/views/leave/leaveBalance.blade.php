@@ -18,18 +18,7 @@
 					<th>Annual Leave</th>
 				</tr>
 				</thead>
-				<tbody>
-					@foreach($employees as $employee)
-						<tr>
-							<td>{{$employee->employee_no}}</td>
-							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
-							<td>{{casualLeave($employee->id)}}</td>
-							<td> </td>
-														
-						</tr>
-					@endforeach
-					
-				</tbody>
+				
 			</table>
 		</div>
 		
@@ -40,49 +29,29 @@
 <script>
 $(document).ready(function() {
 	
-            $('#myTable').DataTable({
-                stateSave: false,
-        		"order": false,
-        		
-        			
-                dom: 'Blfrtip',
-                buttons: [
-                    {
-                        extend: 'copyHtml5',
-                        exportOptions: {
-                            columns: [ 0, 1]
-                        }
-                    },
-                    {
-                        extend: 'excelHtml5',
-                        exportOptions: {
-                             columns: [ 0, 1]
-                        }
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        exportOptions: {
-                             columns: [ 0, 1]
-                        }
-                    }, {
-                        extend: 'csvHtml5',
-                        exportOptions: {
-                             columns: [ 0, 1]
-                        }
-                    },
-                ],
-               
-         //        scrollY:        "400px",
-      			// scrollX:        true,
-        		scrollCollapse: true,
-        		paging:         false,
-        		fixedColumns:   {
-            		leftColumns: 1,
-            		rightColumns:2
-        		}
-            });
             
+    $(function () {
+        $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
         });
+
+        var table = $('#myTable').DataTable({
+            processing: true,
+            serverSide: true,
+            order: [[ 5, 'desc' ]],
+            ajax: {
+            url: "{{ route('leaveBalance.create') }}",
+            },
+            columns: [
+               {data: 'employee_no', name: 'employee_no'},
+               {data: 'full_name', name: 'full_name'},
+               {data: 'casual_leave', name: 'casual_leave'},
+               {data: 'annaul_leave', name: 'annaul_leave'},
+            ]
+        });
+    });
 
 
 </script>

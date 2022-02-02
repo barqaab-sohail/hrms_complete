@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Leave\Leave;
 use App\Models\Leave\LeStatusType;
 use App\Models\Leave\LeSanctioned;
+use App\Models\Hr\HrEmployee;
 use DB;
 
 class LeaveStatusController extends Controller
@@ -25,7 +26,16 @@ class LeaveStatusController extends Controller
     {
         
         $leave = Leave::find($id);
-        return response()->json($leave->leSanctioned??'');
+        $employee = HrEmployee::find($leave->hr_employee_id);
+        $manager = '';
+        
+        if($leave->leSanctioned){
+        	$manager = HrEmployee::with('employeeDesignation')->find($leave->leSanctioned->manager_id);
+    	}else{
+    		$manager =  HrEmployee::with('employeeDesignation')->find($employee->hod->hr_manager_id??'');
+    	}
+
+        return response()->json(['leaveStatus'=>$leave->leSanctioned??'', 'manager'=>$manager]);
     }
 
     public function store (Request $request){
@@ -40,7 +50,7 @@ class LeaveStatusController extends Controller
 	                ['le_status_type_id'=> $input['le_status_type_id'],
 	                'leave_id'=> $input['leave_id'],
 	                'remarks'=> $input['remarks'],
-	                'manager_id'=> 3]); 
+	                'manager_id'=> $input['manager_id']]); 
 	        }else{
 	        	LeSanctioned::where('leave_id',$request->leave_id)->delete();
 	        }
