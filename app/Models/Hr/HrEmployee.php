@@ -99,6 +99,8 @@ class HrEmployee extends Model implements Auditable
         )->orderBy('employee_categories.id', 'asc');
     }
 
+    
+
     public function employeeOffice(){
         //return $this->hasOne('App\Models\Hr\EmployeeDesignation');
         return $this->hasManyThrough(
