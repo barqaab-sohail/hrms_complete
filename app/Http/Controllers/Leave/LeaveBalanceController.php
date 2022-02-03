@@ -14,10 +14,11 @@ class LeaveBalanceController extends Controller
         
         // $employee=HrEmployee::find(3);
         // dd($employee->employeeCategory->last()->name);
-
+        // $data = HrEmployee::whereIn('employee_no',leaveEmployees())->get();
+        // dd($data);
         if($request->ajax()){
 
-            $data = HrEmployee::where('hr_status_id',1)->get();   
+            $data = HrEmployee::with('leAccumulative')->where('hr_status_id',1)->whereIn('employee_no',leaveEmployees())->get();   
            
             return DataTables::of($data)
       
@@ -33,8 +34,13 @@ class LeaveBalanceController extends Controller
 
                  return annualLeave($data->id);
             })
+
+            ->addColumn('accumulative_annual_leave',function($data){
+
+                 return $data->leAccumulative->accumulative_total??'';
+            })
            
-            ->rawColumns(['full_name','casual_leave','annual_leave'])
+            ->rawColumns(['full_name','casual_leave','annual_leave','accumulative_annual_leave'])
             ->make(true);
         }
 

@@ -148,6 +148,10 @@ class HrEmployee extends Model implements Auditable
             return $this->hasOne('App\Models\Hr\HrContact')->where('hr_contact_type_id','=',1);
     }
 
+    public function employeeCatA(){
+            return $this->hasOne('App\Models\Hr\EmployeeCategory')->where('hr_category_id','=',1);
+    }
+
     public function hrContactPermanentCity(){
              return $this->hasOneThrough(
             'App\Models\Common\City',                //Final Model l
@@ -379,5 +383,8 @@ class HrEmployee extends Model implements Auditable
         return $picturePath;
     }
     
+    public function leAccumulative(){
+         return $this->hasOne('App\Models\Leave\LeAccumulative');
+    }
    
 }
