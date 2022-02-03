@@ -11,7 +11,10 @@ use DataTables;
 class LeaveBalanceController extends Controller
 {
     public function index(Request $request){
-      
+        
+        // $employee=HrEmployee::find(3);
+        // dd($employee->employeeCategory->last()->name);
+
         if($request->ajax()){
 
             $data = HrEmployee::where('hr_status_id',1)->get();   
@@ -28,7 +31,7 @@ class LeaveBalanceController extends Controller
             })
             ->addColumn('annual_leave',function($data){
 
-                 return 'annual_leave';
+                 return annualLeave($data->id);
             })
            
             ->rawColumns(['full_name','casual_leave','annual_leave'])
