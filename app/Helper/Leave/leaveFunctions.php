@@ -5,7 +5,7 @@ use App\User;
 
 
 function casualLeave($id){
-	$employee = HrEmployee::find($id);
+	$employee = HrEmployee::with('employeeAppointment')->find($id);
     $joiningDate = $employee->employeeAppointment->joining_date;
     $startDate = date("Y").'-01-01';
     $endDate = date("Y").'-12-31';
@@ -23,9 +23,9 @@ function casualLeave($id){
             $numberDays = $timeDiff/86400;  // 86400 seconds in one day
 
             // and you might want to convert to integer
-            $numberDays = intval($numberDays);
+            $numberDays = round($numberDays);
 
-            $totalCasualLeave = intval(12 *  $numberDays / 365);
+            $totalCasualLeave = round(12 *  $numberDays / 365);
         }
 
 	if($employee){		
@@ -45,13 +45,13 @@ function leaveStatusType($id){
 
 function annualLeave($employeeId){
 
-	$employee = HrEmployee::find($employeeId);
+	$employee = HrEmployee::with('employeeCategory')->find($employeeId);
 
 	$category = $employee->employeeCategory->last()->name??'';
 	
 
     if($category == 'A'){
-	    $categoryADate = '2022-01-01';
+	    $categoryADate = $employee->employeeCatA->effective_date;//'2022-05-01';
 	    $startDate = date("Y").'-01-01';
 	    $endDate = date("Y").'-12-31';
 	    $currentYearAnnualLeave=0;
@@ -82,5 +82,10 @@ function annualLeave($employeeId){
 	}
 
 
+}
+
+function leaveEmployees(){
+
+	return $leaveEmployees = [1000001, 1000002, 1000004, 1000005, 1000006, 1000007, 1000009, 1000010, 1000040, 1000110, 1000124, 1000126, 1000127, 1000130, 1000131, 1000133, 1000136, 1000137, 1000138, 1000139, 1000141, 1000144, 1000145, 1000146, 1000147, 1000148, 1000149, 1000151, 1000152, 1000153, 1000154, 1000155, 1000156, 1000157, 1000158, 1000159, 1000160, 1000161, 1000167, 1000169, 1000178, 1000274, 1000405, 1000440,1000008, 1000011, 1000012, 1000013, 1000171, 1000172, 1000173, 1000174, 1000177, 1000181, 1000182,1000412];
 }
 

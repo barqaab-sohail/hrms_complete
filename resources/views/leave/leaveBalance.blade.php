@@ -16,6 +16,7 @@
 					<th>Employee Name</th>
 					<th>Casual Leave</th>
 					<th>Annual Leave</th>
+					<th>Accumulative A/L</th>
 				</tr>
 				</thead>
 			</table>
@@ -49,6 +50,7 @@ $(document).ready(function() {
 			   {data: 'full_name', name: 'full_name'},
 			   {data: 'casual_leave', name: 'casual_leave'},
 			   {data: 'annual_leave', name: 'annual_leave'},
+			   {data: 'accumulative_annual_leave', name: 'accumulative_annual_leave'}
 		  	]
  		});
 
