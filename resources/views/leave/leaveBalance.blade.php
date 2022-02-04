@@ -15,8 +15,8 @@
 					<th>Employee ID</th>
 					<th>Employee Name</th>
 					<th>Casual Leave</th>
-					<th>Annual Leave</th>
-					<th>Accumulative A/L</th>
+					<th>Earned Leave</th>
+					<th>Accumulative E/L</th>
 				</tr>
 				</thead>
 			</table>

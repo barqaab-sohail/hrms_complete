@@ -246,27 +246,38 @@ class LeaveController extends Controller
 
         if($request->filled('employee') && $request->filled('from') && $request->filled('to')){
         $result = Leave::where('hr_employee_id',$request->employee)->whereDate('from', ">=", $input['from'])->whereDate('to', "<=",$input['to'])->get();
-        return view('leave.search.result',compact('result'));
+        $leaveBalance=false;
+        return view('leave.search.result',compact('result','leaveBalance'));
         }
 
         if($request->filled('from') && $request->filled('to')){
         $result = Leave::whereDate('from', ">=", $input['from'])->whereDate('to', "<=",$input['to'])->get();
-        return view('leave.search.result',compact('result'));
+        $leaveBalance=false;
+        return view('leave.search.result',compact('result','leaveBalance'));
         }
 
         if($request->filled('employee') && $request->filled('from')){
         $result = Leave::where('hr_employee_id',$request->employee)->whereDate('from', "=", $input['from'])->get();
-        return view('leave.search.result',compact('result'));
+        $leaveBalance=false;
+        return view('leave.search.result',compact('result','leaveBalance'));
         }
 
         if($request->filled('employee') && $request->filled('to')){
         $result = Leave::where('hr_employee_id',$request->employee)->whereDate('to', "=", $input['to'])->get();
-        return view('leave.search.result',compact('result'));
+        $leaveBalance=false;
+        return view('leave.search.result',compact('result','leaveBalance'));
         }
 
         if($request->filled('employee')){
         $result = Leave::where('hr_employee_id',$request->employee)->get();
-        return view('leave.search.result',compact('result'));
+        $leaveBalance=false;
+        return view('leave.search.result',compact('result','leaveBalance'));
+        }
+
+        if($request->filled('leave_balance')){
+        $result = HrEmployee::find($request->leave_balance);
+        $leaveBalance=true;
+        return view('leave.search.result',compact('result','leaveBalance'));
         }
 
 

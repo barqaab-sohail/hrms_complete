@@ -22,7 +22,7 @@ class InputMonthController extends Controller
     {
    
         $months = ['January','February', 'March','April', 'May','June','July','August','September','October', 'November', 'December'];
-        $years = ['2021','2022'];
+        $years = ['2022'];
 
         
         if ($request->ajax()) {
