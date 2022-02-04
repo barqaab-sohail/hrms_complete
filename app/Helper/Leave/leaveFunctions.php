@@ -29,7 +29,13 @@ function casualLeave($id){
         }
 
 	if($employee){		
-		$remainingLeaves = $totalCasualLeave - Leave::where('hr_employee_id',$employee->id)->where('le_type_id',1)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->sum('days');
+		
+		// Only approved leave
+		$leaveAvailed = Leave::join('le_sanctioneds','le_sanctioneds.leave_id','=','leaves.id')->select('leaves.*','le_sanctioneds.le_status_type_id')->where('hr_employee_id',$employee->id)->where('le_type_id',1)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->where('le_status_type_id',1)->sum('days');
+
+
+		$remainingLeaves = $totalCasualLeave - $leaveAvailed;
+
 		return $remainingLeaves;
 	}
 }
@@ -40,6 +46,8 @@ function leaveStatusType($id){
 		return 'Approved';
 	}else if ($id ==2){
 		return 'Rejected';
+	}else{
+		return 'Pending';
 	}
 }
 
@@ -71,14 +79,17 @@ function annualLeave($employeeId){
             $currentYearAnnualLeave = round(18 *  $numberDays / 365);
         }
 
-        if($employee){		
-		$remainingLeaves = $currentYearAnnualLeave - Leave::where('hr_employee_id',$employee->id)->where('le_type_id',2)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->sum('days');
+        if($employee){	
+
+        $leaveAvailed = Leave::join('le_sanctioneds','le_sanctioneds.leave_id','=','leaves.id')->select('leaves.*','le_sanctioneds.le_status_type_id')->where('hr_employee_id',$employee->id)->where('le_type_id',2)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->where('le_status_type_id',1)->sum('days');
+	
+		$remainingLeaves = $currentYearAnnualLeave - $leaveAvailed;
 		return $remainingLeaves;
 	}
 
 	}else{
 
-		return 0;
+		return 'N/A';
 	}
 
 

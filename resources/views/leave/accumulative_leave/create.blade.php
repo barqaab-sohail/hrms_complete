@@ -6,7 +6,36 @@
 @section('content')
 <div class="card">
   <div class="card-body">
-    
+    @can('Super Admin')
+    <div class="container" id='hideDiv'>
+        <h3 align="center">Import Excel File</h3>
+
+      <form method="post" enctype="multipart/form-data" action="{{route('leave.import')}}">
+      {{ csrf_field() }}
+          <div class="form-group">
+            <table class="table">
+              <tr>
+                <td width="40%" align="right"><label>Select File for Upload</label></td>
+                  <td width="30">
+                  <input type="file" name="select_file" />
+                  </td>
+                  <td width="30%" align="left">
+                  <input type="submit" name="upload" class="btn btn-success" value="Upload">
+                  </td>
+              </tr>
+              <tr>
+                  <td width="40%" align="right"></td>
+                  <td width="30"><span class="text-muted">.xls, .xslx Files Only</span></td>
+                  <td width="30%" align="left"></td>
+              </tr>
+            </table>
+          </div>
+      </form>
+    </div>
+
+
+    <hr>
+    @endcan
     <button type="button" class="btn btn-success float-right"  id ="createAddAccumulativeLeave" data-toggle="modal" >Add Accumulative Leave</button>
     <br>
     <table class="table table-striped data-table">
@@ -105,7 +134,7 @@ $(document).ready(function() {
         ajax: "{{ route('accumulativesLeave.create') }}",
         columns: [
             {data: "fullName", name: 'fullName'},
-            {data: "le_type_id", name: 'le_type_id'},
+            {data: "leave_type", name: 'leave_type'},
             {data: "accumulative_total", name: 'accumulative_total'},
             {data: 'date', name: 'date'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},

@@ -206,6 +206,9 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 	Route::resource('leaveStatus', 'LeaveStatusController');
 	Route::resource('accumulativesLeave', 'AccumulativesLeaveController');
 	Route::resource('leaveBalance', 'LeaveBalanceController');
+	Route::get('/leave/search','LeaveController@search')->name('leave.search');
+	Route::get('/leave/search/result','LeaveController@result')->name('leave.result');
+	Route::post('/leaveImport', 'AccumulativesLeaveController@import')->name('leave.import');
 
 	
 });

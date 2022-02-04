@@ -31,7 +31,7 @@ class LeaveController extends Controller
    		
         if($request->ajax()){
 
-            $data = Leave::with('hrEmployee','employeeDesignation')->get();   
+            $data = Leave::with('hrEmployee','employeeDesignation','leType')->get();   
            
             return DataTables::of($data)
             ->addColumn('employee_no', function($data){
@@ -47,6 +47,9 @@ class LeaveController extends Controller
             })
             ->addColumn('designation',function($data){
                 return $data->employeeDesignation->last()->name??'';
+            })
+            ->addColumn('leave_type',function($data){
+                return $data->leType->name??'';
             })
             ->addColumn('status',function($data){
 
@@ -75,7 +78,7 @@ class LeaveController extends Controller
                     return $btn;
 
                     })
-            ->rawColumns(['employee_no','full_name','designation','status','edit','delete'])
+            ->rawColumns(['employee_no','full_name','designation','leave_type','status','edit','delete'])
             ->make(true);
         }
 
@@ -224,5 +227,48 @@ class LeaveController extends Controller
        
        return response()->json(['success'=>'data  delete successfully.']);
        
+    }
+
+    public function search(){
+
+        $employees = HrEmployee::whereIn('employee_no',leaveEmployees())->get();
+        return view ('leave.search.search',compact('employees'));
+    }
+
+    public function result(Request $request){
+        
+	    $input = $request->all();
+	    $input['from'] = \Carbon\Carbon::parse($request->from)->format('Y-m-d');
+	    $input['to'] = \Carbon\Carbon::parse($request->to)->format('Y-m-d');
+	   
+	    
+    	
+
+        if($request->filled('employee') && $request->filled('from') && $request->filled('to')){
+        $result = Leave::where('hr_employee_id',$request->employee)->whereDate('from', ">=", $input['from'])->whereDate('to', "<=",$input['to'])->get();
+        return view('leave.search.result',compact('result'));
+        }
+
+        if($request->filled('from') && $request->filled('to')){
+        $result = Leave::whereDate('from', ">=", $input['from'])->whereDate('to', "<=",$input['to'])->get();
+        return view('leave.search.result',compact('result'));
+        }
+
+        if($request->filled('employee') && $request->filled('from')){
+        $result = Leave::where('hr_employee_id',$request->employee)->whereDate('from', "=", $input['from'])->get();
+        return view('leave.search.result',compact('result'));
+        }
+
+        if($request->filled('employee') && $request->filled('to')){
+        $result = Leave::where('hr_employee_id',$request->employee)->whereDate('to', "=", $input['to'])->get();
+        return view('leave.search.result',compact('result'));
+        }
+
+        if($request->filled('employee')){
+        $result = Leave::where('hr_employee_id',$request->employee)->get();
+        return view('leave.search.result',compact('result'));
+        }
+
+
     }
 }

@@ -17,6 +17,7 @@
 					<th>Designation/Position</th>
 					<th>Leave From</th>
 					<th>Leave To</th>
+					<th>Leave Type</th>
 					<th>Total Days</th>
 					<th>Leave Status</th>
 					<th class="text-center"style="width:5%">Edit</th>
@@ -89,7 +90,7 @@ $(document).ready(function() {
 	    var table = $('#myTable').DataTable({
 	  		processing: true,
 	  		serverSide: true,
-	  		order: [[ 5, 'desc' ]],
+	  		order: [[ 3, 'asc' ]],
 		  	ajax: {
 		   	url: "{{ route('leave.index') }}",
 		  	},
@@ -99,6 +100,7 @@ $(document).ready(function() {
 			   {data: 'designation', name: 'designation'},
 			   {data: 'from', name: 'from'},
 			   {data: 'to', name: 'to'},
+			   {data: 'leave_type', name: 'leave_type'},
 			   {data: 'days', name: 'days'},
 			   {data: 'status', name: 'status'},
 			   {data: 'edit',name: 'edit', orderable: false, searchable: false },
@@ -116,20 +118,18 @@ $(document).ready(function() {
 		    $("#manager_id").empty();
 
 	    	$.get("{{ url('hrms/leaveStatus') }}" +'/' + leave_id +'/edit', function (data) {
-	    		
+	    	
 	    		if(data.manager.id){
 	    			var designation = data.manager.employee_designation[data.manager.employee_designation.length-1].name;
 	    			$('#manager_id').append('<option value="'+data.manager.id+'">'+data.manager.first_name+' '+data.manager.last_name+' - '+designation+'</option>');
 	    		}
 
-	    		if(data.leaveStatus.le_status_type_id){
-	    			if(data.leaveStatus.le_status_type_id == 2){
+	    		if(data.leaveStatus && data.leaveStatus.le_status_type_id == 2){
 	    				$('#remarks').val(data.remarks);
 	    				$("#le_status_type_id").val("2").change();
 	    				$('.hide').show();
-	    			}else{
-	    				$("#le_status_type_id").val("1").change();
-	    			}
+	    		}else{
+	    			$("#le_status_type_id").val("1").change();
 	    		}
 			})         
 	        
