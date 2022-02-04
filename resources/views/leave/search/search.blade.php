@@ -12,7 +12,7 @@
             {{csrf_field()}}
             <div class="form-body">
             	<div class="row" >
-		            <div class="col-md-3">
+		            <div class="col-md-4">
 		            	<!--/span 5-1 -->
 		                <div class="form-group row">
 		                    <div class="col-md-12 required">
@@ -47,6 +47,20 @@
                             </div>
                         </div>
                     </div>
+                   	<div class="col-md-4">
+		            	<!--/span 5-1 -->
+		                <div class="form-group row">
+		                    <div class="col-md-12 required">
+		                   		<label class="control-label text-right">Leave Balance</label><br>
+		                   		<select  name="leave_balance"  id="leave_balance" class="form-control searchSelect">
+		                            <option value=""></option>
+		                            @foreach($employees as $employee)
+									<option value="{{$employee->id}}" {{(old("employee")==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employeeDesignation->last()->name??''}}</option>
+		                            @endforeach
+		                        </select>    
+		                    </div>
+		                </div>
+		            </div>
 		        </div>
 
 		    </div>
@@ -90,10 +104,15 @@ $(document).ready(function(){
   			if($(this).val()){
         	$(this).val('').select2('val', 'All');
         	}
+
     	});
     	$(this).addClass('searchSelect');
   	});
-
+	$('#leave_balance').change(function(){
+		$('#from').val('');
+		$('#to').val('');
+		$('.fa-trash-alt').hide();
+	});
 
 	//submit function
       $("#leaveSearch").submit(function(e) { 
