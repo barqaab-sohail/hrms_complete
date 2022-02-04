@@ -40,4 +40,9 @@ class Leave extends Model  implements Auditable
         )->orderBy('employee_designations.id', 'asc');
     }
 
+    public function leType(){
+        return $this->belongsTo('App\Models\Leave\LeType');
+    }
+
+
 }

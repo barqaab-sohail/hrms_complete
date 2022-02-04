@@ -13,7 +13,6 @@ use App\Imports\EmployeeSalaryImport;
 class EmployeeSalaryController extends Controller
 {
     
-
     public function index() {
         
         $hrSalaries = HrSalary::all();

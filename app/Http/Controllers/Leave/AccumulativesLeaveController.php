@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Leave\LeAccumulative;
 use App\Models\Hr\HrEmployee;
+use App\Imports\LeAccumulativeImport;
 use App\Models\Leave\LeType;
 use DB;
 use DataTables;
+
 
 
 class AccumulativesLeaveController extends Controller
@@ -24,7 +26,7 @@ class AccumulativesLeaveController extends Controller
         return $view;
     }
 
-     public function create(Request $request) {
+    public function create(Request $request) {
 
         if ($request->ajax()) {
             $data = LeAccumulative::latest()->get();
@@ -49,8 +51,13 @@ class AccumulativesLeaveController extends Controller
                            return employeeFullName($row->hr_employee_id);
                            
                     })
+                    ->addColumn('leave_type', function($row){                
+                      
+                           return $row->leType->name??'';;
+                           
+                    })
 
-                    ->rawColumns(['Edit','Delete','fullName'])
+                    ->rawColumns(['Edit','Delete','fullName','leave_type'])
                     ->make(true);
         }
 
@@ -94,13 +101,26 @@ class AccumulativesLeaveController extends Controller
 
 
     public function destroy ($id){
-
-       
+      
         DB::transaction(function () use ($id) {  
             LeAccumulative::find($id)->delete();           
         }); // end transcation 
         return response()->json(['success'=>'data  delete successfully.']);
 
+    }
+
+    public function import(Request $request)
+    {
+        
+        $this->validate($request, [
+          'select_file'  => 'required|mimes:xls,xlsx'
+        ]);
+
+        $path = $request->file('select_file')->getRealPath();        
+
+        \Excel::import(new LeAccumulativeImport, $path);
+         
+        return back()->with('success', 'Excel Data Imported successfully.');
     }
 
 

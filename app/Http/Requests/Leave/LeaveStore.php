@@ -41,17 +41,44 @@ class LeaveStore extends FormRequest
             $numberDays = $timeDiff/86400;  // 86400 seconds in one day
 
             // and you might want to convert to integer
-            $numberDays = intval($numberDays);
+            $numberDays = round($numberDays);
 
-            $totalCasualLeave = intval(12 *  $numberDays / 365);
+            $totalCasualLeave = round(12 *  $numberDays / 365);
         }
+
+
+        //check current year annual leave balance
+        $category = $employee->employeeCategory->last()->name??'';
+        if($category == 'A'){
+        $categoryADate = $employee->employeeCatA->effective_date;//'2022-05-01';
+
+            $currentYearAnnualLeave=0;
+            if($categoryADate<$startDate){
+                $currentYearAnnualLeave =18;
+            }else{
+                $startTimeStamp = strtotime($categoryADate);
+                $endTimeStamp = strtotime($endDate);
+
+                $timeDiff = abs($endTimeStamp - $startTimeStamp);
+
+                $numberDays = $timeDiff/86400;  // 86400 seconds in one day
+
+                // and you might want to convert to integer
+                $numberDays = round($numberDays);
+
+                $currentYearAnnualLeave = round(18 *  $numberDays / 365);
+            }
+        }
+
+        //
 
         if($request->le_type_id==1){
 
         $this->leaveBalance = $totalCasualLeave - Leave::where('hr_employee_id',$request->hr_employee_id)->where('le_type_id',1)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->sum('days');
 
-        }elseif($request->le_type_id==2){
-            $this->leaveBalance = 18 - Leave::where('hr_employee_id',$request->hr_employee_id)->where('le_type_id',2)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->sum('days');
+        }elseif($request->le_type_id==2){ //Check Annual Leave Balance only current year.
+            $totalAnnualLeave =  $currentYearAnnualLeave + $employee->leAccumulative->accumulative_total??'';
+            $this->leaveBalance = $totalAnnualLeave - Leave::where('hr_employee_id',$request->hr_employee_id)->where('le_type_id',2)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->sum('days');
         }elseif($request->le_type_id==3){
             $this->leaveBalance = 365 - Leave::where('hr_employee_id',$request->hr_employee_id)->where('le_type_id',3)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->sum('days');
         }
