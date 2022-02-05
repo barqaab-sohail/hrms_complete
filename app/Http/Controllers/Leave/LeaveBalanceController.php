@@ -39,7 +39,7 @@ class LeaveBalanceController extends Controller
 
                  return $data->leAccumulative->accumulative_total??'N/A';
             })
-           
+            
             ->rawColumns(['full_name','casual_leave','annual_leave','accumulative_annual_leave'])
             ->make(true);
         }
