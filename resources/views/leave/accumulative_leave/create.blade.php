@@ -7,6 +7,7 @@
 <div class="card">
   <div class="card-body">
     @can('Super Admin')
+ <!-- upload accumulative earned leave data
     <div class="container" id='hideDiv'>
         <h3 align="center">Import Excel File</h3>
 
@@ -34,7 +35,7 @@
     </div>
 
 
-    <hr>
+    <hr> -->
     @endcan
     <button type="button" class="btn btn-success float-right"  id ="createAddAccumulativeLeave" data-toggle="modal" >Add Accumulative Leave</button>
     <br>
@@ -114,7 +115,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  //formFunctions();
+  formFunctions();
   //only number value entered
     $('#accumulative_total').on('change, keyup', function() {
     var currentInput = $(this).val();

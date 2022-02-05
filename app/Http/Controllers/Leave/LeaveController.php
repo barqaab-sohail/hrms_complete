@@ -48,6 +48,12 @@ class LeaveController extends Controller
             ->addColumn('designation',function($data){
                 return $data->employeeDesignation->last()->name??'';
             })
+            ->addColumn('from',function($data){
+                return \Carbon\Carbon::parse($data->from)->format('M d, Y');
+            })
+            ->addColumn('to',function($data){
+                return \Carbon\Carbon::parse($data->to)->format('M d, Y');
+            })
             ->addColumn('leave_type',function($data){
                 return $data->leType->name??'';
             })
@@ -78,7 +84,7 @@ class LeaveController extends Controller
                     return $btn;
 
                     })
-            ->rawColumns(['employee_no','full_name','designation','leave_type','status','edit','delete'])
+            ->rawColumns(['employee_no','full_name','designation','from','to','leave_type','status','edit','delete'])
             ->make(true);
         }
 
