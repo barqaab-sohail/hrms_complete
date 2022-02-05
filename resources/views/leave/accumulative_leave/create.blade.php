@@ -114,7 +114,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  formFunctions();
+  //formFunctions();
   //only number value entered
     $('#accumulative_total').on('change, keyup', function() {
     var currentInput = $(this).val();
