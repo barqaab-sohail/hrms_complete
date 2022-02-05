@@ -29,8 +29,8 @@
                                     {{$leave->hrEmployee->first_name}} {{$leave->hrEmployee->last_name}}
                                 </td>
                                 <td>{{$leave->employeeDesignation->last()->name??''}}</td>
-                                <td>{{$leave->from}}</td>
-                                <td>{{$leave->to}}</td>
+                                <td>{{date('M d, Y', strtotime($leave->from))}}</td>
+                               <td>{{date('M d, Y', strtotime($leave->to))}}</td>
                                 <td>{{$leave->leType->name}}</td>
                                 <td>{{$leave->days}}</td>
                                 <td>{{leaveStatusType($leave->leSanctioned->le_status_type_id??'')}}</td>
@@ -51,7 +51,7 @@
         $('#myDataTable').DataTable({
                     stateSave: false,        
                     dom: 'Blfrtip',
-                    columnDefs: [ { type: 'date', 'targets': [3] } ],
+                    order: [[ 3, 'asc' ]],
                     buttons: [
                         {
                             extend: 'copyHtml5',
