@@ -17,8 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard','HomeController@index')->middleware('auth')->name('dashboard');
 //Route::get ('insert','Hr\EmployeeController@insert');
-
+Route::get('/test','HomeController@test')->middleware('auth')->name('test');
 Auth::routes();
+
 
 // Route::group(['prefix' => 'code', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Auth','name' =>'opt.'], function(){
 // Route::resource('/','RegisterController',['only'=>['create','store']]);
