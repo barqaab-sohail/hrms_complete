@@ -90,7 +90,7 @@ $(document).ready(function() {
 	    var table = $('#myTable').DataTable({
 	  		processing: true,
 	  		serverSide: true,
-	  		order: [[ 3, 'asc' ]],
+	  		"aaSorting": [],
 		  	ajax: {
 		   	url: "{{ route('leave.index') }}",
 		  	},

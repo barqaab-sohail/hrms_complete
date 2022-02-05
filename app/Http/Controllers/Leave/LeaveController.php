@@ -31,7 +31,7 @@ class LeaveController extends Controller
    		
         if($request->ajax()){
 
-            $data = Leave::with('hrEmployee','employeeDesignation','leType')->get();   
+            $data = Leave::with('hrEmployee','employeeDesignation','leType')->orderBy('from', 'desc')->get();   
            
             return DataTables::of($data)
             ->addColumn('employee_no', function($data){
@@ -60,14 +60,22 @@ class LeaveController extends Controller
             ->addColumn('status',function($data){
 
             	$status='';
+                $color = '';
 
 	            if($data->leSanctioned){
 	                $status = leaveStatusType($data->leSanctioned->le_status_type_id);
+                    if($data->leSanctioned->le_status_type_id==1){
+                         $color='btn-success';
+                     }else{
+                         $color = 'btn-danger';
+                     }
+                   
 	            }else{
 	            	$status = 'Pending';
+                    $color = 'btn-danger';
 	            }
 
-            return '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editStatus">'.$status.'</a>';
+            return '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Edit" class="edit btn '.$color.'  btn-sm editStatus">'.$status.'</a>';
                 
             })
            
