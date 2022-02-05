@@ -112,7 +112,7 @@
                         <td>{{$result->first_name}} {{$result->last_name}}</td>
                         <td>{{casualLeave($result->id)}}</td>
                         <td>{{annualLeave($result->id)}}</td>
-                        <td>{{$leave->leAccumulative->accumulative_total??'N/A'}}</td>                              
+                        <td>{{$result->leAccumulative->accumulative_total??'N/A'}}</td>                              
                     </tr>          
                 </tbody>
             </table>
