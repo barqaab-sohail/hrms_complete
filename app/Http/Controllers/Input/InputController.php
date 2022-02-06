@@ -69,12 +69,12 @@ class InputController extends Controller
 
    			$input = $request->all();
             
-            DB::transaction(function () use ($input, &$data) {  
-                $data = Input::create($input);
+            DB::transaction(function () use ($input) {  
+                Input::create($input);
             }); // end transcation
-            //$data = $data->with('hrEmployee')->get();
-            $data = Input::where('id',$data->id)->with('hrEmployee','hrDesignation')->first();
-            return response()->json($data);
+            
+        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
+            
    }
 
    public function edit($id){

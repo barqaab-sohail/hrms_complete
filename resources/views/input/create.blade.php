@@ -79,14 +79,7 @@
 
  	selectTwo();
   	
-    //submit function
-     $("#inputFrom").submit(function(e) { 
-        e.preventDefault();
-        var url = $(this).attr('action');
-        $('.fa-spinner').show(); 
-        submitForm(this, url,1);
-       
-    });
+    
 
     $('#month').change(function(){
       var cid = $(this).val();
@@ -117,7 +110,7 @@
           });//end ajax
         }
     }); 
-
+  $(function () {
     $('#project').change (function (){
       
       var cid = $(this).val();
@@ -144,9 +137,58 @@
           ],
           order: [[ 1, "desc" ]]
       });
-  
-
+      $('#heading').empty();
+      $('#heading').append( "<br><a class='btn btn-success' href='#' data-toggle='modal'>Add Employee</a>" );
     });
+
+    $('#heading').click(function () {
+        $('#json_message_modal').html('');
+        $('#saveBtn').val("create-Input");
+        $('#input_project_id').val('');
+        $('#inputForm').trigger("reset");
+        $('hr_employee_id').val('');
+        $('#hr_employee_id').trigger('change');
+        $('hr_designation_id').val('');
+        $('#hr_designation_id').trigger('change');
+        $('#input').val('');
+        $('#remarks').val('');
+        $('#input_project_id').val('');
+        $('#input_month_id').val('');
+        $('#projectModal').modal('show');
+    });
+
+    $('#saveBtn').click(function (e) {
+        e.preventDefault();
+        $(this).html('Save');
+
+        console.log($('#hr_employee_id').val());
+        $.ajax({
+          data: $('#inputForm').serialize(),
+          url: "{{ route('input.store') }}",
+          type: "POST",
+          dataType: 'json',
+          success: function (data) {
+     
+              $('#inputForm').trigger("reset");
+              $('#ajaxModel').modal('hide');
+              table.draw();
+        
+          },
+          error: function (data) {
+              
+              var errorMassage = '';
+              $.each(data.responseJSON.errors, function (key, value){
+                errorMassage += value + '<br>';  
+                });
+                 $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
+
+  });
+
 
     // $('#project').change(function(){
     //   var cid = $(this).val();
@@ -193,34 +235,6 @@
     //   alert('lk');
     // });
 
-    $(document).on('submit','form[id^=deleteForm]',function(event){
-    event.preventDefault();
-    var url = $(this).attr('action');
-    var tr = $(this).closest('tr');
-      $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
-            var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
-
-            if (token) {
-                return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Objectl
-            }
-        });
-      $.ajax({
-             method:"DELETE",
-             url: url,
-             success:function(res)
-             {       
-                  if(res)
-                  {
-                    tr.remove();
-                    $('#inputTable tr').each(function(i) {
-                      $(this).children('td:first-child').text(i);
-                    });
-                   
-                  }     
-             }
-
-          });//end ajax
-    }); //end submit
 
 
 
