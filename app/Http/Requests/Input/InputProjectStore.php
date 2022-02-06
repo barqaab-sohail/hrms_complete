@@ -4,7 +4,7 @@ namespace App\Http\Requests\Input;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class HrInputProjectStore extends FormRequest
+class InputProjectStore extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class HrInputProjectStore extends FormRequest
     public function rules()
     {
         $rules = [
-        'hr_input_month_id'=> 'required',
-        'pr_detail_id'=> 'required|unique_with:hr_input_projects,hr_input_month_id'
+        'input_month_id'=> 'required',
+        'pr_detail_id'=> 'required|unique_with:input_projects,input_month_id'
         ];
 
         return $rules;

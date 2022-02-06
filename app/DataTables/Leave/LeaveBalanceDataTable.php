@@ -67,8 +67,8 @@ class LeaveBalanceDataTable extends DataTable
             Column::make('employee_no'),
             Column::make('full_name'),
             Column::computed('action')
-                  ->exportable(true)
-                  ->printable(true)
+                  ->exportable(fasle)
+                  ->printable(fasle)
                   ->width(60)
                   ->addClass('text-center'),
         ];

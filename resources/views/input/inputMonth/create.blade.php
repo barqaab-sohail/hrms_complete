@@ -1,219 +1,182 @@
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
 @section('Heading')
-	<h3 class="text-themecolor">Add Month</h3>
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="javascript:void(0)"></a></li>	
-	</ol>
+  <!-- <h3 class="text-themecolor">List of Employees</h3> -->
 @stop
 @section('content')
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card card-outline-info">
-			<div class="row">
-		        <div class="col-lg-12">
-		            <div style="margin-top:10px; margin-right: 10px;">                   
-		            </div>
-		            <div class="card-body">
-		                <form id= "addMonth"  action="{{route('inputMonth.store')}}" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
-		                {{csrf_field()}}
-		                <div class="form-body">
-		                   
-	                            <div class="row">
-	                            	<div class="col-md-2">
-		                                <div class="form-group row">
-		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Month<span class="text_requried" data-validation="required">*</span></label>
-		                                       
-	                                           	<select  name="month"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($months as $month)
-													<option value="{{$month}}" {{(old("month")==$month? "selected" : "")}}>{{$month}}</option>
-                                                    @endforeach     
-                                                </select>
-		                                    </div>
-		                                </div>
-		                            </div> 
-		                            <div class="col-md-2">
-	                                    <div class="form-group row"> 
-	                                        <div class="col-md-12">
-	                                        	<label class="control-label text-right">Year<span class="text_requried" data-validation="required">*</span></label>
-		                                       
-	                                           	<select  name="year"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    @foreach($years as $year)
-													<option value="{{$year}}" {{(old("year")==$year? "selected" : "")}}>{{$year}}</option>
-                                                    @endforeach     
-                                                </select>
-	                                        </div>
-	                                    </div>
-	                            	</div>   
-	                            	<div class="col-md-2">
-	                                    <div class="form-group row"> 
-	                                        <div class="col-md-12">
-	                                        	<label class="control-label text-right">Status<span class="text_requried" data-validation="required">*</span></label>
-		                                       
-	                                           	<select  name="is_lock"  class="form-control selectTwo" data-validation="required">
-                                                    <option value=""></option>
-                                                    <option value="0">Open</option>
-                                                    <option value="1">Lock</option>  
-                                                </select>
-	                                        </div>
-	                                    </div>
-	                            	</div>   
-		                            <div class="col-md-2">
-		                                <div class="form-actions">
-	                                		<div class="col-md-12"> <br>
-                                            	<button type="submit" class="btn btn-success btn-prevent-multiple-submits">Save</button>
-	                                		</div>
-		                        		</div>
-		                            </div>
-		                        </div>
-		                </div>
-		                <hr> 
-		            	</form>
-		            		<table id="inputTable" class="table table-bordered">
-								<h2 align="center" id="heading"></h2>
-						        <tr>
-						            <th>Month & Year</th>
-						            <th>Status</th>
-						            <th class="text-center">Edit</th>
-						            <th class="text-center">Delete</th>
-						        </tr>
-						        <tbody>
-						        	@foreach($monthYears as $year)
-						        	<tr id="tr_{{$year->id}}">
-						        		<td>{{$year->month}}-{{$year->year}}</td>
-						        		<td>{{$year->is_lock}}</td>
-						        		<td class="text-center">
-								 			<a class="btn btn-success btn-sm" id="editMonthInput{{$year->id}}" url= "{{route('inputMonth.edit',$year->id)}}" data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>
-								 		</td>
-						        	<td class="text-center">
-								 			<form id="deleteInputMonth{{$year->id}}" action="{{route('inputMonth.destroy',$year->id)}}" method="POST">
-								 			@method('DELETE')
-								 			@csrf
-								 			<button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"><i class="fas fa-trash"></i></button>
-								 			</form> 
-								 		</td>
-						        	</tr>
-						        	@endforeach
-						        </tbody>   
-					    	</table>
+<div class="card-body">
+  <button type="button" class="btn btn-success float-right"  id ="createNewMonth" data-toggle="modal" >Add New Month</button>
+  <br>
+  <table class="table table-striped data-table">
+    <thead>
+      <tr>
+          <th>Month</th>
+          <th>Year</th>
+          <th>Status</th>
+          <th>Edit</th>
+          <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+        
+    </tbody>
+  </table>
+</div>
 
-
-		        		</div>       
-		        	</div>
-		        </div>
+<div class="modal fade" id="ajaxModel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modelHeading"></h4>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+              <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
+                <form id="inputMonthForm" name="inputMonthForm" class="form-horizontal">
+                   <input type="hidden" name="month_id" id="month_id">
+                    <div class="form-group">
+                        <label class="control-label text-right">Month<span class="text_requried">*</span></label><br>
+                          <select  name="month"  id="month" class="form-control" data-validation="required">
+                              <option value=""></option>
+                              @foreach ($months as $month)
+                              <option value="{{$month}}">{{$month}}</option>
+                              @endforeach
+                            </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label text-right">Year<span class="text_requried">*</span></label><br>
+                          <select  name="year"  id="year" class="form-control" data-validation="required">
+                              <option value=""></option>
+                              @foreach ($years as $year)
+                              <option value="{{$year}}">{{$year}}</option>
+                              @endforeach   
+                            </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label text-right">status<span class="text_requried">*</span></label><br>
+                          <select  name="is_lock"  id="is_lock" class="form-control" data-validation="required">
+                              <option value=""></option>
+                              <option value="0">Open</option>
+                              <option value="1">Lock</option>
+                              
+                            </select>
+                    </div>
+                    <div class="col-sm-offset-2 col-sm-10">
+                     <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
+                     </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-@include('input.inputMonth.editModal')
 
-<script>
- $(document).ready(function() {
+<script type="text/javascript">
+$(document).ready(function() {
+  
+  $(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('inputMonth.create') }}",
+        columns: [
+            {data: "month", name: 'month'},
+            {data: 'year', name: 'year'},
+            {data: 'is_lock', name: 'is_lock'},
+            {data: 'edit', name: 'edit', orderable: false, searchable: false},
+            {data: 'delete', name: 'delete', orderable: false, searchable: false}
 
+        ],
+        order: [[ 2, "desc" ]]
+    });
 
- 	selectTwo();
-  	
-    //submit function
-     $("#addMonth").submit(function(e) { 
-         e.preventDefault();
-        var url = $(this).attr('action');
-        $('.fa-spinner').show(); 
+    $('#createNewMonth').click(function () {
+        $('#json_message_modal').html('');
+        $('#saveBtn').val("create-Month");
+        $('#month_id').val('');
 
-        $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
-            var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
+        $('#inputMonthForm').trigger("reset");
+        $('#month').trigger('change');
+        $('#year').trigger('change');
+        $('#is_lock').trigger('change');
+        $('#modelHeading').html("Create New Month");
+        $('#ajaxModel').modal('show');
+    });
+    $('body').unbind().on('click', '.editMonth', function () {
+      var manager_id = $(this).data('id');
 
-            if (token) {
-                return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Object
-            }
-        });
-        var data = new FormData(this)
+      $('#json_message_modal').html('');
+      $.get("{{ url('input/inputMonth') }}" +'/' + manager_id +'/edit', function (data) {
+          $('#modelHeading').html("Edit Month");
+          $('#saveBtn').val("edit-Month");
+          $('#ajaxModel').modal('show');
+          $('#month_id').val(data.id);
+          $('#month').val(data.month);
+          $('#month').trigger('change');
+          $('#year').val(data.year);
+          $('#year').trigger('change');
+          $('#is_lock').val(data.is_lock);
+          $('#is_lock').trigger('change');
+         
+      })
+   });
+    $('#saveBtn').click(function (e) {
+        e.preventDefault();
+        $(this).html('Save');
+         
         $.ajax({
-           url:url,
-           method:"POST",
-           data:data,
-           //dataType:'JSON',
-           contentType: false,
-           cache: false,
-           processData: false,
-           success:function(res){
-                if(res.status == 'OK'){
-                $('#json_message').html('<div id="j_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+res.message+'</strong></div>');
-                resetForm();
-                	
-               		
-               	$("#inputTable tbody:last-child").append(
-               		'<tr><td>'+res.data['month']+'-'+res.data['year']+
-                        '</td><td>'+res.data['is_lock']+
-                        '</td><td class="text-center"><a class="btn btn-success btn-sm" id=editMonthInput'+res.data['id']+'url= data-toggle="tooltip" data-original-title="Edit"> <i class="fas fa-pencil-alt text-white "></i></a>'+
-                        '</td><td class="text-center"><form id="deleteInputMonth+" action="+" method="POST">@method("DELETE")@csrf<button type="submit"  class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"><i class="fas fa-trash"></i></button></form></td></tr>'); 
-
-                }
-                else{
-                $('#json_message').html('<div id="j_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+res.message+'</strong></div>');    
-                }
-
-            $('html,body').scrollTop(0);
-            $('.fa-spinner').hide();
-            clearMessage();
-
-           },
-            error: function (jqXHR, textStatus, errorThrown){
-                if (jqXHR.status == 401){
-                    location.href = "{{route ('login')}}"
-                    }      
-                var test = jqXHR.responseJSON // this object have two more objects one is errors and other is message.
-                
-                var errorMassage = '';
-
-                //now saperate only errors object values from test object and store in variable errorMassage;
-                $.each(test.errors, function (key, value){
+          data: $('#inputMonthForm').serialize(),
+          url: "{{ route('inputMonth.store') }}",
+          type: "POST",
+          dataType: 'json',
+          success: function (data) {
+     
+              $('#managerForm').trigger("reset");
+              $('#ajaxModel').modal('hide');
+              table.draw();
+        
+          },
+          error: function (data) {
+              
+              var errorMassage = '';
+              $.each(data.responseJSON.errors, function (key, value){
                 errorMassage += value + '<br>';  
                 });
-                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
-                 $('html,body').scrollTop(0);
-                $('.fa-spinner').hide();                   
-                    
-            }//end error
-   		 }); //end ajax
+                 $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
 
-    }); //end submit
-
-   
-
-    //delete function
-    $(document).on('submit','form[id^=deleteInputMonth]',function(event){
-    event.preventDefault();
-    var url = $(this).attr('action');
-    var tr = $(this).closest('tr');
-      $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
-            var token = $('meta[name="csrf-token"]').attr('content'); // or _token, whichever you are using
-
-            if (token) {
-                return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Objectl
-            }
-        });
-      $.ajax({
-             method:"DELETE",
-             url: url,
-             success:function(res)
-             {       
-                  if(res)
-                  {
-                    tr.remove();
-                  }     
-             }
-
-          });//end ajax
-    }); //end submit
-
-
-
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
     
+    $('body').on('click', '.deleteMonth', function () {
+     
+        var month_id = $(this).data("id");
+        var con = confirm("Are You sure want to delete !");
+        if(con){
+          $.ajax({
+            type: "DELETE",
+            url: "{{ route('inputMonth.store') }}"+'/'+month_id,
+            success: function (data) {
+                table.draw();
+                if(data.error){
+                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+                }
+  
+            },
+            error: function (data) {
+                
+            }
+          });
+        }
+    });
+     
+  });
 });
-
 </script>
-
 @stop

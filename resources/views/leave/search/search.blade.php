@@ -114,6 +114,12 @@ $(document).ready(function(){
 		$('.fa-trash-alt').hide();
 	});
 
+	$('#from, #to').focus(function(){	
+    	if($('#leave_balance').val()){
+    	$('#leave_balance').val('').select2('val', 'All');
+    	}
+  	});
+
 	//submit function
       $("#leaveSearch").submit(function(e) { 
 

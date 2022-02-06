@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Input\InputMonthStore;
-use App\Models\Input\HrInputMonth;
+use App\Models\Input\InputMonth;
 use DB;
 use DataTables;
 
@@ -26,25 +26,38 @@ class InputMonthController extends Controller
 
         
         if ($request->ajax()) {
-            $data = HrInputMonth::latest()->get();
+            $data = InputMonth::latest()->get();
             return DataTables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('action', function($row){
+                    ->editColumn('is_lock', function($row){  
+                        if($row->is_lock==0){
+                          return 'Open';
+                        }else{
+                           return 'Lock';
+                        }     
+                    })
+                    ->addColumn('edit', function($row){
    
                            $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editMonth">Edit</a>';
+                            return $btn;
+                    })
+                    ->addColumn('delete', function($row){
+   
+                           $btn = '';
 
                            if(Auth::user()->hasPermissionTo('hr monthly input')){
-                           $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMonth">Delete</a>';
+                           $btn = ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMonth">Delete</a>';
                             }
                             
                            
                             return $btn;
                     })
-                    ->rawColumns(['action'])
+                    ->rawColumns(['edit','delete'])
                     ->make(true);
+                        
         }
       
-        return view('input.inputMonth.inputMonth', compact('years','months'));
+        return view('input.inputMonth.create', compact('years','months'));
     }
      
     /**
@@ -55,8 +68,11 @@ class InputMonthController extends Controller
      */
     public function store(InputMonthStore $request)
     {
-        HrInputMonth::updateOrCreate(['id' => $request->month_id],
-                ['month' => $request->month, 'year' => $request->year, 'is_lock' => $request->is_lock]);        
+        DB::transaction(function () use ($request) {  
+
+        InputMonth::updateOrCreate(['id' => $request->month_id],
+                ['month' => $request->month, 'year' => $request->year, 'is_lock' => $request->is_lock]);  
+        }); // end transcation      
    
         return response()->json(['success'=>'Month saved successfully.']);
     }
@@ -68,7 +84,7 @@ class InputMonthController extends Controller
      */
     public function edit($id)
     {
-        $book = HrInputMonth::find($id);
+        $book = InputMonth::find($id);
         return response()->json($book);
     }
   
@@ -80,7 +96,7 @@ class InputMonthController extends Controller
      */
     public function destroy($id)
     {
-        HrInputMonth::find($id)->delete();
+        InputMonth::find($id)->delete();
      
         return response()->json(['success'=>'Month deleted successfully.']);
     }

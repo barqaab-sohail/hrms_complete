@@ -6,47 +6,84 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDesignation;
-use App\Models\Input\HrInputProject;
-use App\Models\Input\HrInputMonth;
-use App\Models\Input\HrInput;
-use App\Http\Requests\Input\HrInputStore;
-
+use App\Models\Input\InputProject;
+use App\Models\Input\InputMonth;
+use App\Models\Input\Input;
+use App\Http\Requests\Input\InputStore;
+use DataTables;
 use DB;
 
 class InputController extends Controller
 {
     public function create(){
 
-    	$hrInputMonths = HrInputMonth::where('is_lock',0)->get();
+    	$inputMonths = InputMonth::where('is_lock',0)->get();
     	$hrEmployees = HrEmployee::where('hr_status_id',1)->get();
     	$hrDesignations = HrDesignation::all();
-    	return view ('input.create',compact('hrInputMonths','hrEmployees','hrDesignations'));
+    	return view ('input.create',compact('inputMonths','hrEmployees','hrDesignations'));
     }
 
 
-   public function projectList($id, $month){
+   public function projectList($id, $month, Request $request){
 
-   	$hrInputProjects = HrInputProject::where('hr_input_month_id',$month)->where('pr_detail_id',$id)->with('prDetail','hrEmployee','hrDesignation','hrMonthlyInputEmployee')->first();
-    	return response()->json($hrInputProjects);
+   	$inputProjects = InputProject::where('input_month_id',$month)->where('pr_detail_id',$id)->with('prDetail','hrEmployee','hrDesignation','monthlyInputEmployee')->first();
+          
+          if ($request->ajax()) {
+              $data = InputProject::where('input_month_id',$month)->where('pr_detail_id',$id)->with('prDetail','hrEmployee','hrDesignation','input')->latest()->get();
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('no', function($row){  
+                        return '1';
+                    })
+                    ->addColumn('full_name', function($row){  
+                        return $row->hrEmployee->first_name .' ' .$row->hrEmployee->last_name;
+                    })
+                    ->addColumn('designation', function($row){  
+                        return $row->hrDesignation->name;
+                    })
+                    ->addColumn('input', function($row){  
+                        return $row->input->input;
+                    })
+                    ->editColumn('remarks', function($row){  
+                        return $row->input->remarks;
+                    })
+                    ->addColumn('edit', function($row){
+   
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editMonth">Edit</a>';
+                            return $btn;
+                    })
+                    ->addColumn('delete', function($row){
+   
+                           $btn = ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMonth">Delete</a>';
+                        
+                            return $btn;
+                    })
 
-
+                    ->rawColumns(['no','full_name','designation','input','remarks','edit','delete'])
+                    ->make(true);            
+          }
+    	return response()->json($inputProjects);
    }
 
-   public function store(HrInputStore $request){
+   public function store(InputStore $request){
 
    			$input = $request->all();
             
             DB::transaction(function () use ($input, &$data) {  
-                $data = HrInput::create($input);
+                $data = Input::create($input);
             }); // end transcation
             //$data = $data->with('hrEmployee')->get();
-            $data = HrInput::where('id',$data->id)->with('hrEmployee','hrDesignation')->first();
+            $data = Input::where('id',$data->id)->with('hrEmployee','hrDesignation')->first();
             return response()->json($data);
+   }
+
+   public function edit($id){
+
 
    }
 
    public function destroy($id){
-    HrInput::findOrFail($id)->delete();
+    Input::findOrFail($id)->delete();
     return response()->json('OK');
    }
 }
