@@ -116,7 +116,6 @@ $(document).ready(function() {
           $('#saveBtn').val("edit-Project");
           $('#ajaxModel').modal('show');
           $('#input_project_id').val(data.id);
-          console.log(data.input_month_id);
           $('#input_month_id').val(data.input_month_id);
           $('#input_month_id').trigger('change');
           $('#pr_detail_id').val(data.pr_detail_id);
