@@ -22,11 +22,11 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function test(LeaveBalanceDataTable $dataTable)
-    {
+    // public function test(LeaveBalanceDataTable $dataTable)
+    // {
        
-        return $dataTable->render('test');
-    }
+    //     return $dataTable->render('test');
+    // }
 
     public function index()
     {

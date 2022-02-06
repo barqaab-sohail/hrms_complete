@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard','HomeController@index')->middleware('auth')->name('dashboard');
 //Route::get ('insert','Hr\EmployeeController@insert');
-Route::get('/test','HomeController@test')->middleware('auth')->name('test');
+// Route::get('/test','HomeController@test')->middleware('auth')->name('test');
 Auth::routes();
 
 

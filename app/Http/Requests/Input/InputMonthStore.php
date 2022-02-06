@@ -26,8 +26,8 @@ class InputMonthStore extends FormRequest
         $id = request()->input('month_id');
         $rules = [
         'month'=> 'required',
-        'year'=> 'required|unique_with:hr_input_months,month,'.$id
-
+        'year'=> 'required|unique_with:input_months,month,'.$id,
+        'is_lock'=> 'required',
         ];
 
         return $rules;
