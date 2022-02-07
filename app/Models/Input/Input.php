@@ -17,4 +17,6 @@ class Input extends Model implements Auditable
     public function hrDesignation(){
         return $this->belongsTo('App\Models\Hr\HrDesignation','hr_designation_id');
     }
+
+    
 }

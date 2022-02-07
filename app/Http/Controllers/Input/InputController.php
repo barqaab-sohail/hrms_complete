@@ -29,23 +29,24 @@ class InputController extends Controller
    	$inputProjects = InputProject::where('input_month_id',$month)->where('pr_detail_id',$id)->with('prDetail','hrEmployee','hrDesignation','monthlyInputEmployee')->first();
           
           if ($request->ajax()) {
-              $data = InputProject::where('input_month_id',$month)->where('pr_detail_id',$id)->with('prDetail','hrEmployee','hrDesignation','input')->latest()->get();
+              
+              $data = Input::join('input_projects','inputs.input_project_id','=','input_projects.id')->select('inputs.*','input_projects.input_month_id','input_projects.pr_detail_id','input_projects.is_lock')->where('input_month_id',$month)->where('pr_detail_id',$id)->with('hrEmployee','hrDesignation')->latest()->get();
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('no', function($row){  
                         return '1';
                     })
                     ->addColumn('full_name', function($row){  
-                        return $row->hrEmployee->first_name .' ' .$row->hrEmployee->last_name;
+                        return $row->hrEmployee->first_name. ' '.$row->hrEmployee->last_name;
                     })
                     ->addColumn('designation', function($row){  
-                        return $row->hrDesignation->name;
+                        return $row->hrDesignation->name??'';
                     })
                     ->addColumn('input', function($row){  
-                        return $row->input->input;
+                        return $row->input;
                     })
                     ->editColumn('remarks', function($row){  
-                        return $row->input->remarks;
+                        return $row->remarks??'';
                     })
                     ->addColumn('edit', function($row){
    
