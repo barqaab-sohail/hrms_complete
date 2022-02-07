@@ -26,11 +26,11 @@ class InputController extends Controller
 
    public function projectList($id, $month, Request $request){
 
-   	$inputProjects = InputProject::where('input_month_id',$month)->where('pr_detail_id',$id)->with('prDetail','hrEmployee','hrDesignation','monthlyInputEmployee')->first();
-          
+            
           if ($request->ajax()) {
               
-              $data = Input::join('input_projects','inputs.input_project_id','=','input_projects.id')->select('inputs.*','input_projects.input_month_id','input_projects.pr_detail_id','input_projects.is_lock')->where('input_month_id',$month)->where('pr_detail_id',$id)->with('hrEmployee','hrDesignation')->latest()->get();
+              $data = Input::join('input_projects','inputs.input_project_id','=','input_projects.id')->select('inputs.*','input_projects.input_month_id','input_projects.pr_detail_id','input_projects.is_lock')->where('inputs.input_project_id',$id)->with('hrEmployee','hrDesignation')->latest()->get();
+
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('no', function($row){  
@@ -50,12 +50,12 @@ class InputController extends Controller
                     })
                     ->addColumn('edit', function($row){
    
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editMonth">Edit</a>';
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editInput">Edit</a>';
                             return $btn;
                     })
                     ->addColumn('delete', function($row){
    
-                           $btn = ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMonth">Delete</a>';
+                           $btn = ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteInput">Delete</a>';
                         
                             return $btn;
                     })
@@ -70,8 +70,9 @@ class InputController extends Controller
 
    			$input = $request->all();
             
-            DB::transaction(function () use ($input) {  
-                Input::create($input);
+            DB::transaction(function () use ($input, $request) {  
+
+                Input::updateOrCreate(['id' => $request->input_id],$input);
             }); // end transcation
             
         return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
@@ -79,12 +80,16 @@ class InputController extends Controller
    }
 
    public function edit($id){
-
+    $book = Input::find($id);
+    return response()->json($book);
 
    }
 
-   public function destroy($id){
-    Input::findOrFail($id)->delete();
-    return response()->json('OK');
-   }
+   
+  public function destroy($id)
+  {
+       Input::findOrFail($id)->delete();
+   
+      return response()->json(['success'=>'Project deleted successfully.']);
+  }
 }
