@@ -15,7 +15,7 @@
 		            <div style="margin-top:10px; margin-right: 10px;">                   
 		            </div>
 		            <div class="card-body">
-		                <form id= "inputForm"  action="{{route('input.store')}}" method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
+		                <form method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
 		                {{csrf_field()}}
 		                <div class="form-body">
 		                   
@@ -133,7 +133,6 @@
               {data: 'remarks', name: 'remarks'},
               {data: 'edit', name: 'edit', orderable: false, searchable: false},
               {data: 'delete', name: 'delete', orderable: false, searchable: false}
-
           ],
           order: [[ 1, "desc" ]]
       });

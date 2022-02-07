@@ -43,7 +43,7 @@
 		                            <div class="col-md-2">
 		                                <div class="form-group row">
 		                                    <div class="col-md-12">
-		                                       	<label class="control-label text-right">Leave From</label>
+		                                       	<label class="control-label text-right">Leave From</label><span class="text_requried">*</span>
                                             <input type="text" id="from" name="from" value="{{ old('from') }}" class="form-control date_input1" data-validation="required" readonly>
 
                                            
@@ -63,7 +63,7 @@
                                  <div class="col-md-2">
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <label class="control-label text-right">Leave To</label>
+                                            <label class="control-label text-right">Leave To</label><span class="text_requried">*</span>
                                             <input type="text" id="to" name="to" value="{{ old('to') }}" class="form-control date_input1" data-validation="required" readonly>
 
                                            
@@ -124,7 +124,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <label class="control-label text-right">Contact Number</label>
+                                            <label class="control-label text-right">Contact Number During Leave</label>
                                             <input type="text" name="contact_no" id="contact_no" value="{{old('contact_no')}}" class="form-control">  
                                         </div>
                                     </div>
@@ -132,7 +132,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <label class="control-label text-right">Address</label>
+                                            <label class="control-label text-right">Address During Leave</label>
                                             <input type="text" name="address" id="address" value="{{old('address')}}" class="form-control">  
                                              
                                         </div>
