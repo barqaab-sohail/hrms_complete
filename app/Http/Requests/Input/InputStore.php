@@ -37,7 +37,7 @@ class InputStore extends FormRequest
 
 
         $rules = [
-        'hr_employee_id'=> 'required|unique_with:inputs,input_project_id',
+        'hr_employee_id'=> 'required|unique_with:inputs,input_project_id,'.$this->input_id,
         'hr_designation_id'=> 'required',
         'input'=> "required|numeric|between:0.03,1.0|max:$maxValue",
         'remarks'=> 'required'
