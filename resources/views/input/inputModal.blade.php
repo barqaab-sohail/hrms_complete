@@ -56,6 +56,7 @@
                     </div>                                                                
                   </div>
                   <input type="text" name="input_project_id" id="input_project_id" class="form-control" hidden required>
+                  <input type="text" name="month_id" id="month_id" class="form-control" hidden required>
                   <input type="text" name="input_id" id="input_id" class="form-control" hidden>
                   
                   <hr>

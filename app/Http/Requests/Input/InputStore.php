@@ -31,7 +31,7 @@ class InputStore extends FormRequest
             ->where('hr_employee_id','=',$employeeId)
             ->where('input_month_id','=',$monthId)
             ->sum('input');
-        $input = $this->get('input');
+        $input = $this->input;
         $totalInput = $input + $sumInput;
         $maxValue = 1 - $sumInput;
 
@@ -39,8 +39,7 @@ class InputStore extends FormRequest
         $rules = [
         'hr_employee_id'=> 'required|unique_with:inputs,input_project_id,'.$this->input_id,
         'hr_designation_id'=> 'required',
-        'input'=> "required|numeric|between:0.03,1.0|max:$maxValue",
-        'remarks'=> 'required'
+        'input'=> "required|numeric|between:0.03,1.0|max:$maxValue"
         
         ];
 
@@ -51,7 +50,8 @@ class InputStore extends FormRequest
     {
         
         return [
-            'hr_employee_id.unique_with' => "This employee input is already entered"        
+            'hr_employee_id.unique_with' => "This employee input is already entered, $this->month_id",
+            'input.max'=>"This employee input exceed from 1"       
             
         ];
     }
