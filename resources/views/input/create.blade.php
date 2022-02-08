@@ -139,10 +139,10 @@
           order: [[ 1, "desc" ]]
       });
       $('#heading').empty();
-      $('#heading').append( "<br><a class='btn btn-success' href='#' data-toggle='modal'>Add Employee</a>" );
+      $('#heading').append( "<br><a class='btn btn-success' href='#' data-toggle='modal' id=add_employee>Add Employee</a>" );
 
 
-       $('#heading').click(function () {
+       $('#add_employee').click(function () {
         $('#json_message_modal').html('');
         $('#saveBtn').val("create-Input");
         $('#hr_employee_id').val('');
@@ -159,10 +159,9 @@
        
         });
 
-        $('#saveBtn').click(function (e) {
+        $('#saveBtn').unbind().click(function (e) {
         e.preventDefault();
-        
-        console.log('llll');
+      
         $(this).html('Save');
           $.ajax({
             data: $('#inputForm').serialize(),
