@@ -66,17 +66,20 @@
 <!-- HR Monthly Report -->
              
                 <li class="{{Request::is('input/*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu">Monthly Input</span></a>
-                @can('hr monthly input')
+                @can('monthly input')
                     <ul aria-expanded="false" class="collapse">  
-                        <li><a class="{{Request::is('input/inputMonth/create')?'active':''}}" href="{{route('inputMonth.create')}}">Add Month</a></li> 
-                    </ul>
-                    <ul aria-expanded="false" class="collapse">  
-                        <li><a class="{{Request::is('input/inputProject/create')?'active':''}}" href="{{route('inputProject.create')}}">Add Project</a></li> 
-                    </ul>
-                    <ul aria-expanded="false" class="collapse">  
+                        <li><a class="{{Request::is('input/inputMonth/create')?'active':''}}" href="{{route('inputMonth.create')}}">Add Month</a></li>
+
+                        <li><a class="{{Request::is('input/inputProject/create')?'active':''}}" href="{{route('inputProject.create')}}">Add Project</a></li>
+
                         <li><a class="{{Request::is('input/input/create')?'active':''}}" href="{{route('input.create')}}">Add Input</a></li>
-                       
+
+                        <li><a class="{{Request::is('hrms/input/search')?'active':''}}" href="{{route('input.search')}}">Search</a></li>
+
                     </ul>
+                   
+                    
+
                   @endcan
                 </li>
               

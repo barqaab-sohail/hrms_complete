@@ -33,9 +33,7 @@ class InputController extends Controller
 
             return DataTables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('no', function($row){  
-                        return '1';
-                    })
+                    
                     ->addColumn('full_name', function($row){  
                         return $row->hrEmployee->first_name. ' '.$row->hrEmployee->last_name;
                     })
@@ -92,4 +90,20 @@ class InputController extends Controller
    
       return response()->json(['success'=>'Project deleted successfully.']);
   }
+
+  public function search(){
+        $months = InputMonth::all();
+
+        return view ('input.search.search',compact('months'));
+  }
+
+  public function result(Request $request){
+
+    $inputProjectIds = InputProject::where('input_month_id',$request->month)->pluck('id')->toArray();
+
+    $result = Input::whereIn('input_project_id',$inputProjectIds)->with('hrEmployee','hrDesignation')->get();
+     $inputProjects = InputProject::where('input_month_id',$request->month)->with('prDetail')->get();
+     return view('input.search.result',compact('result','inputProjects'));
+  }
+
 }

@@ -108,9 +108,11 @@ Route::get('/charts/category', 'HrChartController@category')->name('charts.categ
 Route::group(['prefix' => 'input', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Input'], function(){
 	Route::resource('/inputMonth', 'InputMonthController');
 	Route::resource('/inputProject', 'InputProjectController');
+	Route::get('/input/search','InputController@search')->name('input.search');
+	Route::get('/input/search/result','InputController@result')->name('input.result');
 	Route::resource('/input', 'InputController');
-
 	Route::get('/input/{id}/{month?}', 'InputController@projectList')->name('input.projectList');
+
 
 });
 

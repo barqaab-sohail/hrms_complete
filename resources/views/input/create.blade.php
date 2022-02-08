@@ -71,7 +71,7 @@
         </div>
     </div>
 </div>
-@include('input.inputProject.projectModal')
+@include('input.inputModal')
 
 <script>
  $(document).ready(function() {
@@ -114,123 +114,129 @@
     }); 
   $(function () {
     $('#project').change (function (){
-      var cid = $(this).val();
-      var month = $('#month').val();
+      if($(this).val()){
+        var cid = $(this).val();
+        var month = $('#month').val();
 
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-      });
-       var table = $('#inputTable').DataTable({
-          processing: true,
-          serverSide: true,
-          destroy: true,
-          ajax: "{{route('input.projectList','')}}"+"/"+cid+"/"+month,
-          columns: [
-              {data: "no", name: 'no'},
-              {data: "full_name", name: 'full_name'},
-              {data: "designation", name: 'designation'},
-              {data: 'input', name: 'input'},
-              {data: 'remarks', name: 'remarks'},
-              {data: 'edit', name: 'edit', orderable: false, searchable: false},
-              {data: 'delete', name: 'delete', orderable: false, searchable: false}
-          ],
-          order: [[ 1, "desc" ]]
-      });
-      $('#heading').empty();
-      $('#heading').append( "<br><a class='btn btn-success' href='#' data-toggle='modal' id=add_employee>Add Employee</a>" );
-
-
-       $('#add_employee').click(function () {
-        $('#json_message_modal').html('');
-        $('#saveBtn').val("create-Input");
-        $('#hr_employee_id').val('');
-        $('#hr_employee_id').trigger('change');
-        $('#hr_designation_id').val('');
-        $('#hr_designation_id').trigger('change');
-        $('#input').val('');
-        $('#input_id').val('');
-        $('#remarks').val('');
-        $('#inputForm').trigger("reset");
-        $('#input_project_id').val(cid);
-        $('#projectModal').modal('show');
-
-       
-        });
-
-        $('#saveBtn').unbind().click(function (e) {
-        e.preventDefault();
-      
-        $(this).html('Save');
-          $.ajax({
-            data: $('#inputForm').serialize(),
-            url: "{{ route('input.store') }}",
-            type: "POST",
-            dataType: 'json',
-            success: function (data) {
-                $('#inputForm').trigger("reset");
-                $('#projectModal').modal('hide');
-                table.draw();
-          
-            },
-            error: function (data) {
-                
-                var errorMassage = '';
-                $.each(data.responseJSON.errors, function (key, value){
-                  errorMassage += value + '<br>';  
-                  });
-                   $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
-
-                $('#saveBtn').html('Save Changes');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-          }); //end ajax function
-        }); //end save function
+        });
+         var table = $('#inputTable').DataTable({
+            processing: true,
+            serverSide: true,
+            destroy: true,
+            ajax: "{{route('input.projectList','')}}"+"/"+cid+"/"+month,
+            columns: [
+                {data: "DT_RowIndex", name: 'DT_RowIndex'},
+                {data: "full_name", name: 'full_name'},
+                {data: "designation", name: 'designation'},
+                {data: 'input', name: 'input'},
+                {data: 'remarks', name: 'remarks'},
+                {data: 'edit', name: 'edit', orderable: false, searchable: false},
+                {data: 'delete', name: 'delete', orderable: false, searchable: false}
+            ],
+            order: [[ 1, "desc" ]]
+        });
+        $('#heading').empty();
+        $('#heading').append( "<br><a class='btn btn-success' href='#' data-toggle='modal' id=add_employee>Add Employee</a>" );
 
-        $('body').unbind().on('click', '.editInput', function () {
-          var input = $(this).data('id');
 
+         $('#add_employee').click(function () {
           $('#json_message_modal').html('');
-          $.get("{{ url('input/input') }}" +'/' + input +'/edit', function (data) {
-            console.log(data);
-              $('#modelHeading').html("Edit Input");
-              $('#saveBtn').val("edit-Input");
-              $('#projectModal').modal('show');
-              $('#hr_employee_id').val(data.hr_employee_id);
-              $('#hr_employee_id').trigger('change');
-              $('#hr_designation_id').val(data.hr_designation_id);
-              $('#hr_designation_id').trigger('change');
-               $('#input_project_id').val(data.input_project_id);
-              $('#input').val(data.input);
-              $('#remarks').val(data.remarks);
-              $('#input_id').val(data.id);
-              
-             
-          })
-        }); // end edit function
+          $('#saveBtn').val("create-Input");
+          $('#hr_employee_id').val('');
+          $('#hr_employee_id').trigger('change');
+          $('#hr_designation_id').val('');
+          $('#hr_designation_id').trigger('change');
+          $('#input').val('');
+          $('#input_id').val('');
+          $('#remarks').val('');
+          $('#inputForm').trigger("reset");
+          $('#input_project_id').val(cid);
+          $('#month_id').val(month);
+          $('#projectModal').modal('show');
 
-        $('body').on('click', '.deleteInput', function () {
-     
-          var input_id = $(this).data("id");
-          var con = confirm("Are You sure want to delete !");
-          if(con){
+         
+          });
+
+          $('#saveBtn').unbind().click(function (e) {
+          e.preventDefault();
+        
+          $(this).html('Save');
             $.ajax({
-              type: "DELETE",
-              url: "{{ route('input.store') }}"+'/'+input_id,
+              data: $('#inputForm').serialize(),
+              url: "{{ route('input.store') }}",
+              type: "POST",
+              dataType: 'json',
               success: function (data) {
+                  $('#inputForm').trigger("reset");
+                  $('#projectModal').modal('hide');
                   table.draw();
-                  if(data.error){
-                    $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
-                  }
-    
+            
               },
               error: function (data) {
                   
-              }
-            });
-          }
-        }); //end delete function
+                  var errorMassage = '';
+                  $.each(data.responseJSON.errors, function (key, value){
+                    errorMassage += value + '<br>';  
+                    });
+                     $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
 
+                  $('#saveBtn').html('Save Changes');
+              }
+            }); //end ajax function
+          }); //end save function
+
+          $('body').unbind().on('click', '.editInput', function () {
+            var input = $(this).data('id');
+
+            $('#json_message_modal').html('');
+            $.get("{{ url('input/input') }}" +'/' + input +'/edit', function (data) {
+              console.log(data);
+                $('#modelHeading').html("Edit Input");
+                $('#saveBtn').val("edit-Input");
+                $('#projectModal').modal('show');
+                $('#hr_employee_id').val(data.hr_employee_id);
+                $('#hr_employee_id').trigger('change');
+                $('#hr_designation_id').val(data.hr_designation_id);
+                $('#hr_designation_id').trigger('change');
+                 $('#input_project_id').val(data.input_project_id);
+                $('#input').val(data.input);
+                $('#remarks').val(data.remarks);
+                $('#input_id').val(data.id);
+                
+               
+            })
+          }); // end edit function
+
+          $('body').on('click', '.deleteInput', function () {
+       
+            var input_id = $(this).data("id");
+            var con = confirm("Are You sure want to delete !");
+            if(con){
+              $.ajax({
+                type: "DELETE",
+                url: "{{ route('input.store') }}"+'/'+input_id,
+                success: function (data) {
+                    table.draw();
+                    if(data.error){
+                      $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+                    }
+      
+                },
+                error: function (data) {
+                    
+                }
+              });
+            }
+          }); //end delete function
+        }else{
+
+          $('#inputTable_wrapper').hide();
+          $('#heading').empty();
+        }
 
     });//change function
   });//end function
