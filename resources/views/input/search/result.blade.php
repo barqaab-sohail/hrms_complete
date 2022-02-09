@@ -9,7 +9,13 @@
                 <div class="table-responsive m-t-40">
                 
                 <table id="myDataTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
-
+                
+                @foreach($result as $input)
+                    <?php $i = 1; ?>
+                    @foreach($inputProjects as $key=>$project)
+                    @if($key < $i)
+                    
+                    
                      <thead>
                         <tr>                           
                             <th>Employee No</th>
@@ -19,19 +25,23 @@
                             <th>Remarks</th>
                         </tr>
                     </thead>
+                   
+                    @endif
                     <tbody>
-                    @foreach($result as $input)
                         <tr>   
                             <td>{{$input->hrEmployee->employee_no??''}}</td>
                             <td>
                                 {{$input->hrEmployee->first_name}} {{$input->hrEmployee->last_name}}
                             </td>
-                            <td>{{$input->inputProject->pr_detail_id??''}}</td>
+                            <td>{{$input->prDetail->name??''}}</td>
                             <td>{{$input->input??''}}</td>
                             <td>{{$input->remarks??''}}</td>
                         </tr>      
-                    @endforeach
+                    
                     </tbody>
+                    
+                     @endforeach
+                    @endforeach
                 </table>
             </div>
             </div>

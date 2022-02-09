@@ -45,9 +45,9 @@ class InputMonthController extends Controller
    
                            $btn = '';
 
-                           if(Auth::user()->hasPermissionTo('monthly input')){
+                           
                            $btn = ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMonth">Delete</a>';
-                            }
+                            
                             
                            
                             return $btn;

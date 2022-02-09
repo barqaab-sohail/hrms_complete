@@ -29,7 +29,7 @@ class InputController extends Controller
             
           if ($request->ajax()) {
               
-              $data = Input::join('input_projects','inputs.input_project_id','=','input_projects.id')->select('inputs.*','input_projects.input_month_id','input_projects.pr_detail_id','input_projects.is_lock')->where('inputs.input_project_id',$id)->with('hrEmployee','hrDesignation')->latest()->get();
+              $data = Input::join('input_projects','inputs.input_project_id','=','input_projects.id')->select('inputs.*','input_projects.input_month_id','input_projects.pr_detail_id','input_projects.is_lock')->where('inputs.input_project_id',$id)->with('hrEmployee','hrDesignation','prDetail')->latest()->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
@@ -109,9 +109,10 @@ class InputController extends Controller
 
     $inputProjectIds = InputProject::where('input_month_id',$request->month)->pluck('id')->toArray();
 
-    $result = Input::whereIn('input_project_id',$inputProjectIds)->with('hrEmployee','hrDesignation')->get();
+    $result = Input::whereIn('input_project_id',$inputProjectIds)->with('hrEmployee','hrDesignation','prDetail')->orderBy('pr_detail_id','asc')->get();
+    $inputProjects = InputProject::where('input_month_id',$request->month)->get();
     
-     return view('input.search.result',compact('result'));
+     return view('input.search.result',compact('result','inputProjects'));
   }
 
 }

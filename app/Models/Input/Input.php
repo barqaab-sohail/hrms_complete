@@ -22,6 +22,10 @@ class Input extends Model implements Auditable
     	return $this->belongsTo('App\Models\Input\InputProject');
     }
     
+    public function prDetail(){
+        return $this->belongsTo('App\Models\Project\PrDetail','pr_detail_id');
+    }
+
 
     // public function prDetail(){
     //     return $this->user->country;
