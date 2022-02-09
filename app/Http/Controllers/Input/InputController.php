@@ -66,11 +66,19 @@ class InputController extends Controller
 
    public function store(InputStore $request){
 
-   			$input = $request->all();
-            
-            DB::transaction(function () use ($input, $request) {  
+   			
+            $inputProject = InputProject::find($request->input_project_id);
 
-                Input::updateOrCreate(['id' => $request->input_id],$input);
+            DB::transaction(function () use ($request, $inputProject) {  
+
+                Input::updateOrCreate(['id' => $request->input_id],
+                  ['input_project_id' => $request->input_project_id, 
+                  'hr_employee_id' => $request->hr_employee_id, 
+                  'hr_designation_id' => $request->hr_designation_id,
+                  'pr_detail_id' => $inputProject->pr_detail_id,
+                  'input' => $request->input,
+                  'remarks' => $request->remarks]
+                  );
             }); // end transcation
             
         return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
@@ -102,8 +110,8 @@ class InputController extends Controller
     $inputProjectIds = InputProject::where('input_month_id',$request->month)->pluck('id')->toArray();
 
     $result = Input::whereIn('input_project_id',$inputProjectIds)->with('hrEmployee','hrDesignation')->get();
-     $inputProjects = InputProject::where('input_month_id',$request->month)->with('prDetail')->get();
-     return view('input.search.result',compact('result','inputProjects'));
+    
+     return view('input.search.result',compact('result'));
   }
 
 }

@@ -101,12 +101,7 @@ class EmployeeController extends Controller
 
             return DataTables::of($data)
 
-            ->addColumn('full_name',function($data){
-                $full_name = '<a href="'.route('employee.edit',$data->id).'" style="color:grey">'.$data->first_name . ' '. $data->last_name.'</a>';
-
-                return $full_name;
-                //return $data->first_name . ' '. $data->last_name;
-            })
+            
             ->addColumn('designation',function($data){
                 return $data->employeeDesignation->last()->name??'';
             })
@@ -156,7 +151,7 @@ class EmployeeController extends Controller
                                  </form>';
                         return $button;
                     })
-            ->rawColumns(['full_name','designation','project','date_of_birth','date_of_joining','mobile','edit','delete'])
+            ->rawColumns(['designation','project','date_of_birth','date_of_joining','mobile','edit','delete'])
             ->make(true);
         }
        return view ('hr.employee.listDataTable');
