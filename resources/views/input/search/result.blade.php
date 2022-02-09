@@ -9,47 +9,29 @@
                 <div class="table-responsive m-t-40">
                 
                 <table id="myDataTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
-                @foreach($inputProjects as $inputProject)
-                    @foreach($result as $input)
-                    
 
-                    @if($inputProject->id == $input->input_project_id)
-                    @if($loop->first)
                      <thead>
-                        <tr>
-                         <th id="par" colspan="5">{{$inputProject->prDetail->name??''}}</th>
-                        </tr>
-                        <tr>
-                           
-                            <th>Employee ID</th>
+                        <tr>                           
+                            <th>Employee No</th>
                             <th>Employee Name</th>
                             <th>Designation/Position</th>
                             <th>Input</th>
                             <th>Remarks</th>
-                            
                         </tr>
                     </thead>
-                    @endif
                     <tbody>
-                            <tr>   
-                            
-                                <td>{{$input->hrEmployee->employee_no??''}}</td>
-                                <td>
-                                    {{$input->hrEmployee->first_name}} {{$input->hrEmployee->last_name}}
-                                </td>
-                                <td>{{$input->hrDesignation->name??''}}</td>
-                                <td>{{$input->input??''}}</td>
-                                <td>{{$input->remarks??''}}</td>
-                           
-                                                            
-                            </tr>
-                             
-                    
-                    </tbody>
-                  
-                         @endif  
+                    @foreach($result as $input)
+                        <tr>   
+                            <td>{{$input->hrEmployee->employee_no??''}}</td>
+                            <td>
+                                {{$input->hrEmployee->first_name}} {{$input->hrEmployee->last_name}}
+                            </td>
+                            <td>{{$input->inputProject->pr_detail_id??''}}</td>
+                            <td>{{$input->input??''}}</td>
+                            <td>{{$input->remarks??''}}</td>
+                        </tr>      
                     @endforeach
-                @endforeach
+                    </tbody>
                 </table>
             </div>
             </div>
