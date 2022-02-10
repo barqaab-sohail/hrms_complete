@@ -10,12 +10,6 @@
                 
                 <table id="myDataTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
                 
-                @foreach($result as $input)
-                    <?php $i = 1; ?>
-                    @foreach($inputProjects as $key=>$project)
-                    @if($key < $i)
-                    
-                    
                      <thead>
                         <tr>                           
                             <th>Employee No</th>
@@ -25,23 +19,31 @@
                             <th>Remarks</th>
                         </tr>
                     </thead>
-                   
-                    @endif
                     <tbody>
+                    
+                    @foreach($inputProjects as $first=>$project)
+                    
+                    @foreach($result as $k=>$input)
+                     
+                        @if($project->pr_detail_id == $input->prdetail->id)
                         <tr>   
-                            <td>{{$input->hrEmployee->employee_no??''}}</td>
+                            <td>{{$input->hrEmployee->employee_no??''}}
+                            </td>
                             <td>
                                 {{$input->hrEmployee->first_name}} {{$input->hrEmployee->last_name}}
+                                
+                                Project-{{$project->pr_detail_id}}
+                               
                             </td>
                             <td>{{$input->prDetail->name??''}}</td>
                             <td>{{$input->input??''}}</td>
-                            <td>{{$input->remarks??''}}</td>
+                            <td></td>
                         </tr>      
-                    
-                    </tbody>
-                    
-                     @endforeach
+                        @endif
                     @endforeach
+                    @endforeach
+                    </tbody>
+                   
                 </table>
             </div>
             </div>
