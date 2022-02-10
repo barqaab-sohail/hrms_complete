@@ -116,6 +116,7 @@
     $('#project').change (function (){
       if($(this).val()){
         var cid = $(this).val();
+        
         var month = $('#month').val();
 
         $.ajaxSetup({

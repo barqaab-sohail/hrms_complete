@@ -110,7 +110,7 @@ class InputController extends Controller
     $inputProjectIds = InputProject::where('input_month_id',$request->month)->pluck('id')->toArray();
 
     $result = Input::whereIn('input_project_id',$inputProjectIds)->with('hrEmployee','hrDesignation','prDetail')->orderBy('pr_detail_id','asc')->get();
-    $inputProjects = InputProject::where('input_month_id',$request->month)->get();
+    $inputProjects = InputProject::where('input_month_id',$request->month)->get('pr_detail_id');
     
      return view('input.search.result',compact('result','inputProjects'));
   }
