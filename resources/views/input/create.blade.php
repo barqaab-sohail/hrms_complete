@@ -76,7 +76,6 @@
 <script>
  $(document).ready(function() {
 
-
  	selectTwo();
   	
     
@@ -85,8 +84,8 @@
       var cid = $(this).val();
         if(cid){
           $.ajax({
-             type:"get",
-             url: "{{url('input/inputProject')}}"+"/"+cid,
+            type:"get",
+            url: "{{url('input/inputProject')}}"+"/"+cid,
 
              //url:"http://localhost/hrms4/public/country/"+cid, **//Please see the note at the end of the post**
              success:function(res)
@@ -102,9 +101,7 @@
 
                           $("#project").append('<option value="'+value['id']+'">'+value['pr_detail']['name']+'</option>'); 
                       });
-                       $('#state').select2('destroy');
-                       $('#state').select2();
-
+                       
                   }
                  
              }
@@ -116,8 +113,12 @@
     $('#project').change (function (){
       if($(this).val()){
         var cid = $(this).val();
-        
         var month = $('#month').val();
+        if($("#project option:selected").text() == 'overhead'){
+          $('.hideDiv').show();
+        }else{
+          $('.hideDiv').hide();
+        }
 
         $.ajaxSetup({
             headers: {

@@ -39,6 +39,19 @@
                       </div>
                     </div>                                                                
                   </div>
+                   <div class="form-body hideDiv">
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label class="control-label text-right">Office<span class="text_requried">*</span></label><br>
+                        <select  id="office_id"   name="office_id"  class="form-control" data-validation="required">
+                            <option></option>
+                            @foreach($offices as $key=>$office)
+                            <option value="{{$key}}" {{(old("office_id")==$key? "selected" : "")}}>{{$office}}</option>
+                            @endforeach  
+                          </select>
+                      </div>
+                    </div>                                                                
+                  </div>
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-12">
@@ -86,11 +99,12 @@ $(document).ready(function(){
     validateHiddenInputs: true,
     });
 
-    $('#hr_employee_id, #hr_designation_id').select2({
+   $('#hr_employee_id, #hr_designation_id, #office_id').select2({
         dropdownParent: $('#projectModal'),
         width: "100%",
         theme: "classic"
     });
+    $('.hideDiv').hide();
 
 
 });
