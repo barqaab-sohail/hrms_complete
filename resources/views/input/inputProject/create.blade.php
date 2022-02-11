@@ -45,12 +45,9 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label text-right">Project<span class="text_requried">*</span></label><br>
-                          <select  name="pr_detail_id"  id="pr_detail_id" class="form-control" data-validation="required">
-                              <option value=""></option>
-                              @foreach ($projects as $project)
-                               <option value="{{$project->id}}" {{(old("pr_detail_id")==$project->id? "selected" : "")}}>{{$project->name}}</option>
-                              @endforeach   
-                            </select>
+                        <select  name="pr_detail_id" id="pr_detail_id" class="form-control selectTwo" data-validation="required">
+                          
+                        </select>
                     </div>
                     <div class="form-group">
                         <label class="control-label text-right">status<span class="text_requried">*</span></label><br>
@@ -73,7 +70,38 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  
+  $('#input_month_id').change(function(){
+      var cid = $(this).val();
+      console.log(cid);
+        if(cid){
+          $.ajax({
+             type:"get",
+             url: "{{url('input/inputProject')}}"+"/"+cid,
+             success:function(res)
+             {       
+                console.log(res);
+                  if(res)
+                  {
+                  
+                     $("#pr_detail_id").empty(); 
+                     $("#pr_detail_id").append('<option value="">Select Project</option>');
+                      $.each(res,function(key,value){
+
+                          $("#pr_detail_id").append('<option value="'+value['id']+'">'+value['pr_detail']['name']+'</option>'); 
+                      });
+                      
+
+                  }
+                 
+             }
+
+          });//end ajax
+        }
+    }); 
+
+
+
+
   $(function () {
       $.ajaxSetup({
           headers: {
@@ -153,7 +181,6 @@ $(document).ready(function() {
           }
       });
     });
-    
     $('body').on('click', '.deleteProject', function () {
      
         var input_project_id = $(this).data("id");

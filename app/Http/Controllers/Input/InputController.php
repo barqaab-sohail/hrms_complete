@@ -20,7 +20,10 @@ class InputController extends Controller
     	$inputMonths = InputMonth::where('is_lock',0)->get();
     	$hrEmployees = HrEmployee::where('hr_status_id',1)->get();
     	$hrDesignations = HrDesignation::all();
-    	return view ('input.create',compact('inputMonths','hrEmployees','hrDesignations'));
+      $offices = ['Chief Executive Officer','General Manager (Power)','General Manager (W&C)','Manager (Finance)','HR & Administration'];
+    	
+      return view ('input.create',compact('inputMonths','hrEmployees','hrDesignations','offices'));
+
     }
 
 
