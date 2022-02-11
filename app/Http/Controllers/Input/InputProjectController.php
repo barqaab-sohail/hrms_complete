@@ -81,10 +81,9 @@ class InputProjectController extends Controller
         return response()->json($book);
     }
 
-     public function show($id){
-        $inputProjects = InputProject::where('input_month_id',$id)->with('prDetail')->get();
+    public function show($id){
+        $inputProjects = PrDetail::pluck("name","id");
         return response()->json($inputProjects);
-
     }
 
     public function destroy($id)
