@@ -85,7 +85,7 @@
         if(cid){
           $.ajax({
             type:"get",
-            url: "{{url('input/inputProject')}}"+"/"+cid,
+            url: "{{url('input/input')}}"+"/"+cid,
 
              //url:"http://localhost/hrms4/public/country/"+cid, **//Please see the note at the end of the post**
              success:function(res)

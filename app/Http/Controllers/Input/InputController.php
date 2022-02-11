@@ -26,6 +26,12 @@ class InputController extends Controller
 
     }
 
+    public function show($id){
+        $inputProjects = InputProject::where('input_month_id',$id)->with('prDetail')->get();
+        return response()->json($inputProjects);
+
+    }
+
 
    public function projectList($id, $month, Request $request){
 

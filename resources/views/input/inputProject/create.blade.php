@@ -23,7 +23,7 @@
   </table>
 </div>
 
-<div class="modal fade" id="ajaxModel" aria-hidden="true">
+<div class="modal fade" id="inputModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -70,6 +70,12 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+  $('#input_month_id, #pr_detail_id, #is_lock').select2({
+        
+        width: "100%",
+        theme: "classic"
+    });
+
   $('#input_month_id').change(function(){
       var cid = $(this).val();
       console.log(cid);
@@ -79,15 +85,13 @@ $(document).ready(function() {
              url: "{{url('input/inputProject')}}"+"/"+cid,
              success:function(res)
              {       
-                console.log(res);
                   if(res)
                   {
                   
                      $("#pr_detail_id").empty(); 
                      $("#pr_detail_id").append('<option value="">Select Project</option>');
                       $.each(res,function(key,value){
-
-                          $("#pr_detail_id").append('<option value="'+value['id']+'">'+value['pr_detail']['name']+'</option>'); 
+                          $("#pr_detail_id").append('<option value="'+key+'">'+value+'</option>'); 
                       });
                       
 
@@ -133,7 +137,7 @@ $(document).ready(function() {
         $('#pr_detail_id').trigger('change');
         $('#is_lock').trigger('change');
         $('#modelHeading').html("Create New Project");
-        $('#ajaxModel').modal('show');
+        $('#inputModal').modal('show');
     });
     $('body').unbind().on('click', '.editProject', function () {
       var input_project_id = $(this).data('id');
@@ -142,7 +146,7 @@ $(document).ready(function() {
       $.get("{{ url('input/inputProject') }}" +'/' + input_project_id +'/edit', function (data) {
           $('#modelHeading').html("Edit Project");
           $('#saveBtn').val("edit-Project");
-          $('#ajaxModel').modal('show');
+          $('#inputModal').modal('show');
           $('#input_project_id').val(data.id);
           $('#input_month_id').val(data.input_month_id);
           $('#input_month_id').trigger('change');
@@ -165,7 +169,7 @@ $(document).ready(function() {
           success: function (data) {
      
               $('#inputProjectForm').trigger("reset");
-              $('#ajaxModel').modal('hide');
+              $('#inputModal').modal('hide');
               table.draw();
         
           },
