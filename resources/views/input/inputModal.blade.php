@@ -43,10 +43,10 @@
                     <div class="form-group row">
                       <div class="col-md-12">
                         <label class="control-label text-right">Office<span class="text_requried">*</span></label><br>
-                        <select  id="office_id"   name="office_id"  class="form-control" data-validation="required">
+                        <select  id="office_department_id"   name="office_department_id"  class="form-control" data-validation="required">
                             <option></option>
-                            @foreach($offices as $key=>$office)
-                            <option value="{{$key}}" {{(old("office_id")==$key? "selected" : "")}}>{{$office}}</option>
+                            @foreach($officeDepartments as $department)
+                            <option value="{{$department->id}}" {{(old("office_department_id")==$department->id? "selected" : "")}}>{{$department->name}}</option>
                             @endforeach  
                           </select>
                       </div>
@@ -68,7 +68,7 @@
                       </div>
                     </div>                                                                
                   </div>
-                  <input type="text" name="input_project_id" id="input_project_id" class="form-control" hidden required>
+                  <input type="text" name="pr_detail_id" id="pr_detail_id" class="form-control" hidden required>
                   <input type="text" name="month_id" id="month_id" class="form-control" hidden required>
                   <input type="text" name="input_id" id="input_id" class="form-control" hidden>
                   
@@ -99,7 +99,7 @@ $(document).ready(function(){
     validateHiddenInputs: true,
     });
 
-   $('#hr_employee_id, #hr_designation_id, #office_id').select2({
+   $('#hr_employee_id, #hr_designation_id, #office_department_id').select2({
         dropdownParent: $('#projectModal'),
         width: "100%",
         theme: "classic"

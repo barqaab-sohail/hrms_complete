@@ -23,7 +23,7 @@
   </table>
 </div>
 
-<div class="modal fade" id="ajaxModel" aria-hidden="true">
+<div class="modal fade" id="monthModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -73,7 +73,12 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  
+  $('#month, #year, #status').select2({
+        dropdownParent: $('#monthModal'),
+        width: "100%",
+        theme: "classic"
+    });
+
   $(function () {
       $.ajaxSetup({
           headers: {
@@ -105,7 +110,7 @@ $(document).ready(function() {
         $('#year').trigger('change');
         $('#is_lock').trigger('change');
         $('#modelHeading').html("Create New Month");
-        $('#ajaxModel').modal('show');
+        $('#monthModal').modal('show');
     });
     $('body').unbind().on('click', '.editMonth', function () {
       var manager_id = $(this).data('id');
@@ -114,7 +119,7 @@ $(document).ready(function() {
       $.get("{{ url('input/inputMonth') }}" +'/' + manager_id +'/edit', function (data) {
           $('#modelHeading').html("Edit Month");
           $('#saveBtn').val("edit-Month");
-          $('#ajaxModel').modal('show');
+          $('#monthModal').modal('show');
           $('#month_id').val(data.id);
           $('#month').val(data.month);
           $('#month').trigger('change');
@@ -137,7 +142,7 @@ $(document).ready(function() {
           success: function (data) {
      
               $('#managerForm').trigger("reset");
-              $('#ajaxModel').modal('hide');
+              $('#monthModal').modal('hide');
               table.draw();
         
           },

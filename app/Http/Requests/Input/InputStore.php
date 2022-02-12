@@ -27,31 +27,48 @@ class InputStore extends FormRequest
         
         $employeeId = $this->get('hr_employee_id');
         $monthId = $this->get('month_id');
-        $sumInput = Input::join('input_projects', 'inputs.input_project_id','=', 'input_projects.id')
+        $sumStoredInput = Input::join('input_projects', 'inputs.input_project_id','=', 'input_projects.id')
             ->where('hr_employee_id','=',$employeeId)
             ->where('input_month_id','=',$monthId)
             ->sum('input');
-        $input = $this->input;
-        $totalInput = $input + $sumInput;
-        $maxValue = 1 - $sumInput;
+        
+      
+        $maxValue = 1 - $sumStoredInput;
+
+        //check edit request
+        if ($this->input_id) {
+            $input = Input::find($this->input_id);
+            $maxValue = 1 - $sumStoredInput + $input->input ;
+        }
+        
+
+
+        
+        
 
 
         $rules = [
         'hr_employee_id'=> 'required|unique_with:inputs,input_project_id,'.$this->input_id,
         'hr_designation_id'=> 'required',
+        'pr_detail_id'=> 'required',
         'input'=> "required|numeric|between:0.03,1.0|max:$maxValue"
         
         ];
+
+        if($this->pr_detail_id ==1) {
+            $rules += ['office_department_id'=> "required"];
+        }
 
         return $rules;
     }
 
     public function messages()
     {
-        
+       
         return [
             'hr_employee_id.unique_with' => "This employee input is already entered, $this->month_id",
-            'input.max'=>"This employee input exceed from 1"       
+            'input.max'=>"This employee input exceed from 1"  ,
+            'office_department_id.required'=>'Office field is requried'     
             
         ];
     }
