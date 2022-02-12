@@ -10,6 +10,12 @@ class Input extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
     protected $fillable = ['input_project_id', 'hr_employee_id','hr_designation_id','pr_detail_id','input','remarks'];
 
+    
+    protected $appends = ['office_department_id'];
+    function getOfficeDepartmentIdAttribute() {
+        return $this->inputOfficeDeparment->id??'';
+    }
+
     public function hrEmployee(){
         return $this->belongsTo('App\Models\Hr\HrEmployee','hr_employee_id');
     }
@@ -24,6 +30,20 @@ class Input extends Model implements Auditable
     
     public function prDetail(){
         return $this->belongsTo('App\Models\Project\PrDetail','pr_detail_id');
+    }
+
+
+    public function inputOfficeDeparment(){
+         
+        //hasOneThrough Inverse
+         return $this->hasOneThrough(
+            'App\Models\Office\OfficeDepartment',
+            'App\Models\Input\InputOfficeDepartment',
+            'id',
+            'id',
+            'id',
+            'office_department_id'
+            );
     }
 
 

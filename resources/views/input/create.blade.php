@@ -54,6 +54,7 @@
                             <th>No</th>
                             <th>Name</th>
                             <th>Designation</th>
+                            <th>Office</th>
                             <th>Input</th>
                             <th>Remarks</th>
                             <th>Edit</th>
@@ -134,6 +135,7 @@
                 {data: "DT_RowIndex", name: 'DT_RowIndex'},
                 {data: "full_name", name: 'full_name'},
                 {data: "designation", name: 'designation'},
+                {data: 'office', name: 'office'},
                 {data: 'input', name: 'input'},
                 {data: 'remarks', name: 'remarks'},
                 {data: 'edit', name: 'edit', orderable: false, searchable: false},
@@ -156,7 +158,7 @@
           $('#input_id').val('');
           $('#remarks').val('');
           $('#inputForm').trigger("reset");
-          $('#input_project_id').val(cid);
+          $('#pr_detail_id').val(cid);
           $('#month_id').val(month);
           $('#projectModal').modal('show');
 
@@ -196,7 +198,7 @@
 
             $('#json_message_modal').html('');
             $.get("{{ url('input/input') }}" +'/' + input +'/edit', function (data) {
-              console.log(data);
+            
                 $('#modelHeading').html("Edit Input");
                 $('#saveBtn').val("edit-Input");
                 $('#projectModal').modal('show');
@@ -204,10 +206,13 @@
                 $('#hr_employee_id').trigger('change');
                 $('#hr_designation_id').val(data.hr_designation_id);
                 $('#hr_designation_id').trigger('change');
-                 $('#input_project_id').val(data.input_project_id);
+                $('#pr_detail_id').val(data.pr_detail_id);
                 $('#input').val(data.input);
                 $('#remarks').val(data.remarks);
                 $('#input_id').val(data.id);
+                $('#month_id').val(month);
+                $('#office_department_id').val(data.office_department_id);
+                $('#office_department_id').trigger('change');
                 
                
             })

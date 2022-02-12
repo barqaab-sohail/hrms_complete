@@ -9,6 +9,8 @@ use App\Models\Hr\HrDesignation;
 use App\Models\Input\InputProject;
 use App\Models\Input\InputMonth;
 use App\Models\Input\Input;
+use App\Models\Input\InputOfficeDepartment;
+use App\Models\Office\OfficeDepartment;
 use App\Http\Requests\Input\InputStore;
 use DataTables;
 use DB;
@@ -20,9 +22,9 @@ class InputController extends Controller
     	$inputMonths = InputMonth::where('is_lock',0)->get();
     	$hrEmployees = HrEmployee::where('hr_status_id',1)->get();
     	$hrDesignations = HrDesignation::all();
-      $offices = ['Chief Executive Officer','General Manager (Power)','General Manager (W&C)','Manager (Finance)','HR & Administration'];
+      $officeDepartments = OfficeDepartment::all();
     	
-      return view ('input.create',compact('inputMonths','hrEmployees','hrDesignations','offices'));
+      return view ('input.create',compact('inputMonths','hrEmployees','hrDesignations','officeDepartments'));
 
     }
 
@@ -49,6 +51,10 @@ class InputController extends Controller
                     ->addColumn('designation', function($row){  
                         return $row->hrDesignation->name??'';
                     })
+                    ->addColumn('office', function($row){  
+                        
+                        return $row->inputOfficeDeparment->name??'';
+                    })
                     ->addColumn('input', function($row){  
                         return $row->input;
                     })
@@ -67,7 +73,7 @@ class InputController extends Controller
                             return $btn;
                     })
 
-                    ->rawColumns(['no','full_name','designation','input','remarks','edit','delete'])
+                    ->rawColumns(['no','full_name','designation','office','input','remarks','edit','delete'])
                     ->make(true);            
           }
     	return response()->json($inputProjects);
@@ -76,18 +82,27 @@ class InputController extends Controller
    public function store(InputStore $request){
 
    			
-            $inputProject = InputProject::find($request->input_project_id);
+            $inputProject = InputProject::where('input_month_id',$request->month_id)->where('pr_detail_id',$request->pr_detail_id)->first();
 
             DB::transaction(function () use ($request, $inputProject) {  
 
-                Input::updateOrCreate(['id' => $request->input_id],
-                  ['input_project_id' => $request->input_project_id, 
+            $input =  Input::updateOrCreate(['id' => $request->input_id],
+                  ['input_project_id' => $inputProject->id, 
                   'hr_employee_id' => $request->hr_employee_id, 
                   'hr_designation_id' => $request->hr_designation_id,
-                  'pr_detail_id' => $inputProject->pr_detail_id,
+                  'pr_detail_id' => $request->pr_detail_id,
                   'input' => $request->input,
                   'remarks' => $request->remarks]
                   );
+                
+                if($request->filled('office_department_id')){
+                  InputOfficeDepartment::updateOrCreate(['input_id'=>$input->id],
+                    ['input_id'=>$input->id,
+                      'office_department_id'=>$request->office_department_id
+
+                    ]);
+                }
+               
             }); // end transcation
             
         return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
@@ -95,8 +110,8 @@ class InputController extends Controller
    }
 
    public function edit($id){
-    $book = Input::find($id);
-    return response()->json($book);
+    $input = Input::with('inputOfficeDeparment')->find($id);
+    return response()->json($input);
 
    }
 
