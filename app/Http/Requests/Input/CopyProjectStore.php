@@ -4,7 +4,7 @@ namespace App\Http\Requests\Input;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class InputMonthStore extends FormRequest
+class CopyProjectStore extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,21 +23,16 @@ class InputMonthStore extends FormRequest
      */
     public function rules()
     {
-        $id = request()->input('month_id');
-        $rules = [
-        'month'=> 'required',
-        'year'=> 'required|unique_with:input_months,month,'.$id,
-        'is_lock'=> 'required',
+        return [
+            'copyTo'=> 'required|unique:input_projects,input_month_id'
         ];
-
-        return $rules;
     }
 
     public function messages()
     {
        
         return [
-            'year.unique_with' => "This Month & Year is already entered"         
+            'copyTo.unique' => "This Month is already entered"         
         ];
     }
 }

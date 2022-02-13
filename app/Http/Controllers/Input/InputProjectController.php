@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Input\InputMonth;
 use App\Models\Input\InputProject;
 use App\Http\Requests\Input\InputProjectStore;
+use App\Http\Requests\Input\CopyProjectStore;
 use App\Models\Project\PrDetail;
 use DataTables;
 use DB;
@@ -66,7 +67,6 @@ class InputProjectController extends Controller
     public function store(InputProjectStore $request){ 	
 		   	
             DB::transaction(function () use ($request) {  
-               
                 InputProject::updateOrCreate(['id' => $request->input_project_id],
                 ['input_month_id' => $request->input_month_id, 'pr_detail_id' => $request->pr_detail_id, 'is_lock' => $request->is_lock]);   
             }); // end transcation
@@ -91,5 +91,22 @@ class InputProjectController extends Controller
         InputProject::find($id)->delete();
      
         return response()->json(['success'=>'Project deleted successfully.']);
+    }
+
+    public function copy(CopyProjectStore $request){    
+
+        DB::transaction(function () use ($request) {  
+               $inputProjects = InputProject::where('input_month_id',$request->copyFrom)->get();
+               foreach($inputProjects as $inputProject){
+                InputProject::create([
+                    'input_month_id'=>$request->copyTo,
+                    'pr_detail_id'=>$inputProject->pr_detail_id,
+                    'is_lock'=>0
+                    ]);
+               }
+               
+        }); // end transcation
+
+        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
     }
 }

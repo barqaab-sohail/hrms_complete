@@ -6,6 +6,8 @@
 @section('content')
 <div class="card-body">
   <button type="button" class="btn btn-success float-right"  id ="createNewProject" data-toggle="modal" >Add New Project</button>
+  
+  <button type="button" class="btn btn-success float-left"  id ="copyProject" data-toggle="modal" >Copy Projects</button>
   <br>
   <table class="table table-striped data-table">
     <thead>
@@ -67,18 +69,17 @@
         </div>
     </div>
 </div>
+@include('input.inputProject.copy')
 
 <script type="text/javascript">
 $(document).ready(function() {
-  $('#input_month_id, #pr_detail_id, #is_lock').select2({
-        
+  $('#input_month_id, #pr_detail_id, #is_lock').select2({       
         width: "100%",
         theme: "classic"
     });
 
   $('#input_month_id').change(function(){
       var cid = $(this).val();
-      console.log(cid);
         if(cid){
           $.ajax({
              type:"get",
@@ -124,14 +125,13 @@ $(document).ready(function() {
             {data: 'delete', name: 'delete', orderable: false, searchable: false}
 
         ],
-        order: [[ 1, "desc" ]]
+    
     });
 
     $('#createNewProject').click(function () {
         $('#json_message_modal').html('');
         $('#saveBtn').val("create-Project");
         $('#input_project_id').val('');
-
         $('#inputProjectForm').trigger("reset");
         $('#input_month_id').trigger('change');
         $('#pr_detail_id').trigger('change');
@@ -139,6 +139,42 @@ $(document).ready(function() {
         $('#modelHeading').html("Create New Project");
         $('#inputModal').modal('show');
     });
+    $('#copyProject').click(function () {
+        $('#json_message_modal2').html('');
+        $('#copyProjectForm').trigger("reset");
+        $('#copyFrom').trigger('change');
+        $('#copyTo').trigger('change');
+        $('#copyModal').modal('show');
+    });
+    $('#copyBtn').click(function (e) {
+        e.preventDefault();
+        $(this).html('Save');
+         
+        $.ajax({
+          data: $('#copyProjectForm').serialize(),
+          url: "{{ route('copyProject.store') }}",
+          type: "POST",
+          dataType: 'json',
+          success: function (data) {
+     
+              $('#copyProjectForm').trigger("reset");
+              $('#copyModal').modal('hide');
+              table.draw();
+        
+          },
+          error: function (data) {
+              
+              var errorMassage = '';
+              $.each(data.responseJSON.errors, function (key, value){
+                errorMassage += value + '<br>';  
+                });
+                 $('#json_message_modal2').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
+
     $('body').unbind().on('click', '.editProject', function () {
       var input_project_id = $(this).data('id');
 
@@ -156,7 +192,7 @@ $(document).ready(function() {
           $('#is_lock').trigger('change');
          
       })
-   });
+    });
     $('#saveBtn').click(function (e) {
         e.preventDefault();
         $(this).html('Save');

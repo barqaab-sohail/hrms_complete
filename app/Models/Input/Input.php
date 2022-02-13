@@ -13,7 +13,7 @@ class Input extends Model implements Auditable
     
     protected $appends = ['office_department_id'];
     function getOfficeDepartmentIdAttribute() {
-        return $this->inputOfficeDeparment->id??'';
+        return $this->officeDeparment->id??'';
     }
 
     public function hrEmployee(){
@@ -33,7 +33,7 @@ class Input extends Model implements Auditable
     }
 
 
-    public function inputOfficeDeparment(){
+    public function officeDeparment(){
          
         //hasOneThrough Inverse
          return $this->hasOneThrough(
@@ -43,6 +43,11 @@ class Input extends Model implements Auditable
             'id',
             'id',
             'office_department_id'
+            );
+    }
+
+    public function inputOfficeDeparment(){
+         return $this->hasOne('App\Models\Input\InputOfficeDepartment'
             );
     }
 

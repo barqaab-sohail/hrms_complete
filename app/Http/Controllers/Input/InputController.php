@@ -12,6 +12,7 @@ use App\Models\Input\Input;
 use App\Models\Input\InputOfficeDepartment;
 use App\Models\Office\OfficeDepartment;
 use App\Http\Requests\Input\InputStore;
+use App\Http\Requests\Input\CopyInputStore;
 use DataTables;
 use DB;
 
@@ -53,7 +54,7 @@ class InputController extends Controller
                     })
                     ->addColumn('office', function($row){  
                         
-                        return $row->inputOfficeDeparment->name??'';
+                        return $row->officeDeparment->name??'';
                     })
                     ->addColumn('input', function($row){  
                         return $row->input;
@@ -110,7 +111,7 @@ class InputController extends Controller
    }
 
    public function edit($id){
-    $input = Input::with('inputOfficeDeparment')->find($id);
+    $input = Input::with('officeDeparment')->find($id);
     return response()->json($input);
 
    }
@@ -138,5 +139,44 @@ class InputController extends Controller
     
      return view('input.search.result',compact('result','inputProjects'));
   }
+
+   public function copy(CopyInputStore $request){
+
+            DB::transaction(function () use ($request) {  
+
+               $inputProjects = InputProject::where('input_month_id',$request->copyFrom)->get();
+               foreach($inputProjects as $inputProject){
+                  $inputProjectId = InputProject::create([
+                      'input_month_id'=>$request->copyTo,
+                      'pr_detail_id'=>$inputProject->pr_detail_id,
+                      'is_lock'=>0
+                      ]);
+                  $inputs = Input::where('input_project_id',$inputProject->id)->get();
+                  foreach($inputs as $input){
+                    $inputId = Input::create([
+                      'input_project_id'=>$inputProjectId->id,
+                      'hr_employee_id'=>$input->hr_employee_id,
+                      'hr_designation_id'=>$input->hr_designation_id,
+                      'pr_detail_id'=>$input->pr_detail_id,
+                      'input'=>$input->input,
+                      'remarks'=>$input->remarks,
+                      ]);
+
+                    if($input->inputOfficeDeparment){
+                      InputOfficeDepartment::create([
+                        'input_id'=>$inputId->id,
+                        'office_department_id'=>$input->inputOfficeDeparment->office_department_id
+
+                    ]);
+                    }
+                  }
+
+               }
+               
+            }); // end transcation
+            
+        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
+            
+   }
 
 }
