@@ -14,12 +14,50 @@ use App\Models\Asset\AsSubClass;
 use App\Models\Asset\AsDocumentation;
 use DB;
 use Storage;
+use DataTables;
 
 class AssetController extends Controller
 {
     
-    public function index(){
-        $assets = Asset::all();
+    public function index(Request $request){
+          $assets = Asset::with('asCurrentLocation')->get(); 
+         if($request->ajax()){
+
+            $data = Asset::all(); 
+           
+            return DataTables::of($data)
+            ->addColumn('location', function($data){
+                $location = isset($data->asCurrentLocation->office_id)?officeName($data->asCurrentLocation->office_id):employeeFullName($data->asCurrentLocation->hr_employee_id??'');
+                return $location;
+                 
+            })
+            ->addColumn('bar_code', function($data){
+                $barCode ='<img src="data:image/png;base64,'.\DNS1D::getBarcodePNG($data->asset_code,'C39+',1,33,array(0,0,0),true).'" alt="barcode" />';
+                return $barCode;
+            })
+            ->addColumn('image', function($data){
+               $image ='<img src="'.url(isset($data->asDocumentation->file_name)?'/storage/'.$data->asDocumentation->path.$data->asDocumentation->file_name:'Massets/images/document.png').'" class="img-round picture-container picture-src"  id="ViewIMG'.$data->id.'" width=50>';
+
+
+                return $image;
+            })
+           
+            ->addColumn('edit', function($data){
+       
+            $button = '<a class="btn btn-success btn-sm" href="'.route('asset.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+
+            return $button;  
+
+            })
+            ->addColumn('delete', function($data){
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteAsset">Delete</a>';                            
+                    return $btn;
+
+                    })
+            ->rawColumns(['location','bar_code','image','edit','delete'])
+            ->make(true);
+        }
         return view ('asset.index', compact('assets'));
     }
 
@@ -74,8 +112,6 @@ class AssetController extends Controller
         }else{
             return view ('asset.edit', compact('asClasses','asSubClasses','data'));       
         }
-
-    	
 
 
     }
@@ -135,16 +171,18 @@ class AssetController extends Controller
 
      public function destroy($id)
     {
-        $asDocuments = AsDocumentation::where('asset_id',$id)->get();
-        foreach ($asDocuments as $asDocument) {
-            $path = public_path('storage/'.$asDocument->path.$asDocument->file_name);
-                if(File::exists($path)){
-                  File::delete($path);
-                }  
-        }
-        Asset::findOrFail($id)->delete();   
+        DB::transaction(function () use ($id) {  
+            $asDocuments = AsDocumentation::where('asset_id',$id)->get();
+            foreach ($asDocuments as $asDocument) {
+                $path = public_path('storage/'.$asDocument->path.$asDocument->file_name);
+                    if(File::exists($path)){
+                      File::delete($path);
+                    }  
+            }
+            Asset::findOrFail($id)->delete();   
+        }); // end transcation
 
-    return back()->with('success', "Data successfully deleted");
+        return response()->json(['success'=>'data  delete successfully.']);
    
     }
 
@@ -224,4 +262,5 @@ class AssetController extends Controller
       
         
     }
+
 }

@@ -43,7 +43,7 @@ $(document).ready(function() {
 	$('#myTable').DataTable({
   		processing: true,
   		serverSide: true,
-  		order: [[ 5, 'desc' ]],
+  		"aaSorting": [],
 	  	ajax: {
 	   	url: "{{ route('employee.index') }}",
 	  	},

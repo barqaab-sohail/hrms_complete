@@ -126,7 +126,8 @@
                         @endcan
 
                         @canany(['asset edit record', 'asset view record'])
-                        <li><a class="{{Request::is('hrms/assets/cv')?'active':''}}" href="{{route('asset.index')}}">List of Assets</a></li>
+                        <li><a class="{{Request::is('hrms/asset')?'active':''}}" href="{{route('asset.index')}}">List of Assets</a></li> 
+                        
                         @endcanany
                         
                     </ul>

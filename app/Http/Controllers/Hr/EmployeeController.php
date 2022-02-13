@@ -84,8 +84,8 @@ class EmployeeController extends Controller
             //first sort with respect to Designation
             $designations = employeeDesignationArray();
             $data = $data->sort(function ($a, $b) use ($designations) {
-              $pos_a = array_search($a->employeeDesignation->last()->name??'', $designations);
-              $pos_b = array_search($b->employeeDesignation->last()->name??'', $designations);
+              $pos_a = array_search($a->designation??'', $designations);
+              $pos_b = array_search($b->designation??'', $designations);
               return $pos_a - $pos_b;
             });
 
@@ -101,10 +101,6 @@ class EmployeeController extends Controller
 
             return DataTables::of($data)
 
-            
-            ->addColumn('designation',function($data){
-                return $data->employeeDesignation->last()->name??'';
-            })
             ->addColumn('project',function($data){
                 
                $project = isset($data->employeeProject->last()->name)?$data->employeeProject->last()->name:'';
@@ -151,7 +147,7 @@ class EmployeeController extends Controller
                                  </form>';
                         return $button;
                     })
-            ->rawColumns(['designation','project','date_of_birth','date_of_joining','mobile','edit','delete'])
+            ->rawColumns(['project','date_of_birth','date_of_joining','mobile','edit','delete'])
             ->make(true);
         }
        return view ('hr.employee.listDataTable');

@@ -73,7 +73,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  $('#month, #year, #status').select2({
+  $('#month, #year, #is_lock').select2({
         dropdownParent: $('#monthModal'),
         width: "100%",
         theme: "classic"

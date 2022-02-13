@@ -12,7 +12,8 @@
         <div class="card card-outline-info">
 			<div class="row">
 		        <div class="col-lg-12">
-		            <div style="margin-top:10px; margin-right: 10px;">                   
+		            <div style="margin-top:10px; margin-right: 10px;">
+                <button type="button" class="btn btn-success float-right"  id ="copyInput" data-toggle="modal" >Copy Input</button>   
 		            </div>
 		            <div class="card-body">
 		                <form method="post" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
@@ -73,12 +74,55 @@
     </div>
 </div>
 @include('input.inputModal')
+@include('input.copy')
 
 <script>
- $(document).ready(function() {
+$(document).ready(function() {
 
  	selectTwo();
-  	
+    
+   $('#copyInput').click(function () {
+        $('#json_message_modal2').html('');
+        $('#copyProjectForm').trigger("reset");
+        $('#copyFrom').trigger('change');
+        $('#copyTo').trigger('change');
+        $('#copyModal').modal('show');
+    });
+    $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $('#copyBtn').click(function (e) {
+        e.preventDefault();
+        $(this).html('Save');
+         
+        $.ajax({
+          data: $('#copyInputForm').serialize(),
+          url: "{{ route('copyInput.store') }}",
+          type: "POST",
+          dataType: 'json',
+          success: function (data) {
+     
+              $('#copyInputForm').trigger("reset");
+              $('#copyFrom').trigger('change');
+              $('#copyTo').trigger('change');
+              $('#copyModal').modal('hide');
+              $('#json_message').html('<div id="j_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
+        
+          },
+          error: function (data) {
+              
+              var errorMassage = '';
+              $.each(data.responseJSON.errors, function (key, value){
+                errorMassage += value + '<br>';  
+                });
+                 $('#json_message_modal2').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });	
     
 
     $('#month').change(function(){
