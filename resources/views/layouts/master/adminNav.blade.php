@@ -125,7 +125,7 @@
                         <li><a class="{{Request::is('hrms/assets/create')?'active':''}}" href="{{route('asset.create')}}">Add Asset</a></li>
                         @endcan
 
-                        @canany(['asset edit record', 'asset view record'])
+                        @canany(['asset edit record', 'asset view record','asset all record'])
                         <li><a class="{{Request::is('hrms/asset')?'active':''}}" href="{{route('asset.index')}}">List of Assets</a></li> 
                         
                         @endcanany
