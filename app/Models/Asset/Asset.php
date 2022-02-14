@@ -19,15 +19,35 @@ class Asset extends Model implements Auditable
             	'id',
             	'as_condition_type_id'
             	);
-
-
     }
 
     //Current Location of Asset
+    // public function asCurrentLocation(){
+
+    //     return $this->hasOne('App\Models\Asset\AsLocation')->orderby('date', 'desc');
+
+    // }
+
     public function asCurrentLocation(){
+        return $this->hasOneThrough(
+            'App\Models\Office\Office',
+            'App\Models\Asset\AsLocation',
+            'asset_id',
+            'id',
+            'id',
+            'office_id'
+            )->orderby('date', 'desc');
+    }
 
-        return $this->hasOne('App\Models\Asset\AsLocation')->orderby('date', 'desc');
-
+    public function asCurrentAllocation(){
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrEmployee',
+            'App\Models\Asset\AsLocation',
+            'asset_id',
+            'id',
+            'id',
+            'hr_employee_id'
+            )->orderby('date', 'desc');
     }
 
 
