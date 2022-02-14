@@ -60,7 +60,10 @@ $(document).ready(function() {
 			   @role('Super Admin')
 			   {data: 'delete',name: 'delete', orderable: false, searchable: false }
 			   @endrole
-		  	]
+		  	],
+		  	"drawCallback": function( settings ) {
+        		$("[id^='ViewIMG']").EZView();
+    		}
  		});
 
  		$('body').on('click', '.deleteAsset', function () {
@@ -87,10 +90,7 @@ $(document).ready(function() {
      
   	}); // end function
 
-    setTimeout(function(){
-            $("[id^='ViewIMG']").EZView();
-        },5000);
-	
+    
 	     
 });
 

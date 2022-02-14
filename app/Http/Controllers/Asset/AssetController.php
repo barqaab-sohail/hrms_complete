@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Asset;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests\Asset\AssetStore;
 use App\Http\Requests\Asset\ClassStore;
@@ -20,15 +21,24 @@ class AssetController extends Controller
 {
     
     public function index(Request $request){
-          $assets = Asset::with('asCurrentLocation')->get(); 
+        
+        $assets = Asset::join('audits','audits.auditable_id','assets.id')->select('assets.*', 'audits.user_id','audits.auditable_id','audits.auditable_type')->where('auditable_type','App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->with('asCurrentLocation','asCurrentAllocation','asDocumentation')->get(); 
          if($request->ajax()){
 
-            $data = Asset::all(); 
+            $data = Asset::join('audits','audits.auditable_id','assets.id')->select('assets.*', 'audits.user_id','audits.auditable_id','audits.auditable_type')->where('auditable_type','App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->with('asCurrentLocation','asCurrentAllocation','asDocumentation')->get();
            
             return DataTables::of($data)
             ->addColumn('location', function($data){
-                $location = isset($data->asCurrentLocation->office_id)?officeName($data->asCurrentLocation->office_id):employeeFullName($data->asCurrentLocation->hr_employee_id??'');
-                return $location;
+            
+                $location = $data->asCurrentLocation->name??'';
+                $allocation = $data->asCurrentAllocation->full_name??'';
+                if($location){
+                    return $location;
+                }elseif($allocation){
+                    return $allocation .' - '. $data->asCurrentAllocation->designation??'';
+                }else{
+                    return 'N/A';
+                }
                  
             })
             ->addColumn('bar_code', function($data){
