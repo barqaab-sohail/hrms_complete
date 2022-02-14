@@ -101,6 +101,17 @@ class EmployeeController extends Controller
 
             return DataTables::of($data)
 
+            ->addColumn('full_name',function($data){
+                
+                if(Auth::user()->can('hr edit record')){
+                    $fullName = '<a href="'.route('employee.edit',$data->id).'" style="color:grey">'.$data->full_name.'</a>';
+                    return $fullName;
+                }else{
+                    return $data->full_name;
+                }
+
+            })
+
             ->addColumn('project',function($data){
                 
                $project = isset($data->employeeProject->last()->name)?$data->employeeProject->last()->name:'';
@@ -147,7 +158,8 @@ class EmployeeController extends Controller
                                  </form>';
                         return $button;
                     })
-            ->rawColumns(['project','date_of_birth','date_of_joining','mobile','edit','delete'])
+
+            ->rawColumns(['full_name','project','date_of_birth','date_of_joining','mobile','edit','delete'])
             ->make(true);
         }
        return view ('hr.employee.listDataTable');
