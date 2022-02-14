@@ -26,6 +26,11 @@ class AssetController extends Controller
          if($request->ajax()){
 
             $data = Asset::join('audits','audits.auditable_id','assets.id')->select('assets.*', 'audits.user_id','audits.auditable_id','audits.auditable_type')->where('auditable_type','App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->with('asCurrentLocation','asCurrentAllocation','asDocumentation')->get();
+
+            if(Auth::user()->can('Super Admin')){
+                $data = Asset::with('asCurrentLocation','asCurrentAllocation','asDocumentation')->get();
+            }
+                       
            
             return DataTables::of($data)
             ->addColumn('location', function($data){
