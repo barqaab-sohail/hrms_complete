@@ -25,7 +25,7 @@ class AssetController extends Controller
         $assets = Asset::join('audits','audits.auditable_id','assets.id')->select('assets.*', 'audits.user_id','audits.auditable_id','audits.auditable_type')->where('auditable_type','App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->with('asCurrentLocation','asCurrentAllocation','asDocumentation')->get(); 
          if($request->ajax()){
 
-            $data = Asset::join('audits','audits.auditable_id','assets.id')->select('assets.*', 'audits.user_id','audits.auditable_id','audits.auditable_type')->where('auditable_type','App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->with('asCurrentLocation','asCurrentAllocation','asDocumentation')->get();
+            $data = Asset::join('audits','audits.auditable_id','assets.id')->select('assets.*', 'audits.user_id','audits.auditable_id','audits.auditable_type')->where('auditable_type','App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->distinct()->with('asCurrentLocation','asCurrentAllocation','asDocumentation')->get();
 
             if(Auth::user()->can('asset all record')){
                 $data = Asset::with('asCurrentLocation','asCurrentAllocation','asDocumentation')->get();
