@@ -26,7 +26,7 @@
                       </div>
                     </div>                                                                
                   </div>
-                  <div class="form-body">
+                  <div class="form-body" id="designation_div">
                     <div class="form-group row">
                       <div class="col-md-12">
                         <label class="control-label text-right">Designation<span class="text_requried">*</span></label><br>
@@ -39,7 +39,7 @@
                       </div>
                     </div>                                                                
                   </div>
-                   <div class="form-body hideDiv">
+                   <div class="form-body" id="office_div">
                     <div class="form-group row">
                       <div class="col-md-12">
                         <label class="control-label text-right">Office<span class="text_requried">*</span></label><br>
@@ -69,7 +69,7 @@
                     </div>                                                                
                   </div>
                   <input type="text" name="pr_detail_id" id="pr_detail_id" class="form-control" hidden required>
-                  <input type="text" name="month_id" id="month_id" class="form-control" hidden required>
+                  <input type="text" name="input_month_id" id="input_month_id" class="form-control" hidden required>
                   <input type="text" name="input_id" id="input_id" class="form-control" hidden>
                   
                   <hr>

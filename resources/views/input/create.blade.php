@@ -126,27 +126,24 @@ $(document).ready(function() {
     
 
     $('#month').change(function(){
-      var cid = $(this).val();
-        if(cid){
+      var input_month_id = $(this).val();
+        if(input_month_id){
           $.ajax({
             type:"get",
-            url: "{{url('input/input')}}"+"/"+cid,
+            url: "{{url('input/input')}}"+"/"+input_month_id,
 
              //url:"http://localhost/hrms4/public/country/"+cid, **//Please see the note at the end of the post**
              success:function(res)
              {       
                   if(res)
                   {
-                   
                      $("#project").empty();
                      $("#inputTable td").remove();
                      $('#heading').text(''); 
                      $("#project").append('<option value="">Select Project</option>');
                       $.each(res,function(key,value){
-
-                          $("#project").append('<option value="'+value['id']+'">'+value['pr_detail']['name']+'</option>'); 
-                      });
-                       
+                          $("#project").append('<option value="'+value['pr_detail']['id']+'">'+value['pr_detail']['name']+'</option>'); 
+                      });  
                   }
                  
              }
@@ -157,12 +154,14 @@ $(document).ready(function() {
   $(function () {
     $('#project').change (function (){
       if($(this).val()){
-        var cid = $(this).val();
-        var month = $('#month').val();
+        var pr_detail_id = $(this).val();
+        var input_month_id = $('#month').val();
         if($("#project option:selected").text() == 'overhead'){
-          $('.hideDiv').show();
+          $('#office_div').show();
+          $('#designation_div').hide();
         }else{
-          $('.hideDiv').hide();
+          $('#office_div').hide();
+          $('#designation_div').show();
         }
 
         $.ajaxSetup({
@@ -170,11 +169,11 @@ $(document).ready(function() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-         var table = $('#inputTable').DataTable({
+        var table = $('#inputTable').DataTable({
             processing: true,
             serverSide: true,
             destroy: true,
-            ajax: "{{route('input.projectList','')}}"+"/"+cid+"/"+month,
+            ajax: "{{route('input.projectList','')}}"+"/"+pr_detail_id+"/"+input_month_id,
             columns: [
                 {data: "DT_RowIndex", name: 'DT_RowIndex'},
                 {data: "full_name", name: 'full_name'},
@@ -190,6 +189,25 @@ $(document).ready(function() {
         $('#heading').empty();
         $('#heading').append( "<br><a class='btn btn-success' href='#' data-toggle='modal' id=add_employee>Add Employee</a>" );
 
+        if(pr_detail_id){
+          $.ajax({
+            type:"get",
+            url: "{{url('input/inputDesignation')}}"+"/"+pr_detail_id,
+             success:function(res)
+             {       
+                  console.log(res);
+                  if(res)
+                  {
+                     $("#hr_designation_id").empty();
+                     $("#hr_designation_id").append('<option value="">Select Project</option>');
+                      $.each(res,function(key,value){
+                          $("#hr_designation_id").append('<option value="'+value['id']+'">'+value['name']+'</option>'); 
+                      });     
+                  }   
+             }
+          });//end ajax
+        }
+
 
          $('#add_employee').click(function () {
           $('#json_message_modal').html('');
@@ -202,8 +220,8 @@ $(document).ready(function() {
           $('#input_id').val('');
           $('#remarks').val('');
           $('#inputForm').trigger("reset");
-          $('#pr_detail_id').val(cid);
-          $('#month_id').val(month);
+          $('#pr_detail_id').val(pr_detail_id);
+          $('#input_month_id').val(input_month_id);
           $('#projectModal').modal('show');
 
          
@@ -219,6 +237,7 @@ $(document).ready(function() {
               type: "POST",
               dataType: 'json',
               success: function (data) {
+                console.log(data);
                   $('#inputForm').trigger("reset");
                   $('#projectModal').modal('hide');
                   table.draw();
@@ -254,7 +273,7 @@ $(document).ready(function() {
                 $('#input').val(data.input);
                 $('#remarks').val(data.remarks);
                 $('#input_id').val(data.id);
-                $('#month_id').val(month);
+                $('#input_month_id').val(input_month_id);
                 $('#office_department_id').val(data.office_department_id);
                 $('#office_department_id').trigger('change');
                 
