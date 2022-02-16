@@ -5,11 +5,11 @@
   <table class="table table-striped data-table">
     <thead>
       <tr>
-          <th>Designation</th>
-          <th>Position Type</th>
-          <th>Total Manmontn</th>
-          <th>Edit</th>
-          <th>Delete</th>
+        <th>Designation</th>
+        <th>Position Type</th>
+        <th>Total Manmonth</th>
+        <th>Edit</th>
+        <th>Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -33,7 +33,7 @@
                         <label class="control-label text-right">Position<span class="text_requried">*</span></label><br>
                           <select  name="hr_designation_id"  id="hr_designation_id" class="form-control" data-validation="required">
                               <option value=""></option>
-                              @foreach($designations as $designation)
+                              @foreach($hrDesignations as $designation)
                               <option value="{{$designation->id}}" {{(old("hr_designation_id")==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
                               @endforeach 
                             </select>
@@ -42,7 +42,7 @@
                         <label class="control-label text-right">Position Type<span class="text_requried">*</span></label><br>
                           <select  name="pr_position_type_id"  id="pr_position_type_id" class="form-control" data-validation="required">
                               <option value=""></option>
-                              @foreach($positionsTypes as $positionType)
+                              @foreach($positionTypes as $positionType)
                               <option value="{{$positionType->id}}" {{(old("pr_position_type_id")==$positionType->id? "selected" : "")}}>{{$positionType->name}}</option>
                               @endforeach 
                             </select>
@@ -78,7 +78,7 @@ $(document).ready(function() {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('inputMonth.create') }}",
+        ajax: "{{ route('projectPosition.create') }}",
         columns: [
             {data: "hr_designation_id", name: 'hr_designation_id'},
             {data: 'pr_position_type_id', name: 'pr_position_type_id'},

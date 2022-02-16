@@ -35,11 +35,13 @@
                 
                 @can('Super Admin')
                 @if($data->pr_role_id!=1)
-                <a type="submit" role="button" style="color:white" id="addPosition" href="{{route('projectPartner.create')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPartner/create')?'style=background-color:#737373':''}}>Partner Detail</a>
+                <a type="submit" role="button" style="color:white" id="addPartner" href="{{route('projectPartner.create')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPartner/create')?'style=background-color:#737373':''}}>Partner Detail</a>
                 @endif
                 <a type="submit" role="button" style="color:white" id="addConsultancyCost" href="{{route('projectConsultancyCost.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectConsultancyCost/index')?'style=background-color:#737373':''}}>Consultancy Cost</a>
 
-                <a type="submit" role="button" style="color:white" id="addPosition" href="{{route('projectPosition.create')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPosition/create')?'style=background-color:#737373':''}}>Position</a>
+                <a type="submit" role="button" style="color:white" id="addPosition" href="{{route('projectPosition.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPosition/index')?'style=background-color:#737373':''}}>Position</a>
+
+        
 
 
                 @endcan
