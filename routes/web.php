@@ -114,6 +114,7 @@ Route::group(['prefix' => 'input', 'middleware' => ['auth','XssSanitizer'], 'nam
 	Route::resource('/input', 'InputController');
 	Route::post('/copyInput', 'InputController@copy')->name('copyInput.store');
 	Route::get('/input/{id}/{month?}', 'InputController@projectList')->name('input.projectList');
+	Route::get('/inputDesignation/{id}', 'InputController@projectDesignation');
 
 
 });

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDesignation;
+use App\Models\Project\PrPosition;
 use App\Models\Input\InputProject;
 use App\Models\Input\InputMonth;
 use App\Models\Input\Input;
@@ -29,19 +30,26 @@ class InputController extends Controller
 
     }
 
-    public function show($id){
-        $inputProjects = InputProject::where('input_month_id',$id)->with('prDetail')->get();
+    public function show($inputMonthId){
+        $inputProjects = InputProject::where('input_month_id',$inputMonthId)->with('prDetail')->get();
         return response()->json($inputProjects);
 
     }
 
+    public function projectDesignation($prDetailId){
+        $prPositions = PrPosition::where('pr_detail_id',$prDetailId)->pluck('hr_designation_id')->toArray();
+        $designations = HrDesignation::whereIn('id',$prPositions)->get();
+        return response()->json($designations);
 
-   public function projectList($id, $month, Request $request){
+    }
 
+
+   public function projectList($prDetailId, $monthId, Request $request){
+          $inputProject = InputProject::where('input_month_id',$monthId)->where('pr_detail_id',$prDetailId)->first();
             
           if ($request->ajax()) {
               
-              $data = Input::join('input_projects','inputs.input_project_id','=','input_projects.id')->select('inputs.*','input_projects.input_month_id','input_projects.pr_detail_id','input_projects.is_lock')->where('inputs.input_project_id',$id)->with('hrEmployee','hrDesignation','prDetail')->latest()->get();
+              $data = Input::join('input_projects','inputs.input_project_id','=','input_projects.id')->select('inputs.*','input_projects.input_month_id','input_projects.pr_detail_id','input_projects.is_lock')->where('inputs.input_project_id',$inputProject->id)->with('hrEmployee','hrDesignation','prDetail')->latest()->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
@@ -83,14 +91,21 @@ class InputController extends Controller
    public function store(InputStore $request){
 
    			
-            $inputProject = InputProject::where('input_month_id',$request->month_id)->where('pr_detail_id',$request->pr_detail_id)->first();
+            $inputProject = InputProject::where('input_month_id',$request->input_month_id)->where('pr_detail_id',$request->pr_detail_id)->first();
+             
+            $designationId = $request->hr_designation_id;
 
-            DB::transaction(function () use ($request, $inputProject) {  
+            if($request->pr_detail_id==1){
+              $employee = HrEmployee::find($request->hr_employee_id);
+              $designationId = $employee->employeeDesignation->last()->id;
+            }
+
+            DB::transaction(function () use ($request, $inputProject, $designationId) {  
 
             $input =  Input::updateOrCreate(['id' => $request->input_id],
                   ['input_project_id' => $inputProject->id, 
                   'hr_employee_id' => $request->hr_employee_id, 
-                  'hr_designation_id' => $request->hr_designation_id,
+                  'hr_designation_id' => $designationId,
                   'pr_detail_id' => $request->pr_detail_id,
                   'input' => $request->input,
                   'remarks' => $request->remarks]
