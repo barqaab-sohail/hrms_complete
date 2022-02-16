@@ -192,7 +192,7 @@ $(document).ready(function(){
             var url = $(this).attr('href');
             var $el = $(this).find( "i" ).toggleClass('fa-folder-open');
             if ($el.hasClass('fa-folder-open')) {
-                console.log(url);
+                
                 refreshTable(url);
             }else{
                 $('#myDataDiv').remove();

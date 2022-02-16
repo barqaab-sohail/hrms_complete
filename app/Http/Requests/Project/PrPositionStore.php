@@ -24,7 +24,7 @@ class PrPositionStore extends FormRequest
     public function rules()
     {
         return [    
-            'name'=>'required|max:190',
+            'hr_designation_id'=>'required',
             'pr_position_type_id'=>'required|numeric',
             'total_mm'=>'nullable|numeric|min:0.001|max:6000',
         ];
