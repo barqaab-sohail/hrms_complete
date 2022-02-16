@@ -1,5 +1,6 @@
 <div class="btn-group-vertical" role="group" aria-label="vertical button group" style="width: 100%;">
             <a type="submit" role="button" id="addProject" href="{{route('project.edit',session('pr_detail_id'))}}" class="btn btn-success" {{Request::is('hrms/project/*/edit')?'style=background-color:#737373':''}}>Project Detail</a>
+
             
             @can('pr view progress') 
             <a type="submit" role="button" id="addProgress" href="{{route('projectProgress.chart')}}" class="btn btn-success" {Request::is('hrms/projectProgress/chart')?'style=background-color:#737373':''}}>Progress Status</a>

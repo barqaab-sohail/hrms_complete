@@ -18,13 +18,12 @@ class CreatePrPositionTable extends Migration
             $table->id();
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->bigInteger('pr_position_type_id')->unsigned();
-            
-            $table->string('name');
-            $table->float('total_mm',8,3)->nullable();  //first is total number of numbers and second is decimal precision
-            
+            $table->bigInteger('hr_designation_id')->unsigned();
+            $table->float('total_mm')->nullable();
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
             $table->foreign('pr_position_type_id')->references('id')->on('pr_position_types');
+            $table->foreign('hr_designation_id')->references('id')->on('hr_designations');
         });
     }
 

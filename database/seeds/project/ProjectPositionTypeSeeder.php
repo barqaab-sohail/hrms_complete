@@ -14,7 +14,8 @@ class ProjectPositionTypeSeeder extends Seeder
          DB::table('pr_position_types')->delete();
         
         $prPositions = array(
-        	array('name' => 'Overhead'),
+        	array('name' => 'Key Personnel'),
+            array('name' => 'Non Key Personnel'),
         	array('name' => 'Direct Cost'),
         );
 
