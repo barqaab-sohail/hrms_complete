@@ -15,12 +15,49 @@ class ProjectPositionController extends Controller
     
     public function create(Request $request){
 
-    	$positionTypes = PrPositionType::all();
+        	
+        if ($request->ajax()) {
+            
+            $data =  PrPosition::where('pr_detail_id', session('pr_detail_id'))->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->editColumn('is_lock', function($row){  
+                        if($row->is_lock==0){
+                          return 'Open';
+                        }else{
+                           return 'Lock';
+                        }     
+                    })
+                    ->addColumn('edit', function($row){
+   
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editMonth">Edit</a>';
+                            return $btn;
+                    })
+                    ->addColumn('delete', function($row){
+   
+                           $btn = '';
+
+                           
+                           $btn = ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMonth">Delete</a>';
+                            
+                            
+                           
+                            return $btn;
+                    })
+                    ->rawColumns(['edit','delete'])
+                    ->make(true);
+                        
+        }
+
+        $positionTypes = PrPositionType::all();
     	$prPositions =  PrPosition::where('pr_detail_id', session('pr_detail_id'))->get();
 
         if($request->ajax()){
+            
             $view = view ('project.position.create', compact('positionTypes','prPositions'))->render();
             return response()->json($view);
+
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }

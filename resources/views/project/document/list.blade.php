@@ -2,7 +2,7 @@
 
 <div class="card" id="myDataDiv">
 	<div class="card-body">
-		<h2 class="card-title">{{$folderName->name}} Detail</h2>
+		<h2 class="card-title">Detail</h2>
 		
 		<div class="table-responsive m-t-40">
 			

@@ -21,7 +21,7 @@ class ProjectDocumentController extends Controller
 
     public function show ($id){
         $folderName = PrFolderName::find($id);
-        $documentIds = PrDocument::where('pr_detail_id', session(' pr_detail_id'))
+        $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))
         ->where('pr_folder_name_id',$id)->get();
         $Ids = $documentIds->pluck('id')->toArray();
         //For security checking
@@ -306,10 +306,10 @@ class ProjectDocumentController extends Controller
 
 
 
-    // public function refreshTable(){
-    //     $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))->get();
-    //     return view('project.document.list',compact('documentIds'));
-    // }
+    public function refreshTable(){
+        $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))->get();
+        return view('project.document.list',compact('documentIds'));
+    }
 
 
 
