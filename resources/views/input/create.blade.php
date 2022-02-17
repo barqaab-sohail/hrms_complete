@@ -195,7 +195,6 @@ $(document).ready(function() {
             url: "{{url('input/inputDesignation')}}"+"/"+pr_detail_id,
              success:function(res)
              {       
-                  console.log(res);
                   if(res)
                   {
                      $("#hr_designation_id").empty();
@@ -216,6 +215,8 @@ $(document).ready(function() {
           $('#hr_employee_id').trigger('change');
           $('#hr_designation_id').val('');
           $('#hr_designation_id').trigger('change');
+          $('#office_department_id').val('');
+          $('#office_department_id').trigger('change');
           $('#input').val('');
           $('#input_id').val('');
           $('#remarks').val('');
@@ -261,7 +262,7 @@ $(document).ready(function() {
 
             $('#json_message_modal').html('');
             $.get("{{ url('input/input') }}" +'/' + input +'/edit', function (data) {
-            
+              console.log(data.id);
                 $('#modelHeading').html("Edit Input");
                 $('#saveBtn').val("edit-Input");
                 $('#projectModal').modal('show');

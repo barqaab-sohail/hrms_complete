@@ -39,7 +39,7 @@ class Input extends Model implements Auditable
          return $this->hasOneThrough(
             'App\Models\Office\OfficeDepartment',
             'App\Models\Input\InputOfficeDepartment',
-            'id',
+            'input_id',
             'id',
             'id',
             'office_department_id'
