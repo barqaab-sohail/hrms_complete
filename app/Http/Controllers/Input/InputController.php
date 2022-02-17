@@ -100,7 +100,7 @@ class InputController extends Controller
               $designationId = $employee->employeeDesignation->last()->id;
             }
 
-            DB::transaction(function () use ($request, $inputProject, $designationId) {  
+            DB::transaction(function () use ($request, $inputProject, $designationId, &$input) {  
 
             $input =  Input::updateOrCreate(['id' => $request->input_id],
                   ['input_project_id' => $inputProject->id, 
@@ -110,18 +110,17 @@ class InputController extends Controller
                   'input' => $request->input,
                   'remarks' => $request->remarks]
                   );
-                
-                if($request->filled('office_department_id')){
-                  InputOfficeDepartment::updateOrCreate(['input_id'=>$input->id],
-                    ['input_id'=>$input->id,
-                      'office_department_id'=>$request->office_department_id
 
-                    ]);
-                }
+              if($request->filled('office_department_id')){
+                InputOfficeDepartment::updateOrCreate(['input_id'=>$input->id],
+                  ['input_id'=>$input->id,
+                    'office_department_id'=>$request->office_department_id
+                  ]);
+              }
                
             }); // end transcation
             
-        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
+        return response()->json(['status'=> 'OK', 'message' => "$input Data Successfully Saved"]);
             
    }
 

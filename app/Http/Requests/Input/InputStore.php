@@ -43,10 +43,6 @@ class InputStore extends FormRequest
         
 
 
-        
-        
-
-
         $rules = [
         'hr_employee_id'=> 'required|unique_with:inputs,input_project_id,'.$this->input_id,
         'pr_detail_id'=> 'required',

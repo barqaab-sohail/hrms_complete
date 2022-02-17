@@ -81,7 +81,7 @@ class LeaveStore extends FormRequest
         }elseif($request->le_type_id==3){
             $this->leaveBalance = 365 - Leave::where('hr_employee_id',$request->hr_employee_id)->where('le_type_id',3)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->sum('days');
         }elseif($request->le_type_id==4){
-             $this->leaveBalance = 50;
+            $this->leaveBalance = 50 - Leave::where('hr_employee_id',$request->hr_employee_id)->where('le_type_id',4)->whereDate('from', ">=", $startDate)->whereDate('to', "<=",$endDate)->sum('days');
         }
     }
    
