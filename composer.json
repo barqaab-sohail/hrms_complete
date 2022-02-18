@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.2.5|^8.0",
         "asika/pdf2text": "1.*",
         "consoletvs/charts": "7.*",
         "felixkiss/uniquewith-validator": "^3.4",
@@ -27,6 +27,7 @@
         "spatie/laravel-permission": "^3.11",
         "staudenmeir/belongs-to-through": "^2.5",
         "yajra/laravel-datatables": "1.5",
+        "yajra/laravel-datatables-buttons": "^4.13",
         "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {

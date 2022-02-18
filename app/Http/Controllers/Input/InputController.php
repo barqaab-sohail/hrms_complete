@@ -88,9 +88,8 @@ class InputController extends Controller
     	return response()->json($inputProjects);
    }
 
-   public function store(InputStore $request){
+  public function store(InputStore $request){
 
-   			
             $inputProject = InputProject::where('input_month_id',$request->input_month_id)->where('pr_detail_id',$request->pr_detail_id)->first();
              
             $designationId = $request->hr_designation_id;
