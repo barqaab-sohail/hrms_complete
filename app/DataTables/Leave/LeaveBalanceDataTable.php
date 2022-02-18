@@ -49,7 +49,7 @@ class LeaveBalanceDataTable extends DataTable
                     ->minifiedAjax()
                    ->dom('Bfrtip')
                     ->orderBy(1)
-                   ->buttons(
+                    ->buttons(
                         Button::make('export'),
                     );
     }
@@ -67,8 +67,8 @@ class LeaveBalanceDataTable extends DataTable
             Column::make('employee_no'),
             Column::make('full_name'),
             Column::computed('action')
-                  ->exportable(fasle)
-                  ->printable(fasle)
+                  ->exportable(true)
+                  ->printable(false)
                   ->width(60)
                   ->addClass('text-center'),
         ];

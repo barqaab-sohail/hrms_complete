@@ -23,6 +23,10 @@
 <!-- JS Form Validations -->
 <script   src="{{asset('Massets/js/js-validation/jquery.form-validator.min.js') }}"></script>
 
+<script src="{{asset('vendor/datatables/buttons.server-side.js')}}"></script>
+
+
+
 <!-- ============================================================== -->
 <!-- This page plugins -->
 <!-- ============================================================== -->
