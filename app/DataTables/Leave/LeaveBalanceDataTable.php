@@ -21,8 +21,23 @@ class LeaveBalanceDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->filterColumn('full_name', function($query, $keyword) {
+                    $sql = "CONCAT(hr_employees.first_name,'-',hr_employees.last_name)  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+            })
             ->addColumn('full_name', '{{$first_name}} {{$last_name}}')
+            ->addColumn('casual_leave',function($data){
+                return casualLeave($data->id);
+            })
+            ->addColumn('accumulative_annual_leave',function($data){
+                return $data->leAccumulative->accumulative_total??'N/A';
+            })
             ->addColumn('action', 'Full Name');
+
+             //      ->addColumn('accumulative_annual_leave',function($data){
+
+       //           return $data->leAccumulative->accumulative_total??'N/A';
+       //      })
     }
 
     /**
@@ -47,10 +62,14 @@ class LeaveBalanceDataTable extends DataTable
                     ->setTableId('hr_employees-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                   ->dom('Bfrtip')
+                    ->dom('if')
                     ->orderBy(1)
-                    ->buttons(
+                     ->buttons(
+                        Button::make('create'),
                         Button::make('export'),
+                        Button::make('print'),
+                        Button::make('reset'),
+                        Button::make('reload')
                     );
     }
 
@@ -66,6 +85,8 @@ class LeaveBalanceDataTable extends DataTable
             Column::make('id'),
             Column::make('employee_no'),
             Column::make('full_name'),
+            Column::make('casual_leave'),
+            Column::make('accumulative_annual_leave'),
             Column::computed('action')
                   ->exportable(true)
                   ->printable(false)
@@ -84,8 +105,5 @@ class LeaveBalanceDataTable extends DataTable
         return 'HrEmployee_' . date('YmdHis');
     }
 
-    protected $exportColumns = [
-    'full_name',
-    'action',
-    ];
+    
 }
