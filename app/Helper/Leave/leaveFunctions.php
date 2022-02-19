@@ -6,7 +6,7 @@ use App\User;
 
 function casualLeave($id){
 	$employee = HrEmployee::with('employeeAppointment')->find($id);
-    $joiningDate = $employee->employeeAppointment->joining_date;
+    $joiningDate = $employee->employeeAppointment->joining_date??'';
     $startDate = date("Y").'-01-01';
     $endDate = date("Y").'-12-31';
 
