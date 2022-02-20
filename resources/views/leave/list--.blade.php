@@ -9,12 +9,28 @@
 		<h4 class="card-title" style="color:black">List of Leaves</h4>
 
 		<div class="table-responsive m-t-40">	
-			{!!$dataTable->table()!!}
+			<table id="myTable" class="table table-bordered table-striped">
+				<thead>
+				<tr>
+					<th>Employee ID</th>
+					<th>Employee Name</th>
+					<th>Designation/Position</th>
+					<th>Leave From</th>
+					<th>Leave To</th>
+					<th>Leave Type</th>
+					<th>Total Days</th>
+					<th>Leave Status</th>
+					<th class="text-center"style="width:5%">Edit</th>
+					@role('Super Admin')
+					<th class="text-center"style="width:5%">Delete</th>
+					@endrole
+				</tr>
+				</thead>
+			</table>
 		</div>
 		
 	</div>
 </div>
-{!!$dataTable->scripts()!!}
 
 <!-- Model -->
 <div class="modal fade" id="ajaxModel" aria-hidden="true">
@@ -70,8 +86,29 @@ $(document).ready(function() {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
     	});
-    	
 
+	    var table = $('#myTable').DataTable({
+	  		processing: true,
+	  		serverSide: true,
+	  		"aaSorting": [],
+		  	ajax: {
+		   	url: "{{ route('leave.index') }}",
+		  	},
+		  	columns: [
+			   {data: 'employee_no', name: 'employee_no'},
+			   {data: 'full_name', name: 'full_name'},
+			   {data: 'designation', name: 'designation'},
+			   {data: 'from', name: 'from'},
+			   {data: 'to', name: 'to'},
+			   {data: 'leave_type', name: 'leave_type'},
+			   {data: 'days', name: 'days'},
+			   {data: 'status', name: 'status'},
+			   {data: 'edit',name: 'edit', orderable: false, searchable: false },
+			   @role('Super Admin')
+			   {data: 'delete',name: 'delete', orderable: false, searchable: false }
+			   @endrole
+		  	]
+ 		});
 
  		$('body').unbind().on('click', '.editStatus', function () {
 	      	var leave_id = $(this).data('id');
@@ -111,8 +148,9 @@ $(document).ready(function() {
 	          type: "POST",
 	          dataType: 'json',
 	          success: function (data) {
-	            $('#ajaxModel').modal('hide');
-	            $('.fa-refresh').click();
+	              $('#ajaxModel').modal('hide');
+	              table.draw();
+	        
 	          },
 	          error: function (data) {
 	              
@@ -135,7 +173,7 @@ $(document).ready(function() {
 	            type: "DELETE",
 	            url: "{{ route('leave.store') }}"+'/'+leave_id,
 	            success: function (data) {
-	                $('.fa-refresh').click();
+	                table.draw();
 	                if(data.error){
 	                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
 	                }

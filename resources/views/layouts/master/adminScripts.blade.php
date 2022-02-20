@@ -23,7 +23,6 @@
 <!-- JS Form Validations -->
 <script   src="{{asset('Massets/js/js-validation/jquery.form-validator.min.js') }}"></script>
 
-<script src="{{asset('vendor/datatables/buttons.server-side.js')}}"></script>
 
 
 
@@ -63,6 +62,7 @@
     
 
 @yield('scripts')
+<script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
 @stack('scripts')
 <script src="{{asset('Massets/plugins/html5-editor/wysihtml5-0.3.0.js')}}"></script>
 <script src="{{asset('Massets/plugins/html5-editor/bootstrap-wysihtml5.js')}}"></script>

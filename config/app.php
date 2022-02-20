@@ -172,6 +172,7 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Yajra\DataTables\ButtonsServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
+        Barryvdh\Snappy\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -238,6 +239,8 @@ return [
         'DataTable'=> Yajra\DataTables\Facades\DataTables::class,
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
 
     ],
 
