@@ -17,6 +17,8 @@ class LeaveListDataTable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
+    
+
     public function dataTable($query)
     {
         return datatables()
@@ -89,7 +91,7 @@ class LeaveListDataTable extends DataTable
      */
     public function query(Leave $model)
     {
-        return $model->newQuery();
+        return $model->with('hrEmployee','employeeDesignation','leType')->orderBy('from', 'desc')->newQuery();
     }
 
     /**
@@ -132,8 +134,8 @@ class LeaveListDataTable extends DataTable
             Column::make('to'),
             Column::make('leave_type'),
             Column::make('status'),
-            Column::make('edit'),
-            Column::make('delete'),
+            Column::make('edit')->exportable(false)->printable(false),
+            Column::make('delete')->exportable(false)->printable(false),
 
         ];
     }
@@ -147,4 +149,7 @@ class LeaveListDataTable extends DataTable
     {
         return 'Leave\LeaveList_' . date('YmdHis');
     }
+
+    
 }
+
