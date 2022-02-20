@@ -31,13 +31,7 @@ class LeaveBalanceDataTable extends DataTable
             })
             ->addColumn('accumulative_annual_leave',function($data){
                 return $data->leAccumulative->accumulative_total??'N/A';
-            })
-            ->addColumn('action', 'Full Name');
-
-             //      ->addColumn('accumulative_annual_leave',function($data){
-
-       //           return $data->leAccumulative->accumulative_total??'N/A';
-       //      })
+            });
     }
 
     /**
@@ -48,7 +42,7 @@ class LeaveBalanceDataTable extends DataTable
      */
     public function query(HrEmployee $model)
     {
-        return $model->newQuery();
+        return $model->with('leAccumulative')->where('hr_status_id',1)->whereIn('employee_no',leaveEmployees())->newQuery();
     }
 
     /**
@@ -62,14 +56,10 @@ class LeaveBalanceDataTable extends DataTable
                     ->setTableId('hr_employees-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->dom('if')
+                    ->dom('Bif')
                     ->orderBy(1)
                      ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
+                        Button::make('export')
                     );
     }
 
@@ -86,8 +76,7 @@ class LeaveBalanceDataTable extends DataTable
             Column::make('employee_no'),
             Column::make('full_name'),
             Column::make('casual_leave'),
-            Column::make('accumulative_annual_leave'),
-            Column::computed('action')
+            Column::make('accumulative_annual_leave')
                   ->exportable(true)
                   ->printable(false)
                   ->width(60)
