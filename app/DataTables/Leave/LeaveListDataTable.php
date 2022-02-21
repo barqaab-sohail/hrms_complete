@@ -75,8 +75,8 @@ class LeaveListDataTable extends DataTable
             })
             ->addColumn('delete', function($data){
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteLeave">Delete</a>';                            
-                    return $btn;
+                $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteLeave">Delete</a>';                            
+                return $btn;
 
             })
             ->rawColumns(['status', 'edit','delete'])

@@ -30,6 +30,7 @@ use App\Models\Project\PrDetail;
 use App\Models\Hr\HrDocumentation;
 use DB;
 use App\Http\Requests\Hr\EmployeeStore;
+use App\DataTables\Hr\EmployeeListDataTable;
 use DataTables;
 
 class EmployeeController extends Controller
@@ -76,93 +77,95 @@ class EmployeeController extends Controller
     	return response()->json(['url'=> route("employee.edit",$employee),'message' => 'Data Successfully Saved']);
     }
 
-    public function index(Request $request){
+    public function index(EmployeeListDataTable $dataTable){
+
+        return $dataTable->render('hr.employee.listDataTable');
    
-        if($request->ajax()){
-            $data = HrEmployee::with('employeeDesignation','employeeProject','employeeOffice','employeeAppointment','hrContactMobile')->get();   
+       //  if($request->ajax()){
+       //      $data = HrEmployee::with('employeeDesignation','employeeProject','employeeOffice','employeeAppointment','hrContactMobile')->get();   
 
-            //first sort with respect to Designation
-            $designations = employeeDesignationArray();
-            $data = $data->sort(function ($a, $b) use ($designations) {
-              $pos_a = array_search($a->designation??'', $designations);
-              $pos_b = array_search($b->designation??'', $designations);
-              return $pos_a - $pos_b;
-            });
+       //      //first sort with respect to Designation
+       //      $designations = employeeDesignationArray();
+       //      $data = $data->sort(function ($a, $b) use ($designations) {
+       //        $pos_a = array_search($a->designation??'', $designations);
+       //        $pos_b = array_search($b->designation??'', $designations);
+       //        return $pos_a - $pos_b;
+       //      });
 
-            //second sort with respect to Hr Status
-            $hrStatuses = array('On Board','Resigned','Terminated','Retired','Long Leave','Manmonth Ended','Death');
+       //      //second sort with respect to Hr Status
+       //      $hrStatuses = array('On Board','Resigned','Terminated','Retired','Long Leave','Manmonth Ended','Death');
 
-            $data = $data->sort(function ($a, $b) use ($hrStatuses) {
-              $pos_a = array_search($a->hr_status_id??'', $hrStatuses);
-              $pos_b = array_search($b->hr_status_id??'', $hrStatuses);
-              return $pos_a - $pos_b;
-            });
+       //      $data = $data->sort(function ($a, $b) use ($hrStatuses) {
+       //        $pos_a = array_search($a->hr_status_id??'', $hrStatuses);
+       //        $pos_b = array_search($b->hr_status_id??'', $hrStatuses);
+       //        return $pos_a - $pos_b;
+       //      });
 
 
-            return DataTables::of($data)
+       //      return DataTables::of($data)
 
-            ->addColumn('full_name',function($data){
+       //      ->addColumn('full_name',function($data){
                 
-                if(Auth::user()->can('hr edit record')){
-                    $fullName = '<a href="'.route('employee.edit',$data->id).'" style="color:grey">'.$data->full_name.'</a>';
-                    return $fullName;
-                }else{
-                    return $data->full_name;
-                }
+       //          if(Auth::user()->can('hr edit record')){
+       //              $fullName = '<a href="'.route('employee.edit',$data->id).'" style="color:grey">'.$data->full_name.'</a>';
+       //              return $fullName;
+       //          }else{
+       //              return $data->full_name;
+       //          }
 
-            })
+       //      })
 
-            ->addColumn('project',function($data){
+       //      ->addColumn('project',function($data){
                 
-               $project = isset($data->employeeProject->last()->name)?$data->employeeProject->last()->name:'';
-               if($project==''){
-                    return '';
-               }
-               else if($project =='overhead'){
-                    return $data->employeeOffice->last()->name??'';
+       //         $project = isset($data->employeeProject->last()->name)?$data->employeeProject->last()->name:'';
+       //         if($project==''){
+       //              return '';
+       //         }
+       //         else if($project =='overhead'){
+       //              return $data->employeeOffice->last()->name??'';
 
-                }else{
+       //          }else{
 
-                    if(Auth::user()->hasPermissionTo('hr edit documentation')){
-                    $link = '<a href="'.route('project.edit',$data->employeeProject->last()->id??'').'" style="color:grey">'.$data->employeeProject->last()->name??''.'</a>';
-                     return $link;
-                    } else{
-                        return $data->employeeProject->last()->name??'';
-                    }
+       //              if(Auth::user()->hasPermissionTo('hr edit documentation')){
+       //              $link = '<a href="'.route('project.edit',$data->employeeProject->last()->id??'').'" style="color:grey">'.$data->employeeProject->last()->name??''.'</a>';
+       //               return $link;
+       //              } else{
+       //                  return $data->employeeProject->last()->name??'';
+       //              }
 
-                }
+       //          }
 
-            })
-            ->addColumn('date_of_birth',function($data){
-                return \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y');
-            })
-            ->addColumn('date_of_joining',function($data){
-                return \Carbon\Carbon::parse($data->employeeAppointment->joining_date??'')->format('M d, Y');
-            })
-            ->addColumn('mobile',function($data){
-                return $data->hrContactMobile->mobile??'';
-            })
-            ->addColumn('edit', function($data){
+       //      })
+       //      ->addColumn('date_of_birth',function($data){
+       //          return \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y');
+       //      })
+       //      ->addColumn('date_of_joining',function($data){
+       //          return \Carbon\Carbon::parse($data->employeeAppointment->joining_date??'')->format('M d, Y');
+       //      })
+       //      ->addColumn('mobile',function($data){
+       //          return $data->hrContactMobile->mobile??'';
+       //      })
+       //      ->addColumn('edit', function($data){
 
-                    if(Auth::user()->hasPermissionTo('hr edit documentation')){
+       //              if(Auth::user()->hasPermissionTo('hr edit documentation')){
                         
-                        $button = '<a class="btn btn-success btn-sm" href="'.route('employee.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+       //                  $button = '<a class="btn btn-success btn-sm" href="'.route('employee.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
 
-                        return $button;
-                    } 
+       //                  return $button;
+       //              } 
 
-            })
-            ->addColumn('delete', function($data){
-                        $button = '<form  id="formDeleteContact'.$data->id.'"  action="'.route('employee.destroy',$data->id).'" method="POST">'.method_field('DELETE').csrf_field().'
-                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
-                                 </form>';
-                        return $button;
-                    })
+       //      })
+       //      ->addColumn('delete', function($data){
+       //                  $button = '<form  id="formDeleteContact'.$data->id.'"  action="'.route('employee.destroy',$data->id).'" method="POST">'.method_field('DELETE').csrf_field().'
+       //                           <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
+       //                           </form>';
+       //                  return $button;
+       //              })
 
-            ->rawColumns(['full_name','project','date_of_birth','date_of_joining','mobile','edit','delete'])
-            ->make(true);
-        }
-       return view ('hr.employee.listDataTable');
+       //      ->rawColumns(['full_name','project','date_of_birth','date_of_joining','mobile','edit','delete'])
+       //      ->make(true);
+       //  }
+       // return view ('hr.employee.listDataTable');
        
     }
 
