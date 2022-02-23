@@ -39,7 +39,7 @@ class EmployeeController extends Controller
 
     public function create(){
 
-        session()->put('hr_employee_id', '');
+      session()->put('hr_employee_id', '');
     	$genders = Gender::all();
     	$maritalStatuses = MaritalStatus::all();
     	$religions = Religion::all();

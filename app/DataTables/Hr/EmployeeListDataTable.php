@@ -20,12 +20,22 @@ class EmployeeListDataTable extends DataTable
      */
     public function dataTable($query)
     {
+        
+        //first sort with respect to Designation
+        //$designations = employeeDesignationArray();
+        // $query = $query->sort(function ($a, $b) use ($designations) {
+        //   $pos_a = array_search($a->designation??'', $designations);
+        //   $pos_b = array_search($b->designation??'', $designations);
+        //   return $pos_a - $pos_b;
+        // });
+   
         return datatables()
             ->eloquent($query)
             ->filterColumn('full_name', function($query, $keyword) {
                     $sql = "CONCAT(hr_employees.first_name,'-',hr_employees.last_name)  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
             })
+           
             ->addColumn('full_name',function($data){
                 
                 if(Auth::user()->can('hr edit record')){
@@ -66,21 +76,23 @@ class EmployeeListDataTable extends DataTable
             })
             ->addColumn('edit', function($data){
 
-                    if(Auth::user()->hasPermissionTo('hr edit documentation')){
-                        
-                        $button = '<a class="btn btn-success btn-sm" href="'.route('employee.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+                if(Auth::user()->hasPermissionTo('hr edit documentation')){
+                    
+                    $button = '<a class="btn btn-success btn-sm" href="'.route('employee.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
 
-                        return $button;
-                    } 
+                    return $button;
+                } 
 
             })
             ->addColumn('delete', function($data){
-                        $button = '<form  id="formDeleteContact'.$data->id.'"  action="'.route('employee.destroy',$data->id).'" method="POST">'.method_field('DELETE').csrf_field().'
-                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
-                                 </form>';
-                        return $button;
+                if(Auth::user()->hasRole('Super Admin')){
+                    $button = '<form  id="formDeleteContact'.$data->id.'"  action="'.route('employee.destroy',$data->id).'" method="POST">'.method_field('DELETE').csrf_field().'
+                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
+                             </form>';
+                    return $button;
+                }
             })
-            ->rawColumns(['full_name','project','date_of_birth','date_of_joining','mobile','edit','delete'])
+            ->rawColumns(['full_name','project','edit','delete'])
             ;
     }
 
@@ -94,15 +106,6 @@ class EmployeeListDataTable extends DataTable
     {
     
         $data = $model->with('employeeDesignation','employeeProject','employeeOffice','employeeAppointment','hrContactMobile')->newQuery();
-
-
-        // //first sort with respect to Designation
-        //     $designations = employeeDesignationArray();
-        //     $data = $data->sort(function ($a, $b) use ($designations) {
-        //       $pos_a = array_search($a->designation??'', $designations);
-        //       $pos_b = array_search($b->designation??'', $designations);
-        //       return $pos_a - $pos_b;
-        //     });
 
         //     //second sort with respect to Hr Status
         //     $hrStatuses = array('On Board','Resigned','Terminated','Retired','Long Leave','Manmonth Ended','Death');
@@ -152,27 +155,15 @@ class EmployeeListDataTable extends DataTable
             
             'employee_no',
             ['data' => 'full_name', 'title' => 'Employee Name'],
-            ['data' => 'designation', 'title' => 'Designation/Position'],
+            ['data' => 'designation', 'title' => 'Designation/Position','searchable'=>false],
             ['data' => 'project', 'title' => 'Project/Office'],
             'date_of_birth',
             ['data' => 'hr_status_id', 'title' => 'Status'],
             ['data' => 'cnic', 'title' => 'CNIC'],
             'date_of_joining',
             'mobile',
-            'edit',
-            'delete'
-
-            // Column::make('employee_no'),
-            // Column::make('full_name'),
-            // Column::make('designation'),
-            // Column::make('project'),
-            // Column::make('date_of_birth'),
-            // Column::make('hr_status_id'),
-            // Column::make('cnic'),
-            // Column::make('date_of_joining'),
-            // Column::make('mobile'),
-            // Column::make('edit'),
-            // Column::make('delete')
+            Column::make('edit'),
+            Column::make('delete')
         ];
     }
 
