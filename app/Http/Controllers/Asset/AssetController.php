@@ -51,7 +51,11 @@ class AssetController extends Controller
                 return $barCode;
             })
             ->addColumn('image', function($data){
+                if ($data->asDocumentation->extension != 'pdf'){
                $image ='<img src="'.url(isset($data->asDocumentation->file_name)?'/storage/'.$data->asDocumentation->path.$data->asDocumentation->file_name:'Massets/images/document.png').'" class="img-round picture-container picture-src"  id="ViewIMG'.$data->id.'" width=50>';
+                }else{
+                     $image ='<img src="'.asset('Massets/images/document.png').'" href="'.url(isset($data->asDocumentation->file_name)?'/storage/'.$data->asDocumentation->path.$data->asDocumentation->file_name:'Massets/images/document.png').'" class="img-round picture-container picture-src"  id="ViewPDF'.$data->id.'" width=50>';
+                }
 
 
                 return $image;

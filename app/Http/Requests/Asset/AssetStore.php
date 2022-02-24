@@ -33,9 +33,9 @@ class AssetStore extends FormRequest
 
          //If method is POST then document is required otherwise in Patch method document is nullable.
             if ($this->getMethod() == 'POST') {
-                $rules += [ 'document'=>'required|file|max:1000|mimes:jpg,png,jpeg'];
+                $rules += [ 'document'=>'required|file|max:1000|mimes:pdf,jpg,png,jpeg'];
             }else{
-                 $rules += [ 'document'=>'nullable|file|max:1000|mimes:jpg,png,jpeg'];
+                 $rules += [ 'document'=>'nullable|file|max:1000|mimes:pdf,jpg,png,jpeg'];
             }
 
     

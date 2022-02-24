@@ -62,7 +62,8 @@ $(document).ready(function() {
 			   @endrole
 		  	],
 		  	"drawCallback": function( settings ) {
-        		$("[id^='ViewIMG']").EZView();
+        		$("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
+
     		}
  		});
 

@@ -277,8 +277,13 @@ $(document).ready(function() {
                
                 readURL(this);
                 document.getElementById("h6").innerHTML = "Image is Attached";
+            }else if(fileType=='application/pdf'){
+                readURL(this);// for Default Image
+                
+                document.getElementById("pdf").src="{{asset('Massets/images/document.png')}}";  
+                $( "#pdf" ).show();
             }else{
-                alert('Only JPG and PNG Files Allowed');
+                alert('Only PDF, JPG and PNG Files Allowed');
             $(this).val('');
             }
         }
