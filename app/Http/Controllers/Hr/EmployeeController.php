@@ -163,8 +163,10 @@ class EmployeeController extends Controller
             ->rawColumns(['full_name','project','date_of_birth','date_of_joining','mobile','edit','delete'])
             ->make(true);
         }
-       return view ('hr.employee.listDataTable');
-       
+          
+        return view ('hr.employee.listDataTable');
+            
+    
     }
 
     public function activeEmployeesList(){

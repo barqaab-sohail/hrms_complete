@@ -99,6 +99,18 @@ class HrEmployee extends Model implements Auditable
         )->orderBy('employee_designations.id', 'asc');
     }
 
+    public function employeeState(){
+        return $this->hasManyThrough(
+            'App\Models\Common\State', //Final Model HrDocumentName
+            'App\Models\Hr\HrContact', //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',              //Forein Key in Immediate Model of This Model
+            'id',                          //Final Model Primary Key
+            'id',   //current model Primary Key of Final Model (it is called foreign key)
+            'state_id'           //Forein Key in Immediate Model of Final Model
+        )->orderBy('hr_contacts.id', 'asc');
+    }
+
+
     public function employeeCategory(){
         return $this->hasManyThrough(
             'App\Models\Hr\HrCategory', //Final Model HrDocumentName
