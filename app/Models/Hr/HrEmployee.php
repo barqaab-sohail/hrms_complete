@@ -26,6 +26,8 @@ class HrEmployee extends Model implements Auditable
         return $this->employeeProject->last()->name??'';
     }
 
+   
+
     //default value of hr_status_id=1
     protected $attributes = [
         'hr_status_id' => 1 //default value of hr_status_id is 1 
@@ -171,6 +173,7 @@ class HrEmployee extends Model implements Auditable
             return $this->hasOne('App\Models\Hr\HrContact')->where('hr_contact_type_id','=',1);
     }
 
+    
     public function employeeCatA(){
             return $this->hasOne('App\Models\Hr\EmployeeCategory')->where('hr_category_id','=',1);
     }
@@ -394,6 +397,10 @@ class HrEmployee extends Model implements Auditable
 
     public function hod(){
           return $this->hasOne('App\Models\Hr\EmployeeManager')->orderBy('effective_date', 'DESC');
+    }
+
+    public function picture(){
+        return $this->hasOne('App\Models\Hr\HrDocumentation')->where('description','=','Picture');
     }
 
     public function employeePicture(){
