@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Mobile;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDocumentation;
+use App\User;
 
 class EmployeeController extends Controller
 {
@@ -13,7 +15,6 @@ class EmployeeController extends Controller
     public function index(){
     	
     	$data = HrEmployee::with('employeeDesignation','employeeProject','employeeOffice','employeeAppointment','hrContactMobile')->get();
-
 
     	//first sort with respect to Designation
             $designations = employeeDesignationArray();
@@ -54,6 +55,34 @@ class EmployeeController extends Controller
        
         // dd(asset('storage/'.$hremployee->picture->path . $hremployee->picture->file_name));
     	return response()->Json($employees);
+    }
+
+    public function user(Request $request){
+		
+		$user = User::where('email',$request->email)->first();
+		
+		if($user){
+			if(Hash::check($request->password, $user->password)){
+				
+				$fullName = $user->hrEmployee->full_name;
+				
+			echo json_encode(array( "status" => "true","message" => "Login successfully!", "full_name" => $fullName) );
+				
+
+			}else{
+				
+				echo json_encode(array( "status" => "false","message" => "Invalid username or password!") );
+				
+				//echo "Email or Password is not correct";
+			}
+    	}else{
+
+    		echo json_encode(array( "status" => "false","message" => "You are not registered please contact to HR Department") );
+    		//echo "Email  is nottttt correct";
+    	}
+
+    	
+    	
     }
 
 }
