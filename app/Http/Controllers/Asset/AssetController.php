@@ -101,7 +101,7 @@ class AssetController extends Controller
             //add image
                 $extension = request()->document->getClientOriginalExtension();
                 $fileName = time().'.'.$extension;
-                $folderName = "asset/".$asset->id."/";
+                $folderName = "asset/".  $asset->id;
                 //store file
                 $request->file('document')->storeAs('public/'.$folderName,$fileName);
                 
@@ -219,7 +219,6 @@ class AssetController extends Controller
     public function asCode($asSubClass){
 
         $asSubClass = AsSubClass::where('id',$asSubClass)->first();
-
 
         $count = 1;
        // $code = $code.'0'; //200

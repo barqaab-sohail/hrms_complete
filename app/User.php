@@ -8,10 +8,11 @@ use Illuminate\Notifications\Notifiable;
 use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Hr\HrDocumentation;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements Auditable
 {
-    use Notifiable, HasRoles;
+    use Notifiable, HasRoles, HasApiTokens;
      use \OwenIt\Auditing\Auditable;
 
     /**
