@@ -11,7 +11,8 @@ use App\User;
 
 class EmployeeController extends Controller
 {
-    
+   
+
     public function index(){
     	
     	$data = HrEmployee::with('employeeDesignation','employeeProject','employeeOffice','employeeAppointment','hrContactMobile')->get();
@@ -54,7 +55,8 @@ class EmployeeController extends Controller
       
        
         // dd(asset('storage/'.$hremployee->picture->path . $hremployee->picture->file_name));
-    	return response()->Json($employees);
+         $data = HrEmployee::find(3);
+    	return response()->Json($data);
     }
 
     public function user(Request $request){
@@ -66,7 +68,7 @@ class EmployeeController extends Controller
 				
 				$fullName = $user->hrEmployee->full_name;
 				
-			echo json_encode(array( "status" => "true","message" => "Login successfully!", "full_name" => $fullName) );
+			echo json_encode(array( "status" => "true","message" => "Login successfully!", "full_name                                  " => $fullName) );
 				
 
 			}else{
