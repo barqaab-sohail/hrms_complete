@@ -173,6 +173,7 @@ return [
         Yajra\DataTables\ButtonsServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
 
         /*
          * Application Service Providers...
@@ -241,6 +242,7 @@ return [
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
 
     ],
 

@@ -81,6 +81,16 @@
                        
                     </div>
                 </div>
+                 <div class="col-md-5">
+                     <div class="form-group row">
+                        <center >
+                              {!! QrCode::size(150)->generate($data->asset_code); !!}
+                              <br>
+                              {{$data->asset_code}}
+                        </center>
+                       
+                    </div>
+                </div>
 
 
             </div><!--/End Row-->

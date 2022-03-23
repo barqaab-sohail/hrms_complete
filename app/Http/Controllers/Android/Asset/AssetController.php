@@ -17,8 +17,16 @@ class AssetController extends Controller
 
     	$asset = Asset::where('asset_code',$id)->select('description','id','as_sub_class_id','asset_code')->first();
     	//$asset = Asset::find($id);
-    	
-    	return response()->json($assetCode, 202);
+    	$image = AsDocumentation::where('asset_id', $id)->where('description','image')->first();
+
+    	$data['description'] = $asset->description;
+    	$data['asset_code'] = $asset->asset_code;
+    	$data['asset_image'] = asset('/storage/'.$image->path . $image->file_name);
+    	$data['allocation'] = $asset->asCurrentAllocation->full_name??'';
+    	$data['location'] = $asset->asCurrentLocation->name??'';
+    	$data ['ownsership']=$asset->asOwnership->name??'';
+
+    	return response()->json($data, 202);
     }
 
     public function store (Request $request){
@@ -62,7 +70,7 @@ class AssetController extends Controller
 
     	}); // end transcation
 
-    	$result = "It is working";
+    	$result = "Asset Sucessfully Saved";
     	
 
     	return response ()->json($result, 200);
