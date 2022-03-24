@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Asset\Asset;
 use App\Models\Asset\AsSubClass;
 use App\Models\Asset\AsClass;
+use App\Models\Common\Client;
 use App\Models\Asset\AsDocumentation;
 use DB;
 
@@ -107,6 +108,11 @@ class AssetController extends Controller
     	
     	return response ()->json($asSubClass, 200);
     	
+    }
+
+    public function clients(){
+    	$clients = Client::select('id','name')->get();
+    	return response ()->json($clients, 200);
     }
 
 }
