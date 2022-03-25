@@ -9,6 +9,7 @@ use App\Models\Asset\AsSubClass;
 use App\Models\Asset\AsClass;
 use App\Models\Common\Client;
 use App\Models\Asset\AsDocumentation;
+use App\Models\Asset\AsOwnership;
 use DB;
 
 
@@ -32,11 +33,8 @@ class AssetController extends Controller
 
     public function store (Request $request){
 
-    	$asSubClass = AsSubClass::where('name', $request->as_sub_class_name)->first();
     	$input= $request->all();
-    	$input['as_sub_class_id']= $asSubClass->id;
-    	$assetCode = AssetController::asCode($input['as_sub_class_id']);
-    	$input['asset_code'] = $assetCode;
+    	$input['asset_code'] = AssetController::asCode($request->as_sub_class_id);
 
     	DB::transaction(function () use ($input, $request, &$asset) { 
     		$asset = Asset::create($input);
@@ -68,6 +66,8 @@ class AssetController extends Controller
             $attachment['asset_id']=$asset->id;
 
             AsDocumentation::create($attachment);
+            $input['asset_id'] =$asset->id;
+            AsOwnership::create($input);
 
     	}); // end transcation
 
@@ -77,9 +77,9 @@ class AssetController extends Controller
     	return response ()->json($result, 200);
     }
 
-    public function asCode($asSubClass){
+    public function asCode($asSubClassId){
 
-        $asSubClass = AsSubClass::where('id',$asSubClass)->first();
+        $asSubClass = AsSubClass::find($asSubClassId);
 
         $count = 1;
        // $code = $code.'0'; //200
@@ -102,9 +102,9 @@ class AssetController extends Controller
     	
     }
 
-    public function subClasses($className){
-    	$class = AsClass::where('name', $className)->first();
-    	$asSubClass	= AsSubClass::where('as_class_id',$class->id)->select('id','name')->get();
+    public function subClasses($classId){
+    	//$class = AsClass::where('name', $className)->first();
+    	$asSubClass	= AsSubClass::where('as_class_id',$classId)->select('id','name')->get();
     	
     	return response ()->json($asSubClass, 200);
     	

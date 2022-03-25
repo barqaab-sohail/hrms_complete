@@ -19,9 +19,9 @@
 					<th>Barcode</th>
 					<th>Image</th>
 					<th class="text-center"style="width:5%">Edit</th>
-					@role('Super Admin')
+					@can('asset delete record')
 					<th class="text-center"style="width:5%">Delete</th>
-					@endrole
+					@endcan
 				
 				</tr>
 				</thead>
@@ -57,9 +57,9 @@ $(document).ready(function() {
 			   {data: 'bar_code', name: 'bar_code'},
 			   {data: 'image', name: 'image'},
 			   {data: 'edit',name: 'edit', orderable: false, searchable: false },
-			   @role('Super Admin')
+			   @can('asset delete record')
 			   {data: 'delete',name: 'delete', orderable: false, searchable: false }
-			   @endrole
+			   @endcan
 		  	],
 		  	"drawCallback": function( settings ) {
         		$("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
