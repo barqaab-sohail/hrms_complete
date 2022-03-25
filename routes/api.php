@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::Post('/user','Mobile\EmployeeController@user');
 Route::Post('/user/login','Android\Auth\UserController@login');
+Route::Get('/ageChart','Android\Hr\EmployeeController@ageChart');
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
