@@ -32,7 +32,7 @@ class UserController extends Controller
         } 
         else{ 
             
-        	$error['message'] = 'Unauthorised';
+        	$error['message'] = 'Email or Password is Incorrected!';
         	return response()->json($error, 404);
            
         } 
