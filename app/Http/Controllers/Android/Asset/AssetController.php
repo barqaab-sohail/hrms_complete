@@ -19,16 +19,20 @@ class AssetController extends Controller
 
     	$asset = Asset::where('asset_code',$id)->select('description','id','as_sub_class_id','asset_code')->first();
     	//$asset = Asset::find($id);
-    	$image = AsDocumentation::where('asset_id', $id)->where('description','image')->first();
+    	if ($asset ){
+	    	$image = AsDocumentation::where('asset_id', $asset->id)->where('description','image')->first();
 
-    	$data['description'] = $asset->description;
-    	$data['asset_code'] = $asset->asset_code;
-    	$data['asset_image'] = asset('/storage/'.$image->path . $image->file_name);
-    	$data['allocation'] = $asset->asCurrentAllocation->full_name??'';
-    	$data['location'] = $asset->asCurrentLocation->name??'';
-    	$data ['ownsership']=$asset->asOwnership->name??'';
-
-    	return response()->json($data, 202);
+	    	$data['description'] = $asset->description;
+	    	$data['asset_code'] = $asset->asset_code;
+	    	$data['asset_image'] = asset('/storage/'.$image->path . $image->file_name);
+	    	$data['allocation'] = $asset->asCurrentAllocation->full_name??'';
+	    	$data['location'] = $asset->asCurrentLocation->name??'';
+	    	$data ['ownsership']=$asset->asOwnership->name??'';
+    		
+    		return response()->json($data, 200);
+    	}else{
+    		return response()->json("No Data Found", 400);
+    	}
     }
 
     public function store (Request $request){
