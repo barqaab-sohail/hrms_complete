@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::Post('/user','Mobile\EmployeeController@user');
 Route::Post('/user/login','Android\Auth\UserController@login');
 
-
+Route::get('/clients','Android\Asset\AssetController@clients');
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -37,5 +37,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/asset/store','Android\Asset\AssetController@store');
 
    Route::Get('/ageChart','Android\Hr\EmployeeController@ageChart');
+   
 
 });
