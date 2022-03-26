@@ -24,7 +24,7 @@ Route::Post('/user/login','Android\Auth\UserController@login');
 
 Route::get('/clients','Android\Asset\AssetController@clients');
 
-
+ Route::Get('/ageChart','Android\Hr\EmployeeController@ageChart');
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	
 	Route::get('/user/employee', 'Mobile\EmployeeController@index');
@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
    
 	Route::post('/asset/store','Android\Asset\AssetController@store');
 
-   Route::Get('/ageChart','Android\Hr\EmployeeController@ageChart');
+  
    
 
 });
