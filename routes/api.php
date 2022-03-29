@@ -20,14 +20,21 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::Post('/user','Mobile\EmployeeController@user');
+<<<<<<< HEAD
+=======
+Route::Post('/user/login','Android\Auth\UserController@login');
+>>>>>>> 1270b3d31181aaae23c4db8056caa8aaa51e1f58
 
 	Route::Post('/user/login','Android\Auth\UserController@login');
 
     
 
+
+ Route::Get('/ageChart','Android\Hr\EmployeeController@ageChart');
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	
 	Route::get('/user/employee', 'Mobile\EmployeeController@index');
+<<<<<<< HEAD
 	Route::post('/user/logout', 'Android\Auth\UserController@logout');
    	Route::Get('/ageChart','Android\Hr\EmployeeController@ageChart');
 	Route::get('/asset/classes','Android\Asset\AssetController@classes');
@@ -36,4 +43,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::get('/asset/asset/{id}','Android\Asset\AssetController@show');
 	Route::post('/asset/store','Android\Asset\AssetController@store');
 
+=======
+    Route::post('/user/logout', 'Android\Auth\UserController@logout');
+
+    
+ 	Route::get('/asset/classes','Android\Asset\AssetController@classes');
+	Route::get('/clients','Android\Asset\AssetController@clients');
+	Route::get('/asset/subClasses/{id}','Android\Asset\AssetController@subClasses');
+	Route::get('/asset/asset/{id}','Android\Asset\AssetController@show');
+   Route::get('/clients','Android\Asset\AssetController@clients');
+	Route::post('/asset/store','Android\Asset\AssetController@store');
+
+  
+
+
+>>>>>>> 1270b3d31181aaae23c4db8056caa8aaa51e1f58
 });
