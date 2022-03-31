@@ -10,6 +10,7 @@ use App\Models\Asset\AsClass;
 use App\Models\Common\Client;
 use App\Models\Asset\AsDocumentation;
 use App\Models\Asset\AsOwnership;
+use App\Models\Hr\HrEmployee;
 use DB;
 
 
@@ -117,6 +118,20 @@ class AssetController extends Controller
     public function clients(){
     	$clients = Client::select('id','name')->get();
     	return response ()->json($clients, 200);
+    }
+
+    public function employees(){
+        $data = HrEmployee::with('employeeDesignation')->whereIn('hr_status_id',array(1,5))->get();
+
+        foreach($data as $employee){
+
+            $employees[] =  array("id" => $employee->id,
+                                "employee_no" => $employee->employee_no,
+                                "full_name" => $employee->full_name,
+                                "designation"=>$employee->designation);
+         }
+
+         return response()->json ($employees);
     }
 
 }

@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/user','Mobile\EmployeeController@user');
 Route::post('/user/login','Android\Auth\UserController@login');
-
+Route::get('/asset/employees','Android\Asset\AssetController@employees');
 
    
 
@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::get('/asset/classes','Android\Asset\AssetController@classes');
 	Route::get('/clients','Android\Asset\AssetController@clients');
 	Route::get('/asset/subClasses/{id}','Android\Asset\AssetController@subClasses');
+	
 	Route::get('/asset/asset/{id}','Android\Asset\AssetController@show');
 	Route::post('/asset/store','Android\Asset\AssetController@store');
 
