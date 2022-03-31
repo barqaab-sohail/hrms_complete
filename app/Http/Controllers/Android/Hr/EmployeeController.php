@@ -58,11 +58,13 @@ class EmployeeController extends Controller
               return $pos_a - $pos_b;
             });
 
-         
+         $defaultPicture = asset('Massets/images/default.png');
          foreach($data as $employee){
          	$picture = HrDocumentation::where('hr_employee_id',$employee->id)->where('description','Picture')->first();
          	if($picture){
          		$picture = asset('storage/'.$picture->path.$picture->file_name);
+         	}else{
+         		$picture = $defaultPicture;
          	}
 
          	$employees[] =  array("id" => $employee->id,
