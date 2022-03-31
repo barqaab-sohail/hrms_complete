@@ -19,12 +19,11 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::Post('/user','Mobile\EmployeeController@user');
-Route::Post('/user/login','Android\Auth\UserController@login');
-Route::Get('/hr/employees','Android\Hr\EmployeeController@employees');
+Route::post('/user','Mobile\EmployeeController@user');
+Route::post('/user/login','Android\Auth\UserController@login');
 
 
-    
+   
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -32,7 +31,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	//Route::get('/user/employee', 'Mobile\EmployeeController@index');
 
 	Route::post('/user/logout', 'Android\Auth\UserController@logout');
-   	Route::Get('/ageChart','Android\Hr\EmployeeController@ageChart');
+   	Route::get('/ageChart','Android\Hr\EmployeeController@ageChart');
+   	Route::get('/hr/employees','Android\Hr\EmployeeController@employees');
+
 
 	Route::get('/asset/classes','Android\Asset\AssetController@classes');
 	Route::get('/clients','Android\Asset\AssetController@clients');
