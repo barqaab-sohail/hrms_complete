@@ -8,8 +8,10 @@ use App\Models\Asset\Asset;
 use App\Models\Asset\AsSubClass;
 use App\Models\Asset\AsClass;
 use App\Models\Common\Client;
+use App\Models\Office\Office;
 use App\Models\Asset\AsDocumentation;
 use App\Models\Asset\AsOwnership;
+use App\Models\Asset\AsLocation;
 use App\Models\Hr\HrEmployee;
 use DB;
 
@@ -62,7 +64,6 @@ class AssetController extends Controller
 	        $serializedFoo = serialize($image);
 	        $size = mb_strlen($serializedFoo, '8bit');
 	        
-
     		$attachment['description']='image';
             $attachment['file_name']=$fileName;
             $attachment['size']=$size;
@@ -72,7 +73,9 @@ class AssetController extends Controller
 
             AsDocumentation::create($attachment);
             $input['asset_id'] =$asset->id;
+            $input['date']=\Carbon\Carbon::now()->format('Y-m-d');
             AsOwnership::create($input);
+            AsLocation::create($input);
 
     	}); // end transcation
 
@@ -132,6 +135,11 @@ class AssetController extends Controller
          }
 
          return response()->json ($employees);
+    }
+
+    public function offices(){
+    	$offices = Office::select('id','name')->orderBy('id', 'asc')->get();
+    	return response ()->json($offices, 200);
     }
 
 }
