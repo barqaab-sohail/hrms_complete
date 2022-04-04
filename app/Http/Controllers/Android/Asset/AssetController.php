@@ -75,7 +75,15 @@ class AssetController extends Controller
             $input['asset_id'] =$asset->id;
             $input['date']=\Carbon\Carbon::now()->format('Y-m-d');
             AsOwnership::create($input);
-            AsLocation::create($input);
+            
+            if ( $input['hr_employee_id']=="0"){
+            	$input['hr_employee_id']= null;
+            }
+            if ( $input['office_id']=="0"){
+            	$input['office_id']= null;
+            }
+            	
+            	AsLocation::create($input);
 
     	}); // end transcation
 
