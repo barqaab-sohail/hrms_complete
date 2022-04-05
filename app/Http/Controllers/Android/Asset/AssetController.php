@@ -76,10 +76,10 @@ class AssetController extends Controller
             $input['date']=\Carbon\Carbon::now()->format('Y-m-d');
             AsOwnership::create($input);
             
-            if ( $input['hr_employee_id']=="0"){
+            if ( isset($request->hr_employee_id) && $input['hr_employee_id']=="0"){
             	$input['hr_employee_id']= null;
             }
-            if ( $input['office_id']=="0"){
+            if ( isset($request->office_id) && $input['office_id']=="0"){
             	$input['office_id']= null;
             }
             	

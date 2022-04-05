@@ -82,4 +82,19 @@ class EmployeeController extends Controller
          return response()->json ($employees);
 
     }
+
+    public function documents($hrEmployeeId){
+
+    	$employeeDocuments = HrDocumentation::where('hr_employee_id',$hrEmployeeId)->get();
+
+    	foreach ($employeeDocuments as $document){
+    		$documents[] = array("id"=>$document->id,
+    							"description"=>$document->description,
+    							"document"=>asset('storage/'.$document->path.$document->file_name)
+    							);
+    	}
+
+    	return response()->json($documents);
+
+    }
 }
