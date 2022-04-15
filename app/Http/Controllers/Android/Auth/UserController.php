@@ -28,6 +28,7 @@ class UserController extends Controller
             $success['pictureUrl'] = asset('/storage/'.$picture->path . $picture->file_name);
             $success['token_type'] = 'Bearer'; 
             
+            
 	        return response()->json($success, 200);
         } 
         else{ 
