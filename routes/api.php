@@ -24,15 +24,12 @@ Route::post('/user/login','Android\Auth\UserController@login');
 Route::get('/hr/employee/documents/{id}','Android\Hr\EmployeeController@documents');
 
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
-	
-	//Route::get('/user/employee', 'Mobile\EmployeeController@index');
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
+	//Route::get('/user/employee', 'Mobile\EmployeeController@index');
 	Route::post('/user/logout', 'Android\Auth\UserController@logout');
    	Route::get('/ageChart','Android\Hr\EmployeeController@ageChart');
    	Route::get('/hr/employees','Android\Hr\EmployeeController@employees');
-
-
 
 
 //Asset API
