@@ -90,7 +90,8 @@ class EmployeeController extends Controller
     	foreach ($employeeDocuments as $document){
     		$documents[] = array("id"=>$document->id,
     							"description"=>$document->description,
-    							"document"=>asset('storage/'.$document->path.$document->file_name)
+    							"extension"=>strtolower($document->extension),
+    							"uri"=>asset('storage/'.$document->path.$document->file_name)
     							);
     	}
 
