@@ -46,8 +46,11 @@
             <a type="submit" role="button" style="color:white" id="addManager" href="{{route('manager.index')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/manager/index')?'style=background-color:#737373':''}}>HOD</a>
             @endcan
 
-            @can('Super Admin')
+            @can('hr edit salary')
             <a type="submit" role="button" style="color:white" id="addSalary" href="{{route('employeeSalary.index')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/employeeSalary/index')?'style=background-color:#737373':''}}>Salary</a>
+            @endcan
+
+            @can('Super Admin')
             <a type="submit" id="addUserLogin" style="color:white" role="button" href="{{route('userLogin.edit',session('hr_employee_id'))}}" class="dropdown-item btn btn-success " {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Rights Detail</a> 
             @endcan
             
