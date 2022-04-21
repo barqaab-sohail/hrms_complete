@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.0|^7.2.5|^8.0",
+        "armancodes/laravel-download-link": "^1.1",
         "asika/pdf2text": "1.*",
         "barryvdh/laravel-snappy": "^1.0",
         "consoletvs/charts": "7.*",
@@ -38,7 +39,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
         "facade/ignition": "^2.0",
-        "fzaninotto/faker": "^1.9.2",
+       
         "mockery/mockery": "^1.3.1",
         "nunomaduro/collision": "^4.1",
         "phpunit/phpunit": "^8.5"

@@ -139,6 +139,7 @@
 
             <hr>
 
+            @can('hr edit education')
             <div class="form-actions">
                 <div class="row">
                     <div class="col-md-6">
@@ -150,6 +151,7 @@
                     </div>
                 </div>
             </div>
+            @endcan
         </form>
 	</div> <!-- end card body --> 
         <div class="row">

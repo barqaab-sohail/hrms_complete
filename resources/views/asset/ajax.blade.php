@@ -84,7 +84,7 @@
                  <div class="col-md-5">
                      <div class="form-group row">
                         <center style="color:black, font-weight:bold">
-                              {!! QrCode::size(70)->generate($data->asset_code); !!}
+                              {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG($data->asset_code,'QRCODE'). '" alt="barcode" />' !!}
                               <br>
                               {{$data->asset_code}}
                         </center>

@@ -170,7 +170,7 @@
             </div> <!--/End Form Boday-->
 
             <hr>
-
+            @can('hr edit promotion')
             <div class="form-actions">
                 <div class="row">
                     <div class="col-md-6">
@@ -182,6 +182,7 @@
                     </div>
                 </div>
             </div>
+            @endcan
         </form>
         @include('hr.appointment.salModal')
 	</div> <!-- end card body --> 
