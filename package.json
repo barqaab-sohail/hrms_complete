@@ -17,7 +17,7 @@
         "lodash": "^4.17.21",
         "popper.js": "^1.12",
         "resolve-url-loader": "^3.1.4",
-        "sass": "^1.49.10",
+        "sass": "^1.50.1",
         "sass-loader": "^8.0.0",
         "vue": "^2.6.14",
         "vue-template-compiler": "^2.6.14"
@@ -27,9 +27,9 @@
         "color-string": "^1.9.0",
         "is-svg": "^4.3.2",
         "lodash": ">=4.17.21",
-        "moment": "^2.29.1",
+        "moment": "^2.29.3",
         "postcss": "^8.4.12",
-        "ssri": ">=7.1.1",
+        "ssri": "^9.0.0",
         "url-parse": "^1.5.10",
         "ws": "^8.5.0"
     }

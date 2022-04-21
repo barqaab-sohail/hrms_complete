@@ -52,6 +52,10 @@ class EmployeeController extends Controller
     	return view ('hr.employee.create', compact('genders','maritalStatuses','religions'));
     }
 
+    public function card(){
+        
+    }
+
 
     public function store (EmployeeStore $request){
        

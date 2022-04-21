@@ -148,7 +148,16 @@
                 <div class="col-md-2">
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <img src="{{asset('storage/'.$data->employeePicture())}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" class="profile-pic" width="50%"/></a>
+                            <img src="{{asset('storage/'.$data->employeePicture())}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" class="profile-pic" width="50%"/>
+                        </div>
+                    </div>
+                </div>
+                 <!--/span-->
+                <div class="col-md-2">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <br>
+                            {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG($data->employee_no,'QRCODE'). '" alt="barcode" />' !!}
                         </div>
                     </div>
                 </div>
