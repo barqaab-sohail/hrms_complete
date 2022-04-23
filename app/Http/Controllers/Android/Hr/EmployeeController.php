@@ -91,7 +91,7 @@ class EmployeeController extends Controller
     		$documents[] = array("id"=>$document->id,
     							"description"=>$document->description,
     							"extension"=>strtolower($document->extension),
-    							"uri"=>asset('storage/'.$document->path.$document->file_name)
+    							"url"=>asset('storage/'.$document->path.$document->file_name)
     							);
     	}
 
