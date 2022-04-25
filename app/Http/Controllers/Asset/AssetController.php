@@ -47,8 +47,12 @@ class AssetController extends Controller
                  
             })
             ->addColumn('bar_code', function($data){
-                $barCode ='<img src="data:image/png;base64,'.\DNS1D::getBarcodePNG($data->asset_code,'C39+',1,33,array(0,0,0),true).'" alt="barcode" />';
-                return $barCode;
+                //$barCode ='<img src="data:image/png;base64,'.\DNS1D::getBarcodePNG($data->asset_code,'C39+',1,33,array(0,0,0),true).'" alt="barcode" />';
+
+
+                $qrCode = '<img src="data:image/png;base64,' . \DNS2D::getBarcodePNG($data->asset_code, 'QRCODE') . '" alt="barcode"   /><br><p>'.$data->asset_code.'</p>';
+
+                return $qrCode;
             })
             ->addColumn('image', function($data){
                 if ($data->asDocumentation->extension != 'pdf'){
