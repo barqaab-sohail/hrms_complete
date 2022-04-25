@@ -229,9 +229,9 @@ $(document).ready(function(){
                 var fileSize = this.files[0].size;
                 //var fileType = fileName.split('.').pop();
                 
-            //Restrict File Size Less Than 2MB
-            if (fileSize> 25600000){
-                alert('File Size is bigger than 20MB');
+            //Restrict File Size Less Than 30MB
+            if (fileSize> 38400000){
+                alert('File Size is bigger than 30MB');
                 $(this).val('');
             }else{
                 //Restrict File Type
