@@ -50,7 +50,7 @@ class AssetController extends Controller
                 //$barCode ='<img src="data:image/png;base64,'.\DNS1D::getBarcodePNG($data->asset_code,'C39+',1,33,array(0,0,0),true).'" alt="barcode" />';
 
 
-                $qrCode = '<img src="data:image/png;base64,' . \DNS2D::getBarcodePNG($data->asset_code, 'QRCODE') . '" alt="barcode"   /><br><p>'.$data->asset_code.'</p>';
+                $qrCode = '<img  src="data:image/png;base64,' . \DNS2D::getBarcodePNG($data->asset_code, 'QRCODE') . '" alt="barcode"   /><br><p style="color:black; font-weight: bold">'.$data->asset_code.'</p>';
 
                 return $qrCode;
             })

@@ -64,7 +64,14 @@ $(document).ready(function() {
 		  	"drawCallback": function( settings ) {
         		$("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
 
-    		}
+    		},
+    		'columnDefs': [
+			  	{
+			      "targets": 4,
+			      "className": "text-center",
+			 	},
+			],
+
  		});
 
  		$('body').on('click', '.deleteAsset', function () {
@@ -77,9 +84,8 @@ $(document).ready(function() {
 	            success: function (data) {
 	                table.draw();
 	                if(data.error){
-	                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+	                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');
 	                }
-	  
 	            },
 	            error: function (data) {
 	                
