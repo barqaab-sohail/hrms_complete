@@ -155,9 +155,11 @@
                  <!--/span-->
                 <div class="col-md-2">
                     <div class="form-group row">
-                        <div class="col-md-12">
+                        <div class="col-md-12" style="text-align:center; color:black; font-weight: bold;">
                             <br>
-                            {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG($data->employee_no,'QRCODE'). '" alt="barcode" />' !!}
+                            {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG($data->employee_no,'QRCODE',5,5). '" alt="barcode" />' !!}
+                            <br>
+                            {{$data->employee_no}}
                         </div>
                     </div>
                 </div>
