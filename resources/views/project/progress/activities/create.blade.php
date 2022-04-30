@@ -5,6 +5,8 @@
   <table class="table table-bordered data-table">
     <thead>
       <tr>
+          <th>Level</th>
+          <th>Belong to Activity</th>
           <th>Activity Name</th>
           <th>Weightage</th>
           <th>Edit</th>
@@ -31,18 +33,38 @@
                   <input type="hidden" name="activity_id" id="activity_id">
 
                   <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-1">
+                      <div class="form-group">
+                        <label class="control-label">Level</label>
+                        <input type="text" name="level" id="level" value="{{old('level')}}" class="form-control notCapital" data-validation="required">
+                      </div>
+                    </div>
+                    <div class="col-md-8">
                       <div class="form-group">
                         <label class="control-label">Activity Name</label>
                         <input type="text" name="name" id="name" value="{{old('name')}}" class="form-control notCapital" data-validation="required">
                       </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2 hide" id="hideDiv">
+                      <div class="form-group">
+                        <label class="control-label">belong to Activity</label>
+                        <select  name="belong_to_activity" id="belong_to_activity"  class="form-control selectTwo" data-validation="required">
+                          <option value=""></option>
+                          @foreach($prProgressActivities as $activity)
+                          <option value="{{$activity->id}}" {{(old("belong_to_activity")==$activity->id? "selected" : "")}}>{{$activity->name}}</option>
+                          @endforeach     
+                        </select>
+
+                      </div>
+                    </div>
+                    <div class="col-md-1">
                       <div class="form-group">
                         <label class="control-label">Weightage</label>
                         <input type="text" name="weightage" id="weightage" value="{{old('weightage')}}" class="form-control notCapital" data-validation="required">
                       </div>
                     </div>
+
+                    
                     
                   </div>
                 
@@ -70,13 +92,21 @@ $(document).ready(function() {
   
   
   //only number value entered
-    $('#weightage').on('change, keyup', function() {
+    $('#weightage, #level, #belong_to_activity').on('change, keyup', function() {
     var currentInput = $(this).val();
     var fixedInput = currentInput.replace(/[A-Za-z!@#$%^&*()]/g, '');
     $(this).val(fixedInput);
     });
 
-    
+    $("#level").focusout(function(){
+        if($(this).val()>1){
+          $("#hideDiv").removeClass("hide");
+          $("#belong_to_activity").val('')
+        }else{
+           $("#hideDiv").addClass("hide");
+           $("#belong_to_activity").val('')
+        }
+    });
 
   $(function () {
       $.ajaxSetup({
@@ -89,6 +119,8 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "{{ route('projectProgressActivities.create') }}",
         columns: [
+            {data: "level", name: 'level'},
+            {data: "belong_to_activity_name", name: 'belong_to_activity_name'},
             {data: "name", name: 'name'},
             {data: "weightage", name: 'weightage'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
@@ -117,7 +149,15 @@ $(document).ready(function() {
           $('#ajaxModel').modal('show');
           $('#activity_id').val(data.id);
           $('#name').val(data.name);
+          $('#level').val(data.level);
           $('#weightage').val(data.weightage);
+          if(data.belong_to_activity){
+             $("#hideDiv").removeClass("hide");
+              $('#belong_to_activity').val(data.belong_to_activity);
+              $('#belong_to_activity').trigger('change');
+           }else{
+             $("#hideDiv").addClass("hide");
+           }
       })
    });
     $('#saveBtn').click(function (e) {
