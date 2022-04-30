@@ -14,7 +14,7 @@ class CreatePrMonthlyProgresses extends Migration
     public function up()
     {
         Schema::create('pr_monthly_progresses', function (Blueprint $table) {
-             $table->engine = 'InnoDB';
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->bigInteger('pr_progress_activity_id')->unsigned();

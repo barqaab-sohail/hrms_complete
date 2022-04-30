@@ -62,6 +62,8 @@ class ActivitiesController extends Controller
 
             PrProgressActivity::updateOrCreate(['id' => $input['activity_id']],
                 ['pr_detail_id'=> $input['pr_detail_id'],
+                'level'=> $input['level'],
+                'belong_to_activity'=> $input['belong_to_activity'],
                 'name'=> $input['name'],
                 'weightage'=> $input['weightage']
                 
