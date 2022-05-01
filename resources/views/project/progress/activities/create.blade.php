@@ -39,13 +39,19 @@
                         <input type="text" name="level" id="level" value="{{old('level')}}" class="form-control notCapital" data-validation="required">
                       </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label">Activity Name</label>
                         <input type="text" name="name" id="name" value="{{old('name')}}" class="form-control notCapital" data-validation="required">
                       </div>
                     </div>
-                    <div class="col-md-2 hide" id="hideDiv">
+                    <div class="col-md-1" id="hideDivWeightage">
+                      <div class="form-group">
+                        <label class="control-label">Weightage</label>
+                        <input type="text" name="weightage" id="weightage" data-validation="required" value="{{old('weightage')}}" class="form-control notCapital">
+                      </div>
+                    </div> 
+                    <div class="col-md-4 hide" id="hideDiv">
                       <div class="form-group">
                         <label class="control-label">belong to Activity</label>
                         <select  name="belong_to_activity" id="belong_to_activity"  class="form-control selectTwo" data-validation="required">
@@ -57,18 +63,19 @@
 
                       </div>
                     </div>
-                    <div class="col-md-1">
+                  </div>
+                  <div class="row">
+                  <div class="col-md-6">
                       <div class="form-group">
-                        <label class="control-label">Weightage</label>
-                        <input type="text" name="weightage" id="weightage" value="{{old('weightage')}}" class="form-control notCapital" data-validation="required">
+                        <div class="form-check form-switch">
+                        <br>
+                          <input class="form-check-input" type="checkbox" id="sub_activity">
+                          <label class="form-check-label" for="sub_activity">This Activity has Sub Activities</label>
+                        </div>
                       </div>
                     </div>
-
-                    
-                    
                   </div>
-                
-                    
+                 
                   <div class="col-sm-offset-2 col-sm-10">
                    <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
                    </button>
@@ -81,7 +88,7 @@
 
 <style>
   .modal-dialog {
-    max-width: 80%;
+    max-width: 90%;
     display: flex;
 }
 </style>
@@ -96,6 +103,18 @@ $(document).ready(function() {
     var currentInput = $(this).val();
     var fixedInput = currentInput.replace(/[A-Za-z!@#$%^&*()]/g, '');
     $(this).val(fixedInput);
+    });
+
+    $('#sub_activity').change(function(){
+      if(this.checked) {
+        $('#hideDivWeightage').hide();
+        $("#weightage").val('');
+        $("#weightage").removeAttr("data-validation");  
+      }else{
+        $('#hideDivWeightage').show();
+        $("#weightage").val('');
+         $("#weightage").attr("data-validation","required");
+      }
     });
 
     $("#level").focusout(function(){

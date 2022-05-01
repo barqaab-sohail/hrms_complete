@@ -19,7 +19,7 @@ class CreatePrProgressActivities extends Migration
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->tinyInteger('level')->unsigned();
             $table->string('name');
-            $table->tinyInteger('weightage')->unsigned();
+            $table->tinyInteger('weightage')->unsigned()->nullable();
             $table->bigInteger('belong_to_activity')->unsigned()->nullable();
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
