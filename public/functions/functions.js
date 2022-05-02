@@ -188,6 +188,7 @@ function formFunctions(){
 
     $.validate({
     validateHiddenInputs: true,
+    validateOnEvent : true
     });
 
     $('.fa-spinner').hide();

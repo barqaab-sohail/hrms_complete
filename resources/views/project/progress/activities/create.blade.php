@@ -54,11 +54,9 @@
                     <div class="col-md-4 hide" id="hideDiv">
                       <div class="form-group">
                         <label class="control-label">belong to Activity</label>
-                        <select  name="belong_to_activity" id="belong_to_activity"  class="form-control selectTwo" data-validation="required">
+                        <select  name="belong_to_activity" id="belong_to_activity"  class="form-control selectTwo" >
                           <option value=""></option>
-                          @foreach($prProgressActivities as $activity)
-                          <option value="{{$activity->id}}" {{(old("belong_to_activity")==$activity->id? "selected" : "")}}>{{$activity->name}}</option>
-                          @endforeach     
+                            
                         </select>
 
                       </div>
@@ -97,7 +95,7 @@
 
 $(document).ready(function() {
   
-  
+
   //only number value entered
     $('#weightage, #level, #belong_to_activity').on('change, keyup', function() {
     var currentInput = $(this).val();
@@ -119,13 +117,41 @@ $(document).ready(function() {
 
     $("#level").focusout(function(){
         if($(this).val()>1){
-          $("#hideDiv").removeClass("hide");
+          $("#hideDiv").show();
           $("#belong_to_activity").val('')
+          getActivities($(this).val());
         }else{
-           $("#hideDiv").addClass("hide");
-           $("#belong_to_activity").val('')
+          $("#hideDiv").hide();
+          $("#belong_to_activity").empty();
         }
     });
+
+    function getActivities($level, callback){
+      $.ajax({
+        type:"get",
+        url: "{{url('hrms/project/proejctProgressMainActivities')}}"+"/"+$level,
+        success:function(res)
+        {       
+            if(res)
+            {
+              $("#belong_to_activity").empty();
+              $("#belong_to_activity").append('<option value="">Select Activity</option>');
+              $.each(res,function(key,value){
+                    $("#belong_to_activity").append('<option value="'+value.id+'">'+value.name+'</option>');
+                });
+             
+            }
+        }
+
+      });//end ajax
+      
+      if (typeof callback === 'function') {    
+        setTimeout(function() { 
+         callback(); 
+        }, 500);
+         
+      }
+    }
 
   $(function () {
       $.ajaxSetup({
@@ -153,37 +179,43 @@ $(document).ready(function() {
     $('#createActivity').click(function () {
         $('#json_message_modal').html('');
         $('#saveBtn').val("Create Activity");
-        $('#activity_id').val('');name
+        $('#activity_id').val('');
         $('#activityForm').trigger("reset");
+        $('#hideDivWeightage').show();
+        $("#belong_to_activity").empty();
+        $("#hideDiv").hide();
         $('#modelHeading').html("Create New Activity");
         $('#ajaxModel').modal('show');
+        
     });
     $('body').unbind().on('click', '.editActivity', function () {
       
       var activity_id = $(this).data('id');
       $('#json_message_modal').html('');
       $.get("{{ url('hrms/project/projectProgressActivities') }}" +'/' + activity_id +'/edit', function (data) {
+          getActivities(data.level, function(){
+            $('#belong_to_activity').val(data.belong_to_activity);
+            $('#belong_to_activity').trigger('change');
+          });
+
           $('#modelHeading').html("Edit Activity");
           $('#saveBtn').val("edit-Activity");
-          $('#ajaxModel').modal('show');
           $('#activity_id').val(data.id);
           $('#name').val(data.name);
           $('#level').val(data.level);
+          $("#hideDivWeightage").show();
           $('#weightage').val(data.weightage);
-          if(data.belong_to_activity){
-             $("#hideDiv").removeClass("hide");
-              $('#belong_to_activity').val(data.belong_to_activity);
-              $('#belong_to_activity').trigger('change');
-           }else{
-             $("#hideDiv").addClass("hide");
-           }
-      })
-   });
-    $('#saveBtn').click(function (e) {
-        e.preventDefault();
-
-        $(this).html('Save');
+          $("#hideDiv").show();
+          $("#hideDiv").removeClass("hide");
+          $('#ajaxModel').modal('show');
+          
+          
          
+           
+      })
+    });
+    $('#saveBtn').click(function (e) {
+        
         $.ajax({
           data: $('#activityForm').serialize(),
           url: "{{ route('projectProgressActivities.store') }}",

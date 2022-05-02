@@ -57,6 +57,10 @@ class ActivitiesController extends Controller
         $input = $request->all();
         
         $input['pr_detail_id']=session('pr_detail_id');
+        
+        if(!$request->belong_to_activity){
+             $input['belong_to_activity']=null;
+        }
 
         DB::transaction(function () use ($input, $request) {  
 
@@ -91,6 +95,13 @@ class ActivitiesController extends Controller
         PrProgressActivity::findOrFail($id)->delete();
         return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
         
+    }
+
+    public function mainActivities($level){
+
+        $activities = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('level',"<",$level)->get();
+        return response()->json($activities);
+
     }
 
 }
