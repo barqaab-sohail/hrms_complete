@@ -18,7 +18,7 @@ class ActivityStore extends FormRequest
     {
         if($this->request->has('weightage')){
             $this->merge([
-                'weightage' => intval($this->request->get('weightage'))
+                'weightage' => floatval($this->request->get('weightage'))
             ]);
         }
 

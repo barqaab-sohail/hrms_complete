@@ -177,9 +177,13 @@ Route::get('/invoiceValue/{id?}', 'Payment\PaymentController@getInvoiceValue')->
 Route::resource('/projectInvoice', 'Invoice\InvoiceController');
 Route::resource('/projectPayment', 'Payment\PaymentController');
 Route::resource('projectRights', 'ProjectRightController');
-Route::resource('/projectProgressActivities', 'Progress\ActivitiesController');
+
+//Progress Routes
 Route::resource('/monthlyProgress', 'Progress\MonthlyProgressController');
 
+Route::resource('/projectProgressActivities', 'Progress\ActivitiesController');
+Route::resource('/progressProgress', 'Progress\ProgressController');
+Route::get('/proejctProgressMainActivities/{level}','Progress\ActivitiesController@mainActivities');
 
 
 Route::get('/projectProgressChart', 'Progress\ActivityController@chart')->name('projectProgress.chart');

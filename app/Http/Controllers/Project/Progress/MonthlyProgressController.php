@@ -15,7 +15,7 @@ class MonthlyProgressController extends Controller
    
    public function index() {
        	
-       	$progressActivities = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->get();
+       	$progressActivities = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('weightage',">",0)->get();
 
        	$prMonthlyProgress = PrMonthlyProgress::where('pr_detail_id',session('pr_detail_id'))->get();
 
