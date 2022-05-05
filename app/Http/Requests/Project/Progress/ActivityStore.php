@@ -20,6 +20,10 @@ class ActivityStore extends FormRequest
             $this->merge([
                 'weightage' => floatval($this->request->get('weightage'))
             ]);
+        }else{
+            $this->merge([
+                'weightage' => null
+            ]);
         }
 
     }
@@ -64,7 +68,7 @@ class ActivityStore extends FormRequest
         return $rules;
     }
 
-     public function messages()
+    public function messages()
     {
        
         return [

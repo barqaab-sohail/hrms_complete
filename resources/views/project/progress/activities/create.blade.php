@@ -137,9 +137,8 @@ $(document).ready(function() {
               $("#belong_to_activity").empty();
               $("#belong_to_activity").append('<option value="">Select Activity</option>');
               $.each(res,function(key,value){
-                    $("#belong_to_activity").append('<option value="'+value.id+'">'+value.name+'</option>');
+                  $("#belong_to_activity").append('<option value="'+value.id+'">'+value.name+'</option>');
                 });
-             
             }
         }
 
@@ -148,7 +147,7 @@ $(document).ready(function() {
       if (typeof callback === 'function') {    
         setTimeout(function() { 
          callback(); 
-        }, 500);
+        }, 1000);
          
       }
     }

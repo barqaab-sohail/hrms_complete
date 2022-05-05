@@ -180,9 +180,9 @@ Route::resource('projectRights', 'ProjectRightController');
 
 //Progress Routes
 Route::resource('/monthlyProgress', 'Progress\MonthlyProgressController');
-
+Route::resource('/projectProgress', 'Progress\ProjectProgressController');
 Route::resource('/projectProgressActivities', 'Progress\ActivitiesController');
-Route::resource('/progressProgress', 'Progress\ProgressController');
+// Route::resource('/progressProgress', 'Progress\ProgressController');
 Route::get('/proejctProgressMainActivities/{level}','Progress\ActivitiesController@mainActivities');
 
 
