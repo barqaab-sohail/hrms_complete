@@ -3,16 +3,16 @@
   <br>
   <div id="json_message">
   </div>
-  <table class="table table-bordered data-table">
+  <table id="example" class="row-border hover order-column data-table">
     <thead>
       <tr>
           <th>Activity Name</th>
+           <th>Date</th>
+          <th>Progress Completed</th>
           <th>Total Weightage</th>
           <th>Total Progress Achieved</th>
-          <th>Date</th>
-          <th>Progress Completed</th>
           <th>Save</th>
-          <th>Edit</th>
+          <th>Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -30,13 +30,12 @@
             </div>
             <div class="modal-body">
               <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
-              <table class="table table-bordered edit-data-table">
+              <table class="table table-bordered delete-data-table">
                 <thead>
                   <tr>
                       <th>Activity Name</th>
                       <th>Date</th>
                       <th>Progress</th>
-                      <th>Save</th>
                       <th>Delete</th>
                   </tr>
                 </thead>
@@ -53,6 +52,9 @@
     max-width: 90%;
     display: flex;
 }
+td.highlight {
+    background-color: yellow !important;
+}
 </style>
 <script type="text/javascript">
 
@@ -65,50 +67,32 @@ $(document).ready(function() {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
     });
-    var table = $('.data-table').DataTable({
+    var mainTable = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
+        destroy: true,
         ajax: "{{ route('projectProgress.create') }}",
         columns: [
             {data: "name", name: 'name'},
-            {data: "weightage", name: 'weightage'},
-            {data: "progress_achived", name: 'progress_achived'},
             {data: 'Date', name: 'Date', orderable: false, searchable: false},
             {data: 'Progress', name: 'Progress', orderable: false, searchable: false},
+            {data: "weightage", name: 'weightage'},
+            {data: "progress_achived", name: 'progress_achived'},
             {data: 'Save', name: 'Save', orderable: false, searchable: false},
-            {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
+            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
         ],
      
         order: []
     });
+  
+     $("#example tbody")
+        .on( 'mouseenter', 'td', function () {
+            var colIdx = mainTable.cell(this).index().column;
+            console.log (mainTable.column(colIdx).nodes());
+            $( mainTable.cells().nodes()).removeClass('highlight');
+            $( mainTable.column(colIdx).nodes()).addClass('highlight');
+        });
 
-    $('.data-table').unbind().on('click', '.editProgress', function () {
-      
-      var activity_id = $(this).data('id');
-      console.log(activity_id);
-      $('#ajaxModel').modal('show');
-    $(function () {
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-      });
-    var table = $('.edit-data-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ url('hrms/project/projectProgress') }}" +'/' + activity_id +'/edit',
-        columns: [
-            {data: "activity_name", name: 'activity_name'},
-            {data: "date", name: 'date'},
-            {data: "percentage_complete", name: 'percentage_complete'},
-            {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
-            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
-        ],
-    
-    });
-    });
-
-    });
 
     //$('.saveProgress').click(function (e) {  
      $(".data-table").on('click', '.saveProgress', function () {
@@ -126,7 +110,7 @@ $(document).ready(function() {
             
             clearMessage();
 
-            table.draw();
+            mainTable.draw();
         
           },
           error: function (data) {
@@ -139,8 +123,59 @@ $(document).ready(function() {
 
               $('#saveBtn').html('Save Changes');
           }
-      });
-    });
+        }); //end ajax
+
+    }); // end Save
+
+    $('.data-table').on('click', '.deleteModal', function () {
+      var activity_id = $(this).data('id');
+      console.log(activity_id);
+      $('#ajaxModel').modal('show');
+      
+      $(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        var table = $('.delete-data-table').DataTable({
+          processing: true,
+          serverSide: true,
+          destroy: true,
+          ajax: "{{ url('hrms/project/projectProgress') }}" +'/' + activity_id +'/edit',
+          columns: [
+              {data: "activity_name", name: 'activity_name'},
+              {data: "date", name: 'date'},
+              {data: "percentage_complete", name: 'percentage_complete'},
+              {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
+          ],
+      
+        });
+
+        $('.delete-data-table').unbind().on('click', '.deleteProgress', function () {  
+          var activity_id = $(this).data("id");
+          var con = confirm("Are You sure want to delete !");
+          if(con){
+            $.ajax({
+              type: "DELETE",
+              url: "{{ route('projectProgress.store') }}"+'/'+activity_id,
+              success: function (data) {
+                  table.draw();
+                  mainTable.draw();
+                  if(data.error){
+                    $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+                  }
+    
+              },
+              error: function (data) {
+                  
+              }
+            }); //end Ajax
+          }
+        }); // end deleteProgress
+      }); // end inner function
+    }); // end delete modal
+
 
     //only number value entered
     $('body').unbind().on('change, keyup', '.progressInput', function () {
@@ -160,7 +195,13 @@ $(document).ready(function() {
       });
     });
 
+   
+
+
+
   });
+
+
      
 
 });
