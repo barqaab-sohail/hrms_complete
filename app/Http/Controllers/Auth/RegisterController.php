@@ -58,6 +58,20 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
+
+    //this function override
+    public function showRegistrationForm()
+    {
+        $url = \Request::url();
+        $lastWord = substr($url, strrpos($url, "/") + 1);
+        if($lastWord == "pmsRegister"){
+             return view('auth.pms.register');
+         }else{
+            return view('auth.register');
+         }
+       
+    }
+
     protected function validator(array $data)
     {
         return Validator::make($data, [
@@ -73,6 +87,7 @@ class RegisterController extends Controller
      */
     protected function create(Request $request)
     {
+        
         $email = $request->email;
 
         return view('auth.codeConfirmation',compact('email'));
@@ -98,6 +113,7 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
+       
        $this->validator($request->all())->validate();
            
          $test = DB::table('users')

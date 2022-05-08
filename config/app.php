@@ -13,7 +13,9 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'HRMS'),
+    'name_pms' => env('APP_NAME_PMS', 'PMS'),
+    'name_full_name_pms' => env('APP_FULL_NAME_P', 'Project Monitoring System'),
 
     /*
     |--------------------------------------------------------------------------

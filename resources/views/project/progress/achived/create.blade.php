@@ -3,14 +3,14 @@
   <br>
   <div id="json_message">
   </div>
-  <table id="example" class="row-border hover order-column data-table">
+  <table id="example" class="row-border hover order-column table-hover data-table">
     <thead>
       <tr>
           <th>Activity Name</th>
-           <th>Date</th>
-          <th>Progress Completed</th>
           <th>Total Weightage</th>
           <th>Total Progress Achieved</th>
+          <th>Date</th>
+          <th>Progress Completed</th>
           <th>Save</th>
           <th>Delete</th>
       </tr>
@@ -52,8 +52,10 @@
     max-width: 90%;
     display: flex;
 }
-td.highlight {
-    background-color: yellow !important;
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color:#C2DFFF;
+  color:black;
+  font-weight: bold;
 }
 </style>
 <script type="text/javascript">
@@ -74,10 +76,10 @@ $(document).ready(function() {
         ajax: "{{ route('projectProgress.create') }}",
         columns: [
             {data: "name", name: 'name'},
-            {data: 'Date', name: 'Date', orderable: false, searchable: false},
-            {data: 'Progress', name: 'Progress', orderable: false, searchable: false},
             {data: "weightage", name: 'weightage'},
             {data: "progress_achived", name: 'progress_achived'},
+            {data: 'Date', name: 'Date', orderable: false, searchable: false},
+            {data: 'Progress', name: 'Progress', orderable: false, searchable: false},
             {data: 'Save', name: 'Save', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
         ],
@@ -85,13 +87,7 @@ $(document).ready(function() {
         order: []
     });
   
-     $("#example tbody")
-        .on( 'mouseenter', 'td', function () {
-            var colIdx = mainTable.cell(this).index().column;
-            console.log (mainTable.column(colIdx).nodes());
-            $( mainTable.cells().nodes()).removeClass('highlight');
-            $( mainTable.column(colIdx).nodes()).addClass('highlight');
-        });
+
 
 
     //$('.saveProgress').click(function (e) {  

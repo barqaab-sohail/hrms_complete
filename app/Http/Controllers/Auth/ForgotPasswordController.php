@@ -19,4 +19,19 @@ class ForgotPasswordController extends Controller
     */
 
     use SendsPasswordResetEmails;
+
+      //this function override
+    public function showLinkRequestForm()
+    {
+        $url = \Request::url();
+        $lastWord = substr($url, strrpos($url, "/") + 1);
+        if($lastWord == "pmsReset"){
+             return view('auth.pms.passwords.email');
+         }else{
+            return view('auth.passwords.email');
+         }
+       
+    }
+
+    
 }
