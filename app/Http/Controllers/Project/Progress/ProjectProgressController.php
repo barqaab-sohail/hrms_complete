@@ -194,9 +194,6 @@ class ProjectProgressController extends Controller
                     
                     ->rawColumns(['activity_name','Delete'])
                     ->make(true);
-
-
-
         }
        
 

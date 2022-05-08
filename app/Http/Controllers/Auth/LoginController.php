@@ -45,9 +45,22 @@ class LoginController extends Controller
     }
 
 
+    //this function override
+    public function showLoginForm()
+    {
+        $url = \Request::url();
+        $lastWord = substr($url, strrpos($url, "/") + 1);
+        if($lastWord == "pms"){
+             return view('auth.pms.login');
+         }else{
+            return view('auth.login');
+         }
+       
+    }
 
     public function login(Request $request)
     {
+       
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -139,6 +152,9 @@ class LoginController extends Controller
             'last_login_at' => \Carbon\Carbon::now()->toDateTimeString(),
             'last_login_ip' => $request->getClientIp()
         ]);
+
+        //dd(\Request::url());
+        //return redirect()->route('employee.index');
     }
 
 

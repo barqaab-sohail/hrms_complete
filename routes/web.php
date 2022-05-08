@@ -20,10 +20,13 @@ Route::get('/dashboard','HomeController@index')->middleware('auth')->name('dashb
 // Route::get('/test','HomeController@test')->middleware('auth')->name('test');
 Auth::routes();
 
-
 // Route::group(['prefix' => 'code', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Auth','name' =>'opt.'], function(){
 // Route::resource('/','RegisterController',['only'=>['create','store']]);
 // });
+Route::get('pms','Auth\LoginController@showLoginForm');
+Route::get('pmsRegister','Auth\RegisterController@showRegistrationForm');
+Route::get('pmsReset','Auth\ForgotPasswordController@showLinkRequestForm');
+
 Route::get('code/','Auth\RegisterController@create')->name('opt.create');
 Route::post('code/','Auth\RegisterController@register')->name('opt.request');
 Route::post('code/','Auth\RegisterController@store')->name('opt.store');
