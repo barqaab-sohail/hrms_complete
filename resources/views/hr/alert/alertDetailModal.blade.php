@@ -43,11 +43,7 @@
 
 $('#cnicExpiryDetail').click(function(e){ 
         e.preventDefault();
-        $('#alertDetail').DataTable({
-            "destroy": true,
-        });
-
-
+        
   var url = $(this).attr('href');
      $.ajax({
      url:url,
@@ -78,6 +74,9 @@ $('#cnicExpiryDetail').click(function(e){
               + '</td></tr>'
           );
         });
+        $('#alertDetail').DataTable({
+            "destroy": true,
+        });
         $('#alertDetailModel').modal('show');
      }
     })
@@ -87,9 +86,6 @@ $('#cnicExpiryDetail').click(function(e){
 
 $('#appointmentExpiryDetail').click(function(e){ 
   e.preventDefault();
-    $('#alertDetail').DataTable({
-        "destroy": true,
-    });
 
   var url = $(this).attr('href');
      $.ajax({
@@ -121,7 +117,9 @@ $('#appointmentExpiryDetail').click(function(e){
           );
         });
 
-      
+        $('#alertDetail').DataTable({
+        "destroy": true, 
+        });
         $('#alertDetailModel').modal('show');
 
 
@@ -131,9 +129,7 @@ $('#appointmentExpiryDetail').click(function(e){
 
 $('#drivingLicenceExpiryTotal').click(function(e){ 
     e.preventDefault();
-    $('#alertDetail').DataTable({
-            "destroy": true,
-    });
+    
 
   var url = $(this).attr('href');
      $.ajax({
@@ -165,6 +161,10 @@ $('#drivingLicenceExpiryTotal').click(function(e){
               + '</td></tr>'
           );
         });
+        
+        $('#alertDetail').DataTable({
+            "destroy": true,
+        });
         $('#alertDetailModel').modal('show');
 
      }
@@ -173,10 +173,7 @@ $('#drivingLicenceExpiryTotal').click(function(e){
 
 $('#pecCardExpiry').click(function(e){ 
     e.preventDefault();
-    $('#alertDetail').DataTable({
-          "destroy": true,
-    });
-
+    
     var url = $(this).attr('href');
      $.ajax({
      url:url,
@@ -205,6 +202,10 @@ $('#pecCardExpiry').click(function(e){
               + this.mobile
               + '</td></tr>'
           );
+        });
+
+        $('#alertDetail').DataTable({
+          "destroy": true,
         });
         $('#alertDetailModel').modal('show');
 
