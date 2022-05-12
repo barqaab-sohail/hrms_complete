@@ -17,7 +17,7 @@ function pendingInvoices($projectId){
 	
 	$receivedInvoiceIds = receivedInvoices($projectId)->pluck('id')->toArray();
 	
-	$pendingInvoices = Invoice::whereNotIn('id',$receivedInvoiceIds)->get();
+	$pendingInvoices = Invoice::whereNotIn('id',$receivedInvoiceIds)->where('pr_detail_id',$projectId)->get();
 
     return $pendingInvoices;
 }
