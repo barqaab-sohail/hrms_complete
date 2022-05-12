@@ -31,7 +31,6 @@ class PaymentController extends Controller
        	// $invoices = Invoice::where('pr_detail_id',session('pr_detail_id'))->get();
 
         $invoices = pendingInvoices(session('pr_detail_id'));
-
         $paymentStatuses = PaymentStatus::all();
         $view =  view('project.payment.create',compact('invoices','paymentStatuses'))->render();
         return response()->json($view);
