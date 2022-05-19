@@ -19,20 +19,19 @@
 				
 				<tbody>
 					<tr>
-						<td><a id="cnicExpiryDetail" href="{{route('hrAlert.cnicExpiryDetail')}}" style="color:grey">CNIC Expired or Near to Expire Next 10 Days</a></td>
-						<td>{{$totalCnicExpire}}</td> 
-																		
+						<td><a id="cnicExpiryDetail" href="{{route('hrAlert.cnicExpiryDetail')}}" style="color:grey" class="activeRow">CNIC Expired or Near to Expire Next 10 Days</a></td>
+						<td>{{$totalCnicExpire}}</td>
 					</tr>
 					<tr>
-						<td><a id="appointmentExpiryDetail" href="{{route('hrAlert.appointmentExpiry')}}" style="color:grey">Appointment Contract Expired or Near to Expire Next 10 Days</a></td>
+						<td><a id="appointmentExpiryDetail" href="{{route('hrAlert.appointmentExpiry')}}" style="color:grey" class="activeRow">Appointment Contract Expired or Near to Expire Next 10 Days</a></td>
 						<td>{{$appointmentExpiryTotal}}</td>
 					</tr>
                     <tr>
-                        <td><a id="drivingLicenceExpiryTotal" href="{{route('hrAlert.licenceExpiry')}}" style="color:grey">Driver Licence Expired or Near to Expire Next 10 Days</a></td>
+                        <td><a id="drivingLicenceExpiryTotal" href="{{route('hrAlert.licenceExpiry')}}" style="color:grey" class="activeRow">Driver Licence Expired or Near to Expire Next 10 Days</a></td>
                         <td>{{$drivingLicenceExpiryTotal}}</td>
                     </tr>
                      <tr>
-                        <td><a id="pecCardExpiry" href="{{route('hrAlert.pecCardExpiry')}}" style="color:grey">PEC Card Expired or Near to Expire Next 10 Days</a></td>
+                        <td><a id="pecCardExpiry" href="{{route('hrAlert.pecCardExpiry')}}" style="color:grey" class="activeRow">PEC Card Expired or Near to Expire Next 10 Days</a></td>
                         <td>{{$pecCardExpiryTotal}}</td>               
                     </tr>
 				

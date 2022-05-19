@@ -38,23 +38,20 @@
 
 <script>
 
-
 //$(document).on('click', 'button[id^=detail]',function(){ 
 
+
 $('#cnicExpiryDetail').click(function(e){ 
-        e.preventDefault();
-        
+  e.preventDefault(); 
+  
   var url = $(this).attr('href');
      $.ajax({
      url:url,
      dataType:"json",
-     
      success:function(data){
-
         $('#alert_name').text(data.full_name);
-        $("#tbody").empty();
-        // $('#project').remove();
-                
+        $('#alertDetail > tbody').empty();
+        // $('#project').remove();      
         $.each(data.cnicExpiry, function() {
           var office='';
           if (this.employee_project == 'overhead'){
@@ -74,14 +71,9 @@ $('#cnicExpiryDetail').click(function(e){
               + '</td></tr>'
           );
         });
-        $('#alertDetail').DataTable({
-            "destroy": true,
-        });
-        $('#alertDetailModel').modal('show');
      }
-    })
-
-    
+    });
+    $('#alertDetailModel').modal('show');
 });
 
 $('#appointmentExpiryDetail').click(function(e){ 
@@ -91,12 +83,11 @@ $('#appointmentExpiryDetail').click(function(e){
      $.ajax({
      url:url,
      dataType:"json",
-     
+    
      success:function(data){
 
         $('#alert_name').text(data.full_name);
-        $("#tbody").empty();
-                
+        $('#alertDetail > tbody').empty();
         $.each(data.appointmentExpiry, function() {
           var office='';
           if (this.employee_project == 'overhead'){
@@ -116,21 +107,13 @@ $('#appointmentExpiryDetail').click(function(e){
               + '</td></tr>'
           );
         });
-
-        $('#alertDetail').DataTable({
-        "destroy": true, 
-        });
         $('#alertDetailModel').modal('show');
-
-
-     }
-    })
+     }     
+    });
 });
 
 $('#drivingLicenceExpiryTotal').click(function(e){ 
     e.preventDefault();
-    
-
   var url = $(this).attr('href');
      $.ajax({
      url:url,
@@ -139,8 +122,7 @@ $('#drivingLicenceExpiryTotal').click(function(e){
      success:function(data){
 
         $('#alert_name').text(data.full_name);
-        $("#tbody").empty();
-                
+        $('#alertDetail > tbody').empty();
         $.each(data.drivingLicenceExpiryTotal, function() {
           var office='';
           if (this.employee_project == 'overhead'){
@@ -148,7 +130,7 @@ $('#drivingLicenceExpiryTotal').click(function(e){
           }else{
              office = this.employee_project;
           }
-
+         
           $('#alertDetail > tbody').append(
               '<tr><td>'
               + this.employee_name
@@ -161,19 +143,14 @@ $('#drivingLicenceExpiryTotal').click(function(e){
               + '</td></tr>'
           );
         });
-        
-        $('#alertDetail').DataTable({
-            "destroy": true,
-        });
-        $('#alertDetailModel').modal('show');
-
+      $('#alertDetailModel').modal('show');
      }
-    })
+    });
+ 
 });
 
 $('#pecCardExpiry').click(function(e){ 
     e.preventDefault();
-    
     var url = $(this).attr('href');
      $.ajax({
      url:url,
@@ -182,8 +159,7 @@ $('#pecCardExpiry').click(function(e){
      success:function(data){
 
         $('#alert_name').text(data.full_name);
-        $("#tbody").empty();
-                
+        $('#alertDetail > tbody').empty(); 
         $.each(data.pecCardExpiry, function() {
           var office='';
           if (this.employee_project == 'overhead'){
@@ -191,6 +167,7 @@ $('#pecCardExpiry').click(function(e){
           }else{
              office = this.employee_project;
           }
+
           $('#alertDetail > tbody').append(
               '<tr><td>'
               + this.employee_name
@@ -203,14 +180,9 @@ $('#pecCardExpiry').click(function(e){
               + '</td></tr>'
           );
         });
-
-        $('#alertDetail').DataTable({
-          "destroy": true,
-        });
-        $('#alertDetailModel').modal('show');
-
+      $('#alertDetailModel').modal('show');
      }
-    })
+    });
 });
 
 
