@@ -17,10 +17,12 @@ class CreateSubContactTable extends Migration
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->bigInteger('submission_id')->unsigned();
+            $table->string('designation')->nullable(); 
             $table->string('landline',20)->nullable(); 
             $table->string('mobile',20)->nullable(); 
             $table->string('fax',20)->nullable(); 
             $table->string('email',50)->nullable();
+            $table->string('remarks')->nullable(); 
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
             $table->timestamps();
         });

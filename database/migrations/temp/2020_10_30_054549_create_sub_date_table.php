@@ -19,6 +19,7 @@ class CreateSubDateTable extends Migration
             $table->bigInteger('submission_id')->unsigned();
             $table->date('submission_date');
             $table->time('submission_time');
+            $table->string('remarks')->nullable();
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
             $table->timestamps();
         });
