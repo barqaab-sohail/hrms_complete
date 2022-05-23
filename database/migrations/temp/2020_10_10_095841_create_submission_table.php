@@ -22,7 +22,7 @@ class CreateSubmissionTable extends Migration
             $table->bigInteger('sub_division_id')->unsigned();
             $table->string('submission_no',15)->unique();
             $table->string('project_name');
-            $table->foreign('eoi_reference_no')->references('id')->on('submissions')->onDelete('cascade');
+            $table->mediumText('comments')->nullable();
             $table->foreign('sub_type_id')->references('id')->on('sub_types');
             $table->foreign('client_id')->references('id')->on('clients');
             $table->foreign('sub_division_id')->references('id')->on('pr_divisions');
