@@ -13,6 +13,17 @@ class Submission extends Model implements Auditable
 
    protected $fillable = ['submission_id', 'sub_type_id','sub_division_id','eoi_reference_no','project_name','client_id','submission_no'];
 
+
+    protected $appends = ['client_name','division'];
+    
+    function getClientNameAttribute() {
+        return "NTDC";
+    }
+
+    function getDivisionAttribute() {
+        return "Power";
+    }
+
    	public function date(){
 
         return $this->hasOne('App\Models\Submission\SubDate');
