@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Submission;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Common\Client;
 use App\Models\Submission\SubType;
@@ -14,16 +15,42 @@ use App\Models\Submission\SubRfpEoi;
 use App\Models\Project\PrDivision;
 use App\Http\Requests\Submission\SubmissionStore;
 use DB;
+use DataTables;
 
 class SubmissionController extends Controller
 {
-    public function index(){
-   
+    public function index(Request $request){
+   		if($request->ajax()){
+   			$data = Submission::all();
+
+   			return DataTables::of($data)
+   			->addColumn('edit', function($data){
+
+                    if(Auth::user()->hasPermissionTo('sub edit record')){
+                        
+                        $button = '<a class="btn btn-success btn-sm" href="'.route('submission.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+
+                        return $button;
+                    } 
+
+            })
+            ->addColumn('delete', function($data){
+                        $button = '<form  id="formDeleteSubmission'.$data->id.'"  action="'.route('submission.destroy',$data->id).'" method="POST">'.method_field('DELETE').csrf_field().'
+                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
+                                 </form>';
+                        return $button;
+                    })
+
+            ->rawColumns(['edit','delete'])
+            ->make(true);
+
+   		}
+
 	$submissions =collect();
     $waterSubmissions = Submission:: where('sub_division_id',1)->get();
     $powerSubmissions = Submission::where('sub_division_id',2)->get();
 	
-	return view ('submission.submission.list', compact('submissions','waterSubmissions','powerSubmissions'));
+	return view ('submission.list', compact('submissions','waterSubmissions','powerSubmissions'));
 
 	}
 

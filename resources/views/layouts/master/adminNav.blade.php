@@ -158,10 +158,11 @@
                     <ul aria-expanded="false" class="collapse">
                         @can('sub edit record') 
                         <li><a class="{{Request::is('hrms/submission/create')?'active':''}}" href="{{route('submission.create')}}">Add Submission</a></li>
+
                         @endcan
                         
                         @canany(['sub edit record', 'sub view record'])
-                        <li><a  class="{{Request::is('hrms/submission')?'active':''}}" href="{{route('submission.index')}}">List of Submissions</a></li>
+                        <li><a class="{{Request::is('hrms/submission')?'active':''}}" href="{{route('submission.index')}}">List of Submissions</a></li>
                         @endcanany
                                                
                     </ul>
