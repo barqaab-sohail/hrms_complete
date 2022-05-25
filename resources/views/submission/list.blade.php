@@ -31,6 +31,11 @@
                           <select  name="sub_division_id"  id="sub_division_id" class="form-control selectTwo" data-validation="required" readonly>
                           </select>
                     </div>
+                     <div class="form-group" id="hideDiv">
+                        <label class="control-label text-right">EOI Reference</label>
+                        <select  name="eoi_reference_id"  id="eoi_reference_id" class="form-control selectTwo" data-validation="required" readonly>
+                        </select>   
+                    </div>
                     <div class="form-group">
                         <label class="control-label text-right">Project Name</label>
                         <input type="text" name="project_name" id="project_name" value="{{ old('project_name') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Please enter Project Name">    
@@ -56,8 +61,8 @@
 <!-- End Modal -->
 <div class="card">
 	<div class="card-body">	
+		<button type="button" class="btn btn-success float-right"  id ="createSubmission" data-toggle="modal" >Add Submission</button>
 		<h4 class="card-title" style="color:black">List of Submissions</h4>
-
 		<div class="table-responsive m-t-40">	
 			<table id="myTable" class="table table-bordered table-striped">
 				<thead>
@@ -112,6 +117,49 @@ $(document).ready(function() {
 			   	@endrole
 		  	]
  		});
+
+ 		$('#createSubmission').click(function (e) {
+ 			$(".selectTwo").select2({
+        		width: "100%",
+	        	theme: "classic",
+        	});
+
+ 			$.get("{{ url('hrms/submission/create') }}" , function (data) {
+        	
+        		$("#sub_division_id").empty();
+              	$("#sub_division_id").append('<option value="">Select Division</option>');
+        		$.each(data.divisions, function (key, value){
+        			$("#sub_division_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+        		});
+        		$("#client_id").empty();
+              	$("#client_id").append('<option value="">Select Client</option>');
+        		$.each(data.clients, function (key, value){
+        			$("#client_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+        		});
+        		$("#sub_type_id").empty();
+              	$("#sub_type_id").append('<option value="">Select Submission Type</option>');
+        		$.each(data.subTypes, function (key, value){
+        			$("#sub_type_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+        		});
+          	$('#ajaxModel').modal('show');
+      		});
+ 		});
+ 		$('#sub_type_id').change(function(){
+    		var subTypeId = $(this).val();
+    		$.ajax({
+    			type:"get",
+   			 	url: "{{url('hrms/submission/eoiReference')}}"+"/"+subTypeId,
+    			success:function(res)
+		        {       
+		            if(res)
+		            {
+		              $("#eoi_reference_id").empty();
+		              $("#eoi_reference_id").append('<option value="">Select EOI Reference</option>');
+		              console.log(res);
+		            }
+		        }
+		    });//end ajax
+        });
 
  		$('body').unbind().on('click', '.editStatus', function () {
 	      	var leave_id = $(this).data('id');

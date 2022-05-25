@@ -19,6 +19,8 @@ use DataTables;
 
 class SubmissionController extends Controller
 {
+    
+
     public function index(Request $request){
    		if($request->ajax()){
    			$data = Submission::all();
@@ -58,10 +60,14 @@ class SubmissionController extends Controller
     
 	    $clients = Client::all();
 	    $subTypes = SubType::all();
-	    $eoiReferences = Submission::where('sub_type_id','!=',3)->get();
 	    $divisions = PrDivision::all();
 		
-		return view ('submission.submission.create',compact('clients','subTypes','eoiReferences','divisions'));
+		return response()->json(["divisions"=>$divisions, "clients"=>$clients, "subTypes"=>$subTypes]);
+	}
+
+	public function eoiReference($id){
+		$id = Submission::where('sub_type_id','!=',3)->get();
+		return response()->json($id);
 	}
 
 	public function store (SubmissionStore $request){

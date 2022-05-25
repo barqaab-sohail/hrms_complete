@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Database\Seeder;
+namespace Database\Seeders;
 
-class SubTypeTableSeeder extends Seeder
+use Illuminate\Database\Seeder;
+use DB;
+
+class SubmissionTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +14,7 @@ class SubTypeTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('sub_types')->delete();  
+       DB::table('sub_types')->delete();  
         $subTypes = array(
         	array('name' => 'EOI'),
         	array('name' => 'PQD'),
