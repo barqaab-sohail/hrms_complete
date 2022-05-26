@@ -38,7 +38,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label text-right">Project Name</label>
-                        <input type="text" name="project_name" id="project_name" value="{{ old('project_name') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Please enter Project Name">    
+                        <input type="text" name="project_name" id="project_name" value="{{ old('project_name') }}" class="form-control" data-validation="length"  data-validation-length="250" placeholder="Please enter Project Name">    
                     </div>
                     <div class="form-group">
                         <label class="control-label text-right">Submission No</label>
@@ -161,6 +161,7 @@ $(document).ready(function() {
 
     		});
     		$.get("{{ url('hrms/submission/submissionNo') }}"+"/"+subTypeId, function (data) {
+    			$("#submission_no").val(data);
     			console.log(data);
     		});
 
@@ -200,8 +201,8 @@ $(document).ready(function() {
         $(this).html('Save');
          
 	        $.ajax({
-	          data: $('#leaveStatusForm').serialize(),
-	          url: "{{ route('leaveStatus.store') }}",
+	          data: $('#submissionForm').serialize(),
+	          url: "{{ route('submission.store') }}",
 	          type: "POST",
 	          dataType: 'json',
 	          success: function (data) {
@@ -222,13 +223,13 @@ $(document).ready(function() {
 	      	});
     	});
 
-    	$('body').on('click', '.deleteLeave', function () {
-	        var leave_id = $(this).data("id");
+    	$('body').on('click', '.deleteSubmission', function () {
+	        var submission_id = $(this).data("id");
 	        var con = confirm("Are You sure want to delete !");
 	        if(con){
 	          $.ajax({
 	            type: "DELETE",
-	            url: "{{ route('leave.store') }}"+'/'+leave_id,
+	            url: "{{ route('submission.store') }}"+'/'+submission_id,
 	            success: function (data) {
 	                table.draw();
 	                if(data.error){

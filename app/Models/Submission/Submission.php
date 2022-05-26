@@ -11,7 +11,7 @@ class Submission extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
     
 
-   protected $fillable = ['submission_id', 'sub_type_id','sub_division_id','eoi_reference_no','project_name','client_id','submission_no'];
+   protected $fillable = ['sub_type_id','sub_division_id','project_name','client_id','submission_no'];
 
 
     protected $appends = ['client_name','division'];

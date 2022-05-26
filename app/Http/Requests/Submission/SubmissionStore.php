@@ -26,19 +26,10 @@ class SubmissionStore extends FormRequest
         $rules = [
             'sub_division_id'=> 'required',
             'sub_type_id'=> 'required',
-            'project_name'=> 'required|max:190',
+            'project_name'=> 'required|max:250',
             'client_id'=> 'required',
-            'submission_date'=> 'required',
-            'submission_time'=> 'required',
-            'address'=> 'required|max:190',
-            'designation'=> 'required|max:190',
-
+            'submission_no'=> 'required',
         ];
-
-        //If POST Method then run this code otherwise in Patch Method dupblicate checck in uptdate function in controller.
-        // if ($this->getMethod() == 'POST') {
-        // $rules += ['education_id'=> "required|unique_education:".session('hr_employee_id')];
-        // }
 
     return $rules;
     }
