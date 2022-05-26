@@ -31,7 +31,7 @@
 		                                    <div class="col-md-12">
 		                                       	<label class="control-label text-right">Name of Project<span class="text_requried">*</span></label><br>
 
-		                                       	<input type="text"  name="name" value="{{ old('name') }}"  class="form-control exempted" data-validation="required length" data-validation-length="max190" placeholder="Enter Name of Project">
+		                                       	<input type="text"  name="name" value="{{ old('name') }}"  class="form-control exempted" data-validation="required length" data-validation-length="max510" placeholder="Enter Name of Project">
 		                                    </div>
 		                                </div>
 		                            </div>
