@@ -21,7 +21,7 @@ class CreateSubmissionTable extends Migration
             $table->bigInteger('client_id')->unsigned();
             $table->bigInteger('sub_division_id')->unsigned();
             $table->string('submission_no',15)->unique();
-            $table->string('project_name');
+            $table->string('project_name',512);
             $table->mediumText('comments')->nullable();
             $table->foreign('sub_type_id')->references('id')->on('sub_types');
             $table->foreign('client_id')->references('id')->on('clients');
