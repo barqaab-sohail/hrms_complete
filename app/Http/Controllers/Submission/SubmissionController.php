@@ -37,10 +37,10 @@ class SubmissionController extends Controller
 
             })
             ->addColumn('delete', function($data){
-                        $button = '<form  id="formDeleteSubmission'.$data->id.'"  action="'.route('submission.destroy',$data->id).'" method="POST">'.method_field('DELETE').csrf_field().'
-                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
-                                 </form>';
-                        return $button;
+                    if(Auth::user()->hasPermissionTo('sub edit record')){
+                         $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteSubmission">Delete</a>';
+                         return $button;
+                    	}
                     })
 
             ->rawColumns(['edit','delete'])
@@ -73,57 +73,40 @@ class SubmissionController extends Controller
 
 	public function submissionNo($subTypeId){
 		//asSubClass
-        $asSubClass = Submission::where('sub_type_id',$subTypeId)->reverse()->first();
-        dd($asSubClass);
-       //  $count = 1;
-       // // $code = $code.'0'; //200
-       //  $asCode =  $asSubClass->as_class_id.'-'. $asSubClass->id.'-';
-       // // $asCode = $asCode.$count;
+        $lastSubmission = Submission::where('sub_type_id',$subTypeId)->orderBy('id','desc')->first();
+        $submissionNo=null;
+        if($lastSubmission){
+        	$lastSubTypeId = $lastSubmission->submission_no;
+        	$numbers = explode('-', $lastSubTypeId);
+			$lastPart = end($numbers)+1;
+			 $submissionNo = $subTypeId.'-'.$lastPart;
+        }else{
+        	$submissionNo = $subTypeId.'-'.'1001';
+        }
 
-       //  while(Asset::where('asset_code',$asCode.$count)->count()>0){ 
-       //      $count++;  
-       //  }
-       //  $asCode = $asCode.$count;
-
-       //  return response()->json($submissionNo);
-
-        return response()->json([ 'assetCode'=>$asCode]);
+        return response()->json($submissionNo);
     }
 
 	public function store (SubmissionStore $request){
 		
 		$input = $request->all();
 
-			if($request->filled('submission_date')){
-	            $input ['submission_date']= \Carbon\Carbon::parse($request->submission_date)->format('Y-m-d');
-	            }
-
-	        //calculate Submission_no
-	        $code = $request->sub_division_id . $request->sub_type_id . substr($request->submission_date,-2);
-	        $count = 1;
-			$submissionCode = $code.$count;
-
-			while(Submission::where('submission_no',$code.$count)->count()>0){
-				$count++;
-				$submissionCode = $code.$count;
-			}
-
-			$input['submission_no']=$submissionCode;
-
-        DB::transaction(function () use ($input, $request) {  
+		
+        DB::transaction(function () use ($input) {  
 
            $submission = Submission::create($input);
            $input['submission_id'] = $submission->id;
-           if($request->filled('eoi_reference')){
-           	SubRfpEoi::create($input);
-           }
-           SubDate::create($input);
-           SubAddress::create($input);
-           SubContact::create($input);
+
+           // if($request->filled('eoi_reference')){
+           // 	SubRfpEoi::create($input);
+           // }
+           // SubDate::create($input);
+           // SubAddress::create($input);
+           // SubContact::create($input);
 
     	}); // end transcation
 
-		return response()->json(['status'=> 'OK', 'message' => "Submission Successfully Saved and Sumission No. is $submissionCode"]);
+		return response()->json(['status'=> 'OK', 'message' => "Submission Successfully Saved"]);
 	}
 
 
@@ -179,8 +162,7 @@ class SubmissionController extends Controller
 	public function destroy($id){
 
 		Submission::findOrFail($id)->delete();
-		return back()->with('message', 'Data Successfully Updated');
-
+		return response()->json(['success'=>'data  delete successfully.']);
 	}
 
 
