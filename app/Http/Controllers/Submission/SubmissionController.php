@@ -65,10 +65,30 @@ class SubmissionController extends Controller
 		return response()->json(["divisions"=>$divisions, "clients"=>$clients, "subTypes"=>$subTypes]);
 	}
 
-	public function eoiReference($id){
-		$id = Submission::where('sub_type_id','!=',3)->get();
-		return response()->json($id);
+	public function eoiReference(){
+		$eoiReferences = Submission::where('sub_type_id','!=',3)->get();
+		return response()->json($eoiReferences);
 	}
+	
+
+	public function submissionNo($subTypeId){
+		//asSubClass
+        $asSubClass = Submission::where('sub_type_id',$subTypeId)->reverse()->first();
+        dd($asSubClass);
+       //  $count = 1;
+       // // $code = $code.'0'; //200
+       //  $asCode =  $asSubClass->as_class_id.'-'. $asSubClass->id.'-';
+       // // $asCode = $asCode.$count;
+
+       //  while(Asset::where('asset_code',$asCode.$count)->count()>0){ 
+       //      $count++;  
+       //  }
+       //  $asCode = $asCode.$count;
+
+       //  return response()->json($submissionNo);
+
+        return response()->json([ 'assetCode'=>$asCode]);
+    }
 
 	public function store (SubmissionStore $request){
 		

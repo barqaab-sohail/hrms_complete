@@ -16,7 +16,7 @@ class CreatePrDetailTable extends Migration
         Schema::create('pr_details', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->text('name')->unique();
+            $table->string('name',512)->unique();
             $table->bigInteger('contract_type_id')->unsigned();
             $table->bigInteger('client_id')->unsigned();
             $table->date('commencement_date');

@@ -90,6 +90,7 @@
 
 
 $(document).ready(function() {
+	$('#hideDiv').hide();
 
 	$(function () {
       	$.ajaxSetup({
@@ -146,20 +147,25 @@ $(document).ready(function() {
  		});
  		$('#sub_type_id').change(function(){
     		var subTypeId = $(this).val();
-    		$.ajax({
-    			type:"get",
-   			 	url: "{{url('hrms/submission/eoiReference')}}"+"/"+subTypeId,
-    			success:function(res)
-		        {       
-		            if(res)
-		            {
-		              $("#eoi_reference_id").empty();
-		              $("#eoi_reference_id").append('<option value="">Select EOI Reference</option>');
-		              console.log(res);
-		            }
-		        }
-		    });//end ajax
+    		if(subTypeId ==3){
+    			$('#hideDiv').show();
+    		}else{
+    			$('#hideDiv').hide();
+    		}
+    		$.get("{{ url('hrms/submission/eoiReference') }}", function (data) {
+    			$("#eoi_reference_id").empty();
+		        $("#eoi_reference_id").append('<option value="">Select EOI Reference</option>');
+    			$.each(data, function (key, value){
+        			$("#eoi_reference_id").append('<option value="'+value.id+'">'+value.project_name+'</option>');
+        		});
+
+    		});
+    		$.get("{{ url('hrms/submission/submissionNo') }}"+"/"+subTypeId, function (data) {
+    			console.log(data);
+    		});
+
         });
+
 
  		$('body').unbind().on('click', '.editStatus', function () {
 	      	var leave_id = $(this).data('id');
