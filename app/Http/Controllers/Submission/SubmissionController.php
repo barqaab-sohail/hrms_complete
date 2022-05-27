@@ -30,7 +30,7 @@ class SubmissionController extends Controller
 
                     if(Auth::user()->hasPermissionTo('sub edit record')){
                         
-                        $button = '<a class="btn btn-success btn-sm" href="'.route('submission.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+                        $button = '<a class="btn btn-success btn-sm editSubmission" data-id="'.$data->id.'" title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
 
                         return $button;
                     } 
@@ -120,9 +120,7 @@ class SubmissionController extends Controller
 	    $divisions = PrDivision::all();
   
 	    if($request->ajax()){      
-	            return view ('submission.submission.ajax', compact('clients','subTypes','eoiReferences','divisions','data'));    
-	    }else{
-	           return view ('submission.submission.edit', compact('clients','subTypes','eoiReferences','divisions','data'));     
+	            return view ('submission.ajax', compact('clients','subTypes','eoiReferences','divisions','data'));    
 	    }
 
 	}
