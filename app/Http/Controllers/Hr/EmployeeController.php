@@ -231,7 +231,7 @@ class EmployeeController extends Controller
 
     		DB::transaction(function () use ($input, $id) {  
 
-    		HrEmployee::findOrFail($id)->update($input);
+    		  HrEmployee::findOrFail($id)->update($input);
 
     		}); // end transcation
         

@@ -225,23 +225,6 @@
 		          });
 		        }
 	    	});
-	    	$('body').on('click', '.editSubmission', function () {
-	    		var submission_id = $(this).data("id"); 
-	    		$.ajax({
-		            type: "GET",
-		            url: "{{ url('hrms/submission') }}"+'/'+submission_id+'/edit',
-		            success: function (data) {
-		            	$("#mainDiv").empty();
-			            $("#mainDiv").append(data);
-
-		            },
-		            error: function (data) {
-		            }
-		          });
-
-	    		
-
-	    	});    
 	  	}); // end function
 
 	}); //End document ready function
