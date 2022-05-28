@@ -104,7 +104,6 @@ thead th {
             </div>
 
                 @include('layouts.master.message') 
-               
 
                 @yield('content')
         </div>
@@ -116,5 +115,6 @@ thead th {
         <p>HRMS 5.10 - Developed by: BARQAAB IT</p>
     </div>
 </body>
+
 </html>
 

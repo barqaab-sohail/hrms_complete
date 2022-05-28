@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Common\Client;
 use App\Models\Submission\SubType;
 use App\Models\Submission\Submission;
-use App\Models\Submission\SubDate;
-use App\Models\Submission\SubAddress;
-use App\Models\Submission\SubContact;
+use App\Models\Submission\SubEoiReference;
 use App\Models\Submission\SubRfpEoi;
 use App\Models\Project\PrDivision;
 use App\Http\Requests\Submission\SubmissionStore;
@@ -20,17 +18,16 @@ use DataTables;
 class SubmissionController extends Controller
 {
     
-
     public function index(Request $request){
    		if($request->ajax()){
-   			$data = Submission::all();
+   			$data = Submission::orderBy('id','desc')->get();
 
    			return DataTables::of($data)
    			->addColumn('edit', function($data){
 
                     if(Auth::user()->hasPermissionTo('sub edit record')){
                         
-                        $button = '<a class="btn btn-success btn-sm editSubmission" data-id="'.$data->id.'" title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+                        $button = '<a class="btn btn-success btn-sm" href="'.route('submission.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
 
                         return $button;
                     } 
@@ -57,7 +54,7 @@ class SubmissionController extends Controller
 	}
 
 	public function create(){
-    
+    	session()->put('submission_id', '');
 	    $clients = Client::all();
 	    $subTypes = SubType::all();
 	    $divisions = PrDivision::all();
@@ -79,7 +76,7 @@ class SubmissionController extends Controller
         	$lastSubTypeId = $lastSubmission->submission_no;
         	$numbers = explode('-', $lastSubTypeId);
 			$lastPart = end($numbers)+1;
-			 $submissionNo = $subTypeId.'-'.$lastPart;
+			$submissionNo = $subTypeId.'-'.$lastPart;
         }else{
         	$submissionNo = $subTypeId.'-'.'1001';
         }
@@ -91,18 +88,14 @@ class SubmissionController extends Controller
 		
 		$input = $request->all();
 
-		
-        DB::transaction(function () use ($input) {  
+        DB::transaction(function () use ($input, $request) {  
 
            $submission = Submission::create($input);
            $input['submission_id'] = $submission->id;
 
-           // if($request->filled('eoi_reference')){
-           // 	SubRfpEoi::create($input);
-           // }
-           // SubDate::create($input);
-           // SubAddress::create($input);
-           // SubContact::create($input);
+           if($request->filled('eoi_reference')){
+           		SubEoiReference::create($input);
+           }
 
     	}); // end transcation
 
@@ -116,12 +109,15 @@ class SubmissionController extends Controller
 		$data = Submission::find($id);
 		$clients = Client::all();
 	    $subTypes = SubType::all();
-	    $eoiReferences = Submission::all();
+	    $eoiReferences = Submission::where('sub_type_id','!=',3)->get();
 	    $divisions = PrDivision::all();
-  
-	    if($request->ajax()){      
-	            return view ('submission.ajax', compact('clients','subTypes','eoiReferences','divisions','data'));    
-	    }
+	    session()->put('submission_id', $data->id);
+
+        if($request->ajax()){      
+            return view ('submission.ajax', compact('clients','subTypes','eoiReferences','divisions','data'));  
+        }else{
+            return view ('submission.edit', compact('clients','subTypes','eoiReferences','divisions','data'));      
+        }    
 
 	}
 
@@ -129,27 +125,30 @@ class SubmissionController extends Controller
 	public function update(Request $request, $id){
 
 		$input = $request->all();
-
-		if($request->filled('submission_date')){
-	            $input ['submission_date']= \Carbon\Carbon::parse($request->submission_date)->format('Y-m-d');
-	    }
+		//ensure client end is is not changed
+        if($id != session('submission_id')){
+            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        }
 
         DB::transaction(function () use ($input, $request, $id) {  
            
         	Submission::findOrFail($id)->update($input);
+        	
+        	$subEoiReference = SubEoiReference::where('submission_id',$id)->first();
 
-        	$date = $request->only('submission_date','submittion_time');
-        	$date ['submission_date']= \Carbon\Carbon::parse($request->submission_date)->format('Y-m-d');
-        	$subDate = SubDate::where('submission_id',$id)->first();	
-			SubDate::findOrFail($subDate->id)->update($date);
+        	
+        		$subEoiReference=null;
 
-			$address = $request->only('address','designation');
-			$subAddress = SubAddress::where('submission_id',$id)->first();	
-			SubAddress::findOrFail($subAddress->id)->update($address);
+        	if($request->filled('eoi_reference_id')){
+           		
+           		SubEoiReference::updateOrCreate(['id' => $subEoiReference->id],
+                ['submission_id'=> $input['submission_id'],
+                'eoi_reference_id'=> $input['eoi_reference_id'],
+                ]); 
 
-			$contact = $request->only('landline','fax','mobile', 'email');
-			$subContact = SubContact::where('submission_id',$id)->first();	
-			SubContact::findOrFail($subContact->id)->update($contact);
+           	}else{
+           		// SubEoiReference::findOrFail($subEoiReference->id)->delete();
+           	}
 
     	}); // end transcation
 
