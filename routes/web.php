@@ -237,6 +237,9 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 	Route::get('/submission/eoiReference','SubmissionController@eoiReference');
 	Route::get('/submission/submissionNo/{id}','SubmissionController@submissionNo');
 	Route::resource('/submission', 'SubmissionController');
+	Route::resource('/submissionPartner', 'PartnerController');
+	Route::get('/submissionPartnerList', 'PartnerController@list')->name('submissionPartner.list');
+	
 	Route::resource('/submissionDocument', 'SubmissionDocumentController');
 	Route::get('/submissionDocument/refreshTable', 'SubmissionDocumentController@refreshTable')->name('submissionDocument.table');
 
@@ -268,8 +271,9 @@ Route::group(['prefix' => 'invoice', 'middleware' => ['auth','XssSanitizer'], 'n
 
 //General Routes
 Route::group(['middleware' => ['auth','XssSanitizer']], function(){
-Route::get('/country/states/{id?}', 'CountryController@getStates')->name('states');
-Route::get('/country/cities/{id?}', 'CountryController@getCities')->name('cities');
+	Route::get('/country/states/{id?}', 'CountryController@getStates')->name('states');
+	Route::get('/country/cities/{id?}', 'CountryController@getCities')->name('cities');
+	Route::post('/client','Submission\SubmissionController@addClient')->name('addClient');
 
 
 });

@@ -18,40 +18,41 @@
 	                <form id="submissionForm" name="submissionForm" action="{{route('submission.store')}}"class="form-horizontal">
 	                   <input type="hidden" name="submission_id" id="submission_id">
 	                   	<div class="row">
-	                   		<div class="col-md-3">
+	                   		<div class="col-md-2">
 			                   	<div class="form-group">
 			                        <label class="control-label text-right">Submission Type<span class="text_requried">*</span></label><br>
 			                          <select  name="sub_type_id"  id="sub_type_id" class="form-control selectTwo" data-validation="required" readonly>
 			                          </select>
 			                    </div>
 			                </div>
-			                <div class="col-md-3">
+			                <div class="col-md-2">
 				                <div class="form-group">
 			                        <label class="control-label text-right">Division<span class="text_requried">*</span></label><br>
 			                        <select  name="sub_division_id"  id="sub_division_id" class="form-control selectTwo" data-validation="required" readonly>
 			                        </select>
 			                    </div>
 			                </div>
-			                <div class="col-md-3">
+			                <div class="col-md-2">
 				                <div class="form-group">
 			                        <label class="control-label text-right">Submission No</label>
 			                        <input type="text" name="submission_no" id="submission_no" value="{{ old('submission_no') }}" class="form-control" readonly>    
 		                    	</div>
 			                </div>
-			                <div class="col-md-3">
-			                	<div class="form-group" id="hideDiv">
-		                        	<label class="control-label text-right">EOI Reference</label>
-		                        	<select  name="eoi_reference_id"  id="eoi_reference_id" class="form-control selectTwo" data-validation="required" readonly>
-		                        	</select>   
-	                    		</div>
+			                <div class="col-md-6">
+			                	<div class="form-group">
+		                        	<label class="control-label text-right">Client Name<span class="text_requried">*</span></label><br>
+		                          	<select  name="client_id"  id="client_id" class="form-control selectTwo" data-validation="required" readonly>
+		                          	</select>
+		                          	<button type="button" class="btn btn-sm btn-success"  data-toggle="modal" data-target="#clientModal"><i class="fas fa-plus"></i>
+		                    	</div>
 			                </div>
 			            </div>
-	                    <div class="form-group">
-	                        <label class="control-label text-right">Client Name<span class="text_requried">*</span></label><br>
-	                          <select  name="client_id"  id="client_id" class="form-control selectTwo" data-validation="required" readonly>
-	                          </select>
-	                    </div>
 	                    
+	                    <div class="form-group" id="hideDiv">
+                        	<label class="control-label text-right">EOI Reference</label>
+                        	<select  name="eoi_reference_id"  id="eoi_reference_id" class="form-control selectTwo" data-validation="required" readonly>
+                        	</select>   
+	                    </div>
 	                    <div class="form-group">
 	                        <label class="control-label text-right">Project Name</label>
 	                        <input type="text" name="project_name" id="project_name" value="{{ old('project_name') }}" class="form-control" data-validation="length"  data-validation-length="250" placeholder="Please enter Project Name">    
@@ -100,7 +101,7 @@
 			</div>	
 		</div>
 	</div>
-
+	 @include('submission.client.clientModal')
 	<script>
 	$(document).ready(function() {
 		$('#hideDiv').hide();
