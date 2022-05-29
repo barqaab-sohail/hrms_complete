@@ -18,6 +18,7 @@ class CreateSubResultsTable extends Migration
             $table->id();
             $table->bigInteger('submission_id')->unsigned();
             $table->bigInteger('result_id')->unsigned();
+            $table->timestamps();
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
             $table->foreign('result_id')->references('id')->on('results');
         });

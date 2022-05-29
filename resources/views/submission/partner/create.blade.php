@@ -8,7 +8,6 @@
       <tr>
           <th>Name of Firm</th>
           <th>Role</th>
-          <th>Invoice Type</th>
           <th>% Share</th>
           <th>Edit</th>
           <th>Delete</th>
@@ -126,13 +125,13 @@ $(document).ready(function() {
           $('#ajaxModel').modal('show');
           $('#sub_participate_role_id').val(data.id);
           $('#partner_id').val(data.partner_id);
-           $('#partner_id').trigger('change');
+          $('#partner_id').trigger('change');
           $('#role_id').val(data.role_id);
           $('#role_id').trigger('change');
           $('#share').val(data.share);
          
       })
-   });
+    });
     $('#saveBtn').click(function (e) {
         e.preventDefault();
         $(this).html('Save');
