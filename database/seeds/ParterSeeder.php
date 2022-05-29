@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Database\Seeder;
+namespace Database\Seeders;
 
-class PartnersTableSeeder extends Seeder
+use Illuminate\Database\Seeder;
+use DB;
+
+class ParterSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +16,7 @@ class PartnersTableSeeder extends Seeder
     {
         DB::table('partners')->delete();  
         $partners = array(
+            array('name' => 'BARQAAB Consulting Services (Pvt.) Ltd. (BARQAAB)'),
         	array('name' => 'National Engineering Services Pakistan Pvt. Ltd. (NESPAK)'),
         	array('name' => 'National Development Consultants Pvt. Ltd. (NDC)'),
         	array('name' => 'Associated Consulting Engineers Pvt. Ltd. (ACE)'),
