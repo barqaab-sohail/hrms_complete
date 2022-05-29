@@ -45,11 +45,8 @@ class SubmissionController extends Controller
 
    		}
 
-	$submissions =collect();
-    $waterSubmissions = Submission:: where('sub_division_id',1)->get();
-    $powerSubmissions = Submission::where('sub_division_id',2)->get();
 	
-	return view ('submission.list', compact('submissions','waterSubmissions','powerSubmissions'));
+	return view ('submission.list');
 
 	}
 
@@ -136,18 +133,21 @@ class SubmissionController extends Controller
         	
         	$subEoiReference = SubEoiReference::where('submission_id',$id)->first();
 
-        	
-        		$subEoiReference=null;
+        	if(!$subEoiReference){
+        		$subEoiReferenceId=null;
+        	}
 
         	if($request->filled('eoi_reference_id')){
            		
-           		SubEoiReference::updateOrCreate(['id' => $subEoiReference->id],
-                ['submission_id'=> $input['submission_id'],
+           		SubEoiReference::updateOrCreate(['id' => $subEoiReferenceId],
+                ['submission_id'=> $id,
                 'eoi_reference_id'=> $input['eoi_reference_id'],
                 ]); 
 
            	}else{
-           		// SubEoiReference::findOrFail($subEoiReference->id)->delete();
+           		if($subEoiReference){
+           			SubEoiReference::findOrFail($subEoiReference->id)->delete();
+           		}
            	}
 
     	}); // end transcation
@@ -160,6 +160,25 @@ class SubmissionController extends Controller
 
 		Submission::findOrFail($id)->delete();
 		return response()->json(['success'=>'data  delete successfully.']);
+	}
+
+
+	public function addClient (Request $request){
+		
+		$validated = $request->validate([
+        'name' => 'required|unique:clients|max:190',
+    	]);
+    	
+        
+        DB::transaction(function () use ($request) {  
+
+            Client::create(["name"=>$request->name]);
+           
+    	}); // end transcation
+
+    	$clients = Client::all();
+
+		return response()->json(['status'=> 'OK', 'message' => "Submission Successfully Saved", 'clients'=>$clients]);
 	}
 
 
