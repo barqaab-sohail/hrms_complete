@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 use App\Http\Requests\Project\Invoice\InvoiceStore;
 use App\Models\Project\PrDetail;
 use App\Models\Project\Invoice\Invoice;
+use App\Models\Project\Invoice\InvoiceMonth;
 use App\Models\Project\Invoice\InvoiceType;
 use App\Models\Project\Invoice\InvoiceDocument;
 use App\Models\Project\Invoice\InvoiceCost;
@@ -67,6 +68,11 @@ class InvoiceController extends Controller
                            return addComma($row->invoiceCost->amount??'');
                            
                     })
+                    ->addColumn('invoice_month', function($row){                
+                      
+                           return $row->invoiceMonth->invoice_month??'';
+                           
+                    })
                     ->addColumn('sales_tax', function($row){                
                       
                            return addComma($row->invoiceCost->sales_tax??'');
@@ -119,6 +125,9 @@ class InvoiceController extends Controller
         if($request->filled('invoice_date')){
             $input ['invoice_date']= \Carbon\Carbon::parse($request->invoice_date)->format('Y-m-d');
             }
+        if($request->filled('invoice_month')){
+            $input ['invoice_month']= \Carbon\Carbon::parse($request->invoice_month)->format('Y-m-d');
+            }
         
 
      	DB::transaction(function () use ($input, $request) {  
@@ -138,6 +147,13 @@ class InvoiceController extends Controller
             'amount'=> $input['amount'],
             'sales_tax'=> $input['sales_tax']
             ]);
+
+            if ($request->filled('invoice_month')){
+                InvoiceMonth::updateOrCreate(['invoice_id' => $invoice->id],
+                    ['invoice_id'=> $invoice->id,
+                    'invoice_month'=> $input['invoice_month']
+                ]);
+            }
 
             if ($request->hasFile('document')){
                 $extension = request()->document->getClientOriginalExtension();
@@ -160,7 +176,8 @@ class InvoiceController extends Controller
 
     	}); // end transcation
 
-		return response()->json(['success'=>'Data saved successfully.']);
+
+		return response()->json(['message'=>"Data saved successfully"]);
 	}
 
 	public function edit($id){
@@ -176,6 +193,12 @@ class InvoiceController extends Controller
 
         $invoice = $invoice->merge($invoiceCost);
         $invoice = $invoice->merge($invoiceDocument);
+
+        $invoiceMonth = InvoiceMonth::where('invoice_id',$id)->select('invoice_month')->first();
+        if($invoiceMonth){
+            $invoiceMonth = new Collection($invoiceMonth);
+            $invoice = $invoice->merge($invoiceMonth);
+        }
         
         return response()->json($invoice);
 
@@ -192,10 +215,12 @@ class InvoiceController extends Controller
 
             $invoiceDocument = InvoiceDocument::where('invoice_id',$id)->first();
 
-            $path = public_path('storage/'.$invoiceDocument->path);
+            if($invoiceDocument){
+                $path = public_path('storage/'.$invoiceDocument->path);
 
-            if(File::exists($path)){
-                    File::delete($path);
+                if(File::exists($path)){
+                        File::delete($path);
+                }
             }
 
             Invoice::findOrFail($id)->delete();
