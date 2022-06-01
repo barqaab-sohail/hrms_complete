@@ -4,11 +4,13 @@
   <button type="button" class="btn btn-success float-right"  id ="createInvoice" data-toggle="modal" >Add Invoice</button>
   @endif
   <br>
+
   <table class="table table-bordered data-table">
     <thead>
       <tr>
           <th>Invoice No</th>
           <th>Invoice Date</th>
+          <th>Invoice Month</th>
           <th>Invoice Type</th>
           <th>Value Exc. Sales Tax</th>
           <th>Sales Tax</th>
@@ -27,6 +29,7 @@
     <tbody>
         
     </tbody>
+   
   </table>
 </div>
 
@@ -43,16 +46,24 @@
                    
                   <input type="hidden" name="invoice_id" id="invoice_id">
                   <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Invoice No.<span class="text_requried">*</span></label>
                             <input type="text" name="invoice_no" id="invoice_no"  value="{{old('invoice_no')}}" class="form-control exempted" data-validation="required" >
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Invoice Date<span class="text_requried">*</span></label>
                             <input type="text" name="invoice_date" id="invoice_date" value="{{ old('invoice_date') }}" class="form-control date_input" data-validation="required" readonly >
+                            <br>
+                            <i class="fas fa-trash-alt text_requried"></i> 
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Invoice Month</label>
+                            <input type="text" name="invoice_month" id="invoice_month" value="{{ old('invoice_month') }}" class="form-control date-picker" data-validation="required" readonly >
                             <br>
                             <i class="fas fa-trash-alt text_requried"></i> 
                         </div>
@@ -136,7 +147,7 @@
 </div>
 <style>
   .modal-dialog {
-    max-width: 80%;
+    max-width: 90%;
     display: flex;
 }
 </style>
@@ -147,7 +158,25 @@
 $(document).ready(function() {
   //function view from list table
   
-  
+  $(function() {
+      $('.date-picker').datepicker( {
+      changeMonth: true,
+      changeYear: true,
+      showButtonPanel: true,
+      dateFormat: 'MM yy',
+      onClose: function(dateText, inst) { 
+          $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            if($('.date-picker').val()!=''){
+              $('.date-picker').siblings('i').show();
+            }else{
+              $('.date-picker').siblings('i').hide();
+            }
+        }
+      });
+      $('.date-picker').siblings('i').hide();
+     
+      
+  });
   //only number value entered
     $('#amount, #sales_tax').on('change, keyup', function() {
     var currentInput = $(this).val();
@@ -200,6 +229,7 @@ $(document).ready(function() {
         columns: [
             {data: "invoice_no", name: 'invoice_no'},
             {data: "invoice_date", name: 'invoice_date'},
+            {data: "invoice_month", name: 'invoice_month'},
             {data: "invoice_type", name: 'invoice_type'},
             {data: "amount", name: 'amount'},
             {data: "sales_tax", name: 'sales_tax'},
@@ -244,7 +274,8 @@ $(document).ready(function() {
           $('#ajaxModel').modal('show');
           $('#invoice_id').val(data.id);
           $('#invoice_no').val(data.invoice_no);
-          $('#invoice_date').val(data.invoice_date);
+          $('#invoice_date').val(dateInDayMonthYear(data.invoice_date));
+          $('#invoice_month').val(data.invoice_month);
           $('#invoice_type_id').val(data.invoice_type_id);
           $('#invoice_type_id').trigger('change');
           $('#reference').val(data.reference);
@@ -281,6 +312,7 @@ $(document).ready(function() {
      
               $('#invoiceForm').trigger("reset");
               $('#ajaxModel').modal('hide');
+              $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
               table.draw();
         
           },

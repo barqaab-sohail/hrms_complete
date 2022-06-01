@@ -55,6 +55,29 @@ function toTitleCase(str) {
     });
 }
 
+function dateInMonthYear(date){
+
+    var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    
+    //if Date not empty than enter date with format 'Wednesday, 10-August-2010'
+      var Date1 = new Date(date);
+      return months[Date1.getMonth()]
+      +" "+Date1.getFullYear();        
+}
+
+function dateInDayMonthYear(date){
+     //get Date from Database and set as "Saturday, 24-August-2019"
+    var weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    
+    var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    
+    //if Date not empty than enter date with format 'Wednesday, 10-August-2010'
+      var Date1 = new Date(date);
+      return weekday[Date1.getDay()]+", "+
+        Date1.getDate()+"-"+months[Date1.getMonth()]
+        +"-"+Date1.getFullYear();        
+}
+
 
 
 function formFunctions(){
@@ -114,7 +137,7 @@ function formFunctions(){
 
 
     //If Click icon than clear date
-    $(".date_input").siblings('i').click(function (){
+    $(".date_input, .date-picker").siblings('i').click(function (){
         if(confirm("Are you sure to clear date")){
         $(this).siblings('input').val("");
         $(this).hide();
