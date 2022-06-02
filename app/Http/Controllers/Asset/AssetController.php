@@ -105,7 +105,7 @@ class AssetController extends Controller
             //add image
                 $extension = request()->document->getClientOriginalExtension();
                 $fileName = time().'.'.$extension;
-                $folderName = "asset/".  $asset->id;
+                $folderName = "asset/".  $asset->id."/";
                 //store file
                 $request->file('document')->storeAs('public/'.$folderName,$fileName);
                 
