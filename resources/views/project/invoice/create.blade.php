@@ -271,7 +271,6 @@ $(document).ready(function() {
       $.get("{{ url('hrms/project/projectInvoice') }}" +'/' + invoice_id +'/edit', function (data) {
           $('#modelHeading').html("Edit Invoice");
           $('#saveBtn').val("edit-Invoice");
-          $('#ajaxModel').modal('show');
           $('#invoice_id').val(data.id);
           $('#invoice_no').val(data.invoice_no);
           $('#invoice_date').val(dateInDayMonthYear(data.invoice_date));
@@ -292,6 +291,7 @@ $(document).ready(function() {
           $( "#pdf" ).show();
           document.getElementById("pdf").src=docUrl;
           //$('#pdf').trigger('change');
+          $('#ajaxModel').modal('show');
          
       })
    });
