@@ -47,7 +47,7 @@
                           </select>  
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" id="hideShare">
                       <div class="form-group">
                           <label class="control-label">% Share</label>
                           <input type="text" name="share"  id="share" value="{{old('share')}}" class="form-control prc_1" data-validation="required">
@@ -74,7 +74,18 @@
 
 
 $(document).ready(function() {
-  
+  $('#hideShare').hide();
+  $("#pr_role_id").change(function (){
+      
+      if($(this).val()!=1){
+        $('#hideShare').show();
+      }
+      else{
+        $('#hideShare').hide();
+        $('#share').val('');
+      }
+  });
+
   $(function () {
       $.ajaxSetup({
           headers: {
@@ -87,8 +98,8 @@ $(document).ready(function() {
         destroy: true,
         ajax: "{{ route('submissionPartner.index') }}",
         columns: [
-            {data: "partner_id", name: 'partner_id'},
-            {data: "pr_role_id", name: 'pr_role_id'},
+            {data: "partner_name", name: 'partner_name'},
+            {data: "role_name", name: 'role_name'},
             {data: "share", name: 'share'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
@@ -116,26 +127,40 @@ $(document).ready(function() {
               $('#ajaxModel').modal('show');
         });
     });
+
+
+
     $('body').unbind().on('click', '.editSubmissionPartner', function () {
       var sub_participate_role_id = $(this).data('id');
       $('#json_message_modal').html('');
       $.get("{{ url('hrms/submissionPartner') }}" +'/' + sub_participate_role_id +'/edit', function (data) {
-          $('#modelHeading').html("Edit Invoice");
-          $('#saveBtn').val("edit-Invoice");
-          $('#ajaxModel').modal('show');
-          $('#sub_participate_role_id').val(data.id);
-          $('#partner_id').val(data.partner_id);
+          $("#partner_id").empty();
+          $("#partner_id").append('<option value="">Select Partner</option>');
+          $.each(data.partners, function (key, value){
+          $("#partner_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+          });
+          $("#pr_role_id").empty();
+          $("#pr_role_id").append('<option value="">Select Role</option>');
+          $.each(data.prRoles, function (key, value){
+            $("#pr_role_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+          });
+
+          $('#modelHeading').html("Edit Partner");
+          $('#saveBtn').val("edit-Partner");
+          $('#sub_participate_role_id').val(data.data.id);
+          $('#partner_id').val(data.data.partner_id);
           $('#partner_id').trigger('change');
-          $('#role_id').val(data.role_id);
-          $('#role_id').trigger('change');
-          $('#share').val(data.share);
-         
+          $('#pr_role_id').val(data.data.pr_role_id);
+          $('#pr_role_id').trigger('change');
+          $('#share').val(data.data.share);
+          $('#ajaxModel').modal('show');
       })
     });
     $('#saveBtn').click(function (e) {
         e.preventDefault();
         $(this).html('Save');
         var data = new FormData($("#submissionPartnerForm")[0]); 
+        console.log(data);
         $.ajax({
           data: data,
           url: "{{ route('submissionPartner.store') }}",
@@ -146,11 +171,9 @@ $(document).ready(function() {
           processData: false, 
           //dataType: 'json',
           success: function (data) {
-     
               $('#submissionPartnerForm').trigger("reset");
               $('#ajaxModel').modal('hide');
-              table.draw();
-        
+                table.draw(); 
           },
           error: function (data) {
               

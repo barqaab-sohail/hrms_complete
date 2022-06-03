@@ -4,6 +4,8 @@ namespace App\Models\Submission;
 
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Common\Client;
+use App\Models\Project\PrDivision;
 
 class Submission extends Model implements Auditable
 {
@@ -14,14 +16,14 @@ class Submission extends Model implements Auditable
    protected $fillable = ['sub_type_id','sub_division_id','project_name','client_id','submission_no','comments'];
 
 
-    protected $appends = ['client_name','division'];
-    
-    function getClientNameAttribute() {
-        return "NTDC";
+    public function getClientIdAttribute($value) {
+      
+        return Client::find($value)->name;
     }
 
-    function getDivisionAttribute() {
-        return "Power";
+
+    function getSubDivisionIdAttribute($value) {
+        return PrDivision::find($value)->name;
     }
 
    	public function date(){

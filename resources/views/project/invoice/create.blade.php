@@ -137,8 +137,8 @@
                   <!--end row-->
                     
                   <div class="col-sm-offset-2 col-sm-10">
-                   <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
-                   </button>
+                    <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
+                    </button>
                   </div>
               </form>
             </div>
