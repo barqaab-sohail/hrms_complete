@@ -55,16 +55,38 @@ class PartnerController extends Controller
 		return response()->json(["partners"=>$partners, "prRoles"=>$prRoles]);
 	}
 
-  public function store(Request $request){
-    $input = $request->all();
-        $input['submission_id']=session('submission_id');
-        DB::transaction(function () use ($input) {  
+	public function store(Request $request){
+	    $input = $request->all();
+	        $input['submission_id']=session('submission_id');
+	        DB::transaction(function () use ($input) {  
 
-           SubParticipateRole::create($input);
+	       		SubParticipateRole::updateOrCreate(['id' => $input['sub_participate_role_id']],$input); 
 
-      }); // end transcation
+	      }); // end transcation
 
-    return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
-  }
+	    return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
+	}
+
+	public function edit($id){
+
+		$data = SubParticipateRole::find($id);
+		$partners = Partner::all();
+	    $prRoles = PrRole::all();
+	   
+       return response()->json(["partners"=>$partners, "prRoles"=>$prRoles, "data"=>$data]);
+	}
+
+
+
+	public function destroy($id)
+    {
+        DB::transaction(function () use ($id) {  
+            subParticipateRole::findOrFail($id)->delete();   
+        }); // end transcation
+
+        return response()->json(['success'=>'data  delete successfully.']);
+   
+    }
+
 
 }

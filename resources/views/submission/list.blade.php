@@ -122,8 +122,8 @@
 			  	columns: [
 			  		{data: 'submission_no', name: 'submission_no'},
 			  		{data: 'project_name', name: 'project_name'},
-			  		{data: 'client_name', name: 'client_name'},
-			  		{data: 'division', name: 'division'},
+			  		{data: 'client_id', name: 'client_id'},
+			  		{data: 'sub_division_id', name: 'sub_division_id'},
 				   	{data: 'sub_type_id', name: 'sub_type_id'},
 				   	{data: 'edit',name: 'edit', orderable: false, searchable: false },
 				   	@role('Super Admin')
