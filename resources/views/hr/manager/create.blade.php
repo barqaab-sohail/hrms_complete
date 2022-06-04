@@ -101,8 +101,7 @@ $(document).ready(function() {
           $('#employee_manager_id').val(data.id);
           $('#hr_manager_id').val(data.hr_manager_id);
           $('#hr_manager_id').trigger('change');
-          $('#effective_date').val(data.effective_date);
-         
+          $('#effective_date').val(data.effective_date); 
       })
    });
     $('#saveBtn').click(function (e) {

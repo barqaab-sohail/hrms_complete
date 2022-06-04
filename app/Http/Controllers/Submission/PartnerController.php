@@ -14,7 +14,7 @@ use DataTables;
 class PartnerController extends Controller
 {
     
-	public function index(Request $request){
+	public function create(Request $request){
 
 		if($request->ajax()){
    			$data = SubParticipateRole::where('submission_id',session('submission_id'))->orderBy('id','desc')->get();
@@ -44,15 +44,13 @@ class PartnerController extends Controller
    		//return view ('submission.partner.create');
 	}
 
-	public function list(){
-		return view ('submission.partner.create');
-	}
-
-	public function create(){
+	public function index(){
     	
 	    $partners = Partner::all();
 	    $prRoles = PrRole::all();
-		return response()->json(["partners"=>$partners, "prRoles"=>$prRoles]);
+	    $view =  view('submission.partner.create', compact('partners','prRoles'))->render();
+	    return response()->json($view);
+		// return response()->json(["partners"=>$partners, "prRoles"=>$prRoles]);
 	}
 
 	public function store(Request $request){
@@ -68,12 +66,8 @@ class PartnerController extends Controller
 	}
 
 	public function edit($id){
-
 		$data = SubParticipateRole::find($id);
-		$partners = Partner::all();
-	    $prRoles = PrRole::all();
-	   
-       return response()->json(["partners"=>$partners, "prRoles"=>$prRoles, "data"=>$data]);
+    	return response()->json($data);
 	}
 
 

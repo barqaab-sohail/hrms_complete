@@ -353,12 +353,6 @@ class EmployeeController extends Controller
         return view('hr.employee.search.result',compact('result'));
         }
 
-        if($request->filled('employee')){
-            $result = HrEmployee::where('id',$request->employee)->get();
-        return view('hr.employee.search.result',compact('result'));
-
-        }
-
         if($request->filled('blood_group')){
             $result = HrEmployee::join('hr_blood_groups','hr_blood_groups.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','hr_blood_groups.blood_group_id')->where('hr_status_id',1)->where('blood_group_id',$request->blood_group)->get();
         return view('hr.employee.search.result',compact('result'));
@@ -366,16 +360,27 @@ class EmployeeController extends Controller
         }
 
         if ($request->filled('document_name')){
-           $query = $request->input('document_name'); 
+           $data = $request->all();
             
-            $result = HrDocumentation::with('hrEmployee')->where('description', 'LIKE', "%{$query}%")
-            ->get();
+            $result = HrDocumentation::with('hrEmployee')
+                        ->when($data['document_name'], function ($query) use ($data){
+                                return $query-> where('description', 'LIKE', "%{$data['document_name']}%");
+                        })
+                        ->when($data['employee'],function ($query) use ($data){
+                                return $query-> where('hr_employee_id',$data['employee']);
+                        })
+                    ->get();
 
             //this variable used only for goting to else part of result blade.
             $documents=false;
 
            return view('hr.employee.search.result',compact('result','documents'));
        }
+        if($request->filled('employee')){
+            $result = HrEmployee::where('id',$request->employee)->get();
+        return view('hr.employee.search.result',compact('result'));
+
+        }
 
 
     }

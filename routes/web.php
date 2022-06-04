@@ -57,6 +57,8 @@ Route::get('/pecCardExpiry','HrAlertController@pecCardExpiry')->name('hrAlert.pe
 
 Route::get('/employee/search','EmployeeController@search')->name('employee.search');
 Route::get('/employee/search/result','EmployeeController@result')->name('employee.result');
+
+
 Route::get('/employee/user/data/{id}','EmployeeController@userData')->name('user.data');
 Route::resource('/employee', 'EmployeeController');
 
@@ -238,8 +240,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 	Route::get('/submission/submissionNo/{id}','SubmissionController@submissionNo');
 	Route::resource('/submission', 'SubmissionController');
 	Route::resource('/submissionPartner', 'PartnerController');
-	Route::get('/submissionPartnerList', 'PartnerController@list')->name('submissionPartner.list');
-	
+	Route::resource('/submissionDate', 'DateController');
 	Route::resource('/submissionDocument', 'SubmissionDocumentController');
 	Route::get('/submissionDocument/refreshTable', 'SubmissionDocumentController@refreshTable')->name('submissionDocument.table');
 

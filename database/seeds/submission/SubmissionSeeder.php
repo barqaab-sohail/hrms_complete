@@ -14,7 +14,7 @@ class SubmissionSeeder extends Seeder
     public function run()
     {
         $this->call(SubmissionTypeSeeder::class);
-        $this->call(ResultSeeder::class);
+        $this->call(SubStatusSeeder::class);
         $this->call(PartnerSeeder::class);
     }
 }

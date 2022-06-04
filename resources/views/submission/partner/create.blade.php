@@ -36,6 +36,10 @@
                         <div class="form-group">
                             <label class="control-label">Name of Firm<span class="text_requried">*</span></label>
                             <select  id="partner_id"   name="partner_id"  class="form-control selectTwo" data-validation="required">
+                            <option value=""></option>
+                              @foreach ($partners as $partner)
+                              <option value="{{$partner->id}}">{{$partner->name}}</option>
+                              @endforeach
                             </select>
                             
                         </div>
@@ -44,6 +48,10 @@
                         <div class="form-group">
                           <label class="control-label">Firm Role<span class="text_requried">*</span></label>
                           <select  id="pr_role_id"   name="pr_role_id"  class="form-control selectTwo" data-validation="required">
+                           <option value=""></option>
+                              @foreach ($prRoles as $role)
+                              <option value="{{$role->id}}">{{$role->name}}</option>
+                              @endforeach
                           </select>  
                         </div>
                     </div>
@@ -96,7 +104,7 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         destroy: true,
-        ajax: "{{ route('submissionPartner.index') }}",
+        ajax: "{{ route('submissionPartner.create') }}",
         columns: [
             {data: "partner_name", name: 'partner_name'},
             {data: "role_name", name: 'role_name'},
@@ -112,20 +120,11 @@ $(document).ready(function() {
     $('#createSubmissionPartner').click(function () {
         $('#json_message_modal').html('');
         $('#submissionForm').trigger("reset");
-        $.get("{{ url('hrms/submissionPartner/create') }}" , function (data) {
-
-              $("#partner_id").empty();
-              $("#partner_id").append('<option value="">Select Partner</option>');
-              $.each(data.partners, function (key, value){
-                $("#partner_id").append('<option value="'+value.id+'">'+value.name+'</option>');
-              });
-              $("#pr_role_id").empty();
-              $("#pr_role_id").append('<option value="">Select Role</option>');
-              $.each(data.prRoles, function (key, value){
-                $("#pr_role_id").append('<option value="'+value.id+'">'+value.name+'</option>');
-              });
-              $('#ajaxModel').modal('show');
-        });
+        $('#submissionPartnerForm').trigger("reset");
+        $('#partner_id').trigger('change');
+        $('#pr_role_id').trigger('change');
+        $('#hideShare').hide();
+        $('#ajaxModel').modal('show');
     });
 
 
@@ -134,42 +133,26 @@ $(document).ready(function() {
       var sub_participate_role_id = $(this).data('id');
       $('#json_message_modal').html('');
       $.get("{{ url('hrms/submissionPartner') }}" +'/' + sub_participate_role_id +'/edit', function (data) {
-          $("#partner_id").empty();
-          $("#partner_id").append('<option value="">Select Partner</option>');
-          $.each(data.partners, function (key, value){
-          $("#partner_id").append('<option value="'+value.id+'">'+value.name+'</option>');
-          });
-          $("#pr_role_id").empty();
-          $("#pr_role_id").append('<option value="">Select Role</option>');
-          $.each(data.prRoles, function (key, value){
-            $("#pr_role_id").append('<option value="'+value.id+'">'+value.name+'</option>');
-          });
 
           $('#modelHeading').html("Edit Partner");
           $('#saveBtn').val("edit-Partner");
-          $('#sub_participate_role_id').val(data.data.id);
-          $('#partner_id').val(data.data.partner_id);
+          $('#sub_participate_role_id').val(data.id);
+          $('#partner_id').val(data.partner_id);
           $('#partner_id').trigger('change');
-          $('#pr_role_id').val(data.data.pr_role_id);
+          $('#pr_role_id').val(data.pr_role_id);
           $('#pr_role_id').trigger('change');
-          $('#share').val(data.data.share);
+          $('#share').val(data.share);
           $('#ajaxModel').modal('show');
       })
     });
     $('#saveBtn').click(function (e) {
         e.preventDefault();
-        $(this).html('Save');
-        var data = new FormData($("#submissionPartnerForm")[0]); 
-        console.log(data);
+        $(this).html('Save'); 
         $.ajax({
-          data: data,
+          data: $('#submissionPartnerForm').serialize(),
           url: "{{ route('submissionPartner.store') }}",
           type: "POST",
-          async: false, 
-          cache: false, 
-          contentType: false, 
-          processData: false, 
-          //dataType: 'json',
+          dataType: 'json',
           success: function (data) {
               $('#submissionPartnerForm').trigger("reset");
               $('#ajaxModel').modal('hide');

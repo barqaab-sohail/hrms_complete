@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubResultsTable extends Migration
+class CreateSubStatusTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateSubResultsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sub_results', function (Blueprint $table) {
+        Schema::create('sub_status_types', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('submission_id')->unsigned();
-            $table->bigInteger('result_id')->unsigned();
+            $table->bigInteger('sub_status_id')->unsigned();
             $table->timestamps();
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
-            $table->foreign('result_id')->references('id')->on('results');
+            $table->foreign('sub_status_id')->references('id')->on('sub_statuses');
         });
     }
 
@@ -31,6 +31,6 @@ class CreateSubResultsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_results');
+        Schema::dropIfExists('sub_status_types');
     }
 }
