@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateResultsTable extends Migration
+class CreateSubStatusesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateResultsTable extends Migration
      */
     public function up()
     {
-        Schema::create('results', function (Blueprint $table) {
+        Schema::create('sub_statuses', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->string('name');
@@ -28,6 +28,6 @@ class CreateResultsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('results');
+        Schema::dropIfExists('sub_statuses');
     }
 }

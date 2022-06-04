@@ -170,20 +170,24 @@ $(document).ready(function(){
 	formFunctions();
 
 	$('select').change(function(){	
-		$(this).removeClass('searchSelect');
-		$('#document_name').val('');
-  		$('.searchSelect').each(function () {
-  			if($(this).val()){
-        	$(this).val('').select2('val', 'All');
-        	}
-    	});
-    	$(this).addClass('searchSelect');
+		
+			$(this).removeClass('searchSelect');
+			if($(this).attr("id") != "employee"){
+				$('#document_name').val('');
+			}
+	  		$('.searchSelect').each(function () {
+	  			if($(this).val()){
+	        	$(this).val('').select2('val', 'All');
+	        	}
+	    	});
+	    	$(this).addClass('searchSelect');
+	   
   	});
 
   	$('#document_name').focus(function(){
   		$('.searchSelect').each(function () {
-        	if($(this).val()){
-        	$(this).val('').select2('val', 'All');
+        	if($(this).val() && $(this).attr("id") != "employee"){
+        		$(this).val('').select2('val', 'All');
         	}
     	});
   	});

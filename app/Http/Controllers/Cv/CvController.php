@@ -447,7 +447,7 @@ class CvController extends Controller
 
     	$result = CvDetail::join('cv_experiences','cv_experiences.cv_detail_id','=','cv_details.id')
     					->join('cv_detail_education','cv_detail_education.cv_detail_id','=','cv_details.id')
-    							->when($data['speciality_id'], function ($query) use ($data){
+    						->when($data['speciality_id'], function ($query) use ($data){
 			    				return $query->where('cv_specialization_id','=',$data['speciality_id']);
 			    				})
 			    			->when($data['stage_id'], function ($query) use ($data){
