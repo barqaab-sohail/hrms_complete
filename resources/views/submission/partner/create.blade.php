@@ -6,11 +6,11 @@
   <table class="table data-table">
     <thead>
       <tr>
-          <th>Name of Firm</th>
-          <th>Role</th>
-          <th>% Share</th>
-          <th>Edit</th>
-          <th>Delete</th>
+          <th style="width:70%">Name of Firm</th>
+          <th style="width:10%">Role</th>
+          <th style="width:10%">% Share</th>
+          <th style="width:5%">Edit</th>
+          <th style="width:5%">Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -62,6 +62,16 @@
                       </div>
                     </div>
                   </div>
+                 @if($data->sub_type_id==3)
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="form-group">
+                          <label class="control-label">Cost</label>
+                          <input type="text" name="cost"  id="cost" value="{{old('cost')}}" class="form-control" data-validation="required">
+                      </div>
+                    </div>
+                  </div>
+                  @endif
                   <div class="col-sm-offset-2 col-sm-10">
                    <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
                    </button>
