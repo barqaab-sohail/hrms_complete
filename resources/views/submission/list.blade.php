@@ -127,10 +127,10 @@
 					<thead>
 					<tr>
 						<th style="width:5%">Submission No</th>
-						<th style="width:50%">Name of Project</th>
-						<th>Client Name</th>
-						<th>Division</th>
-						<th>Submission Type</th>
+						<th style="width:45%">Name of Project</th>
+						<th style="width:30%">Client Name</th>
+						<th style="width:5%">Division</th>
+						<th style="width:5%">Submission Type</th>
 						<th style="width:5%">Edit</th>
 						@role('Super Admin')
 						<th style="width:5%">Delete</th>

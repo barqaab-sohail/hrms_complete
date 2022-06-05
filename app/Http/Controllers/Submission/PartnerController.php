@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Submission\SubParticipateRole;
+use App\Models\Submission\SubCost;
+use App\Models\Submission\Submission;
 use App\Models\Common\Partner;
 use App\Models\Project\PrRole;
 use DB;
@@ -48,7 +50,8 @@ class PartnerController extends Controller
     	
 	    $partners = Partner::all();
 	    $prRoles = PrRole::all();
-	    $view =  view('submission.partner.create', compact('partners','prRoles'))->render();
+	    $data = Submission::find(session('submission_id'));
+	    $view =  view('submission.partner.create', compact('partners','prRoles','data'))->render();
 	    return response()->json($view);
 		// return response()->json(["partners"=>$partners, "prRoles"=>$prRoles]);
 	}
@@ -58,7 +61,13 @@ class PartnerController extends Controller
 	        $input['submission_id']=session('submission_id');
 	        DB::transaction(function () use ($input) {  
 
-	       		SubParticipateRole::updateOrCreate(['id' => $input['sub_participate_role_id']],$input); 
+	       	$subParticipateRole = SubParticipateRole::updateOrCreate(['id' => $input['sub_participate_role_id']],$input); 
+
+	       	$input['sub_participate_role_id']=$subParticipateRole->id;
+	       	if($request->filled('total_cost')){
+	       		SubCost::create($input);
+	       	}
+
 
 	      }); // end transcation
 

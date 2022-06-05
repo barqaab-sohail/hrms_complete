@@ -36,6 +36,10 @@ class Submission extends Model implements Auditable
             );
     }
 
+    public function subType(){
+        return $this->belongsTo('App\Models\Submission\SubType');
+    }
+
     public function subEoiReference(){
 
         return $this->hasOne('App\Models\Submission\SubEoiReference');
