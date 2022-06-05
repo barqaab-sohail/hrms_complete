@@ -28,20 +28,20 @@
             </div>
             <div class="modal-body">
               <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
-              <form id="submissionPartnerForm" name="submissionPartnerForm" action="{{route('submissionPartner.store')}}"class="form-horizontal">
+              <form id="submissionPartnerForm" name="submissionPartnerForm" class="form-horizontal">
                    
                   <input type="hidden" name="sub_participate_role_id" id="sub_participate_role_id">
                   <div class="row">
                     <div class="col-md-5">
                         <div class="form-group">
-                            <label class="control-label">Name of Firm<span class="text_requried">*</span></label>
+                            <label class="control-label">Name of Partner Firm<span class="text_requried">*</span></label>
                             <select  id="partner_id"   name="partner_id"  class="form-control selectTwo" data-validation="required">
                             <option value=""></option>
                               @foreach ($partners as $partner)
                               <option value="{{$partner->id}}">{{$partner->name}}</option>
                               @endforeach
                             </select>
-                            
+                            <button type="button" class="btn btn-sm btn-success"  data-toggle="modal" data-target="#partnerModal"><i class="fas fa-plus"></i>
                         </div>
                     </div>
                     <div class="col-md-5">
@@ -71,6 +71,7 @@
         </div>
     </div>
 </div>
+ @include('submission.partner.partnerModal')
 <style>
   .modal-dialog {
     max-width: 80%;
@@ -119,8 +120,8 @@ $(document).ready(function() {
 
     $('#createSubmissionPartner').click(function () {
         $('#json_message_modal').html('');
-        $('#submissionForm').trigger("reset");
         $('#submissionPartnerForm').trigger("reset");
+        $('#sub_participate_role_id').val('');
         $('#partner_id').trigger('change');
         $('#pr_role_id').trigger('change');
         $('#hideShare').hide();

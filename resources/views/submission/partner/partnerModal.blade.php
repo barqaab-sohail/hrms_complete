@@ -1,22 +1,22 @@
 <!-- Modal -->
-<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="partnerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Partner</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
        
-           <form id="clientModalFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
+           <form id="partnerModalFrom" action="" method="post" class="form-horizontal form-prevent-multiple-submits form-prevent-multiple-submits" enctype="multipart/form-data">
                   {{csrf_field()}}
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-12">
-                        <label class="control-label text-right">Client Name<span class="text_requried">*</span></label><br>
-                        <input type="text" name="name" id="name" value="{{ old('name') }}" class="form-control" placeholder="Enter Client Name" required>
+                        <label class="control-label text-right">Partner Name<span class="text_requried">*</span></label><br>
+                        <input type="text" name="name" id="name" value="{{ old('name') }}" class="form-control" placeholder="Enter Partner Name" required>
                       </div>
                     </div>                                                                
                   </div>
@@ -39,16 +39,27 @@
     </div>
   </div>
 </div>
+<style>
+#partnerModal {
+  position: fixed;
+}
 
+.modal-dialog {
+  position: fixed;
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+}
+</style>
 
 <script>
 
 $(document).ready(function(){
 
 
-    $('#clientModalFrom').on('submit', function(event){
+    $('#partnerModalFrom').on('submit', function(event){
        
-      var url = "{{route('addClient')}}"
+      var url = "{{route('addPartner')}}"
         event.preventDefault();
               //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
               $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
@@ -71,27 +82,27 @@ $(document).ready(function(){
                  processData: false,
                  success:function(data){
                      
-                      if(data.clients ==''){
+                      if(data.partners ==''){
                           $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                           $('.spinner').hide();
                            $('.btn-prevent-multiple-submits').removeAttr('disabled');
-                          $('#clientModal').modal('toggle');
+                          $('#partnerModal').modal('toggle');
                           $('html,body').scrollTop(0);
                       }else{
-                          $("#client_id").empty();
-                          $("#client_id").append('<option value="">Select Client</option>');
-                          $.each(data.clients, function(key,value){
-                                   $("#client_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+                          $("#partner_id").empty();
+                          $("#partner_id").append('<option value="">Select Partner</option>');
+                          $.each(data.partners, function(key,value){
+                                   $("#partner_id").append('<option value="'+value.id+'">'+value.name+'</option>');
                           });
-                          $('#client_id').select2('destroy');
-                          selectTwo('#client_id');
+                          $('#partner_id').select2('destroy');
+                          selectTwo('#partner_id');
 
                           $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                            $('.spinner').hide();
                            $('.btn-prevent-multiple-submits').removeAttr('disabled');
                            //after sucessfull save clear input fields
                           $('#name').val('');
-                          $('#clientModal').modal('toggle');
+                          $('#partnerModal').modal('toggle');
                         clearMessage(); 
                       }
 

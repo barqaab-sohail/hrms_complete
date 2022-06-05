@@ -156,12 +156,7 @@
 
 <!-- Submissions -->
                 <li class="{{Request::is('hrms/submission*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-book" aria-hidden="true"></i><span class="hide-menu">Submissions</span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        @can('sub edit record') 
-                        <li><a class="{{Request::is('hrms/submission/create')?'active':''}}" href="{{route('submission.create')}}">Add Submission</a></li>
-
-                        @endcan
-                        
+                    <ul aria-expanded="false" class="collapse"> 
                         @canany(['sub edit record', 'sub view record'])
                         <li><a class="{{Request::is('hrms/submission')?'active':''}}" href="{{route('submission.index')}}">List of Submissions</a></li>
                         @endcanany
@@ -237,3 +232,5 @@
     </div>
      
 </aside>
+
+

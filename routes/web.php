@@ -240,7 +240,9 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 	Route::get('/submission/submissionNo/{id}','SubmissionController@submissionNo');
 	Route::resource('/submission', 'SubmissionController');
 	Route::resource('/submissionPartner', 'PartnerController');
-	Route::resource('/submissionDate', 'DateController');
+	Route::resource('/submissionDate', 'DateAndTimeController');
+	
+
 	Route::resource('/submissionDocument', 'SubmissionDocumentController');
 	Route::get('/submissionDocument/refreshTable', 'SubmissionDocumentController@refreshTable')->name('submissionDocument.table');
 
@@ -275,6 +277,7 @@ Route::group(['middleware' => ['auth','XssSanitizer']], function(){
 	Route::get('/country/states/{id?}', 'CountryController@getStates')->name('states');
 	Route::get('/country/cities/{id?}', 'CountryController@getCities')->name('cities');
 	Route::post('/client','Submission\SubmissionController@addClient')->name('addClient');
+	Route::post('/partner','Submission\SubmissionController@addPartner')->name('addPartner');
 
 
 });

@@ -9,5 +9,5 @@ class SubDate extends Model implements Auditable
 {
    use \OwenIt\Auditing\Auditable;
     
-   protected $fillable = ['submission_id', 'submission_date','submission_time'];
+   protected $fillable = ['submission_id', 'submission_date','submission_time','address'];
 }

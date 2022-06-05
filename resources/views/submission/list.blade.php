@@ -4,7 +4,6 @@
 	<!-- <h3 class="text-themecolor">List of Employees</h3> -->
 @stop
 @section('content')
-<div id="mainDiv">
 	<!-- Model -->
 	<div class="modal fade" id="ajaxModel" aria-hidden="true">
 	    <div class="modal-dialog">
@@ -55,13 +54,48 @@
 	                    </div>
 	                    <div class="form-group">
 	                        <label class="control-label text-right">Project Name</label>
-	                        <input type="text" name="project_name" id="project_name" value="{{ old('project_name') }}" class="form-control" data-validation="length"  data-validation-length="250" placeholder="Please enter Project Name">    
+	                        <input type="text" name="project_name" id="project_name" value="{{ old('project_name') }}" class="form-control"  placeholder="Please enter Project Name">    
 	                    </div>
-	                    <div class="form-group">
-	                        <label class="control-label text-right">Comments</label>
-	                        <input type="text" name="comments" id="comments" value="{{ old('comments') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Please enter Comments">    
+	                    <div class="row">
+			                <div class="col-md-2">
+				                <div class="form-group">
+			                        <label class="control-label text-right">Submission Date<span class="text_requried">*</span></label><br>
+			                         <input type="text" id="submission_date" name="submission_date" value="{{ old('submission_date') }}" class="form-control date_input" readonly>     
+                            		<br>
+                            		<i class="fas fa-trash-alt text_requried"></i>
+			                    </div>
+			                </div>
+			                <div class="col-md-2">
+				                <div class="form-group">
+			                        <label class="control-label text-right">Submission Time</label>
+			                        <input type="text" id="submission_time" name="submission_time" value="{{ old('submission_time') }}" class="form-control time_input" readonly>     
+		                          	<br>
+		                          	<i class="fas fa-trash-alt text_requried"></i>   
+		                    	</div>
+			                </div>
+			                <div class="col-md-8">
+			                	<div class="form-group">
+		                        	<label class="control-label text-right">Submission Address<span class="text_requried">*</span></label><br>
+		                          	<input type="text" name="address"  id="address" value="{{old('address')}}" class="form-control">
+		                          	
+		                    	</div>
+			                </div>
+			            </div>
+			            <div class="row">
+			                <div class="col-md-2">
+			                  	<div class="form-group">
+			                        <label class="control-label text-right">Current Status</label>
+			                        <select  name="sub_status_id"  id="sub_status_id" class="form-control selectTwo" readonly>
+                        			</select>
+			                	</div>
+			                </div>
+			                <div class="col-md-10">
+			                  	<div class="form-group">
+			                        <label class="control-label text-right">Comments</label>
+			                        <input type="text" name="comments" id="comments" value="{{ old('comments') }}" class="form-control exempted" data-validation="length"  data-validation-length="max190" placeholder="Please enter Comments">    
+			                	</div>
+			                </div>
 	                    </div>
-	                    
 	                    <div class="col-sm-offset-2 col-sm-10">
 	                     <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save
 	                     </button>
@@ -70,12 +104,18 @@
 	            </div>
 	        </div>
 	    </div>
-	</div>
+	    <script>
+	    	formFunctions();
+	    </script>
+	</div> <!--End Modal  -->
 	<style>
-	  .modal-dialog {
-	    max-width: 80%;
-	    display: flex;
-	}
+		.modal-dialog {
+	    	max-width: 80%;
+		    display: flex;
+		}
+		.ui-timepicker-container{ 
+     		z-index:1151 !important; 
+  		}
 	</style>
 	<!-- End Modal -->
 	<div class="card">
@@ -104,6 +144,7 @@
 	 @include('submission.client.clientModal')
 	<script>
 	$(document).ready(function() {
+
 		$('#hideDiv').hide();
 		$(function () {
 	      	$.ajaxSetup({
@@ -156,6 +197,11 @@
 	              	$("#sub_type_id").append('<option value="">Select Submission Type</option>');
 	        		$.each(data.subTypes, function (key, value){
 	        			$("#sub_type_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+	        		});
+	        		$("#sub_status_id").empty();
+	              	$("#sub_status_id").append('<option value="">Select Current Status</option>');
+	        		$.each(data.subStatuses, function (key, value){
+	        			$("#sub_status_id").append('<option value="'+value.id+'">'+value.name+'</option>');
 	        		});
 	          	$('#ajaxModel').modal('show');
 	      		});

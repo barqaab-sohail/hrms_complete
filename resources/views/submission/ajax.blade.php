@@ -57,7 +57,7 @@
                         <select  name="eoi_reference_id"  id="eoi_reference_id" class="form-control selectTwo">
                         <option></option>
                         @foreach($eoiReferences as $eoiReference)
-                        <option value="{{$eoiReference->id}}" {{(old("eoi_reference_id", $data->eoi_reference_id??'')==$eoiReference->id? "selected" : "")}}>{{$eoiReference->submission_no}}-{{$eoiReference->project_name}}</option>
+                        <option value="{{$eoiReference->id}}" {{(old("eoi_reference_id", $data->subEoiReference->eoi_reference_id??'')==$eoiReference->id? "selected" : "")}}>{{$eoiReference->submission_no}}-{{$eoiReference->project_name}}</option>
                         @endforeach   
                         </select>   
                     </div>
@@ -66,11 +66,25 @@
                         <label class="control-label text-right">Project Name</label>
                         <input type="text"  name="project_name" value="{{ old('project_name', $data->project_name??'') }}"  class="form-control">   
                     </div>
-                    <div class="form-group">
-                        <label class="control-label text-right">Comments</label>
-                        <input type="text" name="comments" id="comments" value="{{ old('comments', $data->comments??'') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Please enter Comments">    
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label text-right">Current Status</label>
+                                <select  name="sub_status_id"  id="sub_status_id" class="form-control selectTwo">
+                                <option></option>
+                                @foreach($subStatuses as $subStatus)
+                                <option value="{{$subStatus->id}}" {{(old("sub_status_id", $data->subStatusType->id??'')==$subStatus->id? "selected" : "")}}>{{$subStatus->name}}</option>
+                                @endforeach   
+                                </select>  
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label class="control-label text-right">Comments</label>
+                                <input type="text" name="comments" id="comments" value="{{ old('comments', $data->comments??'') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Please enter Comments">    
+                            </div>
+                        </div>
                     </div>
-                    
                     <div class="col-sm-offset-2 col-sm-10">
                      <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save
                      </button>
