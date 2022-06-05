@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Common\Client;
+use App\Models\Common\Partner;
+use App\Models\Submission\SubDate;
+use App\Models\Submission\SubStatus;
+use App\Models\Submission\SubStatusType;
 use App\Models\Submission\SubType;
 use App\Models\Submission\Submission;
 use App\Models\Submission\SubEoiReference;
@@ -55,8 +59,9 @@ class SubmissionController extends Controller
 	    $clients = Client::all();
 	    $subTypes = SubType::all();
 	    $divisions = PrDivision::all();
+      $subStatuses = SubStatus::all();
 		
-		return response()->json(["divisions"=>$divisions, "clients"=>$clients, "subTypes"=>$subTypes]);
+		return response()->json(["divisions"=>$divisions, "clients"=>$clients, "subTypes"=>$subTypes,"subStatuses"=>$subStatuses]);
 	}
 
 	public function eoiReference(){
@@ -93,6 +98,13 @@ class SubmissionController extends Controller
            if($request->filled('eoi_reference')){
            		SubEoiReference::create($input);
            }
+           if($request->filled('submission_date') && $request->filled('submission_time') && $request->filled('address')){
+              $input ['submission_date']= \Carbon\Carbon::parse($request->submission_date)->format('Y-m-d');
+              SubDate::create($input);
+           }
+           if($request->filled('sub_status_id')){
+              SubStatusType::create($input);
+           }
 
     	}); // end transcation
 
@@ -105,15 +117,16 @@ class SubmissionController extends Controller
 		session()->put('submission_id', $id);
 		$data = Submission::find($id);
 		$clients = Client::all();
-	    $subTypes = SubType::all();
-	    $eoiReferences = Submission::where('sub_type_id','!=',3)->get();
-	    $divisions = PrDivision::all();
-	    session()->put('submission_id', $data->id);
+	  $subTypes = SubType::all();
+    $subStatuses = SubStatus::all();
+	  $eoiReferences = Submission::where('sub_type_id','!=',3)->get();
+	  $divisions = PrDivision::all();
+	  session()->put('submission_id', $data->id);
 
         if($request->ajax()){      
-            return view ('submission.ajax', compact('clients','subTypes','eoiReferences','divisions','data'));  
+            return view ('submission.ajax', compact('clients','subTypes','eoiReferences','divisions','subStatuses','data'));  
         }else{
-            return view ('submission.edit', compact('clients','subTypes','eoiReferences','divisions','data'));      
+            return view ('submission.edit', compact('clients','subTypes','eoiReferences','divisions','subStatuses','data'));      
         }    
 
 	}
@@ -132,6 +145,11 @@ class SubmissionController extends Controller
         	Submission::findOrFail($id)->update($input);
         	
         	$subEoiReference = SubEoiReference::where('submission_id',$id)->first();
+          $subStatusType = SubStatusType::where('submission_id',$id)->first();
+          
+          if($subStatusType){
+            SubStatusType::findOrFail($subStatusType->id)->update($input);
+          }
 
         	if(!$subEoiReference){
         		$subEoiReferenceId=null;
@@ -169,7 +187,6 @@ class SubmissionController extends Controller
         'name' => 'required|unique:clients|max:190',
     	]);
     	
-        
         DB::transaction(function () use ($request) {  
 
             Client::create(["name"=>$request->name]);
@@ -180,6 +197,25 @@ class SubmissionController extends Controller
 
 		return response()->json(['status'=> 'OK', 'message' => "Submission Successfully Saved", 'clients'=>$clients]);
 	}
+
+    public function addPartner(Request $request){
+    
+    $validated = $request->validate([
+        'name' => 'required|unique:clients|max:190',
+      ]);
+      
+        
+        DB::transaction(function () use ($request) {  
+
+            Partner::create(["name"=>$request->name]);
+           
+      }); // end transcation
+
+      $partners = Partner::all();
+
+    return response()->json(['status'=> 'OK', 'message' => "Submission Successfully Saved", 'partners'=>$partners]);
+  }
+
 
 
 

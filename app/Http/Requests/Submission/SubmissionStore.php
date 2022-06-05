@@ -26,7 +26,7 @@ class SubmissionStore extends FormRequest
         $rules = [
             'sub_division_id'=> 'required',
             'sub_type_id'=> 'required',
-            'project_name'=> 'required|max:250',
+            'project_name'=> 'required|max:510',
             'client_id'=> 'required',
             'submission_no'=> 'required',
         ];

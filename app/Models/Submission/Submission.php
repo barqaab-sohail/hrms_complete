@@ -26,6 +26,22 @@ class Submission extends Model implements Auditable
         return PrDivision::find($value)->name;
     }
 
+    public function subStatusType(){
+
+        return $this->hasOneThrough('App\Models\Submission\SubStatus', 'App\Models\Submission\SubStatusType',
+            'submission_id',
+            'id',
+            'id',
+            'sub_status_id'
+            );
+    }
+
+    public function subEoiReference(){
+
+        return $this->hasOne('App\Models\Submission\SubEoiReference');
+
+    }
+
    	public function date(){
 
         return $this->hasOne('App\Models\Submission\SubDate');

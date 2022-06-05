@@ -9,4 +9,6 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Partner extends Model implements Auditable
 { 
     use \OwenIt\Auditing\Auditable;
+
+    protected $fillable = ['name'];
 }
