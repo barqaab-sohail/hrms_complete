@@ -47,25 +47,16 @@ class Submission extends Model implements Auditable
     }
 
    	public function date(){
-
         return $this->hasOne('App\Models\Submission\SubDate');
-
     }
 
     public function contact(){
-
         return $this->hasOne('App\Models\Submission\SubContact');
-
     }
 
     public function address(){
-
         return $this->hasOne('App\Models\Submission\SubAddress');
-
     }
-
-
-
 
 
    //default value of status=0

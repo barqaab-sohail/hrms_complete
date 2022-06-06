@@ -104,7 +104,7 @@ $(document).ready(function() {
           $('#effective_date').val(data.effective_date); 
       })
    });
-    $('#saveBtn').click(function (e) {
+    $('#saveBtn').unbind().click(function (e) {
         e.preventDefault();
         $(this).html('Save');
          

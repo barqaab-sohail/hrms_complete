@@ -25,6 +25,13 @@ class SubParticipateRole extends Model implements Auditable
         return PrRole::find($this->pr_role_id)->name;
     }
 
+    public function subCost(){
+
+        return $this->hasOne('App\Models\Submission\SubCost');
+
+    }
+
+
     // public function getPartnerIdAttribute($value) {
     //     return Partner::find($value)->name;
     // }

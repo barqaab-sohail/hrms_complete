@@ -178,7 +178,7 @@ $(document).ready(function() {
           $('#date').val(data.date);
       })
    });
-    $('#saveBtn').click(function (e) {
+    $('#saveBtn').unbind().click(function (e) {
         e.preventDefault();
         $(this).html('Save');
          

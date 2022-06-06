@@ -163,7 +163,7 @@ formFunctions();
           $('#payment').trigger('change');
       })
    });
-    $('#saveBtn').click(function (e) {
+    $('#saveBtn').unbind().click(function (e) {
         e.preventDefault();
 
         $(this).html('Save');

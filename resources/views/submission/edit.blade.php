@@ -66,7 +66,7 @@ $(document).ready(function() {
            processData: false,
            success:function(data)
                {
-        		
+        	$(".addAjax").empty();
             $(".addAjax").html(data);
         		$('a[id^=add]').css('background-color','');
         		$('#'+id).css('background-color','#737373');

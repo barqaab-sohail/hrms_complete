@@ -213,7 +213,7 @@ $(document).ready(function() {
            
       })
     });
-    $('#saveBtn').click(function (e) {
+    $('#saveBtn').unbind().click(function (e) {
         
         $.ajax({
           data: $('#activityForm').serialize(),
