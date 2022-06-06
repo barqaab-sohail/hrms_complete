@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Submission\SubParticipateRole;
+use App\Http\Requests\Submission\PartnerStore;
 use App\Models\Submission\SubCost;
 use App\Models\Submission\Submission;
 use App\Models\Common\Partner;
@@ -21,6 +22,21 @@ class PartnerController extends Controller
 		if($request->ajax()){
    			$data = SubParticipateRole::where('submission_id',session('submission_id'))->orderBy('id','desc')->get();
    			return DataTables::of($data)
+   			->addColumn('mm_cost', function($data){
+                    
+                         return addComma($data->subCost->mm_cost??'');
+                    	
+                    })
+   			->addColumn('direct_cost', function($data){
+                   
+                        return addComma($data->subCost->direct_cost??'');
+                    	
+                    })
+   			->addColumn('total_cost', function($data){
+                   
+                         return addComma($data->subCost->total_cost??'');
+                    	
+                    })
    			->addColumn('Edit', function($data){
 
                     if(Auth::user()->hasPermissionTo('sub edit record')){
@@ -38,7 +54,7 @@ class PartnerController extends Controller
                     	}
                     })
 
-            ->rawColumns(['Edit','Delete'])
+            ->rawColumns(['Edit','Delete','mm_cost','direct_cost','total_cost'])
             ->make(true);
 
    		}
@@ -56,16 +72,28 @@ class PartnerController extends Controller
 		// return response()->json(["partners"=>$partners, "prRoles"=>$prRoles]);
 	}
 
-	public function store(Request $request){
+	public function store(PartnerStore $request){
 	    $input = $request->all();
 	        $input['submission_id']=session('submission_id');
-	        DB::transaction(function () use ($input) {  
+	        DB::transaction(function () use ($input, $request) {  
 
 	       	$subParticipateRole = SubParticipateRole::updateOrCreate(['id' => $input['sub_participate_role_id']],$input); 
 
 	       	$input['sub_participate_role_id']=$subParticipateRole->id;
+	       	
+	       	
 	       	if($request->filled('total_cost')){
-	       		SubCost::create($input);
+	       		$input ['mm_cost']= intval(str_replace( ',', '', $request->mm_cost));
+	       		$input ['direct_cost']= intval(str_replace( ',', '', $request->direct_cost));
+	       		$input ['total_cost']= intval(str_replace( ',', '', $request->total_cost));
+	       		$subCost = SubCost::where('sub_participate_role_id',$input['sub_participate_role_id'])->first();
+	       		SubCost::updateOrCreate(['id' => $subCost->id??''],$input); 
+	       	}else{
+
+	       		$subCost = SubCost::where('sub_participate_role_id',$input['sub_participate_role_id'])->first();
+	       		if($subCost){
+	       			 SubCost::findOrFail($subCost->id)->delete();  
+	       		}
 	       	}
 
 
@@ -75,7 +103,7 @@ class PartnerController extends Controller
 	}
 
 	public function edit($id){
-		$data = SubParticipateRole::find($id);
+		$data = SubParticipateRole::with('SubCost')->find($id);
     	return response()->json($data);
 	}
 

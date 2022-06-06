@@ -6,9 +6,12 @@
   <table class="table data-table">
     <thead>
       <tr>
-          <th style="width:70%">Name of Firm</th>
+          <th style="width:40%">Name of Firm</th>
           <th style="width:10%">Role</th>
           <th style="width:10%">% Share</th>
+          <th style="width:10%">MM Cost</th>
+          <th style="width:10%">Direct Cost</th>
+          <th style="width:10%">Total Cost</th>
           <th style="width:5%">Edit</th>
           <th style="width:5%">Delete</th>
       </tr>
@@ -58,18 +61,31 @@
                     <div class="col-md-2" id="hideShare">
                       <div class="form-group">
                           <label class="control-label">% Share</label>
-                          <input type="text" name="share"  id="share" value="{{old('share')}}" class="form-control prc_1" data-validation="required">
+                          <input type="text" name="share"  id="share" value="{{old('share')}}" class="form-control prc_1" data-validation="required" value="">
                       </div>
                     </div>
                   </div>
-                 @if($data->sub_type_id==3)
+                  @if($data->sub_type_id=='RFP')
                   <div class="row">
                     <div class="col-md-2">
                       <div class="form-group">
-                          <label class="control-label">Cost</label>
-                          <input type="text" name="cost"  id="cost" value="{{old('cost')}}" class="form-control" data-validation="required">
+                          <label class="control-label">Manmonth Cost</label>
+                          <input type="text" name="mm_cost"  id="mm_cost" value="{{old('mm_cost')}}" class="form-control prc_1" >
                       </div>
                     </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                          <label class="control-label">Direct Cost</label>
+                          <input type="text" name="direct_cost"  id="direct_cost" value="{{old('direct_cost')}}" class="form-control prc_1">
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                          <label class="control-label">Total Cost<span class="text_requried">*</span></label>
+                          <input type="text" name="total_cost"  id="total_cost" value="{{old('total_cost')}}" class="form-control" data-validation="required">
+                      </div>
+                    </div>
+
                   </div>
                   @endif
                   <div class="col-sm-offset-2 col-sm-10">
@@ -93,6 +109,38 @@
 
 
 $(document).ready(function() {
+
+ 
+  $('.prc_1, #total_cost').keyup(function(){
+         // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+
+    });
+
+    //automatic total
+    $(".form-group").on("input", ".prc_1", function() {
+        var sum = 0;
+        $(".form-group .prc_1").each(function(){
+            var inputVal = $(this).val();
+            inputVal=inputVal.replace(/\,/g,'') // remove comma
+            if ($.isNumeric(inputVal)){
+            sum += parseFloat(inputVal);
+            }
+        });
+        sum = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+        $("#total_cost").val(sum);
+    });
+
+
+
   $('#hideShare').hide();
   $("#pr_role_id").change(function (){
       
@@ -120,6 +168,9 @@ $(document).ready(function() {
             {data: "partner_name", name: 'partner_name'},
             {data: "role_name", name: 'role_name'},
             {data: "share", name: 'share'},
+            {data: "mm_cost", name: 'mm_cost'},
+            {data: "direct_cost", name: 'direct_cost'},
+            {data: "total_cost", name: 'total_cost'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
         ],
@@ -144,7 +195,7 @@ $(document).ready(function() {
       var sub_participate_role_id = $(this).data('id');
       $('#json_message_modal').html('');
       $.get("{{ url('hrms/submissionPartner') }}" +'/' + sub_participate_role_id +'/edit', function (data) {
-
+    
           $('#modelHeading').html("Edit Partner");
           $('#saveBtn').val("edit-Partner");
           $('#sub_participate_role_id').val(data.id);
@@ -153,10 +204,20 @@ $(document).ready(function() {
           $('#pr_role_id').val(data.pr_role_id);
           $('#pr_role_id').trigger('change');
           $('#share').val(data.share);
+          if(data.sub_cost != null){
+            var mm_cost = (data.sub_cost.mm_cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            $('#mm_cost').val(mm_cost);         
+            var direct_cost = (data.sub_cost.direct_cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            $('#direct_cost').val(direct_cost);
+
+            var total_cost = (data.sub_cost.total_cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            $('#total_cost').val(total_cost);
+          }
           $('#ajaxModel').modal('show');
       })
     });
-    $('#saveBtn').click(function (e) {
+
+    $('#saveBtn').unbind().click(function (e) {
         e.preventDefault();
         $(this).html('Save'); 
         $.ajax({
