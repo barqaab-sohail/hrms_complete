@@ -1,18 +1,16 @@
 
 <div class="card-body">
   
-  <button type="button" class="btn btn-success float-right"  id ="createSubContact" data-toggle="modal" >Add Contact</button>
+  <button type="button" class="btn btn-success float-right"  id ="createSubCompetitor" data-toggle="modal" >Add Contact</button>
   <br>
   <table class="table data-table">
     <thead>
       <tr>
           <th style="width:15%">Name</th>
-          <th style="width:15%">Designation</th>
-          <th style="width:20%">Address</th>
-          <th style="width:10%">Phone</th>
-          <th style="width:10%">Fax</th>
-          <th style="width:10%">mobile</th>
-          <th style="width:10%">email</th>
+          <th style="width:15%">Technical Score</th>
+          <th style="width:20%">Financial Score</th>
+          <th style="width:10%">Technical & Financial Score</th>
+          <th style="width:10%">Rank</th>
           <th style="width:5%">Edit</th>
           <th style="width:5%">Delete</th>
       </tr>
@@ -32,54 +30,60 @@
             </div>
             <div class="modal-body">
               <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
-              <form id="subContactForm" name="subContactForm" class="form-horizontal">
+              <form id="subCompetitorForm" name="subCompetitorForm" class="form-horizontal">
                    
-                  <input type="hidden" name="sub_contact_id" id="sub_contact_id">
+                  <input type="hidden" name="sub_competitor_id" id="sub_competitor_id">
                   <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Name</label>
                             <input type="text" name="name"  id="name" value="{{old('name')}}" class="form-control">
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
-                          <label class="control-label">Designation<span class="text_requried">*</span></label>
-                          <input type="text" name="designation"  id="designation" value="{{old('designation')}}" class="form-control" data-validation="required" >
+                          <label class="control-label">Technical Score<span class="text_requried">*</span></label>
+                          <input type="text" name="technical_score"  id="technical_score" value="{{old('technical_score')}}" class="form-control" data-validation="required" >
                         </div>
                     </div>
-                    <div class="col-md-6" id="hideShare">
+                    <div class="col-md-2">
                       <div class="form-group">
-                          <label class="control-label">Address</label>
-                          <input type="text" name="address"  id="address" value="{{old('address')}}" class="form-control" data-validation="required">
+                          <label class="control-label">Currency</label>
+                            <select  id="currency_id"   name="currency_id"  class="form-control selectTwo" data-validation="required">
+                            <option value=""></option>
+                              @foreach ($currencies as $currency)
+                              <option value="{{$currency->id}}">{{$currency->name}}</option>
+                              @endforeach
+                            </select>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                          <label class="control-label">Conversion Rate</label>
+                          <input type="text" name="conversion_rate"  id="conversion_rate" value="{{old('conversion_rate')}}" class="form-control" data-validation="required">
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                          <label class="control-label">Quoted Price</label>
+                          <input type="text" name="quoted_price"  id="quoted_price" value="{{old('quoted_price')}}" class="form-control" data-validation="required">
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-3">
                       <div class="form-group">
-                          <label class="control-label">Phone</label>
-                          <input type="text" name="phone"  id="phone" value="{{old('phone')}}" class="form-control" >
+                          <label class="control-label">Technical & Financial Score </label>
+                          <input type="text" name="technical_financial_score"  id="technical_financial_score" value="{{old('technical_financial_score')}}" class="form-control" >
                       </div>
                     </div>
                     <div class="col-md-3">
                       <div class="form-group">
-                          <label class="control-label">Fax</label>
-                          <input type="text" name="fax"  id="fax" value="{{old('fax')}}" class="form-control">
+                          <label class="control-label">Rank</label>
+                          <input type="text" name="rank"  id="rank" value="{{old('rank')}}" class="form-control">
                       </div>
                     </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                          <label class="control-label">Mobile</label>
-                          <input type="text" name="mobile"  id="mobile" value="{{old('mobile')}}" class="form-control" >
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                          <label class="control-label">Email</label>
-                          <input type="email" name="email"  id="email" value="{{old('email')}}" class="form-control" >
-                      </div>
-                    </div>
+                    
                   </div>
                   <div class="col-sm-offset-2 col-sm-10">
                    <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
@@ -116,7 +120,6 @@ $(document).ready(function() {
       });
   });
 
-   
 
   $(function () {
       $.ajaxSetup({
@@ -128,15 +131,13 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         destroy: true,
-        ajax: "{{ route('submissionContact.create') }}",
+        ajax: "{{ route('submissionCompetitor.create') }}",
         columns: [
             {data: "name", name: 'name'},
-            {data: "designation", name: 'designation'},
-            {data: "address", name: 'address'},
-            {data: "phone", name: 'phone'},
-            {data: "fax", name: 'fax'},
-            {data: "mobile", name: 'mobile'},
-            {data: "email", name: 'email'},
+            {data: "technical_score", name: 'technical_score'},
+            {data: "financial_cost", name: 'financial_cost'},
+            {data: "technical_financial_score", name: 'technical_financial_score'},
+            {data: "rank", name: 'rank'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
         ],
@@ -145,30 +146,33 @@ $(document).ready(function() {
     });
     
 
-    $('#createSubContact').click(function () {
+    $('#createSubCompetitor').click(function () {
         $('#json_message_modal').html('');
-        $('#subContactForm').trigger("reset");
-        $('#sub_contact_id').val('');
+        $('#subCompetitorForm').trigger("reset");
+        $('#sub_competitor_id').val('');
+        $('#currency_id').val('');
+        $('#currency_id').trigger('change');
         $('#ajaxModel').modal('show');
     });
 
 
 
-    $('body').unbind().on('click', '.editSubmissionContact', function () {
-      var sub_contact_id = $(this).data('id');
+    $('body').unbind().on('click', '.editSubmissionCompetitor', function () {
+      var sub_competitor_id = $(this).data('id');
       $('#json_message_modal').html('');
-      $.get("{{ url('hrms/submissionContact') }}" +'/' + sub_contact_id +'/edit', function (data) {
-    
-          $('#modelHeading').html("Edit Contact");
-          $('#saveBtn').val("edit-Contact");
-          $('#sub_contact_id').val(data.id);
+      $.get("{{ url('hrms/submissionCompetitor') }}" +'/' + sub_competitor_id +'/edit', function (data) {
+          console.log(data);
+          $('#modelHeading').html("Edit Competitor");
+          $('#saveBtn').val("edit-Competitor");
+          $('#sub_competitor_id').val(data.id);
           $('#name').val(data.name);
-          $('#designation').val(data.designation);
-          $('#address').val(data.address);
-          $('#phone').val(data.phone);
-          $('#fax').val(data.fax);
-          $('#mobile').val(data.mobile);
-          $('#email').val(data.email);
+          $('#technical_score').val(data.sub_technical_score.technical_score);
+          $('#currency_id').val(data.sub_financial_score[0].currency_id);
+          $('#currency_id').trigger('change');
+          $('#conversion_rate').val(data.sub_financial_score[0].conversion_rate);
+          $('#quoted_price').val(data.sub_financial_score[0].quoted_price);
+          $('#technical_financial_score').val(data.sub_result.technical_financial_score);
+          $('#rank').val(data.sub_result.rank);
           $('#ajaxModel').modal('show');
       })
     });
@@ -177,12 +181,12 @@ $(document).ready(function() {
         e.preventDefault();
         $(this).html('Save'); 
         $.ajax({
-          data: $('#subContactForm').serialize(),
-          url: "{{ route('submissionContact.store') }}",
+          data: $('#subCompetitorForm').serialize(),
+          url: "{{ route('submissionCompetitor.store') }}",
           type: "POST",
           dataType: 'json',
           success: function (data) {
-              $('#subContactForm').trigger("reset");
+              $('#subCompetitorForm').trigger("reset");
               $('#ajaxModel').modal('hide');
                 table.draw(); 
           },
@@ -199,14 +203,14 @@ $(document).ready(function() {
       });
     });
     
-    $('body').on('click', '.deleteSubmissionContact', function () {
+    $('body').on('click', '.deleteSubmissionCompetitor', function () {
      
-        var sub_contact_id = $(this).data("id");
+        var sub_competitor_id = $(this).data("id");
         var con = confirm("Are You sure want to delete !");
         if(con){
           $.ajax({
             type: "DELETE",
-            url: "{{ route('submissionContact.store') }}"+'/'+sub_contact_id,
+            url: "{{ route('submissionCompetitor.store') }}"+'/'+sub_competitor_id,
             success: function (data) {
                 table.draw();
                 if(data.error){

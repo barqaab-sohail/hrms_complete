@@ -13,7 +13,7 @@ class SubContactStore extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,12 @@ class SubContactStore extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
+        $rules = [
+            'designation'=> 'required',
+            'address'=> 'required',
+           
         ];
+
+    return $rules;
     }
 }

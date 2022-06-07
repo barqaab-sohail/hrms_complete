@@ -16,5 +16,6 @@ class SubmissionSeeder extends Seeder
         $this->call(SubmissionTypeSeeder::class);
         $this->call(SubStatusSeeder::class);
         $this->call(PartnerSeeder::class);
+        $this->call(CurrencySeeder::class);
     }
 }
