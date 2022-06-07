@@ -112,7 +112,7 @@ class PartnerController extends Controller
 	public function destroy($id)
     {
         DB::transaction(function () use ($id) {  
-            subParticipateRole::findOrFail($id)->delete();   
+            SubParticipateRole::findOrFail($id)->delete();   
         }); // end transcation
 
         return response()->json(['success'=>'data  delete successfully.']);
