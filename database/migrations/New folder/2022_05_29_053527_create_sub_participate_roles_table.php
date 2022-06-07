@@ -14,7 +14,7 @@ class CreateSubParticipateRolesTable extends Migration
     public function up()
     {
         Schema::create('sub_participate_roles', function (Blueprint $table) {
-             $table->engine = 'InnoDB';
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('submission_id')->unsigned();
             $table->bigInteger('partner_id')->unsigned();

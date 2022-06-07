@@ -6,8 +6,8 @@
 	<div class="dropdown-menu" role="group"  aria-labelledby="dropdownMenuButton" style="width: 100%;">   
 	        <a type="submit" role="button" id="addSubmission" href="{{route('submission.edit',session('submission_id'))}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/submission/*/edit')?'style=background-color:#737373':''}}>Submission Detail</a>
 	        <a type="submit" role="button" id="addDate" href="{{route('submissionDate.index')}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/submission/submissionDate')?'style=background-color:#737373':''}}>Date, Time & Address</a>
-	        <a type="submit" role="button" id="addPartner" href="{{route('submissionPartner.index')}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/submission/partner')?'style=background-color:#737373':''}}>Partner Detail</a>
-
+	        <a type="submit" role="button" id="addPartner" href="{{route('submissionPartner.index')}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/submission/submissionPartner')?'style=background-color:#737373':''}}>Partner Detail</a>
+           <a type="submit" role="button" id="addContact" href="{{route('submissionContact.index')}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/submission/submissionContact')?'style=background-color:#737373':''}}>Client Contact</a>
 	        <a type="submit" role="button" id="addDocument" href="{{route('submissionDocument.create')}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/submissionDocument/create')?'style=background-color:#737373':''}}>Documents</a>
 	        
 	</div>
