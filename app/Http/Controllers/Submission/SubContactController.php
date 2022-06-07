@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Submission\SubContact;
+use App\Http\Requests\Submission\SubContactStore;
 use DB;
 use DataTables;
 
@@ -48,7 +49,7 @@ class SubContactController extends Controller
 	    return response()->json($view);
 	}
 
-	public function store(Request $request){
+	public function store(SubContactStore $request){
 	    $input = $request->all();
 	    $input['submission_id']=session('submission_id');
 
@@ -65,7 +66,6 @@ class SubContactController extends Controller
 		$data = SubContact::find($id);
     	return response()->json($data);
 	}
-
 
 
 	public function destroy($id)
