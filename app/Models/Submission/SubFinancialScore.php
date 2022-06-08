@@ -11,5 +11,5 @@ class SubFinancialScore extends Model implements Auditable
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
     
-   protected $fillable = ['sub_competitor_id', 'currency_id','conversion_rate','quoted_price'];
+   protected $fillable = ['sub_competitor_id', 'currency_id','conversion_rate','quoted_price','financial_date'];
 }

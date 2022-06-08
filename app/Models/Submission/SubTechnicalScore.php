@@ -12,5 +12,5 @@ class SubTechnicalScore extends Model implements Auditable
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
     
-   protected $fillable = ['sub_competitor_id', 'technical_score'];
+   protected $fillable = ['sub_competitor_id', 'technical_score','technical_date'];
 }
