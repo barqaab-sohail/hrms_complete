@@ -42,31 +42,47 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
+                          <label class="control-label">Technical Opening Date<span class="text_requried">*</span></label>
+                          <input type="text" name="technical_date"  id="technical_date" value="{{old('technical_date')}}" class="form-control date_input" readonly data-validation="required" >
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
                           <label class="control-label">Technical Score<span class="text_requried">*</span></label>
                           <input type="text" name="technical_score"  id="technical_score" value="{{old('technical_score')}}" class="form-control" data-validation="required" >
                         </div>
                     </div>
-                    <div class="col-md-2">
-                      <div class="form-group">
-                          <label class="control-label">Currency</label>
-                            <select  id="currency_id"   name="currency_id"  class="form-control selectTwo" data-validation="required">
-                            <option value=""></option>
-                              @foreach ($currencies as $currency)
-                              <option value="{{$currency->id}}">{{$currency->name}}</option>
-                              @endforeach
-                            </select>
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-                      <div class="form-group">
-                          <label class="control-label">Conversion Rate</label>
-                          <input type="text" name="conversion_rate"  id="conversion_rate" value="{{old('conversion_rate')}}" class="form-control" data-validation="required">
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-                      <div class="form-group">
-                          <label class="control-label">Quoted Price</label>
-                          <input type="text" name="quoted_price"  id="quoted_price" value="{{old('quoted_price')}}" class="form-control" data-validation="required">
+                    <div class="col-md-10 financial" id='financial_1'>
+                      <div class="row">
+                        <div class="col-md-2">
+                          <div class="form-group">
+                              <label class="control-label">Currency</label>
+                                <select  id="currency_id"   name="currency_id[]"  class="form-control" data-validation="required">
+                                <option value=""></option>
+                                  @foreach ($currencies as $currency)
+                                  <option value="{{$currency->id}}">{{$currency->name}}</option>
+                                  @endforeach
+                                </select>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                              <label class="control-label">Conversion Rate</label>
+                              <input type="text" name="conversion_rate[]"  id="conversion_rate" value="{{old('conversion_rate')}}" class="form-control" data-validation="required">
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                              <label class="control-label">Quoted Price</label>
+                              <input type="text" name="quoted_price[]"  id="quoted_price" value="{{old('quoted_price')}}" class="form-control" data-validation="required">
+                          </div>
+                        </div>
+                        <div class="col-md-1">
+                          <br>
+                            <div class="float-right">
+                            <button type="button" name="add" id="add" class="btn btn-success add" >+</button>
+                            </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -75,12 +91,6 @@
                       <div class="form-group">
                           <label class="control-label">Technical & Financial Score </label>
                           <input type="text" name="technical_financial_score"  id="technical_financial_score" value="{{old('technical_financial_score')}}" class="form-control" >
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                          <label class="control-label">Rank</label>
-                          <input type="text" name="rank"  id="rank" value="{{old('rank')}}" class="form-control">
                       </div>
                     </div>
                     
@@ -106,6 +116,38 @@
 
 
 $(document).ready(function() {
+  $('select:not(.selectTwo)').chosen();
+  //Dynamic add Financial
+    
+    // Add new element
+     $("#add").click(function(){
+      
+      // Finding total number of elements added
+      var total_element = $(".financial").length;
+      
+      // last <div> with element class id
+      var lastid = $(".financial:last").attr("id");
+      var split_id = lastid.split("_");
+      var nextindex = Number(split_id[1]) + 1;
+      var max = 5;
+      // Check total number elements
+      if(total_element < max ){
+       //Clone Financial div and copy 
+      $('.financial').find('select').chosen('destroy');
+        var clone = $("#financial_1").clone();
+        clone.prop('id','financial_'+nextindex).find('input:text').val('');
+        clone.find("#add").html('X').prop("class", "btn btn-danger remove remove_financial");
+        clone.insertAfter("div.financial:last");
+      $('.financial').find('select').chosen();
+       
+      }
+     
+    });
+     // Remove element
+     $(document).on("click", '.remove_financial', function(){
+     $(this).closest(".financial").remove();
+    }); 
+
 
  
   $('#phone, #fax, #mobile').keyup(function(){

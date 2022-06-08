@@ -20,6 +20,7 @@ class CreateSubFinancialScoresTable extends Migration
             $table->bigInteger('currency_id')->unsigned();
             $table->decimal('conversion_rate',12,0);
             $table->decimal('quoted_price',12,0);
+            $table->date('financial_date');
             $table->timestamps();
             $table->foreign('sub_competitor_id')->references('id')->on('sub_competitors')->onDelete('cascade');
             $table->foreign('currency_id')->references('id')->on('currencies');

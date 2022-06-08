@@ -18,6 +18,7 @@ class CreateSubTechnicalScoresTable extends Migration
             $table->id();
             $table->bigInteger('sub_competitor_id')->unsigned();
             $table->string('technical_score');
+            $table->date('technical_date');
             $table->timestamps();
             $table->foreign('sub_competitor_id')->references('id')->on('sub_competitors')->onDelete('cascade');
         });

@@ -11,5 +11,5 @@ class SubResult extends Model implements Auditable
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
     
-   protected $fillable = ['sub_competitor_id', 'technical_financial_score','rank'];
+   protected $fillable = ['sub_competitor_id', 'technical_financial_score'];
 }

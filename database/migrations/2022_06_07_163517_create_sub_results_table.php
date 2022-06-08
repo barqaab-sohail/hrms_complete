@@ -18,7 +18,6 @@ class CreateSubResultsTable extends Migration
             $table->id();
             $table->bigInteger('sub_competitor_id')->unsigned();
             $table->string('technical_financial_score');
-            $table->string('rank');
             $table->timestamps();
             $table->foreign('sub_competitor_id')->references('id')->on('sub_competitors')->onDelete('cascade');
             
