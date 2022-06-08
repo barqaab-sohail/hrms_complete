@@ -1,7 +1,7 @@
 
 <div class="card-body">
   
-  <button type="button" class="btn btn-success float-right"  id ="createSubCompetitor" data-toggle="modal" >Add Contact</button>
+  <button type="button" class="btn btn-success float-right"  id ="createSubCompetitor" data-toggle="modal" >Add Competitor</button>
   <br>
   <table class="table data-table">
     <thead>
@@ -34,27 +34,33 @@
                    
                   <input type="hidden" name="sub_competitor_id" id="sub_competitor_id">
                   <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">Name</label>
                             <input type="text" name="name"  id="name" value="{{old('name')}}" class="form-control">
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                           <label class="control-label">Technical Opening Date<span class="text_requried">*</span></label>
                           <input type="text" name="technical_date"  id="technical_date" value="{{old('technical_date')}}" class="form-control date_input" readonly data-validation="required" >
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                           <label class="control-label">Technical Score<span class="text_requried">*</span></label>
                           <input type="text" name="technical_score"  id="technical_score" value="{{old('technical_score')}}" class="form-control" data-validation="required" >
                         </div>
                     </div>
-                    <div class="col-md-10 financial" id='financial_1'>
+                    <div class="col-md-12 financial" id='financial_1'>
                       <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label class="control-label">Financial Opening Date<span class="text_requried">*</span></label>
+                            <input type="text" name="financial_date"  id="financial_date" value="{{old('financial_date')}}" class="form-control date_input" readonly data-validation="required" >
+                          </div>
+                        </div>
+                        <div class="col-md-3">
                           <div class="form-group">
                               <label class="control-label">Currency</label>
                                 <select  id="currency_id"   name="currency_id[]"  class="form-control" data-validation="required">
@@ -71,7 +77,7 @@
                               <input type="text" name="conversion_rate[]"  id="conversion_rate" value="{{old('conversion_rate')}}" class="form-control" data-validation="required">
                           </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                           <div class="form-group">
                               <label class="control-label">Quoted Price</label>
                               <input type="text" name="quoted_price[]"  id="quoted_price" value="{{old('quoted_price')}}" class="form-control" data-validation="required">
@@ -120,7 +126,7 @@ $(document).ready(function() {
   //Dynamic add Financial
     
     // Add new element
-     $("#add").click(function(){
+     $("#add").unbind().click(function(){
       
       // Finding total number of elements added
       var total_element = $(".financial").length;
@@ -203,18 +209,21 @@ $(document).ready(function() {
       var sub_competitor_id = $(this).data('id');
       $('#json_message_modal').html('');
       $.get("{{ url('hrms/submissionCompetitor') }}" +'/' + sub_competitor_id +'/edit', function (data) {
-          console.log(data);
           $('#modelHeading').html("Edit Competitor");
           $('#saveBtn').val("edit-Competitor");
           $('#sub_competitor_id').val(data.id);
           $('#name').val(data.name);
           $('#technical_score').val(data.sub_technical_score.technical_score);
+          if(data.sub_financial_score[0]){
           $('#currency_id').val(data.sub_financial_score[0].currency_id);
           $('#currency_id').trigger('change');
           $('#conversion_rate').val(data.sub_financial_score[0].conversion_rate);
           $('#quoted_price').val(data.sub_financial_score[0].quoted_price);
+          }
+          if(data.sub_result){
           $('#technical_financial_score').val(data.sub_result.technical_financial_score);
           $('#rank').val(data.sub_result.rank);
+          }
           $('#ajaxModel').modal('show');
       })
     });
