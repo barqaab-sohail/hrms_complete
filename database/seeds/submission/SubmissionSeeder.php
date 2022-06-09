@@ -17,5 +17,8 @@ class SubmissionSeeder extends Seeder
         $this->call(SubStatusSeeder::class);
         $this->call(PartnerSeeder::class);
         $this->call(CurrencySeeder::class);
+        $this->call(SubFinancialTypeSeeder::class);
+        $this->call(SubCvFormatSeeder::class);
+        $this->call(SubEvaluationTypeSeeder::class);
     }
 }

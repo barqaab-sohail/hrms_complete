@@ -14,7 +14,7 @@ class SubStatusSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('sub_statuses')->delete();  
+         \DB::table('sub_statuses')->delete();  
         $subStatuses = array(
         	array('name' => 'Under Preparation'),
             array('name' => 'Submitted and Under Evaluation'),
@@ -24,6 +24,6 @@ class SubStatusSeeder extends Seeder
         	array('name' => 'Won by BARQAAB'),
         	array('name' => 'Won by Others'),
         );
-        DB::table('sub_statuses')->insert($subStatuses);
+         \DB::table('sub_statuses')->insert($subStatuses);
     }
 }

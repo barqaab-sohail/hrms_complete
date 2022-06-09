@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubResultsTable extends Migration
+class CreateSubManMonthsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateSubResultsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sub_results', function (Blueprint $table) {
+        Schema::create('sub_man_months', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->bigInteger('sub_competitor_id')->unsigned();
-            $table->string('technical_financial_score');
+            $table->bigInteger('sub_position_id')->unsigned();
+            $table->decimal('man_months',12,0);
             $table->timestamps();
-            $table->foreign('sub_competitor_id')->references('id')->on('sub_competitors')->onDelete('cascade');
-            
+            $table->foreign('sub_position_id')->references('id')->on('sub_positions')->onDelete('cascade');
         });
     }
 
@@ -31,6 +30,6 @@ class CreateSubResultsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_results');
+        Schema::dropIfExists('sub_man_months');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubStatusTypesTable extends Migration
+class CreateSubEvaluationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,17 @@ class CreateSubStatusTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sub_status_types', function (Blueprint $table) {
+        Schema::create('sub_evaluations', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('submission_id')->unsigned();
-            $table->bigInteger('sub_status_id')->unsigned();
+            $table->bigInteger('sub_evaluation_type_id')->unsigned();
+            $table->tinyInteger('technical_weightage')->unsigned();
+            $table->tinyInteger('financial_weightage')->unsigned();
+            $table->tinyInteger('pass_marks')->unsigned();
             $table->timestamps();
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
-            $table->foreign('sub_status_id')->references('id')->on('sub_statuses');
+            $table->foreign('sub_evaluation_type_id')->references('id')->on('sub_evaluation_types');
         });
     }
 
@@ -31,6 +34,6 @@ class CreateSubStatusTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_status_types');
+        Schema::dropIfExists('sub_evaluations');
     }
 }
