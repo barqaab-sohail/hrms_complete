@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Common\Client;
 use App\Models\Common\Partner;
 use App\Models\Submission\SubDate;
-use App\Models\Submission\SubStatus;
+use App\Models\Submission\SubDescription;
 use App\Models\Submission\SubStatusType;
 use App\Models\Submission\SubType;
 use App\Models\Submission\Submission;
@@ -103,7 +103,7 @@ class SubmissionController extends Controller
               SubDate::create($input);
            }
            if($request->filled('sub_status_id')){
-              SubStatusType::create($input);
+              SubDescription::create($input);
            }
 
     	}); // end transcation

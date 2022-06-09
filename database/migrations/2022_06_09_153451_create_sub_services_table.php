@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubCompetitorsTable extends Migration
+class CreateSubServicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateSubCompetitorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sub_competitors', function (Blueprint $table) {
+        Schema::create('sub_services', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('submission_id')->unsigned();
-            $table->string('name');
-            $table->boolean('is_multi_currency')->default(0);
+            $table->text('scope_of_services');
+            $table->text('scope_of_work');
             $table->timestamps();
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
+
         });
     }
 
@@ -31,6 +32,6 @@ class CreateSubCompetitorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_competitors');
+        Schema::dropIfExists('sub_services');
     }
 }

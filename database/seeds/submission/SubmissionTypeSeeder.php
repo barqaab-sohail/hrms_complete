@@ -14,12 +14,12 @@ class SubmissionTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('sub_types')->delete();  
+         \DB::table('sub_types')->delete();  
         $subTypes = array(
         	array('name' => 'EOI'),
         	array('name' => 'PQD'),
         	array('name' => 'RFP'),
         );
-        DB::table('sub_types')->insert($subTypes);
+         \DB::table('sub_types')->insert($subTypes);
     }
 }

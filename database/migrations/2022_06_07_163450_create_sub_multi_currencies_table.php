@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubFinancialScoresTable extends Migration
+class CreateSubMultiCurrenciesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreateSubFinancialScoresTable extends Migration
      */
     public function up()
     {
-        Schema::create('sub_financial_scores', function (Blueprint $table) {
+        Schema::create('sub_multi_currencies', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('sub_competitor_id')->unsigned();
+            $table->bigInteger('currency_id')->unsigned();
+            $table->date('conversion_date');
+            $table->decimal('conversion_rate',12,0);
             $table->decimal('quoted_price',12,0);
-            $table->date('financial_date');
-            $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('sub_competitor_id')->references('id')->on('sub_competitors')->onDelete('cascade');
+            $table->foreign('currency_id')->references('id')->on('currencies');
         });
     }
 
@@ -32,6 +34,6 @@ class CreateSubFinancialScoresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_financial_scores');
+        Schema::dropIfExists('sub_multi_currencies');
     }
 }
