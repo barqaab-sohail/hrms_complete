@@ -18,7 +18,6 @@ class CreateSubFinancialScoresTable extends Migration
             $table->id();
             $table->bigInteger('sub_competitor_id')->unsigned();
             $table->decimal('quoted_price',12,0);
-            $table->date('financial_date');
             $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('sub_competitor_id')->references('id')->on('sub_competitors')->onDelete('cascade');
