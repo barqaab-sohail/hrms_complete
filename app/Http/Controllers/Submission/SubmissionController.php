@@ -9,7 +9,9 @@ use App\Models\Common\Client;
 use App\Models\Common\Partner;
 use App\Models\Submission\SubDate;
 use App\Models\Submission\SubDescription;
-use App\Models\Submission\SubStatusType;
+use App\Models\Submission\SubStatus;
+use App\Models\Submission\SubFinancialType;
+use App\Models\Submission\SubCvFormat;
 use App\Models\Submission\SubType;
 use App\Models\Submission\Submission;
 use App\Models\Submission\SubEoiReference;
@@ -27,7 +29,13 @@ class SubmissionController extends Controller
    			$data = Submission::orderBy('id','desc')->get();
 
    			return DataTables::of($data)
-   			->addColumn('edit', function($data){
+       			
+            ->editColumn('sub_type_id', function($data){
+              
+              return $data->subStatusType->name;
+
+            })
+            ->addColumn('edit', function($data){
 
                     if(Auth::user()->hasPermissionTo('sub edit record')){
                         
@@ -44,7 +52,7 @@ class SubmissionController extends Controller
                     	}
                     })
 
-            ->rawColumns(['edit','delete'])
+            ->rawColumns(['edit','delete','sub_type_id'])
             ->make(true);
 
    		}
@@ -60,8 +68,10 @@ class SubmissionController extends Controller
 	    $subTypes = SubType::all();
 	    $divisions = PrDivision::all();
       $subStatuses = SubStatus::all();
-		
-		return response()->json(["divisions"=>$divisions, "clients"=>$clients, "subTypes"=>$subTypes,"subStatuses"=>$subStatuses]);
+		  $subFinancialTypes = SubFinancialType::all();
+      $subCvFormats = SubCvFormat::all();
+    
+		return response()->json(["divisions"=>$divisions, "clients"=>$clients, "subTypes"=>$subTypes,"subStatuses"=>$subStatuses, "subFinancialTypes"=>$subFinancialTypes, "subCvFormats"=>$subCvFormats]);
 	}
 
 	public function eoiReference(){
@@ -118,15 +128,17 @@ class SubmissionController extends Controller
 		$data = Submission::find($id);
 		$clients = Client::all();
 	  $subTypes = SubType::all();
-    $subStatuses = SubStatus::all();
 	  $eoiReferences = Submission::where('sub_type_id','!=',3)->get();
 	  $divisions = PrDivision::all();
+    $subStatuses = SubStatus::all();
+    $subFinancialTypes = SubFinancialType::all();
+    $subCvFormats = SubCvFormat::all();
 	  session()->put('submission_id', $data->id);
 
         if($request->ajax()){      
-            return view ('submission.ajax', compact('clients','subTypes','eoiReferences','divisions','subStatuses','data'));  
+            return view ('submission.ajax', compact('clients','subTypes','eoiReferences','divisions','subFinancialTypes','subCvFormats','subStatuses','data'));  
         }else{
-            return view ('submission.edit', compact('clients','subTypes','eoiReferences','divisions','subStatuses','data'));      
+            return view ('submission.edit', compact('clients','subTypes','eoiReferences','divisions','subFinancialTypes','subCvFormats','subStatuses','data'));      
         }    
 
 	}
@@ -145,10 +157,10 @@ class SubmissionController extends Controller
         	Submission::findOrFail($id)->update($input);
         	
         	$subEoiReference = SubEoiReference::where('submission_id',$id)->first();
-          $subStatusType = SubStatusType::where('submission_id',$id)->first();
+          $subDescription = SubDescription::where('submission_id',$id)->first();
           
-          if($subStatusType){
-            SubStatusType::findOrFail($subStatusType->id)->update($input);
+          if($subDescription){
+            SubDescription::findOrFail($subDescription->id)->update($input);
           }
 
         	if(!$subEoiReference){

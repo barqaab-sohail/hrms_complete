@@ -94,7 +94,8 @@ $(document).ready(function(){
                           $("#hr_designation_id").append('<option value="">Select Designation</option>');
                           $.each(data.designations, function(key,value){
                                       
-                                   $("#hr_designation_id").append('<option value="'+key+'">'+value+'</option>');
+                                   $("#hr_designation_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+
                           });
                           $('#hr_designation_id').select2('destroy');
                           selectTwo('#hr_designation_id');

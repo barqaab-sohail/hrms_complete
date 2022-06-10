@@ -22,8 +22,7 @@ class DesignationController extends Controller
 
             }); // end transcation   
 
-            $designations = DB::table("hr_designations")
-                ->pluck("name");
+            $designations = HrDesignation::all();
         
             return response()->json(['designations'=> $designations, 'message'=>"$newDesignation Successfully Entered"]);
         }else{
