@@ -78,7 +78,29 @@
                                 </select>  
                             </div>
                         </div>
-                        <div class="col-md-10">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label text-right">Financial Type</label>
+                                <select  name="sub_financial_type_id"  id="sub_financial_type_id" class="form-control selectTwo">
+                                <option></option>
+                                @foreach($subFinancialTypes as $subFinancialType)
+                                <option value="{{$subFinancialType->id}}" {{(old("sub_financial_type_id", $data->subFinancialType->id??'')==$subFinancialType->id? "selected" : "")}}>{{$subFinancialType->name}}</option>
+                                @endforeach   
+                                </select>  
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label text-right">CV Format</label>
+                                <select  name="sub_cv_format_id"  id="sub_cv_format_id" class="form-control selectTwo">
+                                <option></option>
+                                @foreach($subCvFormats as $subCvFormat)
+                                <option value="{{$subCvFormat->id}}" {{(old("sub_cv_format_id", $data->subCvFormat->id??'')==$subCvFormat->id? "selected" : "")}}>{{$subCvFormat->name}}</option>
+                                @endforeach   
+                                </select>  
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label text-right">Comments</label>
                                 <input type="text" name="comments" id="comments" value="{{ old('comments', $data->comments??'') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Please enter Comments">    

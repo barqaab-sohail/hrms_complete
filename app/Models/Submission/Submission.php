@@ -28,11 +28,31 @@ class Submission extends Model implements Auditable
 
     public function subStatusType(){
 
-        return $this->hasOneThrough('App\Models\Submission\SubStatus', 'App\Models\Submission\SubStatusType',
+        return $this->hasOneThrough('App\Models\Submission\SubStatus', 'App\Models\Submission\SubDescription',
             'submission_id',
             'id',
             'id',
             'sub_status_id'
+            );
+    }
+
+    public function subFinancialType(){
+
+        return $this->hasOneThrough('App\Models\Submission\SubFinancialType', 'App\Models\Submission\SubDescription',
+            'submission_id',
+            'id',
+            'id',
+            'sub_financial_type_id'
+            );
+    }
+
+    public function SubCvFormat(){
+
+        return $this->hasOneThrough('App\Models\Submission\SubCvFormat', 'App\Models\Submission\SubDescription',
+            'submission_id',
+            'id',
+            'id',
+            'sub_cv_format_id'
             );
     }
 
@@ -63,19 +83,22 @@ class Submission extends Model implements Auditable
     protected $attributes = [
         'sub_type_id' => 1 //1 EOI, 2 PQD and 3 RFP 
     ];
+
+
+
     
     //get value of status and show in string as per statusOptions
-    public function getSubTypeIdAttribute($attribute)
-    {
-        return $this->subTypeIdOptions()[$attribute];
-    }
+    // public function getSubTypeIdAttribute($attribute)
+    // {
+    //     return $this->subTypeIdOptions()[$attribute];
+    // }
     
-    public function subTypeIdOptions()
-    {
-        return [
-            1 => 'EOI',
-            2 => 'PQD',
-            3 => 'RFP'
-        ];
-    }
+    // public function subTypeIdOptions()
+    // {
+    //     return [
+    //         1 => 'EOI',
+    //         2 => 'PQD',
+    //         3 => 'RFP'
+    //     ];
+    // }
 }
