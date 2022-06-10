@@ -89,21 +89,7 @@
                         			</select>
 			                	</div>
 			                </div>
-			                <div class="col-md-2">
-			                  	<div class="form-group">
-			                        <label class="control-label text-right">Financial Type</label>
-			                        <select  name="sub_financial_type_id"  id="sub_financial_type_id" class="form-control selectTwo" readonly>
-                        			</select>
-			                	</div>
-			                </div>
-			                <div class="col-md-2">
-			                  	<div class="form-group">
-			                        <label class="control-label text-right">Cv Format</label>
-			                        <select  name="sub_cv_format_id"  id="sub_cv_format_id" class="form-control selectTwo" readonly>
-                        			</select>
-			                	</div>
-			                </div>
-			                <div class="col-md-6">
+			                <div class="col-md-10">
 			                  	<div class="form-group">
 			                        <label class="control-label text-right">Comments</label>
 			                        <input type="text" name="comments" id="comments" value="{{ old('comments') }}" class="form-control exempted" data-validation="length"  data-validation-length="max190" placeholder="Please enter Comments">    

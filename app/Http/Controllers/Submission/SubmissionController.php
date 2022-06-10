@@ -13,6 +13,7 @@ use App\Models\Submission\SubStatus;
 use App\Models\Submission\SubFinancialType;
 use App\Models\Submission\SubCvFormat;
 use App\Models\Submission\SubType;
+use App\Models\Submission\SubEvaluationType;
 use App\Models\Submission\Submission;
 use App\Models\Submission\SubEoiReference;
 use App\Models\Submission\SubRfpEoi;
@@ -70,6 +71,7 @@ class SubmissionController extends Controller
       $subStatuses = SubStatus::all();
 		  $subFinancialTypes = SubFinancialType::all();
       $subCvFormats = SubCvFormat::all();
+     
     
 		return response()->json(["divisions"=>$divisions, "clients"=>$clients, "subTypes"=>$subTypes,"subStatuses"=>$subStatuses, "subFinancialTypes"=>$subFinancialTypes, "subCvFormats"=>$subCvFormats]);
 	}
@@ -133,12 +135,13 @@ class SubmissionController extends Controller
     $subStatuses = SubStatus::all();
     $subFinancialTypes = SubFinancialType::all();
     $subCvFormats = SubCvFormat::all();
+    $subEvaluationTypes = SubEvaluationType::all();
 	  session()->put('submission_id', $data->id);
 
         if($request->ajax()){      
-            return view ('submission.ajax', compact('clients','subTypes','eoiReferences','divisions','subFinancialTypes','subCvFormats','subStatuses','data'));  
+            return view ('submission.ajax', compact('clients','subTypes','eoiReferences','divisions','subFinancialTypes','subCvFormats','subStatuses','data','subEvaluationTypes'));  
         }else{
-            return view ('submission.edit', compact('clients','subTypes','eoiReferences','divisions','subFinancialTypes','subCvFormats','subStatuses','data'));      
+            return view ('submission.edit', compact('clients','subTypes','eoiReferences','divisions','subFinancialTypes','subCvFormats','subStatuses','data','subEvaluationTypes'));      
         }    
 
 	}

@@ -67,7 +67,7 @@
                         <input type="text"  name="project_name" value="{{ old('project_name', $data->project_name??'') }}"  class="form-control">   
                     </div>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label text-right">Current Status</label>
                                 <select  name="sub_status_id"  id="sub_status_id" class="form-control selectTwo">
@@ -78,7 +78,7 @@
                                 </select>  
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label text-right">Financial Type</label>
                                 <select  name="sub_financial_type_id"  id="sub_financial_type_id" class="form-control selectTwo">
@@ -89,7 +89,7 @@
                                 </select>  
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label text-right">CV Format</label>
                                 <select  name="sub_cv_format_id"  id="sub_cv_format_id" class="form-control selectTwo">
@@ -100,7 +100,61 @@
                                 </select>  
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label text-right">Evaluation Type</label>
+                                <select  name="sub_evaluation_type_id"  id="sub_evaluation_type_id" class="form-control selectTwo">
+                                <option></option>
+                                @foreach($subEvaluationTypes as $subEvaluationType)
+                                <option value="{{$subEvaluationType->id}}" {{(old("sub_evaluation_type_id", $data->subEvaluationType->id??'')==$subEvaluationType->id? "selected" : "")}}>{{$subEvaluationType->name}}</option>
+                                @endforeach   
+                                </select>  
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label text-right">Technical Opening Date</label>
+                                <input type="text" id="technical_opening_date" name="technical_opening_date" value="{{ old('technical_opening_date') }}" class="form-control date_input" readonly>     
+                                <br>
+                                <i class="fas fa-trash-alt text_requried"></i>
+                               
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label text-right">Financial Opening Date</label>
+                                <input type="text" id="financial_opening_date" name="financial_opening_date" value="{{ old('financial_opening_date') }}" class="form-control date_input" readonly>     
+                                <br>
+                                <i class="fas fa-trash-alt text_requried"></i>
+                               
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label text-right">Technical Weightage</label>
+                                <input type="text" id="technical_weightage" name="technical_weightage" value="{{ old('technical_weightage') }}" class="form-control">
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label text-right">Financial Weightage</label>
+                                <input type="text" id="financial_weightage" name="financial_weightage" value="{{ old('financial_weightage') }}" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label text-right">Passing Marks</label>
+                                <input type="text" id="passing_marks" name="passing_marks" value="{{ old('passing_marks') }}" class="form-control" >
+                                  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label text-right">Comments</label>
                                 <input type="text" name="comments" id="comments" value="{{ old('comments', $data->comments??'') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Please enter Comments">    

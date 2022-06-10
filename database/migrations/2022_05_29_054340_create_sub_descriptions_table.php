@@ -18,13 +18,20 @@ class CreateSubDescriptionsTable extends Migration
             $table->id();
             $table->bigInteger('submission_id')->unsigned();
             $table->bigInteger('sub_status_id')->unsigned();
-            $table->bigInteger('sub_financial_type_id')->unsigned();
-            $table->bigInteger('sub_cv_format_id')->unsigned();
+            $table->bigInteger('sub_financial_type_id')->unsigned()->nullable();
+            $table->bigInteger('sub_cv_format_id')->unsigned()->nullable();
+            $table->bigInteger('sub_evaluation_type_id')->unsigned()->nullable();
+            $table->date('technical_opening_date')->nullable();
+            $table->date('financial_opening_date')->nullable();
+            $table->tinyInteger('technical_weightage')->unsigned()->nullable();
+            $table->tinyInteger('financial_weightage')->unsigned()->nullable();
+            $table->tinyInteger('passing_marks')->unsigned()->nullable();
             $table->timestamps();
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
             $table->foreign('sub_status_id')->references('id')->on('sub_statuses');
             $table->foreign('sub_financial_type_id')->references('id')->on('sub_financial_types');
             $table->foreign('sub_cv_format_id')->references('id')->on('sub_cv_formats');
+            $table->foreign('sub_evaluation_type_id')->references('id')->on('sub_evaluation_types');
 
         });
     }
