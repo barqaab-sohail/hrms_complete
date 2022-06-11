@@ -35,12 +35,12 @@ class SubCompetitorController extends Controller
                     })
    			->addColumn('financial_cost', function($data){
                     
-                        return  $data->getFinancial();
+                        return  $data->subFinancialScore->quoted_price??'';
                     	
                     })
    			->addColumn('technical_financial_score', function($data){
                     
-                        return  $data->subResult->technical_financial_score??'';
+                        return  $data->getTechnicalAndFinancialMark();
                     	
                     })
    			->addColumn('rank', function($data){
@@ -92,6 +92,15 @@ class SubCompetitorController extends Controller
 		       			 SubTechnicalScore::findOrFail($subTechnicalScore->id)->delete();  
 		       		}
 		       	}
+		       	if($request->filled('quoted_price')){
+		       		$subFinancialScore = SubFinancialScore::where('sub_competitor_id',$input['sub_competitor_id'])->first();
+		       		SubFinancialScore::updateOrCreate(['id' => $subFinancialScore->id??''],$input); 
+		       	}else{
+		       		$subFinancialScore = SubFinancialScore::where('sub_competitor_id',$input['sub_competitor_id'])->first();
+		       		if($subFinancialScore){
+		       			 SubFinancialScore::findOrFail($subFinancialScore->id)->delete();  
+		       		}
+		       	}
 
 	       		// if($request->filled('currency_id')){
 		       	// 	$subFinancialScore = SubFinancialScore::where('sub_competitor_id',$input['sub_competitor_id'])->first();
@@ -120,7 +129,7 @@ class SubCompetitorController extends Controller
 	}
 
 	public function edit($id){
-		$data = SubCompetitor::with('subTechnicalScore','subResult','subFinancialScore')->find($id);
+		$data = SubCompetitor::with('subTechnicalScore','subFinancialScore')->find($id);
     	return response()->json($data);
 	}
 

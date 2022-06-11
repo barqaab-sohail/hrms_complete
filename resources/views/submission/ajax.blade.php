@@ -80,7 +80,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label text-right">Financial Type</label>
+                                <label class="control-label text-right">Financial Cost Type</label>
                                 <select  name="sub_financial_type_id"  id="sub_financial_type_id" class="form-control selectTwo">
                                 <option></option>
                                 @foreach($subFinancialTypes as $subFinancialType)
@@ -106,18 +106,18 @@
                                 <select  name="sub_evaluation_type_id"  id="sub_evaluation_type_id" class="form-control selectTwo">
                                 <option></option>
                                 @foreach($subEvaluationTypes as $subEvaluationType)
-                                <option value="{{$subEvaluationType->id}}" {{(old("sub_evaluation_type_id", $data->subEvaluationType->id??'')==$subEvaluationType->id? "selected" : "")}}>{{$subEvaluationType->name}}</option>
+                                <option value="{{$subEvaluationType->id}}" {{(old("sub_evaluation_type_id", $data->subDescription->sub_evaluation_type_id??'')==$subEvaluationType->id? "selected" : "")}}>{{$subEvaluationType->name}}</option>
                                 @endforeach   
                                 </select>  
                             </div>
-                        </div>
-                        
+                        </div> 
                     </div>
                     <div class="row">
+                       
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label text-right">Technical Opening Date</label>
-                                <input type="text" id="technical_opening_date" name="technical_opening_date" value="{{ old('technical_opening_date') }}" class="form-control date_input" readonly>     
+                                <input type="text" id="technical_opening_date" name="technical_opening_date" value="{{ old('technical_opening_date', $data->subDescription->technical_opening_date??'') }}" class="form-control date_input" readonly>     
                                 <br>
                                 <i class="fas fa-trash-alt text_requried"></i>
                                
@@ -126,32 +126,34 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label text-right">Financial Opening Date</label>
-                                <input type="text" id="financial_opening_date" name="financial_opening_date" value="{{ old('financial_opening_date') }}" class="form-control date_input" readonly>     
+                                <input type="text" id="financial_opening_date" name="financial_opening_date" value="{{ old('financial_opening_date', $data->subDescription->financial_opening_date??'') }}" class="form-control date_input" readonly>     
                                 <br>
                                 <i class="fas fa-trash-alt text_requried"></i>
                                
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label text-right">Technical Weightage</label>
-                                <input type="text" id="technical_weightage" name="technical_weightage" value="{{ old('technical_weightage') }}" class="form-control">
-                                
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label text-right">Financial Weightage</label>
-                                <input type="text" id="financial_weightage" name="financial_weightage" value="{{ old('financial_weightage') }}" class="form-control" >
-                            </div>
-                        </div>
+                       
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label text-right">Passing Marks</label>
-                                <input type="text" id="passing_marks" name="passing_marks" value="{{ old('passing_marks') }}" class="form-control" >
+                                <input type="text" id="passing_marks" name="passing_marks" value="{{ old('passing_marks', $data->subDescription->passing_marks??'') }}" class="form-control" >
                                   
                             </div>
                         </div>
+                        <div class="col-md-2 QCB">
+                            <div class="form-group">
+                                <label class="control-label text-right">Technical Weightage</label>
+                                <input type="text" id="technical_weightage" name="technical_weightage" value="{{ old('technical_weightage', $data->subDescription->technical_weightage??'') }}" class="form-control">
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-2 QCB">
+                            <div class="form-group">
+                                <label class="control-label text-right">Financial Weightage</label>
+                                <input type="text" id="financial_weightage" name="financial_weightage" value="{{ old('financial_weightage', $data->subDescription->financial_weightage??'') }}" class="form-control" >
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -170,6 +172,23 @@
 
 
 <script>
+    if("{{$data->subDescription->sub_evaluation_type_id}}"!=1){
+        $('.QCB').hide();
+    }
+
+    $("#sub_evaluation_type_id").change(function(){
+
+        if($(this).val() == 1){
+            $('.QCB').show();
+        }else{
+            $('#technical_weightage').val('');
+            $('#financial_weightage').val('');
+            $('.QCB').hide();
+        }
+
+    });
+
+
     $('#sub_type_id').change(function(){
         var subTypeId = $(this).val();
         if(subTypeId == 3){

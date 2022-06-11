@@ -55,6 +55,9 @@ class Submission extends Model implements Auditable
             'sub_cv_format_id'
             );
     }
+    public function SubDescription(){
+        return $this->hasOne('App\Models\Submission\SubDescription');
+    }
 
     public function subType(){
         return $this->belongsTo('App\Models\Submission\SubType');

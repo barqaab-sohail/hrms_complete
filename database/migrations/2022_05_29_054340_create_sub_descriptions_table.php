@@ -17,7 +17,7 @@ class CreateSubDescriptionsTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('submission_id')->unsigned();
-            $table->bigInteger('sub_status_id')->unsigned();
+            $table->bigInteger('sub_status_id')->unsigned()->nullable();
             $table->bigInteger('sub_financial_type_id')->unsigned()->nullable();
             $table->bigInteger('sub_cv_format_id')->unsigned()->nullable();
             $table->bigInteger('sub_evaluation_type_id')->unsigned()->nullable();

@@ -34,16 +34,10 @@
                    
                   <input type="hidden" name="sub_competitor_id" id="sub_competitor_id">
                   <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <div class="form-group">
                             <label class="control-label">Name</label>
                             <input type="text" name="name"  id="name" value="{{old('name')}}" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                          <label class="control-label">Technical Opening Date<span class="text_requried">*</span></label>
-                          <input type="text" name="technical_date"  id="technical_date" value="{{old('technical_date')}}" class="form-control date_input" readonly data-validation="required" >
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -54,12 +48,6 @@
                     </div>
                     <div class="col-md-12 financial" id='financial_1'>
                       <div class="row">
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label class="control-label">Financial Opening Date<span class="text_requried">*</span></label>
-                            <input type="text" name="financial_date"  id="financial_date" value="{{old('financial_date')}}" class="form-control date_input" readonly data-validation="required" >
-                          </div>
-                        </div>
                         <div class="col-md-3">
                           <div class="form-group">
                               <label class="control-label">Currency</label>
@@ -80,7 +68,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                               <label class="control-label">Quoted Price</label>
-                              <input type="text" name="quoted_price[]"  id="quoted_price" value="{{old('quoted_price')}}" class="form-control" data-validation="required">
+                              <input type="text" name="quoted_price"  id="quoted_price" value="{{old('quoted_price')}}" class="form-control" data-validation="required">
                           </div>
                         </div>
                         <div class="col-md-1">
@@ -91,15 +79,6 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-3">
-                      <div class="form-group">
-                          <label class="control-label">Technical & Financial Score </label>
-                          <input type="text" name="technical_financial_score"  id="technical_financial_score" value="{{old('technical_financial_score')}}" class="form-control" >
-                      </div>
-                    </div>
-                    
                   </div>
                   <div class="col-sm-offset-2 col-sm-10">
                    <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
@@ -189,8 +168,7 @@ $(document).ready(function() {
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
         ],
-     
-        order: [[ 0, "desc" ]],
+      order: [],
     });
     
 
@@ -214,15 +192,11 @@ $(document).ready(function() {
           $('#sub_competitor_id').val(data.id);
           $('#name').val(data.name);
           $('#technical_score').val(data.sub_technical_score.technical_score);
-          if(data.sub_financial_score[0]){
-          $('#currency_id').val(data.sub_financial_score[0].currency_id);
+          if(data.sub_financial_score){
+          $('#currency_id').val(data.sub_financial_score.currency_id);
           $('#currency_id').trigger('change');
-          $('#conversion_rate').val(data.sub_financial_score[0].conversion_rate);
-          $('#quoted_price').val(data.sub_financial_score[0].quoted_price);
-          }
-          if(data.sub_result){
-          $('#technical_financial_score').val(data.sub_result.technical_financial_score);
-          $('#rank').val(data.sub_result.rank);
+          $('#conversion_rate').val(data.sub_financial_score.conversion_rate);
+          $('#quoted_price').val(data.sub_financial_score.quoted_price);
           }
           $('#ajaxModel').modal('show');
       })
