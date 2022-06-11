@@ -172,7 +172,7 @@
 
 
 <script>
-    if("{{$data->subDescription->sub_evaluation_type_id}}"!=1){
+    if("{{$data->subDescription->sub_evaluation_type_id??''}}"!=1){
         $('.QCB').hide();
     }
 

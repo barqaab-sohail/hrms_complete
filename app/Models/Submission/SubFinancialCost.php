@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
-
-class SubTechnicalScore extends Model implements Auditable
+class SubFinancialCost extends Model implements Auditable
 {
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
     
-   protected $fillable = ['sub_competitor_id', 'technical_score','technical_date'];
+   protected $fillable = ['sub_competitor_id', 'financial_cost','remarks'];
 }

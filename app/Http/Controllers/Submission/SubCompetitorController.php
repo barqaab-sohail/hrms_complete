@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Submission\SubCompetitor;
-use App\Models\Submission\SubTechnicalScore;
-use App\Models\Submission\SubFinancialScore;
+use App\Models\Submission\SubTechnicalNumber;
+use App\Models\Submission\SubFinancialCost;
 use App\Models\Submission\SubResult;
 use App\Models\Submission\Currency;
 use DB;
@@ -28,16 +28,26 @@ class SubCompetitorController extends Controller
 		if($request->ajax()){
    			$data = SubCompetitor::where('submission_id',session('submission_id'))->orderBy('id','desc')->get();
    			return DataTables::of($data)
+   			->addColumn('technical_number', function($data){
+                    
+                         return $data->subTechnicalNumber->technical_number;
+                    	
+                })
    			->addColumn('technical_score', function($data){
                     
-                         return $data->subTechnicalScore->technical_score;
+                         return $data->getTechnicalScore();
                     	
-                    })
+                })
    			->addColumn('financial_cost', function($data){
                     
-                        return  $data->subFinancialScore->quoted_price??'';
+                        return  $data->subFinancialCost->financial_cost??'';
                     	
-                    })
+                })
+   			->addColumn('financial_score', function($data){
+                    
+                         return $data->getFinancialMark();
+                    	
+                })
    			->addColumn('technical_financial_score', function($data){
                     
                         return  $data->getTechnicalAndFinancialMark();
@@ -66,7 +76,7 @@ class SubCompetitorController extends Controller
                     	}
                     })
 
-            ->rawColumns(['Edit','Delete','financial_cost','technical_score','technical_financial_score','rank'])
+            ->rawColumns(['Edit','Delete','financial_cost','technical_number','technical_score','financial_score','technical_financial_score','rank'])
             ->make(true);
 
    		}
@@ -83,32 +93,32 @@ class SubCompetitorController extends Controller
 		       	$input['sub_competitor_id']=$subCompetitor->id;
 		       	
 		       	
-		       	if($request->filled('technical_score')){
-		       		$subTechnicalScore = SubTechnicalScore::where('sub_competitor_id',$input['sub_competitor_id'])->first();
-		       		SubTechnicalScore::updateOrCreate(['id' => $subTechnicalScore->id??''],$input); 
+		       	if($request->filled('technical_number')){
+		       		$subTechnicalNumber = SubTechnicalNumber::where('sub_competitor_id',$input['sub_competitor_id'])->first();
+		       		SubTechnicalNumber::updateOrCreate(['id' => $subTechnicalNumber->id??''],$input); 
 		       	}else{
-		       		$subTechnicalScore = SubTechnicalScore::where('sub_competitor_id',$input['sub_competitor_id'])->first();
-		       		if($subTechnicalScore){
-		       			 SubTechnicalScore::findOrFail($subTechnicalScore->id)->delete();  
+		       		$subTechnicalNumber = SubTechnicalNumber::where('sub_competitor_id',$input['sub_competitor_id'])->first();
+		       		if($subTechnicalNumber){
+		       			 SubTechnicalNumber::findOrFail($subTechnicalNumber->id)->delete();  
 		       		}
 		       	}
-		       	if($request->filled('quoted_price')){
-		       		$subFinancialScore = SubFinancialScore::where('sub_competitor_id',$input['sub_competitor_id'])->first();
-		       		SubFinancialScore::updateOrCreate(['id' => $subFinancialScore->id??''],$input); 
+		       	if($request->filled('financial_cost')){
+		       		$subFinancialCost = SubFinancialCost::where('sub_competitor_id',$input['sub_competitor_id'])->first();
+		       		SubFinancialCost::updateOrCreate(['id' => $subFinancialCost->id??''],$input); 
 		       	}else{
-		       		$subFinancialScore = SubFinancialScore::where('sub_competitor_id',$input['sub_competitor_id'])->first();
-		       		if($subFinancialScore){
-		       			 SubFinancialScore::findOrFail($subFinancialScore->id)->delete();  
+		       		$subFinancialCost = SubFinancialCost::where('sub_competitor_id',$input['sub_competitor_id'])->first();
+		       		if($subFinancialCost){
+		       			 SubFinancialCost::findOrFail($subFinancialCost->id)->delete();  
 		       		}
 		       	}
 
 	       		// if($request->filled('currency_id')){
-		       	// 	$subFinancialScore = SubFinancialScore::where('sub_competitor_id',$input['sub_competitor_id'])->first();
-		       	// 	SubFinancialScore::updateOrCreate(['id' => $subFinancialScore->id??''],$input); 
+		       	// 	$subFinancialCost = SubFinancialCost::where('sub_competitor_id',$input['sub_competitor_id'])->first();
+		       	// 	SubFinancialCost::updateOrCreate(['id' => $subFinancialCost->id??''],$input); 
 		       	// }else{
-		       	// 	$subFinancialScore = SubFinancialScore::where('sub_competitor_id',$input['sub_competitor_id'])->first();
-		       	// 	if($subFinancialScore){
-		       	// 		 SubFinancialScore::findOrFail($subFinancialScore->id)->delete();  
+		       	// 	$subFinancialCost = SubFinancialCost::where('sub_competitor_id',$input['sub_competitor_id'])->first();
+		       	// 	if($subFinancialCost){
+		       	// 		 SubFinancialCost::findOrFail($subFinancialCost->id)->delete();  
 		       	// 	}
 		       	// }
 
@@ -129,7 +139,7 @@ class SubCompetitorController extends Controller
 	}
 
 	public function edit($id){
-		$data = SubCompetitor::with('subTechnicalScore','subFinancialScore')->find($id);
+		$data = SubCompetitor::with('subTechnicalNumber','subFinancialCost')->find($id);
     	return response()->json($data);
 	}
 
