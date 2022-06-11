@@ -7,7 +7,9 @@
     <thead>
       <tr>
           <th style="width:15%">Name</th>
+          <th style="width:15%">Technical Number</th>
           <th style="width:15%">Technical Score</th>
+          <th style="width:15%">Financial Cost</th>
           <th style="width:20%">Financial Score</th>
           <th style="width:10%">Technical & Financial Score</th>
           <th style="width:10%">Rank</th>
@@ -42,8 +44,8 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                          <label class="control-label">Technical Score<span class="text_requried">*</span></label>
-                          <input type="text" name="technical_score"  id="technical_score" value="{{old('technical_score')}}" class="form-control" data-validation="required" >
+                          <label class="control-label">Technical Number<span class="text_requried">*</span></label>
+                          <input type="text" name="technical_number"  id="technical_number" value="{{old('technical_number')}}" class="form-control" data-validation="required" >
                         </div>
                     </div>
                     <div class="col-md-12 financial" id='financial_1'>
@@ -67,8 +69,8 @@
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <label class="control-label">Quoted Price</label>
-                              <input type="text" name="quoted_price"  id="quoted_price" value="{{old('quoted_price')}}" class="form-control" data-validation="required">
+                              <label class="control-label">Financial Cost</label>
+                              <input type="text" name="financial_cost"  id="financial_cost" value="{{old('financial_cost')}}" class="form-control" data-validation="required">
                           </div>
                         </div>
                         <div class="col-md-1">
@@ -161,8 +163,10 @@ $(document).ready(function() {
         ajax: "{{ route('submissionCompetitor.create') }}",
         columns: [
             {data: "name", name: 'name'},
+            {data: "technical_number", name: 'technical_number'},
             {data: "technical_score", name: 'technical_score'},
             {data: "financial_cost", name: 'financial_cost'},
+            {data: "financial_score", name: 'financial_score'},
             {data: "technical_financial_score", name: 'technical_financial_score'},
             {data: "rank", name: 'rank'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
@@ -191,12 +195,12 @@ $(document).ready(function() {
           $('#saveBtn').val("edit-Competitor");
           $('#sub_competitor_id').val(data.id);
           $('#name').val(data.name);
-          $('#technical_score').val(data.sub_technical_score.technical_score);
-          if(data.sub_financial_score){
-          $('#currency_id').val(data.sub_financial_score.currency_id);
+          $('#technical_number').val(data.sub_technical_number.technical_number);
+          if(data.sub_financial_cost){
+          $('#currency_id').val(data.sub_financial_cost.currency_id);
           $('#currency_id').trigger('change');
-          $('#conversion_rate').val(data.sub_financial_score.conversion_rate);
-          $('#quoted_price').val(data.sub_financial_score.quoted_price);
+          $('#conversion_rate').val(data.sub_financial_cost.conversion_rate);
+          $('#financial_cost').val(data.sub_financial_cost.financial_cost);
           }
           $('#ajaxModel').modal('show');
       })

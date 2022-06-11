@@ -14,13 +14,13 @@ class SubCompetitor extends Model implements Auditable
     
    	protected $fillable = ['submission_id', 'name'];
 
-   	public function subTechnicalScore(){
-    	return $this->hasOne('App\Models\Submission\SubTechnicalScore');
+   	public function subTechnicalNumber(){
+    	return $this->hasOne('App\Models\Submission\SubTechnicalNumber');
     }
 
    
-    public function subFinancialScore(){
-    	return $this->hasOne('App\Models\Submission\SubFinancialScore');
+    public function subFinancialCost(){
+    	return $this->hasOne('App\Models\Submission\SubFinancialCost');
     }
 
     public function submission(){
@@ -29,48 +29,77 @@ class SubCompetitor extends Model implements Auditable
 
     public function getFinancialMark(){
     	$financialWeightage = $this->submission->subDescription->financial_weightage;
-    	$lowestCompetitor = SubCompetitor::join('sub_financial_scores','sub_financial_scores.sub_competitor_id','sub_competitors.id')->select('sub_competitors.*','sub_financial_scores.quoted_price')->where('submission_id',session('submission_id'))->orderBy('quoted_price', 'ASC')->first();
+    	$lowestCompetitor = SubCompetitor::join('sub_financial_costs','sub_financial_costs.sub_competitor_id','sub_competitors.id')->select('sub_competitors.*','sub_financial_costs.financial_cost')->where('submission_id',session('submission_id'))->orderBy('financial_cost', 'ASC')->first();
 
-    	return round(($lowestCompetitor->quoted_price/$this->subFinancialScore->quoted_price * $financialWeightage),4);
-
+      
+      if($lowestCompetitor && $this->subFinancialCost){
+    	   return round(($lowestCompetitor->financial_cost/$this->subFinancialCost->financial_cost * $financialWeightage),4);
+      }
     }
-    public function getTechnicalMark(){
+    public function getTechnicalScore(){
     	$technicalWeightage = $this->submission->subDescription->technical_weightage;
-    	return round(($this->subTechnicalScore->technical_score * $technicalWeightage / 100),4);
+    	return round(($this->subTechnicalNumber->technical_number * $technicalWeightage / 100),4);
     }
 
     public function getTechnicalAndFinancialMark(){
+     
 
-    	return $this->getTechnicalMark() + $this->getFinancialMark();
+      if($this->getTechnicalScore() && $this->getFinancialMark()){
+    	 return $this->getTechnicalScore() + $this->getFinancialMark();
+      }else{
+        return '';
+      }
     }
 
     
 
-   public function getRanking(){
-   		
+    public function getRanking(){
    		$passingMarks = $this->submission->subDescription->passing_marks;
 
-   		$competitors = SubCompetitor::join('sub_technical_scores','sub_technical_scores.sub_competitor_id','sub_competitors.id')->select('sub_competitors.*','sub_technical_scores.technical_score')->where('submission_id',session('submission_id'))->orderBy('technical_score', 'DESC')->get();
 
-   		if($this->subTechnicalScore->technical_score < $passingMarks){
+   		if($this->subTechnicalNumber->technical_number < $passingMarks){
    			return "Not Qualify";
    		}
 
+      $allCompetitors = SubCompetitor::where('submission_id',session('submission_id'))->get();
 
-   		if($competitors){
-		   $collection = collect($competitors);
-		   $data       = $collection->where('id', $this->id);
-		   $value      = $data->keys()->first() + 1;
-		   return $value;
-		}else{
-			return '';
-		}
+    $rank=1;
+      foreach($allCompetitors as $competitor){
+       if($this->getTechnicalAndFinancialMark()<$competitor->getTechnicalAndFinancialMark()){
+          $rank++;
+        }
+
+      }
+      return $rank;
+
+
+      // $results = [];
+      // $allCompetitors = SubCompetitor::all();
+      // foreach($allCompetitors as $competitor){
+      //   array_push($results, $this->getTechnicalAndFinancialMark());
+      // }
+      // return $results;
+      // $first = 1;
+      // if(while >$this->getTechnicalAndFinancialMark())
+
+      // return $first;
+
+    //   $competitors = SubCompetitor::join('sub_technical_numbers','sub_technical_numbers.sub_competitor_id','sub_competitors.id')->select('sub_competitors.*','sub_technical_numbers.technical_number')->where('submission_id',session('submission_id'))->orderBy('technical_number', 'DESC')->get();
+
+   	// 	if($competitors){
+		  //  $collection = collect($competitors);
+		  //  $data       = $collection->where('id', $this->id);
+		  //  $value      = $data->keys()->first() + 1;
+		  //  return $value;
+		  // }else{
+			 // return '';
+		  // }
 	}
 
 
 
 	// public function getFinancial(){
-	// 	$data = SubCompetitor::join('sub_financial_scores','sub_financial_scores.sub_competitor_id','sub_competitors.id')->select('sub_competitors.*','sub_financial_scores.conversion_rate','sub_financial_scores.quoted_price')->where('sub_competitors.id', $this->id)->get();
+	// 	$data = SubCompetitor::join('sub_financial_costs','sub_financial_costs.sub_competitor_id','sub_competitors.id')->select('sub_competitors.*','sub_financial_costs.conversion_rate','sub_financial_costs.financial_cost')->where('sub_competitors.id', $this->id)->get();
 
 	// 	$total=0;
 
@@ -80,7 +109,7 @@ class SubCompetitor extends Model implements Auditable
 	// 	}
 
 	// 	foreach ($data as $sub){
-	// 		$total += ($conversionRate * $sub->quoted_price);
+	// 		$total += ($conversionRate * $sub->financial_cost);
 	// 	}
 	// 	return $total;
 	// }
