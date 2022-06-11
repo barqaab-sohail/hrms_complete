@@ -33,7 +33,7 @@ class SubmissionController extends Controller
        			
             ->editColumn('sub_type_id', function($data){
               
-              return $data->subStatusType->name;
+              return $data->subStatusType->name??'';
 
             })
             ->addColumn('edit', function($data){
@@ -147,7 +147,7 @@ class SubmissionController extends Controller
 	}
 
 
-	public function update(Request $request, $id){
+	public function update(SubmissionStore $request, $id){
 
 		$input = $request->all();
 		//ensure client end is is not changed
@@ -158,12 +158,14 @@ class SubmissionController extends Controller
         DB::transaction(function () use ($input, $request, $id) {  
            
         	Submission::findOrFail($id)->update($input);
-        	
+        	$input['submission_id']=$id;
         	$subEoiReference = SubEoiReference::where('submission_id',$id)->first();
           $subDescription = SubDescription::where('submission_id',$id)->first();
           
           if($subDescription){
             SubDescription::findOrFail($subDescription->id)->update($input);
+          }else{
+            SubDescription::create($input);
           }
 
         	if(!$subEoiReference){
