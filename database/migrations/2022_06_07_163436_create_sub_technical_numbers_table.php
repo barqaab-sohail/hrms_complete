@@ -17,7 +17,7 @@ class CreateSubTechnicalNumbersTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('sub_competitor_id')->unsigned();
-            $table->string('technical_number');
+            $table->decimal('technical_number',4);
             $table->timestamps();
             $table->foreign('sub_competitor_id')->references('id')->on('sub_competitors')->onDelete('cascade');
         });
