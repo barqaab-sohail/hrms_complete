@@ -31,21 +31,31 @@ class SubCompetitor extends Model implements Auditable
     	$financialWeightage = $this->submission->subDescription->financial_weightage;
     	$lowestCompetitor = SubCompetitor::join('sub_financial_costs','sub_financial_costs.sub_competitor_id','sub_competitors.id')->select('sub_competitors.*','sub_financial_costs.financial_cost')->where('submission_id',session('submission_id'))->orderBy('financial_cost', 'ASC')->first();
 
-      
+      $factor = 1;
+      $totalDigit = strlen($this->submission->subDescription->passing_marks);
+      if($totalDigit>2){
+        $factor = 10;
+      }
+
       if($lowestCompetitor && $this->subFinancialCost){
-    	   return round(($lowestCompetitor->financial_cost/$this->subFinancialCost->financial_cost * $financialWeightage),4);
+    	   return round(($lowestCompetitor->financial_cost/$this->subFinancialCost->financial_cost * $financialWeightage*$factor),4);
       }
     }
     public function getTechnicalScore(){
     	$technicalWeightage = $this->submission->subDescription->technical_weightage;
-    	return round(($this->subTechnicalNumber->technical_number * $technicalWeightage / 100),4);
+      if($this->subTechnicalNumber){
+    	 return round(($this->subTechnicalNumber->technical_number * $technicalWeightage / 100),4);
+      }else{
+        return '';
+      }
     }
 
     public function getTechnicalAndFinancialMark(){
      
 
       if($this->getTechnicalScore() && $this->getFinancialMark()){
-    	 return $this->getTechnicalScore() + $this->getFinancialMark();
+    	 return round($this->getTechnicalScore() + $this->getFinancialMark(),4);
+      
       }else{
         return '';
       }
@@ -54,24 +64,64 @@ class SubCompetitor extends Model implements Auditable
     
 
     public function getRanking(){
-   		$passingMarks = $this->submission->subDescription->passing_marks;
+      if($this->submission->subDescription->sub_evaluation_type_id==1){
+       		$passingMarks = $this->submission->subDescription->passing_marks;
+          if(!$this->subTechnicalNumber){
+            return '';
+          }
+
+       		if($this->subTechnicalNumber->technical_number < $passingMarks){
+       			return "Not Qualify";
+       		}
+
+          $allCompetitors = SubCompetitor::where('submission_id',session('submission_id'))->get();
+
+        $rank=1;
+          foreach($allCompetitors as $competitor){
+           if($this->getTechnicalAndFinancialMark()<$competitor->getTechnicalAndFinancialMark()){
+              $rank++;
+            }
+
+          }
+          return $rank;
+        }elseif ($this->submission->subDescription->sub_evaluation_type_id==2){
+          //Lease Cose
+          $allCompetitors = SubCompetitor::where('submission_id',session('submission_id'))->get();
+
+          $rank=1;
+          if(!$this->subFinancialCost){
+            return '';
+          }
+
+          foreach($allCompetitors as $competitor){
+            if($this->subFinancialCost && $competitor->subFinancialCost){
+              if($this->subFinancialCost->financial_cost>$competitor->subFinancialCost->financial_cost){
+                $rank++;
+              }
+            }
+          }
+          return $rank;
 
 
-   		if($this->subTechnicalNumber->technical_number < $passingMarks){
-   			return "Not Qualify";
-   		}
+        }elseif ($this->submission->subDescription->sub_evaluation_type_id==3){
+          //Only Qulity Based
+          $allCompetitors = SubCompetitor::where('submission_id',session('submission_id'))->get();
 
-      $allCompetitors = SubCompetitor::where('submission_id',session('submission_id'))->get();
+          $rank=1;
+          if(!$this->subTechnicalNumber){
+            return '';
+          }
+          foreach($allCompetitors as $competitor){
+            if($this->subTechnicalNumber && $competitor->subTechnicalNumber){
+             if($this->subTechnicalNumber->technical_number<$competitor->subTechnicalNumber->technical_number){
+                $rank++;
+              }
+            }
+          }
+          return $rank;
 
-    $rank=1;
-      foreach($allCompetitors as $competitor){
-       if($this->getTechnicalAndFinancialMark()<$competitor->getTechnicalAndFinancialMark()){
-          $rank++;
+
         }
-
-      }
-      return $rank;
-
 
       // $results = [];
       // $allCompetitors = SubCompetitor::all();

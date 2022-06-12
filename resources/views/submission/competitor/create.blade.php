@@ -8,10 +8,14 @@
       <tr>
           <th style="width:15%">Name</th>
           <th style="width:15%">Technical Number</th>
+          @if($data->subDescription->sub_evaluation_type_id==1)
           <th style="width:15%">Technical Score</th>
+          @endif
           <th style="width:15%">Financial Cost</th>
+          @if($data->subDescription->sub_evaluation_type_id==1)
           <th style="width:20%">Financial Score</th>
           <th style="width:10%">Technical & Financial Score</th>
+          @endif
           <th style="width:10%">Rank</th>
           <th style="width:5%">Edit</th>
           <th style="width:5%">Delete</th>
@@ -164,10 +168,14 @@ $(document).ready(function() {
         columns: [
             {data: "name", name: 'name'},
             {data: "technical_number", name: 'technical_number'},
+            @if($data->subDescription->sub_evaluation_type_id==1)
             {data: "technical_score", name: 'technical_score'},
+            @endif
             {data: "financial_cost", name: 'financial_cost'},
+            @if($data->subDescription->sub_evaluation_type_id==1)
             {data: "financial_score", name: 'financial_score'},
             {data: "technical_financial_score", name: 'technical_financial_score'},
+            @endif
             {data: "rank", name: 'rank'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
@@ -195,7 +203,9 @@ $(document).ready(function() {
           $('#saveBtn').val("edit-Competitor");
           $('#sub_competitor_id').val(data.id);
           $('#name').val(data.name);
+           if(data.sub_technical_number){
           $('#technical_number').val(data.sub_technical_number.technical_number);
+          }
           if(data.sub_financial_cost){
           $('#currency_id').val(data.sub_financial_cost.currency_id);
           $('#currency_id').trigger('change');

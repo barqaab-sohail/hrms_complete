@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Submission;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Requests\Submission\SubCompetitorStore;
+use App\Models\Submission\Submission;
 use App\Models\Submission\SubCompetitor;
 use App\Models\Submission\SubTechnicalNumber;
 use App\Models\Submission\SubFinancialCost;
@@ -19,7 +21,8 @@ class SubCompetitorController extends Controller
 	public function index(){
     	
 	    $currencies = Currency::all();
-	    $view =  view('submission.competitor.create', compact('currencies'))->render();
+	    $data = Submission::find(session('submission_id'));
+	    $view =  view('submission.competitor.create', compact('currencies','data'))->render();
 	    return response()->json($view);
 	}
 
@@ -30,29 +33,37 @@ class SubCompetitorController extends Controller
    			return DataTables::of($data)
    			->addColumn('technical_number', function($data){
                     
-                         return $data->subTechnicalNumber->technical_number;
+                         return $data->subTechnicalNumber->technical_number??'';
                     	
                 })
    			->addColumn('technical_score', function($data){
-                    
+                if($data->submission->subDescription->sub_evaluation_type_id==1){
                          return $data->getTechnicalScore();
+                }else{
+                	return '';
+                }
                     	
-                })
+            })
    			->addColumn('financial_cost', function($data){
                     
                         return  $data->subFinancialCost->financial_cost??'';
                     	
-                })
+            })
    			->addColumn('financial_score', function($data){
-                    
+                if($data->submission->subDescription->sub_evaluation_type_id==1){    
                          return $data->getFinancialMark();
-                    	
-                })
+                }else{
+                	return '';
+                }    	
+            })
    			->addColumn('technical_financial_score', function($data){
-                    
+                if($data->submission->subDescription->sub_evaluation_type_id==1){ 
                         return  $data->getTechnicalAndFinancialMark();
+                }else{
+                	return '';
+                }   
                     	
-                    })
+            })
    			->addColumn('rank', function($data){
                     	                        
                         return  $data->getRanking();
@@ -83,7 +94,7 @@ class SubCompetitorController extends Controller
 
 	}
 
-	public function store(Request $request){
+	public function store(SubCompetitorStore $request){
 	    $input = $request->all();
 	        $input['submission_id']=session('submission_id');
 	        DB::transaction(function () use ($input, $request) {  
