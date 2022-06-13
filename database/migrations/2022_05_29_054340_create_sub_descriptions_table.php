@@ -25,6 +25,7 @@ class CreateSubDescriptionsTable extends Migration
             $table->date('financial_opening_date')->nullable();
             $table->tinyInteger('technical_weightage')->unsigned()->nullable();
             $table->tinyInteger('financial_weightage')->unsigned()->nullable();
+            $table->decimal('total_marks',4,0)->unsigned()->nullable();
             $table->decimal('passing_marks',4,0)->unsigned()->nullable();
             $table->timestamps();
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
