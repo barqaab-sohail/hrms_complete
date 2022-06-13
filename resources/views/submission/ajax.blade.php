@@ -20,7 +20,7 @@
                                 <label class="control-label text-right">Submission Type<span class="text_requried">*</span></label><br>
                                   <select  name="sub_type_id"  id="sub_type_id" class="form-control selectTwo" data-validation="required" readonly>
                                     @foreach($subTypes as $subType)
-                                    <option value="{{$subType->id}}" {{(old("sub_type_id", $data->sub_type_id??'')==$subType->name? "selected" : "")}}>{{$subType->name}}</option>
+                                    <option value="{{$subType->id}}" {{(old("sub_type_id", $data->sub_type_id??'')==$subType->id? "selected" : "")}}>{{$subType->name}}</option>
                                     @endforeach   
                                   </select>
                             </div>
