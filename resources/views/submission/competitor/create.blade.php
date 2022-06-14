@@ -52,7 +52,7 @@
                           <input type="text" name="technical_number"  id="technical_number" value="{{old('technical_number')}}" class="form-control" data-validation="required" >
                         </div>
                     </div>
-                     <div class="col-md-2">
+                     <div class="col-md-2 financial_cost">
                         <div class="form-group">
                           <label class="control-label">Total Cost<span class="text_requried">*</span></label>
                           <input type="text" name="financial_cost"  id="financial_cost" value="{{old('financial_cost')}}" class="form-control" data-validation="required" >
@@ -87,7 +87,7 @@
                         <div class="col-md-2 conversion">
                           <div class="form-group">
                               <label class="control-label">Financial Cost</label>
-                              <input type="text" name="total" value="{{old('total')}}" class="form-control prc_1" data-validation="required">
+                              <input type="text" name="total[]" value="{{old('total')}}" class="form-control prc_1" data-validation="required">
                           </div>
                         </div>
                         <div class="col-md-1 conversion">
@@ -101,7 +101,7 @@
                   </div>
                   <div class="form-group row">
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="multi_currency">
+                        <input class="form-check-input" type="checkbox" value="" name="multi_currency" id="multi_currency">
                           <label class="form-check-label" for="multi_currency">
                           Multi Currency
                         </label>
@@ -133,27 +133,29 @@ $(document).ready(function() {
   $('.conversion').hide();
   $('#multi_currency').click(function(){
       if($(this).is(':checked')){
+        $(this).val('checked');
         $(this).prop('checked', true);
-        $('#financial_cost').attr('readonly',true);
         $('.conversion').show();
+        $("#currency_id").val('');
+        $('#currency_id').trigger("chosen:updated");
       }else{
         $(this).prop('checked', false);
         $('.conversion').hide();
-         $('#financial_cost').attr('readonly',false);
+        $(this).val('');
       }
   });
 
-  $("input[name^=total]").blur(function(event){
-      var cRate = $(this).find("input[name^=conversion_rate]").val();
-      var rate = $(this).val().replace(/,/g, '');
-      var currentVal= $("#financial_cost").val();
-      var total = (cRate * rate);
-      console.log(rate);
-      console.log(cRate);
+  // $("input[name^=total]").blur(function(event){
+  //     var cRate = $(this).find("input[name^=conversion_rate]").val();
+  //     var rate = $(this).val().replace(/,/g, '');
+  //     var currentVal= $("#financial_cost").val();
+  //     var total = (cRate * rate);
+  //     console.log(rate);
+  //     console.log(cRate);
 
-      //$("#financial_cost").val(total + currentVal);
+  //     //$("#financial_cost").val(total + currentVal);
       
-  });
+  // });
 
    
   $('.prc_1').keyup(function(){
