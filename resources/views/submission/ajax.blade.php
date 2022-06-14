@@ -114,7 +114,7 @@
                     </div>
                     <div class="row">
                        
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label text-right">Technical Opening Date</label>
                                 <input type="text" id="technical_opening_date" name="technical_opening_date" value="{{ old('technical_opening_date', $data->subDescription->technical_opening_date??'') }}" class="form-control date_input" readonly>     
@@ -123,7 +123,7 @@
                                
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label text-right">Financial Opening Date</label>
                                 <input type="text" id="financial_opening_date" name="financial_opening_date" value="{{ old('financial_opening_date', $data->subDescription->financial_opening_date??'') }}" class="form-control date_input" readonly>     
@@ -132,7 +132,13 @@
                                
                             </div>
                         </div>
-                       
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label text-right">Total Marks</label>
+                                <input type="text" id="total_marks" name="total_marks" value="{{ old('total_marks', $data->subDescription->total_marks??'') }}" class="form-control" >
+                                  
+                            </div>
+                        </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label text-right">Passing Marks</label>

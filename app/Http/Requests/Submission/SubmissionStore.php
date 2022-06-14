@@ -37,7 +37,8 @@ class SubmissionStore extends FormRequest
         //If method is POST then document is required otherwise in Patch method document is nullable.
             if ($this->getMethod() == 'PATCH') {
                 
-                  $rules += [ 'passing_marks'=>'nullable|numeric|max:1000',
+                  $rules += [ 'passing_marks'=>'nullable|numeric|max:1000|required_if:sub_evaluation_type_id,1',
+                                'total_marks'=>'nullable|numeric|gte:passing_marks|required_if:sub_evaluation_type_id,1',
                             'technical_weightage'=>'nullable|numeric|max:100|required_if:sub_evaluation_type_id,1',
                             'financial_weightage'=>'nullable|numeric|max:100|required_unless:technical_weightage,null|required_if:sub_evaluation_type_id,1',
 

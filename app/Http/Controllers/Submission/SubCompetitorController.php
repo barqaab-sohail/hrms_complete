@@ -46,7 +46,7 @@ class SubCompetitorController extends Controller
             })
    			->addColumn('financial_cost', function($data){
                     
-                        return  $data->subFinancialCost->financial_cost??'';
+                        return  addComma($data->subFinancialCost->financial_cost??'');
                     	
             })
    			->addColumn('financial_score', function($data){
@@ -64,10 +64,8 @@ class SubCompetitorController extends Controller
                 }   
                     	
             })
-   			->addColumn('rank', function($data){
-                    	                        
+   			->addColumn('rank', function($data){ 
                         return  $data->getRanking();
-                    	
                     })
    			
    			->addColumn('Edit', function($data){
@@ -97,6 +95,7 @@ class SubCompetitorController extends Controller
 	public function store(SubCompetitorStore $request){
 	    $input = $request->all();
 	        $input['submission_id']=session('submission_id');
+	        $input ['financial_cost']= intval(str_replace( ',', '', $request->financial_cost));
 	        DB::transaction(function () use ($input, $request) {  
 
 		       	$subCompetitor = SubCompetitor::updateOrCreate(['id' => $input['sub_competitor_id']],$input); 
