@@ -40,21 +40,28 @@
                    
                   <input type="hidden" name="sub_competitor_id" id="sub_competitor_id">
                   <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-8">
                         <div class="form-group">
                             <label class="control-label">Name</label>
-                            <input type="text" name="name"  id="name" value="{{old('name')}}" class="form-control">
+                            <input type="text" name="name"  id="name" value="{{old('name')}}" class="form-control" data-validation="required">
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Technical Number<span class="text_requried">*</span></label>
                           <input type="text" name="technical_number"  id="technical_number" value="{{old('technical_number')}}" class="form-control" data-validation="required" >
                         </div>
                     </div>
+                     <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="control-label">Total Cost<span class="text_requried">*</span></label>
+                          <input type="text" name="financial_cost"  id="financial_cost" value="{{old('financial_cost')}}" class="form-control" data-validation="required" >
+                        </div>
+                    </div>
+
                     <div class="col-md-12 financial" id='financial_1'>
                       <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2 conversion">
                           <div class="form-group">
                               <label class="control-label">Currency</label>
                                 <select  id="currency_id"   name="currency_id[]"  class="form-control" data-validation="required">
@@ -65,29 +72,44 @@
                                 </select>
                           </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 conversion">
+                          <div class="form-group">
+                              <label class="control-label">Conversion Date</label>
+                              <input type="text" name="conversion_date[]"  value="{{old('conversion_date')}}" class="form-control date_input" readonly data-validation="required">
+                          </div>
+                        </div>
+                        <div class="col-md-2 conversion">
                           <div class="form-group">
                               <label class="control-label">Conversion Rate</label>
-                              <input type="text" name="conversion_rate[]"  id="conversion_rate" value="{{old('conversion_rate')}}" class="form-control" data-validation="required">
+                              <input type="text" name="conversion_rate[]" value="{{old('conversion_rate')}}" class="form-control" data-validation="required">
                           </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2 conversion">
                           <div class="form-group">
                               <label class="control-label">Financial Cost</label>
-                              <input type="text" name="financial_cost"  id="financial_cost" value="{{old('financial_cost')}}" class="form-control" data-validation="required">
+                              <input type="text" name="total" value="{{old('total')}}" class="form-control prc_1" data-validation="required">
                           </div>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-1 conversion">
                           <br>
                             <div class="float-right">
-                            <button type="button" name="add" id="add" class="btn btn-success add" >+</button>
+                              <button type="button" name="add" id="add" class="btn btn-success add" >+</button>
                             </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <div class="form-group row">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="multi_currency">
+                          <label class="form-check-label" for="multi_currency">
+                          Multi Currency
+                        </label>
+                      </div>
+                  </div>
+
                   <div class="col-sm-offset-2 col-sm-10">
-                   <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
+                   <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn" value="create">Save changes
                    </button>
                   </div>
               </form>
@@ -107,7 +129,48 @@
 
 
 $(document).ready(function() {
-  $('select:not(.selectTwo)').chosen();
+
+  $('.conversion').hide();
+  $('#multi_currency').click(function(){
+      if($(this).is(':checked')){
+        $(this).prop('checked', true);
+        $('#financial_cost').attr('readonly',true);
+        $('.conversion').show();
+      }else{
+        $(this).prop('checked', false);
+        $('.conversion').hide();
+         $('#financial_cost').attr('readonly',false);
+      }
+  });
+
+  $("input[name^=total]").blur(function(event){
+      var cRate = $(this).find("input[name^=conversion_rate]").val();
+      var rate = $(this).val().replace(/,/g, '');
+      var currentVal= $("#financial_cost").val();
+      var total = (cRate * rate);
+      console.log(rate);
+      console.log(cRate);
+
+      //$("#financial_cost").val(total + currentVal);
+      
+  });
+
+   
+  $('.prc_1').keyup(function(){
+         // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+  });
+
+
+  $('select:not(.selectTwo)').chosen({width: "100%"});
   //Dynamic add Financial
     
     // Add new element
@@ -185,6 +248,12 @@ $(document).ready(function() {
     
 
     $('#createSubCompetitor').click(function () {
+        $("[id^=financial_2]").remove();
+        $("[id^=financial_3]").remove();
+        $("[id^=financial_4]").remove();
+        $("[id^=financial_5]").remove();
+        $('#financial_cost').attr('readonly',false);
+        $('.conversion').hide();
         $('#json_message_modal').html('');
         $('#subCompetitorForm').trigger("reset");
         $('#sub_competitor_id').val('');
@@ -217,6 +286,12 @@ $(document).ready(function() {
     });
 
     $('#saveBtn').unbind().click(function (e) {
+        $(this).attr('disabled','ture');
+        //submit enalbe after 3 second
+        setTimeout(function(){
+            $('.btn-prevent-multiple-submits').removeAttr('disabled');
+        }, 3000);
+        
         e.preventDefault();
         $(this).html('Save'); 
         $.ajax({
@@ -255,7 +330,6 @@ $(document).ready(function() {
                 if(data.error){
                   $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
                 }
-  
             },
             error: function (data) {
                 
