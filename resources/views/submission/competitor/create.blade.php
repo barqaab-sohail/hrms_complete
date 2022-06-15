@@ -73,11 +73,9 @@
                           </div>
                         </div>
                         <div class="col-md-2 conversion">
-                          <div class="form-group conversion_date">
+                          <div class="form-group">
                               <label class="control-label">Conversion Date</label>
                               <input type="text" name="conversion_date[]"  value="{{old('conversion_date')}}" class="form-control date_input" readonly data-validation="required">
-                              <br>
-                              <i class="fas fa-trash-alt text_requried"></i> 
                           </div>
                         </div>
                         <div class="col-md-2 conversion">
@@ -131,14 +129,6 @@
 
 
 $(document).ready(function() {
-
-   $(".date").datepicker({
-    dateFormat: 'D, d-M-yy',
-    yearRange: '1935:'+ (new Date().getFullYear()+15),
-    changeMonth: true,
-    changeYear: true,
-    });
-
 
   $('.conversion').hide();
   $('#multi_currency').click(function(){
@@ -197,13 +187,13 @@ $(document).ready(function() {
       // Check total number elements
       if(total_element < max ){
        //Clone Financial div and copy 
-        $('.financial').find('select').chosen('destroy');
+      $('.financial').find('select').chosen('destroy');
         var clone = $("#financial_1").clone();
         clone.prop('id','financial_'+nextindex).find('input:text').val('');
         clone.find("#add").html('X').prop("class", "btn btn-danger remove remove_financial");
         clone.insertAfter("div.financial:last");
-        clone.find(".conversion_date").hide();
-        $('.financial').find('select').chosen();
+      $('.financial').find('select').chosen();
+       
       }
      
     });
