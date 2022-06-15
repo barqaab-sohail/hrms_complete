@@ -27,6 +27,8 @@ class CreateSubDescriptionsTable extends Migration
             $table->tinyInteger('financial_weightage')->unsigned()->nullable();
             $table->decimal('total_marks',4,0)->unsigned()->nullable();
             $table->decimal('passing_marks',4,0)->unsigned()->nullable();
+            $table->text('scope_of_services')->nullable();
+            $table->text('scope_of_work')->nullable();
             $table->timestamps();
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
             $table->foreign('sub_status_id')->references('id')->on('sub_statuses');
