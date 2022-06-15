@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests\Submission\SubCompetitorStore;
 use App\Models\Submission\Submission;
+use App\Models\Submission\SubMultiCurrency;
 use App\Models\Submission\SubCompetitor;
 use App\Models\Submission\SubTechnicalNumber;
 use App\Models\Submission\SubFinancialCost;
@@ -46,7 +47,7 @@ class SubCompetitorController extends Controller
             })
    			->addColumn('financial_cost', function($data){
                     
-                        return  addComma($data->subFinancialCost->financial_cost??'');
+                    return  addComma($data->subFinancialCost->financial_cost??'');
                     	
             })
    			->addColumn('financial_score', function($data){
@@ -112,7 +113,7 @@ class SubCompetitorController extends Controller
 		       			 SubTechnicalNumber::findOrFail($subTechnicalNumber->id)->delete();  
 		       		}
 		       	}
-		       	if($request->filled('financial_cost')){
+		       	if($request->filled('total_price')){
 		       		$subFinancialCost = SubFinancialCost::where('sub_competitor_id',$input['sub_competitor_id'])->first();
 		       		SubFinancialCost::updateOrCreate(['id' => $subFinancialCost->id??''],$input); 
 		       	}else{
@@ -120,6 +121,26 @@ class SubCompetitorController extends Controller
 		       		if($subFinancialCost){
 		       			 SubFinancialCost::findOrFail($subFinancialCost->id)->delete();  
 		       		}
+		       	}
+
+		       	if ($request->multi_currency){
+		       		
+		       		for ($i=0;$i<count($request->input('currency_id'));$i++){
+		       			$multiCurrency['sub_competitor_id'] = $subCompetitor->id;
+		       			$multiCurrency['conversion_date'] = \Carbon\Carbon::parse($request->input("conversion_date.0"))->format('Y-m-d');
+						$multiCurrency['currency_id'] = $request->input("currency_id.$i");
+						$multiCurrency['conversion_rate'] = $request->input("conversion_rate.$i");
+						$multiCurrency ['currency_price']= intval(str_replace( ',', '', $request->input("currency_price.$i")));
+						SubMultiCurrency::create($multiCurrency);
+					}
+		       	}else{
+		       		$subMultiCurrencies = SubMultiCurrency::where('sub_competitor_id',$input['sub_competitor_id'])->get();
+		       		if($subMultiCurrencies){
+		       			foreach($subMultiCurrencies as $subMultiCurrency){
+		       				SubMultiCurrency::findOrFail($subMultiCurrency->id)->delete();
+		       			}
+		       		}
+
 		       	}
 
 	       		// if($request->filled('currency_id')){

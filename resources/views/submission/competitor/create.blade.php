@@ -55,7 +55,7 @@
                      <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Total Cost<span class="text_requried">*</span></label>
-                          <input type="text" name="financial_cost"  id="financial_cost" value="{{old('financial_cost')}}" class="form-control" data-validation="required" >
+                          <input type="text" name="total_price"  id="total_price" value="{{old('total_price')}}" class="form-control prc_1" data-validation="required" >
                         </div>
                     </div>
 
@@ -73,7 +73,7 @@
                           </div>
                         </div>
                         <div class="col-md-2 conversion">
-                          <div class="form-group">
+                          <div class="form-group conversion_date">
                               <label class="control-label">Conversion Date</label>
                               <input type="text" name="conversion_date[]"  value="{{old('conversion_date')}}" class="form-control date_input" readonly data-validation="required">
                           </div>
@@ -87,7 +87,7 @@
                         <div class="col-md-2 conversion">
                           <div class="form-group">
                               <label class="control-label">Financial Cost</label>
-                              <input type="text" name="total" value="{{old('total')}}" class="form-control prc_1" data-validation="required">
+                              <input type="text" name="currency_price[]" value="{{old('currency_price')}}" class="form-control prc_1" data-validation="required">
                           </div>
                         </div>
                         <div class="col-md-1 conversion">
@@ -101,7 +101,7 @@
                   </div>
                   <div class="form-group row">
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="multi_currency">
+                        <input class="form-check-input" type="checkbox" value="" name="multi_currency" id="multi_currency">
                           <label class="form-check-label" for="multi_currency">
                           Multi Currency
                         </label>
@@ -133,27 +133,19 @@ $(document).ready(function() {
   $('.conversion').hide();
   $('#multi_currency').click(function(){
       if($(this).is(':checked')){
+        $(this).val('checked');
         $(this).prop('checked', true);
-        $('#financial_cost').attr('readonly',true);
         $('.conversion').show();
+        $("#currency_id").val('');
+        $('#currency_id').trigger("chosen:updated");
       }else{
         $(this).prop('checked', false);
         $('.conversion').hide();
-         $('#financial_cost').attr('readonly',false);
+        $(this).val('');
       }
   });
 
-  $("input[name^=total]").blur(function(event){
-      var cRate = $(this).prev().val();
-      var rate = $(this).val().replace(/,/g, '');
-      var currentVal= $("#financial_cost").val();
-      var total = (cRate * rate);
-      console.log(rate);
-      console.log(cRate);
-
-      //$("#financial_cost").val(total + currentVal);
-      
-  });
+ 
 
    
   $('.prc_1').keyup(function(){
@@ -192,6 +184,7 @@ $(document).ready(function() {
         clone.prop('id','financial_'+nextindex).find('input:text').val('');
         clone.find("#add").html('X').prop("class", "btn btn-danger remove remove_financial");
         clone.insertAfter("div.financial:last");
+        clone.find(".conversion_date").hide();
       $('.financial').find('select').chosen();
        
       }
@@ -201,21 +194,6 @@ $(document).ready(function() {
      $(document).on("click", '.remove_financial', function(){
      $(this).closest(".financial").remove();
     }); 
-
-
- 
-  $('#phone, #fax, #mobile').keyup(function(){
-      // skip for arrow keys
-      if(event.which >= 37 && event.which <= 40) return;
-      // format number
-      $(this).val(function(index, value) {
-        return value
-        .replace(/\D/g, "")
-      //.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        ;
-      });
-  });
-
 
   $(function () {
       $.ajaxSetup({
@@ -234,7 +212,7 @@ $(document).ready(function() {
             @if($data->subDescription->sub_evaluation_type_id==1)
             {data: "technical_score", name: 'technical_score'},
             @endif
-            {data: "financial_cost", name: 'financial_cost'},
+            {data: "total_price", name: 'total_price'},
             @if($data->subDescription->sub_evaluation_type_id==1)
             {data: "financial_score", name: 'financial_score'},
             {data: "technical_financial_score", name: 'technical_financial_score'},
@@ -252,13 +230,12 @@ $(document).ready(function() {
         $("[id^=financial_3]").remove();
         $("[id^=financial_4]").remove();
         $("[id^=financial_5]").remove();
-        $('#financial_cost').attr('readonly',false);
         $('.conversion').hide();
         $('#json_message_modal').html('');
         $('#subCompetitorForm').trigger("reset");
         $('#sub_competitor_id').val('');
         $('#currency_id').val('');
-        $('#currency_id').trigger('change');
+        $('#currency_id').trigger("chosen:updated");
         $('#ajaxModel').modal('show');
     });
 

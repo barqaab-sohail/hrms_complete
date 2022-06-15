@@ -31,8 +31,10 @@ class SubCompetitorStore extends FormRequest
         ];
 
         if($this->multi_currency){
-            $rules += [ 'currency_id.*'=>'nullable|required_with:conversion_rate',
-            'conversion_rate.*'=>'nullable|required_with:currency_id'];
+            $rules += [ 'currency_id.*'=>'required_with:conversion_rate,currency_price',
+                        'conversion_rate.*'=>'required_with:currency_id,currency_price',
+                        'currency_price.*'=>'required_with:currency_id,conversion_rate',
+                        ];
         }
 
     return $rules;
