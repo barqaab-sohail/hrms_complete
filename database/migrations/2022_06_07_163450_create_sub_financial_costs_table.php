@@ -17,7 +17,7 @@ class CreateSubFinancialCostsTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('sub_competitor_id')->unsigned();
-            $table->decimal('financial_cost',12,0);
+            $table->decimal('total_price',12,0);
             $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('sub_competitor_id')->references('id')->on('sub_competitors')->onDelete('cascade');

@@ -19,8 +19,8 @@ class CreateSubMultiCurrenciesTable extends Migration
             $table->bigInteger('sub_competitor_id')->unsigned();
             $table->bigInteger('currency_id')->unsigned();
             $table->date('conversion_date');
-            $table->decimal('conversion_rate',12,0);
-            $table->decimal('quoted_price',12,0);
+            $table->decimal('conversion_rate',12,4);
+            $table->decimal('currency_price',12,0);
             $table->timestamps();
             $table->foreign('sub_competitor_id')->references('id')->on('sub_competitors')->onDelete('cascade');
             $table->foreign('currency_id')->references('id')->on('currencies');
