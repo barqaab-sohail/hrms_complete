@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Office\Office;
 use App\Http\Requests\Asset\AssetStore;
 use App\Http\Requests\Asset\ClassStore;
 use App\Http\Requests\Asset\SubClassStore;
@@ -283,6 +284,29 @@ class AssetController extends Controller
         }
       
         
+    }
+
+    public function search(){
+        $offices = Office::all();
+        return view ('asset.search.search',compact('offices'));
+    }
+
+    public function result(Request $request){
+        $data = $request->all();
+
+        $result = Asset::join('as_locations','as_locations.asset_id','=','assets.id')
+                        // ->join('cv_detail_education','cv_detail_education.cv_detail_id','=','cv_details.id')
+                            ->when($data['office_id'], function ($query) use ($data){
+                                return $query->where('office_id','=',$data['office_id']);
+                            })
+                            // ->when($data['stage_id'], function ($query) use ($data){
+                            //     return $query->where('cv_stage_id','=',$data['stage_id']);
+                            // })
+                            
+                        ->select('assets.*')
+                        //->distinct('id')
+                        ->get();
+        return view('asset.search.result',compact('result'));
     }
 
 }

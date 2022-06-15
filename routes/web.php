@@ -203,7 +203,11 @@ Route::resource('/project', 'ProjectController');
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Asset'], function(){
 Route::post('/assetStoreClass','AssetController@storeClass')->name('asset.storeClass');
 Route::post('/assetStoreSubClass','AssetController@storeSubClass')->name('asset.storeSubClass');
+Route::get('/asset/search','AssetController@search')->name('asset.search');
+Route::get('/employee/search/result','AssetController@result')->name('asset.result');
 Route::resource('/asset','AssetController');
+
+
 Route::resource('/asDocument','AssetDocumentController');
 Route::resource('/asPurchase','AsPurchaseController');
 Route::resource('/asLocation','AsLocationController');

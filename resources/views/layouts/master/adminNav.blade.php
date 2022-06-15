@@ -131,6 +131,7 @@
                         <li><a class="{{Request::is('hrms/asset')?'active':''}}" href="{{route('asset.index')}}">List of Assets</a></li> 
                         
                         @endcanany
+                         <li><a  class="{{Request::is('hrms/asset/search')?'active':''}}" href="{{route('asset.search')}}">Search</a></li>
                         
                     </ul>
                 </li>
