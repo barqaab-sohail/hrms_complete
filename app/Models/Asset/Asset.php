@@ -101,6 +101,11 @@ class Asset extends Model implements Auditable
         return $this->hasOne('App\Models\Asset\AsDocumentation');
     }
 
+    public function asPicture(){
+        return $this->hasOne('App\Models\Asset\AsDocumentation')->where('description','image');
+    }
+
+
     public function asLocation(){
 
         return $this->hasMany('App\Models\Asset\AsLocation');
