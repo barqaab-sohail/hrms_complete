@@ -4,6 +4,7 @@ namespace App\Http\Requests\Submission;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
 class SubmissionStore extends FormRequest
 {
     /**
@@ -25,6 +26,7 @@ class SubmissionStore extends FormRequest
     {
         
        // $totalWeightage = $this->technical_weightage + $this->financial_weightage;
+
 
         $rules = [
             'sub_division_id'=> 'required',

@@ -11,5 +11,5 @@ class SubFinancialCost extends Model implements Auditable
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
     
-   protected $fillable = ['sub_competitor_id', 'total_price','remarks'];
+   protected $fillable = ['sub_competitor_id', 'total_price'];
 }
