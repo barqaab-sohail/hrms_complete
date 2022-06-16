@@ -12,7 +12,7 @@ class SubCompetitor extends Model implements Auditable
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
     
-   	protected $fillable = ['submission_id', 'name'];
+   	protected $fillable = ['submission_id', 'name','is_multi_currency','remarks'];
 
    	public function subTechnicalNumber(){
     	return $this->hasOne('App\Models\Submission\SubTechnicalNumber');
@@ -23,13 +23,20 @@ class SubCompetitor extends Model implements Auditable
     	return $this->hasOne('App\Models\Submission\SubFinancialCost');
     }
 
+    public function subMultiCurrency(){
+      return $this->hasMany('App\Models\Submission\SubMultiCurrency');
+    }
+
     public function submission(){
     	return $this->belongsTo('App\Models\Submission\Submission');
     }
 
     public function getFinancialMark(){
     	$financialWeightage = $this->submission->subDescription->financial_weightage;
-    	$lowestCompetitor = SubCompetitor::join('sub_financial_costs','sub_financial_costs.sub_competitor_id','sub_competitors.id')->select('sub_competitors.*','sub_financial_costs.financial_cost')->where('submission_id',session('submission_id'))->orderBy('financial_cost', 'ASC')->first();
+        
+
+
+    	$lowestCompetitor = SubCompetitor::join('sub_financial_costs','sub_financial_costs.sub_competitor_id','sub_competitors.id')->select('sub_competitors.*','sub_financial_costs.total_price')->where('submission_id',session('submission_id'))->orderBy('total_price', 'ASC')->first();
 
       $factor = 1;
       $totalDigit = strlen($this->submission->subDescription->passing_marks);
@@ -38,7 +45,7 @@ class SubCompetitor extends Model implements Auditable
       }
 
       if($lowestCompetitor && $this->subFinancialCost){
-    	   return round(($lowestCompetitor->financial_cost/$this->subFinancialCost->financial_cost * $financialWeightage*$factor),4);
+    	   return round(($lowestCompetitor->total_price/$this->subFinancialCost->total_price * $financialWeightage*$factor),4);
       }
     }
     public function getTechnicalScore(){
@@ -95,7 +102,7 @@ class SubCompetitor extends Model implements Auditable
 
           foreach($allCompetitors as $competitor){
             if($this->subFinancialCost && $competitor->subFinancialCost){
-              if($this->subFinancialCost->financial_cost>$competitor->subFinancialCost->financial_cost){
+              if($this->subFinancialCost->total_price>$competitor->subFinancialCost->total_price){
                 $rank++;
               }
             }

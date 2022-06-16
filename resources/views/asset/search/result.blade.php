@@ -19,12 +19,12 @@
                     </thead>
                     <tbody>
                         @foreach($result as $asset)
-                       
+                        
                         <tr>
                             <td>{{$asset->asset_code??''}}</td>
                             <td>{{$asset->description}}</td>
-                            <td><img src="{{asset('storage/'.$asset->asPicture->path.$asset->asPicture->file_name)}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" class="profile-pic ViewIMG" width="20%"/></td>
-                             
+                            <td>
+                            <img src="{{asset('storage/'.$asset->asPicture->path.$asset->asPicture->file_name)}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" class="profile-pic ViewIMG" width="20%"/></td>
                         </tr>
                         @endforeach
                     
@@ -50,7 +50,7 @@
                         {
                             extend: 'copyHtml5',
                             exportOptions: {
-                                columns: [ 0, 1]
+                                columns: [ 0, 1,2]
                             }
                         },
                         {

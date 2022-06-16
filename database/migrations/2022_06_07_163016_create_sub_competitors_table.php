@@ -19,6 +19,7 @@ class CreateSubCompetitorsTable extends Migration
             $table->bigInteger('submission_id')->unsigned();
             $table->string('name');
             $table->boolean('is_multi_currency')->default(0);
+            $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
         });

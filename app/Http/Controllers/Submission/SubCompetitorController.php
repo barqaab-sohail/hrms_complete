@@ -45,9 +45,9 @@ class SubCompetitorController extends Controller
                 }
                     	
             })
-   			->addColumn('financial_cost', function($data){
+   			->addColumn('total_price', function($data){
                     
-                    return  addComma($data->subFinancialCost->financial_cost??'');
+                    return  addComma($data->subFinancialCost->total_price??'');
                     	
             })
    			->addColumn('financial_score', function($data){
@@ -86,7 +86,7 @@ class SubCompetitorController extends Controller
                     	}
                     })
 
-            ->rawColumns(['Edit','Delete','financial_cost','technical_number','technical_score','financial_score','technical_financial_score','rank'])
+            ->rawColumns(['Edit','Delete','total_price','technical_number','technical_score','financial_score','technical_financial_score','rank'])
             ->make(true);
 
    		}
@@ -114,6 +114,7 @@ class SubCompetitorController extends Controller
 		       		}
 		       	}
 		       	if($request->filled('total_price')){
+		       		$input['total_price']= intval(str_replace( ',', '', $request->input("total_price")));
 		       		$subFinancialCost = SubFinancialCost::where('sub_competitor_id',$input['sub_competitor_id'])->first();
 		       		SubFinancialCost::updateOrCreate(['id' => $subFinancialCost->id??''],$input); 
 		       	}else{
@@ -121,10 +122,10 @@ class SubCompetitorController extends Controller
 		       		if($subFinancialCost){
 		       			 SubFinancialCost::findOrFail($subFinancialCost->id)->delete();  
 		       		}
+
 		       	}
 
-		       	if ($request->multi_currency){
-		       		
+		       	if ($request->multi_currency){	
 		       		for ($i=0;$i<count($request->input('currency_id'));$i++){
 		       			$multiCurrency['sub_competitor_id'] = $subCompetitor->id;
 		       			$multiCurrency['conversion_date'] = \Carbon\Carbon::parse($request->input("conversion_date.0"))->format('Y-m-d');
@@ -140,7 +141,6 @@ class SubCompetitorController extends Controller
 		       				SubMultiCurrency::findOrFail($subMultiCurrency->id)->delete();
 		       			}
 		       		}
-
 		       	}
 
 	       		// if($request->filled('currency_id')){
@@ -170,7 +170,7 @@ class SubCompetitorController extends Controller
 	}
 
 	public function edit($id){
-		$data = SubCompetitor::with('subTechnicalNumber','subFinancialCost')->find($id);
+		$data = SubCompetitor::with('subTechnicalNumber','subFinancialCost','subMultiCurrency')->find($id);
     	return response()->json($data);
 	}
 

@@ -11,7 +11,7 @@
           @if($data->subDescription->sub_evaluation_type_id==1)
           <th style="width:15%">Technical Score</th>
           @endif
-          <th style="width:15%">Financial Cost</th>
+          <th style="width:15%">Total Price</th>
           @if($data->subDescription->sub_evaluation_type_id==1)
           <th style="width:20%">Financial Score</th>
           <th style="width:10%">Technical & Financial Score</th>
@@ -58,7 +58,6 @@
                           <input type="text" name="total_price"  id="total_price" value="{{old('total_price')}}" class="form-control prc_1" data-validation="required" >
                         </div>
                     </div>
-
                     <div class="col-md-12 financial" id='financial_1'>
                       <div class="row">
                         <div class="col-md-2 conversion">
@@ -75,19 +74,19 @@
                         <div class="col-md-2 conversion">
                           <div class="form-group conversion_date">
                               <label class="control-label">Conversion Date</label>
-                              <input type="text" name="conversion_date[]"  value="{{old('conversion_date')}}" class="form-control date_input" readonly data-validation="required">
+                              <input type="text" id="conversion_date" name="conversion_date[]"  value="{{old('conversion_date')}}" class="form-control date_input" readonly data-validation="required">
                           </div>
                         </div>
                         <div class="col-md-2 conversion">
                           <div class="form-group">
                               <label class="control-label">Conversion Rate</label>
-                              <input type="text" name="conversion_rate[]" value="{{old('conversion_rate')}}" class="form-control" data-validation="required">
+                              <input type="text" id="conversion_rate" name="conversion_rate[]" value="{{old('conversion_rate')}}" class="form-control" data-validation="required">
                           </div>
                         </div>
                         <div class="col-md-2 conversion">
                           <div class="form-group">
                               <label class="control-label">Financial Cost</label>
-                              <input type="text" name="currency_price[]" value="{{old('currency_price')}}" class="form-control prc_1" data-validation="required">
+                              <input type="text" id="currency_price" name="currency_price[]" value="{{old('currency_price')}}" class="form-control prc_1" data-validation="required">
                           </div>
                         </div>
                         <div class="col-md-1 conversion">
@@ -107,7 +106,6 @@
                         </label>
                       </div>
                   </div>
-
                   <div class="col-sm-offset-2 col-sm-10">
                    <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn" value="create">Save changes
                    </button>
@@ -140,6 +138,9 @@ $(document).ready(function() {
         $('#currency_id').trigger("chosen:updated");
       }else{
         $(this).prop('checked', false);
+        $('.conversion').find('input:text').val(''); 
+        $('select').val('');
+        $('select').trigger("chosen:updated");
         $('.conversion').hide();
         $(this).val('');
       }
@@ -185,8 +186,7 @@ $(document).ready(function() {
         clone.find("#add").html('X').prop("class", "btn btn-danger remove remove_financial");
         clone.insertAfter("div.financial:last");
         clone.find(".conversion_date").hide();
-      $('.financial').find('select').chosen();
-       
+      $('.financial').find('select').chosen(); 
       }
      
     });
@@ -243,20 +243,44 @@ $(document).ready(function() {
 
     $('body').unbind().on('click', '.editSubmissionCompetitor', function () {
       var sub_competitor_id = $(this).data('id');
+      $(".remove_financial").trigger('click');
+      //$('#multi_currency').prop('checked', false);
+      $('.conversion').hide();
       $('#json_message_modal').html('');
       $.get("{{ url('hrms/submissionCompetitor') }}" +'/' + sub_competitor_id +'/edit', function (data) {
+        
           $('#modelHeading').html("Edit Competitor");
           $('#saveBtn').val("edit-Competitor");
           $('#sub_competitor_id').val(data.id);
           $('#name').val(data.name);
-           if(data.sub_technical_number){
+          if(data.sub_technical_number){
           $('#technical_number').val(data.sub_technical_number.technical_number);
           }
           if(data.sub_financial_cost){
+
           $('#currency_id').val(data.sub_financial_cost.currency_id);
           $('#currency_id').trigger('change');
           $('#conversion_rate').val(data.sub_financial_cost.conversion_rate);
-          $('#financial_cost').val(data.sub_financial_cost.financial_cost);
+          var totalPrice = (data.sub_financial_cost.total_price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          $('#total_price').val(totalPrice);
+          }
+
+          if(data.sub_multi_currency){
+            $("#multi_currency").prop('checked', true);
+            $('.conversion').show();
+              $.each(data.sub_multi_currency, function(index, value) {
+                if(index !=0){
+                  $("#add").trigger('click');
+                }
+                $('select:not(.selectTwo)').chosen('destroy');
+                $('select:not(.selectTwo)').chosen({width: "100%"});
+                $('select[name="currency_id[]"]').eq(index).val(value.currency_id);
+                $('select[name="currency_id[]"]').eq(index).trigger("chosen:updated");
+                $('input[name="conversion_date[]"]').eq(index).val(value.conversion_date);
+                $('input[name="conversion_rate[]"]').eq(index).val(value.conversion_rate);
+                var currencyPrice = (value.currency_price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                $('input[name="currency_price[]"]').eq(index).val(currencyPrice);
+              });
           }
           $('#ajaxModel').modal('show');
       })
