@@ -60,6 +60,7 @@
                     </div>
                     <div class="col-md-12 financial" id='financial_1'>
                       <div class="row">
+                         <input type="hidden" name="sub_multi_currency_id[]">
                         <div class="col-md-2 conversion">
                           <div class="form-group">
                               <label class="control-label">Currency</label>
@@ -226,6 +227,11 @@ $(document).ready(function() {
     
 
     $('#createSubCompetitor').unbind().click(function () {
+        $('input[name="sub_multi_currency_id[]"]').eq(0).val('');
+        $('input[name="sub_multi_currency_id[]"]').eq(1).val('');
+        $('input[name="sub_multi_currency_id[]"]').eq(2).val('');
+        $('input[name="sub_multi_currency_id[]"]').eq(3).val('');
+        $('input[name="sub_multi_currency_id[]"]').eq(4).val('');
         $("[id^=financial_2]").remove();
         $("[id^=financial_3]").remove();
         $("[id^=financial_4]").remove();
@@ -265,15 +271,18 @@ $(document).ready(function() {
           $('#total_price').val(totalPrice);
           }
 
-          if(data.sub_multi_currency){
+          if(data.sub_multi_currency.length>0){
+            
             $("#multi_currency").prop('checked', true);
             $('.conversion').show();
               $.each(data.sub_multi_currency, function(index, value) {
                 if(index !=0){
                   $("#add").trigger('click');
                 }
+                
                 $('select:not(.selectTwo)').chosen('destroy');
                 $('select:not(.selectTwo)').chosen({width: "100%"});
+                $('input[name="sub_multi_currency_id[]"]').eq(index).val(value.id);
                 $('select[name="currency_id[]"]').eq(index).val(value.currency_id);
                 $('select[name="currency_id[]"]').eq(index).trigger("chosen:updated");
                 $('input[name="conversion_date[]"]').eq(index).val(value.conversion_date);

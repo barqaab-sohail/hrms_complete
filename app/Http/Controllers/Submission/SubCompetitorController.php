@@ -125,15 +125,19 @@ class SubCompetitorController extends Controller
 
 		       	}
 
-		       	if ($request->multi_currency){	
-		       		for ($i=0;$i<count($request->input('currency_id'));$i++){
-		       			$multiCurrency['sub_competitor_id'] = $subCompetitor->id;
-		       			$multiCurrency['conversion_date'] = \Carbon\Carbon::parse($request->input("conversion_date.0"))->format('Y-m-d');
-						$multiCurrency['currency_id'] = $request->input("currency_id.$i");
-						$multiCurrency['conversion_rate'] = $request->input("conversion_rate.$i");
-						$multiCurrency ['currency_price']= intval(str_replace( ',', '', $request->input("currency_price.$i")));
-						SubMultiCurrency::create($multiCurrency);
+		       	if ($request->input("currency_id.0")){
+		       		if(count($request->input('currency_id'))==SubMultiCurrency::where('sub_competitor_id',$subCompetitor->id)->count()){
+			       		for ($i=0;$i<count($request->input('currency_id'));$i++){
+			       			$multiCurrency['sub_competitor_id'] = $subCompetitor->id;
+			       			$multiCurrency['conversion_date'] = \Carbon\Carbon::parse($request->input("conversion_date.0"))->format('Y-m-d');
+							$multiCurrency['currency_id'] = $request->input("currency_id.$i");
+							$multiCurrency['conversion_rate'] = $request->input("conversion_rate.$i");
+							$multiCurrency ['currency_price']= intval(str_replace( ',', '', $request->input("currency_price.$i")));
+
+							SubMultiCurrency::updateOrCreate(['id' =>$request->input("sub_multi_currency_id.$i")],$multiCurrency);
+						}
 					}
+
 		       	}else{
 		       		$subMultiCurrencies = SubMultiCurrency::where('sub_competitor_id',$input['sub_competitor_id'])->get();
 		       		if($subMultiCurrencies){
