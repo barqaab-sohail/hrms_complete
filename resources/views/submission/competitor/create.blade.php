@@ -187,6 +187,7 @@ $(document).ready(function() {
         clone.find("#add").html('X').prop("class", "btn btn-danger remove remove_financial");
         clone.insertAfter("div.financial:last");
         clone.find(".conversion_date").hide();
+        clone.find('input[name="sub_multi_currency_id[]"]').val('');
       $('.financial').find('select').chosen(); 
       }
      
@@ -313,6 +314,7 @@ $(document).ready(function() {
               $('#subCompetitorForm').trigger("reset");
               $('#ajaxModel').modal('hide');
                 table.draw(); 
+             $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
           },
           error: function (data) {
               

@@ -18,6 +18,10 @@ class CurrencySeeder extends Seeder
         }
            
         \DB::table('currencies')->insert([
+            ['code' =>'PKR' , 'name' => 'Pakistan Rupee', 'symbol' => '₨' ],
+            ['code' =>'USD' , 'name' => 'US Dollar', 'symbol' => '$' ],
+            ['code' =>'EUR' , 'name' => 'Euro', 'symbol' => '€' ],
+            ['code' =>'GBP' , 'name' => 'Pound Sterling', 'symbol' => '£' ],
             ['code' =>'AFN' , 'name' => 'Afghani', 'symbol' => '؋' ],
             ['code' =>'ALL' , 'name' => 'Lek', 'symbol' => 'Lek' ],
             ['code' =>'ANG' , 'name' => 'Netherlands Antillian Guilder', 'symbol' => 'ƒ' ],
@@ -48,10 +52,9 @@ class CurrencySeeder extends Seeder
             ['code' =>'DKK' , 'name' => 'Danish Krone', 'symbol' => 'kr' ],
             ['code' =>'DOP' , 'name' => 'Dominican Peso', 'symbol' => 'RD$' ],
             ['code' =>'EGP' , 'name' => 'Egyptian Pound', 'symbol' => '£' ],
-            ['code' =>'EUR' , 'name' => 'Euro', 'symbol' => '€' ],
             ['code' =>'FJD' , 'name' => 'Fiji Dollar', 'symbol' => '$' ],
             ['code' =>'FKP' , 'name' => 'Falkland Islands Pound', 'symbol' => '£' ],
-            ['code' =>'GBP' , 'name' => 'Pound Sterling', 'symbol' => '£' ],
+            
             ['code' =>'GIP' , 'name' => 'Gibraltar Pound', 'symbol' => '£' ],
             ['code' =>'GTQ' , 'name' => 'Quetzal', 'symbol' => 'Q' ],
             ['code' =>'GYD' , 'name' => 'Guyana Dollar', 'symbol' => '$' ],
@@ -92,7 +95,7 @@ class CurrencySeeder extends Seeder
             ['code' =>'PAB' , 'name' => 'USD Balboa US Dollar', 'symbol' => 'B/.' ],
             ['code' =>'PEN' , 'name' => 'Nuevo Sol', 'symbol' => 'S/.' ],
             ['code' =>'PHP' , 'name' => 'Philippine Peso', 'symbol' => 'Php' ],
-            ['code' =>'PKR' , 'name' => 'Pakistan Rupee', 'symbol' => '₨' ],
+            
             ['code' =>'PLN' , 'name' => 'Zloty', 'symbol' => 'zł' ],
             ['code' =>'PYG' , 'name' => 'Guarani', 'symbol' => 'Gs' ],
             ['code' =>'QAR' , 'name' => 'Qatari Rial', 'symbol' => '﷼' ],
@@ -114,7 +117,6 @@ class CurrencySeeder extends Seeder
             ['code' =>'TTD' , 'name' => 'Trinidad and Tobago Dollar', 'symbol' => 'TT$' ],
             ['code' =>'TWD' , 'name' => 'New Taiwan Dollar', 'symbol' => 'NT$' ],
             ['code' =>'UAH' , 'name' => 'Hryvnia', 'symbol' => '₴' ],
-            ['code' =>'USD' , 'name' => 'US Dollar', 'symbol' => '$' ],
             ['code' =>'UYU' , 'name' => 'UYI Uruguay Peso en Unidades Indexadas', 'symbol' => '$U' ],
             ['code' =>'UZS' , 'name' => 'Uzbekistan Sum', 'symbol' => 'лв' ],
             ['code' =>'VEF' , 'name' => 'Bolivar Fuerte', 'symbol' => 'Bs' ],
