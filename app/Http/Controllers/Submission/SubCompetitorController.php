@@ -126,17 +126,26 @@ class SubCompetitorController extends Controller
 		       	}
 
 		       	if ($request->input("currency_id.0")){
-		       		if(count($request->input('currency_id'))==SubMultiCurrency::where('sub_competitor_id',$subCompetitor->id)->count()){
-			       		for ($i=0;$i<count($request->input('currency_id'));$i++){
-			       			$multiCurrency['sub_competitor_id'] = $subCompetitor->id;
-			       			$multiCurrency['conversion_date'] = \Carbon\Carbon::parse($request->input("conversion_date.0"))->format('Y-m-d');
-							$multiCurrency['currency_id'] = $request->input("currency_id.$i");
-							$multiCurrency['conversion_rate'] = $request->input("conversion_rate.$i");
-							$multiCurrency ['currency_price']= intval(str_replace( ',', '', $request->input("currency_price.$i")));
+		       		
+		       		$subMultiCurrencyIds=SubMultiCurrency::where('sub_competitor_id',$subCompetitor->id)->get()->pluck('id')->toArray();
+		       		$requestMultiCurrencyIds = $request->input("sub_multi_currency_id");
+		       		$subMultiCurrencies = SubMultiCurrency::where('sub_competitor_id',$subCompetitor->id)->get();
 
-							SubMultiCurrency::updateOrCreate(['id' =>$request->input("sub_multi_currency_id.$i")],$multiCurrency);
-						}
+		       		for ($i=0;$i<count($request->input('currency_id'));$i++){
+		       			$multiCurrency['sub_competitor_id'] = $subCompetitor->id;
+		       			$multiCurrency['conversion_date'] = \Carbon\Carbon::parse($request->input("conversion_date.0"))->format('Y-m-d');
+						$multiCurrency['currency_id'] = $request->input("currency_id.$i");
+						$multiCurrency['conversion_rate'] = $request->input("conversion_rate.$i");
+						$multiCurrency ['currency_price']= intval(str_replace( ',', '', $request->input("currency_price.$i")));
+
+						SubMultiCurrency::updateOrCreate(['id' =>$request->input("sub_multi_currency_id.$i")],$multiCurrency);
 					}
+					
+					foreach($subMultiCurrencies as $subMultiCurrency){
+		       			if(!in_array($subMultiCurrency->id, $requestMultiCurrencyIds)){
+            				SubMultiCurrency::findOrFail($subMultiCurrency->id)->delete();
+        				}	
+		       		}
 
 		       	}else{
 		       		$subMultiCurrencies = SubMultiCurrency::where('sub_competitor_id',$input['sub_competitor_id'])->get();
@@ -147,26 +156,7 @@ class SubCompetitorController extends Controller
 		       		}
 		       	}
 
-	       		// if($request->filled('currency_id')){
-		       	// 	$subFinancialCost = SubFinancialCost::where('sub_competitor_id',$input['sub_competitor_id'])->first();
-		       	// 	SubFinancialCost::updateOrCreate(['id' => $subFinancialCost->id??''],$input); 
-		       	// }else{
-		       	// 	$subFinancialCost = SubFinancialCost::where('sub_competitor_id',$input['sub_competitor_id'])->first();
-		       	// 	if($subFinancialCost){
-		       	// 		 SubFinancialCost::findOrFail($subFinancialCost->id)->delete();  
-		       	// 	}
-		       	// }
-
-	       		// if($request->filled('technical_financial_score')){
-		       	// 	$subResult = subResult::where('sub_competitor_id',$input['sub_competitor_id'])->first();
-		       	// 	subResult::updateOrCreate(['id' => $subResult->id??''],$input); 
-		       	// }else{
-		       	// 	$subResult = subResult::where('sub_competitor_id',$input['sub_competitor_id'])->first();
-		       	// 	if($subResult){
-		       	// 		 subResult::findOrFail($subResult->id)->delete();  
-		       	// 	}
-		       	// }
-
+	       
 
 	      }); // end transcation
 
