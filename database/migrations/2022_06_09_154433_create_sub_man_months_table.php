@@ -17,7 +17,7 @@ class CreateSubManMonthsTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('sub_position_id')->unsigned();
-            $table->decimal('man_months',12,0);
+            $table->decimal('man_month',6,2);
             $table->timestamps();
             $table->foreign('sub_position_id')->references('id')->on('sub_positions')->onDelete('cascade');
         });
