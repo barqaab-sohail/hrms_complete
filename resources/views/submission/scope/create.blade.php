@@ -51,7 +51,6 @@
 
 <script>
 $(document).ready(function(){
-
     //submit function
      $("#scope").submit(function(e) { 
         e.preventDefault();
