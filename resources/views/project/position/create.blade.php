@@ -52,7 +52,7 @@
                         <input type="number" step="0.001" id="total_mm"  name="total_mm" value="{{ old('total_mm') }}"  class="form-control" data-validation-allowing="range[0.001;6000.00],float"> 
                     </div>
                     <div class="col-sm-offset-2 col-sm-10">
-                     <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
+                     <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn" value="create">Save changes
                      </button>
                     </div>
                 </form>
@@ -120,6 +120,12 @@ $(document).ready(function() {
       })
    });
     $('#saveBtn').unbind().click(function (e) {
+        $(this).attr('disabled','ture');
+        //submit enalbe after 3 second
+        setTimeout(function(){
+            $('.btn-prevent-multiple-submits').removeAttr('disabled');
+        }, 3000);
+        
         e.preventDefault();
         $(this).html('Save');
          

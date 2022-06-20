@@ -50,7 +50,7 @@
                     </div>
                     <div class="col-md-6" id="hideShare">
                       <div class="form-group">
-                          <label class="control-label">Address</label>
+                          <label class="control-label">Address<span class="text_requried">*</span></label>
                           <input type="text" name="address"  id="address" value="{{old('address')}}" class="form-control" data-validation="required">
                       </div>
                     </div>
@@ -82,7 +82,7 @@
                     </div>
                   </div>
                   <div class="col-sm-offset-2 col-sm-10">
-                   <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
+                   <button type="submit" class="btn btn-success  btn-prevent-multiple-submits" id="saveBtn" value="create">Save changes
                    </button>
                   </div>
               </form>
@@ -174,6 +174,12 @@ $(document).ready(function() {
     });
 
     $('#saveBtn').unbind().click(function (e) {
+        $(this).attr('disabled','ture');
+        //submit enalbe after 3 second
+        setTimeout(function(){
+            $('.btn-prevent-multiple-submits').removeAttr('disabled');
+        }, 3000);
+
         e.preventDefault();
         $(this).html('Save'); 
         $.ajax({
