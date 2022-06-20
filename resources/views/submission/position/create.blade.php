@@ -6,10 +6,10 @@
   <table class="table data-table">
     <thead>
       <tr>
-          <th style="width:15%">Position</th>
-          <th style="width:15%">Proposed Name</th>
-          <th style="width:60%">Man Month</th>
-          <th style="width:60%">CV</th>
+          <th style="width:35%">Position</th>
+          <th style="width:35%">Proposed Name</th>
+          <th style="width:10%">Man Month</th>
+          <th style="width:10%">CV</th>
           <th style="width:5%">Edit</th>
           <th style="width:5%">Delete</th>
       </tr>
@@ -55,8 +55,20 @@
                           <label class="control-label">Man Month</label>
                           <input type="text" name="man_month"  id="man_month" value="{{old('man_month')}}" class="form-control">
                       </div>
+                      <div class="form-group">
+                          <label class="control-label">CV</label>
+                          <input type="file" name="cv" class="form-control">
+                      </div>
+                      <div class="form-group row" id="deleteCheckInput">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" name="cv_delete" id="cv_delete">
+                            <label class="form-check-label" for="cv_delete">
+                            Delete CV
+                          </label>
+                        </div>
+                      </div>
                   <div class="col-sm-offset-2 col-sm-10">
-                   <button type="submit" class="btn btn-success" id="saveBtn" value="create">Save changes
+                   <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn" value="create">Save changes
                    </button>
                   </div>
               </form>
@@ -74,6 +86,22 @@
 
 
 $(document).ready(function() {
+ 
+  $('#cv_delete').click(function(){
+    if($(this).is(':checked')){
+      $(this).val('checked');
+      $(this).prop('checked', true);
+      $('#currency_id').trigger("chosen:updated");
+    }else{
+      $(this).prop('checked', false);
+      $(this).val('');
+    }
+  });
+
+
+  $(document).on('click','.ViewPDF', function(){  
+        $('.ViewPDF').EZView();
+  });
 
   $("#hr_employee_id").change(function (){
     $("#name").val($("#hr_employee_id option:selected").text());
@@ -105,6 +133,7 @@ $(document).ready(function() {
 
     $('#createSubmissionPosition').click(function () {
         $('#json_message_modal').html('');
+        $('#deleteCheckInput').hide();
         $('#submissionPositionForm').trigger("reset");
         $('#sub_position_id').val('');
         $('#ajaxModel').modal('show');
@@ -128,19 +157,32 @@ $(document).ready(function() {
           if(data.sub_man_month){
             $('#man_month').val(data.sub_man_month.man_month);
           }
-
+          if(data.sub_cv){
+            $('#deleteCheckInput').show();
+          }
 
           $('#ajaxModel').modal('show');
       })
     });
     $('#saveBtn').unbind().click(function (e) {
+        $(this).attr('disabled','ture');
+        //submit enalbe after 3 second
+        setTimeout(function(){
+            $('.btn-prevent-multiple-submits').removeAttr('disabled');
+        }, 3000);
+
         e.preventDefault();
         $(this).html('Save'); 
+        var formData = new FormData($('#submissionPositionForm')[0]);
         $.ajax({
-          data: $('#submissionPositionForm').serialize(),
+          data: formData,
           url: "{{ route('submissionPosition.store') }}",
           type: "POST",
-          dataType: 'json',
+          async: false, 
+          cache: false, 
+          contentType: false, 
+          processData: false, 
+          //dataType: 'json',
           success: function (data) {
               $('#submissionPositionForm').trigger("reset");
               $('#ajaxModel').modal('hide');

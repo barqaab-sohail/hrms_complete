@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Submission;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use App\Models\Hr\HrEmployee;
 use App\Models\Submission\SubPosition;
 use App\Models\Submission\SubNominatePerson;
 use App\Models\Submission\SubManMonth;
+use App\Models\Submission\SubCv;
+use App\Helper\DocxConversion;
 use DB;
 use DataTables;
 
@@ -45,7 +48,19 @@ class SubPositionController extends Controller
                     return $data->subManMonth->man_month??'';
             })
             ->addColumn('cv', function($data){  
-                    return $data->subCv->path??'';
+                
+                if($data->subCv){
+	                if($data->subCv->extension == 'pdf'){    
+	            		 $cv ='<img src="'.asset('Massets/images/document.png').'" href="'.url(isset($data->subCv->file_name)?'/storage/'.$data->subCv->path.$data->subCv->file_name:'Massets/images/document.png').'" class="img-round picture-container ViewPDF"  id="ViewPDF'.$data->id.'" width=50>';
+	            		 return $cv;
+	            	}else{
+	            		$cv ='<a href="'.asset('storage/'.$data->subCv->path.$data->subCv->file_name.'Massets/images/document.png').'" width=30><i class="fa fa-download" aria-hidden="true"></i>Download</a>';
+	            		return $cv;
+	            	}
+	            }else{
+
+                    return '';
+	            }
             })
 
             ->rawColumns(['Edit','Delete','name','man_month','cv'])
@@ -56,6 +71,7 @@ class SubPositionController extends Controller
 	public function store(Request $request){
 	    $input = $request->all();
 	        $input['submission_id']=session('submission_id');
+
 	        DB::transaction(function () use ($input, $request){  
 
 	        	$subPosition = SubPosition::updateOrCreate(['id' => $input['sub_position_id']],$input); 
@@ -81,6 +97,52 @@ class SubPositionController extends Controller
 		       			 SubManMonth::findOrFail($subManMonth->id)->delete();  
 		       		}
 	        	}
+
+	        	if($request->hasFile('cv')){
+	        		$extension = request()->cv->getClientOriginalExtension();
+					$fileName =strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s','', request()->position)).'-'. time().'.'.$extension;
+					$folderName = "submission/".session('submission_id')."/";
+					//store file
+					$request->file('cv')->storeAs('public/'.$folderName,$fileName);
+					
+					$file_path = storage_path('app/public/'.$folderName.$fileName);
+				
+					$attachment['content']='';
+											
+					if (($extension == 'doc')||($extension == 'docx')){
+						$text = new DocxConversion($file_path);
+						$attachment['content']=mb_strtolower($text->convertToText());
+					}else if ($extension =='pdf'){
+						$reader = new \Asika\Pdf2text;
+						$attachment['content'] = mb_strtolower($reader->decode($file_path));
+					}
+
+					$attachment['file_name']=$fileName;
+					$attachment['size']=$request->file('cv')->getSize();
+					$attachment['path']=$folderName;
+					$attachment['extension']=$extension;
+					$attachment['sub_position_id']=$subPosition->id;
+
+					$subCv=SubCv::where('sub_position_id',$input['sub_position_id'])->first();
+					if($subCv){
+		       			$path = public_path('storage/'.$subCv->path.$subCv->file_name);
+			       			if(File::exists($path)){
+	                    	File::delete($path);
+	                		}	 
+		       		}
+					SubCv::updateOrCreate(['id' => $subCv->id??''],$attachment);
+		        }
+
+		        if($request->filled('cv_delete')){
+		        	$subCv= SubCv::where('sub_position_id',$input['sub_position_id'])->first();
+		       		if($subCv){
+		       			$path = public_path('storage/'.$subCv->path.$subCv->file_name);
+		       			 SubCv::findOrFail($subCv->id)->delete();
+		       			if(File::exists($path)){
+                    		File::delete($path);
+                		} 
+		       		}
+		        }
 
 
 	        }); // end transcation

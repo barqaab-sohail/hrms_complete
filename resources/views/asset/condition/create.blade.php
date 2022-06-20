@@ -132,6 +132,11 @@ $(function () {
    });
     
       $("#formCondition").submit(function(e) {
+        $(this).attr('disabled','ture');
+        //submit enalbe after 3 second
+        setTimeout(function(){
+            $('.btn-prevent-multiple-submits').removeAttr('disabled');
+        }, 3000);
         e.preventDefault();
         var formData = new FormData(this);
 
