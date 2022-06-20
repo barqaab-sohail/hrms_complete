@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Models\Hr\HrEmployee;
+use App\Models\Submission\Submission;
 use App\Models\Submission\SubPosition;
 use App\Models\Submission\SubNominatePerson;
 use App\Models\Submission\SubManMonth;
@@ -99,9 +100,10 @@ class SubPositionController extends Controller
 	        	}
 
 	        	if($request->hasFile('cv')){
+	        		$submission=Submission::find(session('submission_id'));
 	        		$extension = request()->cv->getClientOriginalExtension();
 					$fileName =strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s','', request()->position)).'-'. time().'.'.$extension;
-					$folderName = "submission/".session('submission_id')."/";
+					$folderName = "submission/".$submission->submission_no."/";
 					//store file
 					$request->file('cv')->storeAs('public/'.$folderName,$fileName);
 					
