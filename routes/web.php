@@ -237,8 +237,6 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 
 //Submission Routes
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Submission'], function(){
-
-
 	
 	Route::get('/submission/eoiReference','SubmissionController@eoiReference');
 	Route::get('/submission/submissionNo/{id}','SubmissionController@submissionNo');
