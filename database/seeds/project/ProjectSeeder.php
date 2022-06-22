@@ -11,14 +11,14 @@ class ProjectSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(PrDivisionsTableSeeder::class);
-        $this->call(PrCategoriesTableSeeder::class);
-        $this->call(ProjectPositionTypeSeeder::class);
-       //$this->call(PrRolesSeeder::class);
-        //$this->call(PrStatusesTableSeeder::class);
-        $this->call(PrWorkTypesSeeder::class);
-        $this->call(PrFolderNamesTableSeeder::class);
-        //$this->call(PrDetailsTableSeeder::class);
-        
+        $this->call([
+	       PrDivisionsTableSeeder::class,
+	       PrFolderNamesTableSeeder::class,
+	       PrRolesTableSeeder::class,
+	       PrStatusesTableSeeder::class,
+	       PrWorkTypesSeeder::class,
+        ]);
+
+
     }
 }

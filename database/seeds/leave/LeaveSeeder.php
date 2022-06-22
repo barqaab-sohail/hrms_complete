@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class CvSeeder extends Seeder
+class LeaveSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,9 +12,8 @@ class CvSeeder extends Seeder
     public function run()
     {
         $this->call([
-        CvDisciplinesTableSeeder::class,
-        CvSpecializationsTableSeeder::class,
-        CvStagesTableSeeder::class,
+	        LeaveStatusTypeSeeder::class,
+	        LeaveTypeSeeder::class,
         ]);
     }
 }
