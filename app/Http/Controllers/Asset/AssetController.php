@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\Office\Office;
+use App\Models\Common\Office;
 use App\Http\Requests\Asset\AssetStore;
 use App\Http\Requests\Asset\ClassStore;
 use App\Http\Requests\Asset\SubClassStore;

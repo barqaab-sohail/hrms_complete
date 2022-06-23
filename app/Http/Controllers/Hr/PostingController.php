@@ -10,7 +10,7 @@ use App\Models\Hr\HrDepartment;
 use App\Models\Project\PrDetail;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrSalary;
-use App\Models\Office\Office;
+use App\Models\Common\Office;
 use App\Models\Hr\HrPosting;
 use App\Models\Hr\HrDocumentation;
 

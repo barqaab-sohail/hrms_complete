@@ -3,7 +3,7 @@ use App\Models\Cv\CvSpecialization;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CV\CvDetail;
 use App\Models\Project\PrRight;
-use App\Models\Office\Office;
+use App\Models\Common\Office;
 
 
 

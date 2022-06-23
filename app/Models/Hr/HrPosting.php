@@ -74,7 +74,7 @@ class HrPosting extends Model implements Auditable
 
     public function office(){
         return $this->hasOneThrough(
-            'App\Models\Office\Office',                  //Final Model HrDocumentName
+            'App\Models\Common\Office',                  //Final Model HrDocumentName
             'App\Models\Hr\PostingOffice',          //Model Through Access Final Model (Immediate Model)
             'hr_posting_id',                                 //Forein Key in Immediate Model of This Model
             'id',                                             //Final Model Primary Key
