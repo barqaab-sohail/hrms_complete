@@ -8,7 +8,7 @@ use App\Models\Asset\Asset;
 use App\Models\Asset\AsSubClass;
 use App\Models\Asset\AsClass;
 use App\Models\Common\Client;
-use App\Models\Office\Office;
+use App\Models\Common\Office;
 use App\Models\Asset\AsDocumentation;
 use App\Models\Asset\AsOwnership;
 use App\Models\Asset\AsLocation;

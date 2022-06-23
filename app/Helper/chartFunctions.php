@@ -4,7 +4,7 @@ use App\Models\Hr\HrEmployee;
 use App\Models\Hr\EmployeeManager;
 use App\Models\Hr\EmployeeDepartment;
 use App\Charts\Hr\DepartmentChart;
-use App\Models\Office\Office;
+use App\Models\Common\Office;
 
 
 function ageChart(){

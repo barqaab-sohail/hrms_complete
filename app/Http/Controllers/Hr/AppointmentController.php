@@ -19,7 +19,7 @@ use App\Models\Hr\EmployeeManager;
 use App\Models\Hr\HrDepartment;
 use App\Models\Hr\HrLetterType;
 use App\Models\Project\PrDetail;
-use App\Models\Office\Office;
+use App\Models\Common\Office;
 use App\Models\Hr\HrGrade;
 use App\Models\Hr\HrCategory;
 use App\Models\Hr\HrEmployeeType;

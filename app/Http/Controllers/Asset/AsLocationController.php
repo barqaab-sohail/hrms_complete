@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Asset;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Office\Office;
+use App\Models\Common\Office;
 use App\Models\Hr\HrEmployee;
 use App\Models\Asset\AsLocation;
 use App\Models\Asset\Asset;

@@ -136,8 +136,7 @@ class SubmissionController extends Controller
     $subFinancialTypes = SubFinancialType::all();
     $subCvFormats = SubCvFormat::all();
     $subEvaluationTypes = SubEvaluationType::all();
-	  session()->put('submission_id', $data->id);
-
+	
         if($request->ajax()){      
             return view ('submission.ajax', compact('clients','subTypes','eoiReferences','divisions','subFinancialTypes','subCvFormats','subStatuses','data','subEvaluationTypes'));  
         }else{

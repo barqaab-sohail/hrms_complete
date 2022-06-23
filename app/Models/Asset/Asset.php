@@ -30,7 +30,7 @@ class Asset extends Model implements Auditable
 
     public function asCurrentLocation(){
         return $this->hasOneThrough(
-            'App\Models\Office\Office',
+            'App\Models\Common\Office',
             'App\Models\Asset\AsLocation',
             'asset_id',
             'id',

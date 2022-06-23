@@ -129,7 +129,7 @@ class HrEmployee extends Model implements Auditable
     public function employeeOffice(){
         //return $this->hasOne('App\Models\Hr\EmployeeDesignation');
         return $this->hasManyThrough(
-            'App\Models\Office\Office', //Final Model HrDocumentName
+            'App\Models\Common\Office', //Final Model HrDocumentName
             'App\Models\Hr\EmployeeOffice', //Model Through Access Final Model (Immediate Model)
             'hr_employee_id',              //Forein Key in Immediate Model of This Model
             'id',                          //Final Model Primary Key

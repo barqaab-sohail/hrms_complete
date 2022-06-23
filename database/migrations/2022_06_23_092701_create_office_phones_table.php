@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOfficeDetailTable extends Migration
+class CreateOfficePhonesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,12 @@ class CreateOfficeDetailTable extends Migration
      */
     public function up()
     {
-        Schema::create('office_details', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        Schema::create('office_phones', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('office_id')->unsigned();
-            $table->date('establish_date')->nullable();
-            $table->string('fax_no')->nullable();
-            $table->string('address');
-            $table->string('area')->nullable();
+            $table->string('phone_no');
             $table->timestamps();
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
-
-
         });
     }
 
@@ -35,6 +29,6 @@ class CreateOfficeDetailTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('office_details');
+        Schema::dropIfExists('office_phones');
     }
 }

@@ -14,7 +14,8 @@ class UpdateOfficesTable extends Migration
     public function up()
     {
         Schema::table('offices', function (Blueprint $table) {
-            $table->date('establihs_date')->nullable();
+            $table->unique('name');
+            $table->date('establish_date')->nullable();
             $table->string('address')->nullable();
             $table->bigInteger('city_id')->unsigned()->nullable();
             $table->bigInteger('state_id')->unsigned()->nullable();
@@ -33,7 +34,8 @@ class UpdateOfficesTable extends Migration
     public function down()
     {
         Schema::table('offices', function (Blueprint $table) {
-            $table->dropColumn('establihs_date');
+            $table->dropUnique('offices_name_unique');
+            $table->dropColumn('establish_date');
             $table->dropColumn('address');
             $table->dropForeign('offices_city_id_foreign');
             $table->dropForeign('offices_state_id_foreign');

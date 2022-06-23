@@ -252,6 +252,14 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 
 });
 
+//Misc Routes
+Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Common'], function(){
+	Route::resource('/office', 'OfficeController');
+
+	
+});
+
+
 //Admin Routes
 Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Admin'], function(){
 	Route::get('/lastLogin', 'ActiveUserController@lastLogin')->name('lastLogin.detail');
