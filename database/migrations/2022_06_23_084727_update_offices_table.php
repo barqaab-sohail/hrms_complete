@@ -17,6 +17,7 @@ class UpdateOfficesTable extends Migration
             $table->unique('name');
             $table->date('establish_date')->nullable();
             $table->string('address')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->bigInteger('city_id')->unsigned()->nullable();
             $table->bigInteger('state_id')->unsigned()->nullable();
             $table->bigInteger('country_id')->unsigned()->nullable();

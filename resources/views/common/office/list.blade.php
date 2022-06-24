@@ -39,6 +39,49 @@
 			                    </div>
 		                    </div>
 	                    </div>
+	                    <div class="row">
+			                <div class="col-md-2">
+				                <div class="form-group">
+			                        <label class="control-label text-right">Country<span class="text_requried">*</span></label>
+			                        <select  name="country_id"  id="country_id" class="form-control selectTwo" data-validation="required">
+                                	</select>  
+		                    	</div>
+			                </div>
+			                <div class="col-md-2">
+			                	<div class="form-group">
+		                        	<label class="control-label text-right">State<span class="text_requried">*</span></label><br>
+		                        	<select  name="state_id"  id="state_id" class="form-control selectTwo" data-validation="required">
+                                	</select> 
+		                          	
+		                    	</div>
+			                </div>
+				            <div class="col-md-2">
+			                    <div class="form-group">
+		                        	<label class="control-label text-right">City<span class="text_requried">*</span></label>
+		                        	<select  name="city_id"  id="city_id" class="form-control selectTwo" data-validation="required">
+                                	</select> 
+			                    </div>
+		                    </div>
+		                    <div class="col-md-2">
+			                    <div class="form-group">
+		                        	<label class="control-label text-right">Status<span class="text_requried">*</span></label>
+		                        	<select  name="is_active"  id="is_active" class="form-control selectTwo" data-validation="required">
+			                        	<option></option>
+			                        	<option valu="1">Working</option>
+			                        	<option value="0">Closed</option>
+                                	</select> 
+			                    </div>
+		                    </div>
+		                    <div class="col-md-2 phone" id='phone_1'>
+		                    	<input type="hidden" name="office_phone_id[]">
+			                    <div class="form-group">
+		                        	<label class="control-label text-right">Phone Number</label>
+		                        	<input type="text" name="phone_no[]" value="{{ old('phone_no') }}" class="form-control prc_1"> 
+		                        	<button type="button" name="add" id="add" class="btn btn-success add" >+</button>
+			                    </div>
+		                    </div>
+		                    
+	                    </div>
 	                    
 	                    <div class="col-sm-offset-2 col-sm-10">
 	                     <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn" value="create">Save
@@ -71,9 +114,10 @@
 					<thead>
 					<tr>
 						<th style="width:15%">Office Name</th>
-						<th style="width:45%">Address</th>
-						<th style="width:20%">Establish Date</th>
-						<th style="width:5%">Phone Number</th>
+						<th style="width:35%">Address</th>
+						<th style="width:15%">Establish Date</th>
+						<th style="width:20%">Phone Number</th>
+						<th style="width:5%">Status</th>
 						<th style="width:5%">Edit</th>
 						@role('Super Admin')
 						<th style="width:5%">Delete</th>
@@ -85,8 +129,45 @@
 		</div>
 	</div>
 	<script>
-	$(document).ready(function() {
+$(document).ready(function() {
+	
+  	//Dynamic add Phone
+   
+    // Add new element
+     $("#add").unbind().click(function(){
+      
+      // Finding total number of elements added
+      var total_element = $(".phone").length;
+      
+      // last <div> with element class id
+      var lastid = $(".phone:last").attr("id");
+      var split_id = lastid.split("_");
+      var nextindex = Number(split_id[1]) + 1;
+      var max = 5;
+      // Check total number elements
+      if(total_element < max ){
+       //Clone Phone div and copy 
+        var clone = $("#phone_1").clone();
+        clone.prop('id','phone_'+nextindex).find('input:text').val('');
+        clone.find("#add").html('X').prop("class", "btn btn-danger remove remove_phone");
+        clone.insertAfter("div.phone:last");
+        clone.find('input[name="office_phone_id[]"]').val('');
+      }
+     
+    });
+	    // Remove element
+	    $(document).on("click", '.remove_phone', function(){
+	    $(this).closest(".phone").remove();
+    });
 
+    $(document).on("keyup", '.prc_1', function(){
+         // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+      // format number
+      $(this).val(function(index, value) {
+        return value.replace(/\D/g, "");
+      });
+  	}); 
 	
 		$(function () {
 	      	$.ajaxSetup({
@@ -107,6 +188,7 @@
 			  		{data: 'address', name: 'address'},
 			  		{data: 'establish_date', name: 'establish_date'},
 			  		{data: 'phone_no', name: 'phone_no'},
+			  		{data: 'is_active', name: 'is_active'},
 				   	{data: 'edit',name: 'edit', orderable: false, searchable: false },
 				   	@role('Super Admin')
 				   	{data: 'delete',name: 'delete', orderable: false, searchable: false }
@@ -115,12 +197,131 @@
 	 		});
 
 	 		$('#createOffice').click(function (e) {
+	 			$('input[name="phone_no[]"]').eq(0).val('');
+		        $('input[name="phone_no[]"]').eq(1).val('');
+		        $('input[name="phone_no[]"]').eq(2).val('');
+		        $('input[name="phone_no[]"]').eq(3).val('');
+		        $('input[name="phone_no[]"]').eq(4).val('');
+		        $("[id^=phone_2]").remove();
+		        $("[id^=phone_3]").remove();
+		        $("[id^=phone_4]").remove();
+		        $("[id^=phone_5]").remove();
+		        $("#state_id").empty();
+		        $("#city_id").empty();
 	 			$('#json_message_modal').html('');
+	 			$.get("{{ url('hrms/misc/office/create') }}" , function (data) {
+	        	
+	        		$("#country_id").empty();
+	              	$("#country_id").append('<option value="">Select Country</option>');
+	        		$.each(data.countries, function (key, value){
+	        			$("#country_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+	        		});
+	        	$('#office_id').val("");
 		        $('#officeForm').trigger("reset");
 	          	$('#ajaxModel').modal('show');
+	          	});
 	 		});
-	 		
+	 		$('body').unbind().on('click', '.editOffice', function () {
+			      var office_id = $(this).data('id');
+			      $(".remove_phone").trigger('click');
+			      $('input[name="phone_no[]"]').eq(0).val('');
+			      $("#state_id").empty();
+		          $("#city_id").empty();
+			      $('#json_message_modal').html('');
+			      $.get("{{ url('hrms/misc/office') }}" +'/' + office_id +'/edit', function (data) {
+			      	console.log(data);
+			      		$.get("{{ url('hrms/misc/office/create') }}" , function (data) {
+			        		$("#country_id").empty();
+			              	$("#country_id").append('<option value="">Select Country</option>');
+			        		$.each(data.countries, function (key, value){
+			        			$("#country_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+			        		});
+			          	}).done(function() {
+    						$('#country_id').val(data.country_id);
+			         		$('#country_id').trigger('change');
+  						});
 
+			          $('#modelHeading').html("Edit Office");
+			          $('#saveBtn').val("edit-Office");
+			          $('#office_id').val(data.id);
+			          $('#name').val(data.name);
+			          $('#establish_date').val(data.establish_date);
+			          $('#address').val(data.address);
+			          $('#is_active').val(data.is_active);
+			          $('#is_active').trigger('change');
+			          if(data.office_phones.length>0){
+			              $.each(data.office_phones, function(index, value) {
+			                if(index !=0){
+			                  $("#add").trigger('click');
+			                }
+			                $('input[name="office_phone_id[]"]').eq(index).val(value.id);
+			                $('input[name="phone_no[]"]').eq(index).val(value.phone_no);
+			              });
+			          }
+			          setTimeout(function(){
+				        $('#state_id').val(data.state_id);
+				        $('#state_id').trigger('change');
+				       },1000);
+			          setTimeout(function(){
+				        $('#city_id').val(data.city_id);
+				    	$('#city_id').trigger('change'); 
+				       },2000);
+
+			      }).done(function() {
+			      	
+			      	$('#ajaxModel').modal('show');
+			      })
+			});
+
+	 		//get states through ajax
+	 		$('#country_id').change(function(){
+		      var cid = $(this).val();
+		        if(cid){
+		          $.ajax({
+		             type:"get",
+		             url: "{{url('country/states')}}"+"/"+cid,
+		             success:function(res)
+		             {       
+		                  if(res)
+		                  {
+		                    $("#state_id").empty();
+		                    $("#city_id").empty();
+		                    $("#state_id").append('<option value="">Select State</option>');
+		                    $.each(res,function(key,value){
+		                          $("#state_id").append('<option value="'+key+'">'+value+'</option>');
+		                          
+		                    });
+		                    $('#state_id').select2('destroy');
+		                    $('#state_id').select2();
+		                  }
+		             }
+		          });//end ajax
+		        }
+		    }); 
+	 		//get cities through ajax
+		    $('#state_id').change(function(){
+		      var sid = $(this).val();
+		        if(sid){
+		          $.ajax({
+		             type:"get",
+		              url: "{{url('country/cities')}}"+"/"+sid,
+		             success:function(res)
+		             {       
+		                  if(res)
+		                  {
+		                      $("#city_id").empty();
+		                      $("#city_id").append('<option value="">Select City</option>');
+		                      $.each(res,function(key,value){
+		                          $("#city_id").append('<option value="'+key+'">'+value+'</option>');
+		                      });
+		                       $('#city_id').select2('destroy');
+		                       $('#city_id').select2();
+		                  }
+		             }
+		          });
+		        }
+		    });
+	 		
 		   	$('#saveBtn').unbind().click(function (e) {
 		   		$(this).attr('disabled','ture');
 		        //submit enalbe after 3 second
@@ -138,6 +339,7 @@
 		          dataType: 'json',
 		          success: function (data) {
 		              $('#ajaxModel').modal('hide');
+		              $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
 		              table.draw();
 		          },
 		          error: function (data) {
@@ -145,7 +347,7 @@
 		              $.each(data.responseJSON.errors, function (key, value){
 		                errorMassage += value + '<br>';  
 		                });
-		                 $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+		                $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
 
 		              $('#saveBtn').html('Save Changes');
 		          }
@@ -174,7 +376,7 @@
 	    	});
 	  	}); // end function
 
-	}); //End document ready function
+}); //End document ready function
 
 	</script>
 

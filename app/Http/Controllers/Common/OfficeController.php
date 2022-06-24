@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Common\Country;
 use App\Models\Common\Office;
+use App\Models\Common\OfficePhone;
 use DB;
 use DataTables;
 
@@ -16,13 +18,31 @@ class OfficeController extends Controller
 	    	$data = Office::orderBy('id','desc')->get();
 	    	return DataTables::of($data)	
 	            ->addColumn('phone_no', function($data){
-	        
-	                return '';
+	        		if($data->officePhones){
+	        			$phone = $data->officePhones->implode('phone_no',' , ');
+	        			return $phone;
+	        		}else{
+	        			return '';
+	        		}
+	                
 	            })
+	            ->addColumn('is_active',function($data){
+	                $status='';
+	                $color = '';
 
+	                if($data->is_active==0){
+	                	$status='Closed';
+	                	$color = 'btn-danger';
+	                }else{
+	                	$status='Working';
+	                	 $color='btn-success';
+	                }
+
+	            return '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Edit" class="edit btn '.$color.'  btn-sm editStatus">'.$status.'</a>';  
+	            })
 	            ->addColumn('edit', function($data){
 	        
-	                $button = '<a class="btn btn-success btn-sm" href="'.route('office.edit',$data->id).'"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+	                $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Delete" class="btn btn-success btn-sm editOffice">Edit</a>';
 
 	                return $button;
 	            })
@@ -32,23 +52,62 @@ class OfficeController extends Controller
 	                return $button;
 	            })
 
-	            ->rawColumns(['edit','delete','phone_no'])
+	            ->rawColumns(['edit','delete','phone_no','is_active'])
 	            ->make(true);
 	    }
     	return view ('common.office.list');
    	}
 
-   	public function edit(Request $request, $id){
+   	public function create(){
+	    $countries = Country::all(['id','name']);
+		return response()->json(["countries"=>$countries]);
+   	}
 
-		session()->put('office_id', $id);
-		$data = Office::find($id);
-        if($request->ajax()){      
-            return view ('common.office.ajax', compact('data'));  
-        }else{
-            return view ('common.office.edit', compact('data'));      
-        }    
+   	public function store (Request $request){
+		
+		$input = $request->all();
 
+        DB::transaction(function () use ($input, $request) {  
+
+           $office = Office::updateOrCreate(['id' => $input['office_id']],$input); 
+
+           if($request->filled("phone_no.0")){
+           		
+           		$officePhoneIds=OfficePhone::where('office_id',$office->id)->get()->pluck('id')->toArray();
+           		$requestOfficePhoneIds = $request->input("office_phone_id");
+           		$officePhones = OfficePhone::where('office_id',$office->id)->get();
+
+           		for ($i=0;$i<count($request->input('phone_no'));$i++){
+	       			$officePhone['office_id'] = $office->id;
+					$officePhone['phone_no'] = $request->input("phone_no.$i");
+					OfficePhone::updateOrCreate(['id' =>$request->input("office_phone_id.$i")],$officePhone);
+				}
+				
+				foreach($officePhones as $officePhone){
+	       			if(!in_array($officePhone->id, $requestOfficePhoneIds)){
+        				OfficePhone::findOrFail($officePhone->id)->delete();
+    				}	
+		       	}	
+           	}
+    	}); // end transcation
+
+		return response()->json(['status'=> 'OK', 'message' => "Submission Successfully Saved"]);
 	}
+
+	public function edit($id){
+		$data = Office::with('officePhones')->find($id);
+    	return response()->json($data);
+	}
+
+	public function destroy($id)
+    {
+        DB::transaction(function () use ($id) {  
+            Office::findOrFail($id)->delete();   
+        }); // end transcation
+
+        return response()->json(['success'=>'data  delete successfully.']);
+   
+    }
 
 
 }

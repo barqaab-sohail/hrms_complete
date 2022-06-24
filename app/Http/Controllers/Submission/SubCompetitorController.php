@@ -155,9 +155,6 @@ class SubCompetitorController extends Controller
 		       			}
 		       		}
 		       	}
-
-	       
-
 	      }); // end transcation
 
 	    return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);

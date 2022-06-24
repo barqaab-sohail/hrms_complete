@@ -202,15 +202,15 @@ $(document).ready(function(){
              {       
                   if(res)
                   {
-                      $("#state").empty();
-                     $("#city").empty();
-                      $("#state").append('<option value="">Select State</option>');
-                      $.each(res,function(key,value){
+                    $("#state").empty();
+                    $("#city").empty();
+                    $("#state").append('<option value="">Select State</option>');
+                    $.each(res,function(key,value){
                           $("#state").append('<option value="'+key+'">'+value+'</option>');
                           
-                      });
-                       $('#state').select2('destroy');
-                       $('#state').select2();
+                    });
+                    $('#state').select2('destroy');
+                    $('#state').select2();
 
                   }
              }
