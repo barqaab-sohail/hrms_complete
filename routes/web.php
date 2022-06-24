@@ -204,7 +204,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 Route::post('/assetStoreClass','AssetController@storeClass')->name('asset.storeClass');
 Route::post('/assetStoreSubClass','AssetController@storeSubClass')->name('asset.storeSubClass');
 Route::get('/asset/search','AssetController@search')->name('asset.search');
-Route::get('/employee/search/result','AssetController@result')->name('asset.result');
+Route::get('/employee/asset/search/result','AssetController@result')->name('asset.result');
 Route::resource('/asset','AssetController');
 
 
@@ -253,7 +253,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 });
 
 //Misc Routes
-Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Common'], function(){
+Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Common'], function(){
 	Route::resource('/office', 'OfficeController');
 
 	

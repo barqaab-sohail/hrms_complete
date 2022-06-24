@@ -46,7 +46,7 @@
                                 <label class="control-label text-right">Client Name<span class="text_requried">*</span></label><br>
                                 <select  name="client_id"  id="client_id" class="form-control selectTwo" data-validation="required">
                                     @foreach($clients as $client)
-                                    <option value="{{$client->id}}" {{(old("sub_division_id", $data->client_id??'')==$client->id? "selected" : "")}}>{{$client->name}}</option>
+                                    <option value="{{$client->id}}" {{(old("client_id", $data->client_id??'')==$client->id? "selected" : "")}}>{{$client->name}}</option>
                                     @endforeach   
                                 </select>
                             </div>
