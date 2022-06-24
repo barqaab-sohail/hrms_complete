@@ -255,6 +255,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 //Misc Routes
 Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Common'], function(){
 	Route::resource('/office', 'OfficeController');
+	Route::resource('/degree', 'DegreeController');
 
 	
 });
