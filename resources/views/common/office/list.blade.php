@@ -67,7 +67,7 @@
 		                        	<label class="control-label text-right">Status<span class="text_requried">*</span></label>
 		                        	<select  name="is_active"  id="is_active" class="form-control selectTwo" data-validation="required">
 			                        	<option></option>
-			                        	<option valu="1">Working</option>
+			                        	<option value="1">Working</option>
 			                        	<option value="0">Closed</option>
                                 	</select> 
 			                    </div>
@@ -229,7 +229,7 @@ $(document).ready(function() {
 		          $("#city_id").empty();
 			      $('#json_message_modal').html('');
 			      $.get("{{ url('hrms/misc/office') }}" +'/' + office_id +'/edit', function (data) {
-			      	console.log(data);
+			
 			      		$.get("{{ url('hrms/misc/office/create') }}" , function (data) {
 			        		$("#country_id").empty();
 			              	$("#country_id").append('<option value="">Select Country</option>');
@@ -247,8 +247,7 @@ $(document).ready(function() {
 			          $('#name').val(data.name);
 			          $('#establish_date').val(data.establish_date);
 			          $('#address').val(data.address);
-			          $('#is_active').val(data.is_active);
-			          $('#is_active').trigger('change');
+			          $('#is_active').val(data.is_active).change();
 			          if(data.office_phones.length>0){
 			              $.each(data.office_phones, function(index, value) {
 			                if(index !=0){

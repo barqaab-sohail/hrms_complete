@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Common\OfficeStore;
 use App\Models\Common\Country;
 use App\Models\Common\Office;
 use App\Models\Common\OfficePhone;
@@ -63,7 +64,7 @@ class OfficeController extends Controller
 		return response()->json(["countries"=>$countries]);
    	}
 
-   	public function store (Request $request){
+   	public function store (OfficeStore $request){
 		
 		$input = $request->all();
 
@@ -88,6 +89,13 @@ class OfficeController extends Controller
         				OfficePhone::findOrFail($officePhone->id)->delete();
     				}	
 		       	}	
+           	}else{
+           		$officePhones = OfficePhone::where('office_id',$input['office_id'])->get();
+		       		if($officePhones){
+		       			foreach($officePhones as $officePhone){
+		       				OfficePhone::findOrFail($officePhone->id)->delete();
+		       			}
+		       		}
            	}
     	}); // end transcation
 
