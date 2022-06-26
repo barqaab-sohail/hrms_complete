@@ -240,6 +240,8 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 	
 	Route::get('/submission/eoiReference','SubmissionController@eoiReference');
 	Route::get('/submission/submissionNo/{id}','SubmissionController@submissionNo');
+	Route::get('/submission/search','SubmissionController@search')->name('submission.search');
+	Route::get('/submission/search/result','SubmissionController@result')->name('submission.result');
 	Route::resource('/submission', 'SubmissionController');
 	Route::resource('/submissionPartner', 'PartnerController');
 	Route::resource('/submissionDate', 'DateAndTimeController');
@@ -247,8 +249,8 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth','XssSanitizer'], 'name
 	Route::resource('/submissionScope', 'SubScopeController');
 	Route::resource('/submissionPosition', 'SubPositionController');
 	Route::resource('/submissionCompetitor', 'SubCompetitorController');
-	Route::resource('/submissionDocument', 'SubmissionDocumentController');
-	Route::get('/submissionDocument/refreshTable', 'SubmissionDocumentController@refreshTable')->name('submissionDocument.table');
+	Route::resource('/submissionDocument', 'SubDocumentController');
+	// Route::get('/submissionDocument/refreshTable', 'SubmissionDocumentController@refreshTable')->name('submissionDocument.table');
 
 });
 

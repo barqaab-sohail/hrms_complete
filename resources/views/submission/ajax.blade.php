@@ -73,7 +73,7 @@
                                 <select  name="sub_status_id"  id="sub_status_id" class="form-control selectTwo">
                                 <option></option>
                                 @foreach($subStatuses as $subStatus)
-                                <option value="{{$subStatus->id}}" {{(old("sub_status_id", $data->subStatusType->id??'')==$subStatus->id? "selected" : "")}}>{{$subStatus->name}}</option>
+                                <option value="{{$subStatus->id}}" {{(old("sub_status_id", $data->subStatus->id??'')==$subStatus->id? "selected" : "")}}>{{$subStatus->name}}</option>
                                 @endforeach   
                                 </select>  
                             </div>

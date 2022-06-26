@@ -17,7 +17,6 @@ class Submission extends Model implements Auditable
 
 
     public function getClientIdAttribute($value) {
-      
         return Client::find($value)->name;
     }
 
@@ -26,7 +25,7 @@ class Submission extends Model implements Auditable
         return PrDivision::find($value)->name;
     }
 
-    public function subStatusType(){
+    public function subStatus(){
 
         return $this->hasOneThrough('App\Models\Submission\SubStatus', 'App\Models\Submission\SubDescription',
             'submission_id',
@@ -34,6 +33,14 @@ class Submission extends Model implements Auditable
             'id',
             'sub_status_id'
             );
+    }
+
+    public function client(){
+        return $this->belongsTo('App\Models\Common\Client','id');
+    }
+
+    public function subDivision(){
+        return $this->belongsTo('App\Models\Project\PrDivision','id');
     }
 
     public function subFinancialType(){
