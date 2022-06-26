@@ -33,7 +33,7 @@ class SubmissionController extends Controller
        			
             ->editColumn('sub_type_id', function($data){
               
-              return $data->subStatusType->name??'';
+              return $data->subType->name??'';
 
             })
             ->addColumn('edit', function($data){
@@ -232,7 +232,37 @@ class SubmissionController extends Controller
     return response()->json(['status'=> 'OK', 'message' => "Submission Successfully Saved", 'partners'=>$partners]);
   }
 
+   public function search(){
+        $clients = Client::all();
+        $partners = Partner::all();
+        $subStatuses = SubStatus::all();
+        return view ('submission.search.search',compact('clients','partners','subStatuses'));
+    }
 
+    public function result(Request $request){
+        $data = $request->all();
+        if($request->filled('from_date')){
+            $data ['from_date']= \Carbon\Carbon::parse($request->from_date)->format('Y-m-d');
+            $data ['to_date']= \Carbon\Carbon::parse($request->to_date)->format('Y-m-d');
+        }
+
+        $result = Submission::join('sub_dates','sub_dates.submission_id','=','submissions.id')
+                         ->join('sub_descriptions','sub_descriptions.submission_id','=','submissions.id')
+                            ->when($data['client_id'], function ($query) use ($data){
+                                return $query->where('client_id','=',$data['client_id']);
+                            })
+                            ->when($data['from_date'], function ($query) use ($data){
+                                return $query->whereBetween('submission_date',[$data['from_date'], $data['to_date']]);
+                            })
+                            ->when($data['sub_status_id'], function ($query) use ($data){
+                                return $query->where('sub_status_id','=',$data['sub_status_id']);
+                            })
+                            
+                        ->select('submissions.*')
+                        //->distinct('id')
+                        ->get();
+        return view('submission.search.result',compact('result'));
+    }
 
 
 

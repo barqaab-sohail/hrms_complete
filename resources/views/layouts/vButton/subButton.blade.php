@@ -11,7 +11,7 @@
           <a type="submit" role="button" id="addScope" href="{{route('submissionScope.create')}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/submission/submissionScope')?'style=background-color:#737373':''}}>Scope of Services</a>
           <a type="submit" role="button" id="addPosition" href="{{route('submissionPosition.index')}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/submission/submissionPosition')?'style=background-color:#737373':''}}>Positions</a>
           <a type="submit" role="button" id="addCompetitor" href="{{route('submissionCompetitor.index')}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/submission/submissionCompetitor')?'style=background-color:#737373':''}}>Competitor Detail</a>
-	        <a type="submit" role="button" id="addDocument" href="{{route('submissionDocument.create')}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/submissionDocument/create')?'style=background-color:#737373':''}}>Documents</a>
+	        <a type="submit" role="button" id="addDocument" href="{{route('submissionDocument.index')}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/submissionDocument/create')?'style=background-color:#737373':''}}>Documents</a>
 	        
 	</div>
              

@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2.5|^8.0",
         "asika/pdf2text": "1.*",
+        "barryvdh/laravel-dompdf": "^1.0",
         "barryvdh/laravel-snappy": "^1.0",
         "consoletvs/charts": "7.*",
         "felixkiss/uniquewith-validator": "^3.4",
@@ -33,7 +34,6 @@
         "yajra/laravel-datatables-buttons": "^4.13",
         "yajra/laravel-datatables-html": "^4.0",
         "yajra/laravel-datatables-oracle": "~9.0"
-
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

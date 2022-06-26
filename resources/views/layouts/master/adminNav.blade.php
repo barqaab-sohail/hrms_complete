@@ -160,6 +160,7 @@
                     <ul aria-expanded="false" class="collapse"> 
                         @canany(['sub edit record', 'sub view record'])
                         <li><a class="{{Request::is('hrms/submission')?'active':''}}" href="{{route('submission.index')}}">List of Submissions</a></li>
+                        <li><a class="{{Request::is('hrms/submission/search')?'active':''}}" href="{{route('submission.search')}}">Search & Reports</a></li>
                         @endcanany
                                                
                     </ul>

@@ -9,11 +9,47 @@ use App\Models\Submission\SubDocument;
 use App\Models\Submission\SubDocumentContent;
 use App\Helper\DocxConversion;
 use DB;
+use DataTables;
 
 
 class SubmissionDocumentController extends Controller
 {
     
+    public function index(Request $request){
+        if($request->ajax()){
+            $data = SubDocument::where('submission_id', session('submission_id'))->orderBy('id','desc')->get();
+            return DataTables::of($data)
+            ->addColumn('Edit', function($data){           
+                $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Edit" class="btn btn-success btn-sm editDocument">Edit</a>';
+
+                return $button;
+            })
+            ->addColumn('Delete', function($data){
+                $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
+                 return $button;
+                        
+            })
+            ->addColumn('view', function($data){  
+                if ($data->extension == 'jpeg' || $data->extension == 'png' || $data->extension == 'jpg'){
+               $image ='<img src="'.url(isset($data->file_name)?'/storage/'.$data->path.$data->file_name:'Massets/images/document.png').'" class="img-round picture-container picture-src viewImg"  id="ViewIMG'.$data->id.'" width=50>';
+                }elseif($data->extension == 'pdf'){
+                     $image ='<img src="'.asset('Massets/images/document.png').'" href="'.url(isset($data->file_name)?'/storage/'.$data->path.$data->file_name:'Massets/images/document.png').'" class="img-round picture-container picture-src viewPdf"  id="ViewPDF'.$data->id.'" width=50>';
+                }else{
+                    $image = '';
+                }
+
+
+                return $image;
+            })
+
+            ->rawColumns(['Edit','Delete','view'])
+            ->make(true);
+        }
+
+    }
+
+
+
     public function show ($id){ 
         $documentIds = SubDocument::where('submission_id', session('submission_id'))->get();
         return view('submission.document.list',compact('documentIds'));
@@ -22,9 +58,7 @@ class SubmissionDocumentController extends Controller
 
     public function create(Request $request){
     	if($request->ajax()){
-            return view ('submission.document.create');
-        }else{
-            return back()->withError('Please contact to administrator, SSE_JS');
+            return view ('submission.document.dataTableList');
         }
     }
 
