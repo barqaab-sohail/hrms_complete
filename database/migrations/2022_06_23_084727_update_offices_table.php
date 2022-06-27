@@ -38,6 +38,7 @@ class UpdateOfficesTable extends Migration
             $table->dropUnique('offices_name_unique');
             $table->dropColumn('establish_date');
             $table->dropColumn('address');
+            $table->dropColumn('is_active');
             $table->dropForeign('offices_city_id_foreign');
             $table->dropForeign('offices_state_id_foreign');
             $table->dropForeign('offices_country_id_foreign');

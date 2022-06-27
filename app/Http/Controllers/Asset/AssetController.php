@@ -306,6 +306,9 @@ class AssetController extends Controller
                         ->select('assets.*')
                         //->distinct('id')
                         ->get();
+            
+
+
         return view('asset.search.result',compact('result'));
     }
 
