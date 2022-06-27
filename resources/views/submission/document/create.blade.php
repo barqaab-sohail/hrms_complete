@@ -76,10 +76,10 @@
 <table class="table table-bordered data-table" width=100%>
     <thead>
       <tr>
-          <th>Description</th>
-          <th>View</th>
-          <th>Edit</th>
-          <th>Delete</th>
+          <th style="width:35%">Description</th>
+          <th style="width:15%">View</th>
+          <th style="width:5%">Edit</th>
+          <th style="width:5%">Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -145,6 +145,7 @@ $(function () {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
+        retrieve: true,
         ajax: "{{ route('submissionDocument.create') }}",
         columns: [
             {data: "description", name: 'description'},

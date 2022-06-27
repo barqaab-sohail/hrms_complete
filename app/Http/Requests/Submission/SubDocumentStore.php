@@ -30,9 +30,9 @@ class SubDocumentStore extends FormRequest
 
          //If method is POST then document is required otherwise in Patch method document is nullable.
             if (!$this->sub_document_id) {
-                $rules += [ 'document'=>'required|file|max:1000|mimes:jpg,png,jpeg,pdf,doc,docx'];
+                $rules += [ 'document'=>'required|file|max:4000|mimes:jpg,png,jpeg,pdf,doc,docx'];
             }else{
-                 $rules += [ 'document'=>'nullable|file|max:1000|mimes:jpg,png,jpeg,pdf,doc,docx'];
+                 $rules += [ 'document'=>'nullable|file|max:4000|mimes:jpg,png,jpeg,pdf,doc,docx'];
             }
 
     

@@ -1,5 +1,5 @@
 <?php
-
+namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 class SubmissionSeeder extends Seeder
@@ -13,9 +13,12 @@ class SubmissionSeeder extends Seeder
     {
         $this->call(SubmissionTypeSeeder::class);
         $this->call(SubStatusSeeder::class);
-        $this->call(PartnerSeeder::class);
         $this->call(SubFinancialTypeSeeder::class);
         $this->call(SubCvFormatSeeder::class);
         $this->call(SubEvaluationTypeSeeder::class);
+
+        //following seeder in common folder
+        $this->call(PartnerSeeder::class);
+        $this->call(CurrencySeeder::class);
     }
 }

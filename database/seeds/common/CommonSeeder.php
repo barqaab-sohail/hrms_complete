@@ -27,9 +27,8 @@ class CommonSeeder extends Seeder
 	        MembershipsTableSeeder::class,
 	        ReligionsTableSeeder::class,
 	        StatesTableSeeder::class,
-	        CurrencySeeder::class,
-	        PartnerSeeder::class,
 	        OfficeSeeder::class,
+	        // currency and partner seeder run from submission
         ]);
     }
 }

@@ -8,7 +8,7 @@
                 
                 <div class="table-responsive m-t-40">
                 
-                <table id="myDataTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
+                <table id="myDataTable" class="table table-bordered table-striped " width="100%" cellspacing="0">
                     <thead>
                     <tr>
                         <th>Asset Id</th>
@@ -23,8 +23,21 @@
                         <tr>
                             <td>{{$asset->asset_code??''}}</td>
                             <td>{{$asset->description}}</td>
-                            <td>
-                            <img src="{{asset('storage/'.$asset->asPicture->path.$asset->asPicture->file_name)}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" class="profile-pic ViewIMG" width="20%"/></td>
+                            <td >
+                            @php
+                            $arrContextOptions=array(
+                                "ssl"=>array(
+                                    "verify_peer"=>false,
+                                    "verify_peer_name"=>false,
+                                ),
+                            );  
+
+                            $path = asset('storage/'.$asset->asPicture->path.$asset->asPicture->file_name);
+                            $type = pathinfo($path, PATHINFO_EXTENSION);
+                            $data = file_get_contents($path, false, stream_context_create($arrContextOptions));
+                            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                            @endphp
+                            <img class="img-fluid profile-pic ViewIMG" src="{{$base64}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" width="10%"/></td>
                         </tr>
                         @endforeach
                     
@@ -37,11 +50,10 @@
 
 <script>
     $(document).ready(function() {
-         //function view from list table
-        $(function(){
-
-             $('.ViewIMG').EZView();
-        });
+       //function view from list table
+    $(document).on('click','.ViewIMG', function(){  
+        $(this).EZView();
+    });
 
         $('#myDataTable').DataTable({
                     stateSave: false,        
@@ -63,7 +75,19 @@
                             extend: 'pdfHtml5',
                             exportOptions: {
                                 columns: [ 0, 1, 2]
-                            }
+                            },
+                            customize: function(doc) {
+                               //find paths of all images, already in base64 format
+                                var arr2 = $('.img-fluid').map(function(){
+                                              return this.src;
+                                         }).get();
+                                for (var i = 0, c = 1; i < arr2.length; i++, c++) {
+                                                doc.content[1].table.body[c][2] = {
+                                                 image: arr2[i],
+                                                 width: 50
+                                                }
+                                }
+                            },
                         }, {
                             extend: 'csvHtml5',
                             exportOptions: {
