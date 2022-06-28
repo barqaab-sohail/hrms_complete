@@ -36,6 +36,16 @@ class SubmissionController extends Controller
               return $data->subType->name??'';
 
             })
+            ->editColumn('client_id', function($data){
+              
+              return $data->client->name??'';
+
+            })
+            ->editColumn('sub_division_id', function($data){
+              
+              return $data->subDivision->name??'';
+
+            })
             ->addColumn('edit', function($data){
 
                     if(Auth::user()->hasPermissionTo('sub edit record')){
@@ -53,9 +63,8 @@ class SubmissionController extends Controller
                     	}
                     })
 
-            ->rawColumns(['edit','delete','sub_type_id'])
+            ->rawColumns(['edit','delete','sub_type_id','client','sub_division_id'])
             ->make(true);
-
    		}
 
 	
