@@ -26,6 +26,9 @@ class SubCompetitorStore extends FormRequest
     {
         $submission = Submission::find(session('submission_id'));
         $maxTechnicalNumber = $submission->subDescription->total_marks;
+        if(!$maxTechnicalNumber){
+            $maxTechnicalNumber = 1000;
+        }
 
         $rules = [
             'name'=> 'required',

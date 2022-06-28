@@ -16,14 +16,14 @@ class Submission extends Model implements Auditable
    protected $fillable = ['sub_type_id','sub_division_id','project_name','client_id','submission_no','comments'];
 
 
-    public function getClientIdAttribute($value) {
-        return Client::find($value)->name;
-    }
+    // public function getClientIdAttribute($value) {
+    //     return Client::find($value)->name;
+    // }
 
 
-    function getSubDivisionIdAttribute($value) {
-        return PrDivision::find($value)->name;
-    }
+    // function getSubDivisionIdAttribute($value) {
+    //     return PrDivision::find($value)->name;
+    // }
 
     public function subStatus(){
 
@@ -36,11 +36,11 @@ class Submission extends Model implements Auditable
     }
 
     public function client(){
-        return $this->belongsTo('App\Models\Common\Client','id');
+        return $this->belongsTo('App\Models\Common\Client');
     }
 
     public function subDivision(){
-        return $this->belongsTo('App\Models\Project\PrDivision','id');
+        return $this->belongsTo('App\Models\Project\PrDivision');
     }
 
     public function subFinancialType(){
