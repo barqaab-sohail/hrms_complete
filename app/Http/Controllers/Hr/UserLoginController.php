@@ -37,8 +37,12 @@ class UserLoginController extends Controller
 			$employee = HrEmployee::find(session('hr_employee_id'));
 			//Firs check Employee have user_id if yes than get user and give premission 
 			//Else create User detail and updated user_id in Employee Table then give permission 
-			if($employee->user_id??''){
+			if($employee->user_id){
 				$user = User::where('id', $employee->user_id)->first();
+				if($user->email != $request->email){
+					$user->update(['email'=>$request->email]);
+				}
+
 			}else{
 				
 				$user = User::create(['email'=>$request->email, 'password'=>Hash::make(Str::random(8))]);
