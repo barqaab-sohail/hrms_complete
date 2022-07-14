@@ -169,18 +169,18 @@ $(document).ready(function(){
 	$('select').select2();
 	formFunctions();
 
-	$('select').change(function(){	
-		$(this).removeClass('searchSelect');
-		if($(this).attr("id") != "employee"){
-			$('#document_name').val('');
-		}
-  		$('.searchSelect').each(function () {
-  			if($(this).val() && $(this).attr("id") != "project"){
-        		$(this).val('').select2('val', 'All');
-        	}
-    	});
-    	$(this).addClass('searchSelect');
-  	});
+	// $('select').change(function(){	
+	// 	$(this).removeClass('searchSelect');
+	// 	if($(this).attr("id") != "employee"){
+	// 		$('#document_name').val('');
+	// 	}
+ //  		$('.searchSelect').each(function () {
+ //  			if($(this).val() && $(this).attr("id") != "project"){
+ //        		$(this).val('').select2('val', 'All');
+ //        	}
+ //    	});
+ //    	$(this).addClass('searchSelect');
+ //  	});
 
   	$('#document_name').focus(function(){
   		$('.searchSelect').each(function () {
