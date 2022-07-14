@@ -300,7 +300,24 @@ class EmployeeController extends Controller
 
     public function result(Request $request){
         
-       
+        if($request->filled('project') && $request->filled('degree')){
+           $data = $request->all();
+
+            $result = HrEmployee::join('hr_educations','hr_educations.hr_employee_id','hr_employees.id')
+            ->join('employee_projects','employee_projects.hr_employee_id','=','hr_employees.id')
+            ->select('hr_employees.*','hr_educations.education_id','hr_educations.to','employee_projects.pr_detail_id','employee_projects.effective_date')
+            ->when($data['degree'], function ($query) use ($data){
+                                return $query->where('education_id','=',$data['degree']);
+                                })
+             ->when($data['project'], function ($query) use ($data){
+                                return $query->where('pr_detail_id','=',$data['project']);
+                                })
+
+            ->where('hr_status_id',1)->get();
+
+            return view('hr.employee.search.result',compact('result'));
+        }
+
         if($request->filled('category')){
         $result = collect(HrEmployee::join('employee_categories','employee_categories.hr_employee_id','=','hr_employees.id')->select('hr_employees.*','employee_categories.hr_category_id','employee_categories.effective_date as cat')->whereIn('hr_status_id',array(1,5))->orderBy('cat','desc')->get());
             $resultUnique = ($result->unique('id'));
