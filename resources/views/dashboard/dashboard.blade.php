@@ -67,22 +67,21 @@
 			
 			<div class="row">
   				<div class="col-sm-6">
-					<div id="ageChart" style="width: 900px; height: 500px;"></div>
+					<div id="ageChart" style="height: 500px;"></div>
 				</div>
 				<div class="col-sm-6">
-					<div id="engineerChart" style="width: 900px; height: 500px;"></div>
+					<div id="engineerChart" style="height: 500px;"></div>
 				</div>
-					
 			</div>
 			<div class="row">
   				<div class="col-sm-6">
-					<div id="categoryChart" style="width: 900px; height: 500px;"></div>
+					<div id="categoryChart" style="height: 500px;"></div>
 				</div>
 				<div class="col-sm-6">
-					<div id="departmentChart" style="width: 900px; height: 500px;"></div>
+					<div id="departmentChart" style="height: 500px;"></div>
 				</div>
-					
 			</div>
+
 				
 		
 				@include('hr.charts.category')
