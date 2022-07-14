@@ -164,9 +164,11 @@ class HrEmployee extends Model implements Auditable
     }
 
     public function hrContact(){
+        return $this->hasMany('App\Models\Hr\HrContact');
+    }
 
-            return $this->hasMany('App\Models\Hr\HrContact');
-
+    public function hrDocumentation(){
+        return $this->hasMany('App\Models\Hr\HrDocumentation');
     }
 
     public function hrContactPermanent(){
