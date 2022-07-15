@@ -1,4 +1,4 @@
-@if($result->count()!=0 && !isset($documents))
+@if($result->count()!=0 && !$documents)
     <hr>         
             <div class="card">
             <div class="card-body">
