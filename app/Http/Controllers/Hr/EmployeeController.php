@@ -304,46 +304,69 @@ class EmployeeController extends Controller
 
         if ($request->filled('document_name')){
             $result = HrDocumentation::with('hrEmployee')
-                        ->when($data['document_name'], function ($query) use ($data){
-                                return $query-> where('description', 'LIKE', "%{$data['document_name']}%");
-                        })
-                        ->when($data['employee'],function ($query) use ($data){
-                                return $query-> where('hr_employee_id',$data['employee']);
-                        })
-                    ->get();
-
+                ->when($data['document_name'], function ($query) use ($data){
+                    return $query-> where('description', 'LIKE', "%{$data['document_name']}%");
+                })
+                ->when($data['employee'],function ($query) use ($data){
+                    return $query->join('hr_employees','hr_employees.id','=','hr_documentations.hr_employee_id')
+                        ->where('hr_employees.id',$data['employee']);
+                })
+                ->when($data['project'],function ($query) use ($data){
+                    return $query ->join('employee_projects','employee_projects.hr_employee_id','=','hr_documentations.hr_employee_id')->orderBy('employee_projects.effective_date','desc')
+                    ->where('pr_detail_id','=',$data['project'])->groupBy('hr_documentations.hr_employee_id');
+                })
+                ->when($data['blood_group'], function ($query) use ($data){
+                return $query ->join('hr_blood_groups','hr_blood_groups.hr_employee_id','=','hr_documentations.hr_employee_id')
+                ->where('blood_group_id','=',$data['blood_group']);
+                })
+                ->when($data['category'], function ($query) use ($data){
+                    return  $query ->join('employee_categories','employee_categories.hr_employee_id','=','hr_documentations.hr_employee_id')->orderBy('employee_categories.effective_date','desc')->where('hr_category_id',$data['category'])->groupBy('hr_documentations.hr_employee_id');
+                })
+                ->when($data['designation'], function ($query) use ($data){
+                    return  $query->join('employee_designations','employee_designations.hr_employee_id','=','hr_documentations.hr_employee_id')->orderBy('employee_designations.effective_date','desc')->where('hr_designation_id',$data['designation']);
+                })
+                ->when($data['degree'], function ($query) use ($data){
+                    return $query->join('hr_educations','hr_educations.hr_employee_id','hr_documentations.hr_employee_id')->where('education_id','=',$data['degree']);
+                })
+                ->when($data['manager'], function ($query) use ($data){
+                    return   $query->join('employee_managers','employee_managers.hr_employee_id','=','hr_documentations.hr_employee_id')->orderBy('employee_managers.effective_date','desc')->where('hr_manager_id',$data['manager']);
+                })
+            ->get();
             //this variable used only for goting to else part of result blade.
+            $documents=true;
+            return view('hr.employee.search.result',compact('result','documents'));
+        }else{
+
             $documents=false;
-
-           return view('hr.employee.search.result',compact('result','documents'));
+            $result = HrEmployee::where('hr_status_id',1)
+            ->when($data['employee'], function ($query) use ($data){
+                return $query->where('id','=',$data['employee']);
+            })
+            ->when($data['degree'], function ($query) use ($data){
+                return $query->join('hr_educations','hr_educations.hr_employee_id','hr_employees.id')->where('education_id','=',$data['degree']);
+            })
+            ->when($data['blood_group'], function ($query) use ($data){
+                return $query ->join('hr_blood_groups','hr_blood_groups.hr_employee_id','=','hr_employees.id')
+                ->where('blood_group_id','=',$data['blood_group']);
+            })
+            ->when($data['project'], function ($query) use ($data){
+                return $query ->join('employee_projects','employee_projects.hr_employee_id','=','hr_employees.id')
+                ->where('pr_detail_id','=',$data['project']);
+            })
+            ->when($data['category'], function ($query) use ($data){
+                return  $query ->join('employee_categories','employee_categories.hr_employee_id','=','hr_employees.id')->orderBy('employee_categories.effective_date','desc')->where('hr_category_id',$data['category']);
+            })
+            ->when($data['designation'], function ($query) use ($data){
+                return  $query->join('employee_designations','employee_designations.hr_employee_id','=','hr_employees.id')->orderBy('employee_designations.effective_date','desc')->where('hr_designation_id',$data['designation']);
+            })
+            ->when($data['manager'], function ($query) use ($data){
+                return   $query->join('employee_managers','employee_managers.hr_employee_id','=','hr_employees.id')->orderBy('employee_managers.effective_date','desc')->where('hr_manager_id',$data['manager']);
+            })
+            ->select('hr_employees.*')
+            ->get();
+             
+            return view('hr.employee.search.result',compact('result','documents'));
         }
-
-        $result = HrEmployee::where('hr_status_id',1)
-        ->when($data['degree'], function ($query) use ($data){
-              
-            return $query->join('hr_educations','hr_educations.hr_employee_id','hr_employees.id')->where('education_id','=',$data['degree']);
-        })
-        ->when($data['blood_group'], function ($query) use ($data){
-            return $query ->join('hr_blood_groups','hr_blood_groups.hr_employee_id','=','hr_employees.id')
-            ->where('blood_group_id','=',$data['blood_group']);
-        })
-        ->when($data['project'], function ($query) use ($data){
-            return $query ->join('employee_projects','employee_projects.hr_employee_id','=','hr_employees.id')
-            ->where('pr_detail_id','=',$data['project']);
-        })
-        ->when($data['category'], function ($query) use ($data){
-            return  $query ->join('employee_categories','employee_categories.hr_employee_id','=','hr_employees.id')->orderBy('employee_categories.effective_date','desc')->where('hr_category_id',$data['category']);
-        })
-        ->when($data['designation'], function ($query) use ($data){
-            return  $query->join('employee_designations','employee_designations.hr_employee_id','=','hr_employees.id')->orderBy('employee_designations.effective_date','desc')->where('hr_designation_id',$data['designation']);
-        })
-        ->when($data['manager'], function ($query) use ($data){
-            return   $query->join('employee_managers','employee_managers.hr_employee_id','=','hr_employees.id')->orderBy('employee_managers.effective_date','desc')->where('hr_manager_id',$data['manager']);
-        })
-        ->select('hr_employees.*')
-        ->get();
-
-        return view('hr.employee.search.result',compact('result'));
         
 
         if($request->filled('category')){
