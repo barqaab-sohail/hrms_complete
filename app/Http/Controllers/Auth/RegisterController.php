@@ -126,13 +126,12 @@ class RegisterController extends Controller
         }
         else
         {
-
             if($test->user_status==1)
             {
                  return view('auth.login')->withErrors("You are already Registered.  Please Enter Email and Password");
             }elseif($test->user_status==0)
             {
-                $otpcode = rand (10000,65000);
+                $otpcode = rand(10000, 65000);
 
             DB::table('users')
                 ->where('email', $request->email)
