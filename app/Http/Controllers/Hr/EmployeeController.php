@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Hr;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Notifications\UpdateRecordNotification;
 use App\Models\Common\Gender;
 use App\Models\Common\MaritalStatus;
 use App\Models\Common\Religion;
@@ -31,6 +32,7 @@ use App\Models\Hr\HrDocumentation;
 use DB;
 use App\Http\Requests\Hr\EmployeeStore;
 use DataTables;
+use App\User;
 
 class EmployeeController extends Controller
 {
@@ -229,11 +231,19 @@ class EmployeeController extends Controller
             $input ['cnic_expiry']= \Carbon\Carbon::parse($request->cnic_expiry)->format('Y-m-d');
             }
 
-    		DB::transaction(function () use ($input, $id) {  
+            $oldData = HrEmployee::find($id);
 
-    		  HrEmployee::findOrFail($id)->update($input);
+    		DB::transaction(function () use ($input, $id, &$newData) {  
+    		  $newData = HrEmployee::findOrFail($id)->update($input);
 
     		}); // end transcation
+
+            //Any Editin Email to Administrator
+            // $user = User::where('email', 'sohail.afzal@barqaab.com')->first();
+            
+            // if($user){
+            //         $user->notify(New UpdateRecordNotification($oldData, $newData));
+            // }
         
         if($request->ajax()){
     	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated"]);

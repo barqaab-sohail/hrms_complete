@@ -30,7 +30,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/user/logout', 'Android\Auth\UserController@logout');
    	Route::get('/ageChart','Android\Hr\EmployeeController@ageChart');
    	Route::get('/hr/employees','Android\Hr\EmployeeController@employees');
-	Route::get('/hr/employee/documents/{id}','Android\Hr\EmployeeController@documents');
+   	Route::get('/hr/employee/documents/{id}','Android\Hr\EmployeeController@documents');
+	
 
 //Asset API
    	Route::get('/asset/employees','Android\Asset\AssetController@employees');
