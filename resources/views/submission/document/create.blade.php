@@ -104,9 +104,9 @@ $(document).ready(function(){
                 var fileType = this.files[0].type;
                 var fileSize = this.files[0].size;
                 
-            //Restrict File Size Less Than 2MB
-            if (fileSize> 4096000){
-                alert('File Size is bigger than 4MB');
+            //Restrict File Size Less Than 10MB
+            if (fileSize> 10240000){
+                alert('File Size is bigger than 10MB');
                 $(this).val('');
             }else{
                 //Restrict File Type

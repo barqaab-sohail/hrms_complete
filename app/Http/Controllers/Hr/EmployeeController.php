@@ -234,15 +234,16 @@ class EmployeeController extends Controller
             $oldData = HrEmployee::find($id);
 
     		DB::transaction(function () use ($input, $id, &$newData) {  
-    		  $newData = HrEmployee::findOrFail($id)->update($input);
-
+    		  HrEmployee::findOrFail($id)->update($input);
     		}); // end transcation
-
+             $newData = HrEmployee::find($id);
             //Any Editin Email to Administrator
             // $user = User::where('email', 'sohail.afzal@barqaab.com')->first();
-            
-            // if($user){
-            //         $user->notify(New UpdateRecordNotification($oldData, $newData));
+            // if($user){   
+            //     $data = $newData->compareTo($oldData);
+            //     if($data->count()>0){
+            //         $user->notify(New UpdateRecordNotification($data, $oldData));
+            //     }
             // }
         
         if($request->ajax()){

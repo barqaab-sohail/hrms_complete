@@ -26,6 +26,20 @@ class HrEmployee extends Model implements Auditable
         return $this->employeeProject->last()->name??'';
     }
 
+
+    public function compareTo(HrEmployee $other){
+
+        $attributes = collect($this->getAttributes())
+            ->map(function ($attribute, $key) use ($other) {
+                if ($attribute != $other->$key) {
+                    return $key = $attribute;
+                }
+        })->reject(function ($attribute, $key) {
+            return !$attribute || in_array($key, ['id','hr_status_id', 'created_at', 'updated_at']);
+        });
+
+        return $attributes;
+    }
    
 
     //default value of hr_status_id=1
