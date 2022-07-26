@@ -20,7 +20,7 @@ use DataTables;
 class SubPositionController extends Controller
 {
     public function index(){
-    	$employees = HrEmployee::select(['id','first_name','last_name','employee_no'])->get();
+    	$employees = HrEmployee::select(['id','first_name','last_name','employee_no'])->with('employeeDesignation')->get();
 	    $view =  view('submission.position.create',compact('employees'))->render();
 	    return response()->json($view);
 	}

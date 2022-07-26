@@ -42,7 +42,7 @@
                           <select  name="hr_employee_id"  id="hr_employee_id" class="form-control selectTwo" data-validation="required">
                               <option value=""></option>
                               @foreach ($employees as $employee)
-                              <option value="{{$employee->id}}">{{$employee->employee_no}} -{{$employee->full_name}}</option>
+                              <option value="{{$employee->id}}">{{$employee->employee_no}}-{{$employee->full_name}}-{{$employee->employeeDesignation->last()->name??''}}</option>
                               @endforeach
                             </select>
                         </div>
@@ -104,8 +104,9 @@ $(document).ready(function() {
   });
 
   $("#hr_employee_id").change(function (){
-    const result = $("#hr_employee_id option:selected").text().split('-').pop();
-    $("#name").val(result);
+    //const result = $("#hr_employee_id option:selected").text().split('-').pop();
+    const result = $("#hr_employee_id option:selected").text().split('-');
+    $("#name").val(result[1]);
   });
   
   $(function () {
@@ -132,7 +133,7 @@ $(document).ready(function() {
     });
     
 
-    $('#createSubmissionPosition').click(function () {
+    $('#createSubmissionPosition').unbind().click(function () {
         $('#json_message_modal').html('');
         $('#deleteCheckInput').hide();
         $('#submissionPositionForm').trigger("reset");
