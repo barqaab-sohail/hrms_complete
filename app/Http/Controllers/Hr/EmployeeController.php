@@ -365,7 +365,7 @@ class EmployeeController extends Controller
                 ->where('pr_detail_id','=',$data['project']);
             })
             ->when($data['category'], function ($query) use ($data){
-                return  $query ->join('employee_categories','employee_categories.hr_employee_id','=','hr_employees.id')->orderBy('employee_categories.effective_date','desc')->where('hr_category_id',$data['category']);
+                return  $query ->join('employee_categories','employee_categories.hr_employee_id','=','hr_employees.id')->orderBy('employee_categories.effective_date','desc')->where('hr_category_id',$data['category'])->groupBy('employee_categories.hr_employee_id');
             })
             ->when($data['designation'], function ($query) use ($data){
                 return  $query->join('employee_designations','employee_designations.hr_employee_id','=','hr_employees.id')->orderBy('employee_designations.effective_date','desc')->where('hr_designation_id',$data['designation']);
