@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Hr\HrEmployee;
+use App\Models\Project\Progress\PrIssue;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +15,9 @@ use App\Models\Hr\HrEmployee;
 |
 */
 
-
+Route::get('/testing', function (){
+	PrIssue::isResolved();
+});
 Route::get('/dashboard','HomeController@index')->middleware('auth')->name('dashboard');
 //Route::get ('insert','Hr\EmployeeController@insert');
 // Route::get('/test','HomeController@test')->middleware('auth')->name('test');
@@ -35,21 +38,6 @@ Route::post('code/','Auth\RegisterController@store')->name('opt.store');
 // Route::resource('/education', 'EducationController');
 // Route::resource('/appointment', 'AppointmentController');
 
-Route::get('testing/', function (){
-
-$employee = HrEmployee::find(3);
-$other = HrEmployee::find(4);
-$data = $other->compareTo($other);
-if($data->count()>0){
-	return $data;
-}
-dd("No Data");
-
-foreach ($employee->getAttributes() as $key => $value) {
-	    echo "$key => $value \n";
-	}
-
-});
 
 
 //HR Routes
