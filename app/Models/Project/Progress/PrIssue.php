@@ -4,23 +4,15 @@ namespace App\Models\Project\Progress;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Project\Progress\IssueStatus;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class PrIssue extends Model
+
+class PrIssue extends Model implements Auditable
 {
     use HasFactory;
+     use \OwenIt\Auditing\Auditable;
 
-    public const RESOLVED = 'Resolved';
-    public const PENDING = 'Pending';
+    protected $fillable = ['pr_detail_id','description','responsibility', 'status','resolve_date'];
 
-    public static function isResolved()
-    {
-        return 'Nor working';
-    }
-
-    public function isPending()
-    {
-        return $this->status === IssueStatus::PENDING;
-    }
 
 }

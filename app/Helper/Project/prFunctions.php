@@ -23,6 +23,9 @@ function pendingInvoices($projectId){
 }
 
 function isViewInvoice($projectId){
+	if(Auth::user()->hasRole('Super Admin')){
+		return true;
+	}
 	$projectInvoiceRight = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->where('pr_detail_id',$projectId)->first();
 
 		if(auth()->user()->can('view all invoices') ||

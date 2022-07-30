@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Hr\HrEmployee;
-use App\Models\Project\Progress\PrIssue;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +15,7 @@ use App\Models\Project\Progress\PrIssue;
 |
 */
 
-Route::get('/testing', function (){
-	PrIssue::isResolved();
-});
+
 Route::get('/dashboard','HomeController@index')->middleware('auth')->name('dashboard');
 //Route::get ('insert','Hr\EmployeeController@insert');
 // Route::get('/test','HomeController@test')->middleware('auth')->name('test');
@@ -161,13 +159,8 @@ Route::resource('/cvDocument', 'CvDocumentController');
 Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Project'], function(){
 Route::post('/import', 'ProjectController@import')->name('project.import');
 Route::get('/search', 'ProjectController@search')->name('project.search');
-
-
-
-
 Route::get('/result', 'ProjectController@result')->name('project.result');
 Route::get('/selectedProjects', 'ProjectController@selectedProjects')->name('project.selected');
-
 Route::resource('/projectPartner', 'ProjectPartnerController');
 
 Route::get('/projectDocument/refreshTable', 'ProjectDocumentController@refreshTable')->name('projectDocument.table');
@@ -190,6 +183,9 @@ Route::resource('projectRights', 'ProjectRightController');
 Route::resource('/monthlyProgress', 'Progress\MonthlyProgressController');
 Route::resource('/projectProgress', 'Progress\ProjectProgressController');
 Route::resource('/projectProgressActivities', 'Progress\ActivitiesController');
+Route::resource('/projectIssues','Progress\ProjectIssueController');
+
+
 // Route::resource('/progressProgress', 'Progress\ProgressController');
 Route::get('/proejctProgressMainActivities/{level}','Progress\ActivitiesController@mainActivities');
 

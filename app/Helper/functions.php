@@ -26,6 +26,9 @@ function rightsName($id){
 
 
 function projectPaymentRight($project){
+	if(Auth::user()->hasRole('Super Admin')){
+		return true;
+	}
 
 	$projectPaymentRight = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->where('pr_detail_id',$project)->first();
 	if($projectPaymentRight){
@@ -42,7 +45,12 @@ function projectPaymentRight($project){
 }
 
 function projectProgressRight($project){
+	if(Auth::user()->hasRole('Super Admin')){
+		return true;
+	}
+
 	$projectProgressRight = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->where('pr_detail_id',$project)->first();
+
 	if($projectProgressRight){
 		if ($projectProgressRight->progress == 1){
 			return false;
