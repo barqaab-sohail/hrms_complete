@@ -9,6 +9,7 @@
           <th>Activity Name</th>
           <th>Total Weightage</th>
           <th>Total Progress Achieved</th>
+           <th>Last Updated Progress</th>
           <th>Date</th>
           <th>Progress Completed</th>
           <th>Save</th>
@@ -78,10 +79,11 @@ $(document).ready(function() {
             {data: "name", name: 'name'},
             {data: "weightage", name: 'weightage'},
             {data: "progress_achived", name: 'progress_achived'},
+            {data: 'last_updated_progress', name: 'last_updated_progress', orderable: false, searchable: false},
             {data: 'Date', name: 'Date', orderable: false, searchable: false},
             {data: 'Progress', name: 'Progress', orderable: false, searchable: false},
             {data: 'Save', name: 'Save', orderable: false, searchable: false},
-            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
+            {data: 'Detail', name: 'Detail', orderable: false, searchable: false},
         ],
      
         order: []

@@ -58,60 +58,104 @@ class ProjectProgressController extends Controller
             	$headings = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('weightage','NULL')->get();
 
                 //Get Heading Detail
-                foreach($headings as $heading){
-                	
-                	$projectProgress = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('belong_to_activity',$heading->id)->get();
+                if($headings->count()>0){
+                    foreach($headings as $heading){
+                    	
+                    	$projectProgress = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('belong_to_activity',$heading->id)->get();
 
-                	$headingWeightageSum = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('belong_to_activity',$heading->id)->sum('weightage');
+                    	$headingWeightageSum = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('belong_to_activity',$heading->id)->sum('weightage');
 
-                    //update Total Heading Weighatage
-                	$heading->weightage=$headingWeightageSum;
+                        //update Total Heading Weighatage
+                    	$heading->weightage=$headingWeightageSum;
 
 
-                    //Calculate Achived Progress 
-                    //first get ids belong to headings
-                    $headingIds = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('belong_to_activity',$heading->id)->pluck('id')->toArray();
+                        //Calculate Achived Progress 
+                        //first get ids belong to headings
+                        $headingIds = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('belong_to_activity',$heading->id)->pluck('id')->toArray();
 
-                    //variable create for total achived progress
-                    $totalHeadingProgress =0.0;
-                    //foreach loop for sum of total achived progress
-                    foreach($headingIds as $id){
-                          $headingProgress =  PrAchievedProgress::where('pr_progress_activity_id',$id)->latest()->first();
-                          $totalHeadingProgress += $headingProgress->percentage_complete??0;
-                    }
-                  
-                    //create and add total heading achived progress           
-                	$heading['progress_achived']=$totalHeadingProgress;
+                        //variable create for total achived progress
+                        $totalHeadingProgress =0.0;
+                        //foreach loop for sum of total achived progress
+                        foreach($headingIds as $id){
+                              $headingProgress =  PrAchievedProgress::where('pr_progress_activity_id',$id)->latest()->first();
+                              $totalHeadingProgress += $headingProgress->percentage_complete??0;
+                        }
+                      
+                        //create and add total heading achived progress           
+                    	$heading['progress_achived']=$totalHeadingProgress;
+                        $heading['heading']=1;
+                        //Add heading detail into collection
+                    	$customData ->push($heading);
+                    	
+                        //Get sub activities
+                        foreach($projectProgress as $progress){
+                        
+                            //get sub activity achived progress
+                            $latestProgress = PrAchievedProgress::where('pr_progress_activity_id', $progress->id)->latest()->first();
+                            $lastUpdateProgress='';
+                            if($latestProgress){
+                              $totalProgress =$latestProgress->percentage_complete;
+                               $lastUpdateProgress=$latestProgress->date;
+                            }else{
+                                 $totalProgress =0.0;
+                            }
 
-                    //Add heading detail into collection
-                	$customData ->push($heading);
-                	
-                    //Get sub activities
+                            //create and add sub activity achived progress
+                        	$progress['progress_achived']=$totalProgress;
+                            $progress['last_updated_progress']= $lastUpdateProgress;
+
+                            //add sub activities into collection
+                    		$customData ->push($progress);
+                		}
+
+                    }//end foreach
+                }else{//if No Sub Items
+
+                    $projectProgress = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->get();
+
                     foreach($projectProgress as $progress){
-                    
-                    //get sub activity achived progress
-                    $latestProgress = PrAchievedProgress::where('pr_progress_activity_id', $progress->id)->latest()->first();
-                   
-                    if($latestProgress){
-                      $totalProgress =$latestProgress->percentage_complete;
-                    }else{
-                         $totalProgress =0.0;
+                         $latestProgress = PrAchievedProgress::where('pr_progress_activity_id', $progress->id)->latest()->first();
+                         $lastUpdateProgress='';
+                         if($latestProgress){
+                              $totalProgress =$latestProgress->percentage_complete;
+                              $lastUpdateProgress=$latestProgress->date;
+                            }else{
+                                 $totalProgress =0.0;
+                            }
+
+                            //create and add sub activity achived progress
+                            $progress['progress_achived']=$totalProgress;
+                            $progress['last_updated_progress']= $lastUpdateProgress;
+                            $progress['heading']=0;
+                            //add sub activities into collection
+                            $customData ->push($progress);
                     }
-
-                    //create and add sub activity achived progress
-                	$progress['progress_achived']=$totalProgress;
-
-                    //add sub activities into collection
-            		$customData ->push($progress);
-            		}
-
-                }
-
+                   
+                }//end if
+                 
             //Datatabe give collection for display
-            return DataTables::of($customData)
+            return DataTables::of($customData) 
+                ->editColumn('name', function ($row){
+
+                    if($row->belong_to_activity!=NULL){
+                        $btn = $row->name;
+                    }else{
+                         $btn = '<h3>'.$row->name. '</h3>';
+                    }                              
+                    return $btn;
+
+                })
+                ->editColumn('last_updated_progress',function($row){
+                    if($row->belong_to_activity!=NULL || $row->heading ==0){
+                        $btn = $row->last_updated_progress;
+                    }else{
+                         $btn = '';
+                    }                              
+                    return $btn;
+                })
                 ->addColumn('Date', function($row){
                     
-                    if($row->belong_to_activity!=NULL){
+                    if($row->belong_to_activity!=NULL || $row->heading ==0){
                     $btn = ' <input type="text" name="input_progress" id="date'.$row->id.'" class="form-control date_input" data-validation="required" readonly>';
                     }else{
                          $btn ='';
@@ -120,7 +164,7 @@ class ProjectProgressController extends Controller
                 })
                 ->addColumn('Progress', function($row){
                     
-                    if($row->belong_to_activity!=NULL){
+                    if($row->belong_to_activity!=NULL || $row->heading ==0){
                     $btn = '<input type="text" name="progress" id="progress'.$row->id.'" class="form-control notCapital progressInput" data-validation="required">';
                     }else{
                         $btn ='';
@@ -129,7 +173,7 @@ class ProjectProgressController extends Controller
                     return $btn;
                 })
                 ->addColumn('Save', function($row){
-                    if($row->belong_to_activity!=NULL){
+                    if($row->belong_to_activity!=NULL || $row->heading ==0){
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Save" class="save btn btn-success btn-sm saveProgress">Save</a>';
                     }else{
                         $btn ='';
@@ -137,9 +181,9 @@ class ProjectProgressController extends Controller
                                                  
                     return $btn;
                 })
-                ->addColumn('Delete', function($row){                
-                    if($row->belong_to_activity!=NULL){
-                       $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteModal">Delete</a>';
+                ->addColumn('Detail', function($row){                
+                    if($row->belong_to_activity!=NULL || $row->heading ==0){
+                       $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-primary btn-sm deleteModal">Detail</a>';
                        }else{
                         $btn ='';
                        }
@@ -147,14 +191,14 @@ class ProjectProgressController extends Controller
                         return $btn;
                 })
 
-                ->rawColumns(['Date','Progress','Save','Delete'])
+                ->rawColumns(['Date','Progress','Save','Detail','name','last_updated_progress'])
                 ->make(true);
         }
 
       
-        $prProgressActivities = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->get();
-        $view =  view('project.progress.achived.create',compact('prProgressActivities'))->render();
-        return response()->json($view);
+        // $prProgressActivities = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->get();
+        // $view =  view('project.progress.achived.create',compact('prProgressActivities'))->render();
+        // return response()->json($view);
 
 	}
 
