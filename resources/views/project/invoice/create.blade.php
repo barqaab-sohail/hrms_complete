@@ -4,7 +4,7 @@
   <button type="button" class="btn btn-success float-right"  id ="createInvoice" data-toggle="modal" >Add Invoice</button>
   @endif
   <br>
-
+  <h1>Total Invoice = {{$totalInvoice}}</h1>
   <table class="table table-bordered data-table">
     <thead>
       <tr>
@@ -225,7 +225,10 @@ $(document).ready(function() {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('projectInvoice.create') }}",
+        ajax:{
+          url:"{{ route('projectInvoice.create') }}",
+          data: function(data){console.log(data)}
+        },
         columns: [
             {data: "invoice_no", name: 'invoice_no'},
             {data: "invoice_date", name: 'invoice_date'},
@@ -244,7 +247,7 @@ $(document).ready(function() {
             @endif
 
         ],
-     
+       
         order: [[ 0, "desc" ]],
         drawCallback:function(){
           if($('[id^="ViewPDF"]').length > 0) {
