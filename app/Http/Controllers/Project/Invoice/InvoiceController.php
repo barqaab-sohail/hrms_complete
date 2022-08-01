@@ -34,7 +34,10 @@ class InvoiceController extends Controller
 
     public function index() {
         $invoiceTypes = InvoiceType::all();
-        $view =  view('project.invoice.create',compact('invoiceTypes'))->render();
+        $invoiceIds = Invoice::where('pr_detail_id',session('pr_detail_id'))->pluck('id')->toArray();
+
+        $totalInvoice = InvoiceCost::whereIn('invoice_id',$invoiceIds)->sum('amount');
+        $view =  view('project.invoice.create',compact('invoiceTypes','totalInvoice'))->render();
         return response()->json($view);
     }
 
@@ -43,6 +46,9 @@ class InvoiceController extends Controller
         if ($request->ajax()) {
             $data = Invoice::where('pr_detail_id',session('pr_detail_id'))->latest()->get();
 
+            $invoiceIds = Invoice::where('pr_detail_id',session('pr_detail_id'))->pluck('id')->toArray();
+
+            $totalInvoice = InvoiceCost::whereIn('invoice_id',$invoiceIds)->sum('amount');
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('Edit', function($row){
@@ -104,6 +110,7 @@ class InvoiceController extends Controller
                     })
                  
                     ->rawColumns(['Edit','Delete','invoice_type_id','amount','sales_tax','total_value','payment_status','invoice_document'])
+                     ->with('totalInvoice','1')
                     ->make(true);
         }
 
