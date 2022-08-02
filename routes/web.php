@@ -157,7 +157,7 @@ Route::resource('/cvDocument', 'CvDocumentController');
 
 //Projects Routes
 Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Project'], function(){
-//Route::post('/import', 'ProjectController@import')->name('project.import');
+Route::post('/import', 'ProjectController@import')->name('project.import');
 Route::get('/search', 'ProjectController@search')->name('project.search');
 Route::get('/result', 'ProjectController@result')->name('project.result');
 Route::get('/selectedProjects', 'ProjectController@selectedProjects')->name('project.selected');
