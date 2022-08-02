@@ -6,7 +6,7 @@
 @section('content')
 <div class="card">
 	<div class="card-body">	
-		@can('Super Admin')
+		<!-- @can('Super Admin')
 		<div class="container" id='hideDiv'>
    			<h3 align="center">Import Excel File</h3>
 
@@ -35,7 +35,7 @@
 
 
 		<hr>
-		@endcan
+		@endcan -->
 
 		<h4 class="card-title">List of Projects</h4>
 

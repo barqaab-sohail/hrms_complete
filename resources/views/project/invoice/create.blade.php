@@ -4,7 +4,6 @@
   <button type="button" class="btn btn-success float-right"  id ="createInvoice" data-toggle="modal" >Add Invoice</button>
   @endif
   <br>
-  <h1>Total Invoice = {{$totalInvoice}}</h1>
   <table class="table table-bordered data-table">
     <thead>
       <tr>
