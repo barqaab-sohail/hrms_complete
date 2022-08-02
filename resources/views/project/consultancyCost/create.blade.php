@@ -51,7 +51,7 @@
 
                     <div class="form-group">
                       <label class="control-label">Man-Month Cost</label>
-                      <input type="text" name="man_month_cost" id="man_month_cost" value="{{old('man_month_cost')}}" class="form-control" >
+                      <input type="text" name="mm_cost" id="mm_cost" value="{{old('mm_cost')}}" class="form-control" >
                     </div>
 
                     <div class="form-group">
@@ -61,7 +61,7 @@
 
                     <div class="form-group">
                       <label class="control-label">Contingency</label>
-                      <input type="text" name="contingency"  id="contingency" value="{{old('contingency')}}" class="form-control" >
+                      <input type="text" name="contingency_cost"  id="contingency_cost" value="{{old('contingency_cost')}}" class="form-control" >
                     </div>
 
                     <div class="form-group">
@@ -89,14 +89,14 @@
 $(document).ready(function() {
   
   //only number value entered
-    $('#total_cost, #man_month_cost, #direct_cost, #contingency, #sales_tax').on('change, keyup', function() {
+    $('#total_cost, #mm_cost, #direct_cost, #contingency_cost, #sales_tax').on('change, keyup', function() {
     var currentInput = $(this).val();
     var fixedInput = currentInput.replace(/[A-Za-z!@#$%^&*()]/g, '');
     $(this).val(fixedInput);
     });
 
     //Enter Comma after three digit
-    $('#total_cost, #man_month_cost, #direct_cost, #contingency, #sales_tax').keyup(function(event) {
+    $('#total_cost, #mm_cost, #direct_cost, #contingency_cost, #sales_tax').keyup(function(event) {
 
       // skip for arrow keys
       if(event.which >= 37 && event.which <= 40) return;
@@ -126,9 +126,9 @@ $(document).ready(function() {
         columns: [
             {data: "pr_cost_type_id", name: 'pr_cost_type_id'},
             {data: "total_cost", name: 'total_cost'},
-            {data: "man_month_cost", name: 'man_month_cost'},
+            {data: "mm_cost", name: 'mm_cost'},
             {data: "direct_cost", name: 'direct_cost'},
-            {data: "contingency", name: 'contingency'},
+            {data: "contingency_cost", name: 'contingency_cost'},
             {data: "sales_tax", name: 'sales_tax'},
             {data: "remarks", name: 'remarks'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
@@ -161,12 +161,12 @@ $(document).ready(function() {
           $('#pr_cost_type_id').trigger('change');
           var totalCost = (data.total_cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           $('#total_cost').val(totalCost);
-          var manMonthCost = (data.man_month_cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          $('#man_month_cost').val(manMonthCost);
+          var manMonthCost = (data.mm_cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          $('#mm_cost').val(manMonthCost);
           var directCost = (data.direct_cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           $('#direct_cost').val(directCost);
-          var contingency = (data.contingency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          $('#contingency').val(contingency);
+          var contingency_cost = (data.contingency_cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          $('#contingency_cost').val(contingency_cost);
           var salesTax = (data.sales_tax).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           $('#sales_tax').val(salesTax);
           $('#remarks').val(data.remarks);

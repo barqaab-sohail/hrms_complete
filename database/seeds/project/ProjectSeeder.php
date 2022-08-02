@@ -1,4 +1,5 @@
 <?php
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
@@ -12,11 +13,12 @@ class ProjectSeeder extends Seeder
     public function run()
     {
         $this->call([
-	       PrDivisionsTableSeeder::class,
-	       PrFolderNamesTableSeeder::class,
-	       PrRolesTableSeeder::class,
-	       PrStatusesTableSeeder::class,
-	       PrWorkTypesSeeder::class,
+	       // PrDivisionsTableSeeder::class,
+	       // PrFolderNamesTableSeeder::class,
+	       // PrRolesTableSeeder::class,
+	       // PrStatusesTableSeeder::class,
+	       // PrWorkTypesSeeder::class,
+           PrCostTypeSeeder::class,
         ]);
 
 
