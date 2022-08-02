@@ -1,0 +1,4 @@
+[15-Jun-2022 04:05:07 UTC] PHP Warning:  Undefined variable $level in /home/barqaabp/public_html/hrms/resources/views/vendor/notifications/email.blade.php on line 23
+[15-Jun-2022 04:05:07 UTC] PHP Warning:  Undefined variable $level in /home/barqaabp/public_html/hrms/resources/views/vendor/notifications/email.blade.php on line 24
+[15-Jun-2022 04:10:18 UTC] PHP Warning:  Undefined variable $level in /home/barqaabp/public_html/hrms/resources/views/vendor/notifications/email.blade.php on line 23
+[15-Jun-2022 04:10:18 UTC] PHP Warning:  Undefined variable $level in /home/barqaabp/public_html/hrms/resources/views/vendor/notifications/email.blade.php on line 24
