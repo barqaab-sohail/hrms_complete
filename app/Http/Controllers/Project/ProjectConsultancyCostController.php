@@ -128,8 +128,8 @@ class ProjectConsultancyCostController extends Controller
 
 
 	public function edit($id){
-		$prCost = Prcost::find($id);
-        return response()->json($consultancyCost);
+		$prCost = PrCost::find($id);
+        return response()->json($prCost);
 	}
 
 	
