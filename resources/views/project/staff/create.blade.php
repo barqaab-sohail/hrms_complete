@@ -38,17 +38,17 @@
                         <select  id="hr_employee_id"   name="hr_employee_id"  class="form-control selectTwo" data-validation="required">
                             <option value=""></option>
                             @foreach($hrEmployees as $hrEmployee)
-                            <option value="{{$hrEmployee->id}}" {{(old("hr_employee_id")==$hrEmployee->id? "selected" : "")}}>{{$hrEmployee->full_name}}</option>
+                            <option value="{{$hrEmployee->id}}" {{(old("hr_employee_id")==$hrEmployee->id? "selected" : "")}}>{{$hrEmployee->employee_no}} - {{$hrEmployee->full_name}}</option>
                             @endforeach 
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Position</label>
+                        <label class="control-label">Position<span class="text_requried">*</span></label>
                         <input type="text" name="position" id="position"  value="{{old('position')}}" class="form-control" data-validation="required" >
                     </div>
 
                     <div class="form-group">
-                      <label class="control-label">From</label>
+                      <label class="control-label">From<span class="text_requried">*</span></label>
                        <input type="text" name="from" id="from" value="{{ old('from') }}" class="form-control date_input" data-validation="required" readonly >
                         <br>
                         <i class="fas fa-trash-alt text_requried"></i> 
@@ -60,9 +60,8 @@
                         <br>
                         <i class="fas fa-trash-alt text_requried"></i> 
                     </div>
-
                     <div class="form-group">
-                      <label class="control-label text-right">Status</label>
+                      <label class="control-label text-right">Status<span class="text_requried">*</span></label>
                       <select  name="status"  id="status" class="form-control selectTwo" data-validation="required">
                         <option></option>
                         <option value="Working">Working</option>
@@ -91,7 +90,7 @@ $(document).ready(function() {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('projectConsultancyCost.create') }}",
+        ajax: "{{ route('projectStaff.create') }}",
         columns: [
             {data: "hr_employee_id", name: 'hr_employee_id'},
             {data: "position", name: 'position'},
@@ -109,28 +108,28 @@ $(document).ready(function() {
     $('#createStaff').click(function () {
         $('#json_message_modal').html('');
         $('#saveBtn').val("Create Cost");
-        $('#hr_employee_id').val('');
-        $('#hr_employee_id').trigger('change');
-        $('#staff_id').val('');
         $('#staffForm').trigger("reset");
+        $('#hr_employee_id').trigger('change');
+        $('#status').trigger('change');
+        $('#staff_id').val('');
         $('#modelHeading').html("Create New Staff");
         $('#ajaxModel').modal('show');
     });
     $('body').unbind().on('click', '.editStaff', function () {
       var staff_id = $(this).data('id');
       $('#json_message_modal').html('');
-      $.get("{{ url('hrms/projectStaff') }}" +'/' + staff_id +'/edit', function (data) {
-          $('#modelHeading').html("Edit Staff");
+        $.get("{{ url('hrms/project/projectStaff') }}" +'/' + staff_id +'/edit', function (data) {
+           $('#modelHeading').html("Edit Staff");
           $('#saveBtn').val("edit-Staff");
           $('#ajaxModel').modal('show');
           $('#staff_id').val(data.id);
-          $('#hr_employee_id').val(data.hr_employee_id);
-          $('#hr_employee_id').trigger('change');
+          $('#hr_employee_id').val(data.hr_employee_id).trigger('change');
           $('#position').val(data.position);
           $('#from').val(data.from);
           $('#to').val(data.to);
-          $('#status').val(data.status);
-      })
+          $('#status').val(data.status).trigger('change');
+        });
+
    });
     $('#saveBtn').unbind().click(function (e) {
         e.preventDefault();
@@ -145,6 +144,7 @@ $(document).ready(function() {
      
               $('#staffForm').trigger("reset");
               $('#ajaxModel').modal('hide');
+              $('#json_message').html('<div id="message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');
               table.draw();
         
           },
@@ -161,7 +161,7 @@ $(document).ready(function() {
       });
     });
     
-    $('body').on('click', '.deleteCost', function () {
+    $('body').on('click', '.deleteStaff', function () {
      
         var staff_id = $(this).data("id");
         var con = confirm("Are You sure want to delete !");

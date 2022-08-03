@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrStaffsTable extends Migration
+class CreatePrMonthlyExpensesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class CreatePrStaffsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pr_staffs', function (Blueprint $table) {
+        Schema::create('pr_monthly_expenses', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('pr_detail_id')->unsigned();
-            $table->bigInteger('hr_employee_id')->unsigned();
-            $table->string('position');
-            $table->date('from');
-            $table->date('to')->nullable();
-            $table->string('status',15);
+            $table->decimal('salary_expense',12,0)->nullable();
+            $table->decimal('non_salary_expense',12,0)->nullable();
+            $table->date('month');
+            $table->string('remarks')->nullable();
             $table->timestamps();
-            $table->foreign('hr_employee_id')->references('id')->on('hr_employees');
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
         });
     }
@@ -35,6 +33,6 @@ class CreatePrStaffsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pr_staffs');
+        Schema::dropIfExists('pr_monthly_expenses');
     }
 }

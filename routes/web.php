@@ -179,6 +179,7 @@ Route::resource('/projectInvoice', 'Invoice\InvoiceController');
 Route::resource('/projectPayment', 'Payment\PaymentController');
 Route::resource('projectRights', 'ProjectRightController');
 Route::resource('projectStaff','ProjectStaffController');
+Route::resource('projectMonthlyExpense','ProjectMonthlyExpenseController');
 
 //Progress Routes
 Route::resource('/monthlyProgress', 'Progress\MonthlyProgressController');
