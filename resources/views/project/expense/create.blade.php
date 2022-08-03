@@ -41,12 +41,12 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Salary Expense</label>
-                        <input type="text" name="salary_expense" id="salary_expense"  value="{{old('salary_expense')}}" class="form-control" data-validation="required" >
+                        <input type="text" name="salary_expense" id="salary_expense"  value="{{old('salary_expense')}}" class="form-control prc_1" data-validation="required" >
                     </div>
 
                     <div class="form-group">
                       <label class="control-label">Non Salary Expense</label>
-                      <input type="text" name="non_salary_expense" id="non_salary_expense" value="{{old('non_salary_expense')}}" class="form-control" >
+                      <input type="text" name="non_salary_expense" id="non_salary_expense" value="{{old('non_salary_expense')}}" class="form-control prc_1" >
                     </div>
                     <div class="form-group">
                       <label class="control-label">Total Expenses</label>
@@ -70,6 +70,20 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+
+     //automatic total
+    $(".form-group").on("input", ".prc_1", function() {
+        var sum = 0;
+        $(".form-group .prc_1").each(function(){
+            var inputVal = $(this).val();
+            inputVal=inputVal.replace(/\,/g,'') // remove comma
+            if ($.isNumeric(inputVal)){
+            sum += parseFloat(inputVal);
+            }
+        });
+        sum = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+        $("#total_expenses").val(sum);
+    });
   
   //only number value entered
     $('#salary_expense, #non_salary_expense').on('change, keyup', function() {
@@ -156,16 +170,27 @@ $(document).ready(function() {
           $('#saveBtn').val("edit-Expense");
           $('#ajaxModel').modal('show');
           $('#expense_id').val(data.id);
-          var salaryExpense = (data.salary_expense).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+           $('#month').val(data.month);
+          $('#remarks').val(data.remarks);
+          var salary=0;
+          var nonSalary=0;
+          if(data.salary_expense){
+            var salaryExpense = (data.salary_expense).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           $('#salary_expense').val(salaryExpense);
+          salary =  parseInt(data.salary_expense);
+          }else{
+             $('#salary_expense').val('');
+          }
+          if(data.non_salary_expense){
           var nonSalaryExpense = (data.non_salary_expense).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           $('#non_salary_expense').val(nonSalaryExpense);
-          
-          var totalExpense = ( parseInt(data.salary_expense)+ parseInt(data.non_salary_expense)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          nonSalary = parseInt(data.non_salary_expense);
+          }else{
+             $('#non_salary_expense').val('');
+          }
+          var totalExpense = (salary+nonSalary).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           $('#total_expenses').val(totalExpense);
-        
-          $('#month').val(data.month);
-          $('#remarks').val(data.remarks);
+         
       
          
       })

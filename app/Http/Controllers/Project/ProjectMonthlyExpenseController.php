@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Project;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project\PrMonthlyExpense;
+use App\Http\Requests\Project\PrMonthlyExpenseStore;
 use DB;
 use DataTables;
 
@@ -65,12 +66,11 @@ class ProjectMonthlyExpenseController extends Controller
 
 	}
 
-	public function store(Request $request){
+	public function store(PrMonthlyExpenseStore $request){
 
 		$input = $request->all();
 		
         $input['pr_detail_id']=session('pr_detail_id');
-        $input ['month']= \Carbon\Carbon::parse($request->month)->format('Y-m-d');
 		
 		if($request->filled('salary_expense')){
             $input ['salary_expense']= intval(str_replace( ',', '', $request->salary_expense));
