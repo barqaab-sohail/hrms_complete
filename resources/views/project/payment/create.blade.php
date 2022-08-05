@@ -244,7 +244,6 @@ $(document).ready(function() {
       $.get("{{ url('hrms/project/projectPayment') }}" +'/' + payment_id +'/edit', function (data) {
           $('#modelHeading').html("Edit Payment");
           $('#saveBtn').val("edit-Payment");
-          $('#ajaxModel').modal('show');
           $('#payment_id').val(data.id);
           $('#invoice_id').val(data.invoice_id);
           $('#invoice_id').trigger('change');
@@ -264,7 +263,8 @@ $(document).ready(function() {
           $('#payment_status_id').trigger('change');
           var amount = (data.amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           $('#amount').val(amount);
-      })
+      });
+      $('#ajaxModel').modal('show');
    });
     $('#saveBtn').unbind().click(function (e) {
         $(this).attr('disabled','ture');

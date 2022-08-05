@@ -45,9 +45,11 @@ class PaymentStore extends FormRequest
      */
     public function rules()
     {
-         $rules = [
+
+
+        $rules = [
               
-            'invoice_id' => 'required',
+            'invoice_id' => 'required||unique:payment_receives,invoice_id,'.$this->payment_id,
             'amount' => "required|lte:total_invoice_value",
             'total_invoice_value'=>'required',
             'payment_date' => 'required',
