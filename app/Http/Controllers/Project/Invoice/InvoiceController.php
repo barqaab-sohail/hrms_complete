@@ -14,6 +14,8 @@ use App\Models\Project\Invoice\InvoiceType;
 use App\Models\Project\Invoice\InvoiceDocument;
 use App\Models\Project\Invoice\InvoiceCost;
 use App\Models\Project\Invoice\InvoiceStatus;
+use App\Models\Project\Cost\PrCost;
+use App\Models\Project\Payment\PaymentReceive;
 use DB;
 use DataTables;
 
@@ -34,10 +36,18 @@ class InvoiceController extends Controller
 
     public function index() {
         $invoiceTypes = InvoiceType::all();
-        $invoiceIds = Invoice::where('pr_detail_id',session('pr_detail_id'))->pluck('id')->toArray();
+        $invoiceIds = Invoice::where('pr_detail_id',session('pr_detail_id'))->where('invoice_type_id','!=',3)->pluck('id')->toArray();
+        $totalInvoices = InvoiceCost::whereIn('invoice_id',$invoiceIds)->sum('amount');
+        $projectCost = PrCost::where('pr_detail_id',session('pr_detail_id'))->first();
+        $projectTotalCost = $projectCost->total_cost??'0';
+        $balanceCost = $projectTotalCost - $totalInvoices;
+       
 
-        $totalInvoice = InvoiceCost::whereIn('invoice_id',$invoiceIds)->sum('amount');
-        $view =  view('project.invoice.create',compact('invoiceTypes','totalInvoice'))->render();
+        $balanceCost = addComma($balanceCost);
+        $projectTotalCost = addComma($projectTotalCost);
+        $totalInvoices = addComma($totalInvoices);
+       
+        $view =  view('project.invoice.create',compact('invoiceTypes','totalInvoices','projectTotalCost','balanceCost'))->render();
         return response()->json($view);
     }
 

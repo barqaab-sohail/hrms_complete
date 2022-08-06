@@ -13,9 +13,8 @@ class PaymentStatusTableSeeder extends Seeder
     {
         DB::table('payment_statuses')->delete();  
         $paymentStatuses = array(
-        	array('name' => 'Pending'),
-        	array('name' => 'Received'),
-            array('name' => 'Partially Received')
+        	array('name' => 'Partially Received'),
+        	array('name' => 'Received')
         );
         DB::table('payment_statuses')->insert($paymentStatuses);
     }
