@@ -3,6 +3,7 @@
   @if(isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id')))
   <button type="button" class="btn btn-success float-right"  id ="createInvoice" data-toggle="modal" >Add Invoice</button>
   @endif
+  <h3>Total Project Cost = {{$projectTotalCost}} - Total Invoice Raised W/O Escl.= {{$totalInvoices}} - Balance Budget = {{$balanceCost}}</h3>
   <br>
   <table class="table table-bordered data-table">
     <thead>

@@ -10,6 +10,7 @@ use App\Models\Project\Invoice\Invoice;
 use App\Models\Project\Payment\PaymentReceive;
 use App\Models\Project\Payment\PaymentDeduction;
 use App\Models\Project\Payment\PaymentStatus;
+use App\Models\Project\Invoice\InvoiceCost;
 use DB;
 use DataTables;
 
@@ -21,8 +22,8 @@ class PaymentController extends Controller
         
         $invoice = Invoice::find($id);
         $totalInvoiceValue = $invoice->invoiceCost->amount + $invoice->invoiceCost->sales_tax;
-        
         $totalInvoiceValue = addComma($totalInvoiceValue);
+
         return response()->json($totalInvoiceValue);
     }
 
@@ -32,7 +33,17 @@ class PaymentController extends Controller
         //following is not working during editing so above is working
         //$invoices = pendingInvoices(session('pr_detail_id'));
         $paymentStatuses = PaymentStatus::all();
-        $view =  view('project.payment.create',compact('invoices','paymentStatuses'))->render();
+
+        $invoiceIds = Invoice::where('pr_detail_id',session('pr_detail_id'))->pluck('id')->toArray();
+        $totalInvoiceRaised = InvoiceCost::whereIn('invoice_id',$invoiceIds)->sum('amount');
+        $totalPaymentReceived = PaymentReceive::whereIn('invoice_id',$invoiceIds)->sum('amount');
+        $totalPendingPayment = $totalInvoiceRaised - $totalPaymentReceived; 
+
+        $totalInvoiceRaised = addComma($totalInvoiceRaised);
+        $totalPaymentReceived = addComma($totalPaymentReceived);
+        $totalPendingPayment = addComma($totalPendingPayment);
+
+        $view =  view('project.payment.create',compact('invoices','paymentStatuses','totalPaymentReceived','totalPendingPayment','totalInvoiceRaised'))->render();
         return response()->json($view);
     }
 
