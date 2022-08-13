@@ -87,6 +87,7 @@
 </div>
 
 <script type="text/javascript">
+
   $(document).ready(function() {
 
     $(function() {
@@ -169,7 +170,7 @@
           $('#working_as').val(data.working_as).trigger('change');
           $('#status').val(data.status).trigger('change');
         });
-
+        
       });
       $('#saveBtn').unbind().click(function(e) {
         e.preventDefault();
