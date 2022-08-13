@@ -324,8 +324,8 @@
           var totalValue = (+(data.amount) + +(data.sales_tax));
           totalValue = totalValue?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
           $('#total_value').val(totalValue);
-          var docUrl = "{{asset("
-          ")}}" + "storage/" + data.path;
+          var path = data.path;
+          var docUrl = "{{asset('storage/:path')}}".replace(':path',path);
           $("#pdf").show();
           document.getElementById("pdf").src = docUrl;
           //$('#pdf').trigger('change');
