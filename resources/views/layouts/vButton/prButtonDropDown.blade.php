@@ -8,6 +8,11 @@
                 <a type="submit" role="button" id="addProject" href="{{route('project.edit',session('pr_detail_id'))}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/project/*/edit')?'style=background-color:#737373,':''}}>Project Detail</a>
                 @can('pr edit cost') 
                 <a type="submit" role="button" style="color:white" id="addConsultancyCost" href="{{route('projectConsultancyCost.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectConsultancyCost/index')?'style=background-color:#737373':''}}>Consultancy Cost</a>
+                <a type="submit" role="button" style="color:white" id="addPosition" href="{{route('projectPosition.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPosition/index')?'style=background-color:#737373':''}}>Position</a>
+
+                @if($data->pr_role_id!=1)
+                <a type="submit" role="button" style="color:white" id="addPartner" href="{{route('projectPartner.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPartner/index')?'style=background-color:#737373':''}}>Project Partners</a>
+                @endif  
                 <a type="submit" role="button" style="color:white" id="addStaff" href="{{route('projectStaff.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectStaff/index')?'style=background-color:#737373':''}}>Project Staff</a>
                 @endcan
                 @if(isViewInvoice(session('pr_detail_id')) || isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id')))
@@ -40,20 +45,7 @@
                  <a type="submit" role="button" style="color:white" id="addMonthlyProgress" href="{{route('monthlyProgress.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/monthlyProgress/index')?'style=background-color:#737373':''}}>Monthly Progress</a>
                 @endif
                 
-                
-                @can('Super Admin')
-                @if($data->pr_role_id!=1)
-                <a type="submit" role="button" style="color:white" id="addPartner" href="{{route('projectPartner.create')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPartner/create')?'style=background-color:#737373':''}}>Partner Detail</a>
-                @endif
-
-
-                <a type="submit" role="button" style="color:white" id="addPosition" href="{{route('projectPosition.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPosition/index')?'style=background-color:#737373':''}}>Position</a>
-
-        
-
-
-                @endcan
-
+               
 
 
                  

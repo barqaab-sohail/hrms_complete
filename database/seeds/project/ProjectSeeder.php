@@ -19,6 +19,7 @@ class ProjectSeeder extends Seeder
 	       PrStatusesTableSeeder::class,
 	       PrWorkTypesSeeder::class,
            PrCostTypeSeeder::class,
+            PrPositionTypeSeeder::class,
         ]);
 
 

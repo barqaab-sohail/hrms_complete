@@ -34,7 +34,7 @@
 
           <div class="form-group">
             <label class="control-label text-right">Month<span class="text_requried">*</span></label>
-            <input type="text" id="month" name="month" value="{{ old('month') }}" class="form-control " readonly>
+            <input type="text" id="month" name="month" value="{{ old('month') }}" class="form-control date_input" readonly>
             <br>
             <i class="fas fa-trash-alt text_requried"></i>
           </div>
