@@ -169,8 +169,13 @@
           $('#to').val(data.to);
           $('#working_as').val(data.working_as).trigger('change');
           $('#status').val(data.status).trigger('change');
+        }).then(function (){
+          $(".date_input").each(function(){
+            if ($(this).val()!=''){
+              $(this).siblings('i').show();
+            }
+          });
         });
-        
       });
       $('#saveBtn').unbind().click(function(e) {
         e.preventDefault();

@@ -214,7 +214,7 @@
             data: "technical_number",
             name: 'technical_number'
           },
-          @if($data - > subDescription - > sub_evaluation_type_id == 1) {
+          @if($data -> subDescription -> sub_evaluation_type_id == 1) {
             data: "technical_score",
             name: 'technical_score'
           },
@@ -222,7 +222,7 @@
             data: "total_price",
             name: 'total_price'
           },
-          @if($data - > subDescription - > sub_evaluation_type_id == 1) {
+          @if($data -> subDescription -> sub_evaluation_type_id == 1) {
             data: "financial_score",
             name: 'financial_score'
           },

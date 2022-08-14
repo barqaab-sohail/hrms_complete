@@ -19,7 +19,6 @@ class ProjectPositionController extends Controller
         $positionTypes = PrPositionType::all();
         $prPositions =  PrPosition::where('pr_detail_id', session('pr_detail_id'))->get();
         $hrDesignations = HrDesignation::all();
-        //dd($managers->hodDesignation->name);
         $view =  view ('project.position.create', compact('positionTypes','hrDesignations'))->render();
         return response()->json($view);
 
