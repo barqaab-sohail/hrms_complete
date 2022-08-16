@@ -61,6 +61,40 @@
       color: white;
       text-decoration: none;
     }
+
+    body{
+    background:#E0E0E0;
+}
+.details {
+            border: 1.5px solid grey;
+            color: #212121;
+            width: 100%;
+            height: auto;
+            box-shadow: 0px 0px 10px #212121;
+        }
+
+        
+        .card {
+            width: fit-content;
+        }
+
+        .card-body {
+            width: fit-content;
+        }
+
+        .btn {
+            border-radius: 0;
+        }
+
+        .img-thumbnail {
+            border: none;
+        }
+
+        .card {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .2);
+            border-radius: 5px;
+            padding-bottom: 10px;
+        }
   </style>
   <div class="container">
     <div class="d-flex justify-content-center">
@@ -70,25 +104,29 @@
       </div>
     </div>
   </div>
-  <div>
-    <div class="container">
-      <div class="d-flex justify-content-center">
-        <div>
-          <br>
-          <h3 id="name"></h3>
-          <h3 id="position"></h3>
-          <h3 id="status"></h3>
-          <img id="image" width="150" />
+
+
+  <div class='container-fluid'>
+        <div class="card mx-auto col-md-12 col-10 mt-5">
+            <img class='mx-auto img-thumbnail'
+               
+                width="150" height="auto"/>
+            <div class="card-body text-center mx-auto">
+                <div class='cvp'>
+                    <h5 class="card-title font-weight-bold" id="emp_name"></h5>
+                    <h5 class="card-title font-weight-bold"  id="emp_des"></h5>
+                    <h5 class="card-title font-weight-bold"  id="emp_status"></h5>
+                    
+                </div>
+            </div>
         </div>
-      </div>
+
     </div>
-
-
-  </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
+    $('.card').hide();
     //Enter Comma after three digit
     $("#search_input").keyup(function(ev) {
       let input = ev.target.value.split("-").join("");
@@ -127,27 +165,34 @@
           console.log(data);
           console.log(data.picture);
           if (data) {
-            $('#name').text('Name: ' + data.full_name);
-            $('#position').text('Designation: ' + data.designation);
+            $('.card').show();
+            $(".img-thumbnail").show();
+            $('#emp_name').text('Name: ' + data.full_name);
+            $('#emp_des').html(' Designation: '+ data.designation);
             if (data.hr_status_id == 'Active') {
-              $('#status').text('Current Status: Working');
+              $('#emp_status').text('Current Status: Working');
             } else {
-              $('#status').text('Current Status: Not Working');
+              $('#emp_status').text('Current Status: Not Working');
             }
-            var image = data.picture.path + data.picture.file_name;
-            var imageurl = "{{asset('storage/:id')}}".replace(':id', image);
-            $("#image").attr('src', imageurl);
+
+            if(data.picture){
+              var image = data.picture.path + data.picture.file_name;
+              var imageurl = "{{asset('storage/:id')}}".replace(':id', image);
+              $(".img-thumbnail").attr('src', imageurl);
+            }
+
+            $('img').on('error', function() {
+              this.src = "{{asset('Massets/images/default.png')}}";
+            });
 
           } else {
-            $('#name').text('No Record Found');
-            $('#position').text('');
-            $('#status').text('');
-            $("#image").removeAttr('src');
+            $('#emp_name').text('No Record Found');
+            $('#emp_des').text('');
+            $('#emp_status').text('');
+            $(".img-thumbnail").hide();
           }
 
-          $('img').on('error', function() {
-            this.src = 'https://i.imgur.com/CbsGGVp.jpg';
-          });
+          
 
         },
         error: function(jqXHR, textStatus, errorThrown) {
