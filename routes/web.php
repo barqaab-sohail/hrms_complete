@@ -15,8 +15,8 @@ use App\Models\Hr\HrEmployee;
 |
 */
 
-Route::get('/verification', 'HomeController@employee');
-Route::get('/verificationResult/{id?}', 'HomeController@result')->name('verification');
+Route::get('/verifyCard', 'HomeController@employee');
+Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');
 
 Route::get('/dashboard', 'HomeController@index')->middleware('auth')->name('dashboard');
 //Route::get ('insert','Hr\EmployeeController@insert');
