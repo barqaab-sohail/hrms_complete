@@ -24,13 +24,12 @@ class HomeController extends Controller
      */
     // public function test(LeaveBalanceDataTable $dataTable)
     // {
-       
+
     //     return $dataTable->render('test');
     // }
 
     public function index()
     {
-
         // $allRoutes = Route::getRoutes();
         // dd($allRoutes);
 
@@ -39,7 +38,7 @@ class HomeController extends Controller
         $countBelowSixty = ageChart()['countBelowSixty'];
         $countBelowSeventy = ageChart()['countBelowSeventy'];
         $countAboveSeventy = ageChart()['countAboveSeventy'];
- 
+
 
 
         $categoryA = categoryChart()['categoryA'];
@@ -54,14 +53,30 @@ class HomeController extends Controller
         $power = departmentChart()['power'];
         $water = departmentChart()['water'];
 
-        
+
         // $results = projectInvoiceRight(2);
         // // // foreach ($results as $result){
         // // //     echo $result->pr_detail_id.'<br>';
         // // // }
         // dd ($results);
 
-        return view('dashboard.dashboard',compact('countBelowForty','countBelowFifty','countBelowSixty','countBelowSeventy','countAboveSeventy','categoryA','categoryB','categoryC','allEmployees','pecRegisteredEngineers','associatedEngineers','finance','power','water'));
+        return view('dashboard.dashboard', compact('countBelowForty', 'countBelowFifty', 'countBelowSixty', 'countBelowSeventy', 'countAboveSeventy', 'categoryA', 'categoryB', 'categoryC', 'allEmployees', 'pecRegisteredEngineers', 'associatedEngineers', 'finance', 'power', 'water'));
     }
 
+
+    public function employee()
+    {
+        return view('hr.verification.index');
+    }
+
+    public function result($id)
+    {
+
+        $data = HrEmployee::with('picture')->where('cnic', $id)->first();
+        if ($data) {
+            return response()->json($data);
+        } else {
+            return response()->json('');
+        }
+    }
 }
