@@ -14,63 +14,64 @@ use DB;
 
 class UserLoginController extends Controller
 {
-   public function edit(Request $request, $id){
-    	
-    	$data = HrEmployee::find($id);
-    	$user = User::where('id',$data->user_id)->first();
-    	$permissions = Permission::all();
-    	$picture = HrDocumentation::where([['hr_employee_id', '=',session('hr_employee_id')], ['description','=','picture'] ])->first();
-	    
-	   if($request->ajax()){
-	   		$view = view('hr.login.create', compact('data','permissions','picture'))->render();
-    		return response()->json($view);
-	  }else
-	  {
-	  	return back()->withError('Please contact to administrator, SSE_JS');
-	  }
+	public function edit(Request $request, $id)
+	{
+
+		$data = HrEmployee::find($id);
+		$user = User::where('id', $data->user_id)->first();
+		$permissions = Permission::all();
+		$picture = HrDocumentation::where([['hr_employee_id', '=', session('hr_employee_id')], ['description', '=', 'picture']])->first();
+
+		if ($request->ajax()) {
+			$view = view('hr.login.create', compact('data', 'permissions', 'picture'))->render();
+			return response()->json($view);
+		} else {
+			return back()->withError('Please contact to administrator, SSE_JS');
+		}
 	}
 
-	public function store (Request $request){
+	public function store(Request $request)
+	{
 
-		DB::transaction(function () use ($request) {  
+		DB::transaction(function () use ($request) {
 
 			$employee = HrEmployee::find(session('hr_employee_id'));
 			//Firs check Employee have user_id if yes than get user and give premission 
 			//Else create User detail and updated user_id in Employee Table then give permission 
-			if($employee->user_id){
+			if ($employee->user_id) {
 				$user = User::where('id', $employee->user_id)->first();
-				if($user->email != $request->email){
-					$user->update(['email'=>$request->email]);
+				if ($user->email != $request->email) {
+					$user->update(['email' => $request->email]);
 				}
+			} else {
 
-			}else{
-				
-				$user = User::create(['email'=>$request->email, 'password'=>Hash::make(Str::random(8))]);
+				$user = User::create(['email' => $request->email, 'password' => Hash::make(Str::random(8))]);
 				$employee->update(['user_id' => $user->id]);
 			}
-			
-			$user->givePermissionTo($request->permission);
 
+			//check permission entered otherwise only save user email address as per above 
+			if ($request->filled('permission')) {
+				$user->givePermissionTo($request->permission);
+			}
 		});
 
-		return response()->json(['status'=> 'OK', 'message' => "Permission Successfully Saved"]);
-
+		return response()->json(['status' => 'OK', 'message' => "Permission Successfully Saved"]);
 	}
 
-	public function destroy($id){
+	public function destroy($id)
+	{
 		$data = HrEmployee::find(session('hr_employee_id'));
-		$user = User::where('id',$data->user_id)->first();
+		$user = User::where('id', $data->user_id)->first();
 		$user->revokePermissionTo($id);
-		return response()->json(['status'=> 'OK', 'message' => "Permission Successfully Deleted"]);
-
+		return response()->json(['status' => 'OK', 'message' => "Permission Successfully Deleted"]);
 	}
 
 
-	public function refreshTable(){
+	public function refreshTable()
+	{
 		$data = HrEmployee::find(session('hr_employee_id'));
-    	$user = User::where('id',$data->user_id)->first();
+		$user = User::where('id', $data->user_id)->first();
 		$userPermissions = $user->getAllPermissions();
-        return view('hr.login.list',compact('userPermissions'));
-    }
-
+		return view('hr.login.list', compact('userPermissions'));
+	}
 }
