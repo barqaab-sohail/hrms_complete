@@ -115,13 +115,13 @@
             @if($prDetail->contract_type_id==2)
             <div class="col-md-2 hideDev">
               <div class="form-group">
-                <label class="control-label">Total Overhead</label>
+                <label class="control-label">Total Overhead<span class="text_requried">*</span></label>
                 <input type="text" name="overhead" id="overhead" value="{{old('overhead')}}" class="form-control">
               </div>
             </div>
             <div class="col-md-2 hideDev">
               <div class="form-group">
-                <label class="control-label">Total Fee</label>
+                <label class="control-label">Total Fee<span class="text_requried">*</span></label>
                 <input type="text" name="fee" id="fee" value="{{old('fee')}}" class="form-control">
               </div>
             </div>
