@@ -8,42 +8,48 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Invoice extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    
-   	protected $fillable = ['pr_detail_id', 'invoice_type_id','invoice_no','invoice_date','description','reference'];
 
-   	public function paymentStatus(){
+    protected $fillable = ['pr_detail_id', 'invoice_type_id', 'invoice_no', 'invoice_date', 'description', 'reference'];
 
-        return $this->hasOneThrough('App\Models\Project\Payment\PaymentStatus',
-        	'App\Models\Project\Payment\PaymentReceive',
-        	'invoice_id',
-        	'id',
-        	'id',
-        	'payment_status_id'
-        	);
+    public function paymentStatus()
+    {
+
+        return $this->hasOneThrough(
+            'App\Models\Project\Payment\PaymentStatus',
+            'App\Models\Project\Payment\PaymentReceive',
+            'invoice_id',
+            'id',
+            'id',
+            'payment_status_id'
+        );
     }
 
-    Public function invoiceType(){
+    public function prDetail()
+    {
+        return $this->belongsTo('App\Models\Project\PrDetail');
+    }
+
+    public function invoiceType()
+    {
 
         return $this->belongsTo('App\Models\Project\Invoice\InvoiceType');
-
     }
 
 
-    Public function invoiceCost(){
+    public function invoiceCost()
+    {
 
         return $this->hasOne('App\Models\Project\Invoice\InvoiceCost');
-
     }
 
-    public function invoiceDocument(){
+    public function invoiceDocument()
+    {
         return $this->hasOne('App\Models\Project\Invoice\InvoiceDocument');
     }
 
-    Public function invoiceMonth(){
+    public function invoiceMonth()
+    {
 
         return $this->hasOne('App\Models\Project\Invoice\InvoiceMonth');
-
     }
-
-
 }
