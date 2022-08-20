@@ -94,24 +94,38 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
               <div class="form-group">
                 <label class="control-label">Value Excluding Sales Tax<span class="text_requried">*</span></label>
                 <input type="text" name="amount" id="amount" value="{{old('amount')}}" class="form-control prc_1" data-validation="required">
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
               <div class="form-group">
                 <label class="control-label">Sales Tax<span class="text_requried">*</span></label>
                 <input type="text" name="sales_tax" id="sales_tax" value="{{old('sales_tax')}}" class="form-control prc_1" data-validation="required">
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
               <div class="form-group">
                 <label class="control-label">Total Value</label>
                 <input type="text" name="total_value" id="total_value" value="{{old('total_value')}}" readonly class="form-control">
               </div>
             </div>
+            @if($prDetail->contract_type_id==2)
+            <div class="col-md-2 hideDev">
+              <div class="form-group">
+                <label class="control-label">Total Overhead</label>
+                <input type="text" name="overhead" id="overhead" value="{{old('overhead')}}" class="form-control">
+              </div>
+            </div>
+            <div class="col-md-2 hideDev">
+              <div class="form-group">
+                <label class="control-label">Total Fee</label>
+                <input type="text" name="fee" id="fee" value="{{old('fee')}}" class="form-control">
+              </div>
+            </div>
+            @endif
           </div>
           <!--/row-->
           <div class="row">
@@ -154,6 +168,14 @@
 <script type="text/javascript">
   $(document).ready(function() {
     //function view from list table
+    $('.hideDev').hide();
+    $("#invoice_type_id").change(function() {
+      if ($(this).val() == 1 || $(this).val() == 3) {
+        $('.hideDev').show();
+      } else {
+        $('.hideDev').hide();
+      }
+    });
 
     $(function() {
       $('.date-picker').datepicker({
@@ -175,14 +197,14 @@
 
     });
     //only number value entered
-    $('#amount, #sales_tax').on('change, keyup', function() {
+    $('#amount, #sales_tax, #overhead, #fee').on('change, keyup', function() {
       var currentInput = $(this).val();
       var fixedInput = currentInput.replace(/[A-Za-z!@#$%^&*()]/g, '');
       $(this).val(fixedInput);
     });
 
     //Enter Comma after three digit
-    $('#amount, #sales_tax').keyup(function(event) {
+    $('#amount, #sales_tax, #overhead, #fee').keyup(function(event) {
 
       // skip for arrow keys
       if (event.which >= 37 && event.which <= 40) return;
@@ -320,12 +342,19 @@
           $('#amount').val(amount);
           var salesTax = data.sales_tax?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
           $('#sales_tax').val(salesTax);
+          var overhead = data.overhead?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
+          $('#overhead').val(overhead);
+          var fee = data.fee?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
+          $('#fee').val(fee);
+
+
+
           //+ convert string to number
           var totalValue = (+(data.amount) + +(data.sales_tax));
           totalValue = totalValue?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
           $('#total_value').val(totalValue);
           var path = data.path;
-          var docUrl = "{{asset('storage/:path')}}".replace(':path',path);
+          var docUrl = "{{asset('storage/:path')}}".replace(':path', path);
           $("#pdf").show();
           document.getElementById("pdf").src = docUrl;
           //$('#pdf').trigger('change');
