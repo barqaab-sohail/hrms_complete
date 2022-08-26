@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Project\Progress;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project\Progress\PrSubProject;
+use DB;
+use DataTables;
 
 class SubProjectController extends Controller
 {
@@ -55,6 +57,7 @@ class SubProjectController extends Controller
                 ['id' => $input['pr_sub_project_id']],
                 [
                     'pr_detail_id' => $input['pr_detail_id'],
+                    'name' => $input['name'],
                     'weightage' => $input['weightage']
 
                 ]
