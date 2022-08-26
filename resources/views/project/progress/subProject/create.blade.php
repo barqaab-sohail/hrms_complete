@@ -25,7 +25,7 @@
             </div>
             <div class="modal-body">
                 <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
-                <form id="subProjectForm" name="subProjectForm" action="{{route('subProject.store')}}" class="form-horizontal">
+                <form id="subProjectForm" name="subProjectForm" class="form-horizontal">
 
                     <input type="hidden" name="pr_sub_project_id" id="pr_sub_project_id">
 
@@ -81,7 +81,7 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('projectProgressActivities.create') }}",
+                ajax: "{{ route('subProject.create') }}",
                 columns: [{
                         data: "name",
                         name: 'name'
@@ -173,7 +173,7 @@
                 if (con) {
                     $.ajax({
                         type: "DELETE",
-                        url: "{{ route('projectProgressActivities.store') }}" + '/' + pr_sub_project_id,
+                        url: "{{ route('subProject.store') }}" + '/' + pr_sub_project_id,
                         success: function(data) {
                             table.draw();
                             if (data.error) {

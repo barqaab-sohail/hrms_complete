@@ -9,7 +9,7 @@
         @can('pr edit cost')
         <a type="submit" role="button" style="color:white" id="addConsultancyCost" href="{{route('projectConsultancyCost.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectConsultancyCost/index')?'style=background-color:#737373':''}}>Consultancy Cost</a>
         <a type="submit" role="button" style="color:white" id="addPosition" href="{{route('projectPosition.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPosition/index')?'style=background-color:#737373':''}}>Position</a>
-
+        <a type="submit" role="button" style="color:white" id="addSubProject" href="{{route('subProject.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectIssues/index')?'style=background-color:#737373':''}}>Sub Projects</a>
         @if($data->pr_role_id!=1)
         <a type="submit" role="button" style="color:white" id="addPartner" href="{{route('projectPartner.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPartner/index')?'style=background-color:#737373':''}}>Project Partners</a>
         @endif
