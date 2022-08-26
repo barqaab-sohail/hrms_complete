@@ -22,22 +22,22 @@ class AppointmentStore extends FormRequest
      */
     public function rules()
     {
-         return [
+        return [
 
-            'reference_no'=>'required|max:190',
-            'joining_date'=>'required|date',
-            'expiry_date'=>'nullable|date|after:joining_date',
-            'office_id'=>'required|numeric',
-            'hr_designation_id'=>'required|numeric',
-            'hr_manager_id'=>'required|numeric',
-            'hr_department_id'=>'required|numeric',
-            'hr_category_id'=>'required',
-            'hr_salary_id'=>'required|numeric',
-            'hr_grade_id'=>'nullable',
-            'hr_employee_type_id'=>'required',
-            'hr_letter_type_id'=>'required|numeric',
-            'pr_detail_id'=>'required|numeric',
-            'remarks'=>'nullable|max:190',   
+            'reference_no' => 'required|max:190',
+            'joining_date' => 'required|date',
+            'expiry_date' => 'nullable|date|after:joining_date',
+            'office_id' => 'required|numeric',
+            'hr_designation_id' => 'required|numeric',
+            'hr_manager_id' => 'required|numeric',
+            'hr_department_id' => 'required|numeric',
+            'hr_category_id' => 'required',
+            'hr_salary_id' => 'required|numeric',
+            'hr_grade_id' => 'nullable|numeric',
+            'hr_employee_type_id' => 'required',
+            'hr_letter_type_id' => 'required|numeric',
+            'pr_detail_id' => 'required|numeric',
+            'remarks' => 'nullable|max:190',
         ];
     }
 }
