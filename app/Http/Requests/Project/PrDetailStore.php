@@ -23,17 +23,18 @@ class PrDetailStore extends FormRequest
      */
     public function rules()
     {
-        return [    
-            'name'=>'required|max:510|unique:pr_details,name,'.session('pr_detail_id'),
-            'client_id'=>'required|numeric',
-            'commencement_date'=>'required|date',
-            'contractual_completion_date'=>'nullable|date|after:commencement_date',
-            'actual_completion_date'=>'nullable|date', 
-            'pr_status_id'=>'required|numeric',
-            'pr_role_id'=>'required|numeric',
-            'contract_type_id'=>'required|numeric',
-            'project_no'=>'required|max:4|unique:pr_details,project_no,'.session('pr_detail_id'),
-            'share'=>'required',
+        return [
+            'name' => 'required|max:510|unique:pr_details,name,' . session('pr_detail_id'),
+            'client_id' => 'required|numeric',
+            'commencement_date' => 'required|date',
+            'contractual_completion_date' => 'nullable|date|after:commencement_date',
+            'actual_completion_date' => 'nullable|date',
+            'sub_projects' => 'required|boolean',
+            'pr_status_id' => 'required|numeric',
+            'pr_role_id' => 'required|numeric',
+            'contract_type_id' => 'required|numeric',
+            'project_no' => 'required|max:4|unique:pr_details,project_no,' . session('pr_detail_id'),
+            'share' => 'required',
         ];
     }
 }
