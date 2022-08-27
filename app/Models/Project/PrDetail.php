@@ -27,4 +27,9 @@ class PrDetail extends Model implements Auditable
     {
         return \Carbon\Carbon::parse($this->commencement_date)->format('M d, Y');
     }
+
+    public function prSubProject()
+    {
+        return $this->hasMany('App\Models\Project\PrSubProject');
+    }
 }
