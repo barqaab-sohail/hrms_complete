@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Project\Progress;
+namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Project\Progress\PrSubProject;
+use App\Models\Project\PrSubProject;
 use DB;
 use DataTables;
 

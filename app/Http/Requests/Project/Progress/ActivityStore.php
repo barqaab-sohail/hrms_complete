@@ -4,10 +4,12 @@ namespace App\Http\Requests\Project\Progress;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Project\Progress\PrProgressActivity;
+use App\Models\Project\PrDetail;
 
 class ActivityStore extends FormRequest
 {
-    
+    private $total;
+
     public function getValidatorInstance()
     {
         $this->cleanWeightage();
@@ -16,16 +18,15 @@ class ActivityStore extends FormRequest
 
     protected function cleanWeightage()
     {
-        if($this->request->has('weightage')){
+        if ($this->request->has('weightage')) {
             $this->merge([
                 'weightage' => floatval($this->request->get('weightage'))
             ]);
-        }else{
+        } else {
             $this->merge([
                 'weightage' => null
             ]);
         }
-
     }
 
 
@@ -46,23 +47,31 @@ class ActivityStore extends FormRequest
      */
     public function rules()
     {
-         $sum = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->sum('weightage');
-         
-         $max = 100 - $sum;
+        $sum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->sum('weightage');
 
-         $rules = [    
+        $project = PrDetail::find(session('pr_detail_id'));
+        if ($project->prSubProject->count()) {
+            $this->total = $project->prSubProject->count() * 100;
+        } else {
+            $this->total = 100;
+        }
+
+
+        $max = $this->total - $sum;
+
+        $rules = [
             'name' => 'required',
 
         ];
 
-      //If method is POST then document is required otherwise in Patch method document is nullable.
+        //If method is POST then document is required otherwise in Patch method document is nullable.
         if ($this->activity_id) {
-             $sum = PrProgressActivity::where('id',$this->activity_id)->first();
+            $sum = PrProgressActivity::where('id', $this->activity_id)->first();
             $max = $max + $sum->weightage;
 
-            $rules += [ 'weightage' => "required|lte:$max"];
-        }else{    
-            $rules += [ 'weightage' => "required|lte:$max"];  
+            $rules += ['weightage' => "required|lte:$max"];
+        } else {
+            $rules += ['weightage' => "required|lte:$max"];
         }
 
         return $rules;
@@ -70,10 +79,9 @@ class ActivityStore extends FormRequest
 
     public function messages()
     {
-       
+
         return [
-            'weightage.lte' => 'Total Weightage of all activities less than or equal to 100 ',
+            'weightage.lte' => "Total Weightage of all activities less than or equal to $this->total",
         ];
     }
-
 }
