@@ -22,122 +22,122 @@ class ProjectProgressController extends Controller
 
         $view =  view('project.progress.achived.create', compact('prProgressActivities'))->render();
         return response()->json($view);
-
-
-        //following code shift to create function
-
-        // $projectProgress = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('weightage','>',0)->get();
-        // $counts = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->groupBy('belong_to_activity')
-        //        ->get();
-
-        //    $headings = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('weightage','NULL')->get();
-
-        //    echo 'Start heading list' . '<br>';
-        //    foreach($headings as $heading){
-
-        //    	$projectProgress = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('belong_to_activity',$heading->id)->get();
-
-        //    	$sum = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('belong_to_activity',$heading->id)->sum('weightage');
-        //    	echo $heading->name ." - ".$sum.'<br>';
-        //    	foreach($projectProgress as $progress){
-
-        // 	echo "    - ".$progress->name . "<br>";
-        // 	}
-
-
-        //    }
-        //    echo 'end heading list' . '<br>';
-
-
     }
 
     public function create(Request $request)
     {
-        // $projectLevel = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->max('level');
-        // $progressActivities = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 1)->get();
+        $customData1 = new Collection;
 
+        $projectLevel = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->max('level');
 
-        // if ($projectLevel > 1) {
-        //     $levelOnes = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 1)->get();
-        //     foreach ($levelOnes as $levelOne) {
-        //         $Data1->push($levelOne);
-        //         $levelTwoIds =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 2)->where('belong_to_activity', $levelOne->id)->pluck('id')->toArray();
-        //         $levelOneSum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $levelTwoIds)->sum('weightage');
-        //         if ($levelOneSum === 0) {
+        if ($projectLevel > 1) {
+            $levelOnes = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 1)->get();
+            $totalAchievedProgressLevel1 = 0.0;
+            $lastAchievedProgressDateLevel1 = '';
 
-        //             $levelTwoS = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $levelOne->id)->sum('weightage');
-        //             echo $levelOne->name . '--' . $levelTwoS . '<br>';
-        //         } else {
-        //             echo $levelOne->name . '- - ' . $levelOneSum . '<br>';
-        //         }
+            foreach ($levelOnes as $levelOne) {
+                $levelOneIds =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('id', $levelOne->id)->pluck('id')->toArray();
+                $leveltwoSum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $levelOneIds)->sum('weightage');
+                //check if level two sume is 0 than it is heading
+                if ($leveltwoSum === 0) {
+                    $levelTwoTotalWeightage = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $levelOne->id)->sum('weightage');
 
-        //         $levelTwos =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 2)->where('belong_to_activity', $levelOne->id)->get();
-        //         foreach ($levelTwos as $levelTwo) {
-        //             $levelTwoSum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $levelTwo->id)->sum('weightage');
-        //             if ($levelTwoSum === 0) {
-        //                 echo '-------' . $levelTwo->name . ' - ' . $levelTwo->weightage . '<br>';
-        //             } else {
-        //                 echo '-------' . $levelTwo->name . '- - ' . $levelTwoSum . '<br>';
-        //             }
+                    // //Sum of level 2 progress
+                    // foreach ($levelTwoIds as $levelTwoId) {
+                    //     $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelTwoId)->latest()->first();
+                    //     $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
+                    // }
+                    $customData1->push([
+                        'id' => $levelOne->id,
+                        'pr_detail_id' => $levelOne->pr_detail_id,
+                        'level' => $levelOne->level,
+                        'name' => $levelOne->name,
+                        'weightage' => $levelTwoTotalWeightage,
+                        'original_weightage' => $levelOne->weightage,
+                        'belong_to_activity' => $levelOne->belong_to_activity,
+                        'progress_achived' =>  $totalAchievedProgressLevel1,
+                        'last_updated_progress' => $lastAchievedProgressDateLevel1,
+                    ]);
+                } else {
+                    //Sum of level 2 progress
+                    // foreach ($levelTwoIds as $levelTwoId) {
+                    //     $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelTwoId)->latest()->first();
+                    //     $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
+                    // }
+                    $customData1->push([
+                        'id' => $levelOne->id,
+                        'pr_detail_id' => $levelOne->pr_detail_id,
+                        'level' => $levelOne->level,
+                        'name' => $levelOne->name,
+                        'weightage' => $leveltwoSum,
+                        'original_weightage' => $levelOne->weightage,
+                        'belong_to_activity' => $levelOne->belong_to_activity,
+                        'progress_achived' => $totalAchievedProgressLevel1,
+                        'last_updated_progress' => $lastAchievedProgressDateLevel1,
+                    ]);
+                }
+                //Level Two Working
+                $levelTwos =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 2)->where('belong_to_activity', $levelOne->id)->get();
+                foreach ($levelTwos as $levelTwo) {
+                    $levelTwoSum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $levelTwo->id)->sum('weightage');
+                    //get Level 2 sub activity achived progress
+                    $latestProgress2 = PrAchievedProgress::where('pr_progress_activity_id', $levelTwo->id)->latest()->first();
+                    $lastUpdateProgress2 = '';
+                    //check if Level 2 have last level
+                    $totalAchievedProgressLevel2 = 0.0;
+                    if ($latestProgress2) {
+                        $totalAchievedProgressLevel2 = $latestProgress2->percentage_complete;
+                        $lastUpdateProgress2 = $latestProgress2->date;
+                    } else {
+                        //Otherwise get level 3 all ids
+                        $levelThreeIds =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $levelTwo->id)->pluck('id')->toArray();
+                        // Get last update date of level 2;
+                        $lastUpdateProgress2 =  PrAchievedProgress::whereIn('pr_progress_activity_id', $levelThreeIds)->latest()->first();
+                        $lastUpdateProgress2 =  $lastUpdateProgress2->date ?? '';
 
-        //             $levelThrees =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 3)->where('belong_to_activity', $levelTwo->id)->get();
-        //             foreach ($levelThrees as $levelThree) {
-        //                 echo '----------------------' . $levelThree->name . '- - ' . $levelThree->weightage . '<br>';
-        //             }
-        //         }
-        //     }
-        // } else {
-        //     foreach ($progressActivities as $progressActivity) {
-        //         echo  $progressActivity->name . '- - ' . $progressActivity->weightage . '<br>';
-        //     }
-        // }
+                        //Sum of level 2 progress
+                        foreach ($levelThreeIds as $levelThreeId) {
+                            $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelThreeId)->latest()->first();
+                            $totalAchievedProgressLevel2 += $totalCurrentProgress->percentage_complete ?? 0;
+                        }
+                    }
+                    //check if level two sum is 0 Its means it is Level 2 Heading
+                    if ($levelTwoSum === 0) {
 
-
-        if ($request->ajax()) {
-
-            $customData = new Collection;
-
-            $firstHeadings = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('weightage', 'NULL')->get();
-
-
-
-
-            //Get Heading Detail
-            if ($firstHeadings->count() > 0) {
-
-                foreach ($firstHeadings as $firstHeading) {
-
-                    $projectProgress = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $firstHeading->id)->get();
-
-                    $firstHeadingWeightageSum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $firstHeading->id)->sum('weightage');
-
-                    //update Total firstHeading Weighatage
-                    $firstHeading->weightage = $firstHeadingWeightageSum;
-
-
-                    //Calculate Achived Progress 
-                    //first get ids belong to firstHeadings
-                    $firstHeadingIds = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $firstHeading->id)->pluck('id')->toArray();
-
-                    //variable create for total achived progress
-                    $totalfirstHeadingProgress = 0.0;
-                    //foreach loop for sum of total achived progress
-                    foreach ($firstHeadingIds as $id) {
-                        $firstHeadingProgress =  PrAchievedProgress::where('pr_progress_activity_id', $id)->latest()->first();
-                        $totalfirstHeadingProgress += $firstHeadingProgress->percentage_complete ?? 0;
+                        $customData1->push([
+                            'id' => $levelTwo->id,
+                            'pr_detail_id' => $levelTwo->pr_detail_id,
+                            'level' => $levelTwo->level,
+                            'name' => $levelTwo->name,
+                            'weightage' =>  $levelTwo->weightage,
+                            'original_weightage' => $levelTwo->weightage,
+                            'belong_to_activity' => $levelTwo->belong_to_activity,
+                            'progress_achived' => $totalAchievedProgressLevel2,
+                            'last_updated_progress' =>  $lastUpdateProgress2,
+                        ]);
+                    } else {
+                        //Otherwise it is last level
+                        $customData1->push([
+                            'id' => $levelTwo->id,
+                            'pr_detail_id' => $levelTwo->pr_detail_id,
+                            'level' => $levelTwo->level,
+                            'name' => $levelTwo->name,
+                            'weightage' =>  $levelTwoSum,
+                            'original_weightage' => $levelTwo->weightage,
+                            'belong_to_activity' => $levelTwo->belong_to_activity,
+                            'progress_achived' => $totalAchievedProgressLevel2,
+                            'last_updated_progress' =>  $lastUpdateProgress2,
+                        ]);
                     }
 
-                    //create and add total firstHeading achived progress           
-                    $firstHeading['progress_achived'] = $totalfirstHeadingProgress;
-                    $firstHeading['firstHeading'] = 1;
-                    //Add firstHeading detail into collection
-                    $customData->push($firstHeading);
 
-                    //Get sub activities
-                    foreach ($projectProgress as $progress) {
+                    //Only work if Level Three exist otherwiese not work
+                    $levelThrees =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 3)->where('belong_to_activity', $levelTwo->id)->get();
+
+                    foreach ($levelThrees as $levelThree) {
 
                         //get sub activity achived progress
-                        $latestProgress = PrAchievedProgress::where('pr_progress_activity_id', $progress->id)->latest()->first();
+                        $latestProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelThree->id)->latest()->first();
                         $lastUpdateProgress = '';
                         if ($latestProgress) {
                             $totalProgress = $latestProgress->percentage_complete;
@@ -145,62 +145,64 @@ class ProjectProgressController extends Controller
                         } else {
                             $totalProgress = 0.0;
                         }
-
-                        //create and add sub activity achived progress
-                        $progress['progress_achived'] = $totalProgress;
-                        $progress['last_updated_progress'] = $lastUpdateProgress;
-
-                        //add sub activities into collection
-                        $customData->push($progress);
+                        $customData1->push([
+                            'id' => $levelThree->id,
+                            'pr_detail_id' => $levelThree->pr_detail_id,
+                            'level' => $levelThree->level,
+                            'name' => $levelThree->name,
+                            'weightage' =>  $levelThree->weightage,
+                            'original_weightage' => $levelThree->weightage,
+                            'belong_to_activity' => $levelThree->belong_to_activity,
+                            'progress_achived' => $totalProgress,
+                            'last_updated_progress' =>  $lastUpdateProgress,
+                        ]);
                     }
-                } //end foreach
-            } else { //if No Sub Items
-
-                $projectProgress = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->get();
-
-                foreach ($projectProgress as $progress) {
-                    $latestProgress = PrAchievedProgress::where('pr_progress_activity_id', $progress->id)->latest()->first();
-                    $lastUpdateProgress = '';
-                    if ($latestProgress) {
-                        $totalProgress = $latestProgress->percentage_complete;
-                        $lastUpdateProgress = $latestProgress->date;
-                    } else {
-                        $totalProgress = 0.0;
-                    }
-
-                    //create and add sub activity achived progress
-                    $progress['progress_achived'] = $totalProgress;
-                    $progress['last_updated_progress'] = $lastUpdateProgress;
-                    $progress['firstHeading'] = 0;
-                    //add sub activities into collection
-                    $customData->push($progress);
                 }
-            } //end if
+            }
+        } else {
+            $progressActivities = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 1)->get();
+            foreach ($progressActivities as $progressActivity) {
+                //get activity achived progress
+                $latestProgress = PrAchievedProgress::where('pr_progress_activity_id', $progressActivity->id)->latest()->first();
+                $lastUpdateProgress = '';
+                if ($latestProgress) {
+                    $totalProgress = $latestProgress->percentage_complete;
+                    $lastUpdateProgress = $latestProgress->date;
+                } else {
+                    $totalProgress = 0.0;
+                }
+                $customData1->push([
+                    'id' => $progressActivity->id,
+                    'pr_detail_id' => $progressActivity->pr_detail_id,
+                    'level' => $progressActivity->level,
+                    'name' => $progressActivity->name,
+                    'weightage' =>  $progressActivity->weightage,
+                    'original_weightage' => $progressActivity->weightage,
+                    'belong_to_activity' => $progressActivity->belong_to_activity,
+                    'progress_achived' => $totalProgress,
+                    'last_updated_progress' =>  $lastUpdateProgress,
+                ]);
+            }
+        }
+
+
+        if ($request->ajax()) {
 
             //Datatabe give collection for display
-            $data = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
-            return DataTables::of($customData)
+            return DataTables::of($customData1)
                 ->editColumn('name', function ($row) {
 
-                    if ($row->belong_to_activity === NULL) {
-                        $btn = "<h3 style='color:red'>" . $row->name . "</h3>";
+                    if ($row['original_weightage'] === 0.0) {
+                        $btn = "<h3 style='color:red'>" . $row['name'] . "</h3>";
                     } else {
-                        $btn = $row->name . '- ' . $row->belong_to_activity;
-                    }
-                    return $btn;
-                })
-                ->editColumn('last_updated_progress', function ($row) {
-                    if ($row->belong_to_activity != NULL || $row->firstHeading == 0) {
-                        $btn = $row->last_updated_progress;
-                    } else {
-                        $btn = '';
+                        $btn = $row['name'];
                     }
                     return $btn;
                 })
                 ->addColumn('Date', function ($row) {
 
-                    if ($row->belong_to_activity != NULL || $row->firstHeading == 0) {
-                        $btn = ' <input type="text" name="input_progress" id="date' . $row->id . '" class="form-control date_input" data-validation="required" readonly>';
+                    if ($row['weightage'] === $row['original_weightage']) {
+                        $btn = ' <input type="text" name="input_progress" id="date' . $row['id'] . '" class="form-control date_input" data-validation="required" readonly>';
                     } else {
                         $btn = '';
                     }
@@ -208,8 +210,8 @@ class ProjectProgressController extends Controller
                 })
                 ->addColumn('Progress', function ($row) {
 
-                    if ($row->belong_to_activity != NULL || $row->firstHeading == 0) {
-                        $btn = '<input type="text" name="progress" id="progress' . $row->id . '" class="form-control notCapital progressInput" data-validation="required">';
+                    if ($row['weightage'] === $row['original_weightage']) {
+                        $btn = '<input type="text" name="progress" id="progress' . $row['id'] . '" class="form-control notCapital progressInput" data-validation="required">';
                     } else {
                         $btn = '';
                     }
@@ -217,8 +219,8 @@ class ProjectProgressController extends Controller
                     return $btn;
                 })
                 ->addColumn('Save', function ($row) {
-                    if ($row->belong_to_activity != NULL || $row->firstHeading == 0) {
-                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Save" class="save btn btn-success btn-sm saveProgress">Save</a>';
+                    if ($row['weightage'] === $row['original_weightage']) {
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row['id'] . '" data-original-title="Save" class="save btn btn-success btn-sm saveProgress">Save</a>';
                     } else {
                         $btn = '';
                     }
@@ -226,8 +228,8 @@ class ProjectProgressController extends Controller
                     return $btn;
                 })
                 ->addColumn('Detail', function ($row) {
-                    if ($row->belong_to_activity != NULL || $row->firstHeading == 0) {
-                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-primary btn-sm deleteModal">Detail</a>';
+                    if ($row['weightage'] === $row['original_weightage']) {
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row['id'] . '" data-original-title="Delete" class="btn btn-primary btn-sm deleteModal">Detail</a>';
                     } else {
                         $btn = '';
                     }
@@ -235,15 +237,11 @@ class ProjectProgressController extends Controller
                     return $btn;
                 })
 
-                ->rawColumns(['Date', 'Progress', 'Save', 'Detail', 'name', 'last_updated_progress'])
+                ->rawColumns(['Date', 'Progress', 'Save', 'Detail', 'name'])
                 ->make(true);
         }
 
-
-        // $prProgressActivities = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->get();
-        // $view =  view('project.progress.achived.create',compact('prProgressActivities'))->render();
-        // return response()->json($view);
-
+        dd($customData1);
     }
 
     public function store(AchievedProgressStore $request)
