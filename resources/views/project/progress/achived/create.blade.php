@@ -90,9 +90,7 @@
           },
           {
             data: 'last_updated_progress',
-            name: 'last_updated_progress',
-            orderable: false,
-            searchable: false
+            name: 'last_updated_progress'
           },
           {
             data: 'Date',
