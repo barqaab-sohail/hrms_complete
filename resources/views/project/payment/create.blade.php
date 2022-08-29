@@ -104,7 +104,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label class="control-label">Cheque No</label>
-                <input type="text" name="cheque_no" id="cheque_no" value="{{old('cheque_no')}}" class="form-control prc_1">
+                <input type="text" name="cheque_no" id="cheque_no" value="{{old('cheque_no')}}" class="form-control">
               </div>
             </div>
             <div class="col-md-3">
@@ -131,7 +131,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label class="control-label">Remarks</label>
-                <input type="text" name="remarks" id="remarks" value="{{old('remarks')}}" class="form-control prc_1 notCapital">
+                <input type="text" name="remarks" id="remarks" value="{{old('remarks')}}" class="form-control notCapital">
               </div>
             </div>
           </div>
