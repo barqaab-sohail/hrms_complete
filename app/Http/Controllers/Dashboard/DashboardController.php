@@ -22,13 +22,17 @@ class DashboardController extends Controller
         $totalPowerInvoicesId = Invoice::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->pluck('id')->toArray();
         $totalPowerInvoiceCost = addComma(InvoiceCost::whereIn('invoice_id', $totalPowerInvoicesId)->sum('amount'));
 
-        return response()->json([
+        $porjectData = [
             'total_power_projects_running' => $totalPowerProjectsRunning,
             'total_ntdc_projects_running' => $totalNtdcProjectsRunning,
             'total_disco_projects_running' => $totalDiscoProjectsRunning,
             'other_projects_running' => $otherProjectsRunning,
             'total_power_payment_received' => $totalPowerPaymentReceived,
             'total_Power_invoice_cost' => $totalPowerInvoiceCost
-        ]);
+        ];
+
+        $jsonobj = ["{'icon':'<HiOutlineRefresh/>','amount':'39,354','percentage':'-12%', 'title':'Refunds', 'iconColor':'rgb(0, 194, 146)','iconBg':'rgb(235, 250, 242)', 'pcColor': 'red-600'}"];
+
+        return response()->json(['powerData' => $porjectData]);
     }
 }
