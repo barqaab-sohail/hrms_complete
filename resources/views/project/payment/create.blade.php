@@ -291,6 +291,7 @@
           $('#payment_status_id').trigger('change');
           var amount = data.amount?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
           $('#amount').val(amount);
+          $('#remarks').val(data.remarks);
         });
         $('#ajaxModel').modal('show');
       });
