@@ -334,7 +334,7 @@ function getAjaxData(url){
            processData: false,
            success:function(data)
                {
-                
+                console.log (data);
                 $(".addAjax").html(data);
                 formFunctions();
                
