@@ -164,6 +164,13 @@ class PostingController extends Controller
         //ensure client end id is not changed
         if ($id != session('posting_edit_id')) {
             return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        } else {
+            $data = HrPosting::find(session('posting_edit_id'));
+            if ($data) {
+                if ($data->hr_employee_id != session('hr_employee_id')) {
+                    return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
+                }
+            }
         }
 
         $input = $request->all();

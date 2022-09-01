@@ -108,7 +108,6 @@
                         @endcan
 
                         @can('Super Admin')
-                        <li><a class="{{Request::is('hrms/project/progress')?'active':''}}" href="{{route('projectRights.index')}}">Project Rights</a></li>
                         <li><a class="{{Request::is('hrms/project/projectRights')?'active':''}}" href="{{route('projectRights.index')}}">Project Rights</a></li>
                         <li><a class="{{Request::is('hrms/project/search')?'active':''}}" href="{{route('project.search')}}">Search Documentation</a></li>
                         @endcan
