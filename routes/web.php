@@ -186,14 +186,18 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
 	Route::resource('/subProject', 'SubProjectController');
 	Route::resource('/projectIssues', 'Progress\ProjectIssueController');
 
-
 	// Route::resource('/progressProgress', 'Progress\ProgressController');
 	Route::get('/proejctProgressMainActivities/{level}', 'Progress\ActivitiesController@mainActivities');
 
 
-	Route::get('/projectProgressChart', 'Progress\ActivityController@chart')->name('projectProgress.chart');
 
+	Route::get('/projectProgressChart', 'Progress\ActivityController@chart')->name('projectProgress.chart');
 	Route::resource('/project', 'ProjectController');
+});
+
+// MIS Dashboard Progress Check
+Route::group(['prefix' => 'hrms/', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'MIS'], function () {
+	Route::get('/MISMonitor', 'MonitorController@index')->name('MISMonitor.index');
 });
 
 
