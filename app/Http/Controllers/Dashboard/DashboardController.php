@@ -33,6 +33,6 @@ class DashboardController extends Controller
 
         $jsonobj = ["{'icon':'<HiOutlineRefresh/>','amount':'39,354','percentage':'-12%', 'title':'Refunds', 'iconColor':'rgb(0, 194, 146)','iconBg':'rgb(235, 250, 242)', 'pcColor': 'red-600'}"];
 
-        return response()->json(['powerData' => $porjectData]);
+        return response()->json($porjectData);
     }
 }
