@@ -23,6 +23,7 @@ Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 
 Route::get('/dashboardData', 'Dashboard\DashboardController@powerData');
+Route::get('/projectData', 'Dashboard\DashboardController@projectData');
 
 
 
