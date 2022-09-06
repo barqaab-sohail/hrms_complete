@@ -41,7 +41,7 @@ function currentProgress($projectId)
 			return 'N/A';
 		} else {
 			$progressActivities = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 1)->get();
-			$latestDate = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 1)->get();
+			$latestDate = PrAchievedProgress::where('pr_detail_id', $projectId)->latest()->first();
 			$totalProgress = 0.0;
 
 			foreach ($progressActivities as $progressActivity) {
@@ -52,7 +52,7 @@ function currentProgress($projectId)
 					$totalProgress += $latestProgress->percentage_complete ?? 0;
 				}
 			}
-			return $totalProgress . '%';
+			return $totalProgress . '% - ' . $latestDate->date ?? '';
 		}
 	} else {
 		return 'N/A';
