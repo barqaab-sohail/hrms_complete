@@ -18,6 +18,11 @@ class PrDetail extends Model implements Auditable
         return $this->belongsTo('App\Models\Common\Client');
     }
 
+    public function prCost()
+    {
+        return $this->hasOne('App\Models\Project\Cost\PrCost');
+    }
+
     public function prRole()
     {
         return $this->belongsTo('App\Models\Project\PrRole');
@@ -31,5 +36,21 @@ class PrDetail extends Model implements Auditable
     public function prSubProject()
     {
         return $this->hasMany('App\Models\Project\PrSubProject');
+    }
+    public function invoices()
+    {
+        return $this->hasMany('App\Models\Project\Invoice\Invoice');
+    }
+
+    public function invoiceCost()
+    {
+        return $this->hasManyThrough(
+            'App\Models\Project\Invoice\InvoiceCost',
+            'App\Models\Project\Invoice\Invoice',
+            'pr_detail_id',
+            'id',
+            'id',
+            'id',
+        );
     }
 }
