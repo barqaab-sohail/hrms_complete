@@ -32,27 +32,48 @@ function budgetUtilization($projectId)
 }
 function currentProgress($projectId)
 {
+	$totalAchievedProgress = 0.0;
+	$lastAchievedProgressDate = '';
 	$projectLevel = PrProgressActivity::where('pr_detail_id', $projectId)->max('level');
 	if ($projectLevel) {
 		if ($projectLevel > 1) {
+
 			$levelOnes = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 1)->get();
 			foreach ($levelOnes as $levelOne) {
+
+				$leveltwoSum = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 2)->where('belong_to_activity', $levelOne->id)->sum('weightage');
+				$level2Ids = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 2)->where('belong_to_activity', $levelOne->id)->pluck('id')->toArray();
+				$level3Ids = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 3)->whereIn('belong_to_activity', $level2Ids)->pluck('id')->toArray();
+				//check if level two sum is 0 than it is heading
+				if ($leveltwoSum === 0) {
+					foreach ($level3Ids as $level3Id) {
+						$totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $level3Id)->latest()->first();
+						$totalAchievedProgress += $totalCurrentProgress->percentage_complete ?? 0;
+					}
+				} else {
+					foreach ($level2Ids as $level2Id) {
+						$totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $level2Id)->latest()->first();
+						$totalAchievedProgress += $totalCurrentProgress->percentage_complete ?? 0;
+					}
+				}
 			}
-			return 'N/A';
+			$latestDate = PrAchievedProgress::where('pr_detail_id', $projectId)->latest()->first();
+			$lastAchievedProgressDate = $latestDate->date ?? '';
+
+			return $totalAchievedProgress . '% - ' . $lastAchievedProgressDate;
 		} else {
 			$progressActivities = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 1)->get();
 			$latestDate = PrAchievedProgress::where('pr_detail_id', $projectId)->latest()->first();
-			$totalProgress = 0.0;
-
+			$lastAchievedProgressDate = $latestDate->date ?? '';
 			foreach ($progressActivities as $progressActivity) {
 
 				//get activity achived progress
 				$latestProgress = PrAchievedProgress::where('pr_progress_activity_id', $progressActivity->id)->latest()->first();
 				if ($latestProgress) {
-					$totalProgress += $latestProgress->percentage_complete ?? 0;
+					$totalAchievedProgress += $latestProgress->percentage_complete ?? 0;
 				}
 			}
-			return $totalProgress . '% - ' . $latestDate->date ?? '';
+			return $totalAchievedProgress . '% - ' . $lastAchievedProgressDate;
 		}
 	} else {
 		return 'N/A';
