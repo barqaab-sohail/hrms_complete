@@ -21,11 +21,11 @@ class DashboardController extends Controller
         $totalPowerProjectsRunning = PrDetail::where('pr_division_id', 2)->where('pr_status_id', 1)->count();
 
         $totalPowerProjectsRunningIds = PrDetail::where('pr_division_id', 2)->where('pr_status_id', 1)->pluck('id')->toArray();
-        $Received90Days = addComma(PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('payment_date', [\Carbon\Carbon::now()->subDays(90)->startOfDay(), \Carbon\Carbon::now()->startOfDay()])->sum('amount'));
+        $Received30Days = addComma(PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('payment_date', [\Carbon\Carbon::now()->subDays(30)->startOfDay(), \Carbon\Carbon::now()->startOfDay()])->sum('amount'));
         $Received60Days = addComma(PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('payment_date', [\Carbon\Carbon::now()->subDays(60)->startOfDay(), \Carbon\Carbon::now()->startOfDay()])->sum('amount'));
 
-        $invoice90DaysIds = Invoice::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('invoice_date', [\Carbon\Carbon::now()->subDays(90)->startOfDay(), \Carbon\Carbon::now()->startOfDay()])->pluck('id')->toArray();
-        $Invoice90Days = addComma(InvoiceCost::whereIn('invoice_id', $invoice90DaysIds)->sum('amount'));
+        $invoice30DaysIds = Invoice::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('invoice_date', [\Carbon\Carbon::now()->subDays(30)->startOfDay(), \Carbon\Carbon::now()->startOfDay()])->pluck('id')->toArray();
+        $Invoice30Days = addComma(InvoiceCost::whereIn('invoice_id', $invoice30DaysIds)->sum('amount'));
 
         $invoice60DaysIds = Invoice::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('invoice_date', [\Carbon\Carbon::now()->subDays(60)->startOfDay(), \Carbon\Carbon::now()->startOfDay()])->pluck('id')->toArray();
         $Invoice60Days = addComma(InvoiceCost::whereIn('invoice_id', $invoice60DaysIds)->sum('amount'));
@@ -33,8 +33,8 @@ class DashboardController extends Controller
         $porjectData = [
             'total_power_projects_running' => $totalPowerProjectsRunning,
             'other_projects_running' => $otherProjectsRunning,
-            'received_90_days' => $Received90Days,
-            'invoice_90_days' => $Invoice90Days,
+            'received_30_days' => $Received30Days,
+            'invoice_30_days' => $Invoice30Days,
             'received_60_days' => $Received60Days,
             'invoice_60_days' => $Invoice60Days,
         ];
@@ -56,8 +56,6 @@ class DashboardController extends Controller
                 'pendingPayment' => addComma(pendingInvoicesAmount($project->id)),
                 'budgetUtilization' => budgetUtilization($project->id),
                 'projectProgress' => currentProgress($project->id),
-
-
 
             ];
         }
