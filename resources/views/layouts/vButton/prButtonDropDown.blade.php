@@ -23,8 +23,8 @@
         @endif
 
         @if(projectPaymentRight(session('pr_detail_id')))
+
         <a type="submit" role="button" style="color:white" id="addPayment" href="{{route('projectPayment.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPayment/index')?'style=background-color:#737373':''}}>Payments</a>
-        @endif
 
         @can('pr view progress')
         <a type="submit" role="button" id="addProgress" style="color:white" href="{{route('projectProgress.chart')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectProgress/chart')?'style=background-color:#737373':''}}>Progress Status</a>
