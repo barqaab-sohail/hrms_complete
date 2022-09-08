@@ -36,7 +36,7 @@ class PaymentController extends Controller
         $paymentStatuses = PaymentStatus::all();
 
         $invoiceIds = Invoice::where('pr_detail_id', session('pr_detail_id'))->pluck('id')->toArray();
-        $totalInvoiceRaised = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount');
+        $totalInvoiceRaised = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount') + InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('sales_tax');
         $totalPaymentReceived = PaymentReceive::whereIn('invoice_id', $invoiceIds)->sum('amount');
         $totalPendingPayment = $totalInvoiceRaised - $totalPaymentReceived;
 

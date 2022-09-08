@@ -2,7 +2,7 @@
   @if(projectPaymentRight(session('pr_detail_id'))==3 || projectPaymentRight(session('pr_detail_id'))==4)
   <button type="button" class="btn btn-success float-right" id="createPayment" data-toggle="modal">Add Payment</button>
   @endif
-  <h3>Total Invoice Raised = {{$totalInvoiceRaised}} - Payment Received = {{$totalPaymentReceived}} - Pending Payments = {{$totalPendingPayment}}</h3>
+  <h3>Total Invoice Raised = {{$totalInvoiceRaised}} - Invoice Received = {{$totalPaymentReceived}} - Pending Payments = {{$totalPendingPayment}}</h3>
   <br>
   <table class="table table-bordered data-table">
     <thead>
