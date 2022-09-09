@@ -79,4 +79,16 @@ class HomeController extends Controller
             return response()->json('');
         }
     }
+
+    public function employeeId($id)
+    {
+
+        $data = HrEmployee::with('picture')->where('employee_no', $id)->first();
+        if ($data) {
+            //return response()->json($data);
+            return view('hr.verification.show', compact('data'));
+        } else {
+            return response()->json('---');
+        }
+    }
 }

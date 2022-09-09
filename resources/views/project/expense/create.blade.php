@@ -1,9 +1,9 @@
 <div class="card-body">
   <button type="button" class="btn btn-success float-right" id="createExpense" data-toggle="modal">Add Expense</button>
   <br>
-  Total Expenses = {{$totalExpenses}} -
-  Payment Received = {{$totalReceived}} -
-  Pending Invoices without Sales Tax = {{$pendingInvoicesWOSTax}}
+  Total Expenses = {{$totalExpenses}} ::
+  Payment Received = {{$totalReceived}} ::
+  Pending Invoices without Sales Tax = {{$pendingInvoicesWOSTax?$pendingInvoicesWOSTax:'No Pending Invoice'}}
   <table class="table table-bordered data-table">
     <thead>
       <tr>
