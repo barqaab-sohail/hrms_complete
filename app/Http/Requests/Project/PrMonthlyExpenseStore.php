@@ -7,6 +7,11 @@ use Illuminate\Foundation\Http\FormRequest;
 class PrMonthlyExpenseStore extends FormRequest
 {
 
+    public function __construct(\Illuminate\Http\Request $request)
+    {
+        $request->request->add(['pr_detail_id' => session('pr_detail_id')]);
+    }
+
     public function getValidatorInstance()
     {
         $this->cleanMonth();
@@ -41,6 +46,7 @@ class PrMonthlyExpenseStore extends FormRequest
     {
         $rules = [
 
+            'pr_detail_id' => 'required',
             'month' => 'required|unique_with:pr_monthly_expenses,pr_detail_id,' . $this->expense_id,
             'salary_expense' => 'required_without:non_salary_expense',
             'non_salary_expense' => 'required_without:salary_expense',
