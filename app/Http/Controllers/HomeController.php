@@ -88,7 +88,7 @@ class HomeController extends Controller
             //return response()->json($data);
             return view('hr.verification.show', compact('data'));
         } else {
-            return response()->json('---');
+            return view('hr.verification.show', compact('data'));
         }
     }
 }

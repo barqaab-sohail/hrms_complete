@@ -32,32 +32,21 @@ class ProjectProgressController extends Controller
 
         if ($projectLevel > 1) {
             $levelOnes = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 1)->get();
-
+            $totalAchievedProgressLevel1 = 0.0;
+            $lastAchievedProgressDateLevel1 = '';
 
             foreach ($levelOnes as $levelOne) {
-
-                $leveltwoSum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 2)->where('belong_to_activity', $levelOne->id)->sum('weightage');
-                //check if level two sum is 0 than it is heading
+                $levelOneIds =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('id', $levelOne->id)->pluck('id')->toArray();
+                $leveltwoSum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $levelOneIds)->sum('weightage');
+                //check if level two sume is 0 than it is heading
                 if ($leveltwoSum === 0) {
+                    $levelTwoTotalWeightage = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $levelOne->id)->sum('weightage');
 
-                    $level2Ids = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 2)->where('belong_to_activity', $levelOne->id)->pluck('id')->toArray();
-
-                    //If level two sum is 0 than Total Weightage of Level is Sum of Level Two Weightage
-                    $levelTwoTotalWeightage = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $level2Ids)->sum('weightage');
-                    $level3Ids = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 3)->whereIn('belong_to_activity', $level2Ids)->pluck('id')->toArray();
-
-                    //Sum of level 3 progress is also progress of Level 1 of Specific Level 2 
-                    $totalAchievedProgressLevel1 = 0.0;
-                    $lastAchievedProgressDateLevel1 = '';
-                    foreach ($level3Ids as $level3Id) {
-                        $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $level3Id)->latest()->first();
-                        $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
-                    }
-
-                    // Get last update date of level 3;
-                    $lastUpdateProgress3 =  PrAchievedProgress::whereIn('pr_progress_activity_id', $level3Ids)->latest()->first();
-                    $lastUpdateProgress3 =  $lastUpdateProgress3->date ?? '';
-
+                    // //Sum of level 2 progress
+                    // foreach ($levelTwoIds as $levelTwoId) {
+                    //     $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelTwoId)->latest()->first();
+                    //     $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
+                    // }
                     $customData1->push([
                         'id' => $levelOne->id,
                         'pr_detail_id' => $levelOne->pr_detail_id,
@@ -67,22 +56,14 @@ class ProjectProgressController extends Controller
                         'original_weightage' => $levelOne->weightage,
                         'belong_to_activity' => $levelOne->belong_to_activity,
                         'progress_achived' =>  $totalAchievedProgressLevel1,
-                        'last_updated_progress' => $lastUpdateProgress3,
+                        'last_updated_progress' => $lastAchievedProgressDateLevel1,
                     ]);
                 } else {
                     //Sum of level 2 progress
-                    $levelTwoIds =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $levelOne->id)->pluck('id')->toArray();
-                    $totalAchievedProgressLevel1 = 0.0;
-                    $lastAchievedProgressDateLevel1 = '';
-                    foreach ($levelTwoIds as $levelTwoId) {
-                        $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelTwoId)->latest()->first();
-                        $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
-                    }
-
-                    // Get last update date of level 2;
-                    $lastUpdateProgress2 =  PrAchievedProgress::whereIn('pr_progress_activity_id', $levelTwoIds)->latest()->first();
-                    $lastUpdateProgress2 =  $lastUpdateProgress2->date ?? '';
-
+                    // foreach ($levelTwoIds as $levelTwoId) {
+                    //     $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelTwoId)->latest()->first();
+                    //     $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
+                    // }
                     $customData1->push([
                         'id' => $levelOne->id,
                         'pr_detail_id' => $levelOne->pr_detail_id,
@@ -92,7 +73,7 @@ class ProjectProgressController extends Controller
                         'original_weightage' => $levelOne->weightage,
                         'belong_to_activity' => $levelOne->belong_to_activity,
                         'progress_achived' => $totalAchievedProgressLevel1,
-                        'last_updated_progress' => $lastUpdateProgress2,
+                        'last_updated_progress' => $lastAchievedProgressDateLevel1,
                     ]);
                 }
                 //Level Two Working
@@ -211,10 +192,8 @@ class ProjectProgressController extends Controller
             return DataTables::of($customData1)
                 ->editColumn('name', function ($row) {
 
-                    if ($row['level'] === 1 && $row['original_weightage'] === 0.0) {
-                        $btn = "<h2 style='color:red'>" . $row['name'] . "</h2>";
-                    } else if ($row['original_weightage'] === 0.0 && $row['level'] === 2) {
-                        $btn = "<h3 style='color:blue'>" . $row['name'] . "</h3>";
+                    if ($row['original_weightage'] === 0.0.0) {
+                        $btn = "<h3 style='color:red'>" . $row['name'] . "</h3>";
                     } else {
                         $btn = $row['name'];
                     }
@@ -261,7 +240,8 @@ class ProjectProgressController extends Controller
                 ->rawColumns(['Date', 'Progress', 'Save', 'Detail', 'name'])
                 ->make(true);
         }
-        // dd($customData1);
+
+        dd($customData1);
     }
 
     public function store(AchievedProgressStore $request)

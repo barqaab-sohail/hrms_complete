@@ -25,7 +25,10 @@
 
     <div class='container-fluid'>
         <div class="card mx-auto col-md-12 col-10 mt-5">
-            <img class='mx-auto img-thumbnail' src="{{asset('storage/'.$data->picture->path.$data->picture->file_name)}}" width="150" height="auto" />
+            @if($data)
+            @IF($data->picture)
+            <img class='mx-auto img-thumbnail' src="{{asset('storage/'.$data->picture->path.$data->picture->file_name)}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" width="150" height="auto" />
+            @endif
             <div class="card-body text-center mx-auto">
                 <div class='cvp'>
                     <h5 class="card-title font-weight-bold" id="emp_name">Name: {{$data->full_name??''}}</h5>
@@ -34,6 +37,13 @@
 
                 </div>
             </div>
+            @else
+            <div class="card-body text-center mx-auto">
+                <div class='cvp'>
+                    <h3 class="card-title font-weight-bold" id="emp_des">NO RECORD FOUND</h3>
+                </div>
+            </div>
+            @endif
         </div>
 
     </div>
