@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PrMonthlyExpenseStore extends FormRequest
 {
-    
+
     public function getValidatorInstance()
     {
         $this->cleanMonth();
@@ -15,12 +15,11 @@ class PrMonthlyExpenseStore extends FormRequest
 
     protected function cleanMonth()
     {
-        if($this->month){
+        if ($this->month) {
             $this->merge([
                 'month' => \Carbon\Carbon::parse($this->month)->format('Y-m-d')
             ]);
         }
-
     }
 
     /**
@@ -40,12 +39,12 @@ class PrMonthlyExpenseStore extends FormRequest
      */
     public function rules()
     {
-         $rules = [
-              
-            'month' => 'required|unique_with:pr_monthly_expenses,pr_detail_id,'.$this->expense_id,
-            'salary_expense'=>'required_without:non_salary_expense',
-            'non_salary_expense'=>'required_without:salary_expense',
-    
+        $rules = [
+
+            'month' => 'required|unique_with:pr_monthly_expenses,pr_detail_id,' . $this->expense_id,
+            'salary_expense' => 'required_without:non_salary_expense',
+            'non_salary_expense' => 'required_without:salary_expense',
+
         ];
 
         return $rules;
@@ -53,10 +52,10 @@ class PrMonthlyExpenseStore extends FormRequest
 
     public function messages()
     {
-        
+
         return [
             'month.unique_with' => 'This Month Expenses already entered',
-            
+
         ];
     }
 }

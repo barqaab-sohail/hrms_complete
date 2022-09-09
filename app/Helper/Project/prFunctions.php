@@ -21,14 +21,15 @@ function receivedInvoices($projectId)
 function budgetUtilization($projectId)
 {
 	$prDetail = PrDetail::find($projectId);
-	$invoiceIds = Invoice::where('pr_detail_id', $projectId)->where('invoice_type_id', '!=', 3)->pluck('id')->toArray();
-	$totalInvoices = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount');
-	if ($prDetail->prCost) {
+	$totalBudget = $prDetail->prCost->total_cost ?? 0;
+	if ($totalBudget) {
+		$invoiceIds = Invoice::where('pr_detail_id', $projectId)->where('invoice_type_id', '!=', 3)->pluck('id')->toArray();
+		$totalInvoices = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount');
 		$totalCostWithoutGST = $prDetail->prCost->total_cost ?? '0' - $prDetail->prCost->sales_tax ?? '0';
+		return round(($totalInvoices / $totalCostWithoutGST * 100), 2) . "%";
 	} else {
-		return 0;
+		return 'N/A';
 	}
-	return round(($totalInvoices / $totalCostWithoutGST * 100), 2) . "%";
 }
 function currentProgress($projectId)
 {
