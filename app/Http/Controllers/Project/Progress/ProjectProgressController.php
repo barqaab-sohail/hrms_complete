@@ -33,7 +33,7 @@ class ProjectProgressController extends Controller
         if ($projectLevel > 1) {
             $levelOnes = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 1)->get();
 
-            $lastAchievedProgressDateLevel1 = '';
+
 
             foreach ($levelOnes as $levelOne) {
                 $levelOneIds =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('id', $levelOne->id)->pluck('id')->toArray();
@@ -43,13 +43,15 @@ class ProjectProgressController extends Controller
                 //Only Level One Working
                 //check if level two sume is 0 than it is heading
                 if ($leveltwoSum === 0) {
-                    $levelTwoTotalWeightage = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $levelOne->id)->sum('weightage');
                     $levelTwoIds = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $levelOneIds)->pluck('id')->toArray();
                     $levelThreeIds = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity',  $levelTwoIds)->pluck('id')->toArray();
 
-                    //Sum of level 2 progress
+                    //Sum of level 3 progress is overall progress of level 1;
                     $totalAchievedProgressLevel1 = 0.0;
+                    $totalWeightageProgressLevel1 = 0.0;
+                    $lastAchievedProgressDateLevel1 = PrAchievedProgress::whereIn('pr_progress_activity_id', $levelThreeIds)->latest()->first();
                     foreach ($levelThreeIds as $levelThreeId) {
+                        $totalWeightageProgressLevel1 +=  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('id', $levelThreeId)->sum('weightage');
                         $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelThreeId)->latest()->first();
                         $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
                     }
@@ -58,15 +60,16 @@ class ProjectProgressController extends Controller
                         'pr_detail_id' => $levelOne->pr_detail_id,
                         'level' => $levelOne->level,
                         'name' => $levelOne->name,
-                        'weightage' => $levelTwoTotalWeightage,
+                        'weightage' => $totalWeightageProgressLevel1,
                         'original_weightage' => $levelOne->weightage,
                         'belong_to_activity' => $levelOne->belong_to_activity,
                         'progress_achived' =>  round($totalAchievedProgressLevel1, 2),
-                        'last_updated_progress' => $lastAchievedProgressDateLevel1,
+                        'last_updated_progress' => $lastAchievedProgressDateLevel1->date ?? '',
                     ]);
                 } else {
                     $totalAchievedProgressLevel1 = 0.0;
                     $levelTwoIds = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $levelOneIds)->pluck('id')->toArray();
+                    $lastAchievedProgressDateLevel1 = PrAchievedProgress::whereIn('pr_progress_activity_id', $levelTwoIds)->latest()->first();
                     //Sum of level 2 progress
                     foreach ($levelTwoIds as $levelTwoId) {
                         $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelTwoId)->latest()->first();
@@ -81,7 +84,7 @@ class ProjectProgressController extends Controller
                         'original_weightage' => $levelOne->weightage,
                         'belong_to_activity' => $levelOne->belong_to_activity,
                         'progress_achived' => round($totalAchievedProgressLevel1, 2),
-                        'last_updated_progress' => $lastAchievedProgressDateLevel1,
+                        'last_updated_progress' => $lastAchievedProgressDateLevel1->date ?? '',
                     ]);
                 }
                 //Level Two Working
