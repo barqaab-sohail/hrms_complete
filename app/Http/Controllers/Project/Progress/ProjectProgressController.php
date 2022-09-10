@@ -192,7 +192,7 @@ class ProjectProgressController extends Controller
             return DataTables::of($customData1)
                 ->editColumn('name', function ($row) {
 
-                    if ($row['original_weightage'] === 0.0.0) {
+                    if ($row['original_weightage'] === 0.0) {
                         $btn = "<h3 style='color:red'>" . $row['name'] . "</h3>";
                     } else {
                         $btn = $row['name'];
