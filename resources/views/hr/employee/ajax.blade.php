@@ -149,7 +149,7 @@
                 <div class="col-md-2">
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <img src="{{asset('storage/'.$data->employeePicture())}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" class="profile-pic ViewIMG" width="50%" />
+                            <img src="{{asset('storage/'.$data->employeePicture())}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" class="profile-pic ViewIMG" width="60%" />
                         </div>
                     </div>
                 </div>
@@ -158,7 +158,7 @@
                     <div class="form-group row">
                         <div class="col-md-12" style="text-align:center; color:black; font-weight: bold;">
                             <br>
-                            {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG('http://192.168.0.121/hrms/public/verificationResult1/'.$data->employee_no,'QRCODE',5,5). '" class="profile-pic" alt="barcode" />' !!}
+                            {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG(url('cardVerificationResult').'/'.$data->employee_no,'QRCODE',5,5). '" class="profile-pic" alt="barcode" />' !!}
                             <br>
                             {{$data->employee_no}}
                         </div>
