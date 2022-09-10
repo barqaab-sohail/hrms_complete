@@ -32,21 +32,27 @@ class ProjectProgressController extends Controller
 
         if ($projectLevel > 1) {
             $levelOnes = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 1)->get();
-            $totalAchievedProgressLevel1 = 0.0;
+
             $lastAchievedProgressDateLevel1 = '';
 
             foreach ($levelOnes as $levelOne) {
                 $levelOneIds =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('id', $levelOne->id)->pluck('id')->toArray();
                 $leveltwoSum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $levelOneIds)->sum('weightage');
+
+
+                //Only Level One Working
                 //check if level two sume is 0 than it is heading
                 if ($leveltwoSum === 0) {
                     $levelTwoTotalWeightage = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $levelOne->id)->sum('weightage');
+                    $levelTwoIds = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $levelOneIds)->pluck('id')->toArray();
+                    $levelThreeIds = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity',  $levelTwoIds)->pluck('id')->toArray();
 
-                    // //Sum of level 2 progress
-                    // foreach ($levelTwoIds as $levelTwoId) {
-                    //     $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelTwoId)->latest()->first();
-                    //     $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
-                    // }
+                    //Sum of level 2 progress
+                    $totalAchievedProgressLevel1 = 0.0;
+                    foreach ($levelThreeIds as $levelThreeId) {
+                        $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelThreeId)->latest()->first();
+                        $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
+                    }
                     $customData1->push([
                         'id' => $levelOne->id,
                         'pr_detail_id' => $levelOne->pr_detail_id,
@@ -55,15 +61,17 @@ class ProjectProgressController extends Controller
                         'weightage' => $levelTwoTotalWeightage,
                         'original_weightage' => $levelOne->weightage,
                         'belong_to_activity' => $levelOne->belong_to_activity,
-                        'progress_achived' =>  $totalAchievedProgressLevel1,
+                        'progress_achived' =>  round($totalAchievedProgressLevel1, 2),
                         'last_updated_progress' => $lastAchievedProgressDateLevel1,
                     ]);
                 } else {
+                    $totalAchievedProgressLevel1 = 0.0;
+                    $levelTwoIds = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $levelOneIds)->pluck('id')->toArray();
                     //Sum of level 2 progress
-                    // foreach ($levelTwoIds as $levelTwoId) {
-                    //     $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelTwoId)->latest()->first();
-                    //     $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
-                    // }
+                    foreach ($levelTwoIds as $levelTwoId) {
+                        $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelTwoId)->latest()->first();
+                        $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
+                    }
                     $customData1->push([
                         'id' => $levelOne->id,
                         'pr_detail_id' => $levelOne->pr_detail_id,
@@ -72,7 +80,7 @@ class ProjectProgressController extends Controller
                         'weightage' => $leveltwoSum,
                         'original_weightage' => $levelOne->weightage,
                         'belong_to_activity' => $levelOne->belong_to_activity,
-                        'progress_achived' => $totalAchievedProgressLevel1,
+                        'progress_achived' => round($totalAchievedProgressLevel1, 2),
                         'last_updated_progress' => $lastAchievedProgressDateLevel1,
                     ]);
                 }
@@ -112,7 +120,7 @@ class ProjectProgressController extends Controller
                             'weightage' =>  $levelTwo->weightage,
                             'original_weightage' => $levelTwo->weightage,
                             'belong_to_activity' => $levelTwo->belong_to_activity,
-                            'progress_achived' => $totalAchievedProgressLevel2,
+                            'progress_achived' => round($totalAchievedProgressLevel2, 2),
                             'last_updated_progress' =>  $lastUpdateProgress2,
                         ]);
                     } else {
@@ -125,7 +133,7 @@ class ProjectProgressController extends Controller
                             'weightage' =>  $levelTwoSum,
                             'original_weightage' => $levelTwo->weightage,
                             'belong_to_activity' => $levelTwo->belong_to_activity,
-                            'progress_achived' => $totalAchievedProgressLevel2,
+                            'progress_achived' => round($totalAchievedProgressLevel2, 2),
                             'last_updated_progress' =>  $lastUpdateProgress2,
                         ]);
                     }
@@ -153,7 +161,7 @@ class ProjectProgressController extends Controller
                             'weightage' =>  $levelThree->weightage,
                             'original_weightage' => $levelThree->weightage,
                             'belong_to_activity' => $levelThree->belong_to_activity,
-                            'progress_achived' => $totalProgress,
+                            'progress_achived' => round($totalProgress, 2),
                             'last_updated_progress' =>  $lastUpdateProgress,
                         ]);
                     }
@@ -179,7 +187,7 @@ class ProjectProgressController extends Controller
                     'weightage' =>  $progressActivity->weightage,
                     'original_weightage' => $progressActivity->weightage,
                     'belong_to_activity' => $progressActivity->belong_to_activity,
-                    'progress_achived' => $totalProgress,
+                    'progress_achived' => round($totalProgress, 2),
                     'last_updated_progress' =>  $lastUpdateProgress,
                 ]);
             }
