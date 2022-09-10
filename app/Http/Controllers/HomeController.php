@@ -7,10 +7,18 @@ use App\Models\Hr\HrEmployee;
 use App\Charts\Hr\DepartmentChart;
 use Illuminate\Support\Facades\Auth;
 use App\DataTables\Leave\LeaveBalanceDataTable;
+use Illuminate\Support\Facades\RateLimiter;
 //use Illuminate\Support\Facades\Route;
 
 class HomeController extends Controller
 {
+
+
+
+
+
+
+
     /**
      * Create a new controller instance.
      *
@@ -82,6 +90,22 @@ class HomeController extends Controller
 
     public function employeeId($id)
     {
+
+        // Following function restrict maximum 5 request in 1 minute
+        $executed = RateLimiter::attempt(
+            'send-message:',
+            $perMinute = 5,
+            function () {
+                // Send message...
+            }
+        );
+
+        if (!$executed) {
+            return 'Too many Request sent!, Please retry after some time';
+        }
+
+
+
 
         $data = HrEmployee::with('picture')->where('employee_no', $id)->first();
         if ($data) {

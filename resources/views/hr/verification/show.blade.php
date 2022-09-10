@@ -26,8 +26,10 @@
     <div class='container-fluid'>
         <div class="card mx-auto col-md-12 col-10 mt-5">
             @if($data)
-            @IF($data->picture)
-            <img class='mx-auto img-thumbnail' src="{{asset('storage/'.$data->picture->path.$data->picture->file_name)}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" width="150" height="auto" />
+            @if($data->picture)
+            <img class='mx-auto img-thumbnail' src="{{asset('storage/'.$data->picture->path.$data->picture->file_name)}}" width="150" height="auto" />
+            @else
+            <img class='mx-auto img-thumbnail' src="{{asset('Massets/images/default.png')}}" width="150" height="auto" />
             @endif
             <div class="card-body text-center mx-auto">
                 <div class='cvp'>
