@@ -1,4 +1,5 @@
 <?php
+
 use App\Models\Cv\CvSpecialization;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CV\CvDetail;
@@ -6,18 +7,17 @@ use App\Models\Project\PrRight;
 use App\Models\Common\Office;
 
 
-
-
-function rightsName($id){
-	if($id == 1){
+function rightsName($id)
+{
+	if ($id == 1) {
 		return 'No Access';
-	}else if ($id ==2){
+	} else if ($id == 2) {
 		return 'View Record';
-	}else if ($id ==3){
+	} else if ($id == 3) {
 		return 'Edit Record';
-	}else if ($id ==4){
+	} else if ($id == 4) {
 		return 'Delete Record';
-	}else{
+	} else {
 		return '';
 	}
 }
@@ -25,78 +25,79 @@ function rightsName($id){
 
 
 
-function projectPaymentRight($project){
-	if(Auth::user()->hasRole('Super Admin')){
+function projectPaymentRight($project)
+{
+	if (Auth::user()->hasRole('Super Admin')) {
 		return true;
 	}
 
-	$projectPaymentRight = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->where('pr_detail_id',$project)->first();
-	if($projectPaymentRight){
-		if ($projectPaymentRight->invoice == 1){
+	$projectPaymentRight = PrRight::where('hr_employee_id', Auth::user()->hrEmployee->id)->where('pr_detail_id', $project)->first();
+	if ($projectPaymentRight) {
+		if ($projectPaymentRight->invoice == 1) {
 			return false;
-		} else{
+		} else {
 			return $projectPaymentRight->payment;
 		}
-		
-	}else
-	{
+	} else {
 		return false;
 	}
 }
 
-function projectProgressRight($project){
-	if(Auth::user()->hasRole('Super Admin')){
+function projectProgressRight($project)
+{
+	if (Auth::user()->hasRole('Super Admin')) {
 		return true;
 	}
 
-	$projectProgressRight = PrRight::where('hr_employee_id',Auth::user()->hrEmployee->id)->where('pr_detail_id',$project)->first();
+	$projectProgressRight = PrRight::where('hr_employee_id', Auth::user()->hrEmployee->id)->where('pr_detail_id', $project)->first();
 
-	if($projectProgressRight){
-		if ($projectProgressRight->progress == 1){
+	if ($projectProgressRight) {
+		if ($projectProgressRight->progress == 1) {
 			return false;
-		} else{
+		} else {
 			return $projectProgressRight->progress;
-		}	
-	}else
-	{
+		}
+	} else {
 		return false;
 	}
 }
 
-function addComma($id){
+function addComma($id)
+{
 
-	if($id){
+	if ($id) {
 
 		return number_format($id);
-	}else
-	{
+	} else {
 		return '';
 	}
 }
 
-function removeComma($id){
-	$value = intval(str_replace( ',', '', $id));
+function removeComma($id)
+{
+	$value = intval(str_replace(',', '', $id));
 	return $value;
 }
 
 
-function officeName($id){
+function officeName($id)
+{
 	$office = Office::find($id);
 	return $office->name;
 }
 
 
 
-function cvSpecilizationName($id){
+function cvSpecilizationName($id)
+{
 
-    $cvSpecialization = CvSpecialization::find($id);
+	$cvSpecialization = CvSpecialization::find($id);
 
-    return $cvSpecialization->name;
-    
-   
+	return $cvSpecialization->name;
 }
 
-function fullName($id){
+function fullName($id)
+{
 
 	$cvDetail = CvDetail::find($id);
 
@@ -104,23 +105,21 @@ function fullName($id){
 }
 
 
-function age($dob) {
-    //return $dob->diffInYears(\Carbon::now());
+function age($dob)
+{
+	//return $dob->diffInYears(\Carbon::now());
 	$years = \Carbon\Carbon::parse($dob)->age;
-    return $years;
+	return $years;
 }
 
 
 
-function countPdfPages($path) {
+function countPdfPages($path)
+{
 
-  $pdftext = json_decode(file_get_contents($path));
+	$pdftext = json_decode(file_get_contents($path));
 
-  $num = preg_match_all("/\/Page\W/", $pdftext, $dummy);
+	$num = preg_match_all("/\/Page\W/", $pdftext, $dummy);
 
-  return $num;
-
+	return $num;
 }
-
-
-

@@ -21,6 +21,19 @@ class DashboardController extends Controller
         $totalPowerProjectsRunning = PrDetail::where('pr_division_id', 2)->where('pr_status_id', 1)->count();
 
         $totalPowerProjectsRunningIds = PrDetail::where('pr_division_id', 2)->where('pr_status_id', 1)->pluck('id')->toArray();
+        $currentMonthReceived = addComma(PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereMonth('payment_date', \Carbon\Carbon::now()->month)->sum('amount'));
+        $lastMonthReceived = addComma(PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereMonth('payment_date', \Carbon\Carbon::now()->subMonth()->month)->sum('amount'));
+
+        $invoiceCurrentMonthIds = Invoice::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereMonth('invoice_date',  \Carbon\Carbon::now()->month)->pluck('id')->toArray();
+        $InvoiceCurrentMonth = addComma(InvoiceCost::whereIn('invoice_id', $invoiceCurrentMonthIds)->sum('amount'));
+
+        $invoiceLastMonthIds = Invoice::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereMonth('invoice_date',  \Carbon\Carbon::now()->subMonth()->month)->pluck('id')->toArray();
+        $InvoiceLastMonth = addComma(InvoiceCost::whereIn('invoice_id', $invoiceLastMonthIds)->sum('amount'));
+
+
+
+
+
         $Received30Days = addComma(PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('payment_date', [\Carbon\Carbon::now()->subDays(30)->startOfDay(), \Carbon\Carbon::now()->startOfDay()])->sum('amount'));
         $Received60Days = addComma(PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('payment_date', [\Carbon\Carbon::now()->subDays(60)->startOfDay(), \Carbon\Carbon::now()->startOfDay()])->sum('amount'));
 
@@ -31,7 +44,11 @@ class DashboardController extends Controller
         $Invoice60Days = addComma(InvoiceCost::whereIn('invoice_id', $invoice60DaysIds)->sum('amount'));
 
         $porjectData = [
-            'total_power_projects_running' => $totalPowerProjectsRunning,
+            'total_power_projects_running' => "$totalPowerProjectsRunning",
+            'current_month_received' => "$currentMonthReceived",
+            'last_month_received' => "$lastMonthReceived",
+            'current_month_invoice' => "$InvoiceCurrentMonth",
+            'last_month_invoice' => "$InvoiceLastMonth",
             'other_projects_running' => $otherProjectsRunning,
             'received_30_days' => $Received30Days,
             'invoice_30_days' => $Invoice30Days,
@@ -47,7 +64,6 @@ class DashboardController extends Controller
     {
 
         $powerProjectsRunning = PrDetail::where('pr_division_id', 2)->where('pr_status_id', 1)->orderBy('contract_type_id', 'desc')->get();
-
         $projects = [];
         foreach ($powerProjectsRunning as $project) {
             $projects[] = [
