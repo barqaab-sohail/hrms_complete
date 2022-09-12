@@ -43,20 +43,33 @@ class DashboardController extends Controller
         $invoice60DaysIds = Invoice::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('invoice_date', [\Carbon\Carbon::now()->subDays(60)->startOfDay(), \Carbon\Carbon::now()->startOfDay()])->pluck('id')->toArray();
         $Invoice60Days = addComma(InvoiceCost::whereIn('invoice_id', $invoice60DaysIds)->sum('amount'));
 
+        $powerProjectsRunning = PrDetail::where('pr_division_id', 2)->where('pr_status_id', 1)->orderBy('contract_type_id', 'desc')->get();
+        $projects = [];
+        foreach ($powerProjectsRunning as $project) {
+            $projects[] = [
+                'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
+                'projectName' => $project->name,
+                'paymentReceived' => addComma(PaymentReceive::where('pr_detail_id', $project->id)->sum('amount')),
+                'pendingPayment' => addComma(pendingInvoicesAmount($project->id)),
+                'budgetUtilization' => budgetUtilization($project->id),
+                'projectProgress' => currentProgress($project->id),
+
+            ];
+        }
+
         $porjectData = [
             'total_power_projects_running' => "$totalPowerProjectsRunning",
-            'current_month_received' => "$currentMonthReceived",
-            'last_month_received' => "$lastMonthReceived",
-            'current_month_invoice' => "$InvoiceCurrentMonth",
-            'last_month_invoice' => "$InvoiceLastMonth",
+            'current_month_received' => $currentMonthReceived ? "$currentMonthReceived" : "0",
+            'last_month_received' => $lastMonthReceived ? "$lastMonthReceived" : "0",
+            'current_month_invoice' => $InvoiceCurrentMonth ? "$InvoiceCurrentMonth" : "0",
+            'last_month_invoice' => $InvoiceLastMonth ? "$InvoiceLastMonth" : "0",
             'other_projects_running' => $otherProjectsRunning,
             'received_30_days' => $Received30Days,
             'invoice_30_days' => $Invoice30Days,
             'received_60_days' => $Received60Days,
             'invoice_60_days' => $Invoice60Days,
+            'running_projects' => $projects,
         ];
-
-        $jsonobj = ["{'icon':'<HiOutlineRefresh/>','amount':'39,354','percentage':'-12%', 'title':'Refunds', 'iconColor':'rgb(0, 194, 146)','iconBg':'rgb(235, 250, 242)', 'pcColor': 'red-600'}"];
 
         return response()->json($porjectData);
     }
