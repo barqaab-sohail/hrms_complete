@@ -11,7 +11,7 @@ use  App\Models\Project\Invoice\InvoiceCost;
 
 class DashboardController extends Controller
 {
-    public function powerData()
+    public function invoiceData()
     {
 
         $totalNtdcProjectsRunning = PrDetail::where('client_id', 1)->where('pr_division_id', 2)->where('pr_status_id', 1)->count();
@@ -73,17 +73,18 @@ class DashboardController extends Controller
 
         return response()->json($porjectData);
     }
-    public function projectData()
+    public function powerRunningProjectsTable()
     {
 
         $powerProjectsRunning = PrDetail::where('pr_division_id', 2)->where('pr_status_id', 1)->orderBy('contract_type_id', 'desc')->get();
         $projects = [];
         foreach ($powerProjectsRunning as $project) {
             $projects[] = [
+                'id' => $project->id,
                 'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
                 'projectName' => $project->name,
                 'paymentReceived' => addComma(PaymentReceive::where('pr_detail_id', $project->id)->sum('amount')),
-                'pendingPayment' => addComma(pendingInvoicesAmount($project->id)),
+                'pendingPayments' => addComma(pendingInvoicesAmount($project->id)),
                 'budgetUtilization' => budgetUtilization($project->id),
                 'projectProgress' => currentProgress($project->id),
 

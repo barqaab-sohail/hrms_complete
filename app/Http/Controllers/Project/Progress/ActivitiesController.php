@@ -11,97 +11,100 @@ use DataTables;
 
 class ActivitiesController extends Controller
 {
-    public function index() {
-       
-       	$prProgressActivities = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->get();
+    public function index()
+    {
 
-        $view =  view('project.progress.activities.create',compact('prProgressActivities'))->render();
+        $prProgressActivities = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->get();
+
+        $view =  view('project.progress.activities.create', compact('prProgressActivities'))->render();
         return response()->json($view);
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
 
         if ($request->ajax()) {
-            $data = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->latest()->get();
+            $data = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
 
             return DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('Edit', function($row){
-   
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editActivity">Edit</a>';
-                                                     
-                            return $btn;
-                    })
-                    ->addColumn('Delete', function($row){                
-                      
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteActivity">Delete</a>';
-                            
-                           
-                            return $btn;
-                    })
-                    
-                    
-                    ->rawColumns(['Edit','Delete'])
-                    ->make(true);
+                ->addIndexColumn()
+                ->addColumn('Edit', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editActivity">Edit</a>';
+
+                    return $btn;
+                })
+                ->addColumn('Delete', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteActivity">Delete</a>';
+
+
+                    return $btn;
+                })
+                ->editColumn('weightage', function ($row) {
+                    return round($row->weightage, 2);
+                })
+
+                ->rawColumns(['Edit', 'Delete'])
+                ->make(true);
         }
 
-      
-        $prProgressActivities = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->get();
-        $view =  view('project.progress.activities.create',compact('prProgressActivities'))->render();
+
+        $prProgressActivities = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->get();
+        $view =  view('project.progress.activities.create', compact('prProgressActivities'))->render();
         return response()->json($view);
+    }
 
-	}
-
-	public function store(ActivityStore $request){
+    public function store(ActivityStore $request)
+    {
 
         $input = $request->all();
-        
-        $input['pr_detail_id']=session('pr_detail_id');
-        
-        if(!$request->belong_to_activity){
-             $input['belong_to_activity']=null;
+
+        $input['pr_detail_id'] = session('pr_detail_id');
+
+        if (!$request->belong_to_activity) {
+            $input['belong_to_activity'] = null;
         }
 
-        DB::transaction(function () use ($input, $request) {  
+        DB::transaction(function () use ($input, $request) {
 
-            PrProgressActivity::updateOrCreate(['id' => $input['activity_id']],
-                ['pr_detail_id'=> $input['pr_detail_id'],
-                'level'=> $input['level'],
-                'belong_to_activity'=> $input['belong_to_activity'],
-                'name'=> $input['name'],
-                'weightage'=> $input['weightage']
-                
-            ]);
+            PrProgressActivity::updateOrCreate(
+                ['id' => $input['activity_id']],
+                [
+                    'pr_detail_id' => $input['pr_detail_id'],
+                    'level' => $input['level'],
+                    'belong_to_activity' => $input['belong_to_activity'],
+                    'name' => $input['name'],
+                    'weightage' => $input['weightage']
 
-
-
+                ]
+            );
         }); // end transcation
 
-        return response()->json(['success'=>'Data saved successfully.']);
+        return response()->json(['success' => 'Data saved successfully.']);
     }
 
-     public function edit($id){
+    public function edit($id)
+    {
 
-		$prProgressActivity= PrProgressActivity::find($id);
-        
+        $prProgressActivity = PrProgressActivity::find($id);
+
         return response()->json($prProgressActivity);
-
-	}
-
+    }
 
 
-    public function destroy($id){
+
+    public function destroy($id)
+    {
 
         PrProgressActivity::findOrFail($id)->delete();
-        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
-        
+        return response()->json(['status' => 'OK', 'message' => "Data Successfully Deleted"]);
     }
 
-    public function mainActivities($level){
+    public function mainActivities($level)
+    {
 
-        $activities = PrProgressActivity::where('pr_detail_id',session('pr_detail_id'))->where('level',"<",$level)->get();
+        $activities = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', "<", $level)->get();
         return response()->json($activities);
-
     }
-
 }
