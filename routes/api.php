@@ -22,8 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 
-Route::get('/dashboardData', 'Dashboard\DashboardController@powerData');
-Route::get('/projectData', 'Dashboard\DashboardController@projectData');
+Route::get('/invoiceData', 'Dashboard\DashboardController@invoiceData');
+Route::get('/powerRunningProjectsTable', 'Dashboard\DashboardController@powerRunningProjectsTable');
 
 
 
