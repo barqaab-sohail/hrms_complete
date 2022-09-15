@@ -24,6 +24,7 @@ Route::post('/user/login', 'Android\Auth\UserController@login');
 
 Route::get('/invoiceData', 'Dashboard\DashboardController@invoiceData');
 Route::get('/powerRunningProjectsTable', 'Dashboard\DashboardController@powerRunningProjectsTable');
+Route::get('/projectExpenseChart/{id}', 'Dashboard\DashboardController@projectExpenseChart');
 
 
 
