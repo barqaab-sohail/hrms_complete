@@ -38,16 +38,14 @@
           <div class="form-group">
             <label class="control-label text-right">Month<span class="text_requried">*</span></label>
             <input type="text" id="month" name="month" value="{{ old('month') }}" class="form-control" readonly>
-            <br>
-            <i class="fas fa-trash-alt text_requried"></i>
           </div>
           <div class="form-group">
-            <label class="control-label">Salary Expense</label>
+            <label class="control-label">Salary Expense<span class="text_requried">*</span></label>
             <input type="text" name="salary_expense" id="salary_expense" value="{{old('salary_expense')}}" class="form-control prc_1" data-validation="required">
           </div>
 
           <div class="form-group">
-            <label class="control-label">Non Salary Expense</label>
+            <label class="control-label">Non Salary Expense<span class="text_requried">*</span></label>
             <input type="text" name="non_salary_expense" id="non_salary_expense" value="{{old('non_salary_expense')}}" class="form-control prc_1">
           </div>
           <div class="form-group">
@@ -141,6 +139,32 @@
       var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
+        lengthMenu: [
+          [10, 25, 50, -1],
+          [10, 25, 50, 'All'],
+        ],
+        dom: 'Blfrtip',
+        buttons: [{
+            extend: 'copyHtml5',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4]
+            }
+          },
+          {
+            extend: 'excelHtml5',
+            title: 'Monthly Expense Detail',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4]
+            }
+          },
+          {
+            extend: 'pdfHtml5',
+            title: 'Monthly Expense Detail',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4]
+            }
+          },
+        ],
         ajax: "{{ route('projectMonthlyExpense.create') }}",
         columns: [{
             data: "month",
