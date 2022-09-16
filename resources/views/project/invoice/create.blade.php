@@ -243,6 +243,32 @@
       var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
+        lengthMenu: [
+          [10, 25, 50, -1],
+          [10, 25, 50, 'All'],
+        ],
+        dom: 'Blfrtip',
+        buttons: [{
+            extend: 'copyHtml5',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5, 6]
+            }
+          },
+          {
+            extend: 'excelHtml5',
+            title: 'Invoices Detail',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5, 6]
+            }
+          },
+          {
+            extend: 'pdfHtml5',
+            title: 'Invoices Detail',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5, 6]
+            }
+          },
+        ],
         ajax: {
           url: "{{ route('projectInvoice.create') }}",
           data: function(data) {
