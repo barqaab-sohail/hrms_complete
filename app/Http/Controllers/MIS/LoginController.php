@@ -40,4 +40,14 @@ class LoginController extends Controller
             }
         }
     }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Sucessfully Logout'
+        ]);
+    }
 }
