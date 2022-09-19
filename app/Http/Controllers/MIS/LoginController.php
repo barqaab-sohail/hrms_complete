@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Hr\HrDocumentation;
 
 class LoginController extends Controller
 {
@@ -31,9 +32,12 @@ class LoginController extends Controller
                 ]);
             } else {
                 $token = $user->createToken($user->email . '_token')->plainTextToken;
+                $picture = HrDocumentation::where('hr_employee_id', $user->hrEmployee->id)->where('description', 'picture')->first();
                 return response()->json([
                     'status' => 200,
                     'userName' => $user->hrEmployee->full_name,
+                    'userDesignation' => $user->hrEmployee->designation,
+                    'pictureUrl' => asset('/storage/' . $picture->path . $picture->file_name),
                     'token' => $token,
                     'message' => 'Loogged In Successfully',
                 ]);
