@@ -55,12 +55,11 @@ class InvoiceController extends Controller
 
     public function create(Request $request)
     {
+        $data = Invoice::where('pr_detail_id', session('pr_detail_id'))->with('invoiceMonth')->latest()->get();
 
         if ($request->ajax()) {
             $data = Invoice::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
-
             $invoiceIds = Invoice::where('pr_detail_id', session('pr_detail_id'))->pluck('id')->toArray();
-
             $totalInvoice = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount');
             return DataTables::of($data)
                 ->addIndexColumn()
