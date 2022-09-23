@@ -271,9 +271,6 @@
         ],
         ajax: {
           url: "{{ route('projectInvoice.create') }}",
-          data: function(data) {
-            console.log(data)
-          }
         },
         columns: [{
             data: "invoice_no",
