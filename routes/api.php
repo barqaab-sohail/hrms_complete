@@ -23,10 +23,12 @@ Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 Route::post('/mis/login', 'MIS\LoginController@login');
 
+
+Route::get('/powerRunningProjectsTable', 'Dashboard\DashboardController@powerRunningProjectsTable');
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/mis/logout', 'MIS\LoginController@logout');
 	Route::get('/invoiceData', 'Dashboard\DashboardController@invoiceData');
-	Route::get('/powerRunningProjectsTable', 'Dashboard\DashboardController@powerRunningProjectsTable');
 });
 
 

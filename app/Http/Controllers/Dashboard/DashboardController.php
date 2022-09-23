@@ -88,7 +88,7 @@ class DashboardController extends Controller
                 'pendingPayments' => addComma(pendingInvoicesAmount($project->id)),
                 'budgetUtilization' => budgetUtilization($project->id),
                 'projectProgress' => currentProgress($project->id),
-
+                'latestInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? '',
             ];
         }
 
