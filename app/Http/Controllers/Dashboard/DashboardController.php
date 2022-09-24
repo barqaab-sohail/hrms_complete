@@ -125,7 +125,19 @@ class DashboardController extends Controller
     }
     public function projectDetail($projectId)
     {
-        $project = PrDetail::find($projectId);
-        return response()->json($project);
+        $project = PrDetail::with('client', 'latestInvoiceMonth', 'invoiceCost', 'prCost')->find($projectId);
+        $proejctDetail = [
+            'projectName' => $project->name,
+            'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
+            'clientName' => $project->client->name,
+            'commencementDate' => $project->commencement_date,
+            'contractualCompletionDate' => $project->contractual_completion_date,
+            'projectTotalCostWOTax' => addComma(($project->prCost->total_cost ?? 0) - ($project->prCost->sales_tax ?? 0)),
+            'totalInvoicesAmountWOTax' => addComma($project->invoicecost->sum('amount')),
+            'lastInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? '',
+
+        ];
+
+        return response()->json($proejctDetail);
     }
 }
