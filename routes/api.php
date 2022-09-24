@@ -25,6 +25,7 @@ Route::post('/mis/login', 'MIS\LoginController@login');
 
 
 Route::get('/powerRunningProjectsTable', 'Dashboard\DashboardController@powerRunningProjectsTable');
+Route::get('/projectDetail/{id}', 'Dashboard\DashboardController@projectDetail');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/mis/logout', 'MIS\LoginController@logout');

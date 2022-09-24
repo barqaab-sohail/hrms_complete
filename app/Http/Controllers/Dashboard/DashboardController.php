@@ -123,4 +123,9 @@ class DashboardController extends Controller
 
         return response()->json(['months' => $months, 'invoices' => $invoices, 'expenses' => $expenses]);
     }
+    public function projectDetail($projectId)
+    {
+        $project = PrDetail::find($projectId);
+        return response()->json($project);
+    }
 }
