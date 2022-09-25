@@ -27,10 +27,10 @@ Route::post('/mis/login', 'MIS\LoginController@login');
 Route::get('/powerRunningProjectsTable', 'Dashboard\DashboardController@powerRunningProjectsTable');
 Route::get('/projectDetail/{id}', 'Dashboard\DashboardController@projectDetail');
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
-	Route::post('/mis/logout', 'MIS\LoginController@logout');
-	Route::get('/invoiceData', 'Dashboard\DashboardController@invoiceData');
-});
+//Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::post('/mis/logout', 'MIS\LoginController@logout');
+Route::get('/invoiceData', 'Dashboard\DashboardController@invoiceData');
+//});
 
 
 Route::get('/projectExpenseChart/{id}', 'Dashboard\DashboardController@projectExpenseChart');
