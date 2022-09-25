@@ -53,6 +53,17 @@ class PrDetail extends Model implements Auditable
             'id',
         );
     }
+    public function invoiceCostWOEsc()
+    {
+        return $this->hasManyThrough(
+            'App\Models\Project\Invoice\InvoiceCost',
+            'App\Models\Project\Invoice\Invoice',
+            'pr_detail_id',
+            'id',
+            'id',
+            'id',
+        )->where('invoice_type_id', '!=', 3);
+    }
 
     public function latestInvoiceMonth()
     {

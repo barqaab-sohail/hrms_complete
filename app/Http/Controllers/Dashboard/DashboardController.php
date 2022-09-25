@@ -116,25 +116,37 @@ class DashboardController extends Controller
         $lastMonth = $month[\Carbon\Carbon::now()->subMonth(1)->month - 1];
         $last2Month = $month[\Carbon\Carbon::now()->subMonth(2)->month - 1];
 
+        $currentMonthReceived = PaymentReceive::where('pr_detail_id', $projectId)->whereMonth('payment_date', \Carbon\Carbon::now()->month)->sum('amount');
+        $lastMonthReceived = PaymentReceive::where('pr_detail_id', $projectId)->whereMonth('payment_date', \Carbon\Carbon::now()->subMonth(1)->month)->sum('amount');
+        $last2MonthReceived = PaymentReceive::where('pr_detail_id', $projectId)->whereMonth('payment_date', \Carbon\Carbon::now()->subMonth(2)->month)->sum('amount');
+
+
         $months = [$currentMonth, $lastMonth,  $last2Month];
         $invoices = [$lastMonthInvoiceAmount, $last2MonthInvoiceAmount, $currentMonthInvoiceAmount];
         $expenses = [$currentMonthExpenses, $lastMonthExpenses, $last2MonthExpenses];
+        $paymentReceived = [$currentMonthReceived, $lastMonthReceived, $last2MonthReceived];
 
 
-        return response()->json(['months' => $months, 'invoices' => $invoices, 'expenses' => $expenses]);
+        return (['months' => $months, 'invoices' => $invoices, 'expenses' => $expenses, 'paymentReceived' => $paymentReceived]);
     }
     public function projectDetail($projectId)
     {
         $project = PrDetail::with('client', 'latestInvoiceMonth', 'invoiceCost', 'prCost')->find($projectId);
+        $invoiceCostWOTaxWOExc = $project->invoiceCostWOEsc->sum('amount');
+        $totalProjectCostWOTax = ($project->prCost->total_cost ?? 0) - ($project->prCost->sales_tax ?? 0);
+        $percentageRemainingBudget = $totalProjectCostWOTax === 0 ? 'N/A' : round(($totalProjectCostWOTax - $invoiceCostWOTaxWOExc) / ($totalProjectCostWOTax) * 100, 2);
         $proejctDetail = [
             'projectName' => $project->name,
             'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
             'clientName' => $project->client->name,
             'commencementDate' => $project->commencement_date,
             'contractualCompletionDate' => $project->contractual_completion_date,
-            'projectTotalCostWOTax' => addComma(($project->prCost->total_cost ?? 0) - ($project->prCost->sales_tax ?? 0)),
-            'totalInvoicesAmountWOTax' => addComma($project->invoicecost->sum('amount')),
+            'projectTotalCostWOTax' => addComma($totalProjectCostWOTax),
+            'totalInvoicesAmountWOTaxWOExc' => addComma($invoiceCostWOTaxWOExc),
+            'balaneBudget' => addComma($totalProjectCostWOTax - $invoiceCostWOTaxWOExc),
+            'percentageRemainingBudget' => $percentageRemainingBudget,
             'lastInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? '',
+            'projectChart' => $this->projectExpenseChart($project->id),
 
         ];
 
