@@ -121,13 +121,33 @@ class DashboardController extends Controller
         $last2MonthReceived = PaymentReceive::where('pr_detail_id', $projectId)->whereMonth('payment_date', \Carbon\Carbon::now()->subMonth(2)->month)->sum('amount');
 
 
-        $months = [$currentMonth, $lastMonth,  $last2Month];
-        $invoices = [$lastMonthInvoiceAmount, $last2MonthInvoiceAmount, $currentMonthInvoiceAmount];
-        $expenses = [$currentMonthExpenses, $lastMonthExpenses, $last2MonthExpenses];
-        $paymentReceived = [$currentMonthReceived, $lastMonthReceived, $last2MonthReceived];
+        // $months = [$currentMonth, $lastMonth,  $last2Month];
+        // $invoices = [$lastMonthInvoiceAmount, $last2MonthInvoiceAmount, $currentMonthInvoiceAmount];
+        // $expenses = [$currentMonthExpenses, $lastMonthExpenses, $last2MonthExpenses];
+        // $paymentReceived = [$currentMonthReceived, $lastMonthReceived, $last2MonthReceived];
+
+        $data[] = [
+            'months' => $currentMonth,
+            'invoices' => $currentMonthInvoiceAmount,
+            'expenses' => $currentMonthExpenses,
+            'payments' => $currentMonthReceived
+        ];
+
+        $data[] = [
+            'months' => $lastMonth,
+            'invoices' => $lastMonthInvoiceAmount,
+            'expenses' => $lastMonthExpenses,
+            'payments' => $lastMonthReceived
+        ];
+        $data[] = [
+            'months' => $last2Month,
+            'invoices' => $last2MonthInvoiceAmount,
+            'expenses' => $last2MonthExpenses,
+            'payments' => $last2MonthReceived
+        ];
 
 
-        return (['months' => $months, 'invoices' => $invoices, 'expenses' => $expenses, 'paymentReceived' => $paymentReceived]);
+        return  response()->json($data);
     }
     public function projectDetail($projectId)
     {
@@ -146,7 +166,6 @@ class DashboardController extends Controller
             'balaneBudget' => addComma($totalProjectCostWOTax - $invoiceCostWOTaxWOExc),
             'percentageRemainingBudget' => $percentageRemainingBudget,
             'lastInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? '',
-            'projectChart' => $this->projectExpenseChart($project->id),
 
         ];
 
