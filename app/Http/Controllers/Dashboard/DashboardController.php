@@ -129,20 +129,20 @@ class DashboardController extends Controller
         $data[] = [
             'months' => $currentMonth,
             'invoices' => $currentMonthInvoiceAmount,
-            'expenses' => $currentMonthExpenses,
+            'expenses' => 40,
             'payments' => $currentMonthReceived
         ];
 
         $data[] = [
             'months' => $lastMonth,
             'invoices' => $lastMonthInvoiceAmount,
-            'expenses' => $lastMonthExpenses,
+            'expenses' => 30,
             'payments' => $lastMonthReceived
         ];
         $data[] = [
             'months' => $last2Month,
             'invoices' => $last2MonthInvoiceAmount,
-            'expenses' => $last2MonthExpenses,
+            'expenses' => 20,
             'payments' => $last2MonthReceived
         ];
 

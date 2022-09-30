@@ -141,9 +141,10 @@
                         <li><a class="{{Request::is('hrms/leave/create')?'active':''}}" href="{{route('leave.create')}}">Apply Leave</a></li>
                         <li><a class="{{Request::is('hrms/leave')?'active':''}}" href="{{route('leave.index')}}">List of Leaves</a></li>
                         <li><a class="{{Request::is('hrms/leave/search')?'active':''}}" href="{{route('leave.search')}}">Search</a></li>
+                        <li><a class="{{Request::is('hrms/leaveBalance')?'active':''}}" href="{{route('leaveBalance.index')}}">Leave Balance</a></li>
                         @endcan
                         @can('Super Admin')
-                        <li><a class="{{Request::is('hrms/leaveBalance')?'active':''}}" href="{{route('leaveBalance.index')}}">Leave Balance</a></li>
+
                         <li><a class="{{Request::is('hrms/accumulativesLeave')?'active':''}}" href="{{route('accumulativesLeave.index')}}">Accumulatives Leave</a></li>
                         @endcan
                     </ul>
