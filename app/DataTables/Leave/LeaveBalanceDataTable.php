@@ -21,16 +21,21 @@ class LeaveBalanceDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->filterColumn('full_name', function($query, $keyword) {
-                    $sql = "CONCAT(hr_employees.first_name,'-',hr_employees.last_name)  like ?";
-                    $query->whereRaw($sql, ["%{$keyword}%"]);
+            ->filterColumn('full_name', function ($query, $keyword) {
+                $sql = "CONCAT(hr_employees.first_name,'-',hr_employees.last_name)  like ?";
+                $query->whereRaw($sql, ["%{$keyword}%"]);
             })
-            ->addColumn('full_name', '{{$first_name}} {{$last_name}}')
-            ->addColumn('casual_leave',function($data){
+            ->addColumn('full_name', function ($data) {
+                return $data->full_name . ', ' . $data->designation ?? '';
+            })
+            ->addColumn('category', function ($data) {
+                return $data->employeeCategory->first()->name ?? '';
+            })
+            ->addColumn('casual_leave', function ($data) {
                 return casualLeave($data->id);
             })
-            ->addColumn('accumulative_annual_leave',function($data){
-                return $data->leAccumulative->accumulative_total??'N/A';
+            ->addColumn('accumulative_annual_leave', function ($data) {
+                return $data->leAccumulative->accumulative_total ?? 'N/A';
             });
     }
 
@@ -42,7 +47,7 @@ class LeaveBalanceDataTable extends DataTable
      */
     public function query(HrEmployee $model)
     {
-        return $model->with('leAccumulative')->where('hr_status_id',1)->whereIn('employee_no',leaveEmployees())->newQuery();
+        return $model->with('leAccumulative')->where('hr_status_id', 1)->whereIn('employee_no', leaveEmployees())->newQuery();
     }
 
     /**
@@ -53,14 +58,18 @@ class LeaveBalanceDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('hr_employees-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bif')
-                    ->orderBy(1)
-                     ->buttons(
-                        Button::make('export')
-                    );
+            ->setTableId('hr_employees-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            // ->dom('Blfrtip')
+            ->orderBy(0)
+            ->parameters([
+                'dom'          => 'Blfrtip',
+                'buttons'      => ['copy', 'excel', 'csv'],
+            ]);
+        // ->buttons(
+        //     Button::make('export')
+        // );
     }
 
     /**
@@ -71,16 +80,17 @@ class LeaveBalanceDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            
-            Column::make('id'),
+
+            // Column::make('id'),
             Column::make('employee_no'),
             Column::make('full_name'),
+            Column::make('category'),
             Column::make('casual_leave'),
             Column::make('accumulative_annual_leave')
-                  ->exportable(true)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(true)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
         ];
     }
 
@@ -93,6 +103,4 @@ class LeaveBalanceDataTable extends DataTable
     {
         return 'HrEmployee_' . date('YmdHis');
     }
-
-    
 }
