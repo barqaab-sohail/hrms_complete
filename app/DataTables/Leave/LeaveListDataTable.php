@@ -90,7 +90,13 @@ class LeaveListDataTable extends DataTable
      */
     public function query(Leave $model)
     {
-        return $model->with('hrEmployee', 'employeeDesignation', 'leType')->orderBy('from', 'desc')->newQuery();
+        return $model->newQuery()->with('hrEmployee', 'employeeDesignation', 'leSanctioned', 'leType')
+            ->join('hr_employees', function ($join) {
+                $join->on('leaves.hr_employee_id', '=', 'hr_employees.id');
+            })
+            ->select('leaves.*', 'hr_employees.first_name', 'hr_employees.last_name');
+
+        //join('hr_employees','hr_employees.id','=','leavies.hr_employee_id')->with('hrEmployee', 'employeeDesignation', 'leType')->orderBy('from', 'desc')newQuery();
     }
 
     /**
