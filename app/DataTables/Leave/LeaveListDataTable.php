@@ -94,6 +94,7 @@ class LeaveListDataTable extends DataTable
             ->join('hr_employees', function ($join) {
                 $join->on('leaves.hr_employee_id', '=', 'hr_employees.id');
             })
+            ->orderBy('leaves.id', 'desc')
             ->select('leaves.*', 'hr_employees.first_name', 'hr_employees.last_name');
 
         //join('hr_employees','hr_employees.id','=','leavies.hr_employee_id')->with('hrEmployee', 'employeeDesignation', 'leType')->orderBy('from', 'desc')newQuery();
@@ -110,12 +111,12 @@ class LeaveListDataTable extends DataTable
             ->setTableId('leaves-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('Bfrtip')
-            ->orderBy(1)
-            ->buttons(
-                Button::make('export'),
-                Button::make('reload')
-            );
+            // ->dom('Bfrtip')
+            //->orderBy(0)
+            ->parameters([
+                'dom'          => 'Blfrtip',
+                'buttons'      => ['copy', 'excel', 'csv'],
+            ]);
     }
 
     /**
