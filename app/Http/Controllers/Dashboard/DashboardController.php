@@ -129,23 +129,22 @@ class DashboardController extends Controller
         $data[] = [
             'months' => $currentMonth,
             'invoices' => $currentMonthInvoiceAmount,
-            'expenses' => 40,
+            'expenses' => $currentMonthExpenses,
             'payments' => $currentMonthReceived
         ];
 
         $data[] = [
             'months' => $lastMonth,
             'invoices' => $lastMonthInvoiceAmount,
-            'expenses' => 30,
+            'expenses' => $lastMonthExpenses,
             'payments' => $lastMonthReceived
         ];
         $data[] = [
             'months' => $last2Month,
             'invoices' => $last2MonthInvoiceAmount,
-            'expenses' => 20,
+            'expenses' => $last2MonthExpenses,
             'payments' => $last2MonthReceived
         ];
-
 
         return  response()->json($data);
     }
