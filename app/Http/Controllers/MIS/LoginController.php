@@ -37,6 +37,7 @@ class LoginController extends Controller
                     'status' => 200,
                     'userName' => $user->hrEmployee->full_name,
                     'userDesignation' => $user->hrEmployee->designation,
+                    'email' => $user->email,
                     'pictureUrl' => asset('/storage/' . $picture->path . $picture->file_name),
                     'token' => $token,
                     'message' => 'Loogged In Successfully',
