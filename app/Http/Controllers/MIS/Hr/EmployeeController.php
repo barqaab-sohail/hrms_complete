@@ -11,7 +11,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $data = HrEmployee::with('employeeDesignation', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
+        $data = HrEmployee::with('employeeDesignation', 'picture', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
 
         //first sort with respect to Designation
         $designations = employeeDesignationArray();
@@ -32,9 +32,9 @@ class EmployeeController extends Controller
 
         $defaultPicture = asset('Massets/images/default.png');
         foreach ($data as $employee) {
-            $picture = HrDocumentation::where('hr_employee_id', $employee->id)->where('description', 'Picture')->first();
-            if ($picture) {
-                $picture = asset('storage/' . $picture->path . $picture->file_name);
+            // $picture = HrDocumentation::where('hr_employee_id', $employee->id)->where('description', 'Picture')->first();
+            if ($employee->picture) {
+                $picture = asset('storage/' . $employee->picture->path . $employee->picture->file_name);
             } else {
                 $picture = $defaultPicture;
             }
