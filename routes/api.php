@@ -25,7 +25,7 @@ Route::post('/mis/login', 'MIS\LoginController@login');
 
 
 
-Route::get('/employees', 'MIS\Hr\EmployeeController@index');
+
 
 // DashBoard / MIS API
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::get('/projectExpenseChart/{id}', 'Dashboard\DashboardController@projectExpenseChart');
 
 	//HR Routes
+	Route::get('/employees', 'MIS\Hr\EmployeeController@index');
 });
 
 
