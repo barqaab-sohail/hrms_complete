@@ -33,6 +33,8 @@ function budgetUtilization($projectId)
 }
 function currentProgress($projectId)
 {
+	//return $pogress = PrAchievedProgress::where('pr_detail_id', $projectId)->orderBy('created_at', 'desc')->distinct('pr_progress_activity_id')->sum('percentage_complete');
+
 	$totalAchievedProgress = 0.0;
 	$lastAchievedProgressDate = '';
 	$projectLevel = PrProgressActivity::where('pr_detail_id', $projectId)->max('level');

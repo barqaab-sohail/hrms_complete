@@ -45,19 +45,19 @@ class DashboardController extends Controller
         $invoice60DaysIds = Invoice::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('invoice_date', [\Carbon\Carbon::now()->subDays(60)->startOfDay(), \Carbon\Carbon::now()->startOfDay()])->pluck('id')->toArray();
         $Invoice60Days = addComma(InvoiceCost::whereIn('invoice_id', $invoice60DaysIds)->sum('amount'));
 
-        $powerProjectsRunning = PrDetail::where('pr_division_id', 2)->where('pr_status_id', 1)->orderBy('contract_type_id', 'desc')->get();
-        $projects = [];
-        foreach ($powerProjectsRunning as $project) {
-            $projects[] = [
-                'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
-                'projectName' => $project->name,
-                'paymentReceived' => addComma(PaymentReceive::where('pr_detail_id', $project->id)->sum('amount')),
-                'pendingPayment' => addComma(pendingInvoicesAmount($project->id)),
-                'budgetUtilization' => budgetUtilization($project->id),
-                'projectProgress' => currentProgress($project->id),
+        // $powerProjectsRunning = PrDetail::where('pr_division_id', 2)->where('pr_status_id', 1)->orderBy('contract_type_id', 'desc')->get();
+        // $projects = [];
+        // foreach ($powerProjectsRunning as $project) {
+        //     $projects[] = [
+        //         'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
+        //         'projectName' => $project->name,
+        //         'paymentReceived' => addComma(PaymentReceive::where('pr_detail_id', $project->id)->sum('amount')),
+        //         'pendingPayment' => addComma(pendingInvoicesAmount($project->id)),
+        //         'budgetUtilization' => budgetUtilization($project->id),
+        //         'projectProgress' => currentProgress($project->id),
 
-            ];
-        }
+        //     ];
+        // }
 
         $porjectData = [
             'total_power_projects_running' => "$totalPowerProjectsRunning",
@@ -70,7 +70,6 @@ class DashboardController extends Controller
             'invoice_30_days' => $Invoice30Days,
             'received_60_days' => $Received60Days,
             'invoice_60_days' => $Invoice60Days,
-            'running_projects' => $projects,
         ];
 
         return response()->json($porjectData);
@@ -78,7 +77,7 @@ class DashboardController extends Controller
     public function powerRunningProjectsTable()
     {
 
-        $powerProjectsRunning = PrDetail::where('pr_division_id', 2)->where('pr_status_id', 1)->orderBy('contract_type_id', 'desc')->get();
+        $powerProjectsRunning = PrDetail::with('latestInvoiceMonth')->where('pr_division_id', 2)->where('pr_status_id', 1)->orderBy('contract_type_id', 'desc')->get();
         $projects = [];
         foreach ($powerProjectsRunning as $project) {
             $projects[] = [
