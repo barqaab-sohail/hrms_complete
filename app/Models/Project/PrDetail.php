@@ -2,6 +2,7 @@
 
 namespace App\Models\Project;
 
+use App\Models\Project\Progress\PrAchievedProgress;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
