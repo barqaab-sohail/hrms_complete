@@ -8,27 +8,29 @@ use OwenIt\Auditing\Contracts\Auditable;
 class PaymentReceive extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    
-   	protected $fillable = ['invoice_id','pr_detail_id','payment_status_id', 'amount','payment_date','cheque_no','cheque_date'];
 
+    protected $fillable = ['invoice_id', 'pr_detail_id', 'payment_status_id', 'amount', 'payment_date', 'cheque_no', 'cheque_date'];
 
-   	Public function invoice(){
-
-        return $this->belongsTo('App\Models\Project\Invoice\Invoice' );
-
+    public function prDetail()
+    {
+        return $this->belongsTo('App\Models\Project\PrDetail');
     }
 
-    Public function deduction(){
+    public function invoice()
+    {
 
-        return $this->hasOne('App\Models\Project\Payment\PaymentDeduction' );
-
+        return $this->belongsTo('App\Models\Project\Invoice\Invoice');
     }
 
-    Public function paymentStatus(){
+    public function deduction()
+    {
 
-        return $this->belongsTo('App\Models\Project\Payment\PaymentStatus' );
-
+        return $this->hasOne('App\Models\Project\Payment\PaymentDeduction');
     }
 
+    public function paymentStatus()
+    {
 
+        return $this->belongsTo('App\Models\Project\Payment\PaymentStatus');
+    }
 }
