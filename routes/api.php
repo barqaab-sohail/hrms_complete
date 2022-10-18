@@ -28,6 +28,7 @@ Route::post('/mis/login', 'MIS\LoginController@login');
 
 Route::get('/powerRunningProjectsTable', 'Dashboard\DashboardController@powerRunningProjectsTable');
 Route::get('/currentMonthPaymentReceived', 'Dashboard\DashboardController@currentMonthPaymentReceived');
+Route::get('/lastMonthPaymentReceived', 'Dashboard\DashboardController@lastMonthPaymentReceived');
 // DashBoard / MIS API
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	//Projects Routes

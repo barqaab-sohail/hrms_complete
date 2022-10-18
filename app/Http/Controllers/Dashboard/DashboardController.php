@@ -63,18 +63,32 @@ class DashboardController extends Controller
 
     public function currentMonthPaymentReceived()
     {
-
         $totalPowerProjectsRunningIds = PrDetail::where('pr_division_id', 2)->pluck('id')->toArray();
-        $currentMonthReceived = PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('payment_date', [\Carbon\Carbon::now()->subMonth()->startOfMonth(), \Carbon\Carbon::now()->subMonth()->endOfMonth()])->get();
+        $currentMonthReceived = PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('payment_date', [\Carbon\Carbon::now()->startOfMonth(), \Carbon\Carbon::now()->endOfMonth()])->get();
         $payments = [];
         foreach ($currentMonthReceived as $payment) {
             $payments[] = [
                 'projectId' => $payment->pr_detail_id ?? '',
                 'projectName' => $payment->prDetail->name ?? '',
-                'amountReceived' => addComma(PaymentReceive::where('pr_detail_id', $payment->pr_detail_id)->sum('amount')),
+                'amountReceived' => addComma(PaymentReceive::where('pr_detail_id', $payment->pr_detail_id)->whereBetween('payment_date', [\Carbon\Carbon::now()->startOfMonth(), \Carbon\Carbon::now()->endOfMonth()])->sum('amount')),
             ];
         }
-        return response()->json($currentMonthReceived);
+        return response()->json($payments);
+    }
+
+    public function lastMonthPaymentReceived()
+    {
+        $totalPowerProjectsRunningIds = PrDetail::where('pr_division_id', 2)->pluck('id')->toArray();
+        $lastMonthReceived = PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('payment_date', [\Carbon\Carbon::now()->subMonth()->startOfMonth(), \Carbon\Carbon::now()->subMonth()->endOfMonth()])->groupBy('pr_detail_id')->get();
+        $payments = [];
+        foreach ($lastMonthReceived as $payment) {
+            $payments[] = [
+                'projectId' => $payment->pr_detail_id ?? '',
+                'projectName' => $payment->prDetail->name ?? '',
+                'amountReceived' => addComma(PaymentReceive::where('pr_detail_id', $payment->pr_detail_id)->whereBetween('payment_date', [\Carbon\Carbon::now()->subMonth()->startOfMonth(), \Carbon\Carbon::now()->subMonth()->endOfMonth()])->sum('amount')),
+            ];
+        }
+        return response()->json($payments);
     }
 
 
