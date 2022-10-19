@@ -64,7 +64,7 @@ class DashboardController extends Controller
     public function currentMonthPaymentReceived()
     {
         $totalPowerProjectsRunningIds = PrDetail::where('pr_division_id', 2)->pluck('id')->toArray();
-        $currentMonthReceived = PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('payment_date', [\Carbon\Carbon::now()->startOfMonth(), \Carbon\Carbon::now()->endOfMonth()])->get();
+        $currentMonthReceived = PaymentReceive::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->whereBetween('payment_date', [\Carbon\Carbon::now()->startOfMonth(), \Carbon\Carbon::now()->endOfMonth()])->groupBy('pr_detail_id')->get();
         $payments = [];
         foreach ($currentMonthReceived as $payment) {
             $payments[] = [
@@ -89,6 +89,41 @@ class DashboardController extends Controller
             ];
         }
         return response()->json($payments);
+    }
+
+
+    public function currentMonthInvoices()
+    {
+        $totalPowerProjectsRunningIds = PrDetail::where('pr_division_id', 2)->pluck('id')->toArray();
+        $currentMonthInvoices = Invoice::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->WhereBetween('invoice_date',   [\Carbon\Carbon::now()->startOfMonth(), \Carbon\Carbon::now()->endOfMonth()])->groupBy('pr_detail_id')->get();
+        //$InvoiceCurrentMonth = addComma(InvoiceCost::whereIn('invoice_id', $invoiceCurrentMonthIds)->sum('amount'));
+        $invoices = [];
+        foreach ($currentMonthInvoices as $invoice) {
+            $invoiceIds = Invoice::where('pr_detail_id', $invoice->pr_detail_id)->WhereBetween('invoice_date',   [\Carbon\Carbon::now()->startOfMonth(), \Carbon\Carbon::now()->endOfMonth()])->pluck('id')->toArray();
+            $invoices[] = [
+                'projectName' => $invoice->prDetail->name ?? '',
+                'invoiceAmount' => addComma(InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount')),
+            ];
+        }
+
+        return response()->json($invoices);
+    }
+
+    public function lastMonthInvoices()
+    {
+        $totalPowerProjectsRunningIds = PrDetail::where('pr_division_id', 2)->pluck('id')->toArray();
+        $lastMonthInvoices = Invoice::whereIn('pr_detail_id', $totalPowerProjectsRunningIds)->WhereBetween('invoice_date',   [\Carbon\Carbon::now()->subMonth()->startOfMonth(), \Carbon\Carbon::now()->subMonth()->endOfMonth()])->groupBy('pr_detail_id')->get();
+        //$InvoiceCurrentMonth = addComma(InvoiceCost::whereIn('invoice_id', $invoiceCurrentMonthIds)->sum('amount'));
+        $invoices = [];
+        foreach ($lastMonthInvoices as $invoice) {
+            $invoiceIds = Invoice::where('pr_detail_id', $invoice->pr_detail_id)->WhereBetween('invoice_date',   [\Carbon\Carbon::now()->subMonth()->startOfMonth(), \Carbon\Carbon::now()->subMonth()->endOfMonth()])->pluck('id')->toArray();
+            $invoices[] = [
+                'projectName' => $invoice->prDetail->name ?? '',
+                'invoiceAmount' => addComma(InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount')),
+            ];
+        }
+
+        return response()->json($invoices);
     }
 
 
