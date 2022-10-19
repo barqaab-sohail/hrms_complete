@@ -26,17 +26,21 @@ Route::post('/mis/login', 'MIS\LoginController@login');
 
 
 
-Route::get('/powerRunningProjectsTable', 'Dashboard\DashboardController@powerRunningProjectsTable');
-Route::get('/currentMonthPaymentReceived', 'Dashboard\DashboardController@currentMonthPaymentReceived');
-Route::get('/lastMonthPaymentReceived', 'Dashboard\DashboardController@lastMonthPaymentReceived');
+
 // DashBoard / MIS API
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	//Projects Routes
 	Route::post('/mis/logout', 'MIS\LoginController@logout');
 	Route::get('/invoiceData', 'Dashboard\DashboardController@invoiceData');
 	Route::get('/projectDetail/{id}', 'Dashboard\DashboardController@projectDetail');
-
 	Route::get('/projectExpenseChart/{id}', 'Dashboard\DashboardController@projectExpenseChart');
+	Route::get('/powerRunningProjectsTable', 'Dashboard\DashboardController@powerRunningProjectsTable');
+	Route::get('/currentMonthPaymentReceived', 'Dashboard\DashboardController@currentMonthPaymentReceived');
+	Route::get('/lastMonthPaymentReceived', 'Dashboard\DashboardController@lastMonthPaymentReceived');
+	Route::get('/currentMonthInvoices', 'Dashboard\DashboardController@currentMonthInvoices');
+	Route::get('/lastMonthInvoices', 'Dashboard\DashboardController@lastMonthInvoices');
+
+
 
 	//HR Routes
 	Route::get('/employees', 'MIS\Hr\EmployeeController@index');
