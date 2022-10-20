@@ -126,6 +126,20 @@ class DashboardController extends Controller
         return response()->json($invoices);
     }
 
+    public function totalBudgetExpenditure($projectId)
+    {
+        $prDetail = PrDetail::find($projectId);
+        $data = [];
+        if ($prDetail->contract_type_id === 1) {
+            $data['budget'] = $prDetail->prCost->total_cost ?? '';
+            $salaryExpense = PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->sum('salary_expense');
+            $nonSalaryExpense = PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->sum('non_salary_expense');
+            $data['totalExpense'] = $salaryExpense + $nonSalaryExpense;
+            $data['expenseUpdatedUpto'] =  \Carbon\Carbon::createFromFormat('Y-m-d', PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->max('month'))
+                ->format('M-Y');
+        }
+        return response()->json($data);
+    }
 
     public function powerRunningProjectsTable()
     {
