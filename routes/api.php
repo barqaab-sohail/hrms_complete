@@ -26,6 +26,7 @@ Route::post('/mis/login', 'MIS\LoginController@login');
 
 
 
+Route::get('/totalBudgetExpenditure/{id}', 'Dashboard\DashboardController@totalBudgetExpenditure');
 
 // DashBoard / MIS API
 Route::group(['middleware' => ['auth:sanctum']], function () {
