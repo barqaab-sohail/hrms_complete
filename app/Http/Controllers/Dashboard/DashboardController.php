@@ -135,7 +135,7 @@ class DashboardController extends Controller
             $salaryExpense = PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->sum('salary_expense');
             $nonSalaryExpense = PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->sum('non_salary_expense');
             $data['totalExpense'] = $salaryExpense + $nonSalaryExpense;
-            $data['expenseUpdatedUpto'] =  \Carbon\Carbon::createFromFormat('Y-m-d', PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->max('month'))
+            $data['expenseUpdatedUptogit'] =  \Carbon\Carbon::createFromFormat('Y-m-d', PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->max('month'))
                 ->format('M-Y');
         }
         return response()->json($data);
@@ -156,6 +156,8 @@ class DashboardController extends Controller
                 'budgetUtilization' => budgetUtilization($project->id),
                 'projectProgress' => currentProgress($project->id),
                 'latestInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? '',
+                'latestExpenditureMonth' => $project->latestExpenseMonth->month ?? '',
+                'latestPaymentMonth' => $project->latestPaymentMonth->payment_date ?? '',
             ];
         }
 
