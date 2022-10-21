@@ -12,7 +12,11 @@ class PrMonthlyExpense extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $table = 'pr_monthly_expenses';
-    protected $fillable = ['pr_detail_id','salary_expense','non_salary_expense','month','remarks'];
+    protected $fillable = ['pr_detail_id', 'salary_expense', 'non_salary_expense', 'month', 'remarks'];
 
-
+    public function getMonthAttribute($value)
+    {
+        $date = \Carbon\Carbon::parse($value)->format('F-Y');
+        return $date;
+    }
 }

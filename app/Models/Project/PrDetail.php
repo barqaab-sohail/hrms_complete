@@ -74,4 +74,14 @@ class PrDetail extends Model implements Auditable
             'pr_detail_id',                                     //Forein Key in Immediate Model of This Model (PrDetail)
         )->orderby('invoices.id', 'desc');
     }
+
+    public function latestExpenseMonth()
+    {
+        return $this->hasOne('App\Models\Project\PrMonthlyExpense')->orderby('month', 'desc');
+    }
+
+    public function latestPaymentMonth()
+    {
+        return $this->hasOne('App\Models\Project\Payment\PaymentReceive')->orderby('payment_date', 'desc');
+    }
 }
