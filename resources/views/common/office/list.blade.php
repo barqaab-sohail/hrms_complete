@@ -66,27 +66,36 @@
 							<div class="form-group">
 								<label class="control-label text-right">Status<span class="text_requried">*</span></label>
 								<select name="is_active" id="is_active" class="form-control selectTwo" data-validation="required">
-									<option></option>
+									<option value=""></option>
 									<option value="1">Working</option>
 									<option value="0">Closed</option>
 								</select>
 							</div>
 						</div>
-						<div class="col-md-4">
+
+					</div>
+					<div class="row contact" id='phone_1'>
+						<input type="hidden" name="office_phone_id[]">
+						<div class="col-md-6">
 							<div class="form-group">
 								<label class="control-label text-right">Contract Person<span class="text_requried">*</span></label>
-								<select name="hr_employee_id" id="hr_employee_id" class="form-control selectTwo" data-validation="required">
-
+								<select name="hr_employee_id[]" id="hr_employee_id" class="form-control" data-validation="required">
+									<option value="">&nbsp;</option>
+									@foreach($employees as $employee)
+									<option value="{{$employee->id}}">{{$employee->employee_no}} - {{$employee->first_name}} {{$employee->last_name}}</option>
+									@endforeach
 								</select>
 							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-2 phone" id='phone_1'>
-							<input type="hidden" name="office_phone_id[]">
+						<div class="col-md-2 phone">
 							<div class="form-group">
 								<label class="control-label text-right">Phone Number</label>
 								<input type="text" name="phone_no[]" value="{{ old('phone_no') }}" class="form-control prc_1">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<br>
+							<div class="float-left">
 								<button type="button" name="add" id="add" class="btn btn-success add">+</button>
 							</div>
 						</div>
@@ -142,33 +151,39 @@
 <script>
 	$(document).ready(function() {
 
+		$('select:not(.selectTwo)').chosen({
+			width: "100%"
+		});
 		//Dynamic add Phone
 
 		// Add new element
 		$("#add").unbind().click(function() {
 
 			// Finding total number of elements added
-			var total_element = $(".phone").length;
+			var total_element = $(".contact").length;
 
 			// last <div> with element class id
-			var lastid = $(".phone:last").attr("id");
+			var lastid = $(".contact:last").attr("id");
 			var split_id = lastid.split("_");
 			var nextindex = Number(split_id[1]) + 1;
 			var max = 5;
 			// Check total number elements
 			if (total_element < max) {
 				//Clone Phone div and copy 
+				$('.contact').find('select').chosen('destroy');
 				var clone = $("#phone_1").clone();
 				clone.prop('id', 'phone_' + nextindex).find('input:text').val('');
 				clone.find("#add").html('X').prop("class", "btn btn-danger remove remove_phone");
-				clone.insertAfter("div.phone:last");
+				clone.insertAfter("div.contact:last");
 				clone.find('input[name="office_phone_id[]"]').val('');
+				$('.contact').find('select').chosen();
+
 			}
 
 		});
 		// Remove element
 		$(document).on("click", '.remove_phone', function() {
-			$(this).closest(".phone").remove();
+			$(this).closest(".contact").remove();
 		});
 
 		$(document).on("keyup", '.prc_1', function() {
@@ -203,8 +218,8 @@
 						name: 'address'
 					},
 					{
-						data: 'establish_date',
-						name: 'establish_date'
+						data: 'hr_employee_id',
+						name: 'hr_employee_id'
 					},
 					{
 						data: 'phone_no',
@@ -236,6 +251,11 @@
 				$('input[name="phone_no[]"]').eq(2).val('');
 				$('input[name="phone_no[]"]').eq(3).val('');
 				$('input[name="phone_no[]"]').eq(4).val('');
+				$('input[name="hr_employee_id[]"]').eq(0).val('');
+				$('input[name="hr_employee_id[]"]').eq(1).val('');
+				$('input[name="hr_employee_id[]"]').eq(2).val('');
+				$('input[name="hr_employee_id[]"]').eq(3).val('');
+				$('input[name="hr_employee_id[]"]').eq(4).val('');
 				$("[id^=phone_2]").remove();
 				$("[id^=phone_3]").remove();
 				$("[id^=phone_4]").remove();
@@ -259,6 +279,7 @@
 				var office_id = $(this).data('id');
 				$(".remove_phone").trigger('click');
 				$('input[name="phone_no[]"]').eq(0).val('');
+				$('input[name="hr_employee_id[]"]').eq(0).val('');
 				$("#state_id").empty();
 				$("#city_id").empty();
 				$('#json_message_modal').html('');
@@ -273,6 +294,8 @@
 					}).done(function() {
 						$('#country_id').val(data.country_id);
 						$('#country_id').trigger('change');
+
+
 					});
 
 					$('#modelHeading').html("Edit Office");
@@ -289,19 +312,24 @@
 							}
 							$('input[name="office_phone_id[]"]').eq(index).val(value.id);
 							$('input[name="phone_no[]"]').eq(index).val(value.phone_no);
+							$('select[name="hr_employee_id[]"]').eq(index).val(value.hr_employee_id).trigger("chosen:updated");
+
 						});
 					}
 					setTimeout(function() {
 						$('#state_id').val(data.state_id);
 						$('#state_id').trigger('change');
-					}, 1000);
+					}, 2000);
 					setTimeout(function() {
 						$('#city_id').val(data.city_id);
 						$('#city_id').trigger('change');
-					}, 2000);
+					}, 3000);
 
 				}).done(function() {
-
+					$('.contact').find('select').chosen('destroy');
+					$('.contact').find('select').chosen({
+						width: "100%"
+					});
 					$('#ajaxModel').modal('show');
 				})
 			});
