@@ -251,11 +251,11 @@
 				$('input[name="phone_no[]"]').eq(2).val('');
 				$('input[name="phone_no[]"]').eq(3).val('');
 				$('input[name="phone_no[]"]').eq(4).val('');
-				$('input[name="hr_employee_id[]"]').eq(0).val('');
-				$('input[name="hr_employee_id[]"]').eq(1).val('');
-				$('input[name="hr_employee_id[]"]').eq(2).val('');
-				$('input[name="hr_employee_id[]"]').eq(3).val('');
-				$('input[name="hr_employee_id[]"]').eq(4).val('');
+				$('select[name="hr_employee_id[]"]').eq(0).val('').trigger("chosen:updated");
+				$('select[name="hr_employee_id[]"]').eq(1).val('').trigger("chosen:updated");
+				$('select[name="hr_employee_id[]"]').eq(2).val('').trigger("chosen:updated");
+				$('select[name="hr_employee_id[]"]').eq(3).val('').trigger("chosen:updated");
+				$('select[name="hr_employee_id[]"]').eq(4).val('').trigger("chosen:updated");
 				$("[id^=phone_2]").remove();
 				$("[id^=phone_3]").remove();
 				$("[id^=phone_4]").remove();
@@ -279,7 +279,7 @@
 				var office_id = $(this).data('id');
 				$(".remove_phone").trigger('click');
 				$('input[name="phone_no[]"]').eq(0).val('');
-				$('input[name="hr_employee_id[]"]').eq(0).val('');
+				$('select[name="hr_employee_id[]"]').eq(0).val('').trigger("chosen:updated");
 				$("#state_id").empty();
 				$("#city_id").empty();
 				$('#json_message_modal').html('');
@@ -316,6 +316,8 @@
 
 						});
 					}
+
+
 					setTimeout(function() {
 						$('#state_id').val(data.state_id);
 						$('#state_id').trigger('change');
