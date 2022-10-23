@@ -131,11 +131,14 @@ class DashboardController extends Controller
         $prDetail = PrDetail::find($projectId);
         $data = [];
         if ($prDetail->contract_type_id === 1) {
+            $invoiceIds = Invoice::where('pr_detail_id', $prDetail->id)->pluck('id')->toArray();
+            $data['totalInvoice'] = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount');
+            $data['totalPayment'] = PaymentReceive::whereIn('invoice_id', $invoiceIds)->sum('amount');
             $data['budget'] = $prDetail->prCost->total_cost ?? '';
             $salaryExpense = PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->sum('salary_expense');
             $nonSalaryExpense = PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->sum('non_salary_expense');
             $data['totalExpense'] = $salaryExpense + $nonSalaryExpense;
-            $data['expenseUpdatedUptogit'] =  \Carbon\Carbon::createFromFormat('Y-m-d', PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->max('month'))
+            $data['expenseUpdatedUpto'] =  \Carbon\Carbon::createFromFormat('Y-m-d', PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->max('month'))
                 ->format('M-Y');
         }
         return response()->json($data);
@@ -241,7 +244,7 @@ class DashboardController extends Controller
         $project = PrDetail::with('client', 'latestInvoiceMonth', 'invoiceCost', 'prCost')->find($projectId);
         $invoiceCostWOTaxWOExc = $project->invoiceCostWOEsc->sum('amount');
         $totalProjectCostWOTax = ($project->prCost->total_cost ?? 0) - ($project->prCost->sales_tax ?? 0);
-        $percentageRemainingBudget = $totalProjectCostWOTax === 0 ? 'N/A' : round(($totalProjectCostWOTax - $invoiceCostWOTaxWOExc) / ($totalProjectCostWOTax) * 100, 2);
+        $percentageRemainingBudget = $totalProjectCostWOTax === 0 ? 0 : round(($totalProjectCostWOTax - $invoiceCostWOTaxWOExc) / ($totalProjectCostWOTax) * 100, 2);
         $proejctDetail = [
             'projectName' => $project->name,
             'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
@@ -249,10 +252,10 @@ class DashboardController extends Controller
             'commencementDate' => $project->commencement_date,
             'contractualCompletionDate' => $project->contractual_completion_date,
             'projectTotalCostWOTax' => addComma($totalProjectCostWOTax),
-            'totalInvoicesAmountWOTaxWOExc' => addComma($invoiceCostWOTaxWOExc),
+            'totalInvoicesAmountWOTaxWOExc' => addComma($invoiceCostWOTaxWOExc) ?? 'N/A',
             'balaneBudget' => addComma($totalProjectCostWOTax - $invoiceCostWOTaxWOExc),
             'percentageRemainingBudget' => $percentageRemainingBudget,
-            'lastInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? '',
+            'lastInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? 'Not Enter',
 
         ];
 
