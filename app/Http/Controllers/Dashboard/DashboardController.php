@@ -132,11 +132,11 @@ class DashboardController extends Controller
         $data = [];
         if ($prDetail->contract_type_id === 1) {
             $invoiceIds = Invoice::where('pr_detail_id', $prDetail->id)->pluck('id')->toArray();
-            $data['totalInvoice'] = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount');
-            $data['totalPayment'] = PaymentReceive::whereIn('invoice_id', $invoiceIds)->sum('amount');
-            $data['budget'] = $prDetail->prCost->total_cost ?? '';
-            $salaryExpense = PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->sum('salary_expense');
-            $nonSalaryExpense = PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->sum('non_salary_expense');
+            $data['totalInvoice'] = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount') ?? 0;
+            $data['totalPayment'] = PaymentReceive::whereIn('invoice_id', $invoiceIds)->sum('amount') ?? 0;
+            $data['budget'] = $prDetail->prCost->total_cost ?? 0;
+            $salaryExpense = PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->sum('salary_expense') ?? 0;
+            $nonSalaryExpense = PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->sum('non_salary_expense') ?? 0;
             $data['totalExpense'] = $salaryExpense + $nonSalaryExpense;
             $data['expenseUpdatedUpto'] =  \Carbon\Carbon::createFromFormat('Y-m-d', PrMonthlyExpense::where('pr_detail_id', $prDetail->id)->max('month'))
                 ->format('M-Y');
