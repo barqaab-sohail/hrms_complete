@@ -130,6 +130,7 @@ class DashboardController extends Controller
     {
         $prDetail = PrDetail::find($projectId);
         $data = [];
+        //If project is lumpsum
         if ($prDetail->contract_type_id === 1) {
             $invoiceIds = Invoice::where('pr_detail_id', $prDetail->id)->pluck('id')->toArray();
             $data['totalInvoice'] = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount') ?? 0;
@@ -255,6 +256,7 @@ class DashboardController extends Controller
             'totalInvoicesAmountWOTaxWOExc' => addComma($invoiceCostWOTaxWOExc) ?? 'N/A',
             'balaneBudget' => addComma($totalProjectCostWOTax - $invoiceCostWOTaxWOExc),
             'percentageRemainingBudget' => $percentageRemainingBudget,
+            'percentageBudgetUtilized' => 100 - $percentageRemainingBudget,
             'lastInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? 'Not Enter',
 
         ];
