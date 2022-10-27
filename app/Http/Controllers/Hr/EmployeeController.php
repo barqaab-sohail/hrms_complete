@@ -146,7 +146,12 @@ class EmployeeController extends Controller
                     return \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y');
                 })
                 ->addColumn('date_of_joining', function ($data) {
-                    return \Carbon\Carbon::parse($data->employeeAppointment->joining_date ?? '')->format('M d, Y');
+
+                    if ($data->employeeAppointment) {
+                        return \Carbon\Carbon::parse($data->employeeAppointment->joining_date ?? '')->format('M d, Y');
+                    } else {
+                        return '';
+                    }
                 })
                 ->addColumn('mobile', function ($data) {
                     return $data->hrContactMobile->mobile ?? '';

@@ -72,7 +72,7 @@ class PrDetail extends Model implements Auditable
             'App\Models\Project\Invoice\InvoiceMonth',          //Final Model l
             'App\Models\Project\Invoice\Invoice',              //Model Through Access Final Model (Immediate Model)  
             'pr_detail_id',                                     //Forein Key in Immediate Model of This Model (PrDetail)
-        )->orderby('invoices.id', 'desc');
+        )->orderby('invoices.invoice_date', 'desc');
     }
 
     public function latestExpenseMonth()
