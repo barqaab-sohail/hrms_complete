@@ -23,10 +23,12 @@ class PrPositionStore extends FormRequest
      */
     public function rules()
     {
-        return [    
-            'hr_designation_id'=>'required',
-            'pr_position_type_id'=>'required|numeric',
-            'total_mm'=>'nullable|numeric|min:0.001|max:6000',
+        return [
+            'nominated_person' => 'required',
+            'hr_designation_id' => 'required',
+            'pr_position_type_id' => 'required|numeric',
+            'total_mm' => 'required|numeric|min:0.001|max:6000',
+            'remarks' => 'nullable|max:191'
         ];
     }
 }
