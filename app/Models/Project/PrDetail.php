@@ -14,6 +14,27 @@ class PrDetail extends Model implements Auditable
     protected $fillable = ['name', 'client_id', 'commencement_date', 'contractual_completion_date', 'actual_completion_date', 'sub_projects', 'pr_status_id', 'pr_role_id', 'contract_type_id', 'pr_division_id', 'project_no', 'share'];
 
 
+    //default value of pr_status_id=1
+    protected $attributes = [
+        'pr_status_id' => 1 //default value of pr_status_id is 1 
+    ];
+
+    //get value of pr_status_id and show in string as per statusOptions
+    public function getPrStatusIdAttribute($attribute)
+    {
+        return $this->statusOptions()[$attribute];
+    }
+
+    public function statusOptions()
+    {
+        return [
+            1 => 'In Progress',
+            2 => 'Completed',
+            3 => 'Suspended',
+        ];
+    }
+
+
     public function client()
     {
         return $this->belongsTo('App\Models\Common\Client');
