@@ -47,6 +47,7 @@
 						<th>Project Name</th>
 						<th>Client Name</th>
 						<th>Commencement Date</th>
+						<th>Status</th>
 						<th>JV/Independent</th>
 						<th class="text-center" style="width:5%">Edit</th>
 						@role('Super Admin')
@@ -74,6 +75,7 @@
 						<td><a href="{{route('project.edit',$project->id)}}" style="color:grey">{{$project->name}}</a></td>
 						<td>{{$project->client->name??''}}</td>
 						<td>{{$project->formatted_commencement_date}}</td>
+						<td>{{$project->pr_status_id}}</td>
 						<td>{{$project->prRole->name??''}}</td>
 
 						<td class="text-center">
@@ -116,24 +118,24 @@
 			buttons: [{
 					extend: 'copyHtml5',
 					exportOptions: {
-						columns: [0, 1, 2, 3]
+						columns: [0, 1, 2, 3, 4]
 					}
 				},
 				{
 					extend: 'excelHtml5',
 					exportOptions: {
-						columns: [0, 1, 2, 3]
+						columns: [0, 1, 2, 3, 4]
 					}
 				},
 				{
 					extend: 'pdfHtml5',
 					exportOptions: {
-						columns: [0, 1, 2, 3]
+						columns: [0, 1, 2, 3, 4]
 					}
 				}, {
 					extend: 'csvHtml5',
 					exportOptions: {
-						columns: [0, 1, 2, 3]
+						columns: [0, 1, 2, 3, 4]
 					}
 				},
 			],

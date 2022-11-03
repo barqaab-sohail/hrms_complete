@@ -163,13 +163,13 @@
           $('#saveBtn').val("edit-Position");
           $('#positionModal').modal('show');
           $('#position_id').val(data.id);
-          $('#nominated_person').val(data.nominated_person);
           $('#hr_employee_id').val(data.hr_employee_id);
           $('#hr_employee_id').trigger('change');
           $('#hr_designation_id').val(data.hr_designation_id);
           $('#hr_designation_id').trigger('change');
           $('#pr_position_type_id').val(data.pr_position_type_id);
           $('#pr_position_type_id').trigger('change');
+          $('#nominated_person').val(data.nominated_person);
           $('#total_mm').val(data.total_mm);
 
 
