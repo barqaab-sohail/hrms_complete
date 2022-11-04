@@ -9,11 +9,12 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Hr\HrDocumentation;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\MisUser;
 
 class User extends Authenticatable implements Auditable
 {
     use Notifiable, HasRoles, HasApiTokens;
-     use \OwenIt\Auditing\Auditable;
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +22,7 @@ class User extends Authenticatable implements Auditable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','user_status','session_id','last_login_at','last_login_ip',
+        'name', 'email', 'password', 'user_status', 'session_id', 'last_login_at', 'last_login_ip',
     ];
 
     /**
@@ -42,16 +43,18 @@ class User extends Authenticatable implements Auditable
         'email_verified_at' => 'datetime',
     ];
 
-    public function hrEmployee(){
+    public function hrEmployee()
+    {
         return $this->hasOne('App\Models\Hr\HrEmployee');
     }
- 
-    public function picturePath(){
-        $picture = HrDocumentation::where([['description','Picture'],['hr_employee_id',auth()->user()->hrEmployee->id??'']])->first();
-        if($picture){
-        $picturePath = $picture->path.$picture->file_name;
-        }else{
-            $picturePath='';
+
+    public function picturePath()
+    {
+        $picture = HrDocumentation::where([['description', 'Picture'], ['hr_employee_id', auth()->user()->hrEmployee->id ?? '']])->first();
+        if ($picture) {
+            $picturePath = $picture->path . $picture->file_name;
+        } else {
+            $picturePath = '';
         }
         return $picturePath;
     }
