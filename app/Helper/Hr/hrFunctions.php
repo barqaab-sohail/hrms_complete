@@ -4,6 +4,17 @@ use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrPromotion;
 use App\Models\Hr\HrPosting;
 use App\User;
+use App\Models\MisUser;
+
+function isAllowMis($userId)
+{
+	$misUser = MisUser::where('user_id', $userId)->first();
+	if ($misUser) {
+		return $misUser->is_allow_mis;
+	} else {
+		return false;
+	}
+}
 
 
 function employeeFullName($id)
