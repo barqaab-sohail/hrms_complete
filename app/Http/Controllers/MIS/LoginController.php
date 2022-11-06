@@ -26,17 +26,17 @@ class LoginController extends Controller
         } else {
             $user = User::where('email', $request->email)->first();
 
-            if (!isAllowMis($user->id ?? 0)) {
-                return response()->json([
-                    'status' => 401,
-                    'message' => 'You are not allowed to access',
-                ]);
-            }
+
 
             if (!$user || !Hash::check($request->password, $user->password)) {
                 return response()->json([
                     'status' => 401,
-                    'message' => 'Invalid Credentials',
+                    'message' => 'Invalid Email or Password',
+                ]);
+            } else if (!isAllowMis($user->id ?? 0)) {
+                return response()->json([
+                    'status' => 402,
+                    'message' => 'You are not Authorized',
                 ]);
             } else {
                 $token = $user->createToken($user->email . '_token')->plainTextToken;
