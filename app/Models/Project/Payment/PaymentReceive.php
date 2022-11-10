@@ -33,4 +33,9 @@ class PaymentReceive extends Model implements Auditable
 
         return $this->belongsTo('App\Models\Project\Payment\PaymentStatus');
     }
+
+    public function invoiceMonth()
+    {
+        return $this->hasOne('App\Models\Project\Invoice\InvoiceMonth', 'invoice_id', 'invoice_id');
+    }
 }

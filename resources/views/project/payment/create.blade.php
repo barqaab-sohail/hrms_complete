@@ -8,8 +8,10 @@
     <thead>
       <tr>
         <th>Invoice No</th>
+        <th>Invoice Month</th>
         <th>Net Amount Received</th>
         <th>Payment Date</th>
+        <th>Remarks</th>
         <th>Cheque No.</th>
         <th>Cheque Date</th>
         <th>Total Deduction</th>
@@ -210,21 +212,21 @@
         buttons: [{
             extend: 'copyHtml5',
             exportOptions: {
-              columns: [0, 1, 2, 3, 4, 5, 6]
+              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
             }
           },
           {
             extend: 'excelHtml5',
             title: 'Payments Detail',
             exportOptions: {
-              columns: [0, 1, 2, 3, 4, 5, 6]
+              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
             }
           },
           {
             extend: 'pdfHtml5',
             title: 'Payments Detail',
             exportOptions: {
-              columns: [0, 1, 2, 3, 4, 5, 6]
+              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
             }
           },
         ],
@@ -234,12 +236,20 @@
             name: 'invoice_no'
           },
           {
+            data: "invoice_month",
+            name: 'invoice_month'
+          },
+          {
             data: "amount",
             name: 'amount'
           },
           {
             data: "payment_date",
             name: 'payment_date'
+          },
+          {
+            data: "remarks",
+            name: 'remarks'
           },
           {
             data: "cheque_no",
