@@ -175,16 +175,19 @@ class DashboardController extends Controller
         $lastMonth = $month[\Carbon\Carbon::now()->subMonth(1)->month - 1];
         $last2Month = $month[\Carbon\Carbon::now()->subMonth(2)->month - 1];
         $last3Month = $month[\Carbon\Carbon::now()->subMonth(3)->month - 1];
+        $last4Month = $month[\Carbon\Carbon::now()->subMonth(4)->month - 1];
 
         $currentMonthExpenses = PrMonthlyExpense::where('pr_detail_id', $projectId)->whereBetween('month', [\Carbon\Carbon::now()->startOfMonth(), \Carbon\Carbon::now()->endOfMonth()])->sum('salary_expense') + PrMonthlyExpense::where('pr_detail_id', $projectId)->whereBetween('month', [\Carbon\Carbon::now()->startOfMonth(), \Carbon\Carbon::now()->endOfMonth()])->sum('non_salary_expense');
         $lastMonthExpenses = PrMonthlyExpense::where('pr_detail_id', $projectId)->whereBetween('month', [\Carbon\Carbon::now()->subMonth()->startOfMonth(), \Carbon\Carbon::now()->subMonth()->endOfMonth()])->sum('salary_expense') + PrMonthlyExpense::where('pr_detail_id', $projectId)->whereBetween('month', [\Carbon\Carbon::now()->subMonth()->startOfMonth(), \Carbon\Carbon::now()->subMonth()->endOfMonth()])->sum('non_salary_expense');
         $last2MonthExpenses = PrMonthlyExpense::where('pr_detail_id', $projectId)->whereBetween('month', [\Carbon\Carbon::now()->subMonth(2)->startOfMonth(), \Carbon\Carbon::now()->subMonth(2)->endOfMonth()])->sum('salary_expense') + PrMonthlyExpense::where('pr_detail_id', $projectId)->whereBetween('month', [\Carbon\Carbon::now()->subMonth(2)->startOfMonth(), \Carbon\Carbon::now()->subMonth(2)->endOfMonth()])->sum('non_salary_expense');
         $last3MonthExpenses = PrMonthlyExpense::where('pr_detail_id', $projectId)->whereBetween('month', [\Carbon\Carbon::now()->subMonth(3)->startOfMonth(), \Carbon\Carbon::now()->subMonth(3)->endOfMonth()])->sum('salary_expense') + PrMonthlyExpense::where('pr_detail_id', $projectId)->whereBetween('month', [\Carbon\Carbon::now()->subMonth(3)->startOfMonth(), \Carbon\Carbon::now()->subMonth(3)->endOfMonth()])->sum('non_salary_expense');
+        $last4MonthExpenses = PrMonthlyExpense::where('pr_detail_id', $projectId)->whereBetween('month', [\Carbon\Carbon::now()->subMonth(4)->startOfMonth(), \Carbon\Carbon::now()->subMonth(4)->endOfMonth()])->sum('salary_expense') + PrMonthlyExpense::where('pr_detail_id', $projectId)->whereBetween('month', [\Carbon\Carbon::now()->subMonth(4)->startOfMonth(), \Carbon\Carbon::now()->subMonth(4)->endOfMonth()])->sum('non_salary_expense');
 
         $currentMonthReceived = PaymentReceive::where('pr_detail_id', $projectId)->whereBetween('payment_date', [\Carbon\Carbon::now()->startOfMonth(), \Carbon\Carbon::now()->endOfMonth()])->sum('amount');
         $lastMonthReceived = PaymentReceive::where('pr_detail_id', $projectId)->whereBetween('payment_date', [\Carbon\Carbon::now()->subMonth()->startOfMonth(), \Carbon\Carbon::now()->subMonth()->endOfMonth()])->sum('amount');
         $last2MonthReceived = PaymentReceive::where('pr_detail_id', $projectId)->whereBetween('payment_date', [\Carbon\Carbon::now()->subMonth(2)->startOfMonth(), \Carbon\Carbon::now()->subMonth(2)->endOfMonth()])->sum('amount');
         $last3MonthReceived = PaymentReceive::where('pr_detail_id', $projectId)->whereBetween('payment_date', [\Carbon\Carbon::now()->subMonth(3)->startOfMonth(), \Carbon\Carbon::now()->subMonth(3)->endOfMonth()])->sum('amount');
+        $last4MonthReceived = PaymentReceive::where('pr_detail_id', $projectId)->whereBetween('payment_date', [\Carbon\Carbon::now()->subMonth(4)->startOfMonth(), \Carbon\Carbon::now()->subMonth(4)->endOfMonth()])->sum('amount');
 
         $prDetail = PrDetail::find($projectId);
         if ($prDetail->contract_type_id === 2) {
@@ -194,18 +197,21 @@ class DashboardController extends Controller
             $lastMonthInvoiceIds = InvoiceMonth::whereIn('invoice_id', $invoiceIds)->whereBetween('invoice_month',  [\Carbon\Carbon::now()->subMonth()->startOfMonth(), \Carbon\Carbon::now()->subMonth()->endOfMonth()])->pluck('invoice_id')->toArray();
             $last2MonthInvoiceIds = InvoiceMonth::whereIn('invoice_id', $invoiceIds)->whereBetween('invoice_month', [\Carbon\Carbon::now()->subMonth(2)->startOfMonth(), \Carbon\Carbon::now()->subMonth(2)->endOfMonth()])->pluck('invoice_id')->toArray();
             $last3MonthInvoiceIds = InvoiceMonth::whereIn('invoice_id', $invoiceIds)->whereBetween('invoice_month', [\Carbon\Carbon::now()->subMonth(3)->startOfMonth(), \Carbon\Carbon::now()->subMonth(3)->endOfMonth()])->pluck('invoice_id')->toArray();
+            $last4MonthInvoiceIds = InvoiceMonth::whereIn('invoice_id', $invoiceIds)->whereBetween('invoice_month', [\Carbon\Carbon::now()->subMonth(4)->startOfMonth(), \Carbon\Carbon::now()->subMonth(4)->endOfMonth()])->pluck('invoice_id')->toArray();
         } else {
             //Other i.e lumpsum Projects get invoice ids as per invoice date
             $currentMonthInvoiceIds = Invoice::where('pr_detail_id', $projectId)->whereBetween('invoice_date', [\Carbon\Carbon::now()->startOfMonth(), \Carbon\Carbon::now()->endOfMonth()])->pluck('id')->toArray();
             $lastMonthInvoiceIds = Invoice::where('pr_detail_id', $projectId)->whereBetween('invoice_date', [\Carbon\Carbon::now()->subMonth()->startOfMonth(), \Carbon\Carbon::now()->subMonth()->endOfMonth()])->pluck('id')->toArray();
             $last2MonthInvoiceIds = Invoice::where('pr_detail_id', $projectId)->whereBetween('invoice_date',  [\Carbon\Carbon::now()->subMonth(2)->startOfMonth(), \Carbon\Carbon::now()->subMonth(2)->endOfMonth()])->pluck('id')->toArray();
             $last3MonthInvoiceIds = Invoice::where('pr_detail_id', $projectId)->whereBetween('invoice_date',  [\Carbon\Carbon::now()->subMonth(3)->startOfMonth(), \Carbon\Carbon::now()->subMonth(3)->endOfMonth()])->pluck('id')->toArray();
+            $last4MonthInvoiceIds = Invoice::where('pr_detail_id', $projectId)->whereBetween('invoice_date',  [\Carbon\Carbon::now()->subMonth(4)->startOfMonth(), \Carbon\Carbon::now()->subMonth(4)->endOfMonth()])->pluck('id')->toArray();
         }
 
         $currentMonthInvoiceAmount = InvoiceCost::whereIn('invoice_id', $currentMonthInvoiceIds)->sum('amount');
         $lastMonthInvoiceAmount = InvoiceCost::whereIn('invoice_id', $lastMonthInvoiceIds)->sum('amount');
         $last2MonthInvoiceAmount = InvoiceCost::whereIn('invoice_id', $last2MonthInvoiceIds)->sum('amount');
         $last3MonthInvoiceAmount = InvoiceCost::whereIn('invoice_id', $last3MonthInvoiceIds)->sum('amount');
+        $last4MonthInvoiceAmount = InvoiceCost::whereIn('invoice_id', $last4MonthInvoiceIds)->sum('amount');
 
         // $months = [$currentMonth, $lastMonth,  $last2Month];
         // $invoices = [$lastMonthInvoiceAmount, $last2MonthInvoiceAmount, $currentMonthInvoiceAmount];
@@ -236,6 +242,12 @@ class DashboardController extends Controller
             'invoices' => $last3MonthInvoiceAmount,
             'expenses' => $last3MonthExpenses,
             'payments' => $last3MonthReceived
+        ];
+        $data[] = [
+            'months' => $last4Month,
+            'invoices' => $last4MonthInvoiceAmount,
+            'expenses' => $last4MonthExpenses,
+            'payments' => $last4MonthReceived
         ];
 
         return  response()->json($data);
