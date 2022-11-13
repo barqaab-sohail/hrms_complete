@@ -17,7 +17,7 @@
                         <th>CNIC</th>
                         <th>Father Name</th>
                         <th>Location</th>
-                        <th>Last Login Time</th>
+                        <th>Last Login Date</th>
                         <th>Last Login IP</th>
                     </tr>
                 </thead>
