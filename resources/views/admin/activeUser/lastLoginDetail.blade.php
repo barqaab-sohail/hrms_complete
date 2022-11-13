@@ -1,97 +1,84 @@
 @extends('layouts.master.master')
-@section('title', 'BARQAAB HR')
+@section('title', 'Last Login Detail')
 @section('Heading')
-	<h3 class="text-themecolor">Last Login Detail</h3>
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="javascript:void(0)"></a></li>
-		
-		
-	</ol>
+<!-- <h3 class="text-themecolor">List of Employees</h3> -->
 @stop
 @section('content')
-	<div class="card">
-		<div class="card-body">
-			<!--<div class="float-right">
-				<input id="month" class="form-control" value="" type="month">
-			</div>-->
-			<h4 class="card-title">Last Login Detail</h4>
-			
-			<div class="table-responsive m-t-40">
-				
-				<table id="myTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
-					<thead>
-					
-					<tr>
-						<th>Employee Name</th>
-						<th>Email</th>
-						<th>CNIC</th>
-						<th>Father Name</th>
-						<th>Last Login Time</th>
-						<th>Last Login IP</th>
-						
-					</tr>
-					</thead>
-					<tbody>
-						@foreach($users as $user)
-							<tr>
-								<td>{{$user->hrEmployee->first_name}} {{$user->hrEmployee->last_name}}</td>
-								<td>{{$user->hrEmployee->email}}</td>
-								<td>{{$user->hrEmployee->cnic}}</td>
-								<td>{{$user->hrEmployee->father_name}}</td>
-								<td>{{$user->last_login_at}}</td>
-								<td>{{$user->last_login_ip}}</td>
-																						
-							</tr>
-						@endforeach
-					
-					 
-					
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	
-	<script>
-        $(document).ready(function() {
-        	
 
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title" style="color:black">List of Last Login Detail</h4>
+        <div class="table-responsive m-t-40">
+            <table id="myTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Email</th>
+                        <th>CNIC</th>
+                        <th>Father Name</th>
+                        <th>Location</th>
+                        <th>Last Login Time</th>
+                        <th>Last Login IP</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+@include('submission.client.clientModal')
+<script>
+    $(document).ready(function() {
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
-            $('#myTable').DataTable({
-                stateSave: false,
-                scrollY:        "300px",
-      			scrollX:        true,
-        		scrollCollapse: true,
-        		paging:         false,
-                dom: 'Blfrti',
-                buttons: [
-                    {
-                        extend: 'copyHtml5',
-                        exportOptions: {
-                            columns: [ 0, 1, 2,3]
-                        }
+            var table = $('#myTable').DataTable({
+                processing: true,
+                serverSide: true,
+                "aaSorting": [],
+                ajax: {
+                    url: "{{ route('lastLogin.detail') }}",
+                },
+                columns: [{
+                        data: 'full_name',
+                        name: 'full_name'
                     },
                     {
-                        extend: 'excelHtml5',
-                        exportOptions: {
-                            columns: [ 0, 1, 2,3,4]
-                        }
+                        data: 'email',
+                        name: 'email'
                     },
                     {
-                        extend: 'pdfHtml5',
-                        exportOptions: {
-                            columns: [ 0, 1, 2,3,4]
-                        }
-                    }, {
-                        extend: 'csvHtml5',
-                        exportOptions: {
-                            columns: [ 0, 1, 2,3,4]
-                        }
+                        data: 'cnic',
+                        name: 'cnic'
                     },
+                    {
+                        data: 'father_name',
+                        name: 'father_name'
+                    },
+                    {
+                        data: 'location',
+                        name: 'location'
+                    },
+                    {
+                        data: 'last_login_at',
+                        name: 'last_login_at'
+                    },
+                    {
+                        data: 'last_login_ip',
+                        name: 'last_login_ip'
+                    },
+
                 ]
             });
-        });
- 
-	</script>
+
+        }); // end function
+
+    }); //End document ready function
+</script>
+
+</div>
 
 @stop

@@ -1,7 +1,7 @@
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
 @section('Heading')
-<h3 class="text-themecolor">Active User List</h3>
+<h3 class="text-themecolor">Last Login Detail</h3>
 <ol class="breadcrumb">
 	<li class="breadcrumb-item"><a href="javascript:void(0)"></a></li>
 
@@ -14,8 +14,8 @@
 		<!--<div class="float-right">
 				<input id="month" class="form-control" value="" type="month">
 			</div>-->
-		<h4 class="card-title">Total Login Users = {{$totalActiveUsers}}</h4>
-		<button id="logoutAll" class="float-right btn btn-danger">Logout All Active Users</button>
+		<h4 class="card-title">Last Login Detail</h4>
+
 		<div class="table-responsive m-t-40">
 
 			<table id="myTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
@@ -26,32 +26,21 @@
 						<th>Email</th>
 						<th>CNIC</th>
 						<th>Father Name</th>
+						<th>Location</th>
 						<th>Last Login Time</th>
 						<th>Last Login IP</th>
-						<th class="text-center">Log Out</th>
 
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($activeUsers as $employee)
+					@foreach($users as $user)
 					<tr>
-						<td>{{$employee->first_name}} {{$employee->last_name}}</td>
-						<td>{{$employee->email}}</td>
-						<td>{{$employee->cnic}}</td>
-						<td>{{$employee->father_name}}</td>
-						<td>{{$employee->last_login_at}}</td>
-						<td>{{$employee->last_login_ip}}</td>
-						<td class="text-center">
-
-							<form id="logoutUser{{$employee->userId}}" action="{{route('logout.all')}}/{{$employee->userId}}" method="GET">
-
-								@csrf
-								<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href=data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-sign-out-alt"></i></button>
-							</form>
-
-
-						</td>
-
+						<td>{{$user->hrEmployee->first_name}} {{$user->hrEmployee->last_name}}</td>
+						<td>{{$user->hrEmployee->email}}</td>
+						<td>{{$user->hrEmployee->cnic}}</td>
+						<td>{{$user->hrEmployee->father_name}}</td>
+						<td>{{$user->last_login_at}}</td>
+						<td>{{$user->last_login_ip}}</td>
 
 					</tr>
 					@endforeach
@@ -66,22 +55,7 @@
 
 <script>
 	$(document).ready(function() {
-		$('#logoutAll').click(function(e) {
 
-			e.preventDefault();
-			var url = "{{route('logout.all')}}";
-			getAjaxMessage(url);
-
-		});
-
-
-		$('form[id^=logoutUser]').submit(function(e) {
-
-			var url = $(this).attr('action');
-			e.preventDefault();
-			getAjaxMessage(url);
-
-		});
 
 
 		$('#myTable').DataTable({
