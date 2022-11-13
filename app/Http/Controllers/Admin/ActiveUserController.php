@@ -48,8 +48,8 @@ class ActiveUserController extends Controller
 					return $data->hrEmployee->father_name ?? '';
 				})
 				->addColumn('location', function ($data) {
-					if ($data->last_login_at) {
-						$location = Location::get($data->last_login_at);
+					if ($data->last_login_ip) {
+						$location = Location::get($data->last_login_ip);
 						return $location->cityName  ?? '';
 					} else {
 						return '';
