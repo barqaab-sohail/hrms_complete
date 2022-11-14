@@ -154,7 +154,7 @@ class DashboardController extends Controller
             $projects[] = [
                 'id' => $project->id,
                 'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
-                'projectName' => $project->name,
+                'projectName' => $project->code . "-" . $project->name,
                 'paymentReceived' => addComma(PaymentReceive::where('pr_detail_id', $project->id)->sum('amount')),
                 'pendingPayments' => addComma(pendingInvoicesAmount($project->id)),
                 'budgetUtilization' => budgetUtilization($project->id),
@@ -272,7 +272,6 @@ class DashboardController extends Controller
             'lastInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? 'Not Enter',
 
         ];
-
         return response()->json($proejctDetail);
     }
 }
