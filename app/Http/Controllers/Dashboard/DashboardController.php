@@ -154,7 +154,7 @@ class DashboardController extends Controller
             $projects[] = [
                 'id' => $project->id,
                 'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
-                'projectName' => $project->code . "-" . $project->name,
+                'projectName' => $project->project_no . " - " . $project->name,
                 'paymentReceived' => addComma(PaymentReceive::where('pr_detail_id', $project->id)->sum('amount')),
                 'pendingPayments' => addComma(pendingInvoicesAmount($project->id)),
                 'budgetUtilization' => budgetUtilization($project->id),
