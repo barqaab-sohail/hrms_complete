@@ -270,7 +270,8 @@ class DashboardController extends Controller
             'percentageRemainingBudget' => $percentageRemainingBudget,
             'percentageBudgetUtilized' => 100 - $percentageRemainingBudget,
             'lastInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? 'Not Enter',
-
+            'latestPaymentAmount' => addComma(PaymentReceive::where('pr_detail_id', $project->id)->where('payment_date', $project->latestPaymentMonth->payment_date ?? '')->sum('amount')),
+            'latestPaymentDate' => $project->latestPaymentMonth->payment_date ?? '',
         ];
         return response()->json($proejctDetail);
     }
