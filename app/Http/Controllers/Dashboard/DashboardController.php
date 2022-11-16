@@ -258,6 +258,7 @@ class DashboardController extends Controller
         $invoiceCostWOTaxWOExc = $project->invoiceCostWOEsc->sum('amount');
         $totalProjectCostWOTax = ($project->prCost->total_cost ?? 0) - ($project->prCost->sales_tax ?? 0);
         $percentageRemainingBudget = $totalProjectCostWOTax === 0 ? 0 : round(($totalProjectCostWOTax - $invoiceCostWOTaxWOExc) / ($totalProjectCostWOTax) * 100, 2);
+        $lastPaymentReceived = PaymentReceive::where('pr_detail_id', $project->id)->where('payment_date', $project->latestPaymentMonth->payment_date ?? '')->sum('amount');
         $proejctDetail = [
             'projectName' => $project->name,
             'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
@@ -267,11 +268,11 @@ class DashboardController extends Controller
             'projectTotalCostWOTax' => addComma($totalProjectCostWOTax),
             'totalInvoicesAmountWOTaxWOExc' => addComma($invoiceCostWOTaxWOExc) ?? 'N/A',
             'balaneBudget' => addComma($totalProjectCostWOTax - $invoiceCostWOTaxWOExc),
-            'percentageRemainingBudget' => $percentageRemainingBudget,
-            'percentageBudgetUtilized' => 100 - $percentageRemainingBudget,
-            'lastInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? 'Not Enter',
-            'latestPaymentAmount' => addComma(PaymentReceive::where('pr_detail_id', $project->id)->where('payment_date', $project->latestPaymentMonth->payment_date ?? '')->sum('amount')),
-            'latestPaymentDate' => $project->latestPaymentMonth->payment_date ?? '',
+            'percentageRemainingBudget' => $percentageRemainingBudget != null ? $percentageRemainingBudget : 'No Data Found',
+            'percentageBudgetUtilized' => $percentageRemainingBudget != null ? 100 - $percentageRemainingBudget . '%' : null,
+            'lastInvoiceMonth' => $project->latestInvoiceMonth->invoice_month ?? 'No Data Found',
+            'latestPaymentAmount' => $lastPaymentReceived != null ? addComma($lastPaymentReceived) : 'No Data Found',
+            'latestPaymentDate' => $project->latestPaymentMonth->payment_date ?? 'No Data Found',
         ];
         return response()->json($proejctDetail);
     }
