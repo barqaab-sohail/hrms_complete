@@ -261,6 +261,7 @@ class DashboardController extends Controller
         $lastPaymentReceived = PaymentReceive::where('pr_detail_id', $project->id)->where('payment_date', $project->latestPaymentMonth->payment_date ?? '')->sum('amount');
         $proejctDetail = [
             'projectName' => $project->name,
+            'barqaabRole' => $project->pr_role_id,
             'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
             'clientName' => $project->client->name,
             'commencementDate' => $project->commencement_date,
