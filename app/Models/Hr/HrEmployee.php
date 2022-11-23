@@ -306,7 +306,7 @@ class HrEmployee extends Model implements Auditable
             'id',                                             //Final Model Primary Key
             'id',
             'hr_document_name_id'                             //Forein Key in Immediate Model of Final Model
-        )->where('hr_document_names.id', 1);
+        )->where('hr_document_names.id', 1); // 1 belong to Appointment Letter
     }
 
     public function cnicFront()
@@ -318,7 +318,7 @@ class HrEmployee extends Model implements Auditable
             'id',                                             //Final Model Primary Key
             'id',
             'hr_document_name_id'                             //Forein Key in Immediate Model of Final Model
-        )->where('hr_document_names.id', 2);
+        )->where('hr_document_names.id', 2); // 2 belong to CNIC Front
     }
 
     public function hrForm()
@@ -330,7 +330,19 @@ class HrEmployee extends Model implements Auditable
             'id',                                             //Final Model Primary Key
             'id',
             'hr_document_name_id'                             //Forein Key in Immediate Model of Final Model
-        )->where('hr_document_names.id', 4);
+        )->where('hr_document_names.id', 4); // 5 belong to Hr Form
+    }
+
+    public function joiningReport()
+    {
+        return $this->hasManyThrough(
+            'App\Models\Hr\HrDocumentName',                    //Final Model HrDocumentName
+            'App\Models\Hr\HrDocumentNameDocumentation',      //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_document_name_id'                             //Forein Key in Immediate Model of Final Model
+        )->where('hr_document_names.id', 5); // 5 belong to Joining Report
     }
 
     public function engineeringDegree()

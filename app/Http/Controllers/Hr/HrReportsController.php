@@ -10,35 +10,37 @@ use DB;
 
 class HrReportsController extends Controller
 {
-    
-    public function list(){
 
-    	return view ('hr.reports.list');
+    public function list()
+    {
+
+        return view('hr.reports.list');
     }
 
 
-    public function cnicExpiryList(){
+    public function cnicExpiryList()
+    {
 
 
-    	$date = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
-
-    	
-    	$employees = HrEmployee::where('cnic_expiry','<',$date)->where('hr_status_id',1)->get();
+        $date = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
 
 
-    	return view ('hr.reports.cnicExpiryList', compact('employees'));
+        $employees = HrEmployee::where('cnic_expiry', '<', $date)->where('hr_status_id', 1)->get();
 
+
+        return view('hr.reports.cnicExpiryList', compact('employees'));
     }
 
-    public function missingDocumentList(){
+    public function missingDocumentList()
+    {
 
-    	$employees = HrEmployee::where('hr_status_id',1)->with('appointmentLetter','cnicFront','hrForm','engineeringDegree','educationalDocuments')->get();
+        $employees = HrEmployee::where('hr_status_id', 1)->with('employeeProject', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'educationalDocuments')->get();
 
-    	return view ('hr.reports.missingDocumentList', compact('employees'));
-
+        return view('hr.reports.missingDocumentList', compact('employees'));
     }
 
-    public function searchEmployee(){
+    public function searchEmployee()
+    {
 
         //$employees = HrEmployee::where('hr_status_id',1)->with('engineeringDegree')->get();
 
@@ -51,46 +53,45 @@ class HrReportsController extends Controller
 
         //$employees = $employees->unique('hr_employee_id');
         $degrees = Education::all();
-        return view ('hr.reports.searchEmployee.search', compact('degrees'));
-
+        return view('hr.reports.searchEmployee.search', compact('degrees'));
     }
 
-    public function report_1(){
-        $employees = HrEmployee::where('hr_status_id',1)->with('degreeYearAbove12','degreeAbove12','hrContactMobile','employeeAppointment','hrMembership','hrBloodGroup','hrContactLandline','hrEmergency','hrContactPermanent','hrContactPermanentCity','employeeDesignation')->get();
+    public function report_1()
+    {
+        $employees = HrEmployee::where('hr_status_id', 1)->with('degreeYearAbove12', 'degreeAbove12', 'hrContactMobile', 'employeeAppointment', 'hrMembership', 'hrBloodGroup', 'hrContactLandline', 'hrEmergency', 'hrContactPermanent', 'hrContactPermanentCity', 'employeeDesignation')->get();
 
         $designations = employeeDesignationArray();
 
         $employees = $employees->sort(function ($a, $b) use ($designations) {
-              $pos_a = array_search($a->employeeDesignation->last()->name??'', $designations);
-              $pos_b = array_search($b->employeeDesignation->last()->name??'', $designations);
-              return $pos_a - $pos_b;
+            $pos_a = array_search($a->employeeDesignation->last()->name ?? '', $designations);
+            $pos_b = array_search($b->employeeDesignation->last()->name ?? '', $designations);
+            return $pos_a - $pos_b;
         });
 
-        return view ('hr.reports.report_1',compact('employees'));
+        return view('hr.reports.report_1', compact('employees'));
     }
 
-    public function searchEmployeeResult(Request $request){
-        
+    public function searchEmployeeResult(Request $request)
+    {
+
         $data = $request->all();
 
-        if($request->filled('date_of_birth')){
-            $data ['date_of_birth']= \Carbon\Carbon::parse($request->date_of_birth)->format('Y-m-d');
-            }
+        if ($request->filled('date_of_birth')) {
+            $data['date_of_birth'] = \Carbon\Carbon::parse($request->date_of_birth)->format('Y-m-d');
+        }
 
-        $result = HrEmployee::join('hr_educations','hr_educations.hr_employee_id','=','hr_employees.id')
-  
-                            ->when($data['date_of_birth'], function ($query) use ($data){
-                                return $query->where('date_of_birth','>=',$data['date_of_birth']);
-                                })
-                            ->when($data['degree'], function ($query) use ($data){
-                                return $query->where('education_id',$data['degree']);
-                                })
-                        ->select('hr_employees.*')
-                        ->distinct('id')
-                        ->get();
-        
-            return view('hr.reports.searchEmployee.result',compact('result'));
+        $result = HrEmployee::join('hr_educations', 'hr_educations.hr_employee_id', '=', 'hr_employees.id')
 
-       
+            ->when($data['date_of_birth'], function ($query) use ($data) {
+                return $query->where('date_of_birth', '>=', $data['date_of_birth']);
+            })
+            ->when($data['degree'], function ($query) use ($data) {
+                return $query->where('education_id', $data['degree']);
+            })
+            ->select('hr_employees.*')
+            ->distinct('id')
+            ->get();
+
+        return view('hr.reports.searchEmployee.result', compact('result'));
     }
 }
