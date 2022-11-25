@@ -62,13 +62,19 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
                 <div class="form-check form-switch">
                   <br>
                   <input class="form-check-input" type="checkbox" id="sub_activity">
                   <label class="form-check-label" for="sub_activity">This Activity has Sub Activities</label>
                 </div>
+              </div>
+            </div>
+            <div class="col-md-2" id="hideDivTotalWeightage">
+              <div class="form-group">
+                <label class="control-label">Total Weightage</label>
+                <input type="text" name="total_weightage" id="total_weightage" data-validation="required" value="{{old('weightage')}}" class="form-control notCapital">
               </div>
             </div>
           </div>
@@ -104,12 +110,18 @@
     $('#sub_activity').change(function() {
       if (this.checked) {
         $('#hideDivWeightage').hide();
+        $('#hideDivTotalWeightage').hide();
         $("#weightage").val('');
         $("#weightage").removeAttr("data-validation");
+        $("#total_weightage").val('');
+        $("#total_weightage").removeAttr("data-validation");
       } else {
         $('#hideDivWeightage').show();
+        $('#hideDivTotalWeightage').show();
         $("#weightage").val('');
         $("#weightage").attr("data-validation", "required");
+        $("#total_weightage").val('');
+        $("#total_weightage").attr("data-validation", "required");
       }
     });
 
@@ -221,11 +233,24 @@
           $('#activity_id').val(data.id);
           $('#name').val(data.name);
           $('#level').val(data.level);
-          $("#hideDivWeightage").show();
+
           $('#weightage').val(data.weightage.toFixed(2));
           $("#hideDiv").show();
           $("#hideDiv").removeClass("hide");
           $('#ajaxModel').modal('show');
+          if (data.level === 1) {
+            $("#belong_to_activity").empty();
+            $("#hideDiv").hide();
+            if (data.weightage.toFixed(2) == 0.00) {
+              $("#sub_activity").attr("checked", true);
+              $("#hideDivWeightage").hide();
+              $("#hideDivTotalWeightage").show();
+            }
+          } else {
+            $("#sub_activity").attr("checked", false);
+            $("#hideDivWeightage").show();
+            $("#hideDivTotalWeightage").hide();
+          }
         })
       });
       $('#saveBtn').unbind().click(function(e) {

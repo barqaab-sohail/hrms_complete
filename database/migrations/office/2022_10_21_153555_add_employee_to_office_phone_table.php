@@ -27,6 +27,7 @@ class AddEmployeeToOfficePhoneTable extends Migration
     public function down()
     {
         Schema::table('office_phones', function (Blueprint $table) {
+            $table->dropForeign('office_phones_hr_employee_id_foreign');
             $table->dropColumn('hr_employee_id');
         });
     }
