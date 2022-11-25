@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project\Progress\PrProgressActivity;
 use App\Http\Requests\Project\Progress\ActivityStore;
+use App\Models\Project\Progress\PrSubTotalWeightage;
 use DB;
 use DataTables;
 
@@ -68,7 +69,7 @@ class ActivitiesController extends Controller
 
         DB::transaction(function () use ($input, $request) {
 
-            PrProgressActivity::updateOrCreate(
+            $prProgressActivity = PrProgressActivity::updateOrCreate(
                 ['id' => $input['activity_id']],
                 [
                     'pr_detail_id' => $input['pr_detail_id'],
@@ -79,6 +80,17 @@ class ActivitiesController extends Controller
 
                 ]
             );
+
+            if ($request->filled('total_weightage')) {
+
+                PrSubTotalWeightage::updateOrCreate(
+                    ['pr_progress_activity_id' => ''],
+                    [
+                        'pr_progress_activity_id' => $prProgressActivity->id,
+                        'total_weightage' => $input['total_weightage']
+                    ]
+                );
+            }
         }); // end transcation
 
         return response()->json(['success' => 'Data saved successfully.']);
