@@ -45,8 +45,11 @@ class ActivitiesController extends Controller
                 ->editColumn('weightage', function ($row) {
                     return round($row->weightage, 2);
                 })
+                ->addColumn('total_weightage', function ($row) {
+                    return $row->prSubTotalWeightage->total_weightage ?? '';
+                })
 
-                ->rawColumns(['Edit', 'Delete'])
+                ->rawColumns(['Edit', 'Delete', 'total_weightage'])
                 ->make(true);
         }
 
@@ -84,7 +87,7 @@ class ActivitiesController extends Controller
             if ($request->filled('total_weightage')) {
 
                 PrSubTotalWeightage::updateOrCreate(
-                    ['pr_progress_activity_id' => ''],
+                    ['pr_progress_activity_id' => $prProgressActivity->id],
                     [
                         'pr_progress_activity_id' => $prProgressActivity->id,
                         'total_weightage' => $input['total_weightage']
@@ -100,7 +103,8 @@ class ActivitiesController extends Controller
     {
 
         $prProgressActivity = PrProgressActivity::find($id);
-
+        $prProgressActivity->total_weightage = $prProgressActivity->prSubTotalWeightage->total_weightage ?? '';
+        //$prProgressActivity->prSubTotalWeightage->total_weightage ?? ''
         return response()->json($prProgressActivity);
     }
 

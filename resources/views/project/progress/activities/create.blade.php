@@ -8,6 +8,7 @@
         <th>Belong to Activity</th>
         <th>Activity Name</th>
         <th>Weightage</th>
+        <th>Total Sub Project Weightage</th>
         <th>Edit</th>
         <th>Delete</th>
       </tr>
@@ -187,6 +188,10 @@
             name: 'weightage'
           },
           {
+            data: "total_weightage",
+            name: 'total_weightage'
+          },
+          {
             data: 'Edit',
             name: 'Edit',
             orderable: false,
@@ -245,6 +250,7 @@
               $("#sub_activity").attr("checked", true);
               $("#hideDivWeightage").hide();
               $("#hideDivTotalWeightage").show();
+              $('#total_weightage').val(data.total_weightage);
             }
           } else {
             $("#sub_activity").attr("checked", false);

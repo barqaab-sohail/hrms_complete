@@ -59,6 +59,7 @@ class ActivityStore extends FormRequest
 
         $max = $this->total - $sum;
 
+
         $rules = [
             'name' => 'required',
 

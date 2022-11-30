@@ -42,8 +42,7 @@ function currentProgress($projectId)
 		if ($projectLevel > 1) {
 
 			$levelOnes = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 1)->get();
-			foreach ($levelOnes as $levelOne) {
-
+			foreach ($levelOnes as $key => $levelOne) {
 				$leveltwoSum = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 2)->where('belong_to_activity', $levelOne->id)->sum('weightage');
 				$level2Ids = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 2)->where('belong_to_activity', $levelOne->id)->pluck('id')->toArray();
 				$level3Ids = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 3)->whereIn('belong_to_activity', $level2Ids)->pluck('id')->toArray();
