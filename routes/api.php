@@ -25,26 +25,31 @@ Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 Route::post('/mis/login', 'MIS\LoginController@login');
 
+Route::get('/employees', 'MIS\Hr\EmployeeController@index');
 
+Route::get('/projectProgress/{id}', function () {
+
+    return currentProgress(53);
+});
 
 // DashBoard / MIS API
 Route::group(['middleware' => ['auth:sanctum']], function () {
-	//Projects Routes
-	Route::post('/mis/logout', 'MIS\LoginController@logout');
-	Route::get('/invoiceData', 'Dashboard\DashboardController@invoiceData');
-	Route::get('/projectDetail/{id}', 'Dashboard\DashboardController@projectDetail');
-	Route::get('/projectExpenseChart/{id}', 'Dashboard\DashboardController@projectExpenseChart');
-	Route::get('/powerRunningProjectsTable', 'Dashboard\DashboardController@powerRunningProjectsTable');
-	Route::get('/currentMonthPaymentReceived', 'Dashboard\DashboardController@currentMonthPaymentReceived');
-	Route::get('/lastMonthPaymentReceived', 'Dashboard\DashboardController@lastMonthPaymentReceived');
-	Route::get('/currentMonthInvoices', 'Dashboard\DashboardController@currentMonthInvoices');
-	Route::get('/lastMonthInvoices', 'Dashboard\DashboardController@lastMonthInvoices');
-	Route::get('/totalBudgetExpenditure/{id}', 'Dashboard\DashboardController@totalBudgetExpenditure');
+    //Projects Routes
+    Route::post('/mis/logout', 'MIS\LoginController@logout');
+    Route::get('/invoiceData', 'Dashboard\DashboardController@invoiceData');
+    Route::get('/projectDetail/{id}', 'Dashboard\DashboardController@projectDetail');
+    Route::get('/projectExpenseChart/{id}', 'Dashboard\DashboardController@projectExpenseChart');
+    Route::get('/powerRunningProjectsTable', 'Dashboard\DashboardController@powerRunningProjectsTable');
+    Route::get('/currentMonthPaymentReceived', 'Dashboard\DashboardController@currentMonthPaymentReceived');
+    Route::get('/lastMonthPaymentReceived', 'Dashboard\DashboardController@lastMonthPaymentReceived');
+    Route::get('/currentMonthInvoices', 'Dashboard\DashboardController@currentMonthInvoices');
+    Route::get('/lastMonthInvoices', 'Dashboard\DashboardController@lastMonthInvoices');
+    Route::get('/totalBudgetExpenditure/{id}', 'Dashboard\DashboardController@totalBudgetExpenditure');
 
 
 
-	//HR Routes
-	Route::get('/employees', 'MIS\Hr\EmployeeController@index');
+    //HR Routes
+
 });
 
 
@@ -54,19 +59,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-	//Route::get('/user/employee', 'Mobile\EmployeeController@index');
-	Route::post('/user/logout', 'Android\Auth\UserController@logout');
-	Route::get('/ageChart', 'Android\Hr\EmployeeController@ageChart');
-	Route::get('/hr/employees', 'Android\Hr\EmployeeController@employees');
-	Route::get('/hr/employee/documents/{id}', 'Android\Hr\EmployeeController@documents');
+    //Route::get('/user/employee', 'Mobile\EmployeeController@index');
+    Route::post('/user/logout', 'Android\Auth\UserController@logout');
+    Route::get('/ageChart', 'Android\Hr\EmployeeController@ageChart');
+    Route::get('/hr/employees', 'Android\Hr\EmployeeController@employees');
+    Route::get('/hr/employee/documents/{id}', 'Android\Hr\EmployeeController@documents');
 
 
-	//Asset API
-	Route::get('/asset/employees', 'Android\Asset\AssetController@employees');
-	Route::get('/asset/offices', 'Android\Asset\AssetController@offices');
-	Route::get('/asset/classes', 'Android\Asset\AssetController@classes');
-	Route::get('/clients', 'Android\Asset\AssetController@clients');
-	Route::get('/asset/subClasses/{id}', 'Android\Asset\AssetController@subClasses');
-	Route::post('/asset/store', 'Android\Asset\AssetController@store');
-	Route::get('/asset/asset/{id}', 'Android\Asset\AssetController@show');
+    //Asset API
+    Route::get('/asset/employees', 'Android\Asset\AssetController@employees');
+    Route::get('/asset/offices', 'Android\Asset\AssetController@offices');
+    Route::get('/asset/classes', 'Android\Asset\AssetController@classes');
+    Route::get('/clients', 'Android\Asset\AssetController@clients');
+    Route::get('/asset/subClasses/{id}', 'Android\Asset\AssetController@subClasses');
+    Route::post('/asset/store', 'Android\Asset\AssetController@store');
+    Route::get('/asset/asset/{id}', 'Android\Asset\AssetController@show');
 });
