@@ -11,6 +11,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
+
         $data = HrEmployee::with('employeeDesignation', 'picture', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
 
         //first sort with respect to Designation
@@ -18,7 +19,7 @@ class EmployeeController extends Controller
         $data = $data->sort(function ($a, $b) use ($designations) {
             $pos_a = array_search($a->designation ?? '', $designations);
             $pos_b = array_search($b->designation ?? '', $designations);
-            return $pos_a - $pos_b;
+            return  $pos_a !== false ? $pos_a - $pos_b : 999999;
         });
 
         //   // second sort with respect to Hr Status

@@ -48,7 +48,7 @@ class HrEmployee extends Model implements Auditable
 
     //default value of hr_status_id=1
     protected $attributes = [
-        'hr_status_id' => 1 //default value of hr_status_id is 1 
+        'hr_status_id' => 1 //default value of hr_status_id is 1
     ];
 
     //get value of hr_status_id and show in string as per statusOptions
@@ -212,7 +212,7 @@ class HrEmployee extends Model implements Auditable
     {
         return $this->hasOneThrough(
             'App\Models\Common\City',                //Final Model l
-            'App\Models\Hr\HrContact',              //Model Through Access Final Model (Immediate Model)  
+            'App\Models\Hr\HrContact',              //Model Through Access Final Model (Immediate Model)
             'hr_employee_id',
             'id',                                   //Final Model Primary Key
             'id',
@@ -461,5 +461,29 @@ class HrEmployee extends Model implements Auditable
     public function leAccumulative()
     {
         return $this->hasOne('App\Models\Leave\LeAccumulative');
+    }
+
+    public function employeeCurrentSalary()
+    {
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrSalary',                          //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeSalary',                     //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_salary_id'                             //Forein Key in Immediate Model of Final Model
+        )->orderBy('employee_salaries.effective_date', 'desc');
+    }
+
+    public function employeeCurrentDesignation()
+    {
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrDesignation', //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeDesignation', //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',              //Forein Key in Immediate Model of This Model
+            'id',                          //Final Model Primary Key
+            'id',   //current model Primary Key of Final Model (it is called foreign key)
+            'hr_designation_id'           //Forein Key in Immediate Model of Final Model
+        )->orderBy('employee_designations.effective_date', 'desc');
     }
 }

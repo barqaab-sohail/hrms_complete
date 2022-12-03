@@ -58,14 +58,14 @@ class HrReportsController extends Controller
 
     public function report_1()
     {
-        $employees = HrEmployee::where('hr_status_id', 1)->with('degreeYearAbove12', 'degreeAbove12', 'hrContactMobile', 'employeeAppointment', 'hrMembership', 'hrBloodGroup', 'hrContactLandline', 'hrEmergency', 'hrContactPermanent', 'hrContactPermanentCity', 'employeeDesignation')->get();
+        $employees = HrEmployee::where('hr_status_id', 1)->with('degreeYearAbove12', 'degreeAbove12', 'hrDepartment', 'hrContactMobile', 'employeeAppointment', 'hrMembership', 'hrBloodGroup', 'hrContactLandline', 'hrEmergency', 'hrContactPermanent', 'hrContactPermanentCity', 'employeeCurrentDesignation', 'employeeCurrentSalary')->get();
 
         $designations = employeeDesignationArray();
 
         $employees = $employees->sort(function ($a, $b) use ($designations) {
-            $pos_a = array_search($a->employeeDesignation->last()->name ?? '', $designations);
-            $pos_b = array_search($b->employeeDesignation->last()->name ?? '', $designations);
-            return $pos_a - $pos_b;
+            $pos_a = array_search($a->employeeCurrentDesignation->name ?? '', $designations);
+            $pos_b = array_search($b->employeeCurrentDesignation->name ?? '', $designations);
+            return $pos_a !== false ? $pos_a - $pos_b : 999999;
         });
 
         return view('hr.reports.report_1', compact('employees'));

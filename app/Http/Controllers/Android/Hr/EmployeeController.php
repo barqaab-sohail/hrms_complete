@@ -9,96 +9,96 @@ use App\Models\Hr\HrDocumentation;
 
 class EmployeeController extends Controller
 {
-	public function ageChart()
-	{
+    public function ageChart()
+    {
 
-		$countBelowForty = HrEmployee::where('date_of_birth', '>=', \Carbon\Carbon::now()->subYears(40))->whereIn('hr_status_id', array(1, 5))->count();
+        $countBelowForty = HrEmployee::where('date_of_birth', '>=', \Carbon\Carbon::now()->subYears(40))->whereIn('hr_status_id', array(1, 5))->count();
 
-		$countBelowFifty = HrEmployee::where('date_of_birth', '>=', \Carbon\Carbon::now()->subYears(50))->whereIn('hr_status_id', array(1, 5))->count() - $countBelowForty;
+        $countBelowFifty = HrEmployee::where('date_of_birth', '>=', \Carbon\Carbon::now()->subYears(50))->whereIn('hr_status_id', array(1, 5))->count() - $countBelowForty;
 
-		$countBelowSixty = HrEmployee::where('date_of_birth', '>=', \Carbon\Carbon::now()->subYears(60))->whereIn('hr_status_id', array(1, 5))->count() - $countBelowForty - $countBelowFifty;
+        $countBelowSixty = HrEmployee::where('date_of_birth', '>=', \Carbon\Carbon::now()->subYears(60))->whereIn('hr_status_id', array(1, 5))->count() - $countBelowForty - $countBelowFifty;
 
-		$countBelowSeventy = HrEmployee::where('date_of_birth', '>=', \Carbon\Carbon::now()->subYears(70))->whereIn('hr_status_id', array(1, 5))->count() - $countBelowForty - $countBelowFifty - $countBelowSixty;
+        $countBelowSeventy = HrEmployee::where('date_of_birth', '>=', \Carbon\Carbon::now()->subYears(70))->whereIn('hr_status_id', array(1, 5))->count() - $countBelowForty - $countBelowFifty - $countBelowSixty;
 
-		$countAboveSeventy = HrEmployee::whereIn('hr_status_id', array(1, 5))->count() - $countBelowForty - $countBelowFifty - $countBelowSixty - $countBelowSeventy;
-
-
-		$data = [
-			array('label' => 'Below Forty', 'value' => $countBelowForty),
-			array('label' => 'Between 40-50', 'value' => $countBelowFifty),
-			array('label' => 'Between 50-60', 'value' => $countBelowSixty),
-			array('label' => 'Between 60-70', 'value' => $countBelowSeventy),
-			array('label' => 'Aoove Seventy', 'value' => $countAboveSeventy)
-		];
+        $countAboveSeventy = HrEmployee::whereIn('hr_status_id', array(1, 5))->count() - $countBelowForty - $countBelowFifty - $countBelowSixty - $countBelowSeventy;
 
 
-		return response()->json($data);
-	}
+        $data = [
+            array('label' => 'Below Forty', 'value' => $countBelowForty),
+            array('label' => 'Between 40-50', 'value' => $countBelowFifty),
+            array('label' => 'Between 50-60', 'value' => $countBelowSixty),
+            array('label' => 'Between 60-70', 'value' => $countBelowSeventy),
+            array('label' => 'Aoove Seventy', 'value' => $countAboveSeventy)
+        ];
 
-	public function employees()
-	{
 
-		// $data = HrEmployee::whereIn('hr_status_id',array(1,5))->get();
-		// return response()->json($data);
+        return response()->json($data);
+    }
 
-		$data = HrEmployee::with('employeeDesignation', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
+    public function employees()
+    {
 
-		//first sort with respect to Designation
-		$designations = employeeDesignationArray();
-		$data = $data->sort(function ($a, $b) use ($designations) {
-			$pos_a = array_search($a->designation ?? '', $designations);
-			$pos_b = array_search($b->designation ?? '', $designations);
-			return $pos_a - $pos_b;
-		});
+        // $data = HrEmployee::whereIn('hr_status_id',array(1,5))->get();
+        // return response()->json($data);
 
-		//   // second sort with respect to Hr Status
-		$hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'Manmonth Ended', 'Death');
+        $data = HrEmployee::with('employeeDesignation', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
 
-		$data = $data->sort(function ($a, $b) use ($hrStatuses) {
-			$pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
-			$pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
-			return $pos_a - $pos_b;
-		});
+        //first sort with respect to Designation
+        $designations = employeeDesignationArray();
+        $data = $data->sort(function ($a, $b) use ($designations) {
+            $pos_a = array_search($a->designation ?? '', $designations);
+            $pos_b = array_search($b->designation ?? '', $designations);
+            return  $pos_a !== false ? $pos_a - $pos_b : 999999;
+        });
 
-		$defaultPicture = asset('Massets/images/default.png');
-		foreach ($data as $employee) {
-			if ($employee->picture) {
-				$picture = asset('storage/' . $employee->picture->path . $employee->picture->file_name);
-			} else {
-				$picture = $defaultPicture;
-			}
+        //   // second sort with respect to Hr Status
+        $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'Manmonth Ended', 'Death');
 
-			$employees[] =  array(
-				"id" => $employee->id,
-				"employee_no" => $employee->employee_no,
-				"full_name" => $employee->full_name,
-				"date_of_birth" => \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y'),
-				"date_of_joining" => \Carbon\Carbon::parse($employee->employeeAppointment->joining_date ?? '')->format('M d, Y'),
-				"cnic" => $employee->cnic,
-				"designation" => $employee->designation,
-				"picture" => $picture,
-				"mobile" => $employee->hrContactMobile->mobile ?? '',
-				"status" => $employee->hr_status_id ?? ''
-			);
-		}
+        $data = $data->sort(function ($a, $b) use ($hrStatuses) {
+            $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
+            $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
+            return  $pos_a !== false ? $pos_a - $pos_b : 999;
+        });
 
-		return response()->json($employees);
-	}
+        $defaultPicture = asset('Massets/images/default.png');
+        foreach ($data as $employee) {
+            if ($employee->picture) {
+                $picture = asset('storage/' . $employee->picture->path . $employee->picture->file_name);
+            } else {
+                $picture = $defaultPicture;
+            }
 
-	public function documents($hrEmployeeId)
-	{
+            $employees[] =  array(
+                "id" => $employee->id,
+                "employee_no" => $employee->employee_no,
+                "full_name" => $employee->full_name,
+                "date_of_birth" => \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y'),
+                "date_of_joining" => \Carbon\Carbon::parse($employee->employeeAppointment->joining_date ?? '')->format('M d, Y'),
+                "cnic" => $employee->cnic,
+                "designation" => $employee->designation,
+                "picture" => $picture,
+                "mobile" => $employee->hrContactMobile->mobile ?? '',
+                "status" => $employee->hr_status_id ?? ''
+            );
+        }
 
-		$employeeDocuments = HrDocumentation::where('hr_employee_id', $hrEmployeeId)->get();
+        return response()->json($employees);
+    }
 
-		foreach ($employeeDocuments as $document) {
-			$empDocuments[] = array(
-				"id" => $document->id,
-				"description" => $document->description,
-				"extension" => strtolower($document->extension),
-				"url" => asset('storage/' . $document->path . $document->file_name)
-			);
-		}
+    public function documents($hrEmployeeId)
+    {
 
-		return response()->json($empDocuments, 200);
-	}
+        $employeeDocuments = HrDocumentation::where('hr_employee_id', $hrEmployeeId)->get();
+
+        foreach ($employeeDocuments as $document) {
+            $empDocuments[] = array(
+                "id" => $document->id,
+                "description" => $document->description,
+                "extension" => strtolower($document->extension),
+                "url" => asset('storage/' . $document->path . $document->file_name)
+            );
+        }
+
+        return response()->json($empDocuments, 200);
+    }
 }
