@@ -36,6 +36,7 @@ function currentProgress($projectId)
     //return $pogress = PrAchievedProgress::where('pr_detail_id', $projectId)->orderBy('created_at', 'desc')->distinct('pr_progress_activity_id')->sum('percentage_complete');
 
     $totalAchievedProgress = 0.0;
+    $SubProjectsAccomulativeProgress = 0.0;
     $lastAchievedProgressDate = '';
     $projectLevel = PrProgressActivity::where('pr_detail_id', $projectId)->max('level');
     if ($projectLevel) {
@@ -59,11 +60,14 @@ function currentProgress($projectId)
                         $totalAchievedProgress += $totalCurrentProgress->percentage_complete ?? 0;
                     }
                 }
+                $subProjectWeightage = $levelOne->prSubTotalWeightage->total_weightage ?? 100;
+                $SubProjectsAccomulativeProgress +=  $totalAchievedProgress * $subProjectWeightage / 100;
+                $totalAchievedProgress = 0;
             }
             $latestDate = PrAchievedProgress::where('pr_detail_id', $projectId)->latest()->first();
             $lastAchievedProgressDate  = $latestDate->date ?? '';
 
-            return $totalAchievedProgress . '% - ' . $lastAchievedProgressDate;
+            return $SubProjectsAccomulativeProgress . '% - ' . $lastAchievedProgressDate;
         } else {
             $progressActivities = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 1)->get();
             $latestDate = PrAchievedProgress::where('pr_detail_id', $projectId)->latest()->first();

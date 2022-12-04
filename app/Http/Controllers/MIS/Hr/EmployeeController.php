@@ -23,7 +23,7 @@ class EmployeeController extends Controller
         });
 
         //   // second sort with respect to Hr Status
-        $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'Manmonth Ended', 'Death');
+        $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'ManMonth Ended', 'Death');
 
         $data = $data->sort(function ($a, $b) use ($hrStatuses) {
             $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
