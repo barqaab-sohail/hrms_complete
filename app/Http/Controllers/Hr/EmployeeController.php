@@ -90,7 +90,7 @@ class EmployeeController extends Controller
 
 
         if ($request->ajax()) {
-            $value = Cache::remember('employees', 5, function () {
+            $value = Cache::remember('employees', 300, function () {
 
                 $data = HrEmployee::with('employeeDesignation', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
 
