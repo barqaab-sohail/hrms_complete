@@ -92,7 +92,15 @@ class EmployeeController extends Controller
         if ($request->ajax()) {
             $value = Cache::remember('employees', 3000, function () {
 
-                $data = HrEmployee::with('employeeDesignation', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
+                $data = HrEmployee::select(['id',  'first_name', 'last_name', 'cnic', 'date_of_birth', 'hr_status_id', 'employee_no'])->with([
+                    'employeeCurrentDesignation' => function ($query) {
+                        return $query->select('name');
+                    }, 'employeeCurrentProject' => function ($query) {
+                        return $query->select('name');
+                    }, 'employeeCurrentOffice' => function ($query) {
+                        return $query->select('name');
+                    }, 'hrContactMobile:mobile'
+                ])->get();
 
                 //first sort with respect to Designation
                 $designations = employeeDesignationArray();
@@ -119,7 +127,6 @@ class EmployeeController extends Controller
                 return $data;
             });
 
-
             return DataTables::of($value)
 
                 ->addColumn('full_name', function ($data) {
@@ -134,18 +141,18 @@ class EmployeeController extends Controller
 
                 ->addColumn('project', function ($data) {
 
-                    $project = isset($data->employeeProject->last()->name) ? $data->employeeProject->last()->name : '';
+                    $project = isset($data->employeeCurrentProject->name) ? $data->employeeCurrentProject->name : '';
                     if ($project == '') {
                         return '';
                     } else if ($project == 'overhead') {
-                        return $data->employeeOffice->last()->name ?? '';
+                        return $data->employeeCurrentOffice->name ?? '';
                     } else {
 
                         if (Auth::user()->hasPermissionTo('hr edit documentation')) {
-                            $link = '<a href="' . route('project.edit', $data->employeeProject->last()->id ?? '') . '" style="color:grey">' . $data->employeeProject->last()->name ?? '' . '</a>';
+                            $link = '<a href="' . route('project.edit', $data->employeeCurrentProject->id ?? '') . '" style="color:grey">' . $data->employeeCurrentProject->name ?? '' . '</a>';
                             return $link;
                         } else {
-                            return $data->employeeProject->last()->name ?? '';
+                            return $data->employeeCurrentProject->name ?? '';
                         }
                     }
                 })
@@ -154,11 +161,7 @@ class EmployeeController extends Controller
                 })
                 ->addColumn('date_of_joining', function ($data) {
 
-                    if ($data->employeeAppointment) {
-                        return \Carbon\Carbon::parse($data->employeeAppointment->joining_date ?? '')->format('M d, Y');
-                    } else {
-                        return '';
-                    }
+                    return $data->joining_date ?? '';
                 })
                 ->addColumn('mobile', function ($data) {
                     return $data->hrContactMobile->mobile ?? '';

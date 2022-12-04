@@ -22,11 +22,16 @@ class HrEmployee extends Model implements Auditable
 
     function getDesignationAttribute()
     {
-        return $this->employeeDesignation->last()->name ?? '';
+        return $this->employeeCurrentDesignation->name ?? '';
     }
     function getProjectAttribute()
     {
-        return $this->employeeProject->last()->name ?? '';
+        return $this->employeeCurrentProject->name ?? '';
+    }
+
+    public function getJoiningDateAttribute()
+    {
+        return  \Carbon\Carbon::parse($this->employeeAppointment->joining_date ?? '')->format('M d, Y');
     }
 
 
@@ -121,6 +126,18 @@ class HrEmployee extends Model implements Auditable
         )->orderBy('employee_designations.id', 'asc');
     }
 
+    public function employeeCurrentDesignation()
+    {
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrDesignation', //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeDesignation', //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',              //Forein Key in Immediate Model of This Model
+            'id',                          //Final Model Primary Key
+            'id',   //current model Primary Key of Final Model (it is called foreign key)
+            'hr_designation_id'           //Forein Key in Immediate Model of Final Model
+        )->orderBy('employee_designations.effective_date', 'desc');
+    }
+
     public function employeeState()
     {
         return $this->hasManyThrough(
@@ -161,6 +178,19 @@ class HrEmployee extends Model implements Auditable
         )->orderBy('employee_offices.id', 'asc');
     }
 
+    public function employeeCurrentOffice()
+    {
+        //return $this->hasOne('App\Models\Hr\EmployeeDesignation');
+        return $this->hasOneThrough(
+            'App\Models\Common\Office', //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeOffice', //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',              //Forein Key in Immediate Model of This Model
+            'id',                          //Final Model Primary Key
+            'id',   //current model Primary Key of Final Model (it is called foreign key)
+            'office_id'           //Forein Key in Immediate Model of Final Model
+        )->orderBy('employee_offices.effective_date', 'desc');
+    }
+
     public function employeeDepartment()
     {
         //return $this->hasOne('App\Models\Hr\EmployeeDesignation');
@@ -185,6 +215,18 @@ class HrEmployee extends Model implements Auditable
             'id',
             'pr_detail_id'                             //Forein Key in Immediate Model of Final Model
         )->orderBy('employee_projects.id', 'asc');
+    }
+
+    public function employeeCurrentProject()
+    {
+        return $this->hasOneThrough(
+            'App\Models\Project\PrDetail',                  //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeProject',              //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'pr_detail_id'                             //Forein Key in Immediate Model of Final Model
+        )->orderBy('employee_projects.effective_date', 'desc');
     }
 
     public function hrContact()
@@ -473,17 +515,5 @@ class HrEmployee extends Model implements Auditable
             'id',
             'hr_salary_id'                             //Forein Key in Immediate Model of Final Model
         )->orderBy('employee_salaries.effective_date', 'desc');
-    }
-
-    public function employeeCurrentDesignation()
-    {
-        return $this->hasOneThrough(
-            'App\Models\Hr\HrDesignation', //Final Model HrDocumentName
-            'App\Models\Hr\EmployeeDesignation', //Model Through Access Final Model (Immediate Model)
-            'hr_employee_id',              //Forein Key in Immediate Model of This Model
-            'id',                          //Final Model Primary Key
-            'id',   //current model Primary Key of Final Model (it is called foreign key)
-            'hr_designation_id'           //Forein Key in Immediate Model of Final Model
-        )->orderBy('employee_designations.effective_date', 'desc');
     }
 }
