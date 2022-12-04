@@ -29,7 +29,7 @@ Route::get('/employees', 'MIS\Hr\EmployeeController@index');
 
 Route::get('/projectProgress/{id}', function () {
 
-    return currentProgress(53);
+    return currentProgress(75);
 });
 
 // DashBoard / MIS API

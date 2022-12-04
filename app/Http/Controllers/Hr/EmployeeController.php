@@ -34,6 +34,7 @@ use DB;
 use App\Http\Requests\Hr\EmployeeStore;
 use DataTables;
 use App\User;
+use Cache;
 
 class EmployeeController extends Controller
 {
@@ -89,31 +90,37 @@ class EmployeeController extends Controller
 
 
         if ($request->ajax()) {
-            $data = HrEmployee::with('employeeDesignation', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
+            $value = Cache::remember('employees', 5, function () {
 
-            //first sort with respect to Designation
-            $designations = employeeDesignationArray();
-            $data = $data->sort(function ($a, $b) use ($designations) {
-                $pos_a = array_search($a->designation ?? '', $designations);
-                $pos_b = array_search($b->designation ?? '', $designations);
-                if ($pos_a &&  $pos_b) {
+                $data = HrEmployee::with('employeeDesignation', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
+
+                //first sort with respect to Designation
+                $designations = employeeDesignationArray();
+                $data = $data->sort(function ($a, $b) use ($designations) {
+                    $pos_a = array_search($a->designation ?? '', $designations);
+                    $pos_b = array_search($b->designation ?? '', $designations);
+                    if ($pos_a &&  $pos_b) {
+                        return $pos_a - $pos_b;
+                    } else {
+                        return -1;
+                    }
+                });
+
+                //second sort with respect to Hr Status
+                $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'Manmonth Ended', 'Death');
+
+                $data = $data->sort(function ($a, $b) use ($hrStatuses) {
+                    $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
+                    $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
                     return $pos_a - $pos_b;
-                } else {
-                    return -1;
-                }
-            });
+                });
 
-            //second sort with respect to Hr Status
-            $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'Manmonth Ended', 'Death');
 
-            $data = $data->sort(function ($a, $b) use ($hrStatuses) {
-                $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
-                $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
-                return $pos_a - $pos_b;
+                return $data;
             });
 
 
-            return DataTables::of($data)
+            return DataTables::of($value)
 
                 ->addColumn('full_name', function ($data) {
 
