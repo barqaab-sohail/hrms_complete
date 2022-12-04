@@ -25,12 +25,7 @@ Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 Route::post('/mis/login', 'MIS\LoginController@login');
 
-Route::get('/employees', 'MIS\Hr\EmployeeController@index');
 
-Route::get('/projectProgress/{id}', function () {
-
-    return currentProgress(75);
-});
 
 // DashBoard / MIS API
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -49,7 +44,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     //HR Routes
-
+    Route::get('/employees', 'MIS\Hr\EmployeeController@index');
 });
 
 
