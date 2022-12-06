@@ -31,10 +31,12 @@ class HrEmployee extends Model implements Auditable
 
     public function getJoiningDateAttribute()
     {
-        return  \Carbon\Carbon::parse($this->employeeAppointment->joining_date ?? '')->format('M d, Y');
+        $joiningDate = $this->employeeAppointment->joining_date ?? '';
+        return  $joiningDate ? \Carbon\Carbon::parse($joiningDate)->format('M d, Y') : '';
     }
 
 
+    // compare with existing data after update and send notification of admin 
     public function compareTo(HrEmployee $other)
     {
 
