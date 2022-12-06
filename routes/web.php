@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Hr\HrEmployee;
+use App\Http\Controllers\Hr\EmployeeController;
 
 
 /*
@@ -15,7 +16,9 @@ use App\Models\Hr\HrEmployee;
 |
 */
 
-
+Route::get('/employees', function () {
+	return EmployeeController::getAllEmployee();
+});
 Route::get('/verifyCard', 'HomeController@employee');
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');
 Route::get('/cardVerificationResult/{employeeId?}', 'HomeController@employeeId')->middleware('XssSanitizer')->name('employee.verification');

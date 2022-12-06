@@ -41,13 +41,13 @@ class EmployeeController extends Controller
         // $data = HrEmployee::whereIn('hr_status_id',array(1,5))->get();
         // return response()->json($data);
 
-        $data = HrEmployee::with('employeeDesignation', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
+        $data = HrEmployee::with('employeeCurrentDesignation', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
 
         //first sort with respect to Designation
         $designations = employeeDesignationArray();
         $data = $data->sort(function ($a, $b) use ($designations) {
-            $pos_a = array_search($a->designation ?? '', $designations);
-            $pos_b = array_search($b->designation ?? '', $designations);
+            $pos_a = array_search($a->employeeCurrentDesignation->name ?? '', $designations);
+            $pos_b = array_search($b->employeeCurrentDesignation->name ?? '', $designations);
             return  $pos_a !== false ? $pos_a - $pos_b : 999999;
         });
 
@@ -75,7 +75,7 @@ class EmployeeController extends Controller
                 "date_of_birth" => \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y'),
                 "date_of_joining" => \Carbon\Carbon::parse($employee->employeeAppointment->joining_date ?? '')->format('M d, Y'),
                 "cnic" => $employee->cnic,
-                "designation" => $employee->designation,
+                "designation" => $employee->employeeCurrentDesignation->name ?? '',
                 "picture" => $picture,
                 "mobile" => $employee->hrContactMobile->mobile ?? '',
                 "status" => $employee->hr_status_id ?? ''

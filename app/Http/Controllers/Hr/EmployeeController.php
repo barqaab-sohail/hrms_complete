@@ -11,22 +11,10 @@ use App\Models\Common\MaritalStatus;
 use App\Models\Common\Religion;
 use App\Models\Common\BloodGroup;
 use App\Models\Hr\HrEmployee;
-use App\Models\Hr\HrEducation;
 use App\Models\Hr\HrDesignation;
-use App\Models\Hr\EmployeeAppointment;
-use App\Models\Hr\EmployeeCategory;
 use App\Models\Hr\HrCategory;
 use App\Models\Hr\EmployeeManager;
-use App\Models\Hr\EmployeeDesignation;
-use App\Models\Hr\EmployeeDepartment;
-use App\Models\Hr\EmployeeGrade;
-use App\Models\Hr\EmployeeOffice;
-use App\Models\Hr\EmployeeSalary;
-use App\Models\Hr\EmployeeProject;
-use App\Models\Hr\HrContact;
 use App\Models\Hr\HrStatus;
-use App\Models\Hr\HrContactMobile;
-use App\Models\Hr\HrEmergency;
 use App\Models\Common\Education;
 use App\Models\Project\PrDetail;
 use App\Models\Hr\HrDocumentation;
@@ -39,6 +27,44 @@ use Cache;
 class EmployeeController extends Controller
 {
 
+    public static function getAllEmployee()
+    {
+        return $value = Cache::remember('employees', 3000, function () {
+            $data = HrEmployee::select(['id',  'first_name', 'last_name', 'cnic', 'date_of_birth', 'hr_status_id', 'employee_no'])->with([
+                'employeeCurrentDesignation' => function ($query) {
+                    return $query->select('name');
+                }, 'employeeCurrentProject' => function ($query) {
+                    return $query->select('name');
+                }, 'employeeCurrentOffice' => function ($query) {
+                    return $query->select('name');
+                }, 'hrContactMobile:mobile'
+            ])->get();
+
+            //first sort with respect to Designation
+            $designations = employeeDesignationArray();
+            $data = $data->sort(function ($a, $b) use ($designations) {
+                $pos_a = array_search($a->employeeCurrentDesignation->name ?? '', $designations);
+                $pos_b = array_search($b->employeeCurrentDesignation->name ?? '', $designations);
+                if ($pos_a &&  $pos_b) {
+                    return $pos_a - $pos_b;
+                } else {
+                    return -1;
+                }
+            });
+
+            //second sort with respect to Hr Status
+            $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'Manmonth Ended', 'Death');
+
+            $data = $data->sort(function ($a, $b) use ($hrStatuses) {
+                $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
+                $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
+                return $pos_a - $pos_b;
+            });
+
+
+            return $data;
+        });
+    }
 
     public function create()
     {
@@ -82,6 +108,10 @@ class EmployeeController extends Controller
             $employee = HrEmployee::create($input);
         }); // end transcation
 
+
+        //remove cache
+        Cache::forget('employees');
+
         return response()->json(['url' => route("employee.edit", $employee), 'message' => 'Data Successfully Saved']);
     }
 
@@ -90,42 +120,8 @@ class EmployeeController extends Controller
 
 
         if ($request->ajax()) {
-            $value = Cache::remember('employees', 3000, function () {
 
-                $data = HrEmployee::select(['id',  'first_name', 'last_name', 'cnic', 'date_of_birth', 'hr_status_id', 'employee_no'])->with([
-                    'employeeCurrentDesignation' => function ($query) {
-                        return $query->select('name');
-                    }, 'employeeCurrentProject' => function ($query) {
-                        return $query->select('name');
-                    }, 'employeeCurrentOffice' => function ($query) {
-                        return $query->select('name');
-                    }, 'hrContactMobile:mobile'
-                ])->get();
-
-                //first sort with respect to Designation
-                $designations = employeeDesignationArray();
-                $data = $data->sort(function ($a, $b) use ($designations) {
-                    $pos_a = array_search($a->designation ?? '', $designations);
-                    $pos_b = array_search($b->designation ?? '', $designations);
-                    if ($pos_a &&  $pos_b) {
-                        return $pos_a - $pos_b;
-                    } else {
-                        return -1;
-                    }
-                });
-
-                //second sort with respect to Hr Status
-                $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'Manmonth Ended', 'Death');
-
-                $data = $data->sort(function ($a, $b) use ($hrStatuses) {
-                    $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
-                    $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
-                    return $pos_a - $pos_b;
-                });
-
-
-                return $data;
-            });
+            $value = $this->getAllEmployee();
 
             return DataTables::of($value)
 
@@ -137,6 +133,9 @@ class EmployeeController extends Controller
                     } else {
                         return $data->full_name;
                     }
+                })
+                ->addColumn('designation', function ($data) {
+                    return $data->employeeCurrentDesignation->name ?? '';
                 })
 
                 ->addColumn('project', function ($data) {
@@ -182,7 +181,7 @@ class EmployeeController extends Controller
                     return $button;
                 })
 
-                ->rawColumns(['full_name', 'project', 'date_of_birth', 'date_of_joining', 'mobile', 'edit', 'delete'])
+                ->rawColumns(['full_name', 'designation', 'project', 'date_of_birth', 'date_of_joining', 'mobile', 'edit', 'delete'])
                 ->make(true);
         }
 
@@ -262,6 +261,8 @@ class EmployeeController extends Controller
         // }
 
         if ($request->ajax()) {
+            //remove cache
+            Cache::forget('employees');
             return response()->json(['status' => 'OK', 'message' => "Data Successfully Updated"]);
         } else {
             return back()->with('message', 'Data Successfully Updated');
