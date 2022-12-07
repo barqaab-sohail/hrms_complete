@@ -57,7 +57,7 @@ class EmployeeController extends Controller
         $data = $data->sort(function ($a, $b) use ($hrStatuses) {
             $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
             $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
-            return  $pos_a !== false ? $pos_a - $pos_b : 999;
+            return $pos_a - $pos_b;
         });
 
         $defaultPicture = asset('Massets/images/default.png');
