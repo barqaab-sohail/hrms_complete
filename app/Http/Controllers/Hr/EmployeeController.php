@@ -45,11 +45,7 @@ class EmployeeController extends Controller
             $data = $data->sort(function ($a, $b) use ($designations) {
                 $pos_a = array_search($a->employeeCurrentDesignation->name ?? '', $designations);
                 $pos_b = array_search($b->employeeCurrentDesignation->name ?? '', $designations);
-                if ($pos_a &&  $pos_b) {
-                    return $pos_a - $pos_b;
-                } else {
-                    return -1;
-                }
+                return  $pos_a !== false ? $pos_a - $pos_b : 999999;
             });
 
             //second sort with respect to Hr Status
