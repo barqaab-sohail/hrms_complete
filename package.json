@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "browserslist": "^4.21.3",
+        "clipboard": "^2.0.11",
         "color-string": "^1.9.1",
         "is-svg": "^4.3.2",
         "lodash": ">=4.17.21",

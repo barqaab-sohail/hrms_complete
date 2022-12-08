@@ -75,7 +75,7 @@
 						<td><a href="{{route('project.edit',$project->id)}}" style="color:grey">{{$project->name}}</a></td>
 						<td>{{$project->client->name??''}}</td>
 						<td>{{$project->formatted_commencement_date}}</td>
-						<td>{{$project->pr_status_id}}</td>
+						<td>{{projectStatus($project->pr_status_id)}}</td>
 						<td>{{$project->prRole->name??''}}</td>
 
 						<td class="text-center">

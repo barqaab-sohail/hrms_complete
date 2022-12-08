@@ -160,3 +160,16 @@ function isDeleteInvoice($projectId)
 
     return false;
 }
+
+function projectStatus($id)
+{
+    if ($id === 1) {
+        return 'In Progress';
+    } else if ($id === 2) {
+        return 'Completed';
+    } else if ($id === 3) {
+        return 'Suspended';
+    } else {
+        return '';
+    }
+}

@@ -165,6 +165,18 @@ class HrEmployee extends Model implements Auditable
         )->orderBy('employee_categories.id', 'asc');
     }
 
+    public function employeeCurrentCategory()
+    {
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrCategory', //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeCategory', //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',              //Forein Key in Immediate Model of This Model
+            'id',                          //Final Model Primary Key
+            'id',   //current model Primary Key of Final Model (it is called foreign key)
+            'hr_category_id'           //Forein Key in Immediate Model of Final Model
+        )->orderBy('employee_categories.effective_date', 'desc');
+    }
+
 
 
     public function employeeOffice()
