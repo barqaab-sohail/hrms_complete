@@ -78,14 +78,14 @@
                         </ul>
                         <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none;">{{ csrf_field() }}</form>
 
-                        <!-- If URL Manually then redirect to login
+                        If URL Manually then redirect to login
                         @if(!isset($_SERVER['HTTP_REFERER']))
                         {
                         <script>
                             window.location.href = "{{route('login')}}";
                         </script>
                         }
-                        @endif -->
+                        @endif
                     </div>
                 </li>
             </ul>
