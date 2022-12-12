@@ -66,7 +66,7 @@
                 <!-- End HR Reports -->
                 <!-- HR Monthly Report -->
 
-                <li class="{{Request::is('input/*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu">Monthly Input</span></a>
+                <!-- <li class="{{Request::is('input/*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu">Monthly Input</span></a>
                     @can('monthly input')
                     <ul aria-expanded="false" class="collapse">
                         <li><a class="{{Request::is('input/inputMonth/create')?'active':''}}" href="{{route('inputMonth.create')}}">Add Month</a></li>
@@ -82,8 +82,7 @@
 
 
                     @endcan
-                </li>
-
+                </li> -->
 
                 <!-- End HR Reports -->
 
@@ -162,10 +161,9 @@
 
                     </ul>
                 </li>
-
                 <!-- End Submissions -->
                 <!-- Miscellaneous -->
-                <li class="{{Request::is('hrms/misc*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-book" aria-hidden="true"></i><span class="hide-menu">Miscellaneous</span></a>
+                <li class="{{Request::is('hrms/misc*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-server" aria-hidden="true"></i><span class="hide-menu">Miscellaneous</span></a>
                     <ul aria-expanded="false" class="collapse">
                         @can('misc edit record')
                         <li><a class="{{Request::is('hrms/misc/office')?'active':''}}" href="{{route('office.index')}}">List of Offices</a></li>
@@ -176,11 +174,9 @@
                         @endcan
                     </ul>
                 </li>
-
                 <!-- End Misc -->
 
                 <!-- CV -->
-
                 <li class="{{Request::is('hrms/cv*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-database"></i><span class="hide-menu">CV Records</span></a>
                     <ul aria-expanded="false" class="collapse">
                         @can('cv edit record')
@@ -188,11 +184,8 @@
                         <li><a class="{{Request::is('hrms/cvData/cv')?'active':''}}" href="{{route('cv.index')}}">List of CVs</a></li>
                         <li><a class="{{Request::is('hrms/cvData/search')?'active':''}}" href="{{route('cv.search')}}">Search</a></li>
                         @endcan
-
                     </ul>
                 </li>
-
-
                 <!-- End CV -->
 
                 @can('self_services edit record')
@@ -201,7 +194,6 @@
                     <ul aria-expanded="false" class="collapse">
                         <li><a class="{{Request::is('hrms/selfServices/selfContact/create')?'active':''}}" href="{{route('selfContact.create')}}">Personal Contact</a></li>
 
-
                     </ul>
                 </li>
                 <!-- Self Services -->
@@ -209,7 +201,7 @@
 
                 @can('Super Admin')
                 <!-- Invoices -->
-                <li class="{{Request::is('invoice*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-shopping"></i><span class="hide-menu">Invoices</span></a>
+                <!-- <li class="{{Request::is('invoice*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-shopping"></i><span class="hide-menu">Invoices</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a class="{{Request::is('invoice/invoice/create')?'active':''}}" href="{{route('invoice.create')}}">Create Invoice</a></li>
                         <li><a class="{{Request::is('invoice/invoice/index')?'active':''}}" href="{{route('invoice.index')}}">List of Invoice</a></li>
@@ -217,7 +209,7 @@
 
 
                     </ul>
-                </li>
+                </li> -->
                 <!-- End Invoices -->
 
 
