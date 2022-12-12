@@ -1,2 +1,2 @@
 *
-!.gitignore
+/resources/views/layouts/master/master.blade.php
