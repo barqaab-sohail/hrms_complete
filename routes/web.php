@@ -16,9 +16,7 @@ use App\Http\Controllers\Hr\EmployeeController;
 |
 */
 
-Route::get('/employees', function () {
-	return EmployeeController::getAllEmployee();
-});
+
 Route::get('/verifyCard', 'HomeController@employee');
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');
 Route::get('/cardVerificationResult/{employeeId?}', 'HomeController@employeeId')->middleware('XssSanitizer')->name('employee.verification');
@@ -257,6 +255,12 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
 	Route::resource('/submissionDocument', 'SubDocumentController');
 	// Route::get('/submissionDocument/refreshTable', 'SubmissionDocumentController@refreshTable')->name('submissionDocument.table');
 
+});
+
+//Admin Documents Routes
+Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'AdminDoc'], function () {
+
+	Route::resource('/adminDocument', 'AdminDocumentController');
 });
 
 //Misc Routes
