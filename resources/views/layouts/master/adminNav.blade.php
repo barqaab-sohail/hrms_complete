@@ -29,7 +29,7 @@
                         @endcan
                         @can('hr active employees')
                         <!-- <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>
-                      
+
                         <li><a  class="{{Request::is('hrms/employee/allEmployeeList')?'active':''}}" href="{{route('employee.allEmployeeList')}}">All Employees</a></li> -->
 
 
@@ -162,6 +162,16 @@
                     </ul>
                 </li>
                 <!-- End Submissions -->
+                <!-- Admin Document -->
+                <li class="{{Request::is('hrms/adminDocument*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-book" aria-hidden="true"></i><span class="hide-menu">Admin Document</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        @canany(['sub edit admin document', 'sub view admin document'])
+                        <li><a class="{{Request::is('hrms/adminDocument')?'active':''}}" href="{{route('adminDocument.index')}}">Admin Documents</a></li>
+                        @endcanany
+
+                    </ul>
+                </li>
+                <!-- End Admin Document -->
                 <!-- Miscellaneous -->
                 <li class="{{Request::is('hrms/misc*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-server" aria-hidden="true"></i><span class="hide-menu">Miscellaneous</span></a>
                     <ul aria-expanded="false" class="collapse">

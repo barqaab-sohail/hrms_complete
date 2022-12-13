@@ -21,6 +21,7 @@
                             <div class="form-group">
                                 <label class="control-label text-right">Reference No</label>
                                 <input type="text" name="reference_no" id="reference_no" value="{{ old('reference_no') }}" class="form-control exempted" data-validation="length" data-validation-length="max190" placeholder="Enter Document Reference">
+                                <div id="check_reference"></div>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -37,6 +38,29 @@
                                 <input type="text" name="description" value="{{ old('description') }}" class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Document Detail">
                             </div>
                         </div>
+                    </div>
+                    <!--/row-->
+                    <div class="row">
+                        <div class="col-md-8 pdfView">
+                            <embed id="pdf" src="" type="application/pdf" height="300" width="100%" />
+                        </div>
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group row">
+                                <center>
+                                    <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src" id="wizardPicturePreview" title="" width="150">
+                                    </input>
+                                    <input type="file" name="document" id="view" data-validation="required" class="" hidden>
+
+                                    <h6 id="h6" class="card-title m-t-10">Click On Image to Add Document<span class="text_requried">*</span></h6>
+
+                                </center>
+
+                            </div>
+
+                        </div>
+
                     </div>
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn" value="create">Save
@@ -87,6 +111,24 @@
 </div>
 <script>
     $(document).ready(function() {
+        $('#reference_no').keyup(function() {
+            var query = $(this).val();
+            if (query != '') {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('adminDocument.reference') }}",
+                    method: "GET",
+                    data: {
+                        query: query,
+                        _token: _token
+                    },
+                    success: function(data) {
+                        $('#check_reference').fadeIn();
+                        $('#check_reference').html(data);
+                    }
+                });
+            }
+        });
 
         $('#hideDiv').hide();
         $(function() {
@@ -101,7 +143,7 @@
                 serverSide: true,
                 "aaSorting": [],
                 ajax: {
-                    url: "{{ route('AdminDocument.index') }}",
+                    url: "{{ route('adminDocument.index') }}",
                 },
                 columns: [{
                         data: 'reference_no',
@@ -142,61 +184,40 @@
             $('#createDocument').click(function(e) {
                 $('#json_message_modal').html('');
                 $('#documentForm').trigger("reset");
+                $("#pdf").hide();
+                // Prepare the preview for profile picture
+                $("#view").change(function() {
+                    var fileName = this.files[0].name;
+                    var fileType = this.files[0].type;
+                    var fileSize = this.files[0].size;
+                    //var fileType = fileName.split('.').pop();
 
-                $.get("{{ url('hrms/submission/create') }}", function(data) {
-
-                    $("#sub_division_id").empty();
-                    $("#sub_division_id").append('<option value="">Select Division</option>');
-                    $.each(data.divisions, function(key, value) {
-                        $("#sub_division_id").append('<option value="' + value.id + '">' + value.name + '</option>');
-                    });
-                    $("#client_id").empty();
-                    $("#client_id").append('<option value="">Select Client</option>');
-                    $.each(data.clients, function(key, value) {
-                        $("#client_id").append('<option value="' + value.id + '">' + value.name + '</option>');
-                    });
-                    $("#sub_type_id").empty();
-                    $("#sub_type_id").append('<option value="">Select Submission Type</option>');
-                    $.each(data.subTypes, function(key, value) {
-                        $("#sub_type_id").append('<option value="' + value.id + '">' + value.name + '</option>');
-                    });
-                    $("#sub_status_id").empty();
-                    $("#sub_status_id").append('<option value="">Select Current Status</option>');
-                    $.each(data.subStatuses, function(key, value) {
-                        $("#sub_status_id").append('<option value="' + value.id + '">' + value.name + '</option>');
-                    });
-                    $("#sub_financial_type_id").empty();
-                    $("#sub_financial_type_id").append('<option value="">Select Financial Type</option>');
-                    $.each(data.subFinancialTypes, function(key, value) {
-                        $("#sub_financial_type_id").append('<option value="' + value.id + '">' + value.name + '</option>');
-                    });
-                    $("#sub_cv_format_id").empty();
-                    $("#sub_cv_format_id").append('<option value="">Select Cv Format</option>');
-                    $.each(data.subCvFormats, function(key, value) {
-                        $("#sub_cv_format_id").append('<option value="' + value.id + '">' + value.name + '</option>');
-                    });
-
-                    $('#ajaxModel').modal('show');
-                });
-            });
-            $('#sub_type_id').change(function() {
-                var subTypeId = $(this).val();
-                if (subTypeId == 3) {
-                    $('#hideDiv').show();
-                } else {
-                    $('#hideDiv').hide();
-                }
-                $.get("{{ url('hrms/submission/eoiReference') }}", function(data) {
-                    $("#eoi_reference_id").empty();
-                    $("#eoi_reference_id").append('<option value="">Select EOI Reference</option>');
-                    $.each(data, function(key, value) {
-                        $("#eoi_reference_id").append('<option value="' + value.id + '">' + value.project_name + '</option>');
-                    });
+                    //Restrict File Size Less Than 30MB
+                    if (fileSize > 38400000) {
+                        alert('File Size is bigger than 30MB');
+                        $(this).val('');
+                    } else {
+                        //Restrict File Type
+                        if ((fileType == 'application/msword') || (fileType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+                            $("#pdf").hide();
+                            document.getElementById("h6").innerHTML = "MS Word Document is Attached";
+                        } else if ((fileType == 'image/jpeg') || (fileType == 'image/png')) {
+                            $("#pdf").hide();
+                            readURL(this);
+                            document.getElementById("h6").innerHTML = "Image is Attached";
+                        } else if (fileType == 'application/pdf') {
+                            readURL(this); // for Default Image
+                            document.getElementById("h6").innerHTML = "PDF Document is Attached";
+                            document.getElementById("pdf").src = "{{asset('Massets/images/document.png')}}";
+                            $("#pdf").show();
+                        } else {
+                            alert('Only PDF, JPG and PNG Files Allowed');
+                            $(this).val('');
+                        }
+                    }
 
                 });
-                $.get("{{ url('hrms/submission/submissionNo') }}" + "/" + subTypeId, function(data) {
-                    $("#submission_no").val(data);
-                });
+                $('#ajaxModel').modal('show');
 
             });
 
@@ -209,12 +230,17 @@
 
                 e.preventDefault();
                 $(this).html('Save');
+                var data = new FormData($("#documentForm")[0]);
 
                 $.ajax({
-                    data: $('#documentForm').serialize(),
-                    url: "{{ route('submission.store') }}",
+                    data: data,
+                    url: "{{ route('adminDocument.store') }}",
                     type: "POST",
-                    dataType: 'json',
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    // dataType: 'json',
                     success: function(data) {
                         $('#ajaxModel').modal('hide');
                         table.draw();
@@ -252,6 +278,42 @@
                 }
             });
         }); // end function
+
+        function readURL(input) {
+            var fileName = input.files[0].name;
+            var fileType = input.files[0].type;
+            //var fileType = fileName.split('.').pop();
+
+            if (fileType != 'application/pdf') {
+                //Read URL if image
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow').attr('width', '100%');
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+
+            } else {
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        $('embed').attr('src', e.target.result.concat('#toolbar=0&navpanes=0&scrollbar=0'));
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+                document.getElementById("wizardPicturePreview").src = "{{asset('Massets/images/document.png')}}";
+                document.getElementById("h6").innerHTML = "PDF File is Attached";
+                $('#wizardPicturePreview').attr('width', '150');
+            }
+        }
+
+        $("#wizardPicturePreview").click(function() {
+            $("input[id='view']").click();
+        });
 
     }); //End document ready function
 </script>
