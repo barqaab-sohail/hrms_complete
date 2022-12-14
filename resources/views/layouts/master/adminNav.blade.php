@@ -163,14 +163,13 @@
                 </li>
                 <!-- End Submissions -->
                 <!-- Admin Document -->
+                @canany(['admin edit document', 'admin view document'])
                 <li class="{{Request::is('hrms/adminDocument*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-book" aria-hidden="true"></i><span class="hide-menu">Admin Document</span></a>
                     <ul aria-expanded="false" class="collapse">
-                        @canany(['sub edit admin document', 'sub view admin document'])
-                        <li><a class="{{Request::is('hrms/adminDocument')?'active':''}}" href="{{route('adminDocument.index')}}">Admin Documents</a></li>
-                        @endcanany
-
+                        <li><a class="{{Request::is('hrms/adminDocument')?'active':''}}" href="{{route('adminDocument.index')}}">List of Documents</a></li>
                     </ul>
                 </li>
+                @endcanany
                 <!-- End Admin Document -->
                 <!-- Miscellaneous -->
                 <li class="{{Request::is('hrms/misc*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-server" aria-hidden="true"></i><span class="hide-menu">Miscellaneous</span></a>

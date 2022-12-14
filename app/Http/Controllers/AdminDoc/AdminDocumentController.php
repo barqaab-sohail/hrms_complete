@@ -19,7 +19,7 @@ class AdminDocumentController extends Controller
 
             return DataTables::of($data)
                 ->addColumn('link', function ($data) {
-                    $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->file_name . $data->path . '" data-mis-user="false" data-original-title="edit mis rights" class="btn btn-danger btn-sm editMisUser">Copy Link</a>';
+                    $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-link="' . url('/storage/' . $data->path . $data->file_name) . '" data-mis-user="false" data-original-title="edit mis rights" class="btn btn-primary btn-sm copyLink">Copy Link</a>';
                     return $button;
                 })
                 ->addColumn('view', function ($data) {
@@ -40,6 +40,7 @@ class AdminDocumentController extends Controller
                     return $button;
                 })
                 ->addColumn('delete', function ($data) {
+
                     $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
                     return $button;
                 })
@@ -59,39 +60,39 @@ class AdminDocumentController extends Controller
         }
 
         DB::transaction(function () use ($request, $input) {
-
-            $extension = request()->document->getClientOriginalExtension();
-
-            $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', $input['description'])) . '-' . time() . '.' . $extension;
-            $folderName = "adminDocument/";
-            //store file
-            $request->file('document')->storeAs('public/' . $folderName, $fileName);
-
-            $file_path = storage_path('app/public/' . $folderName . $fileName);
-
             $input['content'] = '';
 
-            if (($extension == 'doc') || ($extension == 'docx')) {
-                $text = new DocxConversion($file_path);
-                $input['content'] = mb_strtolower($text->convertToText());
-            } else if ($extension == 'pdf') {
-                $reader = new \Asika\Pdf2text;
-                $input['content'] = mb_strtolower($reader->decode($file_path));
+            if ($request->hasFile('document')) {
+                $extension = request()->document->getClientOriginalExtension();
+                $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', $input['description'])) . '-' . time() . '.' . $extension;
+                $folderName = "adminDocument/";
+                //store file
+                $request->file('document')->storeAs('public/' . $folderName, $fileName);
+
+                $file_path = storage_path('app/public/' . $folderName . $fileName);
+
+                if (($extension == 'doc') || ($extension == 'docx')) {
+                    $text = new DocxConversion($file_path);
+                    $input['content'] = mb_strtolower($text->convertToText());
+                } else if ($extension == 'pdf') {
+                    $reader = new \Asika\Pdf2text;
+                    $input['content'] = mb_strtolower($reader->decode($file_path));
+                }
+                $input['file_name'] = $fileName;
+                $input['size'] = $request->file('document')->getSize();
+                $input['path'] = $folderName;
+                $input['extension'] = $extension;
+                $input['pr_detail_id'] = session('pr_detail_id');
             }
+            $adminDocument = AdminDocument::updateOrCreate(['id' => $input['document_id']], $input);
 
-
-            $input['file_name'] = $fileName;
-            $input['size'] = $request->file('document')->getSize();
-            $input['path'] = $folderName;
-            $input['extension'] = $extension;
-            $input['pr_detail_id'] = session('pr_detail_id');
-
-            $adminDocument = AdminDocument::create($input);
             $input['admin_document_id'] = $adminDocument->id;
 
             if (strlen($input['content']) > 50 && strlen($input['content']) < 16777200) {
 
-                AdminDocumentContent::create($input);
+                AdminDocumentContent::updateOrCreate(['admin_document_id' => $adminDocument->id], $input);
+            } else if ($request->hasFile('document') && $input['content'] < 50) {
+                AdminDocumentContent::where('admin_document_id', $adminDocument->id)->delete();
             }
         });  //end transaction
 
@@ -102,6 +103,16 @@ class AdminDocumentController extends Controller
     {
         $adminDocument = AdminDocument::find($id);
         return response()->json($adminDocument);
+    }
+
+    public function destroy($id)
+    {
+
+        DB::transaction(function () use ($id) {
+            AdminDocument::find($id)->delete();
+        }); // end transcation
+
+        return response()->json(['success' => "data  delete successfully."]);
     }
 
     public function reference(Request $request)
