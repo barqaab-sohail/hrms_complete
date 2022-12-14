@@ -23,11 +23,20 @@ class AdminDocumentController extends Controller
                     return $button;
                 })
                 ->addColumn('view', function ($data) {
-                    $button = '<a>View</a>';
-                    return $button;
+                    if ($data->extension === 'pdf') {
+                        $pdf = '<img id="ViewPDF" src="' . asset('Massets/images/document.png') . '" href="' . asset(isset($data->file_name) ? 'storage/' . $data->path . $data->file_name : 'Massets/images/document.png') . '" width=30 />';
+                        return $pdf;
+                    } else if ($data->extension === 'jpeg' || $data->extension === 'png' || $data->extension === 'jpg') {
+                        $image = '<img src="' . url(isset($data->file_name) ? '/storage/' . $data->path . $data->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewIMG' . $data->id . '" width=50>';
+                        return $image;
+                    } else {
+                        $doc = '<a href="' . asset('storage/' . $data->path . $data->file_name) . '" width=30><i class="fa fa-download" aria-hidden="true"></i>Download</a>';
+                        return $doc;
+                    }
                 })
                 ->addColumn('edit', function ($data) {
-                    $button = '<a class="btn btn-success btn-sm" href="' . route('adminDocument.edit', $data->id) . '"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+                    $button =  '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Edit" class="btn btn-success btn-sm editDocument">Edit</a>';
+                    //'<a class="btn btn-success btn-sm editDocument" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Edit"><i class="fas fa-pencil-alt text-white"></i></a>';
                     return $button;
                 })
                 ->addColumn('delete', function ($data) {
@@ -87,6 +96,12 @@ class AdminDocumentController extends Controller
         });  //end transaction
 
         return response()->json(['status' => 'OK', 'message' => "Data Successfully Saved"]);
+    }
+
+    public function edit($id)
+    {
+        $adminDocument = AdminDocument::find($id);
+        return response()->json($adminDocument);
     }
 
     public function reference(Request $request)
