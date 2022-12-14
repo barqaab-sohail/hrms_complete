@@ -27,7 +27,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label text-right">Date<span class="text_requried">*</span></label>
-                                <input type="text" name="document_date" value="{{ old('document_date') }}" class="form-control date_input" data-validation="required" readonly placeholder="Enter Document Detail">
+                                <input type="text" name="document_date" id="document_date" value="{{ old('document_date') }}" class="form-control date_input" data-validation="required" readonly placeholder="Enter Document Detail">
                                 <br>
                                 <i class="fas fa-trash-alt text_requried"></i>
                             </div>
@@ -35,7 +35,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label text-right">Document Description</label>
-                                <input type="text" name="description" value="{{ old('description') }}" class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Document Detail">
+                                <input type="text" name="description" id="description" value="{{ old('description') }}" class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Document Detail">
                             </div>
                         </div>
                     </div>
@@ -50,8 +50,8 @@
                             <div class="form-group row">
                                 <center>
                                     <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src" id="wizardPicturePreview" title="" width="150">
-                                    </input>
-                                    <input type="file" name="document" id="view" data-validation="required" class="" hidden>
+
+                                    <input type="file" name="document" id="view" data-validation="required" class="" hidden />
 
                                     <h6 id="h6" class="card-title m-t-10">Click On Image to Add Document<span class="text_requried">*</span></h6>
 
@@ -94,10 +94,10 @@
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th style="width:5%">Reference No</th>
-                        <th style="width:45%">Date</th>
-                        <th style="width:30%">Description</th>
-                        <th style="width:5%">View</th>
+                        <th style="width:10%">Reference No</th>
+                        <th style="width:10%">Date</th>
+                        <th style="width:55%">Description</th>
+                        <th style="width:10%">View</th>
                         <th style="width:5%">Copy Link</th>
                         <th style="width:5%">Edit</th>
                         @role('Super Admin')
@@ -131,6 +131,7 @@
         });
 
         $('#hideDiv').hide();
+
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -178,19 +179,23 @@
                         searchable: false
                     }
                     @endrole
-                ]
+                ],
+                "drawCallback": function(settings) {
+                    $("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
+                },
             });
 
             $('#createDocument').click(function(e) {
                 $('#json_message_modal').html('');
                 $('#documentForm').trigger("reset");
+                $('#wizardPicturePreview').attr('src', "{{asset('Massets/images/document.png')}}").attr('width', '30%');
+                document.getElementById("h6").innerHTML = "Click On Image to Add Document";
                 $("#pdf").hide();
                 // Prepare the preview for profile picture
                 $("#view").change(function() {
                     var fileName = this.files[0].name;
                     var fileType = this.files[0].type;
                     var fileSize = this.files[0].size;
-                    //var fileType = fileName.split('.').pop();
 
                     //Restrict File Size Less Than 30MB
                     if (fileSize > 38400000) {
@@ -220,6 +225,7 @@
                 $('#ajaxModel').modal('show');
 
             });
+
 
             $('#saveBtn').unbind().click(function(e) {
                 $(this).attr('disabled', 'ture');
@@ -257,13 +263,33 @@
                 });
             });
 
-            $('body').on('click', '.deleteSubmission', function() {
+
+            $('body').on('click', '.editDocument', function() {
                 var document_id = $(this).data("id");
+                $('#json_message_modal').html('');
+                $('#documentForm').trigger("reset");
+                $.get("{{ url('hrms/adminDocument') }}" + '/' + document_id + '/edit', function(data) {
+                    $('#document_id').val(data.id);
+                    $('#reference_no').val(data.reference_no);
+                    $('#document_date').val(data.document_date);
+                    $('#description').val(data.description);
+
+                    console.log(data);
+
+                });
+                $('#ajaxModel').modal('show');
+                console.log(document_id);
+
+            });
+
+            $('body').on('click', '.deleteDocument', function() {
+                var document_id = $(this).data("id");
+                console.log('testing');
                 var con = confirm("Are You sure want to delete !");
                 if (con) {
                     $.ajax({
                         type: "DELETE",
-                        url: "{{ route('submission.store') }}" + '/' + document_id,
+                        url: "{{ route('adminDocument.store') }}" + '/' + document_id,
                         success: function(data) {
                             table.draw();
                             if (data.error) {
@@ -277,6 +303,7 @@
                     });
                 }
             });
+
         }); // end function
 
         function readURL(input) {
@@ -314,6 +341,7 @@
         $("#wizardPicturePreview").click(function() {
             $("input[id='view']").click();
         });
+
 
     }); //End document ready function
 </script>
