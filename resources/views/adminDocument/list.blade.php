@@ -187,41 +187,13 @@
 
             $('#createDocument').click(function(e) {
                 $('#json_message_modal').html('');
+                $('#document_id').val('');
                 $('#documentForm').trigger("reset");
                 $('#wizardPicturePreview').attr('src', "{{asset('Massets/images/document.png')}}").attr('width', '30%');
                 document.getElementById("h6").innerHTML = "Click On Image to Add Document";
                 $("#pdf").hide();
                 // Prepare the preview for profile picture
-                $("#view").change(function() {
-                    var fileName = this.files[0].name;
-                    var fileType = this.files[0].type;
-                    var fileSize = this.files[0].size;
-
-                    //Restrict File Size Less Than 30MB
-                    if (fileSize > 38400000) {
-                        alert('File Size is bigger than 30MB');
-                        $(this).val('');
-                    } else {
-                        //Restrict File Type
-                        if ((fileType == 'application/msword') || (fileType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
-                            $("#pdf").hide();
-                            document.getElementById("h6").innerHTML = "MS Word Document is Attached";
-                        } else if ((fileType == 'image/jpeg') || (fileType == 'image/png')) {
-                            $("#pdf").hide();
-                            readURL(this);
-                            document.getElementById("h6").innerHTML = "Image is Attached";
-                        } else if (fileType == 'application/pdf') {
-                            readURL(this); // for Default Image
-                            document.getElementById("h6").innerHTML = "PDF Document is Attached";
-                            document.getElementById("pdf").src = "{{asset('Massets/images/document.png')}}";
-                            $("#pdf").show();
-                        } else {
-                            alert('Only PDF, JPG and PNG Files Allowed');
-                            $(this).val('');
-                        }
-                    }
-
-                });
+                view();
                 $('#ajaxModel').modal('show');
 
             });
@@ -273,14 +245,18 @@
                     $('#reference_no').val(data.reference_no);
                     $('#document_date').val(data.document_date);
                     $('#description').val(data.description);
-
-                    console.log(data);
-
                 });
+                view();
                 $('#ajaxModel').modal('show');
-                console.log(document_id);
+
 
             });
+            $('body').on('click', '.copyLink', function() {
+                var text = $(this).data("link").replace(" ", "%20");
+                navigator.clipboard.writeText(text);
+                alert('Link Copied');
+            });
+
 
             $('body').on('click', '.deleteDocument', function() {
                 var document_id = $(this).data("id");
@@ -342,7 +318,38 @@
             $("input[id='view']").click();
         });
 
+        function view() {
+            $("#view").change(function() {
+                var fileName = this.files[0].name;
+                var fileType = this.files[0].type;
+                var fileSize = this.files[0].size;
 
+                //Restrict File Size Less Than 30MB
+                if (fileSize > 38400000) {
+                    alert('File Size is bigger than 30MB');
+                    $(this).val('');
+                } else {
+                    //Restrict File Type
+                    if ((fileType == 'application/msword') || (fileType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+                        $("#pdf").hide();
+                        document.getElementById("h6").innerHTML = "MS Word Document is Attached";
+                    } else if ((fileType == 'image/jpeg') || (fileType == 'image/png')) {
+                        $("#pdf").hide();
+                        readURL(this);
+                        document.getElementById("h6").innerHTML = "Image is Attached";
+                    } else if (fileType == 'application/pdf') {
+                        readURL(this); // for Default Image
+                        document.getElementById("h6").innerHTML = "PDF Document is Attached";
+                        document.getElementById("pdf").src = "{{asset('Massets/images/document.png')}}";
+                        $("#pdf").show();
+                    } else {
+                        alert('Only PDF, JPG and PNG Files Allowed');
+                        $(this).val('');
+                    }
+                }
+
+            });
+        }
     }); //End document ready function
 </script>
 
