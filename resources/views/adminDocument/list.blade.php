@@ -188,6 +188,7 @@
             $('#createDocument').click(function(e) {
                 $('#json_message_modal').html('');
                 $('#document_id').val('');
+                $('#check_reference').fadeOut();
                 $('#documentForm').trigger("reset");
                 $('#wizardPicturePreview').attr('src', "{{asset('Massets/images/document.png')}}").attr('width', '30%');
                 document.getElementById("h6").innerHTML = "Click On Image to Add Document";
