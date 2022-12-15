@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\AdminDoc;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Models\AdminDoc\AdminDocument;
 use App\Models\AdminDoc\AdminDocumentContent;
 use App\Helper\DocxConversion;
+use App\Http\Requests\AdminDoc\AdminDocumentStore;
 use DB;
 use DataTables;
 
@@ -49,7 +51,7 @@ class AdminDocumentController extends Controller
         }
         return view('adminDocument.list');
     }
-    public function store(Request $request)
+    public function store(AdminDocumentStore $request)
     {
 
         $input = $request->all();
@@ -64,12 +66,21 @@ class AdminDocumentController extends Controller
 
             if ($request->hasFile('document')) {
                 $extension = request()->document->getClientOriginalExtension();
-                $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', $input['description'])) . '-' . time() . '.' . $extension;
+                $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
                 $folderName = "adminDocument/";
                 //store file
                 $request->file('document')->storeAs('public/' . $folderName, $fileName);
 
                 $file_path = storage_path('app/public/' . $folderName . $fileName);
+
+                //check if update and have file than old storeage file delete 
+                if ($input['document_id'] && $request->hasFile('document')) {
+                    $adminDocument = AdminDocument::find($input['document_id']);
+                    $documentPath = $adminDocument->path . $adminDocument->file_name;
+                    if (File::exists(public_path('storage/' . $documentPath))) {
+                        File::delete(public_path('storage/' . $documentPath));
+                    }
+                }
 
                 if (($extension == 'doc') || ($extension == 'docx')) {
                     $text = new DocxConversion($file_path);
@@ -84,6 +95,10 @@ class AdminDocumentController extends Controller
                 $input['extension'] = $extension;
                 $input['pr_detail_id'] = session('pr_detail_id');
             }
+
+
+
+
             $adminDocument = AdminDocument::updateOrCreate(['id' => $input['document_id']], $input);
 
             $input['admin_document_id'] = $adminDocument->id;
@@ -109,7 +124,12 @@ class AdminDocumentController extends Controller
     {
 
         DB::transaction(function () use ($id) {
-            AdminDocument::find($id)->delete();
+            $adminDocument = AdminDocument::find($id);
+            $documentPath = $adminDocument->path . $adminDocument->file_name;
+            if (File::exists(public_path('storage/' . $documentPath))) {
+                File::delete(public_path('storage/' . $documentPath));
+            }
+            $adminDocument->delete();
         }); // end transcation
 
         return response()->json(['success' => "data  delete successfully."]);
