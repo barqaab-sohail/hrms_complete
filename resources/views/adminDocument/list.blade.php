@@ -252,7 +252,8 @@
 
             });
             $('body').on('click', '.copyLink', function() {
-                var text = $(this).data("link").replace(" ", "%20");
+                var link = $(this).data("link");
+                var text = link.replace(" ", "%20");
                 navigator.clipboard.writeText(text);
                 alert('Link Copied');
             });
