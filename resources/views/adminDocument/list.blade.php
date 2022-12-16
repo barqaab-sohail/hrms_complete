@@ -20,7 +20,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label text-right">Reference No</label>
-                                <input type="text" name="reference_no" id="reference_no" value="{{ old('reference_no') }}" class="form-control exempted" data-validation="length" data-validation-length="max190" placeholder="Enter Document Reference">
+                                <input type="text" name="reference_no" id="reference_no" autoComplete="off" value="{{ old('reference_no') }}" class="form-control exempted" data-validation="length" data-validation-length="max190" placeholder="Enter Document Reference">
                                 <div id="check_reference"></div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label text-right">Document Description</label>
-                                <input type="text" name="description" id="description" value="{{ old('description') }}" class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Document Detail">
+                                <input type="text" name="description" id="description" autoComplete="off" value="{{ old('description') }}" class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Document Detail">
                             </div>
                         </div>
                     </div>
