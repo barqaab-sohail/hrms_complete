@@ -36,6 +36,12 @@ class HrEmployee extends Model implements Auditable
         return  $joiningDate ? \Carbon\Carbon::parse($joiningDate)->format('M d, Y') : '';
     }
 
+    public function getLastWorkingDateAttribute()
+    {
+        $lastWorkingDate = $this->hrExit->effective_date ?? '';
+        return  $lastWorkingDate ? \Carbon\Carbon::parse($lastWorkingDate)->format('M d, Y') : '';
+    }
+
 
     // compare with existing data after update and send notification of admin 
     public function compareTo(HrEmployee $other)
@@ -114,6 +120,11 @@ class HrEmployee extends Model implements Auditable
     {
 
         return $this->hasOne('App\Models\Hr\HrEmergency');
+    }
+
+    public function hrExit()
+    {
+        return $this->hasOne('App\Models\Hr\HrExit')->orderBy('hr_exits.effective_date', 'desc');
     }
 
     public function employeeDesignation()

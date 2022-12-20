@@ -18,6 +18,7 @@
                         <th>Project/Office</th>
                         <th>Date of Birth</th>
                         <th>Status</th>
+                        <th>Last W/D</th>
                         <th>CNIC</th>
                         <th>Date of Joining</th>
                         <th>Mobile</th>
@@ -70,6 +71,11 @@
                 {
                     data: 'hr_status_id',
                     name: 'status',
+                    orderable: true
+                },
+                {
+                    data: 'last_working_date',
+                    name: 'last_working_date',
                     orderable: true
                 },
                 {
