@@ -161,6 +161,9 @@ class EmployeeController extends Controller
                 ->addColumn('mobile', function ($data) {
                     return $data->hrContactMobile->mobile ?? '';
                 })
+                ->addcolumn('last_working_date', function ($data) {
+                    return $data->last_working_date ?? '';
+                })
                 ->addColumn('edit', function ($data) {
 
                     if (Auth::user()->hasPermissionTo('hr edit documentation')) {
@@ -177,7 +180,7 @@ class EmployeeController extends Controller
                     return $button;
                 })
 
-                ->rawColumns(['full_name', 'designation', 'project', 'date_of_birth', 'date_of_joining', 'mobile', 'edit', 'delete'])
+                ->rawColumns(['full_name', 'designation', 'project', 'last_working_date', 'date_of_birth', 'date_of_joining', 'mobile', 'edit', 'delete'])
                 ->make(true);
         }
 
