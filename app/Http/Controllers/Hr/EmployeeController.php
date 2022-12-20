@@ -40,16 +40,30 @@ class EmployeeController extends Controller
                 }, 'hrContactMobile:mobile'
             ])->get();
 
-            //first sort with respect to Designation
-            $designations = employeeDesignationArray();
-            $data = $data->sort(function ($a, $b) use ($designations) {
-                $pos_a = array_search($a->employeeCurrentDesignation->name ?? '', $designations);
-                $pos_b = array_search($b->employeeCurrentDesignation->name ?? '', $designations);
-                return  $pos_a !== false ? $pos_a - $pos_b : 999999;
+            // //first sort with respect to Designation
+            // $designations = employeeDesignationArray();
+            // $data = $data->sort(function ($a, $b) use ($designations) {
+            //     $pos_a = array_search($a->employeeCurrentDesignation->name ?? '', $designations);
+            //     $pos_b = array_search($b->employeeCurrentDesignation->name ?? '', $designations);
+            //     return  $pos_a !== false ? $pos_a - $pos_b : 999999;
+            // });
+
+
+            $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000139');
+            $second = range(1000001, 1999999);
+            $employeeNos = array_merge($first,  $second);
+            // $data = $data->sort(function ($a, $b) use ($employeeNos) {
+            //     $pos_a = array_search($a->employee_no, $employeeNos);
+            //     $pos_b = array_search($b->employee_no, $employeeNos);
+            //     return  $pos_a !== false || $pos_b !== false ? $pos_a - $pos_b : 999999;
+            // });
+            $data =  $data->sortBy(function ($model) use ($employeeNos) {
+                return array_search($model->employee_no, $employeeNos);
             });
 
+
             //second sort with respect to Hr Status
-            $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'Manmonth Ended', 'Death');
+            $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'ManMonth Ended', 'Death');
 
             $data = $data->sort(function ($a, $b) use ($hrStatuses) {
                 $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);

@@ -169,3 +169,8 @@ function employeeDesignationArray()
     $designationArray = array_merge($managements, $projectManagers, $seniorEngineers, $juniors, $support, $utilityPerson, $others);
     return $designationArray;
 }
+
+function employeeCodeArray()
+{
+    return array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182');
+}
