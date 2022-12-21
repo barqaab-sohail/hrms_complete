@@ -15,11 +15,19 @@ class EmployeeController extends Controller
         $data = HrEmployee::with('employeeDesignation', 'picture', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
 
         //first sort with respect to Designation
-        $designations = employeeDesignationArray();
-        $data = $data->sort(function ($a, $b) use ($designations) {
-            $pos_a = array_search($a->designation ?? '', $designations);
-            $pos_b = array_search($b->designation ?? '', $designations);
-            return  $pos_a !== false ? $pos_a - $pos_b : 999999;
+        // $designations = employeeDesignationArray();
+        // $data = $data->sort(function ($a, $b) use ($designations) {
+        //     $pos_a = array_search($a->designation ?? '', $designations);
+        //     $pos_b = array_search($b->designation ?? '', $designations);
+        //     return  $pos_a !== false ? $pos_a - $pos_b : 999999;
+        // });
+
+        $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
+        $second = range(1000001, 1099999);
+        $employeeNos = array_merge($first,  $second);
+
+        $data =  $data->sortBy(function ($model) use ($employeeNos) {
+            return array_search($model->employee_no, $employeeNos);
         });
 
         //   // second sort with respect to Hr Status
