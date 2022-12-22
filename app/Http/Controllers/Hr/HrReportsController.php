@@ -94,4 +94,10 @@ class HrReportsController extends Controller
 
         return view('hr.reports.searchEmployee.result', compact('result'));
     }
+
+    public function pictureList()
+    {
+        $employees = HrEmployee::all();
+        return view('hr.reports.pictureList', compact('employees'));
+    }
 }
