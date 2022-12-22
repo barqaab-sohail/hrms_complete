@@ -105,6 +105,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
 
 
     Route::get('/hrReports/list', 'HrReportsController@list')->name('hrReports.list');
+    Route::get('/hrReports/pictureList', 'HrReportsController@pictureList')->name('hrReports.pictureList');
     Route::get('/hrReports/cnicExpiryList', 'HrReportsController@cnicExpiryList')->name('hrReports.cnicExpiryList');
     Route::get('/hrReports/missingDocumentList', 'HrReportsController@missingDocumentList')->name('hrReports.missingDocumentList');
     Route::get('/hrReports/searchEmployee', 'HrReportsController@searchEmployee')->name('hrReports.searchEmployee');
