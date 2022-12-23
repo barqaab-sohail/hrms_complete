@@ -16,24 +16,25 @@ class DocumentationStore extends FormRequest
 
     public function __construct(\Illuminate\Http\Request $request)
     {
-        
-        $this->documentNames =  HrDocumentName::all()->pluck('name')->toArray();
-        $this->documentNames=implode(',',$this->documentNames);
 
+        $this->documentNames =  HrDocumentName::all()->pluck('name')->toArray();
+        $this->documentNames = implode(',', $this->documentNames);
 
         $request->request->add(['hr_employee_id' => session('hr_employee_id')]);
-    
-        if($request->hr_document_name_id !='Other'){
+
+        if ($request->hr_document_name_id != 'Other') {
             $documentName =  HrDocumentName::find($request->hr_document_name_id);
 
-             if ($documentName->name == 'Picture'){
-            $request->request->add(['mime_type' => ',jpeg,jpg,png']);
-            }else{
+            if ($documentName->name == 'Picture') {
+                $request->request->add(['mime_type' => ',jpeg,jpg,png']);
+                $request->request->add(['limit' => '40']);
+            } else {
                 $request->request->add(['mime_type' => 'jpeg,jpg,png,pdf']);
+                $request->request->add(['limit' => '4000']);
             }
-        }
-        else{
+        } else {
             $request->request->add(['mime_type' => 'jpeg,jpg,png,pdf']);
+            $request->request->add(['limit' => '4000']);
         }
     }
 
@@ -49,27 +50,31 @@ class DocumentationStore extends FormRequest
      */
     public function rules()
     {
-        return [
-            'document'=>'required|file|max:4000|mimes:'.$this->mime_type,
-            'description'=>'not_in:'.$this->documentNames,
-            //'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
-            'hr_document_name_id' => 'required|unique_with:hr_document_name_hr_documentation,hr_employee_id',
+        $rules = [
+            'document' => 'required|file|max:' . $this->limit . '|mimes:' . $this->mime_type,
             'document_date' => 'required|date',
-             
+
         ];
+
+        //If method is POST then document is required otherwise in Patch method document is nullable.
+        if ($this->getMethod() == 'POST') {
+            $rules += ['hr_document_name_id' => 'required|unique_with:hr_document_name_hr_documentation,hr_employee_id',  'description' => 'not_in:' . $this->documentNames,];
+        } else {
+            $rules += ['hr_document_name_id' => 'required'];
+        }
+
+        return $rules;
     }
 
     public function messages()
     {
-        
+
         return [
             'document.mimes' => ' picture only jpg,png allowed otherwise pdf, jpg, tif and png attachment allowed',
             'hr_document_name_id.unique_with' => 'this document names is already entered',
-            'description.not_in' => $this->description.' is reserved word, please use alternate word in document description',
+            'description.not_in' => $this->description . ' is reserved word, please use alternate word in document description',
 
 
         ];
     }
-
-      
 }
