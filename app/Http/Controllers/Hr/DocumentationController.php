@@ -126,7 +126,7 @@ class DocumentationController extends Controller
 
 
 
-    public function update(Request $request, $id)
+    public function update(DocumentationStore $request, $id)
     {
         //ensure client end id is not changed
         if ($id != session('document_edit_id')) {
