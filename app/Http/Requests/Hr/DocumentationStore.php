@@ -53,7 +53,6 @@ class DocumentationStore extends FormRequest
         $rules = [
             'document' => 'required|file|max:' . $this->limit . '|mimes:' . $this->mime_type,
             'document_date' => 'required|date',
-
         ];
 
         //If method is POST then document is required otherwise in Patch method document is nullable.
