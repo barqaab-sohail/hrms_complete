@@ -174,7 +174,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Project No<span class="text_requried">*</span></label>
 
-                            <input type="text" name="project_no" data-validation=" required length" data-validation-length="max6" value="{{ old('project_no',$data->project_no??'') }}" class="form-control">
+                            <input type="text" name="project_no" readonly data-validation=" required length" data-validation-length="max6" value="{{ old('project_no',$data->project_no??'') }}" class="form-control">
 
                         </div>
                     </div>
