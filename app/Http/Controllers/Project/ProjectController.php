@@ -191,4 +191,22 @@ class ProjectController extends Controller
             return view('project.search.searchResult', compact('result'));
         }
     }
+
+    public function projectCode($divisionId)
+    {
+
+        if ($divisionId === '1') {
+            $waterCode = 1049;
+            while (PrDetail::where('project_no', $waterCode)->count() > 0) {
+                $waterCode++;
+            }
+            return $waterCode;
+        } else {
+            $powerCode = 2079;
+            while (PrDetail::where('project_no', $powerCode)->count() > 0) {
+                $powerCode++;
+            }
+            return $powerCode;
+        }
+    }
 }

@@ -197,6 +197,7 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
 
     Route::get('/projectProgressChart', 'Progress\ActivityController@chart')->name('projectProgress.chart');
     Route::resource('/project', 'ProjectController');
+    Route::get('/projectCode/{divisionId}', 'ProjectController@projectCode');
 });
 
 // MIS Dashboard Progress Check

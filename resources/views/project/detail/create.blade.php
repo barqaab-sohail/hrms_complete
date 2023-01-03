@@ -167,7 +167,7 @@
 										<div class="form-group row">
 											<div class="col-md-12">
 												<label class="control-label text-right">Project Division<span class="text_requried">*</span></label>
-												<select name="pr_division_id" class="form-control selectTwo" data-validation="required">
+												<select name="pr_division_id" id="pr_division_id" class="form-control selectTwo" data-validation="required">
 													<option value=""></option>
 													@foreach($divisions as $division)
 													<option value="{{$division->id}}" {{(old("pr_division_id")==$division->id? "selected" : "")}}>{{$division->name}}</option>
@@ -186,7 +186,7 @@
 											<div class="col-md-12">
 												<label class="control-label text-right">Project No<span class="text_requried">*</span></label>
 
-												<input type="text" name="project_no" data-validation=" required length" data-validation-length="max7" value="{{ old('project_no') }}" class="form-control">
+												<input type="text" name="project_no" id="project_no" data-validation=" required length" readonly data-validation-length="max7" value="{{ old('project_no') }}" class="form-control">
 
 											</div>
 										</div>
@@ -236,6 +236,16 @@
 
 		//All Basic Form Implementatin i.e validation etc.
 		formFunctions();
+
+		$('#pr_division_id').change(function() {
+
+			var divisionId = $(this).val();
+
+			$.get("{{ url('hrms/project/projectCode') }}" + '/' + divisionId, function(data) {
+				$('#project_no').val(data);
+			});
+
+		});
 
 		$('#formProject').on('submit', function(event) {
 			//preventDefault work through formFunctions;
