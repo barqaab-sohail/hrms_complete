@@ -4,7 +4,7 @@ namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PrDetailStore extends FormRequest
+class             PrDetailStore extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
