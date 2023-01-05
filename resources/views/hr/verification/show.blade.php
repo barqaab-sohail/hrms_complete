@@ -35,6 +35,9 @@
                 <div class='cvp'>
                     <h5 class="card-title font-weight-bold" id="emp_name">Name: {{$data->full_name??''}}</h5>
                     <h5 class="card-title font-weight-bold" id="emp_des">Designation: {{$data->designation??''}}</h5>
+                    <h5 class="card-title font-weight-bold" id="emp_des">Employee No: {{$data->employee_no??''}}</h5>
+                    <h5 class="card-title font-weight-bold" id="emp_des">CNIC: {{$data->cnic??''}}</h5>
+                    <h5 class="card-title font-weight-bold" id="emp_des">Emergency No: {{$data->hrEmergency->mobile??''}}</h5>
                     <h5 class="card-title font-weight-bold" id="emp_status">{{$data->hr_status_id == 'Active'?'Current Status: Working':'Current Status: Not Working'}}</h5>
 
                 </div>
