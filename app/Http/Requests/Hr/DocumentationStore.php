@@ -51,13 +51,13 @@ class DocumentationStore extends FormRequest
     public function rules()
     {
         $rules = [
-            'document' => 'required|file|max:' . $this->limit . '|mimes:' . $this->mime_type,
+
             'document_date' => 'required|date',
         ];
 
         //If method is POST then document is required otherwise in Patch method document is nullable.
         if ($this->getMethod() == 'POST') {
-            $rules += ['hr_document_name_id' => 'required|unique_with:hr_document_name_hr_documentation,hr_employee_id',  'description' => 'not_in:' . $this->documentNames,];
+            $rules += ['hr_document_name_id' => 'required|unique_with:hr_document_name_hr_documentation,hr_employee_id',  'description' => 'not_in:' . $this->documentNames, 'document' => 'required|file|max:' . $this->limit . '|mimes:' . $this->mime_type,];
         } else {
             $rules += ['hr_document_name_id' => 'required'];
         }
