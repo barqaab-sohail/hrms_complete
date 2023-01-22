@@ -11,6 +11,19 @@ class Asset extends Model implements Auditable
     protected $fillable = ['description', 'asset_code', 'as_sub_class_id'];
 
 
+    public function companyAsset()
+    {
+        return $this->hasManyThrough(
+            'App\Models\Common\Client',
+            'App\Models\Asset\AsOwnership',
+            'asset_id',
+            'id',
+            'id',
+            'client_id'
+        )->where('client_id', 20);
+    }
+
+
     public function asCondition()
     {
 
