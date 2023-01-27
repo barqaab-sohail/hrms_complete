@@ -15,14 +15,14 @@ class DocumentStore extends FormRequest
 
     private $documentNames;
     private $description;
-    
+
     public function __construct(\Illuminate\Http\Request $request)
     {
-        
+
         // $this->documentNames =  PrDocumentName::all()->pluck('name')->toArray();
         // $this->documentNames=implode(',',$this->documentNames);
         // $this->description = $request->description;
-       
+
         // if($request->pr_document_name_id !='Other'){
         //     $documentName =  PrDocumentName::find($request->pr_document_name_id);
 
@@ -50,24 +50,22 @@ class DocumentStore extends FormRequest
     public function rules()
     {
         return [
-            'document'=>'required|file|max:30000|mimes:doc,docx,jpeg,jpg,png,pdf',
-            'description'=>'required',
+            'document' => 'required|file|max:30000|mimes:doc,docx,xls,xlsx,jpeg,jpg,png,pdf',
+            'description' => 'required',
             //'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
             //'pr_document_name_id' => 'required|unique_with:pr_document_pr_document_name,pr_detail_id',
-             
+
         ];
     }
 
-      public function messages()
+    public function messages()
     {
-        
+
         return [
-            'document.mimes' => ' picture only jpg,png allowed otherwise pdf, jpg, tif and png attachment allowed',
-           
+            'document.mimes' => ' Only doc, docx, xls, xlsx, jpeg, jpg, png, pdf type attachment allowed',
+
 
 
         ];
     }
-
-      
 }
