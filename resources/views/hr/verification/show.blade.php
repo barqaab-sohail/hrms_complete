@@ -40,7 +40,7 @@
                     <h5 class="card-title font-weight-bold" id="emp_des">Emergency No: {{$data->hrEmergency->mobile??''}}</h5>
                     <h5 class="card-title font-weight-bold" id="emp_status">{{$data->hr_status_id == 'Active'?'Current Status: Working':'Current Status: Not Working'}}</h5>
                     <br>
-                    {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG(url('cardVerificationResult').'/'.$data->employee_no,'QRCODE',5,5). '" width="300" height="auto" alt="barcode" />' !!}
+                    <!-- {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG(url('cardVerificationResult').'/'.$data->employee_no,'QRCODE',5,5). '" width="300" height="auto" alt="barcode" />' !!} -->
 
                 </div>
             </div>
