@@ -49,7 +49,7 @@ class LoginController extends Controller
                     'pictureUrl' => asset('/storage/' . $picture->path . $picture->file_name),
                     'token' => $token,
                     'message' => 'Loogged In Successfully',
-                ]);
+                ], 200);
             }
         }
     }
