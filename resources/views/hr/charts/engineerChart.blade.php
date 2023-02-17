@@ -19,7 +19,7 @@
 
         colorsHex = ['#e94922','#4f328a','#00a49f'];
         var options = {
-          title: 'PEC Registered Engineer Chart',
+          title: 'PEC Registered Engineers and Others Chart',
           colors: colorsHex,
           is3D: true,
           pieSliceText: 'value',
