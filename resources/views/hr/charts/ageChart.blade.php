@@ -26,7 +26,7 @@
 
         colorsHex = ['#1e8449','#007fff','#17c9ff','#e3890b','#f22e07'];  
         var options = {
-          title: 'Age Wise Chart'+ ' - (Total Employee = '+ total+')',
+          title: 'Age Wise Chart'+ ' - (Total Employees = '+ total+')',
           colors: colorsHex,
           is3D: true,
           pieSliceText: 'value',
