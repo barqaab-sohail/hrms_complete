@@ -41,6 +41,7 @@
 
         @if(projectProgressRight(session('pr_detail_id')))
         <a type="submit" role="button" style="color:white" id="addContractor" href="{{route('projectContractor.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectContractor/index')?'style=background-color:#737373':''}}>Contractor Detail</a>
+        <a type="submit" role="button" style="color:white" id="addContractor" href="{{route('actualVsScheduledProgress.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/actualVsScheduledProgress/index')?'style=background-color:#737373':''}}>Actual vs Scheduled</a>
         <a type="submit" role="button" style="color:white" id="addProjectProgress" href="{{route('projectProgress.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/monthlyProgress/index')?'style=background-color:#737373':''}}>Project Progress</a>
         <a type="submit" role="button" style="color:white" id="addProgressIssue" href="{{route('projectIssues.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectIssues/index')?'style=background-color:#737373':''}}>Critical Issues</a>
         @endif

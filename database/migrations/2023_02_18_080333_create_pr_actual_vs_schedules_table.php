@@ -20,8 +20,8 @@ class CreatePrActualVsSchedulesTable extends Migration
             $table->bigInteger('pr_contractor_id')->unsigned();
             $table->date('month');
             $table->tinyInteger('schedule_progress')->unsigned();
-            $table->tinyInteger('actual_progress')->unsigned();
-            $table->tinyInteger('current_month_progress')->unsigned();
+            $table->tinyInteger('actual_progress')->unsigned()->nullable();
+            $table->tinyInteger('current_month_progress')->unsigned()->nullable();
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
             $table->foreign('pr_contractor_id')->references('id')->on('pr_contractors')->onDelete('cascade');
