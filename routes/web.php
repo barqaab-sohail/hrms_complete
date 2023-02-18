@@ -189,6 +189,10 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
     Route::resource('/projectProgressActivities', 'Progress\ActivitiesController');
     Route::resource('/subProject', 'SubProjectController');
     Route::resource('/projectIssues', 'Progress\ProjectIssueController');
+    Route::resource('/contractorProgress', 'Progress\ContractorProgressController');
+
+    //Contractor Routes
+    Route::resource('/projectContractor', 'Contractor\ContractorController');
 
     // Route::resource('/progressProgress', 'Progress\ProgressController');
     Route::get('/proejctProgressMainActivities/{level}', 'Progress\ActivitiesController@mainActivities');
