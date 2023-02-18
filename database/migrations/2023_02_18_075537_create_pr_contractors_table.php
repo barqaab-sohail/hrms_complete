@@ -23,6 +23,7 @@ class CreatePrContractorsTable extends Migration
             $table->date('effective_date');
             $table->date('contractual_completion_date');
             $table->string('completion_period');
+            $table->string('contract_price', 512);
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
         });

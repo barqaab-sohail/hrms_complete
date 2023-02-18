@@ -59,13 +59,26 @@
                                 <input type="text" name="completion_period" id="completion_period" value="{{ old('completion_period') }}" class="form-control">
                             </div>
                         </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label text-right">Contract Price<span class="text_requried">*</span></label>
+                                <input type="text" name="contract_price" id="contract_price" value="{{ old('contractor_name') }}" class="form-control">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn" value="create">Save
                         </button>
                     </div>
+
+
                 </form>
+                <div class="float-right">
+
+                    <img id="ViewIMG" src="{{asset('examples/example.jpg') }}" href="{{asset('examples/example_contract_detail.pdf') }}" width="100" />
+
+                </div>
             </div>
         </div>
     </div>
@@ -92,9 +105,10 @@
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th style="width:30%">Contractor Name</th>
-                        <th style="width:30%">Contract Name</th>
-                        <th style="width:10%">Signgin Date</th>
+                        <th style="width:20%">Contractor Name</th>
+                        <th style="width:20%">Contract Name</th>
+                        <th style="width:10%">Contract Price</th>
+                        <th style="width:10%">Signging Date</th>
                         <th style="width:10%">Effective Date</th>
                         <th style="width:10%">Contractual Completion Date</th>
                         <th style="width:10%">Completion Period</th>
@@ -110,6 +124,10 @@
 </div>
 <script>
     $(document).ready(function() {
+        $(function() {
+            $('#ViewIMG').EZView();
+        });
+
 
 
         $(function() {
@@ -133,6 +151,10 @@
                     {
                         data: 'contract_name',
                         name: 'contract_name'
+                    },
+                    {
+                        data: 'contract_price',
+                        name: 'contract_price'
                     },
                     {
                         data: 'contract_signing_date',
@@ -187,6 +209,7 @@
                     $('#effective_date').val(data.effective_date);
                     $('#contractual_completion_date').val(data.contractual_completion_date);
                     $('#completion_period').val(data.completion_period);
+                    $('#contract_price').val(data.contract_price);
                     $('#ajaxModel').modal('show');
                 });
 
