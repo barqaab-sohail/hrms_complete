@@ -44,12 +44,13 @@ class ContractorStore extends FormRequest
     public function rules()
     {
         $rules = [
-            'contractor_name' => 'required',
-            'contract_name' => 'required',
+            'contractor_name' => 'required|max:511',
+            'contract_name' => 'required|max:511',
             'contract_signing_date' => 'required',
             'effective_date' => 'required|after_or_equal:contract_signing_date',
             'contractual_completion_date' => 'required|after:effective_date',
-            'completion_period' => 'required',
+            'completion_period' => 'required|max:191',
+            'contract_price' => 'required|max:511',
         ];
 
         return $rules;

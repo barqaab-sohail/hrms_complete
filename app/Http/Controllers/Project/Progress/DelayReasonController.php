@@ -4,19 +4,20 @@ namespace App\Http\Controllers\Project\Progress;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Project\Progress\PrActualVsSchedule;
+use Illuminate\Support\Str;
+use App\Models\Project\Progress\PrDelayReason;
 use App\Models\Project\Contractor\PrContractor;
-use App\Http\Requests\Project\Progress\ActualVsScheduleStore;
+use App\Http\Requests\Project\Progress\DelayReasonStore;
 use DB;
 use DataTables;
 
-class ContractorProgressController extends Controller
+class DelayReasonController extends Controller
 {
     public function index()
     {
 
         $prContractors = PrContractor::where('pr_detail_id', session('pr_detail_id'))->get();
-        $view =  view('project.progress.actualSchedule.create', compact('prContractors'))->render();
+        $view =  view('project.progress.delayReason.create', compact('prContractors'))->render();
         return response()->json($view);
     }
 
@@ -24,25 +25,28 @@ class ContractorProgressController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = PrActualVsSchedule::where('pr_detail_id', session('pr_detail_id'))->orderBy('month', 'asc')->get();
+            $data = PrDelayReason::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
 
             return DataTables::of($data)
 
                 ->editColumn('contractor_name', function ($row) {
                     return $row->prContractor->contractor_name ?? '';
                 })
+                ->editColumn('reason', function ($row) {
+                    return Str::of($row->reason)->limit(300);
+                })
                 ->editColumn('month', function ($row) {
                     return \Carbon\Carbon::parse($row->month)->format('F-Y');
                 })
                 ->addColumn('edit', function ($row) {
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editActualSchedule">Edit</a>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editDelayReason">Edit</a>';
 
                     return $btn;
                 })
                 ->addColumn('delete', function ($row) {
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteActualSchedule">Delete</a>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDelayReason">Delete</a>';
 
                     return $btn;
                 })
@@ -52,7 +56,7 @@ class ContractorProgressController extends Controller
         }
     }
 
-    public function store(ActualVsScheduleStore $request)
+    public function store(DelayReasonStore $request)
     {
 
         $input = $request->all();
@@ -61,7 +65,7 @@ class ContractorProgressController extends Controller
 
         DB::transaction(function () use ($input, $request) {
 
-            PrActualVsSchedule::updateOrCreate(['id' => $input['actual_schedule_id']], $input);
+            PrDelayReason::updateOrCreate(['id' => $input['delay_reason_id']], $input);
         }); // end transcation
 
         return response()->json(['success' => 'Data saved successfully.']);
@@ -69,13 +73,13 @@ class ContractorProgressController extends Controller
 
     public function edit($Id)
     {
-        $data = PrActualVsSchedule::find($Id);
+        $data = PrDelayReason::find($Id);
         return response()->json($data);
     }
 
     public function destroy($id)
     {
-        PrActualVsSchedule::findOrFail($id)->delete();
+        PrDelayReason::findOrFail($id)->delete();
         return response()->json(['status' => 'OK', 'message' => "Data Successfully Deleted"]);
     }
 }

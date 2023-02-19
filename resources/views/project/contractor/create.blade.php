@@ -140,7 +140,7 @@
             var table = $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
-
+                "aaSorting": [],
                 ajax: {
                     url: "{{ route('projectContractor.create') }}",
                 },

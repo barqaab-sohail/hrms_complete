@@ -11,5 +11,10 @@ class PrDelayReason extends Model implements Auditable
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['pr_detail_id', 'pr_contractor_id', 'reasons'];
+    protected $fillable = ['pr_detail_id', 'pr_contractor_id', 'reason'];
+
+    public function prContractor()
+    {
+        return $this->hasOne('App\Models\Project\Contractor\PrContractor', 'id', 'pr_contractor_id');
+    }
 }
