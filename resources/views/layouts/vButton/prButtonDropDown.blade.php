@@ -6,6 +6,13 @@
     <div class="dropdown-menu" role="group" aria-labelledby="dropdownMenuButton" style="width: 100%;">
 
         <a type="submit" role="button" id="addProject" href="{{route('project.edit',session('pr_detail_id'))}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/project/*/edit')?'style=background-color:#737373,':''}}>Project Detail</a>
+        @if(projectProgressRight(session('pr_detail_id')))
+        <a type="submit" role="button" style="color:white" id="addContractor" href="{{route('projectContractor.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectContractor/index')?'style=background-color:#737373':''}}>Contractor Detail</a>
+        <a type="submit" role="button" style="color:white" id="addActualVsSchedule" href="{{route('actualVsScheduledProgress.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/actualVsScheduledProgress/index')?'style=background-color:#737373':''}}>Actual vs Scheduled</a>
+        <a type="submit" role="button" style="color:white" id="addDelayReason" href="{{route('delayReason.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/delayReason/index')?'style=background-color:#737373':''}}>Delay Reasons</a>
+        <a type="submit" role="button" style="color:white" id="addProjectProgress" href="{{route('projectProgress.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/monthlyProgress/index')?'style=background-color:#737373':''}}>Project Progress</a>
+        <a type="submit" role="button" style="color:white" id="addProgressIssue" href="{{route('projectIssues.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectIssues/index')?'style=background-color:#737373':''}}>Critical Issues</a>
+        @endif
         @can('pr edit cost')
         <a type="submit" role="button" style="color:white" id="addConsultancyCost" href="{{route('projectConsultancyCost.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectConsultancyCost/index')?'style=background-color:#737373':''}}>Consultancy Cost</a>
         <a type="submit" role="button" style="color:white" id="addPosition" href="{{route('projectPosition.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPosition/index')?'style=background-color:#737373':''}}>Position</a>
@@ -39,12 +46,7 @@
 
 
 
-        @if(projectProgressRight(session('pr_detail_id')))
-        <a type="submit" role="button" style="color:white" id="addContractor" href="{{route('projectContractor.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectContractor/index')?'style=background-color:#737373':''}}>Contractor Detail</a>
-        <a type="submit" role="button" style="color:white" id="addContractor" href="{{route('actualVsScheduledProgress.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/actualVsScheduledProgress/index')?'style=background-color:#737373':''}}>Actual vs Scheduled</a>
-        <a type="submit" role="button" style="color:white" id="addProjectProgress" href="{{route('projectProgress.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/monthlyProgress/index')?'style=background-color:#737373':''}}>Project Progress</a>
-        <a type="submit" role="button" style="color:white" id="addProgressIssue" href="{{route('projectIssues.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectIssues/index')?'style=background-color:#737373':''}}>Critical Issues</a>
-        @endif
+
 
         @can('Super Admin')
         <a type="submit" role="button" style="color:white" id="addProgressActivities" href="{{route('projectProgressActivities.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectProgressActivities/index')?'style=background-color:#737373':''}}>Progress Activities</a>

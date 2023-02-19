@@ -18,7 +18,7 @@ class CreatePrDelayReasonsTable extends Migration
             $table->id();
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->bigInteger('pr_contractor_id')->unsigned();
-            $table->text('reasons');
+            $table->text('reason');
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
             $table->foreign('pr_contractor_id')->references('id')->on('pr_contractors')->onDelete('cascade');
