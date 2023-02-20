@@ -29,8 +29,8 @@ class DelayReasonController extends Controller
 
             return DataTables::of($data)
 
-                ->editColumn('contractor_name', function ($row) {
-                    return $row->prContractor->contractor_name ?? '';
+                ->editColumn('contract_name', function ($row) {
+                    return $row->prContractor->contract_name ?? '';
                 })
                 ->editColumn('reason', function ($row) {
                     return Str::of($row->reason)->limit(300);

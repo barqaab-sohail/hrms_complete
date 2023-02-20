@@ -30,4 +30,12 @@ class DelayReasonStore extends FormRequest
 
         return $rules;
     }
+
+    public function messages()
+    {
+        return [
+            'pr_contractor_id.required' => 'Contract name is requried',
+
+        ];
+    }
 }

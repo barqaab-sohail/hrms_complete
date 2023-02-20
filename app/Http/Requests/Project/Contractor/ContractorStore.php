@@ -51,6 +51,7 @@ class ContractorStore extends FormRequest
             'contractual_completion_date' => 'required|after:effective_date',
             'completion_period' => 'required|max:191',
             'contract_price' => 'required|max:511',
+            'scope_of_work' => 'required|max:65000',
         ];
 
         return $rules;

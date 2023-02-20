@@ -11,5 +11,5 @@ class PrContractor extends Model implements Auditable
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['pr_detail_id', 'contractor_name', 'contract_name', 'contract_signing_date', 'effective_date', 'completion_period', 'contractual_completion_date', 'contract_price'];
+    protected $fillable = ['pr_detail_id', 'contractor_name', 'contract_name', 'contract_signing_date', 'effective_date', 'completion_period', 'contractual_completion_date', 'contract_price', 'scope_of_work'];
 }

@@ -28,8 +28,8 @@ class ContractorProgressController extends Controller
 
             return DataTables::of($data)
 
-                ->editColumn('contractor_name', function ($row) {
-                    return $row->prContractor->contractor_name ?? '';
+                ->editColumn('contract_name', function ($row) {
+                    return $row->prContractor->contract_name ?? '';
                 })
                 ->editColumn('month', function ($row) {
                     return \Carbon\Carbon::parse($row->month)->format('F-Y');

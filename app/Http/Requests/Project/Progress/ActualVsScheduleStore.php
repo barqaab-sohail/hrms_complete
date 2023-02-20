@@ -41,23 +41,28 @@ class ActualVsScheduleStore extends FormRequest
      */
     public function rules()
     {
-        //check it is edit request or store request
-        if ($this->actual_schedule_id) {
-            $lastScheduleProgress = PrActualVsSchedule::where('pr_detail_id', session('pr_detail_id'))->where('pr_contractor_id', $this->pr_contractor_id)->where('id', '!=', $this->actual_schedule_id)->where('month', '<', $this->month)->orderBy('id', 'DESC')->first();
-        } else {
-            $lastScheduleProgress = PrActualVsSchedule::where('pr_detail_id', session('pr_detail_id'))->where('pr_contractor_id', $this->pr_contractor_id)->where('month', '<', $this->month)->orderBy('id', 'DESC')->first();
-        }
+        $month = "2020-01-01";
         $maxSchduleProgress = 0;
         $maxActualProgress = 0;
-        $month = "2020-01-01";
-        $totalCurrentMonthProgress = PrActualVsSchedule::where('pr_detail_id', session('pr_detail_id'))->where('pr_contractor_id', $this->pr_contractor_id)->sum('current_month_progress') + $this->current_month_progress;
-        $maxCurrentMonthProgress = 100 - $totalCurrentMonthProgress;
+        $maxCurrentMonthProgress = 0;
 
-        if ($lastScheduleProgress) {
-            $maxSchduleProgress = $lastScheduleProgress->schedule_progress;
-            $month =  $lastScheduleProgress->month;
-            if ($lastScheduleProgress->actual_progress) {
-                $maxActualProgress = $lastScheduleProgress->actual_progress;
+        if ($this->month) {
+            //check it is edit request or store request
+            if ($this->actual_schedule_id) {
+                $lastScheduleProgress = PrActualVsSchedule::where('pr_detail_id', session('pr_detail_id'))->where('pr_contractor_id', $this->pr_contractor_id)->where('id', '!=', $this->actual_schedule_id)->where('month', '<', $this->month)->orderBy('id', 'DESC')->first();
+            } else {
+                $lastScheduleProgress = PrActualVsSchedule::where('pr_detail_id', session('pr_detail_id'))->where('pr_contractor_id', $this->pr_contractor_id)->where('month', '<', $this->month)->orderBy('id', 'DESC')->first();
+            }
+
+            $totalCurrentMonthProgress = PrActualVsSchedule::where('pr_detail_id', session('pr_detail_id'))->where('pr_contractor_id', $this->pr_contractor_id)->sum('current_month_progress') + $this->current_month_progress;
+            $maxCurrentMonthProgress = 100 - $totalCurrentMonthProgress;
+
+            if ($lastScheduleProgress) {
+                $maxSchduleProgress = $lastScheduleProgress->schedule_progress;
+                $month =  $lastScheduleProgress->month;
+                if ($lastScheduleProgress->actual_progress) {
+                    $maxActualProgress = $lastScheduleProgress->actual_progress;
+                }
             }
         }
 
@@ -76,6 +81,7 @@ class ActualVsScheduleStore extends FormRequest
     {
 
         return [
+            'pr_contractor_id.required' => 'Contract name is requried',
             'month.unique_with' => 'This Month already entered',
             'current_month_progress.lte' => 'Accumulative total of current month progress cannot be greater than 100'
 

@@ -13,11 +13,11 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="control-label">Contractor</label>
+                                <label class="control-label">Contractor<span class="text_requried">*</span></label>
                                 <select id="pr_contractor_id" name="pr_contractor_id" class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($prContractors as $prContractor)
-                                    <option value="{{$prContractor->id}}" {{(old("pr_contractor_id")==$prContractor->id? "selected" : "")}}>{{$prContractor->contractor_name}}</option>
+                                    <option value="{{$prContractor->id}}" {{(old("pr_contractor_id")==$prContractor->id? "selected" : "")}}>{{$prContractor->contract_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -63,7 +63,7 @@
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th style="width:20%">Contractor Name</th>
+                        <th style="width:20%">Contract Name</th>
                         <th style="width:70%">Delay Reason</th>
                         <th style="width:5%">Edit</th>
                         <th style="width:5%">Delete</th>
@@ -91,8 +91,8 @@
                     url: "{{ route('delayReason.create') }}",
                 },
                 columns: [{
-                        data: 'contractor_name',
-                        name: 'contractor_name'
+                        data: 'contract_name',
+                        name: 'contract_name'
                     },
                     {
                         data: 'reason',

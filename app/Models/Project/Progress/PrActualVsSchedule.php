@@ -17,6 +17,7 @@ class PrActualVsSchedule extends Model implements Auditable
     {
         return $this->hasOne('App\Models\Project\Contractor\PrContractor', 'id', 'pr_contractor_id');
     }
+
     public function getMonthAttribute($value)
     {
         $date = \Carbon\Carbon::parse($value)->format('F-Y');
