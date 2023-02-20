@@ -37,7 +37,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label text-right">Effective Date</label><br>
+                                <label class="control-label text-right">Effective Date<span class="text_requried">*</span></label><br>
                                 <input type="text" id="effective_date" name="effective_date" value="{{ old('effective_date') }}" class="form-control date_input" readonly>
                                 <br>
                                 <i class="fas fa-trash-alt text_requried"></i>
@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label text-right">Contractual Completion Date</label><br>
+                                <label class="control-label text-right">Contractual Completion Date<span class="text_requried">*</span></label><br>
                                 <input type="text" id="contractual_completion_date" name="contractual_completion_date" value="{{ old('contractual_completion_date') }}" class="form-control date_input" readonly>
                                 <br>
                                 <i class="fas fa-trash-alt text_requried"></i>
@@ -63,6 +63,14 @@
                             <div class="form-group">
                                 <label class="control-label text-right">Contract Price<span class="text_requried">*</span></label>
                                 <input type="text" name="contract_price" id="contract_price" value="{{ old('contractor_name') }}" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label text-right">Scope of Work<span class="text_requried">*</span></label>
+                                <textarea rows=5 cols=5 id="scope_of_work" name="scope_of_work" class="form-control ">{{ old('scope_of_work') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -88,7 +96,7 @@
 </div> <!--End Modal  -->
 <style>
     .modal-dialog {
-        max-width: 80%;
+        max-width: 90%;
         display: flex;
     }
 
@@ -105,8 +113,9 @@
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th style="width:20%">Contractor Name</th>
-                        <th style="width:20%">Contract Name</th>
+                        <th style="width:15%">Contractor Name</th>
+                        <th style="width:15%">Contract Name</th>
+                        <th style="width:10%">Scope of Work</th>
                         <th style="width:10%">Contract Price</th>
                         <th style="width:10%">Signging Date</th>
                         <th style="width:10%">Effective Date</th>
@@ -151,6 +160,10 @@
                     {
                         data: 'contract_name',
                         name: 'contract_name'
+                    },
+                    {
+                        data: 'scope_of_work',
+                        name: 'scope_of_work'
                     },
                     {
                         data: 'contract_price',
@@ -205,6 +218,7 @@
                     $('#contractor_id').val(data.id);
                     $('#contractor_name').val(data.contractor_name);
                     $('#contract_name').val(data.contract_name);
+                    $('#scope_of_work').val(data.scope_of_work);
                     $('#contract_signing_date').val(data.contract_signing_date);
                     $('#effective_date').val(data.effective_date);
                     $('#contractual_completion_date').val(data.contractual_completion_date);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Project\Contractor;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\Project\Contractor\PrContractor;
 use App\Http\Requests\Project\Contractor\ContractorStore;
 use DB;
@@ -27,6 +28,9 @@ class ContractorController extends Controller
 
             return DataTables::of($data)
 
+                ->editColumn('scope_of_work', function ($row) {
+                    return Str::of($row->scope_of_work)->limit(50);
+                })
                 ->addColumn('edit', function ($row) {
 
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editContractor">Edit</a>';

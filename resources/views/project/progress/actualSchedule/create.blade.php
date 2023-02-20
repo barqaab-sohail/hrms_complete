@@ -13,11 +13,11 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="control-label">Contractor</label>
+                                <label class="control-label">Contract Name<span class="text_requried">*</span></label>
                                 <select id="pr_contractor_id" name="pr_contractor_id" class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($prContractors as $prContractor)
-                                    <option value="{{$prContractor->id}}" {{(old("pr_contractor_id")==$prContractor->id? "selected" : "")}}>{{$prContractor->contractor_name}}</option>
+                                    <option value="{{$prContractor->id}}" {{(old("pr_contractor_id")==$prContractor->id? "selected" : "")}}>{{$prContractor->contract_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -26,7 +26,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label text-right">Month</label><br>
+                                <label class="control-label text-right">Month<span class="text_requried">*</span></label><br>
                                 <input type="text" id="month" name="month" value="{{ old('month') }}" class="form-control date-picker" readonly>
                                 <br>
                                 <i class="fas fa-trash-alt text_requried"></i>
@@ -34,7 +34,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Schedule Progress</label>
+                                <label class="control-label">Schedule Progress<span class="text_requried">*</span></label>
                                 <input type="text" name="schedule_progress" id="schedule_progress" data-validation="required" value="{{old('schedule_progress')}}" class="form-control notCapital">
                             </div>
                         </div>
@@ -88,7 +88,7 @@
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th style="width:30%">Contractor Name</th>
+                        <th style="width:30%">Contract Name</th>
                         <th style="width:30%">Month</th>
                         <th style="width:30%">Schedule Progress</th>
                         <th style="width:10%">Actual Progress</th>
@@ -142,8 +142,8 @@
                     url: "{{ route('actualVsScheduledProgress.create') }}",
                 },
                 columns: [{
-                        data: 'contractor_name',
-                        name: 'contractor_name'
+                        data: 'contract_name',
+                        name: 'contract_name'
                     },
                     {
                         data: 'month',
