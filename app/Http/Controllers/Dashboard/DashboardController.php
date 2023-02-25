@@ -153,6 +153,7 @@ class DashboardController extends Controller
         foreach ($powerProjectsRunning as $project) {
             $projects[] = [
                 'id' => $project->id,
+                'projectNo' => $project->project_no,
                 'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
                 'projectName' => $project->project_no . " - " . $project->name,
                 'paymentReceived' => addComma(PaymentReceive::where('pr_detail_id', $project->id)->sum('amount')),
