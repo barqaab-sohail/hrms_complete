@@ -49,13 +49,13 @@ class EmployeeController extends Controller
             }
 
             $employees[] =  array(
-                "id" => $employee->id,
-                "employee_no" => $employee->employee_no,
-                "full_name" => $employee->full_name,
-                "date_of_birth" => \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y'),
-                "date_of_joining" => \Carbon\Carbon::parse($employee->employeeAppointment->joining_date ?? '')->format('M d, Y'),
-                "cnic" => $employee->cnic,
-                "designation" => $employee->designation,
+                "id" => $employee->id ?? '',
+                "employee_no" => $employee->employee_no ?? '',
+                "full_name" => $employee->full_name ?? '',
+                "date_of_birth" => \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y') ?? '',
+                "date_of_joining" => \Carbon\Carbon::parse($employee->employeeAppointment->joining_date ?? '')->format('M d, Y') ?? '',
+                "cnic" => $employee->cnic ?? '',
+                "designation" => $employee->designation ?? '',
                 "picture" => $picture,
                 "mobile" => $employee->hrContactMobile->mobile ?? '',
                 "status" => $employee->hr_status_id ?? ''
