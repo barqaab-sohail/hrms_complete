@@ -16,7 +16,6 @@
 						<th>Asset Code</th>
 						<th>Description</th>
 						<th>Location/Allocation</th>
-						<th>QRCode</th>
 						<th>Image</th>
 						<th class="text-center" style="width:5%">Edit</th>
 						@can('asset delete record')
@@ -49,24 +48,24 @@
 				buttons: [{
 						extend: 'copyHtml5',
 						exportOptions: {
-							columns: [0, 1, 2, 3, 4, 5]
+							columns: [0, 1, 2, 3, 4]
 						}
 					},
 					{
 						extend: 'excelHtml5',
 						exportOptions: {
-							columns: [0, 1, 2, 3, 4, 5]
+							columns: [0, 1, 2, 3, 4]
 						}
 					},
 					{
 						extend: 'pdfHtml5',
 						exportOptions: {
-							columns: [0, 1, 2, 3, 4, 5]
+							columns: [0, 1, 2, 3, 4]
 						}
 					}, {
 						extend: 'csvHtml5',
 						exportOptions: {
-							columns: [0, 1, 2, 3, 4, 5]
+							columns: [0, 1, 2, 3, 4]
 						}
 					},
 				],
@@ -89,10 +88,6 @@
 					{
 						data: 'location',
 						name: 'location'
-					},
-					{
-						data: 'bar_code',
-						name: 'bar_code'
 					},
 					{
 						data: 'image',

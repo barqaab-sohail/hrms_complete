@@ -80,10 +80,16 @@ function removeComma($id)
 }
 
 
-function officeName($id)
+function officeName($officeId)
 {
-	$office = Office::find($id);
-	return $office->name;
+	if ($officeId) {
+
+		$office = Office::find($officeId);
+
+		return $office->name;
+	} else {
+		return '';
+	}
 }
 
 
