@@ -14,6 +14,7 @@ use App\Models\Asset\Asset;
 use App\Models\Asset\AsClass;
 use App\Models\Asset\AsSubClass;
 use App\Models\Asset\AsDocumentation;
+use Illuminate\Support\Facades\RateLimiter;
 use DB;
 use Storage;
 use DataTables;
@@ -47,14 +48,14 @@ class AssetController extends Controller
                         return 'N/A';
                     }
                 })
-                ->addColumn('bar_code', function ($data) {
-                    //$barCode ='<img src="data:image/png;base64,'.\DNS1D::getBarcodePNG($data->asset_code,'C39+',1,33,array(0,0,0),true).'" alt="barcode" />';
+                // ->addColumn('bar_code', function ($data) {
+                //     //$barCode ='<img src="data:image/png;base64,'.\DNS1D::getBarcodePNG($data->asset_code,'C39+',1,33,array(0,0,0),true).'" alt="barcode" />';
 
 
-                    $qrCode = '<img  src="data:image/png;base64,' . \DNS2D::getBarcodePNG($data->asset_code, 'QRCODE') . '" alt="barcode"   /><br><p style="color:black; font-weight: bold">' . $data->asset_code . '</p>';
+                //     $qrCode = '<img  src="data:image/png;base64,' . \DNS2D::getBarcodePNG($data->asset_code, 'QRCODE') . '" alt="barcode"   /><br><p style="color:black; font-weight: bold">' . $data->asset_code . '</p>';
 
-                    return $qrCode;
-                })
+                //     return $qrCode;
+                // })
                 ->addColumn('image', function ($data) {
                     if ($data->asDocumentation->extension != 'pdf') {
                         $image = '<img src="' . url(isset($data->asDocumentation->file_name) ? '/storage/' . $data->asDocumentation->path . $data->asDocumentation->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewIMG' . $data->id . '" width=50>';
@@ -303,5 +304,32 @@ class AssetController extends Controller
 
 
         return view('asset.search.result', compact('result'));
+    }
+
+    public function verification($assetCode)
+    {
+        // Following function restrict maximum 5 request in 1 minute
+        $executed = RateLimiter::attempt(
+            'send-message:',
+            $perMinute = 5,
+            function () {
+                // Send message...
+            }
+        );
+
+        if (!$executed) {
+            return 'Too many Request sent!, Please retry after some time';
+        }
+
+
+
+
+        $data = Asset::with('asPicture', 'asLocation', 'asPurchase', 'currentAllocation')->where('asset_code', $assetCode)->first();
+        if ($data) {
+            //return response()->json($data);
+            return view('asset.verification.show', compact('data'));
+        } else {
+            return view('asset.verification.show', compact('data'));
+        }
     }
 }

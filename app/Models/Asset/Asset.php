@@ -111,6 +111,12 @@ class Asset extends Model implements Auditable
         return $this->hasOne('App\Models\Asset\AsAllocation');
     }
 
+    //Current Allocation
+    public function currentAllocation()
+    {
+        return $this->hasOne('App\Models\Asset\AsLocation')->orderBy('id', 'desc');
+    }
+
 
 
 

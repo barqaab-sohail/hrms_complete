@@ -5,6 +5,7 @@ use App\Models\Hr\HrPromotion;
 use App\Models\Hr\HrPosting;
 use App\User;
 use App\Models\MisUser;
+use App\Models\Common\Office;
 
 function isAllowMis($userId)
 {
@@ -173,4 +174,17 @@ function employeeDesignationArray()
 function employeeCodeArray()
 {
     return array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182');
+}
+
+function employeeName($employeeId)
+{
+
+    if ($employeeId) {
+
+        $employee = HrEmployee::find($employeeId);
+
+        return $employee->full_name;
+    } else {
+        return '';
+    }
 }
