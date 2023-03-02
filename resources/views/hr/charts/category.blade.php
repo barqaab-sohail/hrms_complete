@@ -29,9 +29,9 @@
         ]);
 
         colorsHex = ['#e94922','#4f328a','#00a49f'];
-  
+        var total ={{$categoryA}} + {{$categoryB}} + {{$categoryC}};
         var options = {
-          title: 'Category Wise Chart',
+          title: 'Category Wise Chart' + ' - (Total Employees = '+ total+')',
           colors: colorsHex,
           pieHole: 0.4,
           pieSliceText: 'value',

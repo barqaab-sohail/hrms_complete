@@ -18,8 +18,9 @@
         ]);
 
         colorsHex = ['#e94922','#4f328a','#00a49f'];
+        var total =pecEngineer + associatedEngineers + OtherStaff;
         var options = {
-          title: 'PEC Registered Engineers and Others Chart',
+          title: 'PEC Registered Engineers and Others Chart' + ' - (Total Employees = '+ total+')',
           colors: colorsHex,
           is3D: true,
           pieSliceText: 'value',
