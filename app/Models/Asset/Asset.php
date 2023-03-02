@@ -95,14 +95,25 @@ class Asset extends Model implements Auditable
         );
     }
 
+    public function currentOwnership()
+    {
+
+        return $this->hasOneThrough(
+            'App\Models\Common\Client',
+            'App\Models\Asset\AsOwnership',
+            'asset_id',
+            'id',
+            'id',
+            'client_id'
+        )->orderby('date', 'desc');
+    }
+
 
 
     public function asClass()
     {
         return $this->hasOne('App\Models\Asset\AsSubClass', 'id', 'as_sub_class_id');
     }
-
-
 
     //Allocation at the time of Purhcase
     public function asAllocationFirst()

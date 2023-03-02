@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Common\Office;
 use App\Http\Requests\Asset\AssetStore;
+use App\Http\Requests\Asset\AssetSearchStore;
 use App\Http\Requests\Asset\ClassStore;
 use App\Http\Requests\Asset\SubClassStore;
 use App\Models\Asset\Asset;
@@ -36,6 +37,18 @@ class AssetController extends Controller
 
 
             return DataTables::of($data)
+
+                ->addColumn('ownership', function ($data) {
+
+                    $clientId = $data->currentOwnership->id ?? null;
+                    if ($clientId == null) {
+                        return 'Not Entered';
+                    } else if ($clientId == 20) {
+                        return 'BARQAAB';
+                    } else {
+                        return 'Client';
+                    }
+                })
                 ->addColumn('location', function ($data) {
 
                     $location = $data->asCurrentLocation->name ?? '';
@@ -280,11 +293,11 @@ class AssetController extends Controller
     public function search()
     {
         $offices = Office::all();
-
-        return view('asset.search.search', compact('offices'));
+        $classes = AsClass::all();
+        return view('asset.search.search', compact('offices', 'classes'));
     }
 
-    public function result(Request $request)
+    public function result(AssetSearchStore $request)
     {
         $data = $request->all();
 
@@ -293,15 +306,12 @@ class AssetController extends Controller
             ->when($data['office_id'], function ($query) use ($data) {
                 return $query->where('office_id', '=', $data['office_id']);
             })
-            // ->when($data['stage_id'], function ($query) use ($data){
-            //     return $query->where('cv_stage_id','=',$data['stage_id']);
-            // })
-
+            ->when($data['as_sub_class_id'], function ($query) use ($data) {
+                return $query->where('as_sub_class_id', '=', $data['as_sub_class_id']);
+            })
             ->select('assets.*')
             //->distinct('id')
             ->get();
-
-
 
         return view('asset.search.result', compact('result'));
     }
