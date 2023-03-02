@@ -15,6 +15,7 @@
 						<th>Id</th>
 						<th>Asset Code</th>
 						<th>Description</th>
+						<th>Ownership</th>
 						<th>Location/Allocation</th>
 						<th>Image</th>
 						<th class="text-center" style="width:5%">Edit</th>
@@ -84,6 +85,10 @@
 					{
 						data: 'description',
 						name: 'description'
+					},
+					{
+						data: 'ownership',
+						name: 'ownership'
 					},
 					{
 						data: 'location',
