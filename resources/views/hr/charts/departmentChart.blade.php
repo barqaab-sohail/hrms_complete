@@ -20,10 +20,10 @@
         ]);
 
 
-        colorsHex = ['#7f5539','#dc2f02','#4895ef'];
-  
+        colorsHex = ['#fca311','#f21b3f','#4895ef'];
+        var total ={{$finance}} + {{$power}} + {{$water}};
         var options = {
-          title: 'Department Wise Chart',
+          title: 'Department Wise Chart' + ' - (Total Employees = '+ total+')',
           colors: colorsHex,
           pieHole: 0.4,
           pieSliceText: 'value',

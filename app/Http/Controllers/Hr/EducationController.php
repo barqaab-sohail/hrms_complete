@@ -109,9 +109,9 @@ class EducationController extends Controller
         if(!in_array($id, session('education_delete_ids'))){
             return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
-        //HrEducation::find($id)->delete();
-
         
+        HrEducation::find($id)->delete();
+
         return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Deleted']);
     }
 
