@@ -20,7 +20,7 @@
         ]);
 
 
-        colorsHex = ['#e94922','#4f328a','#00a49f'];
+        colorsHex = ['#7f5539','#dc2f02','#4895ef'];
   
         var options = {
           title: 'Department Wise Chart',
