@@ -14,6 +14,7 @@
                         <th>Asset Id</th>
                         <th>Description</th>
                         <th>Ownership</th>
+                        <th>Allocation/Location</th>
                         <th>Image</th>
 
 
@@ -27,6 +28,13 @@
                         <td>{{$asset->description}}</td>
                         <td>{{$asset->asOwnership->name??''}}</td>
                         <td>
+                            @isset($asset->asCurrentAllocation->full_name)
+                            {{$asset->asCurrentAllocation->full_name}} - {{$asset->asCurrentAllocation->designation}}
+                            @endisset
+                            {{$asset->asCurrentLocation->name??''}}
+                        </td>
+                        <td>
+                            @if(file_exists(asset('storage/'.$asset->asPicture->path.$asset->asPicture->file_name)))
                             @php
                             $arrContextOptions=array(
                             "ssl"=>array(
@@ -41,6 +49,10 @@
                             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                             @endphp
                             <img class="img-fluid profile-pic ViewIMG" src="{{$base64}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" width="10%" />
+                            @else
+                            <img class="img-fluid profile-pic ViewIMG" src="{{asset('Massets/images/asset1.png')}}" alt="user" width="30%" />
+                            @endif
+
                         </td>
 
                     </tr>
@@ -54,12 +66,13 @@
 <hr>
 
 <script>
+  
     $(document).ready(function() {
         //function view from list table
         $(document).on('click', '.ViewIMG', function() {
             $(this).EZView();
         });
-
+      
         $('#myDataTable').DataTable({
             stateSave: false,
             dom: 'Blfrtip',

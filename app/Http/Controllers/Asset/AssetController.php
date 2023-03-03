@@ -15,6 +15,7 @@ use App\Models\Asset\Asset;
 use App\Models\Asset\AsClass;
 use App\Models\Asset\AsSubClass;
 use App\Models\Asset\AsDocumentation;
+use App\Models\Hr\HrEmployee;
 use Illuminate\Support\Facades\RateLimiter;
 use DB;
 use Storage;
@@ -294,25 +295,26 @@ class AssetController extends Controller
     {
         $offices = Office::all();
         $classes = AsClass::all();
-        return view('asset.search.search', compact('offices', 'classes'));
+        $employees = HrEmployee::all();
+        return view('asset.search.search', compact('offices', 'classes', 'employees'));
     }
 
-    public function result(AssetSearchStore $request)
+    public function result(Request $request)
     {
         $data = $request->all();
-
         $result = Asset::join('as_locations', 'as_locations.asset_id', '=', 'assets.id')
-            // ->join('cv_detail_education','cv_detail_education.cv_detail_id','=','cv_details.id')
+            ->when($request->has('as_sub_class_id'), function ($query) use ($data) {
+                return $query->where('as_sub_class_id', '=', $data['as_sub_class_id']);
+            })
             ->when($data['office_id'], function ($query) use ($data) {
                 return $query->where('office_id', '=', $data['office_id']);
             })
-            ->when($data['as_sub_class_id'], function ($query) use ($data) {
-                return $query->where('as_sub_class_id', '=', $data['as_sub_class_id']);
+            ->when($data['hr_employee_id'], function ($query) use ($data) {
+                return $query->where('hr_employee_id', '=', $data['hr_employee_id']);
             })
             ->select('assets.*')
-            //->distinct('id')
+            //->distinct('assets.id')
             ->get();
-
         return view('asset.search.result', compact('result'));
     }
 
