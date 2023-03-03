@@ -18,7 +18,7 @@ class CreateHrEmployeeTable extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('father_name');
+            $table->string('father_name')->nullable();
             $table->string('cnic',20)->unique();
             $table->date('cnic_expiry');
             $table->date('date_of_birth');
