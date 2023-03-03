@@ -26,7 +26,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<!--/span 5-1 -->
 						<div class="form-group row">
 							<div class="col-md-12 required">
@@ -45,6 +45,20 @@
 							<div class="col-md-12">
 								<label class="control-label text-right">Sub Classes<span class="text_requried">*</span></label>
 								<select name="as_sub_class_id" id="as_sub_class_id" class="form-control selectTwo" data-placeholder="First Select Class">
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<!--/span 5-1 -->
+						<div class="form-group row">
+							<div class="col-md-12 required">
+								<label class="control-label text-right">Name Employee</label><br>
+								<select name="hr_employee_id" id="hr_employee_id" class="form-control searchSelect">
+									<option value=""></option>
+									@foreach($employees as $employee)
+									<option value="{{$employee->id}}" {{(old("hr_employee_id")==$employee->id? "selected" : "")}}>{{$employee->full_name}} - {{$employee->designation??''}}</option>
+									@endforeach
 								</select>
 							</div>
 						</div>
@@ -82,7 +96,7 @@
 		$('.fa-spinner').hide();
 		$('select').select2();
 		formFunctions();
-
+		
 		//Add Sub_Class
 		$('#class_id').change(function() {
 			var cid = $(this).val();
@@ -97,7 +111,7 @@
 							$("#as_sub_class_id").empty();
 							$("#as_sub_class_id").append('<option value="">Select Sub Classes</option>');
 							$.each(res, function(key, value) {
-								$("#as_sub_class_id").append('<option value="' + key + '">' + value + '</option>');
+								$("#as_sub_class_id").append('<option value="'+key+'">'+value+'</option>');
 
 							});
 							$('#as_sub_class_id').select2('destroy');

@@ -515,7 +515,6 @@ class CvController extends Controller
 				"cv_discipline_id" => $exp->cvDiscipline->name,
 				"cv_stage_id" => $exp->cvStage->name,
 				"year" => $exp->year,
-		  
 			);  			
     	}
 
