@@ -16,7 +16,7 @@ class CreateGenderTable extends Migration
         Schema::create('genders', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->string('name',10)->unique();
+            $table->string('name',12)->unique();
             
         });
     }

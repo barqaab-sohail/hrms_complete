@@ -17,7 +17,7 @@ class CreateHrEmployeeHusbandsTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('hr_employee_id')->unique()->unsigned();
-            $table->string('husband_name')->nullable();
+            $table->string('husband_name');
             $table->timestamps();
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees')->onDelete('cascade');
         });
