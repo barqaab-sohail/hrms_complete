@@ -16,6 +16,7 @@
 					<th>Employee Name</th>
 					<th>Designation/Position</th>
 					<th>Category</th>
+					<th>Gender</th>
 					<th>CNIC</th>
 					<th>HOD</th>
 					<th>Date of Joining</th>
@@ -38,6 +39,7 @@
 							<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 							<td>{{$employee->employeeDesignation->last()->name??''}}</td>
 							<td>{{$employee->employeeCategory->last()->name??''}}</td>
+							<td>{{$employee->gender_id==1?'Male':'Female'}}</td>
 							<td>{{$employee->cnic}}</td>
 							<td>{{employeeFullName($employee->hod->hr_manager_id??'')}}</td>
 							<td>{{$employee->employeeAppointment->formatted_joining_date??''}}</td>
