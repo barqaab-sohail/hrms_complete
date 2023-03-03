@@ -43,6 +43,13 @@ class HrEmployee extends Model implements Auditable
     }
 
 
+    public function hrEmployeeHusband()
+    {
+        return $this->hasOne('App\Models\Hr\HrEmployeeHusband');
+        
+    }
+
+
     // compare with existing data after update and send notification of admin 
     public function compareTo(HrEmployee $other)
     {

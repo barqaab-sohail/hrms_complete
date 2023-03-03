@@ -17,7 +17,6 @@
                         <th>Allocation/Location</th>
                         <th>Image</th>
 
-
                     </tr>
                 </thead>
                 <tbody>
@@ -34,7 +33,8 @@
                             {{$asset->asCurrentLocation->name??''}}
                         </td>
                         <td>
-                            @if(file_exists(asset('storage/'.$asset->asPicture->path.$asset->asPicture->file_name)))
+                           
+                            @if(file_exists(public_path('storage/'.$asset->asPicture->path.$asset->asPicture->file_name)))
                             @php
                             $arrContextOptions=array(
                             "ssl"=>array(

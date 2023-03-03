@@ -26,7 +26,6 @@ class AssetSearchStore extends FormRequest
         $rules = [
             'office_id' => 'required_if:as_sub_class_id,null',
             'as_sub_class_id' => 'required_if:office_id,null',
-
         ];
 
         return $rules;

@@ -18,6 +18,7 @@ use App\Models\Hr\HrStatus;
 use App\Models\Common\Education;
 use App\Models\Project\PrDetail;
 use App\Models\Hr\HrDocumentation;
+use App\Models\Hr\HrEmployeeHusband;
 use DB;
 use App\Http\Requests\Hr\EmployeeStore;
 use DataTables;
@@ -117,6 +118,14 @@ class EmployeeController extends Controller
         DB::transaction(function () use ($input, &$employee) {
 
             $employee = HrEmployee::create($input);
+            
+            if($input['husband_name']){
+                HrEmployeeHusband::create([
+                    'hr_employee_id'=>$employee->id,
+                    'husband_name'=>$input['husband_name']
+                ]);
+            }
+           
         }); // end transcation
 
 
@@ -263,6 +272,14 @@ class EmployeeController extends Controller
 
         DB::transaction(function () use ($input, $id, &$newData) {
             HrEmployee::findOrFail($id)->update($input);
+            
+            if($input['husband_name']){
+                HrEmployeeHusband::updateOrCreate(['hr_employee_id'=>$id], $input);
+            }else{
+                HrEmployeeHusband::where('hr_employee_id',$id)->delete();
+            }
+           
+
         }); // end transcation
         $newData = HrEmployee::find($id);
         //Any Editin Email to Administrator

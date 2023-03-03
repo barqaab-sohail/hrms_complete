@@ -13,7 +13,7 @@
             <hr class="m-t-0 m-b-40">
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">First Name<span class="text_requried">*</span></label><br>
@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <!--/span-->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Last Name<span class="text_requried">*</span></label>
@@ -33,12 +33,22 @@
                     </div>
                 </div>
                 <!--/span-->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <label class="control-label text-right">Father Name<span class="text_requried">*</span></label>
+                            <label class="control-label text-right">Father Name</label>
 
-                            <input type="text" name="father_name" value="{{ old('father_name', $data->father_name) }}" class="form-control " data-validation="required" placeholder="Enter Father Name">
+                            <input type="text" name="father_name" value="{{ old('father_name', $data->father_name) }}" class="form-control "  placeholder="Enter Father Name">
+                        </div>
+                    </div>
+                </div>
+                 <!--/span-->
+                 <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Husband Name</label>
+
+                            <input type="text" name="husband_name" value="{{ old('husband_name', $data->hrEmployeeHusband->husband_name??'') }}" class="form-control "  placeholder="Enter Husband Name">
                         </div>
                     </div>
                 </div>
