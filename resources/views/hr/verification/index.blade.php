@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-   <link rel="icon" type="image/png" sizes="16x16" href="{{asset('Massets/images/favicon.ico') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{asset('Massets/images/favicon.ico') }}">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous" />
   <link rel="stylesheet" href="{{asset('verification/style.css')}}" />
@@ -13,11 +13,11 @@
 <body>
   <div class="container">
     <div class="d-flex justify-content-center">
-        <img src="{{asset('Massets/images/EmailMono.jpg')}}"/>
-        <br/>
+      <img src="{{asset('Massets/images/EmailMono.jpg')}}" />
+      <br />
     </div>
     <div class="d-flex justify-content-center">
-       <h1>BARQAAB Employee Card Verification</h1>
+      <h1>BARQAAB Employee Card Verification</h1>
     </div>
   </div>
 
@@ -50,9 +50,34 @@
 <script src="{{asset('verification\card.js')}}"></script>
 <script type="text/javascript">
   $(document).ready(function() {
+
+    var cnic = document.getElementById('search_input'),
+      cleanPhoneNumber;
+
+    cleanPhoneNumber = function(e) {
+      e.preventDefault();
+      var pastedText = '';
+      if (window.clipboardData && window.clipboardData.getData) { // IE
+        pastedText = window.clipboardData.getData('Text');
+      } else if (e.clipboardData && e.clipboardData.getData) {
+        pastedText = e.clipboardData.getData('text/plain');
+      }
+      this.value = pastedText.replace(/\D/g, '');
+    };
+
+    cnic.onpaste = cleanPhoneNumber;
+
+
+
+    $(document).on('keydown', '#search_input', function(e) {
+      if (e.keyCode == 32) return false;
+    });
+
     $('.card').hide();
     //Enter Comma after three digit
     $("#search_input").keyup(function(ev) {
+
+
       let input = ev.target.value.split("-").join("");
       if (ev.target.value.length > 15) {
         input = input.substring(0, input.length - 1)
@@ -65,6 +90,7 @@
 
         //If the size of input is 6 or 8, insert dash before it
         //else, just insert input
+
         if (index == 5 || index == 12)
           return "-" + cur;
         else

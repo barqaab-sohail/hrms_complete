@@ -1,5 +1,5 @@
 <div style="margin-top:10px; margin-right: 10px;">
-    <button type="button" onclick="window.location.href='{{route('employee.index')}}'" class="btn btn-success float-right" data-toggle="tooltip" title="Back to List">List of Asset</button>
+    <button type="button" onclick="window.location.href='{{route('asset.index')}}'" class="btn btn-success float-right" data-toggle="tooltip" title="Back to List">List of Asset</button>
 </div>
 
 <div class="card-body">
