@@ -27,8 +27,6 @@ Route::post('/mis/login', 'MIS\LoginController@login');
 
 
 
-
-
 // DashBoard / MIS API
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //Projects Routes
