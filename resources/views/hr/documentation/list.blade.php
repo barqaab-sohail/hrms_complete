@@ -11,7 +11,9 @@
 
 					<tr>
 						<th>Document Name</th>
+						@can('hr document date')
 						<th>Date</th>
+						@endcan
 						<th>View</th>
 						<th>Copy Link</th>
 						@can('hr edit documentation')
@@ -26,8 +28,9 @@
 					@foreach($documentIds as $documentId)
 					<tr>
 						<td>{{$documentId->description}}</td>
+						@can('hr document date')
 						<td>{{isset($documentId->document_date)?date('M d, Y', strtotime($documentId->document_date)):''}}</td>
-
+						@endcan
 						@if($documentId->extension!='pdf')
 						<td><img id="ViewIMG" src="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" href="{{asset(isset($documentId->file_name)?  'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30 /></td>
 						@else
