@@ -34,7 +34,7 @@
             <div class="card-body text-center mx-auto">
                 <div class='cvp'>
                     <h5 class="card-title font-weight-bold" id="emp_name">Description: {{$data->description??''}}</h5>
-                    <h5 class="card-title font-weight-bold" id="emp_name">Current Allocation/Location: {{$data->currentAllocation->hr_employee_id? employeeName($data->currentAllocation->hr_employee_id):officeName($data->currentAllocation->office_id)}}</h5>
+                    <h5 class="card-title font-weight-bold" id="emp_name">Current Allocation/Location: {{$data->currentAllocation->hr_employee_id? employeeName($data->currentAllocation->hr_employee_id??''):officeName($data->currentAllocation->office_id??'')}}</h5>
                     <br>
                     <!-- {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG(url('cardVerificationResult').'/'.$data->employee_no,'QRCODE',5,5). '" width="300" height="auto" alt="barcode" />' !!} -->
 
