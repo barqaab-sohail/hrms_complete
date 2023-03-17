@@ -51,6 +51,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //Assets Routes
     Route::get('/assets', 'MIS\Asset\AssetController@index');
+
+    //Projects Routes
+    Route::get('/projectDocuments/{id}', 'MIS\Project\ProjectController@projectDocuments');
 });
 
 
