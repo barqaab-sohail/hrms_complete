@@ -14,9 +14,8 @@ use App\Models\Project\Invoice\InvoiceType;
 use App\Models\Project\Invoice\InvoiceDocument;
 use App\Models\Project\Invoice\InvoiceCost;
 use App\Models\Project\Invoice\InvoiceOverhead;
-use App\Models\Project\Invoice\InvoiceStatus;
 use App\Models\Project\Cost\PrCost;
-use App\Models\Project\Payment\PaymentReceive;
+use Illuminate\Support\Str;
 use DB;
 use DataTables;
 
@@ -63,6 +62,9 @@ class InvoiceController extends Controller
             $totalInvoice = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount');
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->editColumn('remarks', function ($row) {
+                    return Str::of($row->remarks)->limit(50);
+                })
                 ->addColumn('Edit', function ($row) {
 
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editInvoice">Edit</a>';
@@ -152,7 +154,8 @@ class InvoiceController extends Controller
                     'invoice_no' => $input['invoice_no'],
                     'invoice_date' => $input['invoice_date'],
                     'description' => $input['description'],
-                    'reference' => $input['reference']
+                    'reference' => $input['reference'],
+                    'remarks' => $input['remarks']
                 ]
             );
 

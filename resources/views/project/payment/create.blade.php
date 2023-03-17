@@ -9,6 +9,7 @@
       <tr>
         <th>Invoice No</th>
         <th>Invoice Month</th>
+        <th>Invoice Remarks</th>
         <th>Net Amount Received</th>
         <th>Payment Date</th>
         <th>Remarks</th>
@@ -238,6 +239,10 @@
           {
             data: "invoice_month",
             name: 'invoice_month'
+          },
+          {
+            data: "invoice_remarks",
+            name: 'invoice_remarks'
           },
           {
             data: "amount",

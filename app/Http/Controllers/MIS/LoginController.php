@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Hr\HrDocumentation;
 
+
 class LoginController extends Controller
 {
     public function login(Request $request)
@@ -48,6 +49,7 @@ class LoginController extends Controller
                     'email' => $user->email,
                     'pictureUrl' => asset('/storage/' . $picture->path . $picture->file_name),
                     'token' => $token,
+                    'permissions' => $user->getAllPermissions()->pluck('name'),
                     'message' => 'Loogged In Successfully',
                 ], 200);
             }

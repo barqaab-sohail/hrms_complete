@@ -73,6 +73,10 @@ class PaymentController extends Controller
 
                     return $row->invoice->invoice_no ?? '';
                 })
+                ->addColumn('invoice_remarks', function ($row) {
+
+                    return $row->invoice->remarks ?? '';
+                })
                 ->addColumn('invoice_month', function ($row) {
 
                     return $row->invoiceMonth->invoice_month ?? '';
@@ -97,8 +101,7 @@ class PaymentController extends Controller
                     return $row->paymentStatus->name ?? '';
                 })
 
-
-                ->rawColumns(['Edit', 'Delete', 'amount', 'invoice_no', 'invoice_month', 'remarks', 'total_deduction', 'payment_status'])
+                ->rawColumns(['Edit', 'Delete', 'amount', 'invoice_no', 'invoice_month', 'invoice_month', 'remarks', 'total_deduction', 'payment_status'])
                 ->make(true);
         }
 

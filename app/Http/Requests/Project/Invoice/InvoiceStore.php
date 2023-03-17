@@ -68,6 +68,7 @@ class InvoiceStore extends FormRequest
             'invoice_date' => 'required',
             'invoice_no' => 'required|unique:invoices,invoice_no,' . $this->invoice_id,
             'amount' => 'required',
+            'remarks' => 'nullable|max:191',
             'sales_tax' => 'required|lt:amount',
             'invoice_type_id' => 'required',
             'document' => 'nullable|file|max:300'
