@@ -10,6 +10,7 @@
                 <th>Invoice No</th>
                 <th>Invoice Date</th>
                 <th>Invoice Month</th>
+                <th>Remarks</th>
                 <th>Invoice Type</th>
                 <th>Value Exc. Sales Tax</th>
                 <th>Sales Tax</th>
@@ -126,6 +127,15 @@
                             </div>
                         </div>
                         @endif
+                    </div>
+                    <!--/row-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">remarks</label>
+                                <Input rows=3 cols=5 name="remarks" id="remarks" class="form-control" value="{{ old('remarks') }}" />
+                            </div>
+                        </div>
                     </div>
                     <!--/row-->
                     <div class="row">
@@ -285,6 +295,10 @@
                         name: 'invoice_month'
                     },
                     {
+                        data: "remarks",
+                        name: 'remarks'
+                    },
+                    {
                         data: "invoice_type",
                         name: 'invoice_type'
                     },
@@ -355,6 +369,7 @@
                     $('#saveBtn').val("edit-Invoice");
                     $('#invoice_id').val(data.id);
                     $('#invoice_no').val(data.invoice_no);
+                    $('#remarks').val(data.remarks);
                     $('#invoice_date').val(dateInDayMonthYear(data.invoice_date));
                     $('#invoice_month').val(data.invoice_month);
                     console.log(data.invoice_month);
