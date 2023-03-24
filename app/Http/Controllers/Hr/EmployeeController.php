@@ -30,7 +30,7 @@ class EmployeeController extends Controller
 
     public static function getAllEmployee()
     {
-        return $value = Cache::remember('employees', 3000, function () {
+        return $value = Cache::remember('employees', 3, function () {
             $data = HrEmployee::select(['id',  'first_name', 'last_name', 'cnic', 'date_of_birth', 'hr_status_id', 'employee_no'])->with([
                 'employeeCurrentDesignation' => function ($query) {
                     return $query->select('name');
@@ -56,7 +56,7 @@ class EmployeeController extends Controller
             // });
 
             $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
-            $second = range(1000001, 1099999);
+            $second = range(1000001, 1001999);
             $employeeNos = array_merge($first,  $second);
 
             $data =  $data->sortBy(function ($model) use ($employeeNos) {
