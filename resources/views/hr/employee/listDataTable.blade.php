@@ -43,7 +43,7 @@
     $(document).ready(function() {
         $('#myTable').DataTable({
             processing: true,
-            serverSide: true,
+            serverSide: false,
             dom: 'Blfrtip',
             buttons: [{
                     extend: 'copyHtml5',
