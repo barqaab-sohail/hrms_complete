@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Input;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class InputMonthStore extends FormRequest
 {
@@ -25,9 +26,9 @@ class InputMonthStore extends FormRequest
     {
         $id = request()->input('month_id');
         $rules = [
-        'month'=> 'required',
-        'year'=> 'required|unique_with:input_months,month,'.$id,
-        'is_lock'=> 'required',
+            'month' => 'required',
+            'year' => ['required', Rule::unique('input_months')->where(fn ($query) => $query->where('month', request()->month)->where('id', '!=', $this->id))],
+            'is_lock' => 'required',
         ];
 
         return $rules;
@@ -35,9 +36,9 @@ class InputMonthStore extends FormRequest
 
     public function messages()
     {
-       
+
         return [
-            'year.unique_with' => "This Month & Year is already entered"         
+            'year.unique' => "This Month & Year is already entered"
         ];
     }
 }

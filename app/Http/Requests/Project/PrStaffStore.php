@@ -4,6 +4,7 @@ namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Project\PrStaff;
+use Illuminate\Validation\Rule;
 
 class PrStaffStore extends FormRequest
 {
@@ -76,7 +77,7 @@ class PrStaffStore extends FormRequest
         ];
 
         if ($this->status == 'Working') {
-            $rules += ['hr_employee_id' => 'required|unique_with:pr_staffs,status,' . $this->staff_id];
+            $rules += ['hr_employee_id' => ['required', Rule::unique('pr_staffs')->where(fn ($query) => $query->where('status', request()->status)->where('id', '!=', $this->staff_id))]];
         } else {
             $rules += ['hr_employee_id' => 'required'];
         }
@@ -90,7 +91,7 @@ class PrStaffStore extends FormRequest
 
         return [
             'to.prohibited_if' => "To Date  must be empty, if Staff is Working",
-            'hr_employee_id.unique_with' => 'This Employee is already Entered',
+            'hr_employee_id.unique' => 'This Employee is already Entered',
             'from.unique' => 'These dates Employee is already Entered',
         ];
     }
