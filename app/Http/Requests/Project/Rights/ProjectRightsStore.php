@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Project\Rights;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProjectRightsStore extends FormRequest
 {
@@ -23,8 +24,8 @@ class ProjectRightsStore extends FormRequest
      */
     public function rules()
     {
-        $rules = [     
-            'hr_employee_id' => 'required|unique_with:pr_rights,pr_detail_id,'.$this->right_id,
+        $rules = [
+            'hr_employee_id' => ['required', Rule::unique('pr_rights')->where(fn ($query) => $query->where('pr_detail_id', request()->pr_detail_id)->where('id', '!=', $this->right_id))],
             'pr_detail_id' => 'required',
             'progress' => 'required_without:invoice',
             'invoice' => 'required_without:progress',
@@ -36,9 +37,9 @@ class ProjectRightsStore extends FormRequest
 
     public function messages()
     {
-        
+
         return [
-            'hr_employee_id.unique_with' => employeeFullName($this->hr_employee_id). '  Rights agasint this Project have already been assigned',
+            'hr_employee_id.unique' => employeeFullName($this->hr_employee_id) . '  Rights agasint this Project have already been assigned',
         ];
     }
 }

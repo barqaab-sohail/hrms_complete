@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Hr;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class HrMonthlyReportProjectStore extends FormRequest
 {
@@ -23,20 +24,20 @@ class HrMonthlyReportProjectStore extends FormRequest
      */
     public function rules()
     {
-         $rules = [
-        'hr_monthly_report_id'=> 'required',
-        'pr_detail_id'=> 'required|unique_with:hr_monthly_report_projects,hr_monthly_report_id'
-        //'mobile' => 'required|unique:users,mobile,NULL,id,isd,' . $request->isd,
+        $rules = [
+            'hr_monthly_report_id' => 'required',
+            'pr_detail_id' => ['required', Rule::unique('hr_monthly_report_projects')->where(fn ($query) => $query->where('hr_monthly_report_id', request()->hr_monthly_report_id)->where('id', '!=', $this->id))],
+            //'mobile' => 'required|unique:users,mobile,NULL,id,isd,' . $request->isd,
         ];
 
-         return $rules;
+        return $rules;
     }
 
     public function messages()
     {
-        
+
         return [
-            'pr_detail_id.unique_with' => 'Project already entered',
+            'pr_detail_id.unique' => 'Project already entered',
         ];
     }
 }

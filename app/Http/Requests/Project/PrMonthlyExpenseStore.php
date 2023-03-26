@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PrMonthlyExpenseStore extends FormRequest
 {
@@ -47,7 +48,7 @@ class PrMonthlyExpenseStore extends FormRequest
         $rules = [
 
             'pr_detail_id' => 'required',
-            'month' => 'required|unique_with:pr_monthly_expenses,pr_detail_id,' . $this->expense_id,
+            'month' => ['required', Rule::unique('pr_monthly_expenses')->where(fn ($query) => $query->where('pr_detail_id', request()->pr_detail_id)->where('id', '!=', $this->expense_id))],
             'salary_expense' => 'required_without:non_salary_expense',
             'non_salary_expense' => 'required_without:salary_expense',
 
@@ -60,7 +61,7 @@ class PrMonthlyExpenseStore extends FormRequest
     {
 
         return [
-            'month.unique_with' => 'This Month Expenses already entered',
+            'month.unique' => 'This Month Expenses already entered',
 
         ];
     }

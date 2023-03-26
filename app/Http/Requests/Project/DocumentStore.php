@@ -53,7 +53,7 @@ class DocumentStore extends FormRequest
             'document' => 'required|file|max:30000|mimes:doc,docx,xls,xlsx,jpeg,jpg,png,pdf',
             'description' => 'required',
             //'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
-            //'pr_document_name_id' => 'required|unique_with:pr_document_pr_document_name,pr_detail_id',
+
 
         ];
     }

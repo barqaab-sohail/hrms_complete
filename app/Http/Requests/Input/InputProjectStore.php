@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Input;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class InputProjectStore extends FormRequest
 {
@@ -24,8 +25,8 @@ class InputProjectStore extends FormRequest
     public function rules()
     {
         $rules = [
-        'input_month_id'=> 'required',
-        'pr_detail_id'=> 'required|unique_with:input_projects,input_month_id'
+            'input_month_id' => 'required',
+            'pr_detail_id' => ['required', Rule::unique('input_projects')->where(fn ($query) => $query->where('input_month_id', request()->input_month_id)->where('id', '!=', $this->id))],
         ];
 
         return $rules;
@@ -34,7 +35,7 @@ class InputProjectStore extends FormRequest
     public function messages()
     {
         return [
-            'pr_detail_id.unique_with' => 'Project already entered',
+            'pr_detail_id.unique' => 'Project already entered',
         ];
     }
 }

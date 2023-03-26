@@ -4,6 +4,7 @@ namespace App\Http\Requests\Project\Progress;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Project\Progress\PrActualVsSchedule;
+use Illuminate\Validation\Rule;
 
 class ActualVsScheduleStore extends FormRequest
 {
@@ -68,7 +69,7 @@ class ActualVsScheduleStore extends FormRequest
 
         $rules = [
             'pr_contractor_id' => 'required',
-            'month' => "required|date|after:$month|unique_with:pr_actual_vs_schedules,pr_contractor_id," . $this->actual_schedule_id,
+            'month' => ['required', 'date', "after:$month", Rule::unique('pr_actual_vs_schedules')->where(fn ($query) => $query->where('pr_contractor_id', request()->pr_contractor_id)->where('id', '!=', $this->actual_schedule_id))],
             'schedule_progress' => "required|gte:$maxSchduleProgress|lte:100",
             'actual_progress' => "nullable|gte:$maxActualProgress|lte:100",
             'current_month_progress' => "nullable|lte:$maxCurrentMonthProgress",
@@ -82,7 +83,7 @@ class ActualVsScheduleStore extends FormRequest
 
         return [
             'pr_contractor_id.required' => 'Contract name is requried',
-            'month.unique_with' => 'This Month already entered',
+            'month.unique' => 'This Month already entered',
             'current_month_progress.lte' => 'Accumulative total of current month progress cannot be greater than 100'
 
         ];

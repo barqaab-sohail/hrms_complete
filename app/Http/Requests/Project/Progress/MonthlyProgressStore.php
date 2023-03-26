@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Project\Progress;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MonthlyProgressStore extends FormRequest
 {
@@ -14,12 +15,11 @@ class MonthlyProgressStore extends FormRequest
 
     protected function cleanDate()
     {
-        if($this->date){
+        if ($this->date) {
             $this->merge([
                 'date' => \Carbon\Carbon::parse($this->date)->format('Y-m-d')
             ]);
         }
-
     }
 
 
@@ -41,11 +41,12 @@ class MonthlyProgressStore extends FormRequest
     public function rules()
     {
 
-        $rules = [    
+        $rules = [
             'pr_progress_activity_id' => 'required',
             'date' => 'required',
-            'scheduled' => 'required|unique_with:pr_monthly_progresses,date,'.$this->monthlyProgress_id,
-            'actual' => 'required|unique_with:pr_monthly_progresses,date,'.$this->monthlyProgress_id,
+            'schedule' => ['required', Rule::unique('pr_monthly_progresses')->where(fn ($query) => $query->where('date', request()->date)->where('id', '!=', $this->monthlyProgress_id))],
+            'actual' => ['required', Rule::unique('pr_monthly_progresses')->where(fn ($query) => $query->where('date', request()->date)->where('id', '!=', $this->monthlyProgress_id))],
+
         ];
 
         return $rules;
@@ -53,13 +54,11 @@ class MonthlyProgressStore extends FormRequest
 
     public function messages()
     {
-        
+
         return [
-            'pr_progress_activity_id.required' => 'Activity Name is Required'. $this->date,
-            'scheduled.unique_with' => 'This Activity Scheduled Progress is already Entered',
-            'actual.unique_with' => 'This Activity Actual Progress is already Entered',
+            'pr_progress_activity_id.required' => 'Activity Name is Required' . $this->date,
+            'scheduled.unique' => 'This Activity Scheduled Progress is already Entered',
+            'actual.unique' => 'This Activity Actual Progress is already Entered',
         ];
     }
-
-
 }
