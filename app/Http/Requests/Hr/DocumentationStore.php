@@ -57,7 +57,7 @@ class DocumentationStore extends FormRequest
 
         //If method is POST then document is required otherwise in Patch method document is nullable.
         if ($this->getMethod() == 'POST') {
-            $rules += ['hr_document_name_id' => 'required|unique:hr_document_name_hr_documentation,hr_employee_id',  'description' => 'not_in:' . $this->documentNames, 'document' => 'required|file|max:' . $this->limit . '|mimes:' . $this->mime_type,];
+            $rules += ['hr_document_name_id' => 'required|unique_with:hr_document_name_hr_documentation,hr_employee_id',  'description' => 'not_in:' . $this->documentNames, 'document' => 'required|file|max:' . $this->limit . '|mimes:' . $this->mime_type,];
         } else {
             $rules += ['hr_document_name_id' => 'required'];
         }
@@ -70,7 +70,7 @@ class DocumentationStore extends FormRequest
 
         return [
             'document.mimes' => ' picture only jpg,png allowed otherwise pdf, jpg, tif and png attachment allowed',
-            'hr_document_name_id.unique' => 'this document names is already entered',
+            'hr_document_name_id.unique_with' => 'this document names is already entered',
             'description.not_in' => $this->description . ' is reserved word, please use alternate word in document description',
 
 
