@@ -37,7 +37,7 @@
     <link href="{{asset('Massets/select2/select2.min.css') }}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     @if(Config::get('app.url')==='http://localhost/hrms/public/')
-    <link href="{{asset('Massets/css/colors/red-dark.css') }}" id="theme" rel="stylesheet">
+    <link href="{{asset('Massets/css/colors/megna.css') }}" id="theme" rel="stylesheet">
     @else
     <link href="{{asset('Massets/css/colors/green.css') }}" id="theme" rel="stylesheet">
     @endif
