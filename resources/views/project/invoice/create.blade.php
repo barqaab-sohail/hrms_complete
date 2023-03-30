@@ -372,7 +372,7 @@
                     $('#remarks').val(data.remarks);
                     $('#invoice_date').val(dateInDayMonthYear(data.invoice_date));
                     $('#invoice_month').val(data.invoice_month);
-                    console.log(data.invoice_month);
+
                     $('#invoice_type_id').val(data.invoice_type_id);
                     $('#invoice_type_id').trigger('change');
                     $('#reference').val(data.reference);

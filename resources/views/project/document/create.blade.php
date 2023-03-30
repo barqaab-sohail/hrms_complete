@@ -228,7 +228,7 @@
             var fileType = this.files[0].type;
             var fileSize = this.files[0].size;
             //var fileType = fileName.split('.').pop();
-            console.log(fileType);
+
             //Restrict File Size Less Than 30MB
             if (fileSize > 38400000) {
                 alert('File Size is bigger than 30MB');

@@ -262,7 +262,6 @@
 
             $('body').on('click', '.deleteDocument', function() {
                 var document_id = $(this).data("id");
-                console.log('testing');
                 var con = confirm("Are You sure want to delete !");
                 if (con) {
                     $.ajax({

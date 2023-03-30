@@ -265,7 +265,7 @@
         setTimeout(function() {
           $('.btn-prevent-multiple-submits').removeAttr('disabled');
         }, 3000);
-        console.log($('#activityForm').serialize());
+
         $.ajax({
           data: $('#activityForm').serialize(),
           url: "{{ route('projectProgressActivities.store') }}",

@@ -4,6 +4,7 @@ namespace App\Http\Requests\Hr;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Hr\HrDocumentName;
+use Illuminate\Validation\Rule;
 
 class DocumentationStore extends FormRequest
 {
@@ -53,13 +54,13 @@ class DocumentationStore extends FormRequest
         $rules = [
 
             'document_date' => 'required|date',
+            'hr_document_name_id' => ['required', Rule::unique('hr_document_name_hr_documentation')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('hr_documentation_id', '!=', $this->document_id))],
+
         ];
 
         //If method is POST then document is required otherwise in Patch method document is nullable.
         if ($this->getMethod() == 'POST') {
-            $rules += ['hr_document_name_id' => 'required|unique_with:hr_document_name_hr_documentation,hr_employee_id',  'description' => 'not_in:' . $this->documentNames, 'document' => 'required|file|max:' . $this->limit . '|mimes:' . $this->mime_type,];
-        } else {
-            $rules += ['hr_document_name_id' => 'required'];
+            $rules += ['description' => 'not_in:' . $this->documentNames, 'document' => 'required|file|max:' . $this->limit . '|mimes:' . $this->mime_type,];
         }
 
         return $rules;
@@ -70,7 +71,7 @@ class DocumentationStore extends FormRequest
 
         return [
             'document.mimes' => ' picture only jpg,png allowed otherwise pdf, jpg, tif and png attachment allowed',
-            'hr_document_name_id.unique_with' => 'this document names is already entered',
+            'hr_document_name_id.unique_with' => 'this document names is already entered' . $this->document_id,
             'description.not_in' => $this->description . ' is reserved word, please use alternate word in document description',
 
 

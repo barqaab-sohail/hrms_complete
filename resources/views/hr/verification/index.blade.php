@@ -125,8 +125,7 @@
         cache: false,
         processData: false,
         success: function(data) {
-          console.log(data);
-          console.log(data.picture);
+
           if (data) {
             $('.card').show();
             $(".img-thumbnail").show();
