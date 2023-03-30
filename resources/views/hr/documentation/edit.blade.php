@@ -18,7 +18,6 @@
                 <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <input name="document_id" value="{{$data->id}}" type="hidden" />
                             <label class="control-label text-right">Document Name<span class="text_requried">*</span></label>
                             <select name="hr_document_name_id" id="document_name" class="form-control selectTwo">
                                 <option value=""></option>
@@ -108,8 +107,8 @@
 
             </div>
 
-
         </div>
+        <input name="document_id" id="document_id" value="{{$data->id}}" hidden />
         <hr>
         <div class="form-actions">
             <div class="row">
@@ -169,6 +168,7 @@
             e.preventDefault();
             var url = $(this).attr('action');
             $('.fa-spinner').show();
+            console.log(this);
             submitForm(this, url);
             resetForm();
             $('#wizardPicturePreview').attr('src', "{{asset('Massets/images/document.png')}}").attr('width', '150');

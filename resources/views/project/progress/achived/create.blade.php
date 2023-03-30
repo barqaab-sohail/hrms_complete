@@ -163,7 +163,7 @@
 
       $('.data-table').on('click', '.deleteModal', function() {
         var activity_id = $(this).data('id');
-        console.log(activity_id);
+
         $('#ajaxModel').modal('show');
 
         $(function() {
