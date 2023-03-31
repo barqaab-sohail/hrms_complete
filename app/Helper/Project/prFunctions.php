@@ -31,6 +31,10 @@ function budgetUtilization($projectId)
         return 'N/A';
     }
 }
+
+
+
+
 function currentProgress($projectId)
 {
     //return $pogress = PrAchievedProgress::where('pr_detail_id', $projectId)->orderBy('created_at', 'desc')->distinct('pr_progress_activity_id')->sum('percentage_complete');
@@ -96,6 +100,14 @@ function pendingInvoices($projectId)
     $pendingInvoices = Invoice::whereNotIn('id', $receivedInvoiceIds)->where('pr_detail_id', $projectId)->get();
 
     return $pendingInvoices;
+}
+
+function totalInvoicesAmount($projectId)
+{
+
+    $invoicesId = Invoice::where('pr_detail_id', $projectId)->pluck('id')->toArray();
+    $totalInvoices = InvoiceCost::whereIn('invoice_id', $invoicesId)->sum('amount') + InvoiceCost::whereIn('invoice_id', $invoicesId)->sum('sales_tax');
+    return $totalInvoices;
 }
 
 function pendingInvoicesAmount($projectId)

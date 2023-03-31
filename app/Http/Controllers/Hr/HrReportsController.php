@@ -58,7 +58,7 @@ class HrReportsController extends Controller
 
     public function report_1()
     {
-        $employees = HrEmployee::where('hr_status_id', 1)->with('degreeYearAbove12', 'degreeAbove12', 'hrDepartment', 'hrContactMobile', 'employeeAppointment', 'hrMembership', 'hrBloodGroup', 'hrContactLandline', 'hrEmergency', 'hrContactPermanent', 'hrContactPermanentCity', 'employeeCurrentDesignation', 'employeeCurrentSalary')->get();
+        $employees = HrEmployee::whereIn('hr_status_id', [1, 2, 3, 4, 5, 6])->with('degreeYearAbove12', 'degreeAbove12', 'hrDepartment', 'hrContactMobile', 'employeeAppointment', 'hrMembership', 'hrBloodGroup', 'hrContactLandline', 'hrEmergency', 'hrContactPermanent', 'hrContactPermanentCity', 'employeeCurrentDesignation', 'employeeCurrentSalary')->get();
 
         $designations = employeeDesignationArray();
 

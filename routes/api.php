@@ -54,6 +54,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //Projects Routes
     Route::get('/projectDocuments/{id}', 'MIS\Project\ProjectController@projectDocuments');
+    Route::get('/allProjectDocuments', 'MIS\Project\ProjectController@allProjectDocuments');
+    Route::get('/proejctSummaryMM/{id}', 'MIS\Project\ProjectController@proejctSummaryMM');
 });
 
 
