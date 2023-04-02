@@ -2,6 +2,7 @@
 
 use App\Models\Project\PrDetail;
 use App\Models\Project\Invoice\Invoice;
+use App\Models\Project\Invoice\InvoiceMonth;
 use App\Models\Project\Invoice\InvoiceCost;
 use App\Models\Project\PrRight;
 use App\Models\Project\Progress\PrProgressActivity;
@@ -33,7 +34,12 @@ function budgetUtilization($projectId)
 }
 
 
-
+function lastInvoiceMonth($projectId)
+{
+    $InvoiceIds = Invoice::where('pr_detail_id', $projectId)->pluck('id')->toArray();
+    $lastInvoice = InvoiceMonth::whereIn('invoice_id', $InvoiceIds)->orderBy('invoice_month', 'desc')->first();
+    return $lastInvoice->invoice_month ?? 'N/A';
+}
 
 function currentProgress($projectId)
 {
