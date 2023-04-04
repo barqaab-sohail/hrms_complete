@@ -29,7 +29,7 @@ function budgetUtilization($projectId)
         $totalCostWithoutGST = $prDetail->prCost->total_cost ?? '0' - $prDetail->prCost->sales_tax ?? '0';
         return round(($totalInvoices / $totalCostWithoutGST * 100), 2) . "%";
     } else {
-        return 'N/A';
+        return '0.0';
     }
 }
 
