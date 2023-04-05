@@ -33,8 +33,8 @@ class ProjectController extends Controller
             'pending_invoices' => (int)pendingInvoicesAmount($projectId),
             'total_invoice' => (int)totalInvoicesAmount($projectId),
             'last_invoice' => lastInvoiceMonth($projectId),
-            'budget_utilization' => doubleval($budgetUtilized),
-            'remaining_budget' => (float)$remainingBudget,
+            'budget_utilization' =>  rtrim($budgetUtilized, "%"),
+            'remaining_budget' => "$remainingBudget",
             'current_progress' => currentProgress($projectId),
         ];
         return response()->json($porjectSummary);
