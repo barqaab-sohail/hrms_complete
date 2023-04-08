@@ -27,14 +27,14 @@ class ProjectController extends Controller
     {
         $prDetail = PrDetail::find($projectId);
         $budgetUtilized = budgetUtilization($projectId);
-        $remainingBudget = $budgetUtilized != '0.0' ? 100 - (float) rtrim($budgetUtilized, "%") : '0.0';
+        $remainingBudget = $budgetUtilized != '0.0' ? 100 - rtrim($budgetUtilized, "%") : '0.0';
         $porjectSummary = [
             'total_cost' =>   $prDetail->prCost ? (int) $prDetail->prCost->total_cost ?? 0 - $prDetail->prCost->sales_tax ?? 0 : 0,
             'pending_invoices' => (int)pendingInvoicesAmount($projectId),
             'total_invoice' => (int)totalInvoicesAmount($projectId),
             'last_invoice' => lastInvoiceMonth($projectId),
-            'budget_utilization' => doubleval($budgetUtilized),
-            'remaining_budget' => (float)$remainingBudget,
+            'budget_utilization' =>  rtrim($budgetUtilized, "%"),
+            'remaining_budget' => "$remainingBudget",
             'current_progress' => currentProgress($projectId),
         ];
         return response()->json($porjectSummary);
