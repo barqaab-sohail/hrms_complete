@@ -33,12 +33,12 @@ class LoginController extends Controller
                 return response()->json([
                     'status' => 401,
                     'message' => 'Invalid Email or Password',
-                ]);
+                ])->setStatusCode(401);
             } else if (!isAllowMis($user->id ?? 0)) {
                 return response()->json([
                     'status' => 402,
                     'message' => 'You are not Authorized',
-                ]);
+                ])->setStatusCode(402);
             } else {
                 $token = $user->createToken($user->email . '_token')->plainTextToken;
                 $picture = HrDocumentation::where('hr_employee_id', $user->hrEmployee->id)->where('description', 'picture')->first();
@@ -51,7 +51,7 @@ class LoginController extends Controller
                     'token' => $token,
                     'permissions' => $user->getAllPermissions()->pluck('name'),
                     'message' => 'Loogged In Successfully',
-                ], 200);
+                ])->setStatusCode(200);
             }
         }
     }
