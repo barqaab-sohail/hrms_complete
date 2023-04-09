@@ -34,7 +34,7 @@ class LoginController extends Controller
                     'status' => 401,
                     'message' => 'Invalid Email or Password',
                 ])->setStatusCode(401);
-            } else if (!isAllowMis($user->id ?? 0)) {
+            } else if (!isAllowMis($user->id ?? 0)  || $user->hrEmployee->hr_status_id != "Active") {
                 return response()->json([
                     'status' => 402,
                     'message' => 'You are not Authorized',
