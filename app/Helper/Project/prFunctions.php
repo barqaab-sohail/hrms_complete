@@ -19,6 +19,18 @@ function receivedInvoices($projectId)
     return $receivedInvoices;
 }
 
+function projectCostWithoutGst($projectId)
+{
+    $project = PrDetail::find($projectId);
+    $projectCost = $project->prCost->total_cost ?? 0;
+    $salesTax = $project->prCost->sales_tax ?? 0;
+    if ($projectCost) {
+        return addComma($projectCost -  $salesTax);
+    } else {
+        return 'N/A';
+    }
+}
+
 function budgetUtilization($projectId)
 {
     $prDetail = PrDetail::find($projectId);
@@ -77,7 +89,7 @@ function currentProgress($projectId)
             $latestDate = PrAchievedProgress::where('pr_detail_id', $projectId)->latest()->first();
             $lastAchievedProgressDate  = $latestDate->date ?? '';
 
-            return $SubProjectsAccomulativeProgress . '% - ' . $lastAchievedProgressDate;
+            return  $lastAchievedProgressDate . ' - ' . $SubProjectsAccomulativeProgress . '%';
         } else {
             $progressActivities = PrProgressActivity::where('pr_detail_id', $projectId)->where('level', 1)->get();
             $latestDate = PrAchievedProgress::where('pr_detail_id', $projectId)->latest()->first();
@@ -90,7 +102,7 @@ function currentProgress($projectId)
                     $totalAchievedProgress += $latestProgress->percentage_complete ?? 0;
                 }
             }
-            return $totalAchievedProgress . '% - ' . $lastAchievedProgressDate;
+            return $lastAchievedProgressDate . ' - ' . $totalAchievedProgress . '%';
         }
     } else {
         return 'N/A';
