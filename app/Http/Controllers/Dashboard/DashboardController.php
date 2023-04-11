@@ -156,6 +156,7 @@ class DashboardController extends Controller
                 'projectNo' => $project->project_no,
                 'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
                 'projectName' => $project->project_no . " - " . $project->name,
+                'totalProjectCostWihtoutGST' => projectCostWithoutGst($project->id),
                 'paymentReceived' => addComma(PaymentReceive::where('pr_detail_id', $project->id)->sum('amount')),
                 'pendingPayments' => addComma(pendingInvoicesAmount($project->id)),
                 'budgetUtilization' => budgetUtilization($project->id),
