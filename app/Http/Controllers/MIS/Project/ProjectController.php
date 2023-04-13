@@ -39,4 +39,40 @@ class ProjectController extends Controller
         ];
         return response()->json($porjectSummary);
     }
+
+    public function manMonthProjectsStatus()
+    {
+        $projectsList = PrDetail::where('pr_status_id', 1)->where('contract_type_id', 2)->where('pr_division_id', 2)->get();
+        $projects = [];
+        foreach ($projectsList as $project) {
+            $currProgressWithDate = currentProgress($project->id);
+            $currentProgressDate = '';
+            $currentProgress = '';
+            if (strlen($currProgressWithDate) > 10) {
+                $pieces = explode(" - ", $currProgressWithDate);
+                $currentProgressDate = $pieces[0];
+                $currentProgress = $pieces[1];
+            }
+            $budgetUtilized =  budgetUtilization($project->id);
+            $color = '';
+            if ((float) rtrim($budgetUtilized, "%") > (float) rtrim($currentProgress, "%")) {
+                $color = 'red';
+            } else {
+                $color = 'green';
+            }
+
+            $projects[] = [
+                'id' => $project->id,
+                'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
+                'projectName' => $project->project_no . " - " . $project->name,
+                'lastInvoice' => lastInvoiceMonth($project->id),
+                'budgetUtilization' => $budgetUtilized,
+                'progress' =>   $currentProgress,
+                'progressDate' => $currentProgressDate,
+                'color' => $color,
+
+            ];
+        }
+        return response()->json($projects);
+    }
 }

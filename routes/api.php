@@ -25,6 +25,7 @@ Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 Route::post('/mis/login', 'MIS\LoginController@login');
 Route::get('/proejctSummaryMM/{id}', 'MIS\Project\ProjectController@proejctSummaryMM');
+Route::get('/manMonthProjectsStatus', 'MIS\Project\ProjectController@manMonthProjectsStatus');
 
 
 
