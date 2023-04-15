@@ -149,6 +149,19 @@ function pecCardExpiryTotal()
     return $total;
 }
 
+function employeeType($employeeTypeId)
+{
+    if ($employeeTypeId == 1) {
+        return "Professional";
+    } else if ($employeeTypeId == 2) {
+        return "Para Professional";
+    } else if ($employeeTypeId == 3) {
+        return "Non Technical";
+    } else {
+        return 'N/A';
+    }
+}
+
 function editNotification($oldObject)
 {
 

@@ -29,6 +29,8 @@
                         <th>Mobile</th>
                         <th>LandLine Number</th>
                         <th>Emergency Number</th>
+                        <th>Type</th>
+                        <th>Status</th>
                         <th>Blood Group</th>
                         <th class="text-center" style="width:5%">Edit</th>
 
@@ -59,6 +61,8 @@
                         <td>{{$employee->hrContactMobile->mobile??''}}</td>
                         <td>{{$employee->hrContactLandline->landline??''}}</td>
                         <td>{{$employee->hrEmergency->mobile??''}}</td>
+                        <td>{{employeeType($employee->employeeAppointment->hr_employee_type_id??4)}}</td>
+                        <td>{{$employee->hr_status_id??''}}</td>
                         <td>{{$employee->hrBloodGroup->name??''}}</td>
                         <td class="text-center">
                             <a class="btn btn-success btn-sm" href="{{route('employee.edit',$employee->id)}}" title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
@@ -88,24 +92,24 @@
             buttons: [{
                     extend: 'copyHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
                     }
                 },
                 {
                     extend: 'excelHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
                     }
                 },
                 {
                     extend: 'pdfHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
                     }
                 }, {
                     extend: 'csvHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
                     }
                 },
             ],
