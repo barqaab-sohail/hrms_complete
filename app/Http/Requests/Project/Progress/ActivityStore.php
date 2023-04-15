@@ -50,8 +50,10 @@ class ActivityStore extends FormRequest
     public function rules()
     {
         $sum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->sum('weightage');
-        $PrProgressActivityId = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->pluck('id')->toArray();
-        $this->PrSubProjectWeightageSum = PrSubTotalWeightage::whereIn('pr_progress_activity_id',  $PrProgressActivityId)->sum('total_weightage');
+        if ($this->total_weightage) {
+            $PrProgressActivityId = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->pluck('id')->toArray();
+            $this->PrSubProjectWeightageSum = PrSubTotalWeightage::whereIn('pr_progress_activity_id',  $PrProgressActivityId)->sum('total_weightage');
+        }
 
         $project = PrDetail::find(session('pr_detail_id'));
         if ($project->prSubProject->count()) {
@@ -74,8 +76,10 @@ class ActivityStore extends FormRequest
         if ($this->activity_id) {
             $sum = PrProgressActivity::where('id', $this->activity_id)->first();
             $max = $max + $sum->weightage;
-            $sumSubProject = PrSubTotalWeightage::where('pr_progress_activity_id', $this->activity_id)->first();
-            $maxSubProjectWeightage = $maxSubProjectWeightage + $sumSubProject->total_weightage;
+            if ($this->total_weightage) {
+                $sumSubProject = PrSubTotalWeightage::where('pr_progress_activity_id', $this->activity_id)->first();
+                $maxSubProjectWeightage = $maxSubProjectWeightage + $sumSubProject->total_weightage;
+            }
 
             $rules += ['weightage' => "required|lte:$max", 'total_weightage' => "nullable|lte:$maxSubProjectWeightage"];
         } else {
