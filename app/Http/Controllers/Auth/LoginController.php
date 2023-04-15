@@ -40,7 +40,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        
+
         //$this->middleware('guest')->except('logout');
     }
 
@@ -50,45 +50,46 @@ class LoginController extends Controller
     {
         $url = \Request::url();
         $lastWord = substr($url, strrpos($url, "/") + 1);
-        if($lastWord == "pms"){
-             return view('auth.pms.login');
-         }else{
+        if ($lastWord == "pms") {
+            return view('auth.pms.login');
+        } else {
             return view('auth.login');
-         }
-       
+        }
     }
 
     public function login(Request $request)
     {
-       
+
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
-        
+
 
         //Override loing function for Additional code
-        $user = user::all()->where ('email',$request->email)->first();
+        $user = user::all()->where('email', $request->email)->first();
 
-        if($user){
+        if ($user) {
             // 2 for check User is not block by HR and 0 Check User is Registered
-            if ($user->user_status==2){
-                  return view('auth.login')->withErrors("Please Contact to HR");
-            } elseif($user->user_status==0){
+            if ($user->user_status == 2) {
+                return view('auth.login')->withErrors("Please Contact to HR");
+            } elseif ($user->user_status == 0) {
                 return view('auth.register')->withErrors("You are not registered user, please registration first.  Enter email address as per HR Record");
-            } 
-            
+            }
+
             //check Employee is Onboard
-            if ($user->hrEmployee->hr_status_id != 'Active'){
-                  return view('auth.login')->withErrors("Please Contact to HR");
+            if ($user->hrEmployee->hr_status_id != 'Active') {
+                return view('auth.register')->withErrors("Please Contact to HR");
             }
         }
         //end additional code
 
 
-        if (method_exists($this, 'hasTooManyLoginAttempts') &&
-            $this->hasTooManyLoginAttempts($request)) {
+        if (
+            method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)
+        ) {
             $this->fireLockoutEvent($request);
 
             return $this->sendLockoutResponse($request);
@@ -106,7 +107,8 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
-     public function logout(){
+    public function logout()
+    {
 
         Auth::logout();
         return redirect()->route('login');
@@ -114,17 +116,17 @@ class LoginController extends Controller
     }
 
     /**
- * Swap a user session with a current one
- * 
- * @param \App\User $user
- * @return boolean
- */
-// //Override from original (take from AuthenticatesUsers)
+     * Swap a user session with a current one
+     * 
+     * @param \App\User $user
+     * @return boolean
+     */
+    // //Override from original (take from AuthenticatesUsers)
     protected function sendLoginResponse(Request $request)
     {
 
         $request->session()->regenerate();
-        
+
         //It is overrried function
         $previous_session = Auth::User()->session_id;
         if ($previous_session) {
@@ -138,12 +140,12 @@ class LoginController extends Controller
 
 
         if ($response = $this->authenticated($request, $this->guard()->user())) {
-                return $response;
-            }
+            return $response;
+        }
 
-            return $request->wantsJson()
-                        ? new Response('', 204)
-                        : redirect()->intended($this->redirectPath());
+        return $request->wantsJson()
+            ? new Response('', 204)
+            : redirect()->intended($this->redirectPath());
     }
 
     function authenticated(Request $request, $user)
@@ -156,7 +158,4 @@ class LoginController extends Controller
         //dd(\Request::url());
         //return redirect()->route('employee.index');
     }
-
-
-
 }
