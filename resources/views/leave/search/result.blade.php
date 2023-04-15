@@ -5,7 +5,7 @@
         <!--<div class="float-right">
                     <input id="month" class="form-control" value="" type="month">
                 </div>-->
-
+        <input id='table-title' value="{{$title}}" hidden />
         <div class="table-responsive m-t-40">
 
             <table id="myDataTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
@@ -64,13 +64,16 @@
                     extend: 'excelHtml5',
                     exportOptions: {
                         columns: [0, 1, 2, 3, 4, 5, 6, 7]
-                    }
+                    },
                 },
                 {
                     extend: 'pdfHtml5',
                     exportOptions: {
                         columns: [0, 1, 2, 3, 4, 5, 6, 7]
-                    }
+                    },
+                    title: function() {
+                        return $('#table-title').val();
+                    },
                 }, {
                     extend: 'csvHtml5',
                     exportOptions: {
