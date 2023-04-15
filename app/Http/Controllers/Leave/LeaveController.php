@@ -267,6 +267,10 @@ class LeaveController extends Controller
         $input = $request->all();
         $input['from'] = \Carbon\Carbon::parse($request->from)->format('Y-m-d');
         $input['to'] = \Carbon\Carbon::parse($request->to)->format('Y-m-d');
+        $title = '';
+
+
+
 
 
 
@@ -274,37 +278,40 @@ class LeaveController extends Controller
         if ($request->filled('employee') && $request->filled('from') && $request->filled('to')) {
             $result = Leave::where('hr_employee_id', $request->employee)->whereDate('from', ">=", $input['from'])->whereDate('to', "<=", $input['to'])->get();
             $leaveBalance = false;
-            return view('leave.search.result', compact('result', 'leaveBalance'));
+            return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('from') && $request->filled('to')) {
             $result = Leave::whereDate('from', ">=", $input['from'])->whereDate('to', "<=", $input['to'])->get();
             $leaveBalance = false;
-            return view('leave.search.result', compact('result', 'leaveBalance'));
+            $title = 'Leave Detail from ' . $request->from . ' to ' . $request->to;
+            return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('employee') && $request->filled('from')) {
             $result = Leave::where('hr_employee_id', $request->employee)->whereDate('from', "=", $input['from'])->get();
             $leaveBalance = false;
-            return view('leave.search.result', compact('result', 'leaveBalance'));
+            return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('employee') && $request->filled('to')) {
             $result = Leave::where('hr_employee_id', $request->employee)->whereDate('to', "=", $input['to'])->get();
             $leaveBalance = false;
-            return view('leave.search.result', compact('result', 'leaveBalance'));
+            return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('employee')) {
             $result = Leave::where('hr_employee_id', $request->employee)->get();
             $leaveBalance = false;
-            return view('leave.search.result', compact('result', 'leaveBalance'));
+            $employee = HrEmployee::find($request->employee);
+            $title = $employee->full_name . ' - ' . $employee->designation . ' - Leave Detail';
+            return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('leave_balance')) {
             $result = HrEmployee::find($request->leave_balance);
             $leaveBalance = true;
-            return view('leave.search.result', compact('result', 'leaveBalance'));
+            return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
     }
 }
