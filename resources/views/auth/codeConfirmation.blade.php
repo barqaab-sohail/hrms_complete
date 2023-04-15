@@ -8,48 +8,51 @@
                 <div class="card-header">{{ __('Code Confirmation') }}</div>
 
                 <div class="card-body">
-                @include('layouts.auth.message')
-
-                    <form method="POST" action="{{route('opt.store')}}"  class="form-prevent-multiple-submits">
+                    @include('layouts.auth.message')
+                    <div class="alert alert-success">
+                        <a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <strong></strong> {{$message}}
+                    </div>
+                    <form method="POST" action="{{route('opt.store')}}" class="form-prevent-multiple-submits">
                         @csrf
 
                         <div class="form-group row">
                             <label for="cnic" class="col-md-4 col-form-label text-md-right">{{ __('OTP') }}</label>
 
                             <div class="col-md-6">
-                                <input id="otp" type="number" class="form-control{{ $errors->has('otp') ? ' is-invalid' : '' }}"  name="otp"  placeholder="Enter Code" value="{{ old('otp') }}" required autofocus>
+                                <input id="otp" type="number" class="form-control{{ $errors->has('otp') ? ' is-invalid' : '' }}" name="otp" placeholder="Enter Code" value="{{ old('otp') }}" required autofocus>
 
                                 @if ($errors->has('otp'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('otp') }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('otp') }}</strong>
+                                </span>
                                 @endif
                             </div>
                         </div>
 
-                         <div class="form-group row">
+                        <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{$email}}" readonly>
+                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{old('email',$email)}}" readonly>
 
                                 @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                </span>
                                 @endif
                             </div>
                         </div>
-                         <div class="form-group row">
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
                                 @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('password') }}</strong>
+                                </span>
                                 @endif
                             </div>
                         </div>
@@ -79,4 +82,3 @@
 
 
 @endsection
-

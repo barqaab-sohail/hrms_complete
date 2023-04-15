@@ -46,7 +46,6 @@ class HrEmployee extends Model implements Auditable
     public function hrEmployeeHusband()
     {
         return $this->hasOne('App\Models\Hr\HrEmployeeHusband');
-        
     }
 
 

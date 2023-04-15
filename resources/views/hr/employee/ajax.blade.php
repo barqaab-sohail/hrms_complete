@@ -38,17 +38,17 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Father Name</label>
 
-                            <input type="text" name="father_name" value="{{ old('father_name', $data->father_name) }}" class="form-control "  placeholder="Enter Father Name">
+                            <input type="text" name="father_name" value="{{ old('father_name', $data->father_name) }}" class="form-control " placeholder="Enter Father Name">
                         </div>
                     </div>
                 </div>
-                 <!--/span-->
-                 <div class="col-md-3">
+                <!--/span-->
+                <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Husband Name</label>
 
-                            <input type="text" name="husband_name" value="{{ old('husband_name', $data->hrEmployeeHusband->husband_name??'') }}" class="form-control "  placeholder="Enter Husband Name">
+                            <input type="text" name="husband_name" value="{{ old('husband_name', $data->hrEmployeeHusband->husband_name??'') }}" class="form-control " placeholder="Enter Husband Name">
                         </div>
                     </div>
                 </div>
@@ -150,7 +150,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Employee ID</label>
 
-                            <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no', $data->employee_no) }}" class="form-control" placeholder="Enter Employee No">
+                            <input type="text" id="employee_no" name="employee_no" value="{{ old('employee_no', $data->employee_no) }}" class="form-control" readonly>
 
                         </div>
                     </div>

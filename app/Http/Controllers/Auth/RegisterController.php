@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\StoreOTP;
@@ -49,7 +50,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-       // $this->middleware('guest');
+        // $this->middleware('guest');
     }
 
     /**
@@ -64,18 +65,17 @@ class RegisterController extends Controller
     {
         $url = \Request::url();
         $lastWord = substr($url, strrpos($url, "/") + 1);
-        if($lastWord == "pmsRegister"){
-             return view('auth.pms.register');
-         }else{
+        if ($lastWord == "pmsRegister") {
+            return view('auth.pms.register');
+        } else {
             return view('auth.register');
-         }
-       
+        }
     }
 
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'email' => ['required', 'string', 'email', 'max:255', ],
+            'email' => ['required', 'string', 'email', 'max:255',],
             //'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -87,69 +87,62 @@ class RegisterController extends Controller
      */
     protected function create(Request $request)
     {
-        
-        $email = $request->email;
 
-        return view('auth.codeConfirmation',compact('email'));
+        $email = $request->email;
+        $message = "Please check your email for OTP";
+        return view('auth.codeConfirmation', compact('email', 'message'));
     }
 
-    public function store(StoreOTP $request){
+    public function store(StoreOTP $request)
+    {
 
-        $user = user::all()->where('email',$request->email)->first();
-       
-        if ($user->code == $request->otp){
+        $user = user::all()->where('email', $request->email)->first();
+
+        if ($user->code == $request->otp) {
             DB::table('users')
                 ->where('email', $request->email)
-                ->update(['user_status' => 1, 'email_verified_at' =>  \Carbon\Carbon::now(),'password' => Hash::make($request->password) ]); 
+                ->update(['user_status' => 1, 'email_verified_at' =>  \Carbon\Carbon::now(), 'password' => Hash::make($request->password)]);
 
-        return redirect()->route('login')->with('success', 'You are Successfully registered')->with(['email'=>$request->email]);
-
-        }else{
-
-            
-            return back()->with( ['email'=>$request->email])->withErrors("code is not correct");
+            return redirect()->route('login')->with('success', 'You are Successfully registered')->with(['email' => $request->email]);
+        } else {
+            $email = $request->email;
+            return view('auth.codeConfirmation', compact('email'))->withErrors("OTP is not correct");
+            //return back()->with(['email' => $request->email])->withErrors("code is not correct");
         }
     }
 
     public function register(Request $request)
     {
-       
-       $this->validator($request->all())->validate();
-           
-         $test = DB::table('users')
-                    ->where('email', $request->email)->first();
-         
-        if ($test == null)
-        {
-            return view('auth.register')->withErrors("This Email Address is not Found. Please Contact to HR");
 
-        }
-        else
-        {
-            if($test->user_status==1)
-            {
-                 return view('auth.login')->withErrors("You are already Registered.  Please Enter Email and Password");
-            }elseif($test->user_status==0)
-            {
+        $this->validator($request->all())->validate();
+
+        $test = DB::table('users')
+            ->where('email', $request->email)->first();
+
+        if ($test == null) {
+            return view('auth.register')->withErrors("This Email Address is not Found. Please Contact to HR");
+        } else {
+            if ($test->user_status == 1) {
+                return view('auth.login')->withErrors("You are already Registered.  Please Enter Email and Password");
+            } elseif ($test->user_status == 0) {
                 $otpcode = rand(10000, 65000);
 
-            DB::table('users')
-                ->where('email', $request->email)
-                ->update(['code' => $otpcode]);
+                DB::table('users')
+                    ->where('email', $request->email)
+                    ->update(['code' => $otpcode]);
 
-            $email = $request->email;
+                $email = $request->email;
 
-            $user = User::where('email', $request->email)->first();
-            $user->notify(New MailNotification($otpcode));
+                $user = User::where('email', $request->email)->first();
+                $user->notify(new MailNotification($otpcode));
 
-            $message = 'Verification code is send to your email address.  Please enter below for varification';
+                $message = 'Verification code is send to your email address.  Please enter below for varification';
 
-            return view('auth.codeConfirmation',compact('email','message'));//Redirect::route('otp.create')->with( ['message' => $message, 'email'=>$email] );
-            
-            }else{
+                return view('auth.codeConfirmation', compact('email', 'message')); //Redirect::route('otp.create')->with( ['message' => $message, 'email'=>$email] );
+
+            } else {
                 return view('auth.register')->withErrors("Please Contact to HR");
             }
         }
-       
     }
 }
