@@ -15,7 +15,8 @@ Run following commands one by one:
 3.  composer dupm-autoload
 4.  php artisan migrate
 5.  php artisan db:seed --class=DatabaseSeeder 
-6.  after installation login with email: hrms@hrms.com  and password: great786
+6.  for access application http://localhost/hrms/public/login
+7.  and login with email: hrms@hrms.com  and password: great786
 
 
 ## About Laravel
