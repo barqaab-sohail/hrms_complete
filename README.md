@@ -6,6 +6,15 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
+## How to Install This Project
+
+Run following command:
+1.  git clone https://github.com/barqaab-sohail/hrms_complete.git hrms
+2.  composer update
+3.  composer dupm-autoload
+4.  php artisan migrate
+5.  php artisan db:seed --class=DatabaseSeeder 
+
 
 ## About Laravel
 
