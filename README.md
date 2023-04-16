@@ -13,7 +13,7 @@ Run following commands one by one:
 1.  git clone https://github.com/barqaab-sohail/hrms_complete.git hrms
 2.  composer update
 3.  create database in the name of "hr" OR any other name but change database name in .env file
-4.  composer dupm-autoload
+4.  composer dump-autoload
 5.  php artisan migrate
 6.  php artisan db:seed --class=DatabaseSeeder 
 7.  for access application http://localhost/hrms/public/login
