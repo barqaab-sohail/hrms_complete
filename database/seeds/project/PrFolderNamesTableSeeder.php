@@ -11,15 +11,15 @@ class PrFolderNamesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('pr_folder_names')->delete();  
+        \DB::table('pr_folder_names')->delete();
         $prFolderNames = array(
-        	array('name' => 'General Correspondence'),
-        	array('name' => 'Deployment of Staff'),
-        	array('name' => 'Time Sheets'),
-        	array('name' => 'Contracts'),
-        	array('name' => 'RFP'),
-           
+            array('name' => 'General Correspondence'),
+            array('name' => 'Deployment of Staff'),
+            array('name' => 'Time Sheets'),
+            array('name' => 'Contracts'),
+            array('name' => 'RFP'),
+
         );
-        DB::table('pr_folder_names')->insert($prFolderNames);
+        \DB::table('pr_folder_names')->insert($prFolderNames);
     }
 }

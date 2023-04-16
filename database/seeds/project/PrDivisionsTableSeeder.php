@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Database\Seeder;
 
 class PrDivisionsTableSeeder extends Seeder
@@ -11,13 +12,13 @@ class PrDivisionsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('pr_divisions')->delete();
-        
+        \DB::table('pr_divisions')->delete();
+
         $prDivisions = array(
-        	array('name' => 'Water', 'code'=>1),
-        	array('name' => 'Power', 'code'=>2),
+            array('name' => 'Water', 'code' => 1),
+            array('name' => 'Power', 'code' => 2),
         );
 
-        DB::table('pr_divisions')->insert($prDivisions);
+        \DB::table('pr_divisions')->insert($prDivisions);
     }
 }

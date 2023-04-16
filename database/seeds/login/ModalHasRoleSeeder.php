@@ -14,9 +14,9 @@ class ModalHasRoleSeeder extends Seeder
         \DB::table('model_has_roles')->delete();
 
         $modelHasRoles = array(
-			array('role_id' => '1', 'model_type' => 'App\User','model_id'=>'1')
-		);
+            array('role_id' => '1', 'model_type' => 'App\User', 'model_id' => '1')
+        );
 
-       \DB::table('model_has_roles')->insert($modelHasRoles);
+        \DB::table('model_has_roles')->insert($modelHasRoles);
     }
 }

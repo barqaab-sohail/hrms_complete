@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Database\Seeder;
 
 class PrRolesTableSeeder extends Seeder
@@ -11,15 +12,15 @@ class PrRolesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('pr_roles')->delete();
-        
+        \DB::table('pr_roles')->delete();
+
         $PrRoles = array(
-        	array('name' => 'Independent'),
-        	array('name' => 'JV Partner'),
-        	array('name' => 'Lead Partner'),
-        	array('name' => 'Sub Consultant'),
+            array('name' => 'Independent'),
+            array('name' => 'JV Partner'),
+            array('name' => 'Lead Partner'),
+            array('name' => 'Sub Consultant'),
         );
 
-        DB::table('pr_roles')->insert($PrRoles);
+        \DB::table('pr_roles')->insert($PrRoles);
     }
 }
