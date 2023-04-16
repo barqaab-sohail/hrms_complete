@@ -12,10 +12,11 @@ class LoginSeeder extends Seeder
     public function run()
     {
         $this->call([
-	       PermissionsTableSeeder::class,
-	        RoleSeeder::class,
-	        UserTableSeeder::class,
-	        ModalHasRoleSeeder::class,
+            PermissionsTableSeeder::class,
+            RoleSeeder::class,
+            UserTableSeeder::class,
+            ModalHasRoleSeeder::class,
+            EmployeeSeeder::class,
         ]);
     }
 }
