@@ -9,7 +9,7 @@
 
 ## How to Install This Project
 
-Run following command:
+Run following commands one by one:
 1.  git clone https://github.com/barqaab-sohail/hrms_complete.git hrms
 2.  composer update
 3.  composer dupm-autoload
