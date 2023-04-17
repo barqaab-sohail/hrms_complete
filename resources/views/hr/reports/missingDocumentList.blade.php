@@ -12,7 +12,7 @@
 			<table id="myTable" class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<th>Id</th>
+						<th>Employee ID</th>
 						<th>Employee Name</th>
 						<th>Project</th>
 						<th>CNIC Front</th>
@@ -32,7 +32,7 @@
 				<tbody>
 					@foreach($employees as $employee)
 					<tr>
-						<td>{{$employee->id}}</td>
+						<td>{{$employee->employee_no}}</td>
 						<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 						<td>{{$employee->employeeProject->last()->name??''}}</td>
 						<td>{{$employee->cnicFront->first()?'Avaiable':'Missing'}}</td>
