@@ -14,6 +14,7 @@
 					<tr>
 						<th>Employee ID</th>
 						<th>Employee Name</th>
+						<th>Division</th>
 						<th>Project</th>
 						<th>CNIC Front</th>
 						<th>Appointment Letter</th>
@@ -34,6 +35,7 @@
 					<tr>
 						<td>{{$employee->employee_no}}</td>
 						<td>{{$employee->first_name}} {{$employee->last_name}}</td>
+						<td>{{$employee->employeeCurrentDepartment->name??''}}</td>
 						<td>{{$employee->employeeProject->last()->name??''}}</td>
 						<td>{{$employee->cnicFront->first()?'Avaiable':'Missing'}}</td>
 						<td>{{$employee->appointmentLetter->first()?'Avaiable':'Missing'}}</td>
