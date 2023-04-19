@@ -154,6 +154,7 @@ class DashboardController extends Controller
             $projects[] = [
                 'id' => $project->id,
                 'projectNo' => $project->project_no,
+                'clientName' => $project->client->name ?? '',
                 'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
                 'projectName' => $project->project_no . " - " . $project->name,
                 'totalProjectCostWihtoutGST' => projectCostWithoutGst($project->id),
