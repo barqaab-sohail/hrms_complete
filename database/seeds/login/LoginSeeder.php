@@ -16,6 +16,7 @@ class LoginSeeder extends Seeder
             RoleSeeder::class,
             UserTableSeeder::class,
             ModalHasRoleSeeder::class,
+            EmployeeSeeder::class,
         ]);
     }
 }
