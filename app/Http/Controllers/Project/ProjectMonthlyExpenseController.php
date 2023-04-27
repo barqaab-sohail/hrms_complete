@@ -10,6 +10,8 @@ use App\Models\Project\Invoice\Invoice;
 use App\Models\Project\Invoice\InvoiceCost;
 use App\Models\Project\Payment\PaymentReceive;
 use DB;
+use Excel;
+use App\Imports\Project\ExpenseImport;
 use DataTables;
 
 
@@ -102,5 +104,21 @@ class ProjectMonthlyExpenseController extends Controller
 
         PrMonthlyExpense::findOrFail($id)->delete();
         return response()->json(['status' => 'OK', 'message' => "Data Successfully Deleted"]);
+    }
+
+
+    public function importExpense(Request $request)
+    {
+
+        $this->validate($request, [
+            'select_file'  => 'required|mimes:xls,xlsx'
+        ]);
+
+        $path = $request->file('select_file')->getRealPath();
+
+
+        Excel::import(new ExpenseImport, $path);
+
+        return back()->with('success', 'Excel Data Imported successfully.');
     }
 }
