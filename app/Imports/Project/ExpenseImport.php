@@ -15,24 +15,28 @@ class ExpenseImport implements ToCollection
 
     public function collection(Collection $collection)
     {
+        // dd($collection[1][0]);
 
         $reimbursementExpensesKey = '';
         $nonReimbursementExpensesKey = '';
         $reimbursementSalaryKey = '';
         $nonReimbursementSalaryKey = '';
-
         foreach ($collection as $key => $value) {
-            if ($value[$key] == "REIMBURSEABLE EXPENS") {
+
+            if ($value->contains("REIMBURSEABLE EXPENS")) {
                 $reimbursementExpensesKey = $key;
-            } else if ($value[$key] == "REIMBURSEABLE SALARIE") {
-                $reimbursementSalaryKey = $key;
-            } else if ($value[$key] == "NON REMIBURSABLE EXP") {
+            }
+            if ($value->contains("NON REMIBURSABLE EXP")) {
                 $nonReimbursementExpensesKey = $key;
-            } else if ($value[$key] == "NON REIMBURSEABLESAL") {
+            }
+            if ($value->contains("REIMBURSEABLE SALARIE")) {
+                $reimbursementSalaryKey = $key;
+            }
+            if ($value->contains("NON REIMBURSEABLESAL")) {
                 $nonReimbursementSalaryKey = $key;
             }
         }
-        dd([$reimbursementSalaryKey, $reimbursementExpensesKey,  $nonReimbursementSalaryKey,  $nonReimbursementExpensesKey]);
+        // dd([$reimbursementSalaryKey, $reimbursementExpensesKey,  $nonReimbursementSalaryKey,  $nonReimbursementExpensesKey]);
 
         $months = [];
         $expenses = [];
@@ -43,7 +47,7 @@ class ExpenseImport implements ToCollection
         $reimbursementExpenses = [];
         $nonReimbursementExpenses = [];
         $reimbursementSalary = [];
-        $directCost = [];
+        $nonReimbursementSalary = [];
         foreach ($collection as $key => $value) {
             if ($key == 1) {
                 $reportName = $value[0];
@@ -56,14 +60,17 @@ class ExpenseImport implements ToCollection
                 $nextYear = '20' . $value[0] + 1;
                 array_push($months, 'Jul' . '-' . $year, 'Aug' . '-' . $year, 'Sep' . '-' . $year, 'Oct' . '-' . $year, 'Nov' . '-' . $year, 'Dec' . '-' . $year, 'Jan' . '-' . $nextYear, 'Feb' . '-' . $nextYear, 'Mar' . '-' . $nextYear, 'Apr' . '-' . $nextYear, 'May' . '-' . $nextYear, 'Jun' . '-' . $nextYear);
             }
-            if ($key == 14) {
+            if ($key == $reimbursementSalaryKey) {
                 array_push($reimbursementSalary, $value[1], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11], $value[12], $value[13]);
             }
-            if ($key == 15) {
+            if ($key == $reimbursementExpensesKey) {
                 array_push($reimbursementExpenses, $value[1], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11], $value[12], $value[13]);
             }
-            if ($key == 16) {
+            if ($key == $nonReimbursementExpensesKey) {
                 array_push($nonReimbursementExpenses, $value[1], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11], $value[12], $value[13]);
+            }
+            if ($key == $nonReimbursementSalaryKey) {
+                array_push($nonReimbursementSalary, $value[1], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11], $value[12], $value[13]);
             }
             if ($key == 17) {
                 array_push($expenses, $value[1], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11], $value[12], $value[13]);
@@ -72,8 +79,11 @@ class ExpenseImport implements ToCollection
         $directCost = array_map(function () {
             return array_sum(func_get_args());
         }, $reimbursementExpenses, $nonReimbursementExpenses);
+        $salaryCost = array_map(function () {
+            return array_sum(func_get_args());
+        }, $reimbursementSalary, $nonReimbursementSalary);
 
 
-        $this->data = ['projectNo' => $projectNo, 'reportName' => $reportName, 'months' => $months, 'salary' => $reimbursementSalary, 'directCost' => $directCost];
+        $this->data = ['projectNo' => $projectNo, 'reportName' => $reportName, 'months' => $months, 'salary' => $salaryCost, 'directCost' => $directCost];
     }
 }
