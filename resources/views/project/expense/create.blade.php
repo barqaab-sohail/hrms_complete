@@ -1,6 +1,18 @@
 <div class="card-body">
-    <button type="button" class="btn btn-success float-right" id="createExpense" data-toggle="modal">Add Expense</button>
+    <div class="row">
+        <div class="col-md-3">
+            <button type="button" class="btn btn-success reload float-right mb-3" hidden>Reload</button>
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-success float-right" id="uploadFile" data-toggle="modal">Upload File</button>
+            @include('project.expense.import')
+        </div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-success float-right" id="createExpense" data-toggle="modal">Add Expense</button>
+        </div>
+    </div>
     <br>
+    <!-- @include('project.expense.import') -->
     Total Expenses = {{$totalExpenses}} ::
     Payment Received = {{$totalReceived}} ::
     Pending Invoices without Sales Tax = {{$pendingInvoicesWOSTax?$pendingInvoicesWOSTax:'No Pending Invoice'}}
@@ -71,6 +83,11 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
+        $('#uploadFile').click(function() {
+            $('#json_message_modal').html('');
+            $('#uploadFileForm').trigger("reset");
+            $('#fileModel').modal('show');
+        });
         //automatic total
         $(".form-group").on("input", ".prc_1", function() {
             var sum = 0;
@@ -202,6 +219,9 @@
                 order: [
                     [0, "desc"]
                 ]
+            });
+            $(".reload").click(function() {
+                table.ajax.reload(null, false);
             });
 
             $('#createExpense').click(function() {

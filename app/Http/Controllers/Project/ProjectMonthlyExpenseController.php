@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Project\PrMonthlyExpense;
 use App\Http\Requests\Project\PrMonthlyExpenseStore;
 use App\Models\Project\Invoice\Invoice;
+use App\Models\Project\PrDetail;
 use App\Models\Project\Invoice\InvoiceCost;
 use App\Models\Project\Payment\PaymentReceive;
 use DB;
@@ -109,16 +110,56 @@ class ProjectMonthlyExpenseController extends Controller
 
     public function importExpense(Request $request)
     {
+        $importRecord = 0;
+        $updateRecord = 0;
 
         $this->validate($request, [
-            'select_file'  => 'required|mimes:xls,xlsx'
+            'excel_file'  => 'required|mimes:xls,xlsx'
+        ], [
+            'required' => 'Excel File Required ',
+            'mimes' => 'Only Excel File Accepted'
         ]);
 
-        $path = $request->file('select_file')->getRealPath();
+        $path = $request->file('excel_file')->getRealPath();
+        $prDetail = PrDetail::find(session('pr_detail_id'));
+        $import = new ExpenseImport();
+        Excel::import($import, $path);
 
-
-        Excel::import(new ExpenseImport, $path);
-
-        return back()->with('success', 'Excel Data Imported successfully.');
+        if ($import->data['projectNo'] !=  $prDetail->project_no) {
+            return response()->json(['error' => 'Project No is not match with this file']);
+        } else if ($import->data['reportName'] != "Project Wise Income Statement") {
+            return response()->json(['error' => 'Report is not match with this file']);
+        } else {
+            foreach ($import->data['months'] as $key => $value) {
+                $date = \Carbon\Carbon::parse($import->data['months'][$key])->format('Y-m-d');
+                $prMonthlyExpense = PrMonthlyExpense::where('pr_detail_id', 43)->where('month', $date)->first();
+                if ($prMonthlyExpense) {
+                    if ($prMonthlyExpense->salary_expense != $import->data['salary'][$key] || $prMonthlyExpense->non_salary_expense != $import->data['directCost'][$key]) {
+                        ++$updateRecord;
+                        $prMonthlyExpense->update(
+                            [
+                                'salary_expense' => $import->data['salary'][$key],
+                                'non_salary_expense' => $import->data['directCost'][$key]
+                            ]
+                        );
+                    }
+                } else {
+                    if (!($import->data['salary'][$key] == null && $import->data['directCost'][$key] == null)) {
+                        PrMonthlyExpense::create([
+                            'pr_detail_id' => session('pr_detail_id'),
+                            'month' =>  $date,
+                            'salary_expense' => $import->data['salary'][$key],
+                            'non_salary_expense' => $import->data['directCost'][$key]
+                        ]);
+                        ++$importRecord;
+                    }
+                }
+            }
+        }
+        if ($importRecord == 0 && $updateRecord == 0) {
+            return response()->json(['error' => "All Record is Already Updated"]);
+        } else {
+            return response()->json(['success' => "$importRecord Record Sucessfully Entered and $updateRecord Record Updates"]);
+        }
     }
 }
