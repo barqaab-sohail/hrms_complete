@@ -16,7 +16,7 @@ class ExpenseImport implements ToCollection
     public function collection(Collection $collection)
     {
         // dd($collection[1][0]);
-
+        $isValue2Null = true;
         $reimbursementExpensesKey = '';
         $nonReimbursementExpensesKey = '';
         $reimbursementSalaryKey = '';
@@ -36,7 +36,6 @@ class ExpenseImport implements ToCollection
                 $nonReimbursementSalaryKey = $key;
             }
         }
-        // dd([$reimbursementSalaryKey, $reimbursementExpensesKey,  $nonReimbursementSalaryKey,  $nonReimbursementExpensesKey]);
 
         $months = [];
         $expenses = [];
@@ -49,6 +48,7 @@ class ExpenseImport implements ToCollection
         $reimbursementSalary = [];
         $nonReimbursementSalary = [];
         foreach ($collection as $key => $value) {
+
             if ($key == 1) {
                 $reportName = $value[0];
             }
@@ -61,15 +61,27 @@ class ExpenseImport implements ToCollection
                 array_push($months, 'Jul' . '-' . $year, 'Aug' . '-' . $year, 'Sep' . '-' . $year, 'Oct' . '-' . $year, 'Nov' . '-' . $year, 'Dec' . '-' . $year, 'Jan' . '-' . $nextYear, 'Feb' . '-' . $nextYear, 'Mar' . '-' . $nextYear, 'Apr' . '-' . $nextYear, 'May' . '-' . $nextYear, 'Jun' . '-' . $nextYear);
             }
             if ($key == $reimbursementSalaryKey) {
+                if ($value[2] != null) {
+                    $isValue2Null = false;
+                }
                 array_push($reimbursementSalary, $value[1], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11], $value[12], $value[13]);
             }
             if ($key == $reimbursementExpensesKey) {
+                if ($value[2] != null) {
+                    $isValue2Null = false;
+                }
                 array_push($reimbursementExpenses, $value[1], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11], $value[12], $value[13]);
             }
             if ($key == $nonReimbursementExpensesKey) {
+                if ($value[2] != null) {
+                    $isValue2Null = false;
+                }
                 array_push($nonReimbursementExpenses, $value[1], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11], $value[12], $value[13]);
             }
             if ($key == $nonReimbursementSalaryKey) {
+                if ($value[2] != null) {
+                    $isValue2Null = false;
+                }
                 array_push($nonReimbursementSalary, $value[1], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11], $value[12], $value[13]);
             }
             if ($key == 17) {
@@ -83,7 +95,6 @@ class ExpenseImport implements ToCollection
             return array_sum(func_get_args());
         }, $reimbursementSalary, $nonReimbursementSalary);
 
-
-        $this->data = ['projectNo' => $projectNo, 'reportName' => $reportName, 'months' => $months, 'salary' => $salaryCost, 'directCost' => $directCost];
+        $this->data = ['isColumnTwoEmpty' => $isValue2Null, 'projectNo' => $projectNo, 'reportName' => $reportName, 'months' => $months, 'salary' => $salaryCost, 'directCost' => $directCost];
     }
 }

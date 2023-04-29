@@ -217,7 +217,7 @@
                     },
                 ],
                 order: [
-                    [0, "desc"]
+
                 ]
             });
             $(".reload").click(function() {

@@ -35,7 +35,7 @@ class ProjectMonthlyExpenseController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
+            $data = PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->orderBy('month', 'DESC')->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -114,7 +114,7 @@ class ProjectMonthlyExpenseController extends Controller
         $updateRecord = 0;
 
         $this->validate($request, [
-            'excel_file'  => 'required|mimes:xls,xlsx'
+            'excel_file'  => 'required|file|max:15|mimes:xls,xlsx'
         ], [
             'required' => 'Excel File Required ',
             'mimes' => 'Only Excel File Accepted'
@@ -129,6 +129,8 @@ class ProjectMonthlyExpenseController extends Controller
             return response()->json(['error' => 'Project No is not match with this file']);
         } else if ($import->data['reportName'] != "Project Wise Income Statement") {
             return response()->json(['error' => 'Report is not match with this file']);
+        } else if (!$import->data['isColumnTwoEmpty']) {
+            return response()->json(['error' => 'Report Format is not match against column 2']);
         } else {
             foreach ($import->data['months'] as $key => $value) {
                 $date = \Carbon\Carbon::parse($import->data['months'][$key])->format('Y-m-d');
