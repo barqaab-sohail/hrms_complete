@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use App\Models\Project\PrMonthlyExpense;
 use App\Http\Requests\Project\PrMonthlyExpenseStore;
 use App\Models\Project\Invoice\Invoice;
@@ -120,7 +121,8 @@ class ProjectMonthlyExpenseController extends Controller
             'mimes' => 'Only Excel File Accepted'
         ]);
 
-        $path = $request->file('excel_file')->getRealPath();
+        $path1 = $request->file('excel_file')->store('temp');
+        $path = storage_path('app') . '/' . $path1;
         $prDetail = PrDetail::find(session('pr_detail_id'));
         $import = new ExpenseImport();
         Excel::import($import, $path);
@@ -157,6 +159,9 @@ class ProjectMonthlyExpenseController extends Controller
                     }
                 }
             }
+        }
+        if (File::exists($path)) {
+            File::delete($path);
         }
         if ($importRecord == 0 && $updateRecord == 0) {
             return response()->json(['error' => "All Record is Already Updated"]);
