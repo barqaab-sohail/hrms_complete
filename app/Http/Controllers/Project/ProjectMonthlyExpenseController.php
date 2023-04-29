@@ -22,7 +22,7 @@ class ProjectMonthlyExpenseController extends Controller
     public function index()
     {
 
-        $totalExpenses = addComma(PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->sum('salary_expense') + PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->sum('non_salary_expense'));
+        $totalExpenses = addComma(PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->sum('salary_expense') + PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->sum('non_salary_expense') + PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->sum('non_reimbursable_salary') + PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->sum('non_reimbursable_expense'));
         $totalReceived = addComma(PaymentReceive::where('pr_detail_id', session('pr_detail_id'))->sum('amount'));
         //$invoiceIds = Invoice::where('pr_detail_id', session('pr_detail_id'))->pluck('id')->toArray();
         $invoiceReceivedIds = PaymentReceive::where('pr_detail_id', session('pr_detail_id'))->pluck('invoice_id')->toArray();
@@ -65,9 +65,17 @@ class ProjectMonthlyExpenseController extends Controller
 
                     return addComma($row->non_salary_expense ?? '');
                 })
+                ->editColumn('non_reimbursable_salary', function ($row) {
+
+                    return addComma($row->non_reimbursable_salary ?? '');
+                })
+                ->editColumn('non_reimbursable_expense', function ($row) {
+
+                    return addComma($row->non_reimbursable_expense ?? '');
+                })
                 ->editColumn('total_expense', function ($row) {
 
-                    return addComma($row->salary_expense + $row->non_salary_expense);
+                    return addComma($row->salary_expense + $row->non_salary_expense + $row->non_reimbursable_salary + $row->non_reimbursable_expense);
                 })
                 ->rawColumns(['Edit', 'Delete', 'total_expense'])
                 ->make(true);
@@ -138,22 +146,27 @@ class ProjectMonthlyExpenseController extends Controller
                 $date = \Carbon\Carbon::parse($import->data['months'][$key])->format('Y-m-d');
                 $prMonthlyExpense = PrMonthlyExpense::where('pr_detail_id', 43)->where('month', $date)->first();
                 if ($prMonthlyExpense) {
-                    if ($prMonthlyExpense->salary_expense != $import->data['salary'][$key] || $prMonthlyExpense->non_salary_expense != $import->data['directCost'][$key]) {
+                    if ($prMonthlyExpense->salary_expense != $import->data['salary'][$key] || $prMonthlyExpense->non_salary_expense != $import->data['expense'][$key] || $prMonthlyExpense->non_reimbursable_salary != $import->data['non_reimbursable_salary'][$key] || $prMonthlyExpense->non_reimbursable_expense != $import->data['non_reimbursable_expense'][$key]) {
                         ++$updateRecord;
                         $prMonthlyExpense->update(
                             [
                                 'salary_expense' => $import->data['salary'][$key],
-                                'non_salary_expense' => $import->data['directCost'][$key]
+                                'non_salary_expense' => $import->data['expense'][$key],
+                                'non_reimbursable_salary' => $import->data['non_reimbursable_salary'][$key],
+                                'non_reimbursable_expense' => $import->data['non_reimbursable_expense'][$key]
                             ]
                         );
                     }
                 } else {
-                    if (!($import->data['salary'][$key] == null && $import->data['directCost'][$key] == null)) {
+                    //check if all four values are null than not enter value
+                    if (!($import->data['salary'][$key] == null && $import->data['expense'][$key] == null && $import->data['non_reimbursable_salary'][$key] == null && $import->data['non_reimbursable_expense'][$key] == null)) {
                         PrMonthlyExpense::create([
                             'pr_detail_id' => session('pr_detail_id'),
                             'month' =>  $date,
                             'salary_expense' => $import->data['salary'][$key],
-                            'non_salary_expense' => $import->data['directCost'][$key]
+                            'non_salary_expense' => $import->data['expense'][$key],
+                            'non_reimbursable_salary' => $import->data['non_reimbursable_salary'][$key],
+                            'non_reimbursable_expense' => $import->data['non_reimbursable_expense'][$key]
                         ]);
                         ++$importRecord;
                     }

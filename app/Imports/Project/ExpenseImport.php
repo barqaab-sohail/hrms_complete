@@ -25,6 +25,7 @@ class ExpenseImport implements ToCollection
 
             if ($value->contains("REIMBURSEABLE EXPENS")) {
                 $reimbursementExpensesKey = $key;
+            } else {
             }
             if ($value->contains("NON REMIBURSABLE EXP")) {
                 $nonReimbursementExpensesKey = $key;
@@ -82,19 +83,34 @@ class ExpenseImport implements ToCollection
                 if ($value[2] != null) {
                     $isValue2Null = false;
                 }
+
                 array_push($nonReimbursementSalary, $value[1], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11], $value[12], $value[13]);
             }
             if ($key == 17) {
                 array_push($expenses, $value[1], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11], $value[12], $value[13]);
             }
         }
-        $directCost = array_map(function () {
-            return array_sum(func_get_args());
-        }, $reimbursementExpenses, $nonReimbursementExpenses);
-        $salaryCost = array_map(function () {
-            return array_sum(func_get_args());
-        }, $reimbursementSalary, $nonReimbursementSalary);
 
-        $this->data = ['isColumnTwoEmpty' => $isValue2Null, 'projectNo' => $projectNo, 'reportName' => $reportName, 'months' => $months, 'salary' => $salaryCost, 'directCost' => $directCost];
+        //Sum of two array
+        // $directCost = array_map(function () {
+        //     return array_sum(func_get_args());
+        // }, $reimbursementExpenses, $nonReimbursementExpenses);
+        // $salaryCost = array_map(function () {
+        //     return array_sum(func_get_args());
+        // }, $reimbursementSalary, $nonReimbursementSalary);
+        if (empty($reimbursementSalary)) {
+            $reimbursementSalary = [null, null, null, null, null, null, null, null, null, null, null, null];
+        }
+        if (empty($reimbursementExpenses)) {
+            $reimbursementExpenses = [null, null, null, null, null, null, null, null, null, null, null, null];
+        }
+        if (empty($nonReimbursementSalary)) {
+            $nonReimbursementSalary = [null, null, null, null, null, null, null, null, null, null, null, null];
+        }
+        if (empty($nonReimbursementExpenses)) {
+            $nonReimbursementExpenses = [null, null, null, null, null, null, null, null, null, null, null, null];
+        }
+
+        $this->data = ['isColumnTwoEmpty' => $isValue2Null, 'projectNo' => $projectNo, 'reportName' => $reportName, 'months' => $months, 'salary' => $reimbursementSalary, 'expense' => $reimbursementExpenses, 'non_reimbursable_salary' => $nonReimbursementSalary, 'non_reimbursable_expense' => $nonReimbursementExpenses];
     }
 }

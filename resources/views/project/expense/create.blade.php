@@ -4,11 +4,12 @@
             <button type="button" class="btn btn-success reload float-right mb-3" hidden>Reload</button>
         </div>
         <div class="col-md-3">
-            <button type="button" class="btn btn-success float-right" id="uploadFile" data-toggle="modal">Upload File</button>
-            @include('project.expense.import')
+            <!-- <button type="button" class="btn btn-success float-right" id="createExpense" data-toggle="modal" hidden>Add Expense</button> -->
         </div>
         <div class="col-md-6">
-            <button type="button" class="btn btn-success float-right" id="createExpense" data-toggle="modal">Add Expense</button>
+            <button type="button" class="btn btn-success float-right" id="uploadFile" data-toggle="modal">Upload Excel File</button>
+            @include('project.expense.import')
+
         </div>
     </div>
     <br>
@@ -20,8 +21,10 @@
         <thead>
             <tr>
                 <th>Month</th>
-                <th>Salary Expense</th>
-                <th>Non Salary Expense</th>
+                <th>Reimbursable Salary</th>
+                <th>Reimbursable Expense</th>
+                <th>Non Reimbursable Salary</th>
+                <th>Non Reimbursable Expense</th>
                 <th>Total Expense</th>
                 <th>Remarks</th>
                 <th>Edit</th>
@@ -194,6 +197,14 @@
                     {
                         data: "non_salary_expense",
                         name: 'non_salary_expense'
+                    },
+                    {
+                        data: "non_reimbursable_salary",
+                        name: 'non_reimbursable_salary'
+                    },
+                    {
+                        data: "non_reimbursable_expense",
+                        name: 'non_reimbursable_expense'
                     },
                     {
                         data: "total_expense",
