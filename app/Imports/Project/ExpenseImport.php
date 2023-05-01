@@ -112,5 +112,6 @@ class ExpenseImport implements ToCollection
         }
 
         $this->data = ['isColumnTwoEmpty' => $isValue2Null, 'projectNo' => $projectNo, 'reportName' => $reportName, 'months' => $months, 'salary' => $reimbursementSalary, 'expense' => $reimbursementExpenses, 'non_reimbursable_salary' => $nonReimbursementSalary, 'non_reimbursable_expense' => $nonReimbursementExpenses];
+        //dd($this->data);
     }
 }

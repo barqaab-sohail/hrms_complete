@@ -137,14 +137,14 @@ class ProjectMonthlyExpenseController extends Controller
 
         if ($import->data['projectNo'] !=  $prDetail->project_no) {
             return response()->json(['error' => 'Project No is not match with this file']);
-        } else if ($import->data['reportName'] != "Project Wise Income Statement") {
+        } else if ($import->data['reportName'] != "Project Wise Income Statement" && $import->data['reportName'] != "Project Wise Income Statements") {
             return response()->json(['error' => 'Report is not match with this file']);
         } else if (!$import->data['isColumnTwoEmpty']) {
             return response()->json(['error' => 'Report Format is not match against column 2']);
         } else {
             foreach ($import->data['months'] as $key => $value) {
                 $date = \Carbon\Carbon::parse($import->data['months'][$key])->format('Y-m-d');
-                $prMonthlyExpense = PrMonthlyExpense::where('pr_detail_id', 43)->where('month', $date)->first();
+                $prMonthlyExpense = PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->where('month', $date)->first();
                 if ($prMonthlyExpense) {
                     if ($prMonthlyExpense->salary_expense != $import->data['salary'][$key] || $prMonthlyExpense->non_salary_expense != $import->data['expense'][$key] || $prMonthlyExpense->non_reimbursable_salary != $import->data['non_reimbursable_salary'][$key] || $prMonthlyExpense->non_reimbursable_expense != $import->data['non_reimbursable_expense'][$key]) {
                         ++$updateRecord;
