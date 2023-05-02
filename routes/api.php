@@ -24,9 +24,8 @@ use App\Models\MisUser;
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 Route::post('/mis/login', 'MIS\LoginController@login');
-Route::get('/proejctSummaryMM/{id}', 'MIS\Project\ProjectController@proejctSummaryMM');
-Route::get('/manMonthProjectsStatus', 'MIS\Project\ProjectController@manMonthProjectsStatus');
-Route::get('/employees', 'MIS\Hr\EmployeeController@index');
+
+
 
 
 // DashBoard / MIS API
@@ -46,7 +45,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     //HR Routes
-
+    Route::get('/employees', 'MIS\Hr\EmployeeController@index');
     Route::get('/employeeDocuments/{id}', 'MIS\Hr\EmployeeDocumentController@show');
 
 
@@ -56,6 +55,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //Projects Routes
     Route::get('/projectDocuments/{id}', 'MIS\Project\ProjectController@projectDocuments');
     Route::get('/allProjectDocuments', 'MIS\Project\ProjectController@allProjectDocuments');
+    Route::get('/proejctSummaryMM/{id}', 'MIS\Project\ProjectController@proejctSummaryMM');
+    Route::get('/manMonthProjectsStatus', 'MIS\Project\ProjectController@manMonthProjectsStatus');
 });
 
 
