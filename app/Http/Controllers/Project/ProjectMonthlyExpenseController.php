@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Project;
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -119,67 +120,103 @@ class ProjectMonthlyExpenseController extends Controller
 
     public function importExpense(Request $request)
     {
+
+
         $importRecord = 0;
         $updateRecord = 0;
-
-        $this->validate($request, [
-            'excel_file'  => 'required|file|max:15|mimes:xls,xlsx'
-        ], [
-            'required' => 'Excel File Required ',
-            'mimes' => 'Only Excel File Accepted'
-        ]);
+        // $this->validate($request, [
+        //     'excel_file'  => 'required|file|max:15|mimes:xls,xlsx'
+        // ], [
+        //     'required' => 'Excel File Required ',
+        //     'mimes' => 'Only Excel File Accepted'
+        // ]);
 
         $path1 = $request->file('excel_file')->store('temp');
         $path = storage_path('app') . '/' . $path1;
-        $prDetail = PrDetail::find(session('pr_detail_id'));
-        $import = new ExpenseImport();
-        Excel::import($import, $path);
+        $outPut = storage_path('app') . '/ temp/test.xls';
+        $this->convertPdfToExcel($path, $outPut);
 
-        if ($import->data['projectNo'] !=  $prDetail->project_no) {
-            return response()->json(['error' => 'Project No is not match with this file']);
-        } else if ($import->data['reportName'] != "Project Wise Income Statement" && $import->data['reportName'] != "Project Wise Income Statements") {
-            return response()->json(['error' => 'Report is not match with this file']);
-        } else if (!$import->data['isColumnTwoEmpty']) {
-            return response()->json(['error' => 'Report Format is not match against column 2']);
-        } else {
-            foreach ($import->data['months'] as $key => $value) {
-                $date = \Carbon\Carbon::parse($import->data['months'][$key])->format('Y-m-d');
-                $prMonthlyExpense = PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->where('month', $date)->first();
-                if ($prMonthlyExpense) {
-                    if ($prMonthlyExpense->salary_expense != $import->data['salary'][$key] || $prMonthlyExpense->non_salary_expense != $import->data['expense'][$key] || $prMonthlyExpense->non_reimbursable_salary != $import->data['non_reimbursable_salary'][$key] || $prMonthlyExpense->non_reimbursable_expense != $import->data['non_reimbursable_expense'][$key]) {
-                        ++$updateRecord;
-                        $prMonthlyExpense->update(
-                            [
-                                'salary_expense' => $import->data['salary'][$key],
-                                'non_salary_expense' => $import->data['expense'][$key],
-                                'non_reimbursable_salary' => $import->data['non_reimbursable_salary'][$key],
-                                'non_reimbursable_expense' => $import->data['non_reimbursable_expense'][$key]
-                            ]
-                        );
-                    }
-                } else {
-                    //check if all four values are null than not enter value
-                    if (!($import->data['salary'][$key] == null && $import->data['expense'][$key] == null && $import->data['non_reimbursable_salary'][$key] == null && $import->data['non_reimbursable_expense'][$key] == null)) {
-                        PrMonthlyExpense::create([
-                            'pr_detail_id' => session('pr_detail_id'),
-                            'month' =>  $date,
-                            'salary_expense' => $import->data['salary'][$key],
-                            'non_salary_expense' => $import->data['expense'][$key],
-                            'non_reimbursable_salary' => $import->data['non_reimbursable_salary'][$key],
-                            'non_reimbursable_expense' => $import->data['non_reimbursable_expense'][$key]
-                        ]);
-                        ++$importRecord;
-                    }
-                }
-            }
-        }
-        if (File::exists($path)) {
-            File::delete($path);
-        }
-        if ($importRecord == 0 && $updateRecord == 0) {
-            return response()->json(['error' => "All Record is Already Updated"]);
-        } else {
-            return response()->json(['success' => "$importRecord Record Sucessfully Entered and $updateRecord Record Updates"]);
-        }
+        // $prDetail = PrDetail::find(session('pr_detail_id'));
+        // $import = new ExpenseImport();
+        // Excel::import($import, $path);
+
+        // if ($import->data['projectNo'] !=  $prDetail->project_no) {
+        //     return response()->json(['error' => 'Project No is not match with this file']);
+        // } else if ($import->data['reportName'] != "Project Wise Income Statement" && $import->data['reportName'] != "Project Wise Income Statements") {
+        //     return response()->json(['error' => 'Report is not match with this file']);
+        // } else if (!$import->data['isColumnTwoEmpty']) {
+        //     return response()->json(['error' => 'Report Format is not match against column 2']);
+        // } else {
+        //     foreach ($import->data['months'] as $key => $value) {
+        //         $date = \Carbon\Carbon::parse($import->data['months'][$key])->format('Y-m-d');
+        //         $prMonthlyExpense = PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->where('month', $date)->first();
+        //         if ($prMonthlyExpense) {
+        //             if ($prMonthlyExpense->salary_expense != $import->data['salary'][$key] || $prMonthlyExpense->non_salary_expense != $import->data['expense'][$key] || $prMonthlyExpense->non_reimbursable_salary != $import->data['non_reimbursable_salary'][$key] || $prMonthlyExpense->non_reimbursable_expense != $import->data['non_reimbursable_expense'][$key]) {
+        //                 ++$updateRecord;
+        //                 $prMonthlyExpense->update(
+        //                     [
+        //                         'salary_expense' => $import->data['salary'][$key],
+        //                         'non_salary_expense' => $import->data['expense'][$key],
+        //                         'non_reimbursable_salary' => $import->data['non_reimbursable_salary'][$key],
+        //                         'non_reimbursable_expense' => $import->data['non_reimbursable_expense'][$key]
+        //                     ]
+        //                 );
+        //             }
+        //         } else {
+        //             //check if all four values are null than not enter value
+        //             if (!($import->data['salary'][$key] == null && $import->data['expense'][$key] == null && $import->data['non_reimbursable_salary'][$key] == null && $import->data['non_reimbursable_expense'][$key] == null)) {
+        //                 PrMonthlyExpense::create([
+        //                     'pr_detail_id' => session('pr_detail_id'),
+        //                     'month' =>  $date,
+        //                     'salary_expense' => $import->data['salary'][$key],
+        //                     'non_salary_expense' => $import->data['expense'][$key],
+        //                     'non_reimbursable_salary' => $import->data['non_reimbursable_salary'][$key],
+        //                     'non_reimbursable_expense' => $import->data['non_reimbursable_expense'][$key]
+        //                 ]);
+        //                 ++$importRecord;
+        //             }
+        //         }
+        //     }
+        // }
+        // if (File::exists($path)) {
+        //     File::delete($path);
+        // }
+        // if ($importRecord == 0 && $updateRecord == 0) {
+        //     return response()->json(['error' => "All Record is Already Updated"]);
+        // } else {
+        //     return response()->json(['success' => "$importRecord Record Sucessfully Entered and $updateRecord Record Updates"]);
+        // }
+    }
+
+    public function convertPdfToExcel($path, $outPut)
+    {
+        $className = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf::class;
+        IOFactory::registerWriter('Pdf', $className);
+        IOFactory::registerReader('Pdf', $className);
+
+
+        $inputFileType = 'PDF';
+        $inputFileName = $path;
+        $outputFileType = 'Xlsx';
+        $outputFileName = $outPut;
+
+        $reader = IOFactory::createReader($inputFileType);
+        $spreadsheet = $reader->load($inputFileName);
+
+        $writer = IOFactory::createWriter($spreadsheet, $outputFileType);
+        $writer->save($outputFileName);
+
+        return $outputFileName;
+
+        // $inputFileType = 'PDF';
+        // $inputFileName = 'path/to/your/pdf/file.pdf';
+        // $outputFileType = 'Xlsx';
+        // $outputFileName = 'path/to/your/excel/file.xlsx';
+
+        // $reader = IOFactory::createReader($inputFileType);
+        // $spreadsheet = $reader->load($inputFileName);
+
+        // $writer = IOFactory::createWriter($spreadsheet, $outputFileType);
+        // $writer->save($outputFileName);
     }
 }
