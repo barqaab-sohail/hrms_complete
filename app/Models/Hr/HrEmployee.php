@@ -379,7 +379,6 @@ class HrEmployee extends Model implements Auditable
 
 
 
-
     // public function employeeAppointmentProject(){
     //     return $this->hasOne('App\Models\Hr\EmployeeProject')->oldest();
     // }

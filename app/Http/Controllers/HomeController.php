@@ -79,12 +79,34 @@ class HomeController extends Controller
 
     public function result($id)
     {
+        // Following function restrict maximum 5 request in 1 minute
+        $executed = RateLimiter::attempt(
+            'send-message:',
+            $perMinute = 5,
+            function () {
+                // Send message...
+            }
+        );
 
-        $data = HrEmployee::with('picture')->where('cnic', $id)->first();
-        if ($data) {
-            return response()->json($data);
+        if (!$executed) {
+            return response()->json(['error' => 'Too many Request sent!, Please retry after some time']);
+        }
+
+
+        if (strlen($id) > 7) {
+            $data = HrEmployee::with('picture', 'employeeAppointment')->where('cnic', $id)->first();
+            if ($data) {
+                return response()->json(['data' => $data]);
+            } else {
+                return response()->json(['error' => 'Not Data Found']);
+            }
         } else {
-            return response()->json('');
+            $data = HrEmployee::with('picture', 'employeeAppointment')->where('employee_no', $id)->first();
+            if ($data) {
+                return response()->json(['data' => $data]);
+            } else {
+                return response()->json(['error' => 'Not Data Found']);
+            }
         }
     }
 
