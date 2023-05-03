@@ -133,23 +133,22 @@ class ProjectMonthlyExpenseController extends Controller
 
         $path1 = $request->file('excel_file')->store('temp');
         $path = storage_path('app') . '/' . $path1;
-        $config = new \Smalot\PdfParser\Config();
-        $config->setHorizontalOffset('');
-        $config->setHorizontalOffset("\n");
-        $parser = new \Smalot\PdfParser\Parser();
-        $pdf = $parser->parseFile($path);
 
-
-        $data = $pdf->getPages()[0]->getDataTm();
-        $rawdata = [];
-        foreach ($data as $key => $value) {
-            array_push($rawdata, $value[1]);
+        $myfile = fopen($path, "r") or die("Unable to open file!");
+        $content = fread($myfile, filesize($path));
+        $doc = new \DOMDocument();
+        $doc->loadHTML($content);
+        //$selector = new \DOMXPath($doc);
+        $tag = $doc->getElementsByTagName('td');
+        $test = [];
+        foreach ($tag as $value) {
+            $text = $value->textContent;
+            $test[] = $text;
+            echo $text . '<br>';
         }
+        dd($tag[12]);
+        fclose($myfile);
 
-
-        echo '<pre>';
-        print_r($rawdata);
-        echo '</pre>';
 
         // $prDetail = PrDetail::find(session('pr_detail_id'));
         // $import = new ExpenseImport();
