@@ -133,21 +133,9 @@ class ProjectMonthlyExpenseController extends Controller
 
         $path1 = $request->file('excel_file')->store('temp');
         $path = storage_path('app') . '/' . $path1;
+        $data = $this->loadHtmlFile($path);
+        dd($data);
 
-        $myfile = fopen($path, "r") or die("Unable to open file!");
-        $content = fread($myfile, filesize($path));
-        $doc = new \DOMDocument();
-        $doc->loadHTML($content);
-        //$selector = new \DOMXPath($doc);
-        $tag = $doc->getElementsByTagName('td');
-        $test = [];
-        foreach ($tag as $value) {
-            $text = $value->textContent;
-            $test[] = $text;
-            echo $text . '<br>';
-        }
-        dd($tag[12]);
-        fclose($myfile);
 
 
         // $prDetail = PrDetail::find(session('pr_detail_id'));
@@ -201,6 +189,60 @@ class ProjectMonthlyExpenseController extends Controller
         //     return response()->json(['success' => "$importRecord Record Sucessfully Entered and $updateRecord Record Updates"]);
         // }
     }
+
+
+    public function loadHtmlFile($path)
+    {
+
+        $htmlContent = file_get_contents($path);
+        $htmlContent = str_replace("&nbsp;", " ", $htmlContent);
+        $DOM = new \DOMDocument();
+        $DOM->loadHTML($htmlContent);
+
+        $Detail = $DOM->getElementsByTagName('td');
+
+        foreach ($Detail as $sNodeDetail) {
+            $aDataTableDetailHTML[0][] = trim($sNodeDetail->textContent);
+        }
+        $reimbursementSalaryKey = 0;
+        $reimbursementExpensesKey = 0;
+        $nonReimbursementExpensesKey = 0;
+        $nonReimbursementSalaryKey = 0;
+        $year = '';
+        $projectCode = '';
+        $salaries = [];
+        $data = collect();
+        foreach ($aDataTableDetailHTML[0] as $key => $value) {
+            $data->push($value);
+            if ($value == "REIMBURSEABLE SALARIE") {
+                $reimbursementSalaryKey = $key;
+            }
+            if ($value == "REIMBURSEABLE EXPENSE") {
+                $reimbursementExpensesKey = $key;
+            }
+            if ($value == "NON REMIBURSABLE EXPE") {
+                $nonReimbursementExpensesKey = $key;
+            }
+            if ($value == "NON REIMBURSEABLESAL") {
+                $nonReimbursementSalaryKey  = $key;
+            }
+            if ($value == "For The Year") {
+                $year  = $key + 2;
+            }
+            if ($value == "Project Code and Name:") {
+                $projectCode  = $key + 2;
+            }
+        }
+        $twoArray = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
+        foreach ($twoArray as $val) {
+            array_push($salaries, intval(str_replace(',', '', $aDataTableDetailHTML[0][($reimbursementSalaryKey + $val)])));
+        }
+
+
+        dd($salaries);
+        //return $keyvalue;
+    }
+
 
     public function convertPdfToExcel($path, $outPut)
     {
