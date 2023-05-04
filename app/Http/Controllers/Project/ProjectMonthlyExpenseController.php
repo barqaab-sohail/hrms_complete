@@ -130,10 +130,12 @@ class ProjectMonthlyExpenseController extends Controller
         //     'required' => 'Excel File Required ',
         //     'mimes' => 'Only Excel File Accepted'
         // ]);
-
+        $prDetail = PrDetail::find(43);
+        $projectNo = $prDetail->project_no;
+        $year =  \Carbon\Carbon::parse($prDetail->commencement_date)->format('Y');
         $path1 = $request->file('excel_file')->store('temp');
         $path = storage_path('app') . '/' . $path1;
-        $data = $this->loadHtmlFile($path);
+        $data = $this->loadHtmlFile($projectNo, $year);
         dd($data);
 
 
@@ -191,11 +193,15 @@ class ProjectMonthlyExpenseController extends Controller
     }
 
 
-    public function loadHtmlFile($path)
+    public function loadHtmlFile($projectNo, $year)
     {
+        $url = "http://194.116.228.8:8888/reports/rwservlet?userid=BARQAAB/BARQAAB@scar&domain=classicdomain&report=D:\app\SYSTEM\BARQAAB\REPORTS\FR_PROJ_12MONTHS_FIN_SMRY&destype=CACHE&desformat=HTML&paramform=no&PPCD=__YEAR&PMCD=07&PMNODE=06FS30636&PUNCD=0001&PSTNATURE=01&PENNATURE=02&PSTREGION=01&PENREGION=05&PSTPROVINCE=01&PENPROVINCE=06&PSTCD=01__PROJECTNO&PENCD=012086&PSTDT=&PENDT=&PSTUC=0001&PENUC=9999&PUNCD=0001&PSTNATURE=01&PENNATURE=02&PSTREGION=01&PENREGION=05&PSTPROVINCE=01&PENPROVINCE=06&PSTVT=AAA&PENVT=ZZZ&PVST=&PPST=";
+        $url = str_replace("__YEAR", substr($year, -2), $url);
+        $url = str_replace("__PROJECTNO", $projectNo, $url);
 
-        $htmlContent = file_get_contents($path);
+        $htmlContent = file_get_contents($url);
         $htmlContent = str_replace("&nbsp;", " ", $htmlContent);
+        $htmlContent = strip_tags($htmlContent, ['td']);
         $DOM = new \DOMDocument();
         $DOM->loadHTML($htmlContent);
 
@@ -208,9 +214,14 @@ class ProjectMonthlyExpenseController extends Controller
         $reimbursementExpensesKey = 0;
         $nonReimbursementExpensesKey = 0;
         $nonReimbursementSalaryKey = 0;
-        $year = '';
-        $projectCode = '';
+        $yearKey = '';
+        $nextYear = '';
+        $months = [];
+        $projectNo = '';
         $salaries = [];
+        $nonRSalaries = [];
+        $expenses = [];
+        $nonRExpenses = [];
         $data = collect();
         foreach ($aDataTableDetailHTML[0] as $key => $value) {
             $data->push($value);
@@ -227,19 +238,31 @@ class ProjectMonthlyExpenseController extends Controller
                 $nonReimbursementSalaryKey  = $key;
             }
             if ($value == "For The Year") {
-                $year  = $key + 2;
+                $yearKey  = $key + 2;
             }
             if ($value == "Project Code and Name:") {
-                $projectCode  = $key + 2;
+                $projectNo  = $key + 2;
             }
         }
+        $year = $aDataTableDetailHTML[0][$yearKey];
+        $nextYear = $year + 1;
+        array_push($months, 'Jul' . '-' . $year, 'Aug' . '-' . $year, 'Sep' . '-' . $year, 'Oct' . '-' . $year, 'Nov' . '-' . $year, 'Dec' . '-' . $year, 'Jan' . '-' . $nextYear, 'Feb' . '-' . $nextYear, 'Mar' . '-' . $nextYear, 'Apr' . '-' . $nextYear, 'May' . '-' . $nextYear, 'Jun' . '-' . $nextYear);
         $twoArray = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
         foreach ($twoArray as $val) {
             array_push($salaries, intval(str_replace(',', '', $aDataTableDetailHTML[0][($reimbursementSalaryKey + $val)])));
         }
+        foreach ($twoArray as $val) {
+            array_push($expenses, intval(str_replace(',', '', $aDataTableDetailHTML[0][($reimbursementExpensesKey + $val)])));
+        }
+        foreach ($twoArray as $val) {
+            array_push($nonRSalaries, intval(str_replace(',', '', $aDataTableDetailHTML[0][($nonReimbursementSalaryKey + $val)])));
+        }
+        foreach ($twoArray as $val) {
+            array_push($nonRExpenses, intval(str_replace(',', '', $aDataTableDetailHTML[0][($nonReimbursementExpensesKey  + $val)])));
+        }
 
-
-        dd($salaries);
+        $data = ['months' => $months, 'projectNo' => $projectNo, 'salaries' => $salaries, 'expenses' => $expenses, 'nonRSalaries' => $nonRSalaries, 'nonRExpenses' => $nonRExpenses];
+        dd($data);
         //return $keyvalue;
     }
 
