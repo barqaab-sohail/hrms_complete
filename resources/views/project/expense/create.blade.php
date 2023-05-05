@@ -29,6 +29,7 @@
                 <th>Non Reimbursable Salary</th>
                 <th>Non Reimbursable Expense</th>
                 <th>Total Expense</th>
+                <th>Total Revenue</th>
             </tr>
         </thead>
         <tbody>
@@ -167,21 +168,21 @@
                 buttons: [{
                         extend: 'copyHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
+                            columns: [0, 1, 2, 3, 4, 5, 6]
                         }
                     },
                     {
                         extend: 'excelHtml5',
                         title: 'Monthly Expense Detail',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
+                            columns: [0, 1, 2, 3, 4, 5, 6]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
                         title: 'Monthly Expense Detail',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
+                            columns: [0, 1, 2, 3, 4, 5, 6]
                         }
                     },
                 ],
@@ -210,6 +211,11 @@
                         data: "total_expense",
                         name: 'total_expense'
                     },
+                    {
+                        data: "revenue",
+                        name: 'revenue'
+                    },
+
 
                 ],
                 order: [

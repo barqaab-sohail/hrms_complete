@@ -73,6 +73,10 @@ class ProjectMonthlyExpenseController extends Controller
 
                     return addComma($row->non_reimbursable_expense ?? '');
                 })
+                ->editColumn('revenue', function ($row) {
+
+                    return addComma($row->revenue ?? '');
+                })
                 ->editColumn('total_expense', function ($row) {
 
                     return addComma($row->salary_expense + $row->non_salary_expense + $row->non_reimbursable_salary + $row->non_reimbursable_expense);
@@ -140,7 +144,7 @@ class ProjectMonthlyExpenseController extends Controller
                     // break;
                     $prMonthlyExpense = PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->where('month', $date)->first();
                     if ($prMonthlyExpense) {
-                        if ($prMonthlyExpense->salary_expense != $data['salaries'][$key] || $prMonthlyExpense->non_salary_expense != $data['expenses'][$key] || $prMonthlyExpense->non_reimbursable_salary != $data['nonRSalaries'][$key] || $prMonthlyExpense->non_reimbursable_expense != $data['nonRExpenses'][$key]) {
+                        if ($prMonthlyExpense->salary_expense != $data['salaries'][$key] || $prMonthlyExpense->non_salary_expense != $data['expenses'][$key] || $prMonthlyExpense->non_reimbursable_salary != $data['nonRSalaries'][$key] || $prMonthlyExpense->non_reimbursable_expense != $data['nonRExpenses'][$key] || $prMonthlyExpense->revenue != $data['revenue'][$key]) {
                             ++$updateRecord;
                             $prMonthlyExpense->update(
                                 [
@@ -148,7 +152,8 @@ class ProjectMonthlyExpenseController extends Controller
                                     'salary_expense' => $data['salaries'][$key],
                                     'non_salary_expense' => $data['expenses'][$key],
                                     'non_reimbursable_salary' => $data['nonRSalaries'][$key],
-                                    'non_reimbursable_expense' => $data['nonRExpenses'][$key]
+                                    'non_reimbursable_expense' => $data['nonRExpenses'][$key],
+                                    'revenue' => $data['revenue'][$key]
                                 ]
                             );
                         }
@@ -161,7 +166,8 @@ class ProjectMonthlyExpenseController extends Controller
                                 'salary_expense' => $data['salaries'][$key],
                                 'non_salary_expense' => $data['expenses'][$key],
                                 'non_reimbursable_salary' => $data['nonRSalaries'][$key],
-                                'non_reimbursable_expense' => $data['nonRExpenses'][$key]
+                                'non_reimbursable_expense' => $data['nonRExpenses'][$key],
+                                'revenue' => $data['revenue'][$key]
                             ]);
                             ++$importRecord;
                         }
@@ -186,7 +192,6 @@ class ProjectMonthlyExpenseController extends Controller
 
         $url = str_replace("__YEAR", substr($year, -2), $url);
         $url = str_replace("__PROJECTNO", $projectNo, $url);
-
         $htmlContent = file_get_contents($url);
         $htmlContent = str_replace("&nbsp;", " ", $htmlContent);
         $htmlContent = strip_tags($htmlContent, ['td']);
@@ -198,12 +203,15 @@ class ProjectMonthlyExpenseController extends Controller
         foreach ($Detail as $sNodeDetail) {
             $aDataTableDetailHTML[0][] = trim($sNodeDetail->textContent);
         }
+
         $reimbursementSalaryKey = 0;
         $reimbursementExpensesKey = 0;
         $nonReimbursementExpensesKey = 0;
         $nonReimbursementSalaryKey = 0;
+        $revenueFromOperationKey = 0;
         $yearKey = '';
         $nextYear = '';
+        $revenue = [];
         $months = [];
         $projectNoKey = '';
         $salaries = [];
@@ -217,6 +225,9 @@ class ProjectMonthlyExpenseController extends Controller
             $data->push($value);
             if ($value == "Project Wise Income Statement") {
                 $reportName = $value;
+            }
+            if ($value == "REVENUE FROM  OPERATIONS") {
+                $revenueFromOperationKey = $key;
             }
             if ($value == "REIMBURSEABLE SALARIE") {
                 $reimbursementSalaryKey = $key;
@@ -253,8 +264,11 @@ class ProjectMonthlyExpenseController extends Controller
         foreach ($twoArray as $val) {
             array_push($nonRExpenses, intval(str_replace(',', '', $aDataTableDetailHTML[0][($nonReimbursementExpensesKey  + $val)])));
         }
+        foreach ($twoArray as $val) {
+            array_push($revenue, intval(str_replace(',', '', $aDataTableDetailHTML[0][($revenueFromOperationKey  + $val)])));
+        }
         $projectNo = substr($aDataTableDetailHTML[0][$projectNoKey], -4);
-        $data = ['months' => $months, 'projectNo' => $projectNo, 'salaries' => $salaries, 'expenses' => $expenses, 'nonRSalaries' => $nonRSalaries, 'nonRExpenses' => $nonRExpenses, 'reportName' => $reportName];
+        $data = ['months' => $months, 'projectNo' => $projectNo, 'salaries' => $salaries, 'expenses' => $expenses, 'nonRSalaries' => $nonRSalaries, 'nonRExpenses' => $nonRExpenses, 'reportName' => $reportName, 'revenue' => $revenue];
         return $data;
     }
 }
