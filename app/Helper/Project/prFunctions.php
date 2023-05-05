@@ -19,6 +19,35 @@ function receivedInvoices($projectId)
     return $receivedInvoices;
 }
 
+function calculateSyncYears($prDetailId)
+{
+    $prDetail = PrDetail::find($prDetailId);
+
+    $commencementMonth = \Carbon\Carbon::parse($prDetail->commencement_date)->format('m');
+    $commencementYear = \Carbon\Carbon::parse($prDetail->commencement_date)->format('Y');
+    $currentYear = \Carbon\Carbon::now()->format('Y');
+    $currentmonth = \Carbon\Carbon::now()->format('m');
+    $startYear = '';
+    $endYear = '';
+    if ($commencementMonth > 06) {
+        $startYear = $commencementYear - 0;
+    } else {
+        $startYear = $commencementYear - 1;
+    }
+
+    if ($currentmonth > 06) {
+        $endYear = $currentYear - 0;
+    } else {
+        $endYear = $currentYear - 1;
+    }
+    $years = [];
+    for ($i = $startYear; $i <= $endYear; $i++) {
+        array_push($years, $i);
+    }
+
+    return $years;
+}
+
 function projectCostWithoutGst($projectId)
 {
     $project = PrDetail::find($projectId);

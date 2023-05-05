@@ -6,9 +6,12 @@
         <div class="col-md-3">
             <!-- <button type="button" class="btn btn-success float-right" id="createExpense" data-toggle="modal" hidden>Add Expense</button> -->
         </div>
-        <div class="col-md-6">
-            <button type="button" class="btn btn-success float-right" id="uploadFile" data-toggle="modal">Upload Excel File</button>
-            @include('project.expense.import')
+        <div class="col-md-3">
+
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-success float-right" id="syncExpense" data-toggle="modal">Sync Expense with Oracle<i class="fa fa-spinner fa-spin" style="font-size:18px"></i></button>
+            @include('project.expense.syncOracle')
 
         </div>
     </div>
@@ -26,9 +29,6 @@
                 <th>Non Reimbursable Salary</th>
                 <th>Non Reimbursable Expense</th>
                 <th>Total Expense</th>
-                <th>Remarks</th>
-                <th>Edit</th>
-                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -210,22 +210,7 @@
                         data: "total_expense",
                         name: 'total_expense'
                     },
-                    {
-                        data: "remarks",
-                        name: 'remarks'
-                    },
-                    {
-                        data: 'Edit',
-                        name: 'Edit',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'Delete',
-                        name: 'Delete',
-                        orderable: false,
-                        searchable: false
-                    },
+
                 ],
                 order: [
 

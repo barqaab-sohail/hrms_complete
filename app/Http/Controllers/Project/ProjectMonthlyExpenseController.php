@@ -41,19 +41,18 @@ class ProjectMonthlyExpenseController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('Edit', function ($row) {
+                // ->addColumn('Edit', function ($row) {
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editExpense">Edit</a>';
+                //     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editExpense">Edit</a>';
 
-                    return $btn;
-                })
-                ->addColumn('Delete', function ($row) {
+                //     return $btn;
+                // })
+                // ->addColumn('Delete', function ($row) {
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteExpense">Delete</a>';
+                //     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteExpense">Delete</a>';
 
-
-                    return $btn;
-                })
+                //     return $btn;
+                // })
                 ->editColumn('month', function ($row) {
 
                     return \Carbon\Carbon::parse($row->month)->format('Y-M');
@@ -78,7 +77,7 @@ class ProjectMonthlyExpenseController extends Controller
 
                     return addComma($row->salary_expense + $row->non_salary_expense + $row->non_reimbursable_salary + $row->non_reimbursable_expense);
                 })
-                ->rawColumns(['Edit', 'Delete', 'total_expense'])
+                ->rawColumns(['total_expense'])
                 ->make(true);
         }
     }
@@ -118,84 +117,73 @@ class ProjectMonthlyExpenseController extends Controller
     }
 
 
-    public function importExpense(Request $request)
+    public function importExpense()
     {
 
-
+        $prDetailId = session('pr_detail_id');
         $importRecord = 0;
         $updateRecord = 0;
-        // $this->validate($request, [
-        //     'excel_file'  => 'required|file|max:15|mimes:xls,xlsx'
-        // ], [
-        //     'required' => 'Excel File Required ',
-        //     'mimes' => 'Only Excel File Accepted'
-        // ]);
-        $prDetail = PrDetail::find(43);
+        $years = calculateSyncYears($prDetailId);
+        $prDetail = PrDetail::find($prDetailId);
         $projectNo = $prDetail->project_no;
-        $year =  \Carbon\Carbon::parse($prDetail->commencement_date)->format('Y');
-        $path1 = $request->file('excel_file')->store('temp');
-        $path = storage_path('app') . '/' . $path1;
-        $data = $this->loadHtmlFile($projectNo, $year);
-        dd($data);
+        // return response()->json(['error' => 'Testing from start', 'years' => implode(",", $years), 'projectNo' => $projectNo]);
+        foreach ($years as $year) {
+            $data = $this->loadHtmlFile($projectNo, $year);
+            if ($data['projectNo'] !=  $prDetail->project_no) {
+                return response()->json(['error' => 'Project No is not match with this file']);
+            } else if ($data['reportName'] != "Project Wise Income Statement" && $data['reportName'] != "Project Wise Income Statements") {
+                return response()->json(['error' => 'Report is not match with this file']);
+            } else {
+                foreach ($data['months'] as $key => $value) {
+                    $date = \Carbon\Carbon::parse($data['months'][$key])->format('Y-m-d');
+                    // return response()->json(['error' => 'Testing from start', 'date' => $date, 'year' => $year, 'projectNo' => $data['months'][$key]]);
+                    // break;
+                    $prMonthlyExpense = PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->where('month', $date)->first();
+                    if ($prMonthlyExpense) {
+                        if ($prMonthlyExpense->salary_expense != $data['salaries'][$key] || $prMonthlyExpense->non_salary_expense != $data['expenses'][$key] || $prMonthlyExpense->non_reimbursable_salary != $data['nonRSalaries'][$key] || $prMonthlyExpense->non_reimbursable_expense != $data['nonRExpenses'][$key]) {
+                            ++$updateRecord;
+                            $prMonthlyExpense->update(
+                                [
+                                    'month' => $date,
+                                    'salary_expense' => $data['salaries'][$key],
+                                    'non_salary_expense' => $data['expenses'][$key],
+                                    'non_reimbursable_salary' => $data['nonRSalaries'][$key],
+                                    'non_reimbursable_expense' => $data['nonRExpenses'][$key]
+                                ]
+                            );
+                        }
+                    } else {
+                        //check if all four values are null than not enter value
+                        if (!($data['salaries'][$key] == null && $data['expenses'][$key] == null && $data['nonRSalaries'][$key] == null && $data['nonRExpenses'][$key] == null)) {
+                            PrMonthlyExpense::create([
+                                'pr_detail_id' => session('pr_detail_id'),
+                                'month' =>  $date,
+                                'salary_expense' => $data['salaries'][$key],
+                                'non_salary_expense' => $data['expenses'][$key],
+                                'non_reimbursable_salary' => $data['nonRSalaries'][$key],
+                                'non_reimbursable_expense' => $data['nonRExpenses'][$key]
+                            ]);
+                            ++$importRecord;
+                        }
+                    }
+                }
+            }
+        }
 
-
-
-        // $prDetail = PrDetail::find(session('pr_detail_id'));
-        // $import = new ExpenseImport();
-        // Excel::import($import, $path);
-
-        // if ($import->data['projectNo'] !=  $prDetail->project_no) {
-        //     return response()->json(['error' => 'Project No is not match with this file']);
-        // } else if ($import->data['reportName'] != "Project Wise Income Statement" && $import->data['reportName'] != "Project Wise Income Statements") {
-        //     return response()->json(['error' => 'Report is not match with this file']);
-        // } else if (!$import->data['isColumnTwoEmpty']) {
-        //     return response()->json(['error' => 'Report Format is not match against column 2']);
-        // } else {
-        //     foreach ($import->data['months'] as $key => $value) {
-        //         $date = \Carbon\Carbon::parse($import->data['months'][$key])->format('Y-m-d');
-        //         $prMonthlyExpense = PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->where('month', $date)->first();
-        //         if ($prMonthlyExpense) {
-        //             if ($prMonthlyExpense->salary_expense != $import->data['salary'][$key] || $prMonthlyExpense->non_salary_expense != $import->data['expense'][$key] || $prMonthlyExpense->non_reimbursable_salary != $import->data['non_reimbursable_salary'][$key] || $prMonthlyExpense->non_reimbursable_expense != $import->data['non_reimbursable_expense'][$key]) {
-        //                 ++$updateRecord;
-        //                 $prMonthlyExpense->update(
-        //                     [
-        //                         'salary_expense' => $import->data['salary'][$key],
-        //                         'non_salary_expense' => $import->data['expense'][$key],
-        //                         'non_reimbursable_salary' => $import->data['non_reimbursable_salary'][$key],
-        //                         'non_reimbursable_expense' => $import->data['non_reimbursable_expense'][$key]
-        //                     ]
-        //                 );
-        //             }
-        //         } else {
-        //             //check if all four values are null than not enter value
-        //             if (!($import->data['salary'][$key] == null && $import->data['expense'][$key] == null && $import->data['non_reimbursable_salary'][$key] == null && $import->data['non_reimbursable_expense'][$key] == null)) {
-        //                 PrMonthlyExpense::create([
-        //                     'pr_detail_id' => session('pr_detail_id'),
-        //                     'month' =>  $date,
-        //                     'salary_expense' => $import->data['salary'][$key],
-        //                     'non_salary_expense' => $import->data['expense'][$key],
-        //                     'non_reimbursable_salary' => $import->data['non_reimbursable_salary'][$key],
-        //                     'non_reimbursable_expense' => $import->data['non_reimbursable_expense'][$key]
-        //                 ]);
-        //                 ++$importRecord;
-        //             }
-        //         }
-        //     }
-        // }
-        // if (File::exists($path)) {
-        //     File::delete($path);
-        // }
-        // if ($importRecord == 0 && $updateRecord == 0) {
-        //     return response()->json(['error' => "All Record is Already Updated"]);
-        // } else {
-        //     return response()->json(['success' => "$importRecord Record Sucessfully Entered and $updateRecord Record Updates"]);
-        // }
+        $yearList = implode(",", $years);
+        if ($importRecord == 0 && $updateRecord == 0) {
+            return response()->json(['error' => "All Expenses are already Updated"]);
+        } else {
+            return response()->json(['success' => "$importRecord Record Sucessfully Entered and $updateRecord Record Updates for the years $yearList"]);
+        }
     }
 
 
     public function loadHtmlFile($projectNo, $year)
     {
         $url = "http://194.116.228.8:8888/reports/rwservlet?userid=BARQAAB/BARQAAB@scar&domain=classicdomain&report=D:\app\SYSTEM\BARQAAB\REPORTS\FR_PROJ_12MONTHS_FIN_SMRY&destype=CACHE&desformat=HTML&paramform=no&PPCD=__YEAR&PMCD=07&PMNODE=06FS30636&PUNCD=0001&PSTNATURE=01&PENNATURE=02&PSTREGION=01&PENREGION=05&PSTPROVINCE=01&PENPROVINCE=06&PSTCD=01__PROJECTNO&PENCD=012086&PSTDT=&PENDT=&PSTUC=0001&PENUC=9999&PUNCD=0001&PSTNATURE=01&PENNATURE=02&PSTREGION=01&PENREGION=05&PSTPROVINCE=01&PENPROVINCE=06&PSTVT=AAA&PENVT=ZZZ&PVST=&PPST=";
+
+
         $url = str_replace("__YEAR", substr($year, -2), $url);
         $url = str_replace("__PROJECTNO", $projectNo, $url);
 
@@ -217,14 +205,19 @@ class ProjectMonthlyExpenseController extends Controller
         $yearKey = '';
         $nextYear = '';
         $months = [];
-        $projectNo = '';
+        $projectNoKey = '';
         $salaries = [];
         $nonRSalaries = [];
         $expenses = [];
         $nonRExpenses = [];
+
+        $reportName = '';
         $data = collect();
         foreach ($aDataTableDetailHTML[0] as $key => $value) {
             $data->push($value);
+            if ($value == "Project Wise Income Statement") {
+                $reportName = $value;
+            }
             if ($value == "REIMBURSEABLE SALARIE") {
                 $reimbursementSalaryKey = $key;
             }
@@ -241,10 +234,10 @@ class ProjectMonthlyExpenseController extends Controller
                 $yearKey  = $key + 2;
             }
             if ($value == "Project Code and Name:") {
-                $projectNo  = $key + 2;
+                $projectNoKey  = $key + 2;
             }
         }
-        $year = $aDataTableDetailHTML[0][$yearKey];
+        $year = '20' . $aDataTableDetailHTML[0][$yearKey];
         $nextYear = $year + 1;
         array_push($months, 'Jul' . '-' . $year, 'Aug' . '-' . $year, 'Sep' . '-' . $year, 'Oct' . '-' . $year, 'Nov' . '-' . $year, 'Dec' . '-' . $year, 'Jan' . '-' . $nextYear, 'Feb' . '-' . $nextYear, 'Mar' . '-' . $nextYear, 'Apr' . '-' . $nextYear, 'May' . '-' . $nextYear, 'Jun' . '-' . $nextYear);
         $twoArray = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
@@ -260,42 +253,8 @@ class ProjectMonthlyExpenseController extends Controller
         foreach ($twoArray as $val) {
             array_push($nonRExpenses, intval(str_replace(',', '', $aDataTableDetailHTML[0][($nonReimbursementExpensesKey  + $val)])));
         }
-
-        $data = ['months' => $months, 'projectNo' => $projectNo, 'salaries' => $salaries, 'expenses' => $expenses, 'nonRSalaries' => $nonRSalaries, 'nonRExpenses' => $nonRExpenses];
-        dd($data);
-        //return $keyvalue;
-    }
-
-
-    public function convertPdfToExcel($path, $outPut)
-    {
-        $className = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf::class;
-        IOFactory::registerWriter('Pdf', $className);
-        IOFactory::registerReader('Pdf', $className);
-
-
-        $inputFileType = 'PDF';
-        $inputFileName = $path;
-        $outputFileType = 'Xlsx';
-        $outputFileName = $outPut;
-
-        $reader = IOFactory::createReader($inputFileType);
-        $spreadsheet = $reader->load($inputFileName);
-
-        $writer = IOFactory::createWriter($spreadsheet, $outputFileType);
-        $writer->save($outputFileName);
-
-        return $outputFileName;
-
-        // $inputFileType = 'PDF';
-        // $inputFileName = 'path/to/your/pdf/file.pdf';
-        // $outputFileType = 'Xlsx';
-        // $outputFileName = 'path/to/your/excel/file.xlsx';
-
-        // $reader = IOFactory::createReader($inputFileType);
-        // $spreadsheet = $reader->load($inputFileName);
-
-        // $writer = IOFactory::createWriter($spreadsheet, $outputFileType);
-        // $writer->save($outputFileName);
+        $projectNo = substr($aDataTableDetailHTML[0][$projectNoKey], -4);
+        $data = ['months' => $months, 'projectNo' => $projectNo, 'salaries' => $salaries, 'expenses' => $expenses, 'nonRSalaries' => $nonRSalaries, 'nonRExpenses' => $nonRExpenses, 'reportName' => $reportName];
+        return $data;
     }
 }
