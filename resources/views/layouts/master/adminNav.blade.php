@@ -110,7 +110,7 @@
                         <li><a class="{{Request::is('hrms/project/search')?'active':''}}" href="{{route('project.search')}}">Search Documentation</a></li>
                         @endcan
 
-                        @can('Super Admin')
+                        @canany(['Super Admin','pr rights'])
                         <li><a class="{{Request::is('hrms/project/projectRights')?'active':''}}" href="{{route('projectRights.index')}}">Project Rights</a></li>
                         @endcan
 
