@@ -24,7 +24,7 @@
         @endif
         <a type="submit" role="button" style="color:white" id="addStaff" href="{{route('projectStaff.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectStaff/index')?'style=background-color:#737373':''}}>Project Staff</a>
         @endcan
-        @if(isViewInvoice(session('pr_detail_id')) || isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id')))
+        @if(isViewInvoice(session('pr_detail_id')) || isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id')) || auth()->user()->can('pr invoice'))
         <a type="submit" role="button" style="color:white" id="addInvoice" href="{{route('projectInvoice.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectInvoice/index')?'style=background-color:#737373':''}}>Invoices</a>
         <a type="submit" role="button" style="color:white" id="addExpense" href="{{route('projectMonthlyExpense.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectMonthlyExpense/index')?'style=background-color:#737373':''}}>Monthly Expenses</a>
         @endif
