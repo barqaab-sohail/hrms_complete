@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\Hr\HrEmployee;
 use App\Http\Controllers\Hr\EmployeeController;
+use App\Http\Controllers\Project\ProjectMonthlyExpenseController;
 
 
 /*
@@ -184,6 +185,7 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
     Route::resource('projectStaff', 'ProjectStaffController');
     Route::resource('projectMonthlyExpense', 'ProjectMonthlyExpenseController');
     Route::post('/importExpense', 'ProjectMonthlyExpenseController@importExpense')->name('project.importExpense');
+    Route::get('/customerLedgerActivity', [ProjectMonthlyExpenseController::class, 'CustomerLedgerActivity'])->name('project.customerLedgerActivity');
 
     //Progress Routes
     Route::resource('/monthlyProgress', 'Progress\MonthlyProgressController');

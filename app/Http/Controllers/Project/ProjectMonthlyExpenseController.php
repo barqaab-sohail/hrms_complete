@@ -271,4 +271,35 @@ class ProjectMonthlyExpenseController extends Controller
         $data = ['months' => $months, 'projectNo' => $projectNo, 'salaries' => $salaries, 'expenses' => $expenses, 'nonRSalaries' => $nonRSalaries, 'nonRExpenses' => $nonRExpenses, 'reportName' => $reportName, 'revenue' => $revenue];
         return $data;
     }
+
+    public function CustomerLedgerActivity()
+    {
+        $htmlContent = file_get_contents('C:\Users\sohail\Desktop\\testt1.htm');
+        $htmlContent = str_replace("&nbsp;", " ", $htmlContent);
+        $htmlContent = strip_tags($htmlContent, ['td']);
+        $DOM = new \DOMDocument();
+        $DOM->loadHTML($htmlContent);
+
+        $Detail = $DOM->getElementsByTagName('td');
+
+        foreach ($Detail as $sNodeDetail) {
+            if (trim($sNodeDetail->textContent != '')) {
+                $aDataTableDetailHTML[0][] = trim($sNodeDetail->textContent);
+            }
+        }
+
+        dd($aDataTableDetailHTML[0]);
+        $customerNameKey = [];
+        foreach ($aDataTableDetailHTML[0] as $key => $value) {
+            if ($value == 'Customer Name:') {
+                array_push($customerNameKey, $key);
+            }
+        }
+
+        $customerName = [];
+        foreach ($customerNameKey as $key => $value) {
+            array_push($customerName, $aDataTableDetailHTML[0][$value + 1]);
+        }
+        dd($customerName);
+    }
 }
