@@ -35,6 +35,17 @@
         <tbody>
 
         </tbody>
+        <tfoot>
+            <tr>
+                <th style="text-align:right">Grand Total:</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
     </table>
 </div>
 
@@ -167,6 +178,7 @@
                 dom: 'Blfrtip',
                 buttons: [{
                         extend: 'copyHtml5',
+                        footer: true,
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5, 6]
                         }
@@ -174,12 +186,14 @@
                     {
                         extend: 'excelHtml5',
                         title: 'Monthly Expense Detail',
+                        footer: true,
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5, 6]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
+                        footer: true,
                         title: 'Monthly Expense Detail',
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5, 6]
@@ -218,6 +232,70 @@
 
 
                 ],
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api();
+
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function(i) {
+                        return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                    };
+
+                    // Total over all pages
+                    total1 = api
+                        .column(1)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0).toLocaleString("en-US");
+                    total2 = api
+                        .column(2)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0).toLocaleString("en-US");
+                    total3 = api
+                        .column(3)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0).toLocaleString("en-US");
+                    total4 = api
+                        .column(4)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0).toLocaleString("en-US");
+                    total5 = api
+                        .column(5)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0).toLocaleString("en-US");
+                    total6 = api
+                        .column(6)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0).toLocaleString("en-US");
+                    // Total over this page
+                    pageTotal = api
+                        .column(1, {
+                            page: 'current'
+                        })
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(1).footer()).html(total1);
+                    $(api.column(2).footer()).html(total2);
+                    $(api.column(3).footer()).html(total3);
+                    $(api.column(4).footer()).html(total4);
+                    $(api.column(5).footer()).html(total5);
+                    $(api.column(6).footer()).html(total6);
+                },
+
                 order: [
 
                 ]
