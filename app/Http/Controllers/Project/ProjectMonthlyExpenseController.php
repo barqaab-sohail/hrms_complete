@@ -274,7 +274,7 @@ class ProjectMonthlyExpenseController extends Controller
 
     public function CustomerLedgerActivity()
     {
-        $htmlContent = file_get_contents('C:\Users\sohail\Desktop\\testt1.htm');
+        $htmlContent = file_get_contents('C:\Users\sohail\Desktop\\list.htm');
         $htmlContent = str_replace("&nbsp;", " ", $htmlContent);
         $htmlContent = strip_tags($htmlContent, ['td']);
         $DOM = new \DOMDocument();
@@ -287,18 +287,23 @@ class ProjectMonthlyExpenseController extends Controller
                 $aDataTableDetailHTML[0][] = trim($sNodeDetail->textContent);
             }
         }
-
-        dd($aDataTableDetailHTML[0]);
+        // dd($aDataTableDetailHTML[0]);
+        // $customerName = array_search('Customer Name:', $aDataTableDetailHTML[0]);
+        // dd($customerName);
         $customerNameKey = [];
+        $customerCodeKey = [];
         foreach ($aDataTableDetailHTML[0] as $key => $value) {
             if ($value == 'Customer Name:') {
                 array_push($customerNameKey, $key);
             }
+            if ($value == 'Customer Code:') {
+                array_push($customerCodeKey, $key);
+            }
         }
 
         $customerName = [];
-        foreach ($customerNameKey as $key => $value) {
-            array_push($customerName, $aDataTableDetailHTML[0][$value + 1]);
+        foreach ($customerCodeKey as $key => $value) {
+            array_push($customerName, $aDataTableDetailHTML[0][$value + 1] . '===' . $aDataTableDetailHTML[0][$value + 3]);
         }
         dd($customerName);
     }
