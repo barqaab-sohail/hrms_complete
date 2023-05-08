@@ -112,6 +112,7 @@
 
                         @canany(['Super Admin','pr rights'])
                         <li><a class="{{Request::is('hrms/project/projectRights')?'active':''}}" href="{{route('projectRights.index')}}">Project Rights</a></li>
+                        <li><a class="{{Request::is('hrms/project/projectLedgerUrl')?'active':''}}" href="{{route('projectLedgerUrl.index')}}">Project Ledger URL</a></li>
                         @endcan
 
                     </ul>
