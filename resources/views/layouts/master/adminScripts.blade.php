@@ -39,7 +39,6 @@
 <!--CDN ChartJS 
  -->
 <script src="http://www.chartjs.org/dist/2.7.3/Chart.bundle.js"></script>
-<script src="http://www.chartjs.org/samples/latest/utils.js"></script>
 
 <!-- ============================================================== -->
 <!-- Style switcher -->
