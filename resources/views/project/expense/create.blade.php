@@ -37,7 +37,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <th style="text-align:right">Grand Total:</th>
+                <th style="text-align:right">Page Total:</th>
                 <th></th>
                 <th></th>
                 <th></th>
