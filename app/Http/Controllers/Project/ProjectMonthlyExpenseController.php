@@ -274,12 +274,14 @@ class ProjectMonthlyExpenseController extends Controller
 
     public function CustomerLedgerActivity()
     {
-        $htmlContent = file_get_contents('C:\Users\sohail\Desktop\\list.htm');
+        $htmlContent = file_get_contents('C:\Users\Sohail Afzal\OneDrive\Desktop\\test2.html');
         $htmlContent = str_replace("&nbsp;", " ", $htmlContent);
+        $htmlContent = str_replace("&amp;", "__saperator", $htmlContent);
         $htmlContent = strip_tags($htmlContent, ['td']);
         $DOM = new \DOMDocument();
         $DOM->loadHTML($htmlContent);
 
+        //dd($DOM);
         $Detail = $DOM->getElementsByTagName('td');
 
         foreach ($Detail as $sNodeDetail) {
@@ -287,24 +289,27 @@ class ProjectMonthlyExpenseController extends Controller
                 $aDataTableDetailHTML[0][] = trim($sNodeDetail->textContent);
             }
         }
-        // dd($aDataTableDetailHTML[0]);
-        // $customerName = array_search('Customer Name:', $aDataTableDetailHTML[0]);
+        //dd($aDataTableDetailHTML[0]);
+        $customerName = array_search('Customer Name:', $aDataTableDetailHTML[0]);
+        dd($customerName);
         // dd($customerName);
         $customerNameKey = [];
-        $customerCodeKey = [];
+        $dataKey = '';
+        $customerCodeKey = '';
         foreach ($aDataTableDetailHTML[0] as $key => $value) {
             if ($value == 'Customer Name:') {
-                array_push($customerNameKey, $key);
-            }
-            if ($value == 'Customer Code:') {
-                array_push($customerCodeKey, $key);
+                array_push($customerNameKey,  $key + 1);
             }
         }
 
-        $customerName = [];
-        foreach ($customerCodeKey as $key => $value) {
-            array_push($customerName, $aDataTableDetailHTML[0][$value + 1] . '===' . $aDataTableDetailHTML[0][$value + 3]);
+        dd($customerNameKey);
+        $data = [];
+        for ($i = $dataKey; $i < count($aDataTableDetailHTML[0]); $i++) {
+            array_push($data, $aDataTableDetailHTML[0][$i]);
+            //echo $aDataTableDetailHTML[0][$i] . '<br>';
         }
-        dd($customerName);
+
+        dd(array_chunk($data, 9));
+        dd($aDataTableDetailHTML[0][$customerNameKey]);
     }
 }

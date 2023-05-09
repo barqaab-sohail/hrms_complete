@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class PrLedgerLink extends Model implements Auditable
+
+class PrCustomerNo extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     use HasFactory;
 
-    protected $fillable = ['pr_detail_id', 'url'];
+    protected $fillable = ['pr_detail_id', 'customer_no'];
 }

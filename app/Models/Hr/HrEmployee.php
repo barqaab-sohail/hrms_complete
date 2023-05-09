@@ -455,6 +455,18 @@ class HrEmployee extends Model implements Auditable
         )->where('hr_document_names.id', 11);
     }
 
+    public function signedAppointmentLetter()
+    {
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrDocumentName',                    //Final Model HrDocumentName
+            'App\Models\Hr\HrDocumentNameDocumentation',      //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_document_name_id'                             //Forein Key in Immediate Model of Final Model
+        )->where('hr_document_names.id', 17);
+    }
+
 
 
 
