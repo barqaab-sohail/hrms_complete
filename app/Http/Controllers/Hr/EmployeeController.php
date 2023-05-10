@@ -185,7 +185,11 @@ class EmployeeController extends Controller
                     return $data->hrContactMobile->mobile ?? '';
                 })
                 ->addcolumn('last_working_date', function ($data) {
-                    return $data->last_working_date ?? '';
+                    if ($data->hr_status_id == "Active") {
+                        return '';
+                    } else {
+                        return $data->last_working_date ?? '';
+                    }
                 })
                 ->addColumn('edit', function ($data) {
 
