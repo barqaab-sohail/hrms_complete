@@ -23,7 +23,7 @@
                         <th>Date of Joining</th>
                         <th>Mobile</th>
 
-                        @can('hr edit documentation')
+                        @can('hr view record')
                         <th class="text-center" style="width:5%">Edit</th>
                         @endcan
 

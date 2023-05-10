@@ -275,7 +275,7 @@ class ProjectMonthlyExpenseController extends Controller
 
     public function CustomerLedgerActivity()
     {
-        $htmlContent = file_get_contents('C:\Users\sohail\Desktop\\test2t.htm');
+        $htmlContent = file_get_contents("C:\Users\Sohail Afzal\OneDrive\Desktop\\test2.html");
         $htmlContent = str_replace("&nbsp;", " ", $htmlContent);
         $htmlContent = str_replace("&amp;", "__saperator", $htmlContent);
         $htmlContent = strip_tags($htmlContent, ['td']);
@@ -284,20 +284,81 @@ class ProjectMonthlyExpenseController extends Controller
 
         //dd($DOM);
         $Detail = $DOM->getElementsByTagName('td');
-
+        $data = collect();
         foreach ($Detail as $sNodeDetail) {
             if (trim($sNodeDetail->textContent != '')) {
-                $aDataTableDetailHTML[0][] = trim($sNodeDetail->textContent);
+                //$aDataTableDetailHTML[0][] = trim($sNodeDetail->textContent);
+                $data = $data->push(trim($sNodeDetail->textContent));
             }
         }
-        $data = [];
-        //whieh "Customer's Ledger Activity" new array
-        dd($aDataTableDetailHTML[0]);
-        $dataC = collect($aDataTableDetailHTML[0]);
-        $keys = $dataC->filter(function ($value) {
-            return $value == "Customer's Ledger Activity";
+        //dd($data);
+        $page1 = [];
+        $page2 = [];
+        $page3 = [];
+        $page4 = [];
+        $count = 0;
+
+        foreach ($data as $key => $value) {
+            if ($value == 'Customer Code:') {
+                $count++;
+            }
+            if ($count == 1) {
+                if ($value == "Customer's Ledger Activity") {
+                    // continue;
+                }
+                array_push($page1, $value);
+            }
+            if ($count == 2) {
+                array_push($page2, $value);
+            }
+            if ($count == 3) {
+                array_push($page3, $value);
+            }
+            if ($count == 4) {
+                array_push($page4, $value);
+            }
+        }
+        dd($page1);
+
+        $clear = array_slice($page1, 7);
+        // dd($clear);
+        dd(array_chunk($clear, 9));
+        dd($groups);
+        dd($page1, $page2, $page3, $page4);
+        $pageEndKeys = $data->filter(function ($value) {
+            return $value == "Opening:";
         });
-        //  dd($keys);
+        $keys = $pageEndKeys->keys();
+
+        $pages = $data->filter(function ($key, $value) use ($page1, $keys) {
+            if ($key < $keys[0]) {
+                return  $page1 = $page1->push($value);
+            }
+        });
+        dd($pages);
+        //dd($keys[0]);
+        foreach ($data as $key => $value) {
+            if ($keys->has(0) && $key < $keys[0]) {
+                $page1 = $page1->push($value);
+            } else if ($keys->has(1) && $key < $keys[1]) {
+                $page2 = $page2->push($value);
+            } else if ($keys->has(2) && $key < $keys[2]) {
+                $page3 = $page3->push($value);
+            } else if ($keys->has(3) && $key < $keys[3]) {
+                $page4 = $page4->push($value);
+            } else {
+                break;
+            }
+        }
+
+        dd($page1, $page2, $page3);
+
+        //dd($data);
+        //whieh "Customer's Ledger Activity" new array
+        //dd($aDataTableDetailHTML[0]);
+        //$dataC = collect($aDataTableDetailHTML[0]);
+
+        dd($keys);
         //dd($aDataTableDetailHTML[0]);
         $customerName = array_search('Customer Name:', $aDataTableDetailHTML[0]);
 

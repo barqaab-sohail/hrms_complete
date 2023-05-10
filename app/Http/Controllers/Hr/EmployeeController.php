@@ -146,7 +146,7 @@ class EmployeeController extends Controller
 
                 ->addColumn('full_name', function ($data) {
 
-                    if (Auth::user()->can('hr edit record')) {
+                    if (Auth::user()->can('hr edit record') || Auth::user()->can('hr view record')) {
                         $fullName = '<a href="' . route('employee.edit', $data->id) . '" style="color:grey">' . $data->full_name . '</a>';
                         return $fullName;
                     } else {
