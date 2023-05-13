@@ -35,16 +35,28 @@ class ProjectLedgerActivityController extends Controller
 
     public function importLedgerActivity()
     {
-        return response()->json(['error' => 'Customer No is not found']);
+        $prDetail = PrDetail::find(session('pr_detail_id'));
+        $customerNo = 251000010060;
+        $projectNo = 2060;
+
+        $data = "";
+        if ($customerNo != '' && $projectNo != '') {
+            $data = $this->CustomerLedgerActivity($projectNo, $customerNo);
+        } else {
+            $data = "Error for reading file";
+        }
+        dd($data);
+
+
+        return response()->json(['error' => "Customer No is not found $data=>['customer_no']"]);
     }
 
     public function CustomerLedgerActivity($projectNo, $customerNo)
     {
         //$htmlContent = file_get_contents("C:\Users\Sohail Afzal\OneDrive\Desktop\Reduced\\test2.html");
-        $url = "http://194.116.228.8:8888/reports/rwservlet?userid=BARQAAB/BARQAAB@scar&domain=classicdomain&report=D:\app\SYSTEM\BARQAAB\REPORTS\AR_LGR&destype=CACHE&desformat=HTML&paramform=no&PPCD=22&PMNODE=12AR302013&PUNCD=__PROJECTNO&PSTCD=__CUSTOMERNO&PENCD=&PSTDT=30-JUN-19&PENDT=05-MAY-23&PSTUC=__PROJECTNO&PENUC=9999&PUNCD=__PROJECTNO&PSTVT=AAA&PENVT=ZZZ&PVST=&PPST=";
+        $url = "http://194.116.228.8:8888/reports/rwservlet?userid=BARQAAB/BARQAAB@scar&domain=classicdomain&report=D:\app\SYSTEM\BARQAAB\REPORTS\AR_LGR&destype=CACHE&desformat=HTML&paramform=no&PPCD=22&PMNODE=12AR302013&PUNCD=__PROJECTNO&PSTCD=__CUSTOMERNO&PENCD=__CUSTOMERNO&PSTDT=30-JUN-19&PENDT=05-MAY-23&PSTUC=__PROJECTNO&PENUC=__PROJECTNO &PUNCD=__PROJECTNO&PSTVT=AAA&PENVT=ZZZ&PVST=&PPST=";
         $url = str_replace("__PROJECTNO", $projectNo, $url);
         $url = str_replace("__CUSTOMERNO", $customerNo, $url);
-
         $htmlContent = file_get_contents($url);
         $htmlContent = str_replace("&nbsp;", " ", $htmlContent);
         //following line is not used, it is used for future if recorded 'a' tag

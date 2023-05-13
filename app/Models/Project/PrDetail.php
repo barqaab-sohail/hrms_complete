@@ -45,6 +45,11 @@ class PrDetail extends Model implements Auditable
         return $this->hasOne('App\Models\Project\Cost\PrCost');
     }
 
+    public function prCustomerNo()
+    {
+        return $this->hasOne('App\Models\Project\PrCustomerNo');
+    }
+
     public function prRole()
     {
         return $this->belongsTo('App\Models\Project\PrRole');
