@@ -25,6 +25,18 @@ class ProjectLedgerActivityController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->editColumn('debit', function ($row) {
+
+                    return addComma($row->debit ?? '');
+                })
+                ->editColumn('credit', function ($row) {
+
+                    return addComma($row->credit ?? '');
+                })
+                ->editColumn('balance', function ($row) {
+
+                    return addComma($row->balance ?? '');
+                })
                 ->make(true);
         }
 
@@ -35,29 +47,106 @@ class ProjectLedgerActivityController extends Controller
 
     public function importLedgerActivity()
     {
-        $prDetail = PrDetail::find(session('pr_detail_id'));
-        $customerNo = 251000010060;
-        $projectNo = 2060;
-
+        $prDetailId = session('pr_detail_id');
+        $prDetail = PrDetail::find($prDetailId);
+        $customerNo = $prDetail->prCustomerNo->customer_no ?? '';
+        $projectNo = $prDetail->project_no;
+        if ($customerNo == '') {
+            return response()->json(['error' => 'Cusomer No is not entered, please enter customer no first']);
+        }
+        $toDate = \Carbon\Carbon::now()->format('d-M-y');
         $data = "";
         if ($customerNo != '' && $projectNo != '') {
-            $data = $this->CustomerLedgerActivity($projectNo, $customerNo);
+            $data = $this->CustomerLedgerActivity($projectNo, $customerNo, $toDate);
         } else {
             $data = "Error for reading file";
         }
-        dd($data);
 
+        $ledgerActivities = LedgerActivity::where('pr_detail_id', $prDetailId)->get();
 
-        return response()->json(['error' => "Customer No is not found $data=>['customer_no']"]);
+        $databaseCount = $ledgerActivities->count();
+        $dataCount = count($data['data']);
+
+        if ($ledgerActivities->isEmpty()) {
+            foreach ($data['data'] as $key => $value) {
+                LedgerActivity::create([
+                    'pr_detail_id' => $prDetailId,
+                    'voucher_date' => \Carbon\Carbon::parse($value[0])->format('Y-m-d'),
+                    'voucher_no' => $value[1],
+                    'reference_date' => $value[2] == '' ? null : \Carbon\Carbon::parse($value[2])->format('Y-m-d'),
+                    'reference_no' => $value[3],
+                    'description' => $value[4],
+                    'debit' => intval(str_replace(',', '', $value[5])),
+                    'credit' => intval(str_replace(',', '', $value[6])),
+                    'balance' => intval(str_replace(',', '', $value[7])),
+                    'remarks' => $value[8],
+
+                ]);
+            }
+            $message = "Data Enter sucessfully";
+        } else {
+            if ($databaseCount >= $dataCount) {
+                foreach ($ledgerActivities as $key => $ledgerActivity) {
+                    if (isset($data['data'][$key])) {
+                        $isData = true;
+                    } else {
+                        $isData = false;
+                    }
+                    if ($isData) {
+                        $ledgerActivity->update([
+                            'pr_detail_id' => $prDetailId,
+                            'voucher_date' => \Carbon\Carbon::parse($data['data'][$key][0])->format('Y-m-d'),
+                            'voucher_no' => $data['data'][$key][1],
+                            'reference_date' => $data['data'][$key][2] == '' ? null : \Carbon\Carbon::parse($data['data'][$key][2])->format('Y-m-d'),
+                            'reference_no' => $data['data'][$key][3],
+                            'description' => $data['data'][$key][4],
+                            'debit' => intval(str_replace(',', '', $data['data'][$key][5])),
+                            'credit' => intval(str_replace(',', '', $data['data'][$key][6])),
+                            'balance' => intval(str_replace(',', '', $data['data'][$key][7])),
+                            'remarks' => $data['data'][$key][8],
+                        ]);
+                    } else {
+                        $ledgerActivity->delete();
+                    }
+                }
+                $message = "Database sync sucessfully";
+            } else {
+                foreach ($data['data'] as $key => $value) {
+                    if (isset($ledgerActivities[$key])) {
+                        $id = $ledgerActivities[$key]['id'];
+                    } else {
+                        $id = null;
+                    }
+
+                    LedgerActivity::updateOrCreate(['id' => $id], [
+                        'pr_detail_id' => $prDetailId,
+                        'voucher_date' => \Carbon\Carbon::parse($data['data'][$key][0])->format('Y-m-d'),
+                        'voucher_no' => $data['data'][$key][1],
+                        'reference_date' => $data['data'][$key][2] == '' ? null : \Carbon\Carbon::parse($data['data'][$key][2])->format('Y-m-d'),
+                        'reference_no' => $data['data'][$key][3],
+                        'description' => $data['data'][$key][4],
+                        'debit' => intval(str_replace(',', '', $data['data'][$key][5])),
+                        'credit' => intval(str_replace(',', '', $data['data'][$key][6])),
+                        'balance' => intval(str_replace(',', '', $data['data'][$key][7])),
+                        'remarks' => $data['data'][$key][8],
+                    ]);
+                }
+                $message = "Data Updated sucessfully";
+            }
+        }
+
+        return response()->json(['success' => $message]);
     }
 
-    public function CustomerLedgerActivity($projectNo, $customerNo)
+    public function CustomerLedgerActivity($projectNo, $customerNo, $toDate)
     {
-        //$htmlContent = file_get_contents("C:\Users\Sohail Afzal\OneDrive\Desktop\Reduced\\test2.html");
-        $url = "http://194.116.228.8:8888/reports/rwservlet?userid=BARQAAB/BARQAAB@scar&domain=classicdomain&report=D:\app\SYSTEM\BARQAAB\REPORTS\AR_LGR&destype=CACHE&desformat=HTML&paramform=no&PPCD=22&PMNODE=12AR302013&PUNCD=__PROJECTNO&PSTCD=__CUSTOMERNO&PENCD=__CUSTOMERNO&PSTDT=30-JUN-19&PENDT=05-MAY-23&PSTUC=__PROJECTNO&PENUC=__PROJECTNO &PUNCD=__PROJECTNO&PSTVT=AAA&PENVT=ZZZ&PVST=&PPST=";
+
+        $url = "http://194.116.228.8:8888/reports/rwservlet?userid=BARQAAB/BARQAAB@scar&domain=classicdomain&report=D:\app\SYSTEM\BARQAAB\REPORTS\AR_LGR&destype=CACHE&desformat=HTML&paramform=no&PPCD=22&PMNODE=12AR302013&PUNCD=__PROJECTNO&PSTCD=__CUSTOMERNO&PENCD=__CUSTOMERNO&PSTDT=30-JUN-19&PENDT=__TODATE&PSTUC=__PROJECTNO&PENUC=__PROJECTNO &PUNCD=__PROJECTNO&PSTVT=AAA&PENVT=ZZZ&PVST=&PPST=";
         $url = str_replace("__PROJECTNO", $projectNo, $url);
         $url = str_replace("__CUSTOMERNO", $customerNo, $url);
+        $url = str_replace("__TODATE", $toDate, $url);
         $htmlContent = file_get_contents($url);
+        //$htmlContent = file_get_contents("C:\Users\sohail\Desktop\\testt.htm");
         $htmlContent = str_replace("&nbsp;", " ", $htmlContent);
         //following line is not used, it is used for future if recorded 'a' tag
         $htmlContent = str_replace("&amp;", "__saperator", $htmlContent);

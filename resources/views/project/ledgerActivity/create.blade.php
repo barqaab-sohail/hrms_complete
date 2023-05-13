@@ -155,12 +155,7 @@
                         .reduce(function(a, b) {
                             return intVal(a) + intVal(b);
                         }, 0).toLocaleString("en-US");
-                    total7 = api
-                        .column(7)
-                        .data()
-                        .reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0).toLocaleString("en-US");
+
                     // Total over this page
                     pageTotal = api
                         .column(1, {
@@ -174,7 +169,7 @@
                     // Update footer
                     $(api.column(5).footer()).html(total5);
                     $(api.column(6).footer()).html(total6);
-                    $(api.column(7).footer()).html(total7);
+
                 },
 
                 order: [
