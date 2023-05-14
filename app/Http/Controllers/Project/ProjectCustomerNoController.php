@@ -69,7 +69,7 @@ class ProjectCustomerNoController extends Controller
     {
         $validated = $request->validate([
             'pr_detail_id' => 'required|unique:pr_customer_nos,pr_detail_id,' . $request->customer_id,
-            'customer_no' => 'required|max:12',
+            'customer_no' => 'required|max:12|unique:pr_customer_nos,customer_no,' . $request->customer_id,
         ]);
 
         $input = $request->all();
