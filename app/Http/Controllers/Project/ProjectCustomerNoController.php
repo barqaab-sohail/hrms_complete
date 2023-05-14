@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Project\PrDetail;
 use App\Models\Project\PrCustomerNo;
@@ -28,17 +29,22 @@ class ProjectCustomerNoController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('Edit', function ($row) {
+                    if (Auth::user()->can('pr add customer no')) {
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProjectCustomerNo">Edit</a>';
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProjectCustomerNo">Edit</a>';
-
-                    return $btn;
+                        return $btn;
+                    } else {
+                        return '';
+                    }
                 })
+
                 ->addColumn('Delete', function ($row) {
-
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProjectCustomerNo">Delete</a>';
-
-
-                    return $btn;
+                    if (Auth::user()->can('pr add customer no')) {
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProjectCustomerNo">Delete</a>';
+                        return $btn;
+                    } else {
+                        return '';
+                    }
                 })
 
                 ->addColumn('pr_detail_id', function ($row) {

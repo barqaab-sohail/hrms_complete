@@ -28,7 +28,9 @@
         <a type="submit" role="button" style="color:white" id="addInvoice" href="{{route('projectInvoice.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectInvoice/index')?'style=background-color:#737373':''}}>Invoices</a>
         <a type="submit" role="button" style="color:white" id="addExpense" href="{{route('projectMonthlyExpense.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectMonthlyExpense/index')?'style=background-color:#737373':''}}>Monthly Expenses</a>
         @endif
-
+        @can('pr ledger activity')
+        <a type="submit" role="button" style="color:white" id="addProgressActivities" href="{{route('projectLedgerActivity.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectLedgerActivity/index')?'style=background-color:#737373':''}}>Ledger Activity</a>
+        @endcan
         @if(projectPaymentRight(session('pr_detail_id')))
         <a type="submit" role="button" style="color:white" id="addPayment" href="{{route('projectPayment.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPayment/index')?'style=background-color:#737373':''}}>Payments</a>
         @endif
@@ -46,10 +48,7 @@
 
 
 
-
-
         @can('Super Admin')
-        <a type="submit" role="button" style="color:white" id="addProgressActivities" href="{{route('projectLedgerActivity.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectLedgerActivity/index')?'style=background-color:#737373':''}}>Ledger Activity</a>
         <a type="submit" role="button" style="color:white" id="addProgressActivities" href="{{route('projectProgressActivities.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectProgressActivities/index')?'style=background-color:#737373':''}}>Progress Activities</a>
         <a type="submit" role="button" style="color:white" id="addMonthlyProgress" href="{{route('monthlyProgress.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/monthlyProgress/index')?'style=background-color:#737373':''}}>Monthly Progress</a>
         @endcan

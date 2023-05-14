@@ -6,7 +6,9 @@
 @section('content')
 <div class="card">
     <div class="card-body">
+        @can('pr add customer no')
         <button type="button" class="btn btn-success float-right" id="createCustomerNo" data-toggle="modal">Add Customer No</button>
+        @endcan
         <br>
         <div class="table-responsive">
             <table class="table table-bordered data-table">
@@ -14,8 +16,10 @@
                     <tr>
                         <th style="width:60%">Project Name</th>
                         <th style="width:20%">Customer No</th>
+                        @can('pr add customer no')
                         <th style="width:10%">Edit</th>
                         <th style="width:10%">Delete</th>
+                        @endcan
                     </tr>
                 </thead>
                 <tbody>
@@ -128,7 +132,7 @@
                         data: "customer_no",
                         name: 'customer_no'
                     },
-                    {
+                    @can('pr add customer no') {
                         data: 'Edit',
                         name: 'Edit',
                         orderable: false,
@@ -140,6 +144,7 @@
                         orderable: false,
                         searchable: false
                     },
+                    @endcan
                 ],
 
                 order: [

@@ -106,13 +106,17 @@
                         <li><a class="{{Request::is('hrms/project/selectedProjects')?'active':''}}" href="{{route('project.selected')}}">Selected Projects</a></li>
                         @endcan
 
+                        @canany(['pr add customer no', 'pr view customer no'])
+                        <li><a class="{{Request::is('hrms/project/projectCustomerNo')?'active':''}}" href="{{route('projectCustomerNo.index')}}">Customer No</a></li>
+                        @endcanany
+
                         @can('pr document search')
                         <li><a class="{{Request::is('hrms/project/search')?'active':''}}" href="{{route('project.search')}}">Search Documentation</a></li>
                         @endcan
 
                         @can('Super Admin')
                         <li><a class="{{Request::is('hrms/project/projectRights')?'active':''}}" href="{{route('projectRights.index')}}">Project Rights</a></li>
-                        <li><a class="{{Request::is('hrms/project/projectCustomerNo')?'active':''}}" href="{{route('projectCustomerNo.index')}}">Customer No</a></li>
+
                         @endcan
 
                     </ul>
