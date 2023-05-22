@@ -10,7 +10,7 @@
         <div class="container" id='hideDiv'>
             <h3 align="center">Import Excel File</h3>
 
-            <form method="POST" enctype="multipart/form-data" action="{{route('project.importLedgerActivity')}}">
+            <form method="POST" enctype="multipart/form-data" action="{{route('project.updateLedgerActivity')}}">
                 {{ csrf_field() }}
                 <div class="form-group">
                     <table class="table">

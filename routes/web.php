@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Hr\HrEmployee;
-use App\Http\Controllers\Hr\EmployeeController;
-use App\Http\Controllers\Project\ProjectMonthlyExpenseController;
+use App\Http\Controllers\Project\ProjectLedgerActivityController;
 
 
 /*
@@ -188,7 +186,6 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
     Route::resource('projectStaff', 'ProjectStaffController');
     Route::resource('projectMonthlyExpense', 'ProjectMonthlyExpenseController');
     Route::post('/importExpense', 'ProjectMonthlyExpenseController@importExpense')->name('project.importExpense');
-    Route::get('/customerLedgerActivity', [ProjectMonthlyExpenseController::class, 'CustomerLedgerActivity'])->name('project.customerLedgerActivity');
 
     //Progress Routes
     Route::resource('/monthlyProgress', 'Progress\MonthlyProgressController');
@@ -290,6 +287,7 @@ Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth', 'XssSanitizer'],
 
 //Admin Routes
 Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Admin'], function () {
+    Route::post('/updateLedgerActivity', [ProjectLedgerActivityController::class, 'updateLedgerActivity'])->name('project.updateLedgerActivity');
     Route::get('/lastLogin', 'ActiveUserController@lastLogin')->name('lastLogin.detail');
     Route::get('/activeUser', 'ActiveUserController@index')->name('activeUser.index');
     Route::get('/logoutAll/{id?}', 'ActiveUserController@logoutAll')->name('logout.all');
