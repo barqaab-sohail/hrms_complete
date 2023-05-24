@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\User;
 use App\Models\MisUser;
+use App\Http\Controllers\MIS\Project\ProjectLedgerActivityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ use App\Models\MisUser;
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 Route::post('/mis/login', 'MIS\LoginController@login');
-
+Route::get('/misProjectLedgerActivity/{projectId}', [ProjectLedgerActivityController::class, 'misProjectLedgerActivity']);
 
 
 
