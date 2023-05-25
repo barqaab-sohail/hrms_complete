@@ -45,9 +45,12 @@ class ProjectLedgerActivityController extends Controller
     }
 
 
-    public function importLedgerActivity()
+    public function importLedgerActivity($prDetailId = null)
     {
-        $prDetailId = session('pr_detail_id');
+
+        if ($prDetailId == null) {
+            $prDetailId = session('pr_detail_id');
+        }
         $prDetail = PrDetail::find($prDetailId);
         $customerNo = $prDetail->prCustomerNo->customer_no ?? '';
         $projectNo = $prDetail->project_no;
