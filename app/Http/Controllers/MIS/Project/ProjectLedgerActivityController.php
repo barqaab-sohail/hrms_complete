@@ -23,18 +23,28 @@ class ProjectLedgerActivityController extends Controller
             $today = \Carbon\Carbon::now();
             $difference = $today->diffInDays($lastUpdate);
         }
+        $statusCode = '400';
         if ($difference > 10) {
             $ledger = new Ledger();
-            $ledger->importLedgerActivity($projectId);
+            $resonseData = $ledger->importLedgerActivity($projectId);
             $checkUpdate = "Yes";
+            $statusCode =  response()->json($resonseData->status());
         }
 
-        $totalDebit = LedgerActivity::where('pr_detail_id', $projectId)->sum('debit');
-        $totalCredit = LedgerActivity::where('pr_detail_id', $projectId)->sum('credit');
-        $balance = $totalDebit - $totalCredit;
-        $project = PrDetail::find($projectId);
-        $projectCost = (int)$project->prCost->total_cost ?? '';
+        if ($statusCode == '200' || $lastUpdate) {
+            $totalDebit = LedgerActivity::where('pr_detail_id', $projectId)->sum('debit');
+            $totalCredit = LedgerActivity::where('pr_detail_id', $projectId)->sum('credit');
+            $balance = $totalDebit - $totalCredit;
+            $project = PrDetail::find($projectId);
+            if ($project->prCost) {
+                $projectCost = (int)$project->prCost->total_cost ?? '';
+            } else {
+                $projectCost = '';
+            }
 
-        return response()->json(['total_debit' => $totalDebit, 'total_credit' => $totalCredit, 'balance' => $balance, 'projectCost' => $projectCost, 'update' => $checkUpdate]);
+            return response()->json(['total_debit' => $totalDebit, 'total_credit' => $totalCredit, 'balance' => $balance, 'projectCost' => $projectCost, 'update' => $checkUpdate]);
+        } else {
+            return response()->json(['total_debit' => 0, 'total_credit' => 0, 'balance' => 0, 'projectCost' => 0, 'update' => $checkUpdate]);
+        }
     }
 }

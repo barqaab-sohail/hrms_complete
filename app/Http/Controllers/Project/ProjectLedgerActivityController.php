@@ -55,7 +55,7 @@ class ProjectLedgerActivityController extends Controller
         $customerNo = $prDetail->prCustomerNo->customer_no ?? '';
         $projectNo = $prDetail->project_no;
         if ($customerNo == '') {
-            return response()->json(['error' => 'Cusomer No is not entered, please enter customer no first']);
+            return response()->json(['error' => 'Cusomer No is not entered, please enter customer no first'], 400);
         }
         $toDate = \Carbon\Carbon::now()->format('d-M-y');
         $data = "";
@@ -138,7 +138,7 @@ class ProjectLedgerActivityController extends Controller
             }
         }
 
-        return response()->json(['success' => $message]);
+        return response()->json(['success' => $message], 200);
     }
 
     public function CustomerLedgerActivity($projectNo, $customerNo, $toDate)
