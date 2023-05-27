@@ -217,15 +217,17 @@
                         }
                     },
                     error: function(data) {
+
                         $('.fa-spinner').hide();
                         $('#syncLedgerActivity').removeAttr("disabled");
-                        var errorMassage = '';
-                        $.each(data.responseJSON.errors, function(key, value) {
-                            errorMassage += value + '<br>';
-                        });
-                        $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + errorMassage + '</strong></div>');
+                        $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + data.responseJSON.error + '</strong></div>');
+                        // var errorMassage = '';
+                        // $.each(data.responseJSON.errors, function(key, value) {
+                        //     errorMassage += value + '<br>';
+                        // });
+                        // $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + errorMassage + '</strong></div>');
 
-                        $('#saveBtn').html('Save Changes');
+                        // $('#saveBtn').html('Save Changes');
                     }
                 });
             });

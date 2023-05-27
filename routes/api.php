@@ -25,7 +25,7 @@ use App\Http\Controllers\MIS\Project\ProjectLedgerActivityController;
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 Route::post('/mis/login', 'MIS\LoginController@login');
-
+Route::get('/misProjectLedgerActivity/{projectId}', [ProjectLedgerActivityController::class, 'misProjectLedgerActivity']);
 
 
 
@@ -58,7 +58,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/allProjectDocuments', 'MIS\Project\ProjectController@allProjectDocuments');
     Route::get('/proejctSummaryMM/{id}', 'MIS\Project\ProjectController@proejctSummaryMM');
     Route::get('/manMonthProjectsStatus', 'MIS\Project\ProjectController@manMonthProjectsStatus');
-    Route::get('/misProjectLedgerActivity/{projectId}', [ProjectLedgerActivityController::class, 'misProjectLedgerActivity']);
 });
 
 
