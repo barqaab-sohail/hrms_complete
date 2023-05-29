@@ -273,7 +273,11 @@ class ProjectDocumentController extends Controller
 
     public function destroy($id)
     {
-        if (!in_array($id, session('pr_document_delete_ids'))) {
+
+        $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))->get();
+        $Ids = $documentIds->pluck('id')->toArray();
+
+        if (!in_array($id, $Ids)) {
             return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
         }
 

@@ -32,7 +32,7 @@
 
                         <li><a  class="{{Request::is('hrms/employee/allEmployeeList')?'active':''}}" href="{{route('employee.allEmployeeList')}}">All Employees</a></li> -->
 
-
+                        <li><a class="{{Request::is('hrms/employee/card')?'active':''}}" href="{{route('employee.card')}}">Employees Card</a></li>
                         <li><a class="{{Request::is('hrms/employee/activeEmployeesList')?'active':''}}" href="{{route('employee.activeEmployeesList')}}">Active Employees List</a></li>
                         @endcan
 

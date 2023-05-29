@@ -24,6 +24,7 @@ use App\Http\Requests\Hr\EmployeeStore;
 use DataTables;
 use App\User;
 use Cache;
+use PDF;
 
 class EmployeeController extends Controller
 {
@@ -97,6 +98,9 @@ class EmployeeController extends Controller
 
     public function card()
     {
+        $data = ['title' => 'Welcome to NiceSnippets.com'];
+        $pdf = PDF::loadView('hr/employee/employeeCard', $data);
+        return $pdf->download('EmployeeCard.pdf');
     }
 
 
