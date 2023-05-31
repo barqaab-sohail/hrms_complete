@@ -46,7 +46,8 @@ Route::post('code/', 'Auth\RegisterController@store')->name('opt.store');
 //HR Routes
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Hr'], function () {
 
-    Route::get('employee/card', 'CardController@index')->name('employee.card');
+    Route::get('employee/card', 'CardController@create')->name('employee.card');
+    Route::get('employee/getEmployeePicture/{id}', 'CardController@getEmployeePicture')->name('employee.getEmployeePicture');
 
     Route::post('/employeeCnic', 'EmployeeController@employeeCnic')->name('employee.cnic');
     //temporary

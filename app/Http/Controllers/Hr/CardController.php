@@ -7,9 +7,29 @@ use Illuminate\Http\Request;
 use setasign\Fpdi\Fpdi;
 use App\Models\Hr\HrEmployee;
 use Illuminate\Support\Str;
+use DNS1D;
 
 class CardController extends Controller
 {
+
+
+    public function getEmployeePicture($employeeId)
+    {
+        $employee = HrEmployee::find($employeeId);
+        $picture =  asset('storage/' . $employee->picture->path .  $employee->picture->file_name);
+        return $picture;
+    }
+
+    public function create()
+    {
+
+        $employees = HrEmployee::where('hr_status_id', 1)->get();
+
+        return view('hr/card/create', compact('employees'));
+
+        $filePath = public_path("employee_card.pdf");
+    }
+
     public function index(Request $request)
     {
         $filePath = public_path("employee_card.pdf");
@@ -28,8 +48,17 @@ class CardController extends Controller
         $count = $fpdi->setSourceFile($file);
         $nameLength = Str::length($employee->full_name);
         $designationLength = Str::length($employee->designation);
-
+        //dd(url('cardVerificationResult') . '/' . $employee->employee_no);
+        //"data:image/png;base64,'. DNS2D::getBarcodePNG(url('cardVerificationResult').'/'.$data->employee_no,'QRCODE',5,5). '"
         //dd(floor($this->nameAlignment($nameLength)));
+        //echo "<img  src=\"$picture\" alt='barcode'   />";
+        //echo '<img src="data:image/png;base64,\DNS2D::getBarcodePNG(\'16\', \'QRCODE\')" alt="barcode" />';
+        $url = url('cardVerificationResult') . '/' . $employee->employee_no;
+        // echo \DNS2D::getBarcodeHTML("$url", 'QRCODE', 5, 5);
+        // // echo '<img src="data:image/png;base64,"' . \DNS2D::getBarcodePNG($url, 'QRCODE', 5, 5) . '"/>';
+        $qrCode = \DNS1D::getBarcodePNG('1239', 'QRCODE', 5, 5);
+        echo  "<img src=$qrCode alt='barcode'   />";
+        dd();
         for ($i = 1; $i <= $count; $i++) {
 
             $template = $fpdi->importPage($i);
@@ -70,7 +99,8 @@ class CardController extends Controller
             $fpdi->Text($designationLeft, $designationTop, $employeeDesignation);
             $fpdi->Image($picture, 70, 32, 20);
             // $fpdi->Image("https://www.itsolutionstuff.com/assets/images/footer-logo.png", 40, 90);
-            $fpdi->Image("' . DNS1D::getBarcodePNG('4', 'C39+',3,33,array(1,1,1)) . '", 70, 70, 20);
+            $fpdi->Text(54, 75, \DNS2D::getBarcodeHTML("$url", 'QRCODE', 5, 5));
+            // $fpdi->Image("data:image/png;base64,'. \DNS2D::getBarcodePNG(url('cardVerificationResult').'/'.$employee->employee_no,'QRCODE',5,5). '", 70, 70, 20, 20, 'png');
         }
 
         return $fpdi->Output($outputFilePath, 'F');

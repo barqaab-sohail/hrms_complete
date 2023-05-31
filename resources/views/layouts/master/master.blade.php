@@ -16,6 +16,10 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" rel="stylesheet" />
 
+
+    <!-- Jquery Cropper -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+
     <!-- Jquery UI Datepicker "Redmond theme" CSS -->
     <link href="{{asset('Massets/js/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet">
 
