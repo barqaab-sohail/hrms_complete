@@ -18,12 +18,7 @@
         border: 1px solid red;
     }
 </style>
-<div class="container">
-    <h5>Upload Images</h5>
-    <form method="post">
-        <input type="file" name="image" class="image">
-    </form>
-</div>
+
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">Create Employee Card</h4>
@@ -50,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="form-actions">
+            <!-- <div class="form-actions">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row">
@@ -62,13 +57,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </form>
 
         <hr>
         <div class="row">
-            <div class="col-md-12 table-container">
-
+            <div class="col-md-12 pdfView">
 
             </div>
         </div>
@@ -112,22 +106,28 @@
 
 <script>
     $(document).ready(function() {
+        $('iframe').remove();
 
         $('.fa-spinner').hide();
         $('select').select2();
         var bs_modal = $('#modal');
         var image = document.getElementById('image');
-        var cropper, reader, file;
+        var cropper, reader, employeeId
+
+        function showCrop(url) {
+            image.src = url;
+            bs_modal.modal('show');
+        };
 
 
         $("#employee").change(function() {
-            var employeeId = $(this).val();
+            employeeId = $(this).val();
             if (employeeId) {
                 $.ajax({
                     type: "get",
                     url: "{{url('hrms/employee/getEmployeePicture')}}" + "/" + employeeId,
                     success: function(data) {
-                        console.log(data);
+                        showCrop(data);
                         bs_modal.modal('show');
                     },
                     error: function(data) {
@@ -142,34 +142,10 @@
 
 
 
-        $("body").on("change", ".image", function(e) {
-            var files = e.target.files;
-            var done = function(url) {
-                console.log(url)
-                image.src = "http://localhost/hrms/public/storage/hr/documentation/4-jamshaid_siddiqui/4-Picture-1587361007.jpg";
-                bs_modal.modal('show');
-            };
-
-
-            if (files && files.length > 0) {
-                file = files[0];
-
-                if (URL) {
-                    done(URL.createObjectURL(file));
-                } else if (FileReader) {
-                    reader = new FileReader();
-                    reader.onload = function(e) {
-                        done(reader.result);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-        });
-
         bs_modal.on('shown.bs.modal', function() {
             cropper = new Cropper(image, {
                 aspectRatio: 1,
-                viewMode: 3,
+
                 preview: '.preview'
             });
         }).on('hidden.bs.modal', function() {
@@ -189,18 +165,30 @@
                 reader.readAsDataURL(blob);
                 reader.onloadend = function() {
                     var base64data = reader.result;
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
                     //alert(base64data);
                     $.ajax({
                         type: "POST",
                         dataType: "json",
-                        url: "crop_image_upload.php",
+                        url: "{{ route('employeeCard.index') }}",
                         data: {
-                            image: base64data
+                            image: base64data,
+                            employeeId: employeeId
                         },
                         success: function(data) {
+                            $('iframe').remove();
                             bs_modal.modal('hide');
-                            alert("success upload image");
+                            $(".pdfView").append("<iframe src=\"{{asset('sample_output.pdf')}}\" height='300' width='100%'/>");
+
+                        },
+                        error: function(data) {
+
                         }
+
                     });
                 };
             });

@@ -47,6 +47,7 @@ Route::post('code/', 'Auth\RegisterController@store')->name('opt.store');
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Hr'], function () {
 
     Route::get('employee/card', 'CardController@create')->name('employee.card');
+    Route::post('employee/card', 'CardController@index')->name('employeeCard.index');
     Route::get('employee/getEmployeePicture/{id}', 'CardController@getEmployeePicture')->name('employee.getEmployeePicture');
 
     Route::post('/employeeCnic', 'EmployeeController@employeeCnic')->name('employee.cnic');
