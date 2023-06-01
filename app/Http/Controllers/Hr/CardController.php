@@ -14,6 +14,11 @@ class CardController extends Controller
 
     public function create()
     {
+        // echo $base64Data = '<img src="data:image/png;base64,' . \DNS2D::getBarcodePNG(url('cardVerificationResult') . '/' . '111', 'QRCODE', 5, 5) . '"/>';
+
+        // dd();
+
+
         $employees = HrEmployee::where('hr_status_id', 1)->get();
         return view('hr/card/create', compact('employees'));
     }
@@ -30,14 +35,15 @@ class CardController extends Controller
     {
 
         $employeeid = $request->employeeId;
+        $image = $request->image;
         $filePath = public_path("employee_card.pdf");
         $outputFilePath = public_path("sample_output.pdf");
-        $this->fillPDFFile($filePath, $outputFilePath, $employeeid);
+        $this->fillPDFFile($filePath, $outputFilePath, $employeeid, $image);
 
         return response()->json("Card Created Sucessfully");
     }
 
-    public function fillPDFFile($file, $outputFilePath,  $employeeid)
+    public function fillPDFFile($file, $outputFilePath,  $employeeid, $image)
     {
 
         $fpdi = new FPDI;
@@ -54,21 +60,21 @@ class CardController extends Controller
             $fpdi->AddPage($size['orientation'], array($size['width'], $size['height']));
             $fpdi->useTemplate($template);
 
-            $fpdi->SetFont("arial", "", 8);
+            $fpdi->SetFont("arial", "B", 7);
             $fpdi->SetTextColor(0, 0, 0);
 
-            $employeeNoLeft = 133;
+            $employeeNoLeft = 135;
             $employeeNoTop = 15;
             $employeeNo = $employee->employee_no;
             $fpdi->Text($employeeNoLeft, $employeeNoTop, $employeeNo);
 
-            $cnicLeft = 133;
+            $cnicLeft = 135;
             $cnicTop = 20;
             $employeeCnic = $employee->cnic;
             $fpdi->Text($cnicLeft, $cnicTop, $employeeCnic);
 
-            $contactNoLeft = 133;
-            $contactNoTop = 25;
+            $contactNoLeft = 135;
+            $contactNoTop = 27;
             $employeeContact = $employee->hrEmergency->mobile ?? '';
             $fpdi->Text($contactNoLeft, $contactNoTop, $employeeContact);
 
@@ -79,13 +85,25 @@ class CardController extends Controller
             $nameLeft = 54 + $this->nameAlignment($nameLength);
             $NameTop = 64;
             $employeeName = strtoupper($employee->full_name);
-            $fpdi->Text($nameLeft, $NameTop, $employeeName);
+            //$fpdi->Text($nameLeft, $NameTop, $employeeName);
 
-            $designationLeft = 54 + $this->nameAlignment($nameLength);
+            $designationLeft = 54 + $this->nameAlignment($designationLength);
             $designationTop = 69;
             $employeeDesignation = $employee->designation;
-            $fpdi->Text($designationLeft, $designationTop, $employeeDesignation);
-            $fpdi->Image($picture, 70, 32, 20);
+            // $fpdi->Text($designationLeft, $designationTop, $employeeDesignation);
+            $fpdi->Image($image, 70, 32, 20, 0, 'png');
+            $fpdi->SetXY(50, 60);
+            $fpdi->MultiCell(60, 4, $txt = "$employeeName \n$employeeDesignation", 0, 'C', 0, 8);
+            $filePath = public_path('barcode.png');
+            $url = url('cardVerificationResult') . '/' . $employee->employee_no;
+            $data =  'data:image/png;base64,' . \DNS2D::getBarcodePNG($url, 'QRCODE', 5, 5);
+            list($type, $data) = explode(';', $data);
+            list(, $data)      = explode(',', $data);
+            $data = base64_decode($data);
+            file_put_contents($filePath, $data);
+            $fpdi->Image($filePath, 72, 72, 15);
+            unlink($filePath);
+            //$fpdi->Image($qrCode, 72, 72, 15, 'png');
             // $fpdi->Image("https://www.itsolutionstuff.com/assets/images/footer-logo.png", 40, 90);
             // $fpdi->Image("data:image/png;base64,'. \DNS2D::getBarcodePNG(url('cardVerificationResult').'/'.$employee->employee_no,'QRCODE',5,5). '", 70, 70, 20, 20, 'png');
         }
@@ -93,6 +111,17 @@ class CardController extends Controller
         $fpdi->Output($outputFilePath, 'F');
     }
 
+    public function base64_to_jpeg($base64_string, $output_file)
+    {
+
+        // Obtain the original content (usually binary data)
+        $bin = base64_decode($base64_string);
+
+        // Load GD resource from binary data
+        $im = imageCreateFromString($base64_string);
+
+        return imagepng($im, $output_file, 0);
+    }
 
     public function nameAlignment($nameLength)
     {

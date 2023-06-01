@@ -171,6 +171,7 @@
                         }
                     });
                     //alert(base64data);
+
                     $.ajax({
                         type: "POST",
                         dataType: "json",
