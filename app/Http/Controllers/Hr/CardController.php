@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use setasign\Fpdi\Fpdi;
 use App\Models\Hr\HrEmployee;
 use Illuminate\Support\Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use DNS1D;
 
 class CardController extends Controller
@@ -14,9 +15,11 @@ class CardController extends Controller
 
     public function create()
     {
-        // echo $base64Data = '<img src="data:image/png;base64,' . \DNS2D::getBarcodePNG(url('cardVerificationResult') . '/' . '111', 'QRCODE', 5, 5) . '"/>';
-
-        // dd();
+        $filePath = public_path('barcode.png');
+        $url = url('cardVerificationResult') . '/' . '123456';
+        echo $data =  \DNS2D::getBarcodeHTML($url, 'QRCODE', 5, 5);
+        echo 'ok';
+        die;
 
 
         $employees = HrEmployee::where('hr_status_id', 1)->get();
@@ -94,15 +97,12 @@ class CardController extends Controller
             $fpdi->Image($image, 70, 32, 20, 0, 'png');
             $fpdi->SetXY(50, 60);
             $fpdi->MultiCell(60, 4, $txt = "$employeeName \n$employeeDesignation", 0, 'C', 0, 8);
-            $filePath = public_path('barcode.png');
             $url = url('cardVerificationResult') . '/' . $employee->employee_no;
-            $data =  'data:image/png;base64,' . \DNS2D::getBarcodePNG($url, 'QRCODE', 5, 5);
-            list($type, $data) = explode(';', $data);
-            list(, $data)      = explode(',', $data);
-            $data = base64_decode($data);
-            file_put_contents($filePath, $data);
-            $fpdi->Image($filePath, 72, 72, 15);
-            unlink($filePath);
+            $data =  \DNS2D::getBarcodeHTML($url, 'QRCODE', 2, 2);
+            $fpdi->WriteHTML(72, 72, $data);
+
+            // $fpdi->Image($filePath, 72, 72, 15);
+            //unlink($filePath);
             //$fpdi->Image($qrCode, 72, 72, 15, 'png');
             // $fpdi->Image("https://www.itsolutionstuff.com/assets/images/footer-logo.png", 40, 90);
             // $fpdi->Image("data:image/png;base64,'. \DNS2D::getBarcodePNG(url('cardVerificationResult').'/'.$employee->employee_no,'QRCODE',5,5). '", 70, 70, 20, 20, 'png');
