@@ -15,12 +15,6 @@ class CardController extends Controller
 
     public function create()
     {
-        $filePath = public_path('barcode.png');
-        $url = url('cardVerificationResult') . '/' . '123456';
-        echo $data =  \DNS2D::getBarcodeHTML($url, 'QRCODE', 5, 5);
-        echo 'ok';
-        die;
-
 
         $employees = HrEmployee::where('hr_status_id', 1)->get();
         return view('hr/card/create', compact('employees'));
@@ -97,9 +91,15 @@ class CardController extends Controller
             $fpdi->Image($image, 70, 32, 20, 0, 'png');
             $fpdi->SetXY(50, 60);
             $fpdi->MultiCell(60, 4, $txt = "$employeeName \n$employeeDesignation", 0, 'C', 0, 8);
+            $filePath = public_path('barcode.png');
             $url = url('cardVerificationResult') . '/' . $employee->employee_no;
-            $data =  \DNS2D::getBarcodeHTML($url, 'QRCODE', 2, 2);
-            $fpdi->WriteHTML(72, 72, $data);
+            $data =  'data:image/png;base64,' . \DNS2D::getBarcodePNG($url, 'QRCODE', 5, 5);
+            list($type, $data) = explode(';', $data);
+            list(, $data)      = explode(',', $data);
+            $data = base64_decode($data);
+            file_put_contents($filePath, $data);
+            $fpdi->Image($filePath, 72, 72, 15);
+            unlink($filePath);
 
             // $fpdi->Image($filePath, 72, 72, 15);
             //unlink($filePath);

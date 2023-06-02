@@ -83,7 +83,8 @@
                     <div class="form-group row">
                         <center style="color:black, font-weight:bold">
                             <!-- {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG($data->asset_code,'QRCODE'). '" alt="barcode" />' !!} -->
-                            {!! DNS2D::getBarcodeHTML(url('assestVerificationResult').'/'.$data->asset_code,'QRCODE',5,5) !!}
+                            {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG(url('assestVerificationResult').'/'.$data->asset_code,'QRCODE',5,5). '" class="profile-pic" alt="barcode" />' !!}
+                            <!-- {!! DNS2D::getBarcodeHTML(url('assestVerificationResult').'/'.$data->asset_code,'QRCODE',5,5) !!} -->
                             <br>
                             {{$data->asset_code}}
                         </center>

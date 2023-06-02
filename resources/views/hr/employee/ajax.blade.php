@@ -168,7 +168,8 @@
                     <div class="form-group row">
                         <div class="col-md-12" style="text-align:center; color:black; font-weight: bold;">
                             <br>
-                            {!! DNS2D::getBarcodeHTML(url('cardVerificationResult').'/'.$data->employee_no,'QRCODE',5,5)!!}
+                            {!! '<img src="data:image/png;base64,'. DNS2D::getBarcodePNG(url('cardVerificationResult').'/'.$data->employee_no,'QRCODE',5,5). '" class="profile-pic" alt="barcode" />' !!}
+                            <!-- {!! DNS2D::getBarcodeHTML(url('cardVerificationResult').'/'.$data->employee_no,'QRCODE',5,5)!!} -->
                             <br>
                             {{$data->employee_no}}
                         </div>
