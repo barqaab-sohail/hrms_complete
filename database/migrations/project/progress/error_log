@@ -1,0 +1,8 @@
+[28-Mar-2023 18:07:31 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Database\Migrations\Migration" not found in /home/barqaabp/public_html/hrms/database/migrations/project/progress/2022_11_24_090354_create_pr_sub_total_weightages.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/barqaabp/public_html/hrms/database/migrations/project/progress/2022_11_24_090354_create_pr_sub_total_weightages.php on line 7
+[28-Mar-2023 18:07:32 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Database\Migrations\Migration" not found in /home/barqaabp/public_html/hrms/database/migrations/project/progress/2022_11_24_090354_create_pr_sub_total_weightages.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/barqaabp/public_html/hrms/database/migrations/project/progress/2022_11_24_090354_create_pr_sub_total_weightages.php on line 7

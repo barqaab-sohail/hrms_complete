@@ -1,0 +1,24 @@
+[28-Mar-2023 05:18:33 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/barqaabp/public_html/hrms/routes/web.php:20
+Stack trace:
+#0 {main}
+  thrown in /home/barqaabp/public_html/hrms/routes/web.php on line 20
+[28-Mar-2023 05:18:33 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/barqaabp/public_html/hrms/routes/web.php:20
+Stack trace:
+#0 {main}
+  thrown in /home/barqaabp/public_html/hrms/routes/web.php on line 20
+[28-Mar-2023 05:18:38 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/barqaabp/public_html/hrms/routes/api.php:24
+Stack trace:
+#0 {main}
+  thrown in /home/barqaabp/public_html/hrms/routes/api.php on line 24
+[28-Mar-2023 05:18:38 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/barqaabp/public_html/hrms/routes/api.php:24
+Stack trace:
+#0 {main}
+  thrown in /home/barqaabp/public_html/hrms/routes/api.php on line 24
+[28-Mar-2023 05:18:40 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/barqaabp/public_html/hrms/routes/console.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/barqaabp/public_html/hrms/routes/console.php on line 17
+[28-Mar-2023 05:18:40 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/barqaabp/public_html/hrms/routes/console.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/barqaabp/public_html/hrms/routes/console.php on line 17
