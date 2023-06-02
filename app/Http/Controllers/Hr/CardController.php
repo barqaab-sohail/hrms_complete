@@ -79,18 +79,13 @@ class CardController extends Controller
 
             $fpdi->SetFont("arial", "B", 8);
 
-            $nameLeft = 54 + $this->nameAlignment($nameLength);
-            $NameTop = 64;
-            $employeeName = strtoupper($employee->full_name);
-            //$fpdi->Text($nameLeft, $NameTop, $employeeName);
 
-            $designationLeft = 54 + $this->nameAlignment($designationLength);
-            $designationTop = 69;
+            $employeeName = strtoupper($employee->full_name);
             $employeeDesignation = $employee->designation;
-            // $fpdi->Text($designationLeft, $designationTop, $employeeDesignation);
+
             $fpdi->Image($image, 70, 32, 20, 0, 'png');
-            $fpdi->SetXY(50, 60);
-            $fpdi->MultiCell(60, 4, $txt = "$employeeName \n$employeeDesignation", 0, 'C', 0, 8);
+            $fpdi->SetXY(54, 62);
+            $fpdi->MultiCell(50, 3, $txt = "$employeeName \n$employeeDesignation", 0, 'C', 0, 8);
             $filePath = public_path('barcode.png');
             $url = url('cardVerificationResult') . '/' . $employee->employee_no;
             $data =  'data:image/png;base64,' . \DNS2D::getBarcodePNG($url, 'QRCODE', 5, 5);

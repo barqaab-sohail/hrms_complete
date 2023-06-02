@@ -23,7 +23,7 @@
     <div class="card-body">
         <h4 class="card-title">Create Employee Card</h4>
         <hr>
-        <form id="employeePermissionSearch" method="get" class="form-horizontal form-prevent-multiple-submits" action="{{route('permission.result')}}" enctype="multipart/form-data">
+        <form method="get" class="form-horizontal form-prevent-multiple-submits" action="{{route('permission.result')}}" enctype="multipart/form-data">
             {{csrf_field()}}
             <div class="form-body">
 
@@ -144,8 +144,9 @@
 
         bs_modal.on('shown.bs.modal', function() {
             cropper = new Cropper(image, {
-                aspectRatio: 1,
-
+                aspectRatio: 0,
+                viewMode: 1,
+                wheelZoomRatio: 0.2,
                 preview: '.preview'
             });
         }).on('hidden.bs.modal', function() {
