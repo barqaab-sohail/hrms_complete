@@ -43,6 +43,12 @@ class HrEmployee extends Model implements Auditable
     }
 
 
+    public function employeeManager()
+    {
+        return $this->hasMany('App\Models\Hr\EmployeeManager', 'hr_manager_id');
+    }
+
+
     public function hrEmployeeHusband()
     {
         return $this->hasOne('App\Models\Hr\HrEmployeeHusband');
@@ -537,7 +543,7 @@ class HrEmployee extends Model implements Auditable
 
     public function hod()
     {
-        return $this->hasOne('App\Models\Hr\EmployeeManager')->orderBy('effective_date', 'DESC');
+        return $this->hasOne('App\Models\Hr\EmployeeManager', 'hr_employee_id')->orderBy('effective_date', 'DESC');
     }
 
     public function picture()

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\EmployeeManager;
 use App\Charts\Hr\DepartmentChart;
 use Illuminate\Support\Facades\Auth;
 use App\DataTables\Leave\LeaveBalanceDataTable;
@@ -136,5 +137,18 @@ class HomeController extends Controller
         } else {
             return view('hr.verification.show', compact('data'));
         }
+    }
+
+
+
+    public function test()
+    {
+
+        $manager = HrEmployee::find(280);
+        echo employeeFullName($manager->hod->hr_manager_id) ?? '' . '<br>';
+
+        // foreach ($manager->employeeManager as $employee) {
+        //     echo employeeFullName($employee->hr_employee_id)  . '<br>';
+        // }
     }
 }

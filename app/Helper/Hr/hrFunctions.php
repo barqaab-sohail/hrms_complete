@@ -23,6 +23,7 @@ function employeeFullName($id)
     $hremployee = HrEmployee::find($id);
     if ($hremployee) {
         $fullName = $hremployee->first_name . ' ' . $hremployee->last_name;
+        $status = $hremployee->hr_status_id;
         $designation = isset($hremployee->employeeDesignation->last()->name) ? $hremployee->employeeDesignation->last()->name : '';
         return $fullName . ' - ' . $designation;
     }

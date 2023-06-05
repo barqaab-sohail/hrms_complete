@@ -105,26 +105,4 @@ class CardController extends Controller
 
         $fpdi->Output($outputFilePath, 'F');
     }
-
-    public function base64_to_jpeg($base64_string, $output_file)
-    {
-
-        // Obtain the original content (usually binary data)
-        $bin = base64_decode($base64_string);
-
-        // Load GD resource from binary data
-        $im = imageCreateFromString($base64_string);
-
-        return imagepng($im, $output_file, 0);
-    }
-
-    public function nameAlignment($nameLength)
-    {
-
-        if ($nameLength > 25) {
-            return 0;
-        }
-        $balance = (54 - ($nameLength * 2)) / 2;
-        return $balance;
-    }
 }
