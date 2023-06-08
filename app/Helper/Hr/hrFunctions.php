@@ -202,3 +202,17 @@ function employeeName($employeeId)
         return '';
     }
 }
+
+function currentActiveSubordinates($managerId)
+{
+    $manager = HrEmployee::find($managerId);
+    $employees = [];
+    foreach ($manager->subordinates as $key => $employee) {
+        $emp = HrEmployee::find($employee->id);
+        if ($managerId == $emp->manager->id && $emp->hr_status_id == 'Active') {
+            array_push($employees, $employee->id);
+        }
+    }
+
+    return $employees;
+}

@@ -4,6 +4,7 @@ namespace App\Models\Hr;
 
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use DB;
 
 
 
@@ -504,17 +505,7 @@ class HrEmployee extends Model implements Auditable
         return $this->hasOne('App\Models\Hr\HrDriving');
     }
 
-    public function manager()
-    {
-        return $this->hasOneThrough(
-            'App\Models\Hr\HrEmployee',                  //Final Model HrDocumentName
-            'App\Models\Hr\EmployeeAppointment',              //Model Through Access Final Model (Immediate Model)
-            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
-            'id',                                             //Final Model Primary Key
-            'id',
-            'hr_manager_id'                             //Forein Key in Immediate Model of Final Model
-        );
-    }
+
 
     public function hrDepartment()
     {
@@ -540,11 +531,43 @@ class HrEmployee extends Model implements Auditable
         );
     }
 
-
+    // only used in App\Http\Controllers\Leave and ActiveEmployeeList View;
     public function hod()
     {
         return $this->hasOne('App\Models\Hr\EmployeeManager', 'hr_employee_id')->orderBy('effective_date', 'DESC');
     }
+
+    // Employee Manager
+    public function manager()
+    {
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrEmployee',                  //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeManager',              //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_manager_id'                             //Forein Key in Immediate Model of Final Model
+        )->orderBy('effective_date', 'DESC');
+    }
+
+    // Employee Subordinates
+    public function subordinates()
+    {
+        return $this->hasManyThrough(
+            'App\Models\Hr\HrEmployee',                  //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeManager',              //Model Through Access Final Model (Immediate Model)
+            'hr_manager_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'hr_employee_id'                             //Forein Key in Immediate Model of Final Model
+        );
+    }
+
+    public function subs($employeeId)
+    {
+    }
+
+
 
     public function picture()
     {

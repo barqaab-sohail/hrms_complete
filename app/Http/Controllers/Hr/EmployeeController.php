@@ -423,7 +423,8 @@ class EmployeeController extends Controller
                     return  $query->join('employee_designations', 'employee_designations.hr_employee_id', '=', 'hr_employees.id')->orderBy('employee_designations.effective_date', 'desc')->where('hr_designation_id', $data['designation']);
                 })
                 ->when($data['manager'], function ($query) use ($data) {
-                    return   $query->join('employee_managers', 'employee_managers.hr_employee_id', '=', 'hr_employees.id')->where('hr_manager_id', $data['manager'])->orderBy('employee_managers.effective_date', 'desc');
+                    $employees = currentActiveSubordinates($data['manager']);
+                    return     $query->whereIn('hr_employees.id', $employees);
                 })
                 ->select('hr_employees.*')
                 ->get();

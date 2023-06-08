@@ -9,6 +9,7 @@ use App\Charts\Hr\DepartmentChart;
 use Illuminate\Support\Facades\Auth;
 use App\DataTables\Leave\LeaveBalanceDataTable;
 use Illuminate\Support\Facades\RateLimiter;
+use DB;
 //use Illuminate\Support\Facades\Route;
 
 class HomeController extends Controller
@@ -137,18 +138,5 @@ class HomeController extends Controller
         } else {
             return view('hr.verification.show', compact('data'));
         }
-    }
-
-
-
-    public function test()
-    {
-
-        $manager = HrEmployee::find(280);
-        echo employeeFullName($manager->hod->hr_manager_id) ?? '' . '<br>';
-
-        // foreach ($manager->employeeManager as $employee) {
-        //     echo employeeFullName($employee->hr_employee_id)  . '<br>';
-        // }
     }
 }
