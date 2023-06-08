@@ -30,9 +30,9 @@ class AsDocumentStore extends FormRequest
 
         //If method is POST then document is required otherwise in Patch method document is nullable.
         if (!$this->as_document_id) {
-            $rules += ['document' => 'required|file|max:24000|mimes:jpg,png,jpeg,pdf'];
+            $rules += ['document' => 'required|file|max:4000|mimes:jpg,png,jpeg,pdf'];
         } else {
-            $rules += ['document' => 'nullable|file|max:24000|mimes:jpg,png,jpeg,pdf'];
+            $rules += ['document' => 'nullable|file|max:4000|mimes:jpg,png,jpeg,pdf'];
         }
 
 

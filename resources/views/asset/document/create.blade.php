@@ -105,8 +105,8 @@
             var fileSize = this.files[0].size;
 
             //Restrict File Size Less Than 2MB
-            if (fileSize > 24096000) {
-                alert('File Size is bigger than 24MB');
+            if (fileSize > 4096000) {
+                alert('File Size is bigger than 4MB');
                 $(this).val('');
             } else {
                 //Restrict File Type
