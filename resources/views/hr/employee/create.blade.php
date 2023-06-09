@@ -1,5 +1,5 @@
 @extends('layouts.master.master')
-@section('title', 'BARQAAB HR')
+@section('title', 'Add Employee')
 @section('Heading')
 <h3 class="text-themecolor">Human Resource</h3>
 <ol class="breadcrumb">
@@ -63,7 +63,7 @@
 											<div class="col-md-12">
 												<label class="control-label text-right">Hasband Name</label>
 
-												<input type="text" name="husband_name" value="{{ old('husband_name') }}" class="form-control "  placeholder="Enter Husband Name">
+												<input type="text" name="husband_name" value="{{ old('husband_name') }}" class="form-control " placeholder="Enter Husband Name">
 											</div>
 										</div>
 									</div>

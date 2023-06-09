@@ -1,5 +1,5 @@
 @extends('layouts.master.master')
-@section('title', 'BARQAAB HR')
+@section('title', 'Add Project')
 @section('Heading')
 <h3 class="text-themecolor">Projects</h3>
 <ol class="breadcrumb">
