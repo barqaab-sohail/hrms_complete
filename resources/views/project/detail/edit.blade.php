@@ -20,11 +20,13 @@
 		<div class="card card-outline-info">
 			<div class="row">
 				<!-- <div class="col-lg-2">
-					
+					style="display:none;"
 				</div>
 
  -->
+
 				<div class="col-lg-12 addAjax">
+
 					@include('project.detail.ajax')
 				</div> <!-- end col-lg-12 -->
 			</div> <!-- end row -->
@@ -54,6 +56,8 @@
 
 		// Vertical Button function to load page through ajax 
 		$('a[id^=add]').click(function(e) {
+			$("#loading-image").show();
+			$(".addAjax").html('');
 			var url = $(this).attr('href');
 			var id = $(this).attr('id');
 			e.preventDefault();
@@ -65,7 +69,7 @@
 				cache: false,
 				processData: false,
 				success: function(data) {
-
+					$("#loading-image").hide();
 					$(".addAjax").html(data);
 					$('a[id^=add]').css('background-color', '');
 					$('#' + id).css('background-color', '#737373');
@@ -73,6 +77,7 @@
 
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
+					$("#loading-image").hide();
 					if (jqXHR.status == 401) {
 						location.href = "{{route ('login')}}"
 					}

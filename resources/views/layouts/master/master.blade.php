@@ -113,7 +113,9 @@
                 </div>
 
                 @include('layouts.master.message')
-
+                <div class="col-lg-12 d-flex flex-column min-vh-100 justify-content-center align-items-center">
+                    <img id="loading-image" src="{{asset('spinner.gif')}}" style="display:none;" />
+                </div>
                 @yield('content')
             </div>
         </div>

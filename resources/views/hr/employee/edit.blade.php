@@ -18,11 +18,7 @@
 	<div class="col-lg-12 reducedCol">
 		<div class="card card-outline-info">
 			<div class="row">
-				<div class="preloaderAjax">
-					<svg class="circular" viewBox="25 25 50 50">
-						<circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10"></circle>
-					</svg>
-				</div>
+
 				<div class="col-lg-12 addAjax">
 					@include('hr.employee.ajax')
 				</div> <!-- end col-lg-12 -->
@@ -58,7 +54,7 @@
 			var url = $(this).attr('href');
 			var id = $(this).attr('id');
 
-			$(".preloaderAjax").fadeIn();
+			$("#loading-image").show();
 			$(".addAjax").html('');
 			e.preventDefault();
 
@@ -70,7 +66,7 @@
 				cache: false,
 				processData: false,
 				success: function(data) {
-					$(".preloaderAjax").fadeOut();
+					$("#loading-image").hide();
 					if (data.status == 'Not Ok') {
 						$('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + data.message + '</strong></div>');
 					} else {
@@ -81,7 +77,7 @@
 					}
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
-					$(".preloaderAjax").fadeOut();
+					$("#loading-image").hide();
 					if (jqXHR.status == 401) {
 						location.href = "{{route ('login')}}"
 					}
