@@ -184,7 +184,7 @@
                         success: function(data) {
                             $('iframe').remove();
                             bs_modal.modal('hide');
-                            $(".pdfView").append("<iframe src=\"{{asset('sample_output.pdf')}}\" height='300' width='100%'/>");
+                            $(".pdfView").append("<iframe src=\"{{asset('sample_output.pdf')}}\" height='700' width='100%'/>");
 
                         },
                         error: function(data) {
