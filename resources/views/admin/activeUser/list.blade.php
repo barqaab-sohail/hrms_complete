@@ -1,5 +1,5 @@
 @extends('layouts.master.master')
-@section('title', 'BARQAAB HR')
+@section('title', 'Active Users List')
 @section('Heading')
 <h3 class="text-themecolor">Active User List</h3>
 <ol class="breadcrumb">

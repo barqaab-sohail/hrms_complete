@@ -1,5 +1,5 @@
 @extends('layouts.master.master')
-@section('title', 'BARQAAB HR')
+@section('title', 'Search CVs')
 @section('Heading')
 <h3 class="text-themecolor">Search CVs</h3>
 @stop

@@ -1,5 +1,5 @@
 @extends('layouts.master.master')
-@section('title', 'BARQAAB HR')
+@section('title', 'Assets List')
 @section('Heading')
 <h3 class="text-themecolor">List of Assets</h3>
 @stop

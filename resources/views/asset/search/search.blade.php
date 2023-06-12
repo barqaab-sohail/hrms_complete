@@ -1,5 +1,5 @@
 @extends('layouts.master.master')
-@section('title', 'BARQAAB HR')
+@section('title', 'Search Asset')
 @section('Heading')
 <h3 class="text-themecolor">Search Asset</h3>
 @stop
@@ -96,7 +96,7 @@
 		$('.fa-spinner').hide();
 		$('select').select2();
 		formFunctions();
-		
+
 		//Add Sub_Class
 		$('#class_id').change(function() {
 			var cid = $(this).val();
@@ -111,7 +111,7 @@
 							$("#as_sub_class_id").empty();
 							$("#as_sub_class_id").append('<option value="">Select Sub Classes</option>');
 							$.each(res, function(key, value) {
-								$("#as_sub_class_id").append('<option value="'+key+'">'+value+'</option>');
+								$("#as_sub_class_id").append('<option value="' + key + '">' + value + '</option>');
 
 							});
 							$('#as_sub_class_id').select2('destroy');
