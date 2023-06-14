@@ -14,7 +14,7 @@
         "barryvdh/laravel-snappy": "^1.0",
         "felixkiss/uniquewith-validator": "3.4.2",
         "fideloper/proxy": "^4.2",
-        "fruitcake/laravel-cors": "^1.0",
+        "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "h4cc/wkhtmltoimage-i386": "0.12.x",
         "h4cc/wkhtmltopdf-i386": "0.12.x",
