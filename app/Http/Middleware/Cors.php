@@ -24,11 +24,11 @@ class Cors
         if ($request->getMethod() == "OPTIONS") {
             return response()->json('OK', 200, $headers);
         }
-        $response = $next($request);
-        foreach ($headers as $key => $value) {
-            $response->header($key, $value);
-        }
-        return $response;
-        //return $next($request);
+        // $response = $next($request);
+        // foreach ($headers as $key => $value) {
+        //     $response->header($key, $value);
+        // }
+        // return $response;
+        return $next($request);
     }
 }
