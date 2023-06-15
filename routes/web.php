@@ -142,6 +142,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/selfServices/task', 'SelfTaskController');
     Route::get('/selfServices/selfContact/refreshTable', 'SelfContactController@refreshTable')->name('selfContact.table');
     Route::resource('/selfServices/selfContact', 'SelfContactController');
+    Route::get('/multiplePrints', 'MultiplePrintsController@print')->name('multiplePrint.print');
 });
 
 //CV Routes
