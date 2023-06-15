@@ -26,18 +26,18 @@
                         <div class="form-group row">
                             <div class="col-md-6 required">
                                 <label class="control-label text-right">First Image</label><br>
-                                <input type=file name="image_1" class="image" />
+                                <input type=file name="image_1" id="1" class="image" />
                             </div>
                             <div class="col-md-6 required">
                                 <label class="control-label text-right">Second Image</label><br>
-                                <input type=file name="image_2" class="image" />
+                                <input type=file name="image_2" id="2" class="image" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="form-actions">
+            <!-- <div class="form-actions">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row">
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </form>
         <hr>
         <div class="row">
@@ -65,7 +65,7 @@
 
             </div>
         </div>
-
+        <button type="submit" id="submit" hidden class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Submit</button>
     </div>
 </div>
 
@@ -112,8 +112,13 @@
         var $modal = $('#modal');
         var image = document.getElementById('image');
         var cropper;
+        var imageId;
+        var imageData1;
+        var imageData2;
 
-        $("body").on("change", ".image, .image", function(e) {
+        $("body").unbind().on("change", ".image", function(e) {
+            imageId = $(this).attr('id');
+            console.log(imageId);
             var files = e.target.files;
             var done = function(url) {
                 image.src = url;
@@ -144,11 +149,11 @@
             cropper = new Cropme(image, {
                 "container": {
                     "width": "80%",
-                    "height": 400
+                    "height": 1400
                 },
                 "viewport": {
-                    "width": 300,
-                    "height": 200,
+                    "width": 1250,
+                    "height": 1160,
                     "type": "square",
                     "border": {
                         "width": 2,
@@ -175,15 +180,24 @@
             //     preview: '.preview'
             // });
         }).on('hidden.bs.modal', function() {
-            cropper.destroy();
-            cropper = null;
+            // cropper.destroy();
+            // cropper = null;
         });
 
         $("#crop").click(function() {
 
             cropper.crop()
                 .then(function(output) {
-                    $("#image_1").attr("src", output);
+                    $('#image_' + imageId).attr("src", output);
+                    if (imageId == 1) {
+                        imageData1 = output;
+                    } else {
+                        imageData2 = output;
+                    }
+
+                    $('#submit').removeAttr('hidden');
+
+
                 });
             $modal.modal('hide');
             // canvas.toBlob(function(blob) {
@@ -209,6 +223,24 @@
             //     }
             // });
         });
+
+        $("#submit").click(function() {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "{{route('multiplePrint.output')}}",
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    'image1': imageData1,
+                    'image2': imageData2,
+                },
+                success: function(data) {
+                    console.log(data);
+
+                }
+            });
+        });
+
     });
 </script>
 @push('scripts')
