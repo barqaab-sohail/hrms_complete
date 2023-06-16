@@ -53,10 +53,10 @@
         <hr>
         <div class="row">
             <div class="col-md-6">
-                <img src='' id="image_1" />
+                <img src='' id="image_1" width="50%" />
             </div>
             <div class="col-md-6">
-                <img src='' id="image_2" />
+                <img src='' id="image_2" width="50%" />
             </div>
         </div>
         <hr>
@@ -116,44 +116,63 @@
         var imageData1;
         var imageData2;
 
-        $("body").unbind().on("change", ".image", function(e) {
-            imageId = $(this).attr('id');
-            console.log(imageId);
-            var files = e.target.files;
-            var done = function(url) {
-                image.src = url;
-                $modal.modal('show');
-            };
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-            var reader;
-            var file;
-            var url;
-
-            if (files && files.length > 0) {
-                file = files[0];
-
-                if (URL) {
-                    done(URL.createObjectURL(file));
-                } else if (FileReader) {
-                    reader = new FileReader();
-                    reader.onload = function(e) {
-                        done(reader.result);
-                    };
-                    reader.readAsDataURL(file);
+                reader.onload = function(e) {
+                    $('#image').attr('src', e.target.result);
                 }
+
+                reader.readAsDataURL(input.files[0]);
             }
+        }
+        $("#1, #2").change(function() {
+            imageId = $(this).attr('id');
+            readURL(this);
+            $modal.modal('show');
         });
 
+
+        // $("body").on("change", ".image", function(e) {
+        //     imageId = $(this).attr('id');
+        //     console.log(imageId);
+        //     var files = e.target.files;
+        //     var done = function(url) {
+        //         image.src = url;
+        //         $modal.modal('show');
+        //     };
+
+        //     var reader;
+        //     var file;
+        //     var url;
+
+        //     if (files && files.length > 0) {
+        //         file = files[0];
+
+        //         if (URL) {
+        //             done(URL.createObjectURL(file));
+        //         } else if (FileReader) {
+        //             reader = new FileReader();
+        //             reader.onload = function(e) {
+        //                 done(reader.result);
+        //             };
+        //             reader.readAsDataURL(file);
+        //         }
+        //     }
+        // });
+
         $modal.on('shown.bs.modal', function() {
+
 
             cropper = new Cropme(image, {
                 "container": {
                     "width": "80%",
-                    "height": 1400
+                    "height": 600
                 },
                 "viewport": {
-                    "width": 1250,
-                    "height": 1160,
+                    "width": 563,
+                    "height": 360,
                     "type": "square",
                     "border": {
                         "width": 2,
@@ -182,6 +201,7 @@
         }).on('hidden.bs.modal', function() {
             // cropper.destroy();
             // cropper = null;
+
         });
 
         $("#crop").click(function() {
@@ -196,7 +216,6 @@
                     }
 
                     $('#submit').removeAttr('hidden');
-
 
                 });
             $modal.modal('hide');
