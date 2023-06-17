@@ -205,17 +205,17 @@
                 </li>
                 <!-- End CV -->
 
-                @can('self_services edit record')
+
                 <!-- Self Services -->
                 <li class="{{Request::is('hrms/charging*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-shopping"></i><span class="hide-menu">Self Services</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a class="{{Request::is('hrms/selfServices/selfContact/create')?'active':''}}" href="{{route('selfContact.create')}}">Personal Contact</a></li>
-                        <li><a class="{{Request::is('hrms/multiplePrints/print')?'active':''}}" href="{{route('multiplePrint.print')}}">Multiple Prints</a></li>
+                        <li><a class="{{Request::is('hrms/multiplePrints/print')?'active':''}}" href="{{route('multiplePrint.print')}}">CNIC Multiple Prints</a></li>
 
                     </ul>
                 </li>
                 <!-- Self Services -->
-                @endcan
+
 
                 @can('Super Admin')
                 <!-- Invoices -->
