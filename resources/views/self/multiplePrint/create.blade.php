@@ -5,12 +5,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropme@latest/dist/cropme.min.css">
 @stop
 @section('content')
-<style type="text/css">
-    .image {
-        display: block;
-        max-width: 100%;
-    }
-</style>
+
 
 <div class="card">
     <div class="card-body">
@@ -21,7 +16,7 @@
             <div class="form-body">
 
                 <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-12">
                         <!--/span 5-1 -->
                         <div class="form-group row">
                             <div class="col-md-6 required">
@@ -84,14 +79,14 @@
                     <div class="row">
                         <div class="col-md-12">
                             <!--  default image where we will set the src via jquery-->
-                            <img id="image">
+                            <img id="modal_image">
                         </div>
 
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel">Cancel</button>
                 <button type="button" class="btn btn-primary" id="crop">Crop</button>
             </div>
         </div>
@@ -110,7 +105,7 @@
         $('select').select2();
 
         var $modal = $('#modal');
-        var image = document.getElementById('image');
+        var image = document.getElementById('modal_image');
         var cropper;
         var imageId;
         var imageData1;
@@ -119,11 +114,9 @@
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-
                 reader.onload = function(e) {
-                    $('#image').attr('src', e.target.result);
+                    $('#modal_image').attr('src', e.target.result);
                 }
-
                 reader.readAsDataURL(input.files[0]);
             }
         }
@@ -133,79 +126,50 @@
             $modal.modal('show');
         });
 
-
-        // $("body").on("change", ".image", function(e) {
-        //     imageId = $(this).attr('id');
-        //     console.log(imageId);
-        //     var files = e.target.files;
-        //     var done = function(url) {
-        //         image.src = url;
-        //         $modal.modal('show');
-        //     };
-
-        //     var reader;
-        //     var file;
-        //     var url;
-
-        //     if (files && files.length > 0) {
-        //         file = files[0];
-
-        //         if (URL) {
-        //             done(URL.createObjectURL(file));
-        //         } else if (FileReader) {
-        //             reader = new FileReader();
-        //             reader.onload = function(e) {
-        //                 done(reader.result);
-        //             };
-        //             reader.readAsDataURL(file);
-        //         }
-        //     }
-        // });
+        var options = {
+            "container": {
+                "width": "80%",
+                "height": 600
+            },
+            "viewport": {
+                "width": 563,
+                "height": 360,
+                "type": "square",
+                "border": {
+                    "width": 2,
+                    "enable": true,
+                    "color": "#fff"
+                }
+            },
+            "zoom": {
+                "enable": true,
+                "mouseWheel": true,
+                "slider": true
+            },
+            "rotation": {
+                "slider": true,
+                "enable": true,
+                "position": "left"
+            },
+            "transformOrigin": "viewport"
+        };
 
         $modal.on('shown.bs.modal', function() {
 
-
-            cropper = new Cropme(image, {
-                "container": {
-                    "width": "80%",
-                    "height": 600
-                },
-                "viewport": {
-                    "width": 563,
-                    "height": 360,
-                    "type": "square",
-                    "border": {
-                        "width": 2,
-                        "enable": true,
-                        "color": "#fff"
-                    }
-                },
-                "zoom": {
-                    "enable": true,
-                    "mouseWheel": true,
-                    "slider": true
-                },
-                "rotation": {
-                    "slider": true,
-                    "enable": true,
-                    "position": "left"
-                },
-                "transformOrigin": "viewport"
-            });
-            // cropper = new Cropper(image, {
-            //     aspectRatio: 1,
-            //     viewMode: 3,
-            //     rotatable: true,
-            //     preview: '.preview'
-            // });
+            cropper = new Cropme(image, options);
         }).on('hidden.bs.modal', function() {
+            // image.src = '';
             // cropper.destroy();
             // cropper = null;
 
         });
 
-        $("#crop").click(function() {
+        $("#cancel").click(function() {
+            $("#" + imageId).val('');
+        });
 
+        $("#crop").click(function() {
+            $("#" + imageId).attr('hidden', true);
             cropper.crop()
                 .then(function(output) {
                     $('#image_' + imageId).attr("src", output);
@@ -219,28 +183,7 @@
 
                 });
             $modal.modal('hide');
-            // canvas.toBlob(function(blob) {
-            //     url = URL.createObjectURL(blob);
-            //     var reader = new FileReader();
-            //     reader.readAsDataURL(blob);
-            //     reader.onloadend = function() {
-            //         var base64data = reader.result;
-            //         $.ajax({
-            //             type: "POST",
-            //             dataType: "json",
-            //             url: "crop-image-upload-ajax",
-            //             data: {
-            //                 '_token': $('meta[name="_token"]').attr('content'),
-            //                 'image': base64data
-            //             },
-            //             success: function(data) {
-            //                 console.log(data);
-            //                 $modal.modal('hide');
-            //                 alert("Crop image successfully uploaded");
-            //             }
-            //         });
-            //     }
-            // });
+
         });
 
         $("#submit").click(function() {
@@ -254,8 +197,14 @@
                     'image2': imageData2,
                 },
                 success: function(data) {
-                    console.log(data);
+                    $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>File Create Sucessfully</strong></div>');
+                    $(".pdfView").append("<iframe src=\"{{asset('prints_output.pdf')}}\" height='700' width='100%'/>");
+                    $('#submit').attr('hidden', true);
 
+
+                },
+                error: function($data) {
+                    $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>File Not Created</strong></div>');
                 }
             });
         });
