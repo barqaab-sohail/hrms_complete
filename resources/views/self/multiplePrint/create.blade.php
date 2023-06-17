@@ -87,18 +87,28 @@
 
         function readURL_1(input) {
             if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#modal_image_1').attr('src', e.target.result);
+                var fileType = input.files[0].type;
+                if ((fileType == 'image/jpeg') || (fileType == 'image/png')) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#modal_image_1').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                    return true;
+                } else {
+
+                    alert('Only jpg and png file allowed');
+                    $("#1").val('');
+                    return false;
                 }
-                reader.readAsDataURL(input.files[0]);
             }
         }
 
         $("#1").change(function() {
 
-            readURL_1(this);
-            $modal.modal('show');
+            if (readURL_1(this)) {
+                $modal.modal('show');
+            }
         });
 
         var options = {
@@ -169,17 +179,27 @@
         function readURL_2(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#modal_image_2').attr('src', e.target.result);
+                var fileType = input.files[0].type;
+                if ((fileType == 'image/jpeg') || (fileType == 'image/png')) {
+                    reader.onload = function(e) {
+                        $('#modal_image_2').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                    return true;
+                } else {
+
+                    alert('Only jpg and png file allowed');
+                    $("#2").val('');
+                    return false;
                 }
-                reader.readAsDataURL(input.files[0]);
             }
         }
 
         $("#2").change(function() {
 
-            readURL_2(this);
-            $modal_2.modal('show');
+            if (readURL_2(this)) {
+                $modal_2.modal('show');
+            }
         });
 
         var options_2 = {
