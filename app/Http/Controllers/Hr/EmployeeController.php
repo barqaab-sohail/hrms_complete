@@ -244,6 +244,10 @@ class EmployeeController extends Controller
 
     public function edit(Request $request, $id)
     {
+        $users = [1, 17, 21, 25];
+        if (in_array($id, managementEmployeeIds()) && !in_array(auth()->user()->id, $users)) {
+            abort(403, 'Your are not authorized');
+        }
 
         $genders = Gender::all();
         $maritalStatuses = MaritalStatus::all();
@@ -289,7 +293,7 @@ class EmployeeController extends Controller
         $newData = HrEmployee::find($id);
         //Any Editin Email to Administrator
         // $user = User::where('email', 'sohail.afzal@barqaab.com')->first();
-        // if($user){   
+        // if($user){
         //     $data = $newData->compareTo($oldData);
         //     if($data->count()>0){
         //         $user->notify(New UpdateRecordNotification($data, $oldData));

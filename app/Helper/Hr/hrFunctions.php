@@ -216,3 +216,8 @@ function currentActiveSubordinates($managerId)
 
     return $employees;
 }
+
+function managementEmployeeIds()
+{
+    return HrEmployee::whereIn('employee_no', employeeCodeArray())->pluck('id')->toArray();
+}
