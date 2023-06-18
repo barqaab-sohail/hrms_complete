@@ -264,7 +264,8 @@
 
 
         $("#submit").click(function() {
-
+            $(this).attr('disabled', 'ture');
+            $('.fa-spinner').show();
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -275,6 +276,8 @@
                     'image2': imageData2,
                 },
                 success: function(data) {
+                    $(this).attr('disabled', 'false');
+                    $('.fa-spinner').hide();
                     $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>File Create Sucessfully</strong></div>');
                     $(".pdfView").append("<iframe src=\"{{asset('prints_output.pdf')}}\" height='700' width='100%'/>");
                     $('#submit').attr('hidden', true);
@@ -282,6 +285,8 @@
 
                 },
                 error: function($data) {
+                    $(this).attr('disabled', 'false');
+                    $('.fa-spinner').hide();
                     $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>File Not Created</strong></div>');
                 }
             });
