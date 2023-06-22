@@ -11,6 +11,7 @@ class PrPosition extends Model implements Auditable
 
         protected $fillable = ['hr_designation_id', 'hr_employee_id', 'nominated_person', 'total_mm', 'pr_position_type_id', 'pr_detail_id', 'remarks'];
 
+
         public function hrDesignation()
         {
                 return $this->belongsTo('App\Models\Hr\HrDesignation');

@@ -1,5 +1,5 @@
 <div class="card-body">
-    <button type="button" class="btn btn-success float-right" id="createNewPosition" data-toggle="modal">Add New Utilization</button>
+    <button type="button" class="btn btn-success float-right" id="createNewMmUtilization" data-toggle="modal">Add New Utilization</button>
     <br>
     <table class="table table-striped data-table">
         <thead>
@@ -21,7 +21,7 @@
     </table>
 </div>
 
-<div class="modal fade" id="positionModal" aria-hidden="true">
+<div class="modal fade" id="mmUtilizationModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -42,23 +42,31 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label text-right">Position<span class="text_requried">*</span></label><br>
+                        <label class="control-label text-right">Position Against Charged<span class="text_requried">*</span></label><br>
                         <select name="pr_position_id" id="pr_position_id" class="form-control" data-validation="required">
                             <option value=""></option>
                             @foreach($positions as $position)
-                            <option value="{{$position->id}}" {{(old("pr_position_id")==$position->id? "selected" : "")}}>{{$position->name}}</option>
+                            <option value="{{$position->id}}" {{(old("pr_position_id")==$position->id? "selected" : "")}}>{{$position->hrDesignation->name}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Month</label>
-                        <input type="text" name="month" id="month" value="{{ old('month') }}" class="form-control date-picker" data-validation="required" readonly>
+                        <input type="text" name="month_year" id="month_year" value="{{ old('month_year') }}" class="form-control date-picker" data-validation="required" readonly>
                         <br>
                         <i class="fas fa-trash-alt text_requried"></i>
                     </div>
                     <div class="form-group">
                         <label class="control-label text-right">Man Month</label><br>
                         <input type="number" step="0.001" id="man_month" name="man_month" value="{{ old('man_month') }}" class="form-control" data-validation-allowing="range[0.001;1.00],float">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label text-right">Billing Rate</label><br>
+                        <input type="number" step="10000" id="billing_rate" name="billing_rate" value="{{ old('billing_rate') }}" class="form-control" data-validation-allowing="range[10000;10000000],float">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label text-right">Total Amount</label><br>
+                        <input type="text" id="total_amount" name="total_amount" value="{{ old('total_amount') }}" class="form-control" readonly>
                     </div>
 
                     <div class="form-group">
@@ -77,6 +85,17 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+
+        $('#man_month, #billing_rate').change(function() {
+            var manMonth = $("#man_month").val();
+            var billingRate = $("#billing_rate").val();
+            if (manMonth && billingRate) {
+
+                $("#total_amount").val(manMonth * billingRate);
+            }
+        });
+
+
         $(function() {
             $('.date-picker').datepicker({
                 changeMonth: true,
@@ -96,17 +115,13 @@
 
 
         });
-        $("#hr_employee_id").change(function() {
-            //const result = $("#hr_employee_id option:selected").text().split('-').pop();
-            const result = $("#hr_employee_id option:selected").text().split('-');
-            $("#nominated_person").val(result[1]);
-        });
 
-        $('#pr_position_id, #pr_position_type_id').select2({
-            dropdownParent: $('#positionModal'),
-            width: "100%",
-            theme: "classic"
-        });
+
+        // $('#pr_position_id, #pr_position_type_id').select2({
+        //     dropdownParent: $('#mmUtilizationModal'),
+        //     width: "100%",
+        //     theme: "classic"
+        // });
 
         $(function() {
             $.ajaxSetup({
@@ -117,22 +132,31 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('projectPosition.create') }}",
+                ajax: "{{ route('mmUtilization.create') }}",
                 columns: [{
-                        data: "nominated_person",
-                        name: 'nominated_person'
+                        data: "hr_employee_id",
+                        name: 'hr_employee_id'
                     },
                     {
                         data: "pr_position_id",
                         name: 'pr_position_id'
                     },
                     {
-                        data: 'pr_position_type_id',
-                        name: 'pr_position_type_id'
+                        data: 'month_year',
+                        name: 'month_year'
                     },
+
                     {
                         data: 'man_month',
                         name: 'man_month'
+                    },
+                    {
+                        data: 'billing_rate',
+                        name: 'billing_rate'
+                    },
+                    {
+                        data: 'total',
+                        name: 'total'
                     },
                     {
                         data: 'remarks',
@@ -157,63 +181,57 @@
                 ]
             });
 
-            $('#createNewPosition').click(function() {
+            $('#createNewMmUtilization').click(function() {
                 $('#json_message_modal').html('');
-                $('#saveBtn').val("create-Position");
+                $('#saveBtn').val("create-Utilization");
                 $('#utilization_id').val('');
 
                 $('#utilizationForm').trigger("reset");
                 $('#pr_position_id').trigger('change');
                 $('#hr_employee_id').trigger('change');
-                $('#pr_position_type_id').trigger('change');
-                $('#modelHeading').html("Create New Position");
-                $('#positionModal').modal('show');
+                $('#modelHeading').html("Create New MM Utilization");
+                $('#mmUtilizationModal').modal('show');
             });
-            $('body').unbind().on('click', '.editPosition', function() {
+            $('body').unbind().on('click', '.editMmUtilization', function() {
                 var utilization_id = $(this).data('id');
 
                 $('#json_message_modal').html('');
-                $.get("{{ url('hrms/project/projectPosition') }}" + '/' + utilization_id + '/edit', function(data) {
-                    $('#modelHeading').html("Edit Position");
-                    $('#saveBtn').val("edit-Position");
-                    $('#positionModal').modal('show');
+                $.get("{{ url('hrms/project/mmUtilization') }}" + '/' + utilization_id + '/edit', function(data) {
+                    $('#modelHeading').html("Edit MM Utilization");
+                    $('#saveBtn').val("edit-MmUtilization");
+                    $('#mmUtilizationModal').modal('show');
                     $('#utilization_id').val(data.id);
                     $('#hr_employee_id').val(data.hr_employee_id);
                     $('#hr_employee_id').trigger('change');
                     $('#pr_position_id').val(data.pr_position_id);
                     $('#pr_position_id').trigger('change');
-                    $('#pr_position_type_id').val(data.pr_position_type_id);
-                    $('#pr_position_type_id').trigger('change');
-                    $('#nominated_person').val(data.nominated_person);
+                    $('#month_year').val(data.month_year);
                     $('#man_month').val(data.man_month);
-
-
+                    $('#billing_rate').val(data.billing_rate);
+                    $('#total_amount').val(data.billing_rate * data.man_month);
+                    $('#remakrs').val(data.remakrs);
                 })
             });
             $('#saveBtn').unbind().click(function(e) {
                 $(this).attr('disabled', 'ture');
-                //submit enalbe after 3 second
-                setTimeout(function() {
-                    $('.btn-prevent-multiple-submits').removeAttr('disabled');
-                }, 3000);
 
                 e.preventDefault();
                 $(this).html('Save');
-
+                console.log($('#utilizationForm').serialize());
                 $.ajax({
                     data: $('#utilizationForm').serialize(),
-                    url: "{{ route('projectPosition.store') }}",
+                    url: "{{ route('mmUtilization.store') }}",
                     type: "POST",
                     dataType: 'json',
                     success: function(data) {
-
+                        $('.btn-prevent-multiple-submits').removeAttr('disabled');
                         $('#utilizationForm').trigger("reset");
-                        $('#positionModal').modal('hide');
+                        $('#mmUtilizationModal').modal('hide');
                         table.draw();
 
                     },
                     error: function(data) {
-
+                        $('.btn-prevent-multiple-submits').removeAttr('disabled');
                         var errorMassage = '';
                         $.each(data.responseJSON.errors, function(key, value) {
                             errorMassage += value + '<br>';
@@ -225,14 +243,14 @@
                 });
             });
 
-            $('body').on('click', '.deletePosition', function() {
+            $('body').on('click', '.deleteMmUtilization', function() {
 
                 var utilization_id = $(this).data("id");
                 var con = confirm("Are You sure want to delete !");
                 if (con) {
                     $.ajax({
                         type: "DELETE",
-                        url: "{{ route('projectPosition.store') }}" + '/' + utilization_id,
+                        url: "{{ route('mmUtilization.store') }}" + '/' + utilization_id,
                         success: function(data) {
                             table.draw();
                             if (data.error) {

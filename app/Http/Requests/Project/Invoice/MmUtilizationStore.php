@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Http\Requests\Project\Invoice;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class MmUtilizationStore extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function getValidatorInstance()
+    {
+        $this->cleanDate();
+        return parent::getValidatorInstance();
+    }
+
+    protected function cleanDate()
+    {
+
+        if ($this->month_year) {
+            $this->merge([
+                'month_year' => \Carbon\Carbon::parse($this->month_year)->format('Y-m-d')
+            ]);
+        }
+    }
+
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        $rules = [
+
+            'hr_employee_id' => ['required', Rule::unique('pr_mm_utilizations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->utilization_id))],
+            'pr_position_id' => ['required'],
+            'month_year' => ['required', 'date', Rule::unique('pr_mm_utilizations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->utilization_id))],
+
+        ];
+
+        return $rules;
+    }
+
+    public function messages()
+    {
+
+        return [
+
+            'month_year.unique' => "This Employee already entered",
+
+
+        ];
+    }
+}
