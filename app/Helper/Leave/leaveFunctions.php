@@ -2,6 +2,7 @@
 
 use App\Models\Hr\HrEmployee;
 use App\Models\Leave\Leave;
+use App\Models\Leave\LeAccumulative;
 use App\User;
 
 
@@ -54,13 +55,46 @@ function leaveStatusType($id)
     }
 }
 
+function annualLeaveBalance($employeeId)
+{
+
+    $employee = HrEmployee::with('employeeCategory')->find($employeeId);
+    $category = $employee->employeeCurrentCategory->name ?? '';
+    if ($category == 'A') {
+        $startFrom = '2022-01-01';
+        $currentYear = date("Y");
+        // . '-12-31';
+        $accommulateLeaves = 0;
+        for ($i = 2022; $i <= $currentYear; $i++) {
+            $from = $i . '-01-01';
+            $to = $i . '-12-31';
+            $totalLeave = Leave::where(['hr_employee_id' => $employeeId, 'le_type_id' => 2])->whereDate('from', ">=", $from)->whereDate('to', "<=", $to)->sum('days');
+            $totalLeave = 18 - $totalLeave;
+            if ($totalLeave > 0) {
+                $accommulateLeaves += $totalLeave;
+            }
+        }
+
+        //accomulative leave balance upto 31-12-2021;
+        $previousLeaves = LeAccumulative::where('hr_employee_id', $employeeId)->first();
+
+        $total =  $accommulateLeaves + $previousLeaves?->accumulative_total ?? 0;
+
+        //Maximum accomulate 60 + current year annual leaves = 78
+        if ($total > 78) {
+            $total = 78;
+        }
+
+        return $total;
+    }
+    return 0;
+}
+
 function annualLeave($employeeId)
 {
 
     $employee = HrEmployee::with('employeeCategory')->find($employeeId);
-
     $category = $employee->employeeCurrentCategory->name ?? '';
-
 
     if ($category == 'A') {
         $categoryADate = $employee->employeeCatA->effective_date; //'2022-05-01';

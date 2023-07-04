@@ -76,8 +76,9 @@ class LeaveStore extends FormRequest
 
             $this->leaveBalance = $totalCasualLeave - Leave::where('hr_employee_id', $request->hr_employee_id)->where('le_type_id', 1)->whereDate('from', ">=", $startDate)->whereDate('to', "<=", $endDate)->sum('days');
         } elseif ($request->le_type_id == 2) { //Check Annual Leave Balance only current year.
-            $totalAnnualLeave =  $currentYearAnnualLeave + $employee->leAccumulative->accumulative_total ?? '';
-            $this->leaveBalance = $totalAnnualLeave - Leave::where('hr_employee_id', $request->hr_employee_id)->where('le_type_id', 2)->whereDate('from', ">=", $startDate)->whereDate('to', "<=", $endDate)->sum('days');
+            //$totalAnnualLeave =  $currentYearAnnualLeave + $employee->leAccumulative->accumulative_total ?? '';
+            //$totalAnnualLeave - Leave::where('hr_employee_id', $request->hr_employee_id)->where('le_type_id', 2)->whereDate('from', ">=", $startDate)->whereDate('to', "<=", $endDate)->sum('days');
+            $this->leaveBalance = annualLeaveBalance($request->hr_employee_id);
         } elseif ($request->le_type_id == 3) {
             $this->leaveBalance = 365 - Leave::where('hr_employee_id', $request->hr_employee_id)->where('le_type_id', 3)->whereDate('from', ">=", $startDate)->whereDate('to', "<=", $endDate)->sum('days');
         } elseif ($request->le_type_id == 4) {

@@ -11,10 +11,10 @@ use App\DataTables\Leave\LeaveBalanceDataTable;
 
 class LeaveBalanceController extends Controller
 {
-    public function index(LeaveBalanceDataTable $dataTable){
-        
-        return $dataTable->render('leave.dataTable');
-       
-    }
+    public function index(LeaveBalanceDataTable $dataTable)
+    {
 
+
+        return $dataTable->render('leave.dataTable');
+    }
 }
