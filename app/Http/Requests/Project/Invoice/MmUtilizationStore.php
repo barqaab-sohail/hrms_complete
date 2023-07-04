@@ -26,6 +26,11 @@ class MmUtilizationStore extends FormRequest
                 'month_year' => \Carbon\Carbon::parse($this->month_year)->format('Y-m-d')
             ]);
         }
+        if ($this->billing_rate) {
+            $this->merge([
+                'billing_rate' => (int)str_replace(',', '', $this->billing_rate)
+            ]);
+        }
     }
 
     public function authorize()
@@ -42,9 +47,10 @@ class MmUtilizationStore extends FormRequest
     {
         $rules = [
 
-            'hr_employee_id' => ['required', Rule::unique('pr_mm_utilizations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->utilization_id))],
+            'hr_employee_id' => ['required'],
             'pr_position_id' => ['required'],
             'month_year' => ['required', 'date', Rule::unique('pr_mm_utilizations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->utilization_id))],
+            'man_month' => ['required', 'numeric', 'between:0.1,1'],
 
         ];
 

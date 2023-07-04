@@ -20,8 +20,8 @@ class CreatePrMmUtilizationsTable extends Migration
             $table->bigInteger('pr_position_id')->unsigned();
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->date('month_year');
-            $table->decimal('man_month', 1, 1);
-            $table->decimal('billing_rate', 7, 2);
+            $table->decimal('man_month', 3, 1);
+            $table->decimal('billing_rate', 12, 0);
             $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');

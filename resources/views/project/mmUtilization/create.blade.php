@@ -62,7 +62,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label text-right">Billing Rate</label><br>
-                        <input type="number" step="10000" id="billing_rate" name="billing_rate" value="{{ old('billing_rate') }}" class="form-control" data-validation-allowing="range[10000;10000000],float">
+                        <input type="text" id="billing_rate" name="billing_rate" value="{{ old('billing_rate') }}" class="form-control" data-validation-allowing="range[10000;10000000],float">
                     </div>
                     <div class="form-group">
                         <label class="control-label text-right">Total Amount</label><br>
@@ -86,12 +86,30 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
+        //Enter Comma after three digit
+        $('#billing_rate').keyup(function(event) {
+
+            // skip for arrow keys
+            if (event.which >= 37 && event.which <= 40) return;
+
+            // format number
+            $(this).val(function(index, value) {
+                return value
+                    .replace(/\D/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            });
+        });
+
+
+
         $('#man_month, #billing_rate').change(function() {
             var manMonth = $("#man_month").val();
             var billingRate = $("#billing_rate").val();
+            billingRate = billingRate.replace(/\,/g, '');
             if (manMonth && billingRate) {
-
-                $("#total_amount").val(manMonth * billingRate);
+                var total = manMonth * parseInt(billingRate);
+                total = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+                $("#total_amount").val(total);
             }
         });
 
@@ -117,11 +135,11 @@
         });
 
 
-        // $('#pr_position_id, #pr_position_type_id').select2({
-        //     dropdownParent: $('#mmUtilizationModal'),
-        //     width: "100%",
-        //     theme: "classic"
-        // });
+        $('#pr_position_id').select2({
+            dropdownParent: $('#mmUtilizationModal'),
+            width: "100%",
+            theme: "classic"
+        });
 
         $(function() {
             $.ajaxSetup({
@@ -207,8 +225,12 @@
                     $('#pr_position_id').trigger('change');
                     $('#month_year').val(data.month_year);
                     $('#man_month').val(data.man_month);
-                    $('#billing_rate').val(data.billing_rate);
-                    $('#total_amount').val(data.billing_rate * data.man_month);
+                    var billingRate = data.billing_rate;
+                    billingRate = billingRate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+                    $('#billing_rate').val(billingRate);
+                    var total = data.billing_rate * data.man_month;
+                    total = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+                    $('#total_amount').val(total);
                     $('#remakrs').val(data.remakrs);
                 })
             });

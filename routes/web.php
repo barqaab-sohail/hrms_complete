@@ -23,7 +23,7 @@ Route::get('/assestVerificationResult/{assetCode}', 'Asset\AssetController@verif
 
 Route::get('/dashboard', 'HomeController@index')->middleware('auth')->name('dashboard');
 //Route::get ('insert','Hr\EmployeeController@insert');
-//Route::get('/test', 'HomeController@test');
+Route::get('/test', 'TestController@test');
 Auth::routes();
 
 // Route::group(['prefix' => 'code', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Auth','name' =>'opt.'], function(){

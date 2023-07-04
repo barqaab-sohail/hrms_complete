@@ -34,8 +34,12 @@ class MmUtilizationController extends Controller
 
                 return $row->hrDesignation->name ?? '';
             })
+            ->editColumn('billing_rate', function ($row) {
+
+                return addComma($row->billing_rate);
+            })
             ->addColumn('total', function ($row) {
-                return $row->man_month * $row->billing_rate;
+                return addComma($row->man_month * $row->billing_rate);
             })
 
             ->addColumn('edit', function ($row) {
