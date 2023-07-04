@@ -35,7 +35,8 @@ class LeaveBalanceDataTable extends DataTable
                 return casualLeave($data->id);
             })
             ->addColumn('accumulative_annual_leave', function ($data) {
-                return $data->leAccumulative->accumulative_total ?? 'N/A';
+                return annualTotalLeaveBalance($data->id);
+                //$data->leAccumulative->accumulative_total ?? 'N/A';
             });
     }
 

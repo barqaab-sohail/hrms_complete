@@ -107,7 +107,7 @@
                         <th>Employee Name</th>
                         <th>Casual Leave</th>
                         <th>Earned Leave</th>
-                        <th>Accumulative E/L</th>
+                        <th>Total E/L including <br>Current Year</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -116,7 +116,7 @@
                         <td>{{$result->first_name}} {{$result->last_name}}</td>
                         <td>{{casualLeave($result->id)}}</td>
                         <td>{{annualLeave($result->id)}}</td>
-                        <td>{{$result->leAccumulative->accumulative_total??'N/A'}}</td>
+                        <td>{{annualTotalLeaveBalance($result->id)}}</td>
                     </tr>
                 </tbody>
             </table>

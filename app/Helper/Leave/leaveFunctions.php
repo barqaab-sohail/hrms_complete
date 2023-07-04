@@ -55,7 +55,7 @@ function leaveStatusType($id)
     }
 }
 
-function annualLeaveBalance($employeeId)
+function annualTotalLeaveBalance($employeeId)
 {
 
     $employee = HrEmployee::with('employeeCategory')->find($employeeId);
