@@ -8,6 +8,7 @@ use App\Models\Project\PrPosition;
 use App\Models\Hr\HrEmployee;
 use App\Http\Requests\Project\Invoice\MmUtilizationStore;
 use App\Models\Project\Invoice\PrMmUtilization;
+use App\Models\Project\Invoice\Invoice;
 use DB;
 use DataTables;
 
@@ -17,8 +18,8 @@ class MmUtilizationController extends Controller
     {
         $positions = PrPosition::where('pr_detail_id', session('pr_detail_id'))->get();
         $employees = HrEmployee::where('hr_status_id', 1)->get();
-
-        $view =  view('project.mmUtilization.create', compact('positions', 'employees'))->render();
+        $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->get();
+        $view =  view('project.mmUtilization.create', compact('positions', 'employees', 'invoices'))->render();
         return response()->json($view);
     }
 

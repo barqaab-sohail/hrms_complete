@@ -19,6 +19,7 @@ class CreatePrMmUtilizationsTable extends Migration
             $table->bigInteger('pr_detail_id')->unsigned();
             $table->bigInteger('pr_position_id')->unsigned();
             $table->bigInteger('hr_employee_id')->unsigned();
+            $table->bigInteger('invoice_id')->unsigned();
             $table->date('month_year');
             $table->decimal('man_month', 3, 1);
             $table->decimal('billing_rate', 12, 0);
@@ -27,6 +28,7 @@ class CreatePrMmUtilizationsTable extends Migration
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
             $table->foreign('pr_position_id')->references('id')->on('pr_positions');
             $table->foreign('hr_employee_id')->references('id')->on('hr_employees');
+            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
         });
     }
 

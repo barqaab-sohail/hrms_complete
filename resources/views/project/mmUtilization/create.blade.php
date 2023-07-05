@@ -51,6 +51,15 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label class="control-label text-right">Invoice No<span class="text_requried">*</span></label><br>
+                        <select name="invoice_id" id="invoice_id" class="form-control" data-validation="required">
+                            <option value=""></option>
+                            @foreach($invoices as $invoice)
+                            <option value="{{$invoice->id}}" {{(old("invoice_id")==$invoice->id? "selected" : "")}}>{{$invoice->invoice_no??''}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Month</label>
                         <input type="text" name="month_year" id="month_year" value="{{ old('month_year') }}" class="form-control date-picker" data-validation="required" readonly>
                         <br>
@@ -135,7 +144,7 @@
         });
 
 
-        $('#pr_position_id').select2({
+        $('#pr_position_id, #invoice_id').select2({
             dropdownParent: $('#mmUtilizationModal'),
             width: "100%",
             theme: "classic"
@@ -207,6 +216,7 @@
                 $('#utilizationForm').trigger("reset");
                 $('#pr_position_id').trigger('change');
                 $('#hr_employee_id').trigger('change');
+                $('#invoice_id').trigger('change');
                 $('#modelHeading').html("Create New MM Utilization");
                 $('#mmUtilizationModal').modal('show');
             });
@@ -223,6 +233,8 @@
                     $('#hr_employee_id').trigger('change');
                     $('#pr_position_id').val(data.pr_position_id);
                     $('#pr_position_id').trigger('change');
+                    $('#invoice_id').val(data.invoice_id);
+                    $('#invoice_id').trigger('change');
                     $('#month_year').val(data.month_year);
                     $('#man_month').val(data.man_month);
                     var billingRate = data.billing_rate;

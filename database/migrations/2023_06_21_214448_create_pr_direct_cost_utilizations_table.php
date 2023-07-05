@@ -17,6 +17,7 @@ class CreatePrDirectCostUtilizationsTable extends Migration
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->bigInteger('pr_detail_id')->unsigned();
+            $table->bigInteger('invoice_id')->unsigned();
             $table->bigInteger('direct_cost_description_id')->unsigned();
             $table->date('month_year');
             $table->decimal('amount', 7, 2);
@@ -24,6 +25,7 @@ class CreatePrDirectCostUtilizationsTable extends Migration
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
             $table->foreign('direct_cost_description_id')->references('id')->on('direct_cost_descriptions');
+            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
         });
     }
 

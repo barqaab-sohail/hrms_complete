@@ -10,7 +10,7 @@ class PrMmUtilization extends Model implements Auditable
 {
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
-    protected $fillable = ['pr_detail_id', 'pr_position_id', 'hr_employee_id', 'month_year', 'man_month', 'billing_rate', 'remarks'];
+    protected $fillable = ['pr_detail_id', 'pr_position_id',  'invoice_id', 'hr_employee_id', 'month_year', 'man_month', 'billing_rate', 'remarks'];
 
 
     public function getMonthYearAttribute($value)
