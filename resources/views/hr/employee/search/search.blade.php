@@ -57,7 +57,7 @@
 								<select name="manager" id="manager" class="form-control searchSelect">
 									<option value=""></option>
 									@foreach($managers as $manager)
-									<option value="{{$manager->id}}" {{(old("manager")==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}} - {{$employee->employeeCurrentDesignation->name??''}}</option>
+									<option value="{{$manager->id}}" {{(old("manager")==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}} - {{$manager->employeeCurrentDesignation->name??''}}</option>
 									@endforeach
 								</select>
 							</div>
