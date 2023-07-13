@@ -33,7 +33,7 @@
                                     {{$employee->first_name}} {{$employee->last_name}}
                                     </a>
                                 </td>
-                                <td>{{$employee->employeeDesignation->last()->name??''}}</td>
+                                <td>{{$employee->employeeCurrentDesignation->name??''}}</td>
                                 <td>{{$employee->employeeDepartment->last()->name??''}}</td>
                                 <td>{{$employee->formatted_date_of_birth}}</td>
                                 <td>{{$employee->hr_status_id}}</td>

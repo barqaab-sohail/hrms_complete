@@ -38,7 +38,7 @@
 					<tr>
 						<td>{{$serial++}}</td>
 						<td>{{$employee->first_name}} {{$employee->last_name}}</td>
-						<td>{{$employee->employeeDesignation->last()->name??''}}</td>
+						<td>{{$employee->employeeCurrentDesignation->name??''}}</td>
 						<td>{{$employee->signedAppointmentLetter->name??'Missing'}}</td>
 						<td>{{$employee->employeeCategory->last()->name??''}}</td>
 						<td>{{$employee->gender_id==1?'Male':'Female'}}</td>
