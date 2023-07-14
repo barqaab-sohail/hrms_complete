@@ -47,6 +47,7 @@
                         <th>Project Name</th>
                         <th>Client Name</th>
                         <th>Commencement Date</th>
+                        <th>Completion Date</th>
                         <th>Status</th>
                         <th>JV/Independent</th>
                         <th class="text-center" style="width:5%">Edit</th>
@@ -75,6 +76,7 @@
                         <td><a href="{{route('project.edit',$project->id)}}" style="color:grey">{{$project->name}}</a></td>
                         <td>{{$project->client->name??''}}</td>
                         <td>{{$project->formatted_commencement_date}}</td>
+                        <td>{{$project->formatted_contractual_completion_date}}</td>
                         <td>{{projectStatus($project->pr_status_id)}}</td>
                         <td>{{$project->prRole->name??''}}</td>
 

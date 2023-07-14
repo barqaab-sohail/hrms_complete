@@ -59,6 +59,10 @@ class PrDetail extends Model implements Auditable
     {
         return \Carbon\Carbon::parse($this->commencement_date)->format('M d, Y');
     }
+    public function getFormattedContractualCompletionDateAttribute()
+    {
+        return \Carbon\Carbon::parse($this->contractual_completion_date)->format('M d, Y');
+    }
 
     public function prSubProject()
     {
