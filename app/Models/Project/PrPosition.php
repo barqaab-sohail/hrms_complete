@@ -21,4 +21,9 @@ class PrPosition extends Model implements Auditable
         {
                 return $this->belongsTo('App\Models\Project\PrPositionType');
         }
+
+        public function hrEmployee()
+        {
+                return $this->belongsTo('App\Models\Hr\HrEmployee');
+        }
 }

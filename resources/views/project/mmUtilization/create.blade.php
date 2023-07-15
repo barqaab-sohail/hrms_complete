@@ -1,4 +1,12 @@
 <div class="card-body">
+    @php
+    if(!empty($difference)){
+    echo 'Following Difference in Invoices and Utilization:' . '<br>';
+    foreach($difference as $value){
+    echo $value['month']. ' - Invoice Value ='.number_format($value['cost'],2). ' - Utilization Value ='.number_format($value['utilization'],2).' - Total Difference ='.number_format($value['difference'],2).'<br>';
+    }
+    }
+    @endphp
     <button type="button" class="btn btn-success float-right" id="createNewMmUtilization" data-toggle="modal">Add New Utilization</button>
     <br>
     <table class="table table-striped data-table">
@@ -37,7 +45,7 @@
                         <select name="hr_employee_id" id="hr_employee_id" class="form-control selectTwo" data-validation="required">
                             <option value=""></option>
                             @foreach ($employees as $employee)
-                            <option value="{{$employee->id}}">{{$employee->employee_no}}-{{$employee->full_name}}-{{$employee->employeeDesignation->last()->name??''}}</option>
+                            <option value="{{$employee->id}}">{{$employee->employee_no}}-{{$employee->full_name}}-{{$employee->employeeCurrentDesignation->name??''}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -60,7 +68,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Month</label>
+                        <label class="control-label">Invoice Month</label>
                         <input type="text" name="month_year" id="month_year" value="{{ old('month_year') }}" class="form-control date-picker" data-validation="required" readonly>
                         <br>
                         <i class="fas fa-trash-alt text_requried"></i>
@@ -109,6 +117,16 @@
             });
         });
 
+        $("#invoice_id").change(function() {
+            var invoiceId = $('#invoice_id option').filter(':selected').val();
+            if (invoiceId) {
+                $.get("{{ url('hrms/project/invoice') }}" + '/' + invoiceId, function(data) {
+                    $('#month_year').val(data.invoice_month);
+                })
+            }
+
+
+        });
 
 
         $('#man_month, #billing_rate').change(function() {
@@ -160,6 +178,9 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('mmUtilization.create') }}",
+                drawCallback: function(data) {
+                    console.log(data.json.difference);
+                },
                 columns: [{
                         data: "hr_employee_id",
                         name: 'hr_employee_id'

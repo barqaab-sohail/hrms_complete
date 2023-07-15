@@ -15,8 +15,8 @@ use App\Http\Controllers\Project\ProjectLedgerActivityController;
 |
 */
 
-Route::get('/newDesign', function(){
-return view('receipt_detail_1');
+Route::get('/newDesign', function () {
+    return view('receipt_detail_1');
 });
 Route::get('/verifyCard', 'HomeController@employee');
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');
@@ -167,6 +167,7 @@ Route::group(['prefix' => 'hrms/cvData', 'middleware' => ['auth', 'XssSanitizer'
 Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Project'], function () {
 
     Route::Resource('/mmUtilization', 'Invoice\MmUtilizationController');
+    Route::get('/invoice/{id}', 'Invoice\MmUtilizationController@invoice');
 
     Route::post('/import', 'ProjectController@import')->name('project.import');
     Route::get('/search', 'ProjectController@search')->name('project.search');

@@ -18,13 +18,41 @@ class MmUtilizationController extends Controller
     {
         $positions = PrPosition::where('pr_detail_id', session('pr_detail_id'))->get();
         $employees = HrEmployee::where('hr_status_id', 1)->get();
-        $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->get();
-        $view =  view('project.mmUtilization.create', compact('positions', 'employees', 'invoices'))->render();
+        // invoice_type_1 is salary cost
+        $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', 1)->orderBy('invoice_no', 'desc')->get();
+        $difference = $this->calculateDifferenceBetweenInvoiceUtilization($invoices);
+        $view =  view('project.mmUtilization.create', compact('positions', 'employees', 'invoices', 'difference'))->render();
         return response()->json($view);
+    }
+
+    public function calculateDifferenceBetweenInvoiceUtilization($invoices)
+    {
+        $data = [];
+        if ($invoices) {
+            foreach ($invoices as $value) {
+                $v['month'] = $value->invoiceMonth->invoice_month;
+                $v['cost'] = $value->invoiceCost->amount;
+                $totalUtilization = 0.0;
+                $utilizations = $value->prMMUtilization;
+                foreach ($utilizations as $utilization) {
+                    if ($v['month'] == $utilization->month_year) {
+                        $totalUtilization += $utilization->billing_rate * $utilization->man_month;
+                    }
+                }
+                $v['utilization'] = $totalUtilization;
+                if ($v['utilization'] != $v['cost']) {
+                    $v['difference'] = $v['utilization'] - $v['cost'];
+                    array_push($data, $v);
+                }
+            }
+        }
+        return $data;
     }
 
     public function create()
     {
+        $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', 1)->orderBy('invoice_no', 'desc')->get();
+        $difference = $this->calculateDifferenceBetweenInvoiceUtilization($invoices);
         $data =  PrMmUtilization::where('pr_detail_id', session('pr_detail_id'))->get();
         return DataTables::of($data)
             ->editColumn('hr_employee_id', function ($row) {
@@ -56,6 +84,7 @@ class MmUtilizationController extends Controller
                 return $btn;
             })
             ->rawColumns(['edit', 'delete'])
+            ->with('difference', $difference)
             ->make(true);
     }
 
@@ -90,5 +119,11 @@ class MmUtilizationController extends Controller
         PrMmUtilization::findOrFail($id)->delete();
 
         return response()->json(['status' => 'OK', 'message' => 'Data Successfully Deleted']);
+    }
+
+    public function invoice($id)
+    {
+        $invoice = Invoice::find($id);
+        return response()->json($invoice->invoiceMonth);
     }
 }

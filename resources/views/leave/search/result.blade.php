@@ -28,7 +28,7 @@
                         <td>
                             {{$leave->hrEmployee->first_name}} {{$leave->hrEmployee->last_name}}
                         </td>
-                        <td>{{$leave->employeeDesignation->last()->name??''}}</td>
+                        <td>{{$leave->employeeCurrentDesignation->name??''}}</td>
                         <td>{{date('M d, Y', strtotime($leave->from))}}</td>
                         <td>{{date('M d, Y', strtotime($leave->to))}}</td>
                         <td>{{$leave->leType->name}}</td>

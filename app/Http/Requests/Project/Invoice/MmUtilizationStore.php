@@ -4,6 +4,7 @@ namespace App\Http\Requests\Project\Invoice;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\Project\Invoice\Invoice;
 
 class MmUtilizationStore extends FormRequest
 {
@@ -12,6 +13,7 @@ class MmUtilizationStore extends FormRequest
      *
      * @return bool
      */
+
     public function getValidatorInstance()
     {
         $this->cleanDate();
@@ -45,12 +47,16 @@ class MmUtilizationStore extends FormRequest
      */
     public function rules()
     {
+
+        $invoice = Invoice::find($this->invoice_id);
+        $invoiceMonth = \Carbon\Carbon::parse($invoice->invoiceMonth->invoice_month)->format('Y-m-d');
+
         $rules = [
 
             'hr_employee_id' => ['required'],
             'pr_position_id' => ['required'],
             'invoice_id' => ['required'],
-            'month_year' => ['required', 'date', Rule::unique('pr_mm_utilizations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->utilization_id))],
+            'month_year' => ['required', 'date', 'date_equals:' . $invoiceMonth, Rule::unique('pr_mm_utilizations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->utilization_id))],
             'man_month' => ['required', 'numeric', 'between:0.1,1'],
 
         ];
@@ -64,6 +70,8 @@ class MmUtilizationStore extends FormRequest
         return [
 
             'month_year.unique' => "This Employee already entered",
+            'month_year.date_equals' => "Your Entered Invoice Month is not correct",
+
 
 
         ];
