@@ -16,6 +16,7 @@
         @can('pr edit cost')
         <a type="submit" role="button" style="color:white" id="addConsultancyCost" href="{{route('projectConsultancyCost.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectConsultancyCost/index')?'style=background-color:#737373':''}}>Consultancy Cost</a>
         <a type="submit" role="button" style="color:white" id="addPosition" href="{{route('projectPosition.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPosition/index')?'style=background-color:#737373':''}}>Position</a>
+        <a type="submit" role="button" style="color:white" id="addDirectCostDetail" href="{{route('directCostDetail.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/directCostDetail/index')?'style=background-color:#737373':''}}>Direct Cost Detail</a>
         @if($data->sub_projects===1)
         <a type="submit" role="button" style="color:white" id="addSubProject" href="{{route('subProject.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectIssues/index')?'style=background-color:#737373':''}}>Sub Projects</a>
         @endif
@@ -26,7 +27,9 @@
         @endcan
         @if(isViewInvoice(session('pr_detail_id')) || isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id')) || auth()->user()->can('pr invoice'))
         <a type="submit" role="button" style="color:white" id="addInvoice" href="{{route('projectInvoice.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectInvoice/index')?'style=background-color:#737373':''}}>Invoices</a>
+        @if($data->contract_type_id ==2)
         <a type="submit" role="button" style="color:white" id="addMmUtilization" href="{{route('mmUtilization.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/mmUtilization/index')?'style=background-color:#737373':''}}>Man Month Utilization</a>
+        @endif
         <a type="submit" role="button" style="color:white" id="addExpense" href="{{route('projectMonthlyExpense.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectMonthlyExpense/index')?'style=background-color:#737373':''}}>Monthly Expenses</a>
         @endif
         @can('pr ledger activity')

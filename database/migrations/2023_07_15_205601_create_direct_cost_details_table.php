@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrDirectCostUtilizationsTable extends Migration
+class CreateDirectCostDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,16 @@ class CreatePrDirectCostUtilizationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pr_direct_cost_utilizations', function (Blueprint $table) {
+        Schema::create('direct_cost_details', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->bigInteger('pr_detail_id')->unsigned();
-            $table->bigInteger('invoice_id')->unsigned();
             $table->bigInteger('direct_cost_description_id')->unsigned();
-            $table->date('month_year');
-            $table->decimal('amount', 7, 2);
-            $table->string('remarks')->nullable();
+            $table->string('name');
+            $table->decimal('amount', 12, 0);
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
-            $table->foreign('direct_cost_description_id')->references('id')->on('direct_cost_descriptions');
-            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
+            $table->foreign('direct_cost_description_id')->references('id')->on('direct_cost_descriptions')->onDelete('cascade');
         });
     }
 
@@ -36,6 +33,6 @@ class CreatePrDirectCostUtilizationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pr_direct_cost_utilizations');
+        Schema::dropIfExists('direct_cost_details');
     }
 }

@@ -56,4 +56,9 @@ class Invoice extends Model implements Auditable
     {
         return $this->hasMany('App\Models\Project\Invoice\PrMMUtilization');
     }
+
+    public function prDirectCostUtilization()
+    {
+        return $this->hasMany('App\Models\Project\Invoice\PrDirectCostUtilization');
+    }
 }

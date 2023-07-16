@@ -17,7 +17,7 @@ class MmUtilizationController extends Controller
     public function index()
     {
         $positions = PrPosition::where('pr_detail_id', session('pr_detail_id'))->get();
-        $employees = HrEmployee::where('hr_status_id', 1)->get();
+        $employees = HrEmployee::select('id', 'first_name', 'last_name', 'employee_no')->get();
         // invoice_type_1 is salary cost
         $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', 1)->orderBy('invoice_no', 'desc')->get();
         $difference = $this->calculateDifferenceBetweenInvoiceUtilization($invoices);

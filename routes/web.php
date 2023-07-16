@@ -168,6 +168,7 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
 
     Route::Resource('/mmUtilization', 'Invoice\MmUtilizationController');
     Route::get('/invoice/{id}', 'Invoice\MmUtilizationController@invoice');
+    Route::Resource('/prDirectCostUtilization', 'Invoice\PrDirectCostUtilizationController');
 
     Route::post('/import', 'ProjectController@import')->name('project.import');
     Route::get('/search', 'ProjectController@search')->name('project.search');
@@ -181,6 +182,7 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
     Route::resource('/projectDocument', 'ProjectDocumentController');
     Route::get('/projectPosition/refreshTable', 'ProjectPositionController@refreshTable')->name('projectPosition.table');
     Route::resource('/projectPosition', 'ProjectPositionController');
+    Route::resource('/directCostDetail', 'DirectCostDetailController');
     Route::get('/projectConsultancyCost/refreshTable', 'ProjectConsultancyCostController@refreshTable')->name('projectConsultancyCost.table');
     Route::resource('/projectConsultancyCost', 'ProjectConsultancyCostController');
 
@@ -291,6 +293,7 @@ Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth', 'XssSanitizer'],
     Route::resource('/hrDesignation', 'DesignationController');
     Route::resource('/client', 'ClientController');
     Route::resource('/partner', 'PartnerController');
+    Route::resource('/directCostDescription', 'DirectCostDescriptionController');
 });
 
 

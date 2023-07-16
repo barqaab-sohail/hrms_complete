@@ -1,15 +1,24 @@
 <div class="card-body">
-    @php
-    if(!empty($difference)){
-    echo 'Following Difference in Invoices and Utilization:' . '<br>';
-    foreach($difference as $value){
-    echo $value['month']. ' - Invoice Value ='.number_format($value['cost'],2). ' - Utilization Value ='.number_format($value['utilization'],2).' - Total Difference ='.number_format($value['difference'],2).'<br>';
-    }
-    }
-    @endphp
+
     <button type="button" class="btn btn-success float-right" id="createNewMmUtilization" data-toggle="modal">Add New Utilization</button>
     <br>
     <table class="table table-striped data-table">
+        <div id="dfference_div">
+            <label class="control-label text-danger">Following Difference in Invoices and Utilization</label>
+            <select id="difference" name="difference" class="form-control">
+            </select>
+        </div>
+        <!-- @php
+        if(!empty($difference)){
+        echo "<textarea rows='3' cols='120'>";
+        echo "Following Difference in Invoices and Utilization:&#13;&#10;";
+        foreach($difference as $value){
+        echo $value['month']. ' - Invoice Value ='.number_format($value['cost'],2). ' - Utilization Value ='.number_format($value['utilization'],2).' - Total Difference = '.number_format($value['difference'],2).'&#13;&#10;';
+        }
+        echo "</textarea>";
+        }
+        @endphp -->
+
         <thead>
             <tr>
                 <th>Employee Name</th>
@@ -63,22 +72,20 @@
                         <select name="invoice_id" id="invoice_id" class="form-control" data-validation="required">
                             <option value=""></option>
                             @foreach($invoices as $invoice)
-                            <option value="{{$invoice->id}}" {{(old("invoice_id")==$invoice->id? "selected" : "")}}>{{$invoice->invoice_no??''}}</option>
+                            <option value="{{$invoice->id}}" {{(old("invoice_id")==$invoice->id? "selected" : "")}}>{{$invoice->invoice_no??''}} - {{$invoice->invoiceMonth->invoice_month}}</option>
                             @endforeach
                         </select>
                     </div>
+
+                    <!-- <label class="control-label">Invoice Month</label> -->
+                    <input type="text" name="month_year" id="month_year" value="{{ old('month_year') }}" class="form-control" data-validation="required" hidden readonly>
+
                     <div class="form-group">
-                        <label class="control-label">Invoice Month</label>
-                        <input type="text" name="month_year" id="month_year" value="{{ old('month_year') }}" class="form-control date-picker" data-validation="required" readonly>
-                        <br>
-                        <i class="fas fa-trash-alt text_requried"></i>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label text-right">Man Month</label><br>
+                        <label class="control-label text-right">Man Month<span class="text_requried">*</span></label><br>
                         <input type="number" step="0.001" id="man_month" name="man_month" value="{{ old('man_month') }}" class="form-control" data-validation-allowing="range[0.001;1.00],float">
                     </div>
                     <div class="form-group">
-                        <label class="control-label text-right">Billing Rate</label><br>
+                        <label class="control-label text-right">Billing Rate<span class="text_requried">*</span></label><br>
                         <input type="text" id="billing_rate" name="billing_rate" value="{{ old('billing_rate') }}" class="form-control" data-validation-allowing="range[10000;10000000],float">
                     </div>
                     <div class="form-group">
@@ -102,7 +109,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-
+        $("#dfference_div").hide();
         //Enter Comma after three digit
         $('#billing_rate').keyup(function(event) {
 
@@ -179,7 +186,23 @@
                 serverSide: true,
                 ajax: "{{ route('mmUtilization.create') }}",
                 drawCallback: function(data) {
-                    console.log(data.json.difference);
+
+                    if (data.json.difference.length > 0) {
+                        $("#dfference_div").show();
+                    } else {
+                        $("#dfference_div").hide();
+                    }
+                    $("#difference").empty();
+                    // $("#cycle").append('<option value=""></option>');
+                    $.each(data.json.difference, function(key, value) {
+                        $("#difference").append('<option >' + value['month'] + ' - Invoice Value =' + value['cost'] + ' - Utilization Value =' + value['utilization'] +
+                            ' - Total Difference = ' + value['difference'] +
+                            '</option>');
+                    });
+                    $('#difference').select2({
+                        width: "100%",
+                        theme: "classic"
+                    });
                 },
                 columns: [{
                         data: "hr_employee_id",

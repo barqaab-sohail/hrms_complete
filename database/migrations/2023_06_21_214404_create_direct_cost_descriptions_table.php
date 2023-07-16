@@ -16,11 +16,8 @@ class CreateDirectCostDescriptionsTable extends Migration
         Schema::create('direct_cost_descriptions', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->bigInteger('pr_detail_id')->unsigned();
-            $table->string('name');
-            $table->decimal('amount', 12, 0);
+            $table->string('name')->unique();
             $table->timestamps();
-            $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');
         });
     }
 

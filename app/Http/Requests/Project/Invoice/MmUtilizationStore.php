@@ -47,10 +47,11 @@ class MmUtilizationStore extends FormRequest
      */
     public function rules()
     {
-
-        $invoice = Invoice::find($this->invoice_id);
-        $invoiceMonth = \Carbon\Carbon::parse($invoice->invoiceMonth->invoice_month)->format('Y-m-d');
-
+        $invoiceMonth = '2001-01-01';
+        if ($this->invoice_id) {
+            $invoice = Invoice::find($this->invoice_id);
+            $invoiceMonth = \Carbon\Carbon::parse($invoice->invoiceMonth->invoice_month)->format('Y-m-d');
+        }
         $rules = [
 
             'hr_employee_id' => ['required'],
@@ -58,6 +59,7 @@ class MmUtilizationStore extends FormRequest
             'invoice_id' => ['required'],
             'month_year' => ['required', 'date', 'date_equals:' . $invoiceMonth, Rule::unique('pr_mm_utilizations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->utilization_id))],
             'man_month' => ['required', 'numeric', 'between:0.1,1'],
+            'billing_rate' => ['required'],
 
         ];
 
