@@ -20,7 +20,7 @@ class CreatePrDirectCostUtilizationsTable extends Migration
             $table->bigInteger('invoice_id')->unsigned();
             $table->bigInteger('direct_cost_detail_id')->unsigned();
             $table->date('month_year');
-            $table->decimal('amount', 7, 2);
+            $table->decimal('amount', 12, 2);
             $table->string('remarks')->nullable();
             $table->timestamps();
             $table->foreign('pr_detail_id')->references('id')->on('pr_details')->onDelete('cascade');

@@ -8,17 +8,19 @@ use App\Models\Project\Invoice\DirectCostDetail;
 use App\Models\Project\Invoice\Invoice;
 use App\Models\Project\Invoice\PrDirectCostUtilization;
 use App\Http\Requests\Project\Invoice\DirectCostUtilizationStore;
+use DB;
+use DataTables;
 
 
 class PrDirectCostUtilizationController extends Controller
 {
     public function index()
     {
-        $directCostDetail = DirectCostDetail::where('pr_detail_id', session('pr_detail_id'))->get();
+        $directCostDetails = DirectCostDetail::where('pr_detail_id', session('pr_detail_id'))->get();
         // invoice_type_2 is Direct cost
         $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', 2)->orderBy('invoice_no', 'desc')->get();
         $difference = $this->calculateDifferenceBetweenInvoiceUtilization($invoices);
-        $view =  view('project.direct_cost_utilization.create', compact('directCostDetail', 'invoices', 'difference'))->render();
+        $view =  view('project.direct_cost_utilization.create', compact('directCostDetails', 'invoices', 'difference'))->render();
         return response()->json($view);
     }
 

@@ -29,6 +29,7 @@
         <a type="submit" role="button" style="color:white" id="addInvoice" href="{{route('projectInvoice.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectInvoice/index')?'style=background-color:#737373':''}}>Invoices</a>
         @if($data->contract_type_id ==2)
         <a type="submit" role="button" style="color:white" id="addMmUtilization" href="{{route('mmUtilization.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/mmUtilization/index')?'style=background-color:#737373':''}}>Man Month Utilization</a>
+        <a type="submit" role="button" style="color:white" id="addDirectCostUtilization" href="{{route('prDirectCostUtilization.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/prDirectCostUtilization/index')?'style=background-color:#737373':''}}>Direct Cost Utilization</a>
         @endif
         <a type="submit" role="button" style="color:white" id="addExpense" href="{{route('projectMonthlyExpense.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectMonthlyExpense/index')?'style=background-color:#737373':''}}>Monthly Expenses</a>
         @endif
