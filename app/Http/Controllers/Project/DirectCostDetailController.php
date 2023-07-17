@@ -34,6 +34,10 @@ class DirectCostDetailController extends Controller
 
                     return $row->directCostDescription->name;
                 })
+                ->editColumn('amount', function ($row) {
+
+                    return addComma($row->amount);
+                })
 
                 ->addColumn('edit', function ($row) {
 

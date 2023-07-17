@@ -53,7 +53,18 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        $('#amount').keyup(function(event) {
 
+            // skip for arrow keys
+            if (event.which >= 37 && event.which <= 40) return;
+
+            // format number
+            $(this).val(function(index, value) {
+                return value
+                    .replace(/\D/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            });
+        });
 
         $('#direct_cost_description_id').select2({
             dropdownParent: $('#detailModal'),
@@ -116,7 +127,9 @@
                     $('#direct_cost_detail_id').val(data.id);
                     $('#direct_cost_description_id').val(data.direct_cost_description_id);
                     $('#direct_cost_description_id').trigger('change');
-                    $('#amount').val(data.amount);
+                    var amount = data.amount;
+                    amount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+                    $('#amount').val(amount);
                 })
             });
             $('#saveBtn').unbind().click(function(e) {
