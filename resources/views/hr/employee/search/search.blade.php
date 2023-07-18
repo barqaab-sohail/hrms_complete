@@ -134,6 +134,22 @@
 						</div>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<!--/span 5-1 -->
+						<div class="form-group row">
+							<div class="col-md-12 required">
+								<label class="control-label text-right">Name of Office</label><br>
+								<select name="office_id" id="office_id" class="form-control searchSelect">
+									<option value=""></option>
+									@foreach($offices as $office)
+									<option value="{{$office->id}}" {{(old("office")==$office->id? "selected" : "")}}>{{$office->name}}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="form-actions">

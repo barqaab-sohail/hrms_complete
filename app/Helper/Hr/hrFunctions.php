@@ -217,6 +217,34 @@ function currentActiveSubordinates($managerId)
     return $employees;
 }
 
+function currentActiveCategory($category)
+{
+    $allEmployees = HrEmployee::where('hr_status_id', 1)->with('employeeCurrentCategory')->get();
+    $employees = [];
+
+    foreach ($allEmployees as $key => $employee) {
+
+        if ($category == $employee->employeeCurrentCategory->id) {
+            array_push($employees, $employee->id);
+        }
+    }
+
+    return $employees;
+}
+
+function currentActiveOffice($office)
+{
+    $allEmployees = HrEmployee::where('hr_status_id', 1)->with('employeeCurrentOffice')->get();
+    $employees = [];
+    foreach ($allEmployees as $key => $employee) {
+
+        if ($office == $employee->employeeCurrentOffice->id) {
+            array_push($employees, $employee->id);
+        }
+    }
+    return $employees;
+}
+
 function managementEmployeeIds()
 {
     return HrEmployee::whereIn('employee_no', employeeCodeArray())->pluck('id')->toArray();

@@ -144,7 +144,7 @@
                             <select id="hr_salary_id" name="hr_salary_id" class="form-control selectTwo" data-validation="required">
                                 <option value=""></option>
                                 @foreach($salaries as $salary)
-                                <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hr_salary_id??'')==$salary->id? "selected" : "")}}>{{$salary->total_salary}}</option>
+                                <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hr_salary_id??'')==$salary->id? "selected" : "")}}>{{number_format($salary->total_salary,0)}}</option>
                                 @endforeach
 
                             </select>

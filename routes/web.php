@@ -88,6 +88,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/nextToKin', 'NextToKinController');
 
     Route::resource('/manager', 'ManagerController');
+    Route::resource('/employeeOffice', 'EmployeeOfficeController');
     Route::post('/employeeSalaryImport', 'EmployeeSalaryController@import')->name('employeeSalaryImport');
     Route::resource('/employeeSalary', 'EmployeeSalaryController');
 

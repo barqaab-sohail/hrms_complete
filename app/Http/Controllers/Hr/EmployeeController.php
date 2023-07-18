@@ -19,6 +19,7 @@ use App\Models\Common\Education;
 use App\Models\Project\PrDetail;
 use App\Models\Hr\HrDocumentation;
 use App\Models\Hr\HrEmployeeHusband;
+use App\Models\Common\Office;
 use DB;
 use App\Http\Requests\Hr\EmployeeStore;
 use DataTables;
@@ -354,13 +355,14 @@ class EmployeeController extends Controller
         $degrees = Education::all();
         $designations = HrDesignation::all();
         $projects = PrDetail::select('id', 'name', 'project_no')->get();
+        $offices = Office::select('id', 'name')->where('is_active', 1)->get();
 
         $managerIds = EmployeeManager::all()->pluck('hr_manager_id')->toArray();
         $managers = HrEmployee::where('hr_status_id', 1)->wherein('id', $managerIds)->with('employeeDesignation')->get(['id', 'first_name', 'last_name']);
 
         $employees = HrEmployee::select('id', 'first_name', 'last_name')->with('employeeDesignation')->get();
 
-        return view('hr.employee.search.search', compact('categories', 'degrees', 'designations', 'projects', 'managers', 'employees', 'bloodGroups'));
+        return view('hr.employee.search.search', compact('categories', 'offices', 'degrees', 'designations', 'projects', 'managers', 'employees', 'bloodGroups'));
     }
 
 
@@ -421,13 +423,20 @@ class EmployeeController extends Controller
                         ->where('pr_detail_id', '=', $data['project']);
                 })
                 ->when($data['category'], function ($query) use ($data) {
-                    return  $query->join('employee_categories', 'employee_categories.hr_employee_id', '=', 'hr_employees.id')->orderBy('employee_categories.effective_date', 'desc')->groupBy('employee_categories.hr_employee_id')->where('employee_categories.hr_category_id', $data['category']);
+
+                    $employees = currentActiveCategory($data['category']);
+                    return     $query->whereIn('hr_employees.id', $employees);
+                    //$query->join('employee_categories', 'employee_categories.hr_employee_id', '=', 'hr_employees.id')->orderBy('employee_categories.effective_date', 'desc')->groupBy('employee_categories.hr_employee_id')->where('employee_categories.hr_category_id', $data['category']);
                 })
                 ->when($data['designation'], function ($query) use ($data) {
                     return  $query->join('employee_designations', 'employee_designations.hr_employee_id', '=', 'hr_employees.id')->orderBy('employee_designations.effective_date', 'desc')->where('hr_designation_id', $data['designation']);
                 })
                 ->when($data['manager'], function ($query) use ($data) {
                     $employees = currentActiveSubordinates($data['manager']);
+                    return     $query->whereIn('hr_employees.id', $employees);
+                })
+                ->when($data['office_id'], function ($query) use ($data) {
+                    $employees = currentActiveOffice($data['office_id']);
                     return     $query->whereIn('hr_employees.id', $employees);
                 })
                 ->select('hr_employees.*')

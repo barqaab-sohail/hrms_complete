@@ -66,7 +66,7 @@ class DirectCostDetailController extends Controller
 
         $input = $request->all();
         $input['pr_detail_id'] = session('pr_detail_id');
-
+        $input['amount'] =  (int)str_replace(',', '', $request->amount);
         DB::transaction(function () use ($input, $request) {
             $input =  DirectCostDetail::updateOrCreate(
                 ['id' => $request->direct_cost_detail_id],

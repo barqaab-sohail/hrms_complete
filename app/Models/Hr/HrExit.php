@@ -7,15 +7,26 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 
 class HrExit extends Model implements Auditable
-{ 
+{
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['hr_employee_id','hr_status_id','effective_date','reason','remarks'];
+    protected $fillable = ['hr_employee_id', 'hr_status_id', 'effective_date', 'reason', 'remarks'];
 
 
-    public function hrStatus(){
+    public function hrStatus()
+    {
 
-    	return $this->belongsTo('App\Models\Hr\HrStatus');
+        return $this->belongsTo('App\Models\Hr\HrStatus');
     }
 
+    public function getEffectiveDateAttribute()
+    {
+        $effective_date = $this->effective_date ?? '';
+        return  $effective_date ? \Carbon\Carbon::parse($effective_date)->format('M d, Y') : '';
+    }
+
+    public function getFormattedEffectiveDateAttribute()
+    {
+        return \Carbon\Carbon::parse($this->effective_date)->format('M d, Y');
+    }
 }
