@@ -154,6 +154,8 @@ class DashboardController extends Controller
             $projects[] = [
                 'id' => $project->id,
                 'projectNo' => $project->project_no,
+                'commencementDate' => \Carbon\Carbon::parse($project->commencement_date)->format('M d, Y'),
+                'completionDate' => \Carbon\Carbon::parse($project->contractual_completion_date)->format('M d, Y'),
                 'clientName' => $project->client->name ?? '',
                 'projectType' => $project->contract_type_id === 2 ? 'Man Month' : 'Lumpsum',
                 'projectName' => $project->project_no . " - " . $project->name,
