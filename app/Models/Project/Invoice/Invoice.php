@@ -52,9 +52,9 @@ class Invoice extends Model implements Auditable
         return $this->hasOne('App\Models\Project\Invoice\InvoiceDocument');
     }
 
-    public function prMMUtilization()
+    public function prMmUtilization()
     {
-        return $this->hasMany('App\Models\Project\Invoice\PrMMUtilization');
+        return $this->hasMany('App\Models\Project\Invoice\PrMmUtilization');
     }
 
     public function prDirectCostUtilization()
