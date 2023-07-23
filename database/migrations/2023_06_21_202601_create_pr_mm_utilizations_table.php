@@ -21,7 +21,7 @@ class CreatePrMmUtilizationsTable extends Migration
             $table->bigInteger('hr_employee_id')->unsigned();
             $table->bigInteger('invoice_id')->unsigned();
             $table->date('month_year');
-            $table->decimal('man_month', 3, 1);
+            $table->decimal('man_month', 4, 3); //total 4 digits and 3 are after decimal;
             $table->decimal('billing_rate', 12, 0);
             $table->string('remarks')->nullable();
             $table->timestamps();

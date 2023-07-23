@@ -141,7 +141,7 @@
             var billingRate = $("#billing_rate").val();
             billingRate = billingRate.replace(/\,/g, '');
             if (manMonth && billingRate) {
-                var total = manMonth * parseInt(billingRate);
+                var total = (manMonth * parseInt(billingRate)).toFixed(2);
                 total = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
                 $("#total_amount").val(total);
             }
