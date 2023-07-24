@@ -28,6 +28,7 @@
                         @endcan
 
                         @role('Super Admin')
+                        <th class="text-center" style="width:5%">Expiry</th>
                         <th class="text-center" style="width:5%">Delete</th>
                         @endrole
                     </tr>
@@ -124,6 +125,10 @@
                 },
                 @endcan
                 @role('Super Admin') {
+                    data: 'expiry_date',
+                    name: 'expiry_date'
+                },
+                {
                     data: 'delete',
                     name: 'delete',
                     orderable: false,

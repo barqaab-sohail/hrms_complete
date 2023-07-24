@@ -196,6 +196,14 @@ class EmployeeController extends Controller
                         return $data->last_working_date ?? '';
                     }
                 })
+                ->addcolumn('expiry_date', function ($data) {
+
+                    $date = $data->employeeAppointment->expiry_date ?? '';
+                    if ($date) {
+                        $date =  \Carbon\Carbon::parse($date)->format('M d, Y');
+                    }
+                    return $date;
+                })
                 ->addColumn('edit', function ($data) {
 
                     if (Auth::user()->hasPermissionTo('hr edit documentation')) {

@@ -77,7 +77,12 @@ function annualTotalLeaveBalance($employeeId)
 
         //accomulative leave balance upto 31-12-2021;
         $previousLeaves = LeAccumulative::where('hr_employee_id', $employeeId)->first();
-
+        // if ($previousLeaves) {
+        //     $perviousTotal = $previousLeaves->accumulative_total;
+        // } else {
+        //     $perviousTotal = 0;
+        // }
+        //this line support by php version 8 null check 
         $total =  $accommulateLeaves + $previousLeaves?->accumulative_total ?? 0;
 
         //Maximum accomulate 60 + current year annual leaves = 78
