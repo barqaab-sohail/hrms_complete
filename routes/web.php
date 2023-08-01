@@ -168,6 +168,8 @@ Route::group(['prefix' => 'hrms/cvData', 'middleware' => ['auth', 'XssSanitizer'
 Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Project'], function () {
 
     Route::Resource('/mmUtilization', 'Invoice\MmUtilizationController');
+    Route::get('/exportUtilization', 'Invoice\MmUtilizationController@exportUtilization');
+    Route::get('/exportView', 'Invoice\MmUtilizationController@exportView');
     Route::get('/invoice/{id}', 'Invoice\MmUtilizationController@invoice');
     Route::Resource('/prDirectCostUtilization', 'Invoice\PrDirectCostUtilizationController');
 

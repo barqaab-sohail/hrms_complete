@@ -26,4 +26,9 @@ class PrPosition extends Model implements Auditable
         {
                 return $this->belongsTo('App\Models\Hr\HrEmployee');
         }
+
+        public function prMmUtilizations()
+        {
+                return $this->hasMany('App\Models\Project\Invoice\PrMmUtilization');
+        }
 }

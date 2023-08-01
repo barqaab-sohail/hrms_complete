@@ -9,6 +9,8 @@ use App\Models\Hr\HrEmployee;
 use App\Http\Requests\Project\Invoice\MmUtilizationStore;
 use App\Models\Project\Invoice\PrMmUtilization;
 use App\Models\Project\Invoice\Invoice;
+use App\Exports\Project\Invoice\UtilizationExport;
+use Excel;
 use DB;
 use DataTables;
 
@@ -39,7 +41,7 @@ class MmUtilizationController extends Controller
                         $totalUtilization += $utilization->billing_rate * $utilization->man_month;
                     }
                 }
-                $v['utilization'] = $totalUtilization;
+                $v['utilization'] = round($totalUtilization, 0);
                 if ($v['utilization'] != $v['cost']) {
                     $v['difference'] = $v['utilization'] - $v['cost'];
                     array_push($data, $v);
@@ -125,5 +127,40 @@ class MmUtilizationController extends Controller
     {
         $invoice = Invoice::find($id);
         return response()->json($invoice->invoiceMonth);
+    }
+
+    public function exportUtilization()
+    {
+
+
+
+        // $fileName = 'utilizations.xlsx';
+        // return Excel::download(new UtilizationExport(14), $fileName);
+    }
+
+    public function exportView()
+    {
+        $months = PrMmUtilization::where('pr_detail_id', 14)->select('month_year')->groupBy('month_year')->get();
+        $prPositions = PrPosition::where('pr_detail_id', 14)->get();
+        //$prPositions = PrMmUtilization::where('pr_detail_id', 14)->select('pr_position_id')->groupBy('pr_position_id')->get();
+        $prMmUtilizations = PrMmUtilization::where('pr_detail_id', 14)->get();
+
+        // foreach ($prPositions as $position) {
+
+        //     foreach ($position->prMmUtilizations as $utilization) {
+        //         echo $utilization->hrEmployee->full_name . '<br>';
+        //     }
+
+        //     // foreach ($prMmUtilizations as $prMmUtilization) {
+        //     //     if ($position->pr_position_id == $prMmUtilization->pr_position_id) {
+        //     //         echo $prMmUtilization->hrEmployee->full_name . '-' . $prMmUtilization->hrDesignation->name . '<br>';
+        //     //     }
+        //     // }
+        // }
+        // dd();
+        // foreach ($months as $month) {
+        //     echo $month->month_year . '<br>';
+        // }
+        return view('project/mmUtilization/utilizationReport', compact('months', 'prPositions', 'prMmUtilizations'));
     }
 }
