@@ -506,6 +506,12 @@ class HrEmployee extends Model implements Auditable
     }
 
 
+    public function employeeContracts()
+    {
+        return $this->hasMany('App\Models\Hr\EmployeeContract');
+    }
+
+
 
     public function hrDepartment()
     {

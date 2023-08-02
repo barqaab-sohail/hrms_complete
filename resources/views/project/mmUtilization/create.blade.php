@@ -8,18 +8,9 @@
             <select id="difference" name="difference" class="form-control">
             </select>
         </div>
-        <!-- @php
-        if(!empty($difference)){
-        echo "<textarea rows='3' cols='120'>";
-        echo "Following Difference in Invoices and Utilization:&#13;&#10;";
-        foreach($difference as $value){
-        echo $value['month']. ' - Invoice Value ='.number_format($value['cost'],2). ' - Utilization Value ='.number_format($value['utilization'],2).' - Total Difference = '.number_format($value['difference'],2).'&#13;&#10;';
-        }
-        echo "</textarea>";
-        }
-        @endphp -->
-        <br>
-        <button type="button" href="{{url('hrms/project/expertUtilization')}}" class="btn btn-danger float-left">Download Report</button>
+
+        <!-- <br>
+        <button type="button" href="{{url('hrms/project/expertUtilization')}}" class="btn btn-danger float-left">Download Report</button> -->
         <thead>
             <tr>
                 <th>Employee Name</th>

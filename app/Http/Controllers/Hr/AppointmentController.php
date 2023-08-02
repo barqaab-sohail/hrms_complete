@@ -24,6 +24,7 @@ use App\Models\Hr\HrGrade;
 use App\Models\Hr\HrCategory;
 use App\Models\Hr\HrEmployeeType;
 use App\Http\Requests\Hr\AppointmentStore;
+use App\Models\Hr\EmployeeContract;
 use DB;
 
 class AppointmentController extends Controller
@@ -128,6 +129,18 @@ class AppointmentController extends Controller
                     ['id' => $employeeGrade->id ?? ''],
                     $input
                 );
+            }
+            if ($request->filled('expiry_date')) {
+                $data = EmployeeContract::where('hr_employee_id', session('hr_employee_id'))->orderBy('to', 'desc')->first();
+                if (empty($data) ||  $data->to < $input['expiry_date']) {
+                    EmployeeContract::Create(
+                        [
+                            'from' => $input['joining_date'],
+                            'to' => $input['expiry_date'],
+                            'hr_employee_id' => $input['hr_employee_id']
+                        ]
+                    );
+                }
             }
         }); // end transcation
 
