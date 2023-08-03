@@ -31,9 +31,13 @@
                         <td>{{$serial++}}</td>
                         <td>{{$position->hrDesignation->name}}</td>
                         <td>{{$position->total_mm}}</td>
-                        @foreach($position->prMmUtilizations as $utilization)
-                        <td>{{$utilization->hrEmployee->full_name??''}}</td>
-                        @endforeach
+
+
+                        <td> @foreach(mmUtilization(14, $position->id) as $employeeid)
+                            {{employeeName($employeeid)}} <br>
+                            @endforeach
+                        </td>
+
 
                         @foreach($months as $month)
                         @foreach ($prMmUtilizations as $prMmUtilization)

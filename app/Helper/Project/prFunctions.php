@@ -7,6 +7,7 @@ use App\Models\Project\Invoice\InvoiceCost;
 use App\Models\Project\PrRight;
 use App\Models\Project\Progress\PrProgressActivity;
 use App\Models\Project\Progress\PrAchievedProgress;
+use App\Models\Project\Invoice\PrMmUtilization;
 
 
 function receivedInvoices($projectId)
@@ -231,4 +232,10 @@ function projectStatus($id)
     } else {
         return '';
     }
+}
+
+function mmUtilization($prDetailId, $positionId)
+{
+    $employeeIds = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $positionId)->groupBy('hr_employee_id')->pluck('hr_employee_id')->toArray();
+    return $employeeIds;
 }

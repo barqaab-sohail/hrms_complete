@@ -138,12 +138,26 @@ class MmUtilizationController extends Controller
         // return Excel::download(new UtilizationExport(14), $fileName);
     }
 
-    public function exportView()
+    public function exportView(Request $request)
     {
         $months = PrMmUtilization::where('pr_detail_id', 14)->select('month_year')->groupBy('month_year')->get();
         $prPositions = PrPosition::where('pr_detail_id', 14)->get();
         //$prPositions = PrMmUtilization::where('pr_detail_id', 14)->select('pr_position_id')->groupBy('pr_position_id')->get();
         $prMmUtilizations = PrMmUtilization::where('pr_detail_id', 14)->get();
+
+        $data = [];
+        foreach ($prPositions as $key => $position) {
+            $utilizations = PrMmUtilization::where('pr_detail_id', 14)->where('pr_position_id', $position->id)->select('month_year', 'man_month', 'billing_rate', 'hr_employee_id')->get();
+            foreach ($utilizations as $utilization) {
+                $value = ['key' => $key + 1, 'pr_position_id' => $position->id, 'position_name' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm, 'month_year' => $utilization->month_year, 'man_month' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate, 'employee_name' => $utilization->hrEmployee->full_name, 'hr_employee_id' => $utilization->hr_employee_id];
+                array_push($data, $value);
+            }
+        }
+
+        $data = collect($data);
+        //if ($request->ajax()) {
+        return DataTables::of($data)->make(true);
+        //}
 
         // foreach ($prPositions as $position) {
 
@@ -161,6 +175,6 @@ class MmUtilizationController extends Controller
         // foreach ($months as $month) {
         //     echo $month->month_year . '<br>';
         // }
-        return view('project/mmUtilization/utilizationReport', compact('months', 'prPositions', 'prMmUtilizations'));
+        return view('project/mmUtilization/report', compact('months'));
     }
 }

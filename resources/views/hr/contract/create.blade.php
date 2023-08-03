@@ -30,6 +30,17 @@
                 <form id="contractForm" name="contractForm" action="{{route('employeeContract.store')}}" class="form-horizontal">
                     <input type="hidden" name="employee_contract_id" id="employee_contract_id">
                     <input type="hidden" name="hr_employee_id" id="hr_employee_id" value="{{session('hr_employee_id')}}">
+
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Duration</label>
+                            <select name="duration" id="duration" class="form-control selectTwo">
+                                <option value=""></option>
+                                <option value="6">Six Months</option>
+                                <option value="1">One Year</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="control-label text-right">From<span class="text_requried">*</span></label>
                         <input type="text" name="from" id="from" value="{{ old('from') }}" class="form-control date_input" data-validation="required" readonly>
@@ -56,7 +67,19 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
-
+        $("#duration").change(function() {
+            var duration = $(this).val();
+            if (duration == 1) {
+                $("#from").val("2023-07-01");
+                $("#to").val("2024-07-31");
+            } else if (duration == 6) {
+                $("#from").val("2023-07-01");
+                $("#to").val("2024-01-31");
+            } else {
+                $("#from").val("");
+                $("#to").val("");
+            }
+        });
 
         $(function() {
             $.ajaxSetup({
@@ -104,6 +127,7 @@
                 $('#saveBtn').val("create-extension");
                 $('#employee_contract_id').val('');
                 $('#contractForm').trigger("reset");
+                $('#duration').val('').trigger("change");
                 $('#modelHeading').html("Create New Extension");
                 $('#ajaxModel').modal('show');
             });
