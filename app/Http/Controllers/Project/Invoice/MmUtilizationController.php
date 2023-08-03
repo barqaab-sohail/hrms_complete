@@ -148,10 +148,18 @@ class MmUtilizationController extends Controller
         $data = [];
         foreach ($prPositions as $key => $position) {
             $utilizations = PrMmUtilization::where('pr_detail_id', 14)->where('pr_position_id', $position->id)->select('month_year', 'man_month', 'billing_rate', 'hr_employee_id')->get();
+            $data1 = [];
             foreach ($utilizations as $utilization) {
-                $value = ['key' => $key + 1, 'pr_position_id' => $position->id, 'position_name' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm, 'month_year' => $utilization->month_year, 'man_month' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate, 'employee_name' => $utilization->hrEmployee->full_name, 'hr_employee_id' => $utilization->hr_employee_id];
-                array_push($data, $value);
+                $value = ['month_year' => $utilization->month_year, 'man_month' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate, 'employee_name' => $utilization->hrEmployee->full_name, 'hr_employee_id' => $utilization->hr_employee_id];
+                array_push($data1, $value);
             }
+
+
+            foreach ($data1 as $d) {
+                $v =  ['key' => $key + 1, 'pr_position_id' => $position->id, 'position_name' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm, $d['month_year'] => $d['month_year']];
+            }
+            dd($v);
+            array_push($data, $v);
         }
 
         $data = collect($data);

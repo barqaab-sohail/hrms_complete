@@ -70,10 +70,10 @@
         $("#duration").change(function() {
             var duration = $(this).val();
             if (duration == 1) {
-                $("#from").val("2023-07-01");
+                $("#from").val("2023-08-01");
                 $("#to").val("2024-07-31");
             } else if (duration == 6) {
-                $("#from").val("2023-07-01");
+                $("#from").val("2023-08-01");
                 $("#to").val("2024-01-31");
             } else {
                 $("#from").val("");
