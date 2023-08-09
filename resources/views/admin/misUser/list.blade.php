@@ -7,7 +7,6 @@
 
 <div class="card">
     <div class="card-body">
-        <button type="button" class="btn btn-success float-right" id="createMisUser" data-toggle="modal">Add Office</button>
         <h4 class="card-title" style="color:black">List of Users</h4>
         <div class="table-responsive m-t-40">
             <table id="myTable" class="table table-bordered table-striped">

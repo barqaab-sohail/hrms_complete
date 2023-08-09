@@ -11,5 +11,5 @@ class MisUser extends Model implements Auditable
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['user_id', 'is_allow_mis'];
+    protected $fillable = ['user_id', 'is_allow_mis', 'hr_employee_id'];
 }

@@ -58,10 +58,7 @@
                         data: 'employee_name',
                         name: 'employee_name'
                     },
-                    {
-                        data: 'man_month',
-                        name: 'man_month'
-                    }
+
 
                 ],
                 order: [

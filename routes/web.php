@@ -316,6 +316,7 @@ Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth', 'XssSanitizer']
 
     Route::get('/audit/search', 'AuditController@search')->name('audit.search');
     Route::get('/result', 'AuditController@result')->name('audit.result');
+    Route::resource('/addUser', 'UserController');
 });
 
 //Invoice Routes
