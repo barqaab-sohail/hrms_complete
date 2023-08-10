@@ -24,12 +24,14 @@ class ProjectLedgerActivityController extends Controller
         }
 
         $statusCode = 400;
-        if ($difference > 30 || !$lastUpdate) {
-            $ledger = new Ledger();
-            $ledgerResponse = $ledger->importLedgerActivity($projectId);
-            $checkUpdate = "Yes";
-            $statusCode = $ledgerResponse->status();
-        }
+
+        // if ($difference > 30 || !$lastUpdate) {
+        //     $ledger = new Ledger();
+        //     $ledgerResponse = $ledger->importLedgerActivity($projectId);
+        //     $checkUpdate = "Yes";
+        //     dd($ledgerResponse);
+        //     $statusCode = $ledgerResponse->status();
+        // }
 
         $project = PrDetail::find($projectId);
         $projectCost = isset($project->prCost) ? (int)$project->prCost->total_cost : 0;

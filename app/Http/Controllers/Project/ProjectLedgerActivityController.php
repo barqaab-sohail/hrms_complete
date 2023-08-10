@@ -148,7 +148,9 @@ class ProjectLedgerActivityController extends Controller
         $url = str_replace("__PROJECTNO", $projectNo, $url);
         $url = str_replace("__CUSTOMERNO", $customerNo, $url);
         $url = str_replace("__TODATE", $toDate, $url);
+        dd($url);
         $htmlContent = file_get_contents($url);
+
         //$htmlContent = file_get_contents("C:\Users\sohail\Desktop\\testt.htm");
         $htmlContent = str_replace("&nbsp;", " ", $htmlContent);
         //following line is not used, it is used for future if recorded 'a' tag
