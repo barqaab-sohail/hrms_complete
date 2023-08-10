@@ -17,7 +17,7 @@ class MisUserController extends Controller
             $data = User::all();
             return DataTables::of($data)
                 ->addColumn('full_name', function ($data) {
-                    return $data->hrEmployee->full_name ?? '';
+                    return $data->hrEmployee->full_name ?? $data->misEmployeeUser->full_name;
                 })
                 ->editColumn('is_allow_mis', function ($data) {
                     if (!isAllowMis($data->id ?? 0)) {

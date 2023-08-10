@@ -33,6 +33,8 @@ class EmployeeController extends Controller
     public static function getAllEmployee()
     {
         return $value = Cache::remember('employees', 3, function () {
+
+
             $data = HrEmployee::select(['id',  'first_name', 'last_name', 'cnic', 'date_of_birth', 'hr_status_id', 'employee_no'])->with([
                 'employeeCurrentDesignation' => function ($query) {
                     return $query->select('name');
@@ -229,7 +231,13 @@ class EmployeeController extends Controller
 
     public function activeEmployeesList()
     {
-        $employees = HrEmployee::where('hr_status_id', 1)->with('employeeDesignation', 'hrContactMobile', 'employeeAppointment')->get();
+        // $employees = HrEmployee::chunk(50, function ($employees) {
+        //     foreach ($employees as $employee) {
+        //         echo $employee->full_name . '</br>';
+        //     }
+        // });
+        // dd('test');
+        $employees = HrEmployee::where('hr_status_id', 1)->with('employeeCurrentDesignation', 'signedAppointmentLetter', 'employeeCategory', 'hod', 'hrContactMobile', 'employeeAppointment')->get();
 
 
         return view('hr.employee.activeEmployeesList', compact('employees'));

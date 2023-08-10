@@ -27,13 +27,13 @@
 
                     <div class="form-group">
                         <label class="control-label text-right">Email<span class="text_requried">*</span></label><br>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control" data-validation-allowing="range[10000;10000000],float">
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control">
                     </div>
 
 
                     <div class="form-group">
-                        <label class="control-label">Status</label>
-                        <select name="status" id="status" class="form-control selectTwo" data-validation="required">
+                        <label class="control-label">User Status</label>
+                        <select name="user_status" id="user_status" class="form-control selectTwo" data-validation="required">
                             <option value=""></option>
                             <option value="0">Not Registered</option>
                             <option value="1">Registered</option>
@@ -62,6 +62,9 @@
                     <tr>
                         <th>Name</th>
                         <th>Email Address</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+
                     </tr>
                 </thead>
             </table>
@@ -93,10 +96,18 @@
                         data: 'email',
                         name: 'email'
                     },
+                    {
+                        data: 'edit',
+                        name: 'edit'
+                    },
+                    {
+                        data: 'delete',
+                        name: 'delete'
+                    },
                 ]
             });
 
-            $('#hr_employee_id, #status').select2({
+            $('#hr_employee_id, #user_status').select2({
                 dropdownParent: $('#userModal'),
                 width: "100%",
                 theme: "classic"
@@ -108,7 +119,7 @@
                 $('#user_id').val('');
                 $('#userForm').trigger("reset");
                 $('#hr_employee_id').trigger('change');
-                $('#status').trigger('change');
+                $('#user_status').trigger('change');
                 $('#modelHeading').html("Create New User");
                 $('#userModal').modal('show');
             });
@@ -117,14 +128,19 @@
 
                 $('#json_message_modal').html('');
                 $.get("{{ url('hrms/admin/addUser') }}" + '/' + user_id + '/edit', function(data) {
+                    console.log(data);
                     $('#modelHeading').html("Edit User");
                     $('#saveBtn').val("edit-user");
                     $('#userModal').modal('show');
                     $('#user_id').val(data.id);
-                    $('#hr_employee_id').val(data.hr_employee_id);
+                    if (data.mis_employee_user) {
+                        $('#hr_employee_id').val(data.mis_employee_user.id);
+                    } else {
+                        $('#hr_employee_id').val(data.hr_employee.id);
+                    }
                     $('#hr_employee_id').trigger('change');
-                    $('#status').val(data.status);
-                    $('#status').trigger('change');
+                    $('#user_status').val(data.user_status);
+                    $('#user_status').trigger('change');
                     $('#email').val(data.email);
                 })
             });

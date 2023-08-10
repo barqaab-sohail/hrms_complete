@@ -48,6 +48,18 @@ class User extends Authenticatable implements Auditable
         return $this->hasOne('App\Models\Hr\HrEmployee');
     }
 
+    public function misEmployeeUser()
+    {
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrEmployee',
+            'App\Models\MisUser',
+            'user_id',
+            'id',
+            'id',
+            'hr_employee_id'
+        );
+    }
+
     public function picturePath()
     {
         $picture = HrDocumentation::where([['description', 'Picture'], ['hr_employee_id', auth()->user()->hrEmployee->id ?? '']])->first();
