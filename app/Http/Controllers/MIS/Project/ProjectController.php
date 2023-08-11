@@ -19,7 +19,7 @@ class ProjectController extends Controller
 
     public function allProjectDocuments()
     {
-        $prDocuments = PrDocument::all();
+        $prDocuments = PrDocument::select('id', 'pr_folder_name_id', 'pr_detail_id', 'reference_no', 'description', 'document_date', 'file_name', 'extension', 'path', 'size')->get();
         return response()->json($prDocuments);
     }
 

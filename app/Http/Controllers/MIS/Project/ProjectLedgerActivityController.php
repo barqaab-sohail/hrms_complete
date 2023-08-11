@@ -15,7 +15,13 @@ class ProjectLedgerActivityController extends Controller
     {
 
         $checkUpdate = "NO";
-        $lastUpdate = LedgerActivity::where('pr_detail_id', $projectId)->orderBy('updated_at', 'desc')->first();
+        $updatedDate = LedgerActivity::where('pr_detail_id', $projectId)->orderBy('updated_at', 'desc')->first();
+        $createdDate = LedgerActivity::where('pr_detail_id', $projectId)->orderBy('created_at', 'desc')->first();
+        $lastUpdate = $createdDate;
+        if ($updatedDate > $createdDate) {
+            $lastUpdate = $updatedDate;
+        }
+
         $difference = 29;
         if ($lastUpdate) {
             $lastUpdate =  \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastUpdate->updated_at)->format('d-m-Y');
@@ -36,7 +42,7 @@ class ProjectLedgerActivityController extends Controller
         $project = PrDetail::find($projectId);
         $projectCost = isset($project->prCost) ? (int)$project->prCost->total_cost : 0;
 
-        if ($statusCode == 200) {
+        if ($statusCode == 400) {
             $totalDebit = LedgerActivity::where('pr_detail_id', $projectId)->sum('debit');
             $totalCredit = LedgerActivity::where('pr_detail_id', $projectId)->sum('credit');
             $balance = $totalDebit - $totalCredit;

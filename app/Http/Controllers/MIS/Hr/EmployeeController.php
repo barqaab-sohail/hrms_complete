@@ -13,7 +13,6 @@ class EmployeeController extends Controller
     {
 
         $data = HrEmployee::with('employeeDesignation', 'picture', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
-
         //first sort with respect to Designation
         // $designations = employeeDesignationArray();
         // $data = $data->sort(function ($a, $b) use ($designations) {
