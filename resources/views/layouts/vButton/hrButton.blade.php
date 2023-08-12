@@ -44,12 +44,12 @@
             @can('hr edit exit')
             <a type="submit" id="addExit" style="color:white" role="button" href="{{route('exit.create')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/exit/create/')?'style=background-color:#737373':''}}>Exit</a>
             <a type="submit" role="button" style="color:white" id="addManager" href="{{route('manager.index')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/manager/index')?'style=background-color:#737373':''}}>HOD</a>
+            <a type="submit" role="button" style="color:white" id="addContract" href="{{route('employeeContract.index')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/employeeContract/index')?'style=background-color:#737373':''}}>Contracts</a>
+            <a type="submit" role="button" style="color:white" id="addOffice" href="{{route('employeeOffice.index')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/employeeOffice/index')?'style=background-color:#737373':''}}>Office</a>
             @endcan
 
             @can('hr edit salary')
             <a type="submit" role="button" style="color:white" id="addSalary" href="{{route('employeeSalary.index')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/employeeSalary/index')?'style=background-color:#737373':''}}>Salary</a>
-            <a type="submit" role="button" style="color:white" id="addContract" href="{{route('employeeContract.index')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/employeeContract/index')?'style=background-color:#737373':''}}>Contracts</a>
-            <a type="submit" role="button" style="color:white" id="addOffice" href="{{route('employeeOffice.index')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/employeeOffice/index')?'style=background-color:#737373':''}}>Office</a>
             @endcan
 
             @can('Super Admin')

@@ -148,6 +148,9 @@ class EmployeeController extends Controller
 
             $value = $this->getAllEmployee();
             //$value = HrEmployee::with('employeeCurrentDesignation', 'employeeCurrentProject', 'employeeCurrentOffice', 'hrContactMobile:mobile')->get();
+            //$first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
+            //$value = HrEmployee::whereIn('employee_no', $first)->with('employeeCurrentDesignation', 'employeeCurrentProject', 'employeeCurrentOffice', 'hrContactMobile:mobile')->get();
+            //$value = HrEmployee::where('hr_status_id', 2)->with('employeeCurrentDesignation', 'employeeCurrentProject', 'employeeCurrentOffice', 'hrContactMobile:mobile')->get();
 
             return DataTables::of($value)
 

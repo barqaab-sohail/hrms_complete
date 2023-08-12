@@ -182,8 +182,10 @@
                 <!-- Miscellaneous -->
                 <li class="{{Request::is('hrms/misc*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-server" aria-hidden="true"></i><span class="hide-menu">Miscellaneous</span></a>
                     <ul aria-expanded="false" class="collapse">
-                        @can('misc edit record')
+                        @can('misc office edit record')
                         <li><a class="{{Request::is('hrms/misc/office')?'active':''}}" href="{{route('office.index')}}">List of Offices</a></li>
+                        @endcan
+                        @can('misc edit record')
                         <li><a class="{{Request::is('hrms/misc/degree')?'active':''}}" href="{{route('degree.index')}}">List of Degrees</a></li>
                         <li><a class="{{Request::is('hrms/misc/hrDesignation')?'active':''}}" href="{{route('hrDesignation.index')}}">List of Designations</a></li>
                         <li><a class="{{Request::is('hrms/misc/client')?'active':''}}" href="{{route('client.index')}}">List of Clients</a></li>

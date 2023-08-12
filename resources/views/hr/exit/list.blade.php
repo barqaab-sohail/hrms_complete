@@ -30,7 +30,7 @@
 					@foreach($hrExits as $hrExit)
 					<tr>
 						<td>{{$hrExit->hrStatus->name}}</td>
-						<td>{{$hrExit->formatted_effective_date??''}}</td>
+						<td>{{$hrExit->effective_date?\Carbon\Carbon::parse($hrExit->effective_date)->format('M d, Y'):''}}</td>
 						<td>{{$hrExit->reason}}</td>
 
 

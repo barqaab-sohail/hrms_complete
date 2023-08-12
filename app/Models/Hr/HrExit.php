@@ -15,18 +15,6 @@ class HrExit extends Model implements Auditable
 
     public function hrStatus()
     {
-
         return $this->belongsTo('App\Models\Hr\HrStatus');
-    }
-
-    public function getEffectiveDateAttribute()
-    {
-        $effective_date = $this->effective_date ?? '';
-        return  $effective_date ? \Carbon\Carbon::parse($effective_date)->format('M d, Y') : '';
-    }
-
-    public function getFormattedEffectiveDateAttribute()
-    {
-        return \Carbon\Carbon::parse($this->effective_date)->format('M d, Y');
     }
 }
