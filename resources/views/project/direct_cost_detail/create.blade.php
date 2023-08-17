@@ -1,6 +1,7 @@
 <div class="card-body">
     <button type="button" class="btn btn-success float-right" id="createDetail" data-toggle="modal">Add New Position</button>
     <br>
+    <h3>Total Direct Cost: <span id="sum"></span></h3>
     <table class="table table-striped data-table">
         <thead>
             <tr>
@@ -82,6 +83,12 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('directCostDetail.create') }}",
+                drawCallback: function(data) {
+                    if (data.json.sum) {
+                        $("#sum").text(data.json.sum.replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    }
+
+                },
                 columns: [{
                         data: "direct_cost_description_id",
                         name: 'direct_cost_description_id'

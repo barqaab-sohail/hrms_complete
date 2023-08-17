@@ -16,6 +16,7 @@
 						<th>Employee Name</th>
 						<th>Designation/Position</th>
 						<th>Signed Appointment Letter</th>
+						<th>Project</th>
 						<th>Category</th>
 						<th>Gender</th>
 						<th>CNIC</th>
@@ -40,6 +41,7 @@
 						<td>{{$employee->first_name}} {{$employee->last_name}}</td>
 						<td>{{$employee->employeeCurrentDesignation->name??''}}</td>
 						<td>{{$employee->signedAppointmentLetter->name??'Missing'}}</td>
+						<td>{{$employee->employeeCurrentProject->name}}</td>
 						<td>{{$employee->employeeCategory->last()->name??''}}</td>
 						<td>{{$employee->gender_id==1?'Male':'Female'}}</td>
 						<td>{{$employee->cnic}}</td>

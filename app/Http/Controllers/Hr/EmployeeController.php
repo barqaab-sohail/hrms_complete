@@ -36,6 +36,9 @@ class EmployeeController extends Controller
 
 
             $data = HrEmployee::select(['id',  'first_name', 'last_name', 'cnic', 'date_of_birth', 'hr_status_id', 'employee_no'])->with([
+                'employeeAppointment' => function ($query) {
+                    return $query->select('expiry_date');
+                },
                 'employeeCurrentDesignation' => function ($query) {
                     return $query->select('name');
                 }, 'employeeCurrentProject' => function ($query) {
@@ -240,7 +243,7 @@ class EmployeeController extends Controller
         //     }
         // });
         // dd('test');
-        $employees = HrEmployee::where('hr_status_id', 1)->with('employeeCurrentDesignation', 'signedAppointmentLetter', 'employeeCategory', 'hod', 'hrContactMobile', 'employeeAppointment')->get();
+        $employees = HrEmployee::where('hr_status_id', 1)->with('employeeCurrentDesignation', 'employeeCurrentProject', 'signedAppointmentLetter', 'employeeCategory', 'hod', 'hrContactMobile', 'employeeAppointment')->get();
 
 
         return view('hr.employee.activeEmployeesList', compact('employees'));

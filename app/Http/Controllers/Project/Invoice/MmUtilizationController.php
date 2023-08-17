@@ -142,35 +142,60 @@ class MmUtilizationController extends Controller
     {
 
         $prDetailId = 14;
-        $months = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('month_year')->groupBy('month_year')->orderBy('month_year', 'asc')->get();
+        $months = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('month_year')->groupBy('month_year')->orderBy('month_year', 'asc')->pluck('month_year')->toArray();
         $prPositions = PrPosition::where('pr_detail_id', $prDetailId)->get();
         //$prPositions = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('pr_position_id')->groupBy('pr_position_id')->get();
         $prMmUtilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('pr_position_id', 'hr_employee_id', 'month_year', 'man_month', 'billing_rate')->get();
-        dd($prMmUtilizations);
-        $data = [];
-        foreach ($prPositions as $postion) {
+
+        $heading = ['no', 'designation', 'total_man_month', 'employee_name'];
+        foreach ($months as $month) {
+            array_push($heading, $month);
+        }
+
+
+
+        $positionData = [];
+        $utilizationData = [];
+        foreach ($prPositions as $key => $position) {
+            $positionValue = ['pr_position_id' => $position->id, 'position' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm];
+            array_push($positionData, $positionValue);
             foreach ($prMmUtilizations as $utilization) {
-                if ($postion->id == $utilization->pr_position_id) {
-                    $value = ['pr_position_id' => $utilization->pr_position_id, 'month_year' => $utilization->month_year, 'man_month' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate, 'employee_name' => $utilization->hrEmployee->full_name, 'hr_employee_id' => $utilization->hr_employee_id];
-                    array_push($data, $value);
-                }
+                echo $utilization->month_year . '-' . $utilization->hrEmployee->full_name . '<br>';
             }
         }
-        $data = collect($data);
-        $table = [];
 
-        $table = $data->map(function ($value, $key) use ($months) {
-            // echo $value['month_year'] . '<br>';
-            foreach ($months as $month) {
-                if ($month->month_year == $value['month_year']) {
-                }
-            }
-            // $keys = array_keys($value[''], $month->month_year);
-            // echo $month->month_year . '<br>';
-            //echo $value['month_year'] . '<br>';
-            // }
-        });
-        dd($data);
+
+        dd($positionData);
+
+
+
+
+        // $data = [];
+        // foreach ($prPositions as $postion) {
+        //     foreach ($prMmUtilizations as $utilization) {
+        //         if ($postion->id == $utilization->pr_position_id) {
+        //             $value = ['pr_position_id' => $utilization->pr_position_id, 'month_year' => $utilization->month_year, 'man_month' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate, 'employee_name' => $utilization->hrEmployee->full_name, 'hr_employee_id' => $utilization->hr_employee_id];
+        //             array_push($data, $value);
+        //         }
+        //     }
+        // }
+        // $data = collect($data);
+        // $table = [];
+
+
+
+        // $table = $data->map(function ($value, $key) use ($months) {
+        //     // echo $value['month_year'] . '<br>';
+        //     foreach ($months as $month) {
+        //         if ($month->month_year == $value['month_year']) {
+        //         }
+        //     }
+        //     // $keys = array_keys($value[''], $month->month_year);
+        //     // echo $month->month_year . '<br>';
+        //     //echo $value['month_year'] . '<br>';
+        //     // }
+        // });
+        // dd($data);
 
 
         $data = [];
@@ -183,9 +208,7 @@ class MmUtilizationController extends Controller
             }
 
             $v = array();
-            if ($key == 1) {
-                dd($data1);
-            }
+
             foreach ($data1 as $d) {
                 $v[] =  ['key' => $key + 1, 'pr_position_id' => $position->id, 'position_name' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm, $d['month_year'] => $d['man_month'], 'billing_rate' => $d['billing_rate'], 'employee_name' => $d['employee_name']];
             }
@@ -194,6 +217,7 @@ class MmUtilizationController extends Controller
         }
 
         $data = collect($data);
+        dd($data);
         //if ($request->ajax()) {
         return DataTables::of($data)->make(true);
         //}

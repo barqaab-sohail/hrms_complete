@@ -27,7 +27,7 @@ class DirectCostDetailController extends Controller
         if ($request->ajax()) {
 
             $data =  DirectCostDetail::where('pr_detail_id', session('pr_detail_id'))->get();
-
+            $sum =  DirectCostDetail::where('pr_detail_id', session('pr_detail_id'))->sum('amount');
             return DataTables::of($data)
 
                 ->editColumn('direct_cost_description_id', function ($row) {
@@ -51,6 +51,7 @@ class DirectCostDetailController extends Controller
 
                     return $btn;
                 })
+                ->with(['sum' => $sum])
                 ->rawColumns(['edit', 'delete'])
                 ->make(true);
         }
