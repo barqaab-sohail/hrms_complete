@@ -6,7 +6,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <table class="table table-striped data-table">
+        <table id="myTable" class="table table-bordered table-striped" style="width:100%">
             <thead>
                 <tr>
                     <th>Sr. #</th>
@@ -20,7 +20,18 @@
                 </tr>
             </thead>
             <tbody>
-
+                @foreach($positionArray as $key=>$position)
+                <tr>
+                    <td>{{$key+1}}</td>
+                    <td>{{$position['position']}}</td>
+                    <td>{{$position['total_man_month']}}</td>
+                    <td>{{$position['total_man_month']}}</td>
+                    <td>{{$position['total_man_month']}}</td>
+                    @foreach($months as $month)
+                    <td>{{$month}}</td>
+                    @endforeach
+                </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -28,58 +39,32 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        $('#myTable').DataTable({
 
-
-        $(function() {
-
-            var table = $('.data-table').DataTable({
-                processing: true,
-                serverSide: true,
-                dom: 'Blfrtip',
-                buttons: [{
+            dom: 'Blfrtip',
+            buttons: [{
                     extend: 'copyHtml5',
-                    exportOptions: {
+                },
+                {
+                    extend: 'excelHtml5',
+                },
+                {
+                    extend: 'pdfHtml5',
+                }, {
+                    extend: 'csvHtml5',
+                },
+            ],
+            scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            fixedColumns: {
+                leftColumns: 3,
 
-                    }
-                }, ],
-                ajax: "{{ route('project.utilization') }}",
-                columns: [{
-                        data: "key",
-                        name: 'key'
-                    },
-
-                    {
-                        data: "position",
-                        name: 'position'
-                    },
-                    {
-                        data: 'total_man_month',
-                        name: 'total_man_month'
-                    },
-                    {
-                        data: 'billing_rate',
-                        name: 'billing_rate'
-                    },
-                    {
-                        data: 'employee_name',
-                        name: 'employee_name'
-                    },
-                    @foreach($months as $key=>$month) {
-                        data: '{{$month}}',
-                        name: '{{$month}}'
-                    },
-                    @endforeach
-
-
-
-                ],
-                "aaSorting": [],
-
-
-
-            });
-
+            }
         });
+
+
     });
 </script>
 @stop
