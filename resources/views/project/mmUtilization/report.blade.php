@@ -15,7 +15,7 @@
                     <th>Billing Rate</th>
                     <th>Employee Name</th>
                     @foreach($months as $month)
-                    <th>{{$month->month_year}}</th>
+                    <th>{{$month}}</th>
                     @endforeach
                 </tr>
             </thead>
@@ -35,16 +35,22 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('project.utilization') }}",
+                dom: 'Blfrtip',
+                buttons: [{
+                    extend: 'copyHtml5',
+                    exportOptions: {
 
+                    }
+                }, ],
+                ajax: "{{ route('project.utilization') }}",
                 columns: [{
                         data: "key",
                         name: 'key'
                     },
 
                     {
-                        data: "position_name",
-                        name: 'position_name'
+                        data: "position",
+                        name: 'position'
                     },
                     {
                         data: 'total_man_month',
@@ -58,12 +64,19 @@
                         data: 'employee_name',
                         name: 'employee_name'
                     },
+                    @foreach($months as $key=>$month) {
+                        data: '{{$month}}',
+                        name: '{{$month}}'
+                    },
+                    @endforeach
+
 
 
                 ],
-                order: [
-                    [2, "desc"]
-                ]
+                "aaSorting": [],
+
+
+
             });
 
         });

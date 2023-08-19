@@ -9,8 +9,8 @@
             </select>
         </div>
 
-        <!-- <br>
-        <button type="button" href="{{url('hrms/project/expertUtilization')}}" class="btn btn-danger float-left">Download Report</button> -->
+        <br>
+        <button type="button" href="{{url('hrms/project/exportView')}}" class="btn btn-danger float-left">Download Report</button>
         <thead>
             <tr>
                 <th>Employee Name</th>

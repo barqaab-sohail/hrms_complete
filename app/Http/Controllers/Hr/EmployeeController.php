@@ -267,7 +267,7 @@ class EmployeeController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $users = [1, 17, 21, 25];
+        $users = [1, 14, 17, 20, 21, 25];
         if (in_array($id, managementEmployeeIds()) && !in_array(auth()->user()->id, $users)) {
             abort(403, 'Your are not authorized');
         }

@@ -143,6 +143,9 @@ class MmUtilizationController extends Controller
 
         $prDetailId = 14;
         $months = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('month_year')->groupBy('month_year')->orderBy('month_year', 'asc')->pluck('month_year')->toArray();
+        
+        $months = ["October-2020",  "November-2020",  "December-2020",  "January-2021",  "February-2021",  "March-2021",  "April-2021",  "May-2021",  "June-2021",  "July-2021",  "August-2021",  "September-2021",  "October-2021",  "November-2021",  "December-2021",  "January-2022",  "February-2022",  "March-2022",  "April-2022",  "May-2022",  "June-2022",  "July-2022",  "August-2022",  "September-2022",  "October-2022",  "November-2022",  "December-2022",  "January-2023",  "February-2023",  "March-2023",  "April-2023",  "May-2023",  "June-2023"];
+        $employeesIds = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('hr_employee_id')->groupBy('hr_employee_id')->pluck('hr_employee_id')->toArray();
         $prPositions = PrPosition::where('pr_detail_id', $prDetailId)->get();
         //$prPositions = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('pr_position_id')->groupBy('pr_position_id')->get();
         $prMmUtilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('pr_position_id', 'hr_employee_id', 'month_year', 'man_month', 'billing_rate')->get();
@@ -154,18 +157,59 @@ class MmUtilizationController extends Controller
 
 
 
-        $positionData = [];
-        $utilizationData = [];
+        $positionArray = [];
+
         foreach ($prPositions as $key => $position) {
-            $positionValue = ['pr_position_id' => $position->id, 'position' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm];
-            array_push($positionData, $positionValue);
-            foreach ($prMmUtilizations as $utilization) {
-                echo $utilization->month_year . '-' . $utilization->hrEmployee->full_name . '<br>';
+            $utilizationArray = [];
+            $utilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->get();
+
+            foreach ($utilizations as $utilization) {
+                $utilizationValue = ['hr_employee_id' => $utilization->hr_employee_id, 'month' => $utilization->month_year, 'mm' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate];
+                array_push($utilizationArray, $utilizationValue);
             }
+            $positionValue = ['pr_position_id' => $position->id, 'position' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm];
+            foreach ($months as $month) {
+                $positionValue[$month] ='';
+            }
+
+
+            // foreach ($prMmUtilizations as $utilization) {
+            //     foreach ($employeesIds as $employeeId) {
+            //         if ($employeeId == $utilization->hr_employee_id) {
+            //             echo $utilization->hrEmployee->full_name;
+            //             echo '<br>';
+            //         }
+            //     }
+
+            //     // foreach ($months as $month) {
+            //     //     echo '--' . $month;
+            //     // }
+            // }
+            array_push($positionArray, $positionValue);
         }
+        if ($request->ajax()) {
+             $data = DataTables::of($positionArray); 
+             $data = $data ->addColumn('key', function ($row) {
+                    return $row['pr_position_id'];
+                })
+                ->addColumn('billing_rate', function ($row) {
+                    return 1000;
+                })
+                ->addColumn('employee_name', function ($row) {
+                    return 'Sohail Afzal';
+                });
+                // foreach ($months as $month){
+                // $data = $data
+                //     ->addColumn("$month", function ($row) {
+                //         return 'testing';
+                //     });
+                // }
+               
+               return $data->make(true);
+        }
+        return view('project/mmUtilization/report', compact('months'));
 
-
-        dd($positionData);
+        dd($positionArray);
 
 
 
