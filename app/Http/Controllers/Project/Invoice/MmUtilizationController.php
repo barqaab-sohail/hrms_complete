@@ -154,182 +154,191 @@ class MmUtilizationController extends Controller
             array_push($heading, $month);
         }
 
-        $positionarray = [];
+        $positionArray = [];
         foreach ($prPositions as $key => $position) {
             $employeeArray = [];
+            $employeeIds = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->select('hr_employee_id')->groupBy('hr_employee_id')->pluck('hr_employee_id')->toArray();
+            $total = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->select(DB::raw('sum(billing_rate * man_month) as total'))->first()->total;
             foreach ($employeeIds as $key => $employeeId) {
                 $utilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->where('hr_employee_id', $employeeId)->get();
-
-                //$employeeValue = ['employee_name' => employeeName($employeeId)];
+                $employeeTotal = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->where('hr_employee_id', $employeeId)->select(DB::raw('sum(billing_rate * man_month) as total'))->first()->total;
+                $employeeValue = ['employee_name' => employeeName($employeeId)];
                 foreach ($utilizations as $utilization) {
-                    if ($employeeId == $utilization->hr_employee_id) {
-                        $employeeValue['pr_position_id'] = $utilization->pr_position_id;
-                        $employeeValue['designation'] = $utilization->hrDesignation->name;
-                        foreach ($months as $month) {
-                            if ($month == $utilization->month_year) {
-                                $employeeValue[$month] = $utilization->man_month;
-                            } else {
-                                if (!array_key_exists($month, $employeeValue)) {
-                                    $employeeValue[$month] = '';
-                                }
+                    $employeeValue['pr_position_id'] = $position->id;
+                    $employeeValue['position'] = $position->hrDesignation->name;
+                    $employeeValue['nominated_person'] = $position->nominated_person;
+                    $employeeValue['total_man_month'] =  $position->total_mm;
+                    $employeeValue['designation'] = $utilization->hrDesignation->name;
+                    $employeeValue['billing_rate'] = $utilization->billing_rate;
+                    $employeeValue['employee_total'] = $employeeTotal;
+                    $employeeValue['total'] = $total;
+
+                    foreach ($months as $month) {
+                        if ($month == $utilization->month_year) {
+                            $employeeValue[$month] = $utilization->man_month;
+                        } else {
+                            if (!array_key_exists($month, $employeeValue)) {
+                                $employeeValue[$month] = '';
                             }
                         }
                     }
                 }
                 array_push($employeeArray, $employeeValue);
             }
-            $positionValue = ['pr_position_id' => $position->id, 'position' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm, 'nominated_person' => $position->nominated_person, 'employee_value' => $employeeArray];
-            array_push($positionarray, $positionValue);
+            // $positionValue = ['employee_value' => $employeeArray];
+            array_push($positionArray, $employeeArray);
         }
-        dd($positionarray);
-
-        $employeeArray = [];
-        foreach ($employeeIds as $key => $employeeId) {
-            $utilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('hr_employee_id', $employeeId)->get();
-            $employeeValue = ['employee_name' => employeeName($employeeId)];
-            foreach ($utilizations as $utilization) {
-                $employeeValue['pr_position_id'] = $utilization->pr_position_id;
-                $employeeValue['designation'] = $utilization->hrDesignation->name;
-                foreach ($months as $month) {
-                    if ($month == $utilization->month_year) {
-                        $employeeValue[$month] = $utilization->man_month;
-                    } else {
-                        if (!array_key_exists($month, $employeeValue)) {
-                            $employeeValue[$month] = '';
-                        }
-                    }
-                }
-            }
-
-
-            array_push($employeeArray,  $employeeValue);
-        }
-
-        dd($employeeArray);
-        $positionArray = [];
-
-        foreach ($prPositions as $key => $position) {
-            $utilizationArray = [];
-            $utilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->get();
-
-            foreach ($utilizations as $utilization) {
-                $utilizationValue = ['hr_employee_id' => $utilization->hr_employee_id, 'month' => $utilization->month_year, 'mm' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate];
-                array_push($utilizationArray, $utilizationValue);
-            }
-            $positionValue = ['pr_position_id' => $position->id, 'position' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm];
-
-
-
-            // foreach ($prMmUtilizations as $utilization) {
-            //     foreach ($employeesIds as $employeeId) {
-            //         if ($employeeId == $utilization->hr_employee_id) {
-            //             echo $utilization->hrEmployee->full_name;
-            //             echo '<br>';
-            //         }
-            //     }
-
-            //     // foreach ($months as $month) {
-            //     //     echo '--' . $month;
-            //     // }
-            // }
-            array_push($positionArray, $positionValue);
-        }
-        dd($positionArray);
-        // if ($request->ajax()) {
-        //      $data = DataTables::of($positionArray); 
-        //      $data = $data ->addColumn('key', function ($row) {
-        //             return $row['pr_position_id'];
-        //         })
-        //         ->addColumn('billing_rate', function ($row) {
-        //             return 1000;
-        //         })
-        //         ->addColumn('employee_name', function ($row) {
-        //             return 'Sohail Afzal';
-        //         });
-        //         // foreach ($months as $month){
-        //         // $data = $data
-        //         //     ->addColumn("$month", function ($row) {
-        //         //         return 'testing';
-        //         //     });
-        //         // }
-
-        //        return $data->make(true);
-        // }
+        // dd($positionArray);
         return view('project/mmUtilization/report', compact('months', 'positionArray'));
 
-        dd($positionArray);
+
+        // $employeeArray = [];
+        // foreach ($employeeIds as $key => $employeeId) {
+        //     $utilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('hr_employee_id', $employeeId)->get();
+        //     $employeeValue = ['employee_name' => employeeName($employeeId)];
+        //     foreach ($utilizations as $utilization) {
+        //         $employeeValue['pr_position_id'] = $utilization->pr_position_id;
+        //         $employeeValue['designation'] = $utilization->hrDesignation->name;
+        //         foreach ($months as $month) {
+        //             if ($month == $utilization->month_year) {
+        //                 $employeeValue[$month] = $utilization->man_month;
+        //             } else {
+        //                 if (!array_key_exists($month, $employeeValue)) {
+        //                     $employeeValue[$month] = '';
+        //                 }
+        //             }
+        //         }
+        //     }
 
 
+        //     array_push($employeeArray,  $employeeValue);
+        // }
+
+        // dd($employeeArray);
+        // $positionArray = [];
+
+        // foreach ($prPositions as $key => $position) {
+        //     $utilizationArray = [];
+        //     $utilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->get();
+
+        //     foreach ($utilizations as $utilization) {
+        //         $utilizationValue = ['hr_employee_id' => $utilization->hr_employee_id, 'month' => $utilization->month_year, 'mm' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate];
+        //         array_push($utilizationArray, $utilizationValue);
+        //     }
+        //     $positionValue = ['pr_position_id' => $position->id, 'position' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm];
+
+
+
+        //     // foreach ($prMmUtilizations as $utilization) {
+        //     //     foreach ($employeesIds as $employeeId) {
+        //     //         if ($employeeId == $utilization->hr_employee_id) {
+        //     //             echo $utilization->hrEmployee->full_name;
+        //     //             echo '<br>';
+        //     //         }
+        //     //     }
+
+        //     //     // foreach ($months as $month) {
+        //     //     //     echo '--' . $month;
+        //     //     // }
+        //     // }
+        //     array_push($positionArray, $positionValue);
+        // }
+        // dd($positionArray);
+        // // if ($request->ajax()) {
+        // //      $data = DataTables::of($positionArray); 
+        // //      $data = $data ->addColumn('key', function ($row) {
+        // //             return $row['pr_position_id'];
+        // //         })
+        // //         ->addColumn('billing_rate', function ($row) {
+        // //             return 1000;
+        // //         })
+        // //         ->addColumn('employee_name', function ($row) {
+        // //             return 'Sohail Afzal';
+        // //         });
+        // //         // foreach ($months as $month){
+        // //         // $data = $data
+        // //         //     ->addColumn("$month", function ($row) {
+        // //         //         return 'testing';
+        // //         //     });
+        // //         // }
+
+        // //        return $data->make(true);
+        // // }
+        // return view('project/mmUtilization/report', compact('months', 'positionArray'));
+
+        // dd($positionArray);
+
+
+
+
+        // // $data = [];
+        // // foreach ($prPositions as $postion) {
+        // //     foreach ($prMmUtilizations as $utilization) {
+        // //         if ($postion->id == $utilization->pr_position_id) {
+        // //             $value = ['pr_position_id' => $utilization->pr_position_id, 'month_year' => $utilization->month_year, 'man_month' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate, 'employee_name' => $utilization->hrEmployee->full_name, 'hr_employee_id' => $utilization->hr_employee_id];
+        // //             array_push($data, $value);
+        // //         }
+        // //     }
+        // // }
+        // // $data = collect($data);
+        // // $table = [];
+
+
+
+        // // $table = $data->map(function ($value, $key) use ($months) {
+        // //     // echo $value['month_year'] . '<br>';
+        // //     foreach ($months as $month) {
+        // //         if ($month->month_year == $value['month_year']) {
+        // //         }
+        // //     }
+        // //     // $keys = array_keys($value[''], $month->month_year);
+        // //     // echo $month->month_year . '<br>';
+        // //     //echo $value['month_year'] . '<br>';
+        // //     // }
+        // // });
+        // // dd($data);
 
 
         // $data = [];
-        // foreach ($prPositions as $postion) {
-        //     foreach ($prMmUtilizations as $utilization) {
-        //         if ($postion->id == $utilization->pr_position_id) {
-        //             $value = ['pr_position_id' => $utilization->pr_position_id, 'month_year' => $utilization->month_year, 'man_month' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate, 'employee_name' => $utilization->hrEmployee->full_name, 'hr_employee_id' => $utilization->hr_employee_id];
-        //             array_push($data, $value);
-        //         }
+        // foreach ($prPositions as $key => $position) {
+        //     $utilizations = PrMmUtilization::where('pr_detail_id', 14)->where('pr_position_id', $position->id)->select('month_year', 'man_month', 'billing_rate', 'hr_employee_id')->get();
+        //     $data1 = [];
+        //     foreach ($utilizations as $utilization) {
+        //         $value = ['month_year' => $utilization->month_year, 'man_month' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate, 'employee_name' => $utilization->hrEmployee->full_name, 'hr_employee_id' => $utilization->hr_employee_id];
+        //         array_push($data1, $value);
         //     }
+
+        //     $v = array();
+
+        //     foreach ($data1 as $d) {
+        //         $v[] =  ['key' => $key + 1, 'pr_position_id' => $position->id, 'position_name' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm, $d['month_year'] => $d['man_month'], 'billing_rate' => $d['billing_rate'], 'employee_name' => $d['employee_name']];
+        //     }
+
+        //     array_push($data, array_merge(...$v));
         // }
+
         // $data = collect($data);
-        // $table = [];
-
-
-
-        // $table = $data->map(function ($value, $key) use ($months) {
-        //     // echo $value['month_year'] . '<br>';
-        //     foreach ($months as $month) {
-        //         if ($month->month_year == $value['month_year']) {
-        //         }
-        //     }
-        //     // $keys = array_keys($value[''], $month->month_year);
-        //     // echo $month->month_year . '<br>';
-        //     //echo $value['month_year'] . '<br>';
-        //     // }
-        // });
         // dd($data);
+        // //if ($request->ajax()) {
+        // return DataTables::of($data)->make(true);
+        // //}
 
+        // // foreach ($prPositions as $position) {
 
-        $data = [];
-        foreach ($prPositions as $key => $position) {
-            $utilizations = PrMmUtilization::where('pr_detail_id', 14)->where('pr_position_id', $position->id)->select('month_year', 'man_month', 'billing_rate', 'hr_employee_id')->get();
-            $data1 = [];
-            foreach ($utilizations as $utilization) {
-                $value = ['month_year' => $utilization->month_year, 'man_month' => $utilization->man_month, 'billing_rate' => $utilization->billing_rate, 'employee_name' => $utilization->hrEmployee->full_name, 'hr_employee_id' => $utilization->hr_employee_id];
-                array_push($data1, $value);
-            }
+        // //     foreach ($position->prMmUtilizations as $utilization) {
+        // //         echo $utilization->hrEmployee->full_name . '<br>';
+        // //     }
 
-            $v = array();
-
-            foreach ($data1 as $d) {
-                $v[] =  ['key' => $key + 1, 'pr_position_id' => $position->id, 'position_name' => $position->hrDesignation->name, 'total_man_month' => $position->total_mm, $d['month_year'] => $d['man_month'], 'billing_rate' => $d['billing_rate'], 'employee_name' => $d['employee_name']];
-            }
-
-            array_push($data, array_merge(...$v));
-        }
-
-        $data = collect($data);
-        dd($data);
-        //if ($request->ajax()) {
-        return DataTables::of($data)->make(true);
-        //}
-
-        // foreach ($prPositions as $position) {
-
-        //     foreach ($position->prMmUtilizations as $utilization) {
-        //         echo $utilization->hrEmployee->full_name . '<br>';
-        //     }
-
-        //     // foreach ($prMmUtilizations as $prMmUtilization) {
-        //     //     if ($position->pr_position_id == $prMmUtilization->pr_position_id) {
-        //     //         echo $prMmUtilization->hrEmployee->full_name . '-' . $prMmUtilization->hrDesignation->name . '<br>';
-        //     //     }
-        //     // }
-        // }
-        // dd();
-        // foreach ($months as $month) {
-        //     echo $month->month_year . '<br>';
-        // }
-        return view('project/mmUtilization/report', compact('months'));
+        // //     // foreach ($prMmUtilizations as $prMmUtilization) {
+        // //     //     if ($position->pr_position_id == $prMmUtilization->pr_position_id) {
+        // //     //         echo $prMmUtilization->hrEmployee->full_name . '-' . $prMmUtilization->hrDesignation->name . '<br>';
+        // //     //     }
+        // //     // }
+        // // }
+        // // dd();
+        // // foreach ($months as $month) {
+        // //     echo $month->month_year . '<br>';
+        // // }
+        // return view('project/mmUtilization/report', compact('months'));
     }
 }

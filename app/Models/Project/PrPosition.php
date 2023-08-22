@@ -9,7 +9,7 @@ class PrPosition extends Model implements Auditable
 {
         use \OwenIt\Auditing\Auditable;
 
-        protected $fillable = ['hr_designation_id', 'hr_employee_id', 'nominated_person', 'total_mm', 'pr_position_type_id', 'pr_detail_id', 'remarks'];
+        protected $fillable = ['hr_designation_id', 'hr_employee_id', 'nominated_person', 'total_mm', 'pr_position_type_id', 'pr_detail_id', 'billing', 'total_amount', 'remarks'];
 
 
         public function hrDesignation()

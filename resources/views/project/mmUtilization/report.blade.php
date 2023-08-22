@@ -13,24 +13,30 @@
                     <th>Position Name</th>
                     <th>Total Man Month</th>
                     <th>Billing Rate</th>
+                    <th>Total Utilized</th>
                     <th>Employee Name</th>
+                    <th>Employee Utilized Amount</th>
                     @foreach($months as $month)
                     <th>{{$month}}</th>
                     @endforeach
                 </tr>
             </thead>
             <tbody>
-                @foreach($positionArray as $key=>$position)
+                @foreach($positionArray as $key=>$positions)
+                @foreach ($positions as $position)
                 <tr>
                     <td>{{$key+1}}</td>
                     <td>{{$position['position']}}</td>
                     <td>{{$position['total_man_month']}}</td>
-                    <td>{{$position['total_man_month']}}</td>
-                    <td>{{$position['total_man_month']}}</td>
+                    <td>{{number_format($position['billing_rate'])}}</td>
+                    <td>{{number_format($position['total'],2)}}</td>
+                    <td>{{$position['employee_name']}}</td>
+                    <td>{{number_format($position['employee_total'],2)}}</td>
                     @foreach($months as $month)
-                    <td>{{$month}}</td>
+                    <td>{{$position[$month]}}</td>
                     @endforeach
                 </tr>
+                @endforeach
                 @endforeach
             </tbody>
         </table>

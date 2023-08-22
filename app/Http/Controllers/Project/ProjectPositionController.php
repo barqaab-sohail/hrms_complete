@@ -45,6 +45,14 @@ class ProjectPositionController extends Controller
 
                     return $row->prPositionType->name;
                 })
+                ->editColumn('billing', function ($row) {
+
+                    return addComma($row->billing);
+                })
+                ->editColumn('total_amount', function ($row) {
+
+                    return addComma($row->total_amount);
+                })
 
                 ->addColumn('edit', function ($row) {
 

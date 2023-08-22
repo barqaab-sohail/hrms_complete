@@ -8,6 +8,8 @@
                 <th>Designation</th>
                 <th>Position Type</th>
                 <th>Total Manmonth</th>
+                <th>Billing Rate</th>
+                <th>Total Amount</th>
                 <th>Remarks</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -66,6 +68,14 @@
                         <input type="number" step="0.001" id="total_mm" name="total_mm" value="{{ old('total_mm') }}" class="form-control" data-validation-allowing="range[0.001;6000.00],float">
                     </div>
                     <div class="form-group">
+                        <label class="control-label text-right">Billing Rate<span class="text_requried">*</span></label><br>
+                        <input type="text" id="billing" name="billing" value="{{ old('billing') }}" class="form-control" data-validation-allowing="range[10000;10000000],float">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label text-right">Total Amount</label><br>
+                        <input type="text" id="total_amount" name="total_amount" value="{{ old('total_amount') }}" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Remarks</label>
                         <input type="text" id="remarks" name="remarks" value="{{ old('remarks') }}" class="form-control">
                     </div>
@@ -81,6 +91,31 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+
+        $('#total_amount, #billing_rate').keyup(function(event) {
+
+            // skip for arrow keys
+            if (event.which >= 37 && event.which <= 40) return;
+
+            // format number
+            $(this).val(function(index, value) {
+                return value
+                    .replace(/\D/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            });
+        });
+
+        $('#total_mm, #billing').change(function() {
+            var manMonth = $("#total_mm").val();
+            var billingRate = $("#billing").val();
+            billingRate = billingRate.replace(/\,/g, '');
+            if (manMonth && billingRate) {
+                var total = (manMonth * parseInt(billingRate));
+                total = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+                $("#total_amount").val(total);
+            }
+        });
+
         $("#hr_employee_id").change(function() {
             //const result = $("#hr_employee_id option:selected").text().split('-').pop();
             const result = $("#hr_employee_id option:selected").text().split('-');
@@ -118,6 +153,14 @@
                     {
                         data: 'total_mm',
                         name: 'total_mm'
+                    },
+                    {
+                        data: 'billing',
+                        name: 'billing'
+                    },
+                    {
+                        data: 'total_amount',
+                        name: 'total_amount'
                     },
                     {
                         data: 'remarks',
@@ -171,7 +214,12 @@
                     $('#pr_position_type_id').trigger('change');
                     $('#nominated_person').val(data.nominated_person);
                     $('#total_mm').val(data.total_mm);
-
+                    var billingRate = data.billing;
+                    billingRate = billingRate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+                    $('#billing').val(billingRate);
+                    var totalAmount = data.total_amount;
+                    totalAmount = totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //add comma
+                    $('#total_amount').val(totalAmount);
 
                 })
             });
