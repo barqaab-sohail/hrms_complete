@@ -92,8 +92,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
-        $('#total_amount, #billing_rate').keyup(function(event) {
-
+        $('#total_amount, #billing').keyup(function(event) {
             // skip for arrow keys
             if (event.which >= 37 && event.which <= 40) return;
 

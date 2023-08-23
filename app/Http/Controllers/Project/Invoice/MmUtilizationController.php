@@ -157,38 +157,45 @@ class MmUtilizationController extends Controller
         $positionArray = [];
         foreach ($prPositions as $key => $position) {
             $employeeArray = [];
+            $positionTotalMm = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->sum('man_month');
             $employeeIds = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->select('hr_employee_id')->groupBy('hr_employee_id')->pluck('hr_employee_id')->toArray();
             $total = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->select(DB::raw('sum(billing_rate * man_month) as total'))->first()->total;
             foreach ($employeeIds as $key => $employeeId) {
-                $utilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->where('hr_employee_id', $employeeId)->get();
-                $employeeTotal = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->where('hr_employee_id', $employeeId)->select(DB::raw('sum(billing_rate * man_month) as total'))->first()->total;
-                $employeeValue = ['employee_name' => employeeName($employeeId)];
-                foreach ($utilizations as $utilization) {
-                    $employeeValue['pr_position_id'] = $position->id;
-                    $employeeValue['position'] = $position->hrDesignation->name;
-                    $employeeValue['nominated_person'] = $position->nominated_person;
-                    $employeeValue['total_man_month'] =  $position->total_mm;
-                    $employeeValue['designation'] = $utilization->hrDesignation->name;
-                    $employeeValue['billing_rate'] = $utilization->billing_rate;
-                    $employeeValue['employee_total'] = $employeeTotal;
-                    $employeeValue['total'] = $total;
+                $billingRates = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->where('hr_employee_id', $employeeId)->select('billing_rate')->groupBy('billing_rate')->pluck('billing_rate')->toArray();
+                $employeeTotalMm = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->where('hr_employee_id', $employeeId)->sum('man_month');
+                foreach ($billingRates as $key => $billingRate) {
+                    $utilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->where('hr_employee_id', $employeeId)->where('billing_rate', $billingRate)->get();
+                    $employeeTotal = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->where('hr_employee_id', $employeeId)->where('billing_rate', $billingRate)->select(DB::raw('sum(billing_rate * man_month) as total'))->first()->total;
+                    $employeeValue = ['employee_name' => employeeName($employeeId)];
+                    foreach ($utilizations as $utilization) {
+                        $employeeValue['pr_position_id'] = $position->id;
+                        $employeeValue['position'] = $position->hrDesignation->name;
+                        $employeeValue['nominated_person'] = $position->nominated_person;
+                        $employeeValue['total_man_month'] =  $position->total_mm;
+                        $employeeValue['designation'] = $utilization->hrDesignation->name;
+                        $employeeValue['billing_rate'] = $utilization->billing_rate;
+                        $employeeValue['employee_total'] = $employeeTotal;
+                        $employeeValue['employee_total_mm'] = $employeeTotalMm;
+                        $employeeValue['total_mm_utilized'] = $positionTotalMm;
+                        $employeeValue['total'] = $total;
 
-                    foreach ($months as $month) {
-                        if ($month == $utilization->month_year) {
-                            $employeeValue[$month] = $utilization->man_month;
-                        } else {
-                            if (!array_key_exists($month, $employeeValue)) {
-                                $employeeValue[$month] = '';
+                        foreach ($months as $month) {
+                            if ($month == $utilization->month_year) {
+                                $employeeValue[$month] = $utilization->man_month;
+                            } else {
+                                if (!array_key_exists($month, $employeeValue)) {
+                                    $employeeValue[$month] = '';
+                                }
                             }
                         }
                     }
+                    array_push($employeeArray, $employeeValue);
                 }
-                array_push($employeeArray, $employeeValue);
             }
             // $positionValue = ['employee_value' => $employeeArray];
             array_push($positionArray, $employeeArray);
         }
-        // dd($positionArray);
+        //dd($positionArray);
         return view('project/mmUtilization/report', compact('months', 'positionArray'));
 
 

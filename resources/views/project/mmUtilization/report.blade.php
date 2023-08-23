@@ -12,9 +12,11 @@
                     <th>Sr. #</th>
                     <th>Position Name</th>
                     <th>Total Man Month</th>
-                    <th>Billing Rate</th>
-                    <th>Total Utilized</th>
                     <th>Employee Name</th>
+                    <th>Total MM Utilized</th>
+                    <th>Total Cost Utilized</th>
+                    <th>Total Employee Man Month</th>
+                    <th>Billing Rate</th>
                     <th>Employee Utilized Amount</th>
                     @foreach($months as $month)
                     <th>{{$month}}</th>
@@ -28,9 +30,11 @@
                     <td>{{$key+1}}</td>
                     <td>{{$position['position']}}</td>
                     <td>{{$position['total_man_month']}}</td>
-                    <td>{{number_format($position['billing_rate'])}}</td>
-                    <td>{{number_format($position['total'],2)}}</td>
                     <td>{{$position['employee_name']}}</td>
+                    <td>{{$position['total_mm_utilized']}}</td>
+                    <td>{{number_format($position['total'],2)}}</td>
+                    <td>{{$position['employee_total_mm']}}</td>
+                    <td>{{number_format($position['billing_rate'])}}</td>
                     <td>{{number_format($position['employee_total'],2)}}</td>
                     @foreach($months as $month)
                     <td>{{$position[$month]}}</td>
@@ -45,7 +49,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#myTable').DataTable({
+        var oTable = $('#myTable').DataTable({
 
             dom: 'Blfrtip',
             buttons: [{
@@ -65,10 +69,10 @@
             scrollCollapse: true,
             paging: false,
             fixedColumns: {
-                leftColumns: 3,
-
-            }
+                left: 1,
+            },
         });
+
 
 
     });
