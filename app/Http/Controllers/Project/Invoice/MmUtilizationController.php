@@ -138,6 +138,11 @@ class MmUtilizationController extends Controller
         // return Excel::download(new UtilizationExport(14), $fileName);
     }
 
+    public function insertAtPosition($string, $insert, $position)
+    {
+        return implode($insert, str_split($string, $position));
+    }
+
     public function exportView(Request $request)
     {
 
@@ -155,7 +160,8 @@ class MmUtilizationController extends Controller
         }
 
         $positionArray = [];
-        foreach ($prPositions as $key => $position) {
+        foreach ($prPositions as $positionKey => $position) {
+
             $employeeArray = [];
             $positionTotalMm = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->sum('man_month');
             $employeeIds = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->select('hr_employee_id')->groupBy('hr_employee_id')->pluck('hr_employee_id')->toArray();
@@ -178,6 +184,7 @@ class MmUtilizationController extends Controller
                         $employeeValue['employee_total_mm'] = $employeeTotalMm;
                         $employeeValue['total_mm_utilized'] = $positionTotalMm;
                         $employeeValue['total'] = $total;
+                        $employeeValue['no'] = $positionKey + 1;
 
                         foreach ($months as $month) {
                             if ($month == $utilization->month_year) {
@@ -195,7 +202,8 @@ class MmUtilizationController extends Controller
             // $positionValue = ['employee_value' => $employeeArray];
             array_push($positionArray, $employeeArray);
         }
-        //dd($positionArray);
+        //   dd($positionArray);
+
         return view('project/mmUtilization/report', compact('months', 'positionArray'));
 
 

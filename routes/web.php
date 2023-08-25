@@ -88,6 +88,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/nextToKin', 'NextToKinController');
 
     Route::resource('/manager', 'ManagerController');
+
     Route::resource('/employeeOffice', 'EmployeeOfficeController');
     Route::post('/employeeSalaryImport', 'EmployeeSalaryController@import')->name('employeeSalaryImport');
     Route::resource('/employeeSalary', 'EmployeeSalaryController');
@@ -117,6 +118,10 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/hrReports/searchEmployee', 'HrReportsController@searchEmployee')->name('hrReports.searchEmployee');
     Route::get('/hrReports/report_1', 'HrReportsController@report_1')->name('hrReports.report_1');
     Route::post('/hrReports/searchEmployeeResult', 'HrReportsController@searchEmployeeResult')->name('hrReports.searchEmployeeResult');
+    Route::resource('/employeeBank', 'BankController');
+    Route::get('/allBankAccounts', 'BankController@createAllBankAccounts')->name('allBankAccounts.createAllBankAccounts');
+    Route::get('/importBankDetail', 'BankController@view')->name('importBankDetail.view');
+    Route::post('/importBankDetail', 'BankController@import')->name('importBankDetail.import');
 
     //Route::resource('/hrMonthlyReport', 'HrMonthlyReportController');
     //Route::get('/hrMonthlyReportProject/refreshTable', 'HrMonthlyReportProjectController@refreshTable')->name('hrMonthlyProject.table');

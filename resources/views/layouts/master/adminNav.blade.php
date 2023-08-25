@@ -186,6 +186,7 @@
                         <li><a class="{{Request::is('hrms/misc/office')?'active':''}}" href="{{route('office.index')}}">List of Offices</a></li>
                         @endcan
                         @can('misc edit record')
+                        <li><a class="{{Request::is('hrms/allbankAccounts')?'active':''}}" href="{{route('allBankAccounts.createAllBankAccounts')}}">List of Bank Accounts</a></li>
                         <li><a class="{{Request::is('hrms/misc/degree')?'active':''}}" href="{{route('degree.index')}}">List of Degrees</a></li>
                         <li><a class="{{Request::is('hrms/misc/hrDesignation')?'active':''}}" href="{{route('hrDesignation.index')}}">List of Designations</a></li>
                         <li><a class="{{Request::is('hrms/misc/client')?'active':''}}" href="{{route('client.index')}}">List of Clients</a></li>
@@ -239,6 +240,7 @@
                 @can('Super Admin')
                 <li class="{{Request::is('hrms/admin*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-lock" aria-hidden="true"></i><span class="hide-menu">Admin</span></a>
                     <ul aria-expanded="false" class="collapse">
+                        <li><a class="{{Request::is('hrms/Hr/importBankDetail')?'active':''}}" href="{{route('importBankDetail.view')}}">Banks Detail</a></li>
                         <li><a class="{{Request::is('hrms/admin/activeUser')?'active':''}}" href="{{route('activeUser.index')}}">Active User List</a></li>
                         <li><a class="{{Request::is('hrms/admin/lastLogin')?'active':''}}" href="{{route('lastLogin.detail')}}">Last Login Detail</a></li>
                         <li><a class="{{Request::is('hrms/admin/permission/employeePermission')?'active':''}}" href="{{route('permission.search')}}">Emplolyee Permission</a></li>
