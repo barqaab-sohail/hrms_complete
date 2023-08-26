@@ -161,8 +161,9 @@ class BankController extends Controller
             'excel_file'  => 'required|mimes:xls,xlsx'
         ]);
 
-        $path = $request->file('excel_file')->getRealPath();
-
+        //$path = $request->file('excel_file')->getRealPath();
+        $path1 = $request->file('excel_file')->store('temp');
+        $path = storage_path('app') . '/' . $path1;
 
         \Excel::import(new BankDetailImport, $path);
 
