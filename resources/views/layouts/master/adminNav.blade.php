@@ -186,7 +186,7 @@
                         <li><a class="{{Request::is('hrms/misc/office')?'active':''}}" href="{{route('office.index')}}">List of Offices</a></li>
                         @endcan
                         @can('misc edit record')
-                        <li><a class="{{Request::is('hrms/allbankAccounts')?'active':''}}" href="{{route('allBankAccounts.createAllBankAccounts')}}">List of Bank Accounts</a></li>
+                        <li><a class="{{Request::is('hrms/allBankAccounts')?'active':''}}" href="{{route('allBankAccounts.list')}}">List of Bank Accounts</a></li>
                         <li><a class="{{Request::is('hrms/misc/degree')?'active':''}}" href="{{route('degree.index')}}">List of Degrees</a></li>
                         <li><a class="{{Request::is('hrms/misc/hrDesignation')?'active':''}}" href="{{route('hrDesignation.index')}}">List of Designations</a></li>
                         <li><a class="{{Request::is('hrms/misc/client')?'active':''}}" href="{{route('client.index')}}">List of Clients</a></li>

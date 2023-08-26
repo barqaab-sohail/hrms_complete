@@ -17,55 +17,43 @@ class BankController extends Controller
 {
 
 
-    public function allBankAccounts()
+
+    public function allBankAccounts(Request $request)
     {
 
-        $employees = HrEmployee::were('hr_status_id', 1)->get();
-        $employeeBanks = EmployeeBank::where('hr_employee_id', session('hr_employee_id'))->get();
+        if ($request->ajax()) {
+            $data = EmployeeBank::with('hrEmployee', 'bank', 'hrEmployee.employeeCurrentDesignation')->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('Edit', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editEmployeeBank">Edit</a>';
+
+                    return $btn;
+                })
+                ->addColumn('Delete', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteEmployeeBank">Delete</a>';
+
+
+                    return $btn;
+                })
+                ->editColumn('bank_id', function ($row) {
+
+                    return $row->bank->name;
+                })
+                ->editColumn('hr_employee_id', function ($row) {
+
+                    return $row->hrEmployee->employee_no . '- ' . $row->hrEmployee->first_name . ' ' . $row->hrEmployee->last_name . ', ' . $row->hrEmployee->designation;
+                })
+                ->rawColumns(['Edit', 'Delete'])
+                ->make(true);
+        }
+
+        $employees = HrEmployee::with('employeeCurrentDesignation')->where('hr_status_id', 1)->get();
+        $employeeBanks = EmployeeBank::with('hrEmployee', 'bank')->get();
         $banks = Bank::all();
-
-        $view =  view('common.bank.allBankAccounts', compact('employeeBanks', 'banks', '$employees'))->render();
-        return response()->json($view);
-    }
-
-    public function createAllBankAccounts(Request $request)
-    {
-
-        // if ($request->ajax()) {
-        //     $data = EmployeeBank::all();
-        //     return DataTables::of($data)
-        //         ->addIndexColumn()
-        //         ->addColumn('Edit', function ($row) {
-
-        //             $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editEmployeeBank">Edit</a>';
-
-        //             return $btn;
-        //         })
-        //         ->addColumn('Delete', function ($row) {
-
-        //             $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteEmployeeBank">Delete</a>';
-
-
-        //             return $btn;
-        //         })
-        //         ->editColumn('bank_id', function ($row) {
-
-        //             return $row->bank->name;
-        //         })
-        //         ->editColumn('hr_employee_id', function ($row) {
-
-        //             return $row->hrEmployee->first_name . ' ' . $row->hrEmployee->last_name;
-        //         })
-        //         ->rawColumns(['Edit', 'Delete'])
-        //         ->make(true);
-        // }
-
-        $employees = HrEmployee::where('hr_status_id', 1)->get();
-        $employeeBanks = EmployeeBank::where('hr_employee_id', session('hr_employee_id'))->get();
-        $banks = Bank::all();
-
-        $view =  view('common.bank.allBankAccounts', compact('employeeBanks', 'banks', 'employees'))->render();
-        return response()->json($view);
+        return view('common.bank.list', compact('employeeBanks', 'banks', 'employees'));
     }
 
     public function index()
@@ -119,6 +107,7 @@ class BankController extends Controller
 
         $validated = $request->validate([
             'bank_id' =>  ['required'],
+            'hr_employee_id' =>  ['required'],
             'account_no' => ['required', Rule::unique('employee_banks')->where(fn ($query) => $query->where('bank_id', $request->bank_id)->where('id', '!=', $request->employee_bank_id))]
         ]);
 

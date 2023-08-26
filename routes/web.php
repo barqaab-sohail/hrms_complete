@@ -119,7 +119,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/hrReports/report_1', 'HrReportsController@report_1')->name('hrReports.report_1');
     Route::post('/hrReports/searchEmployeeResult', 'HrReportsController@searchEmployeeResult')->name('hrReports.searchEmployeeResult');
     Route::resource('/employeeBank', 'BankController');
-    Route::get('/allBankAccounts', 'BankController@createAllBankAccounts')->name('allBankAccounts.createAllBankAccounts');
+    Route::get('/allBankAccounts', 'BankController@allBankAccounts')->name('allBankAccounts.list');
     Route::get('/importBankDetail', 'BankController@view')->name('importBankDetail.view');
     Route::post('/importBankDetail', 'BankController@import')->name('importBankDetail.import');
 
