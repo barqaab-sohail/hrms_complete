@@ -9,15 +9,17 @@
         <table id="myTable" class="table table-bordered table-striped" style="width:100%">
             <thead>
                 <tr>
-                    <th>Sr. #</th>
+                    <th>Position #</th>
                     <th>Position Name</th>
                     <th>Total Man Month</th>
-                    <th>Employee Name</th>
                     <th>Total MM Utilized</th>
                     <th>Total Cost Utilized</th>
-                    <th>Total Employee Man Month</th>
+                    <th>Employee Name</th>
+                    <th>Total MM As Per Employee</th>
+
                     <th>Billing Rate</th>
-                    <th>Employee Utilized Amount</th>
+                    <th>MM As Per Billing Rate</th>
+                    <th>Amount As Per Billing Rate</th>
                     @foreach($months as $month)
                     <th>{{$month}}</th>
                     @endforeach
@@ -25,16 +27,35 @@
             </thead>
             <tbody>
                 @foreach($positionArray as $key=>$positions)
-                @foreach ($positions as $position)
+
+
+                @foreach ($positions as $positinoKey=>$position)
+
                 <tr>
-                    <td></td>
+                    @if($positinoKey==0)
+                    <td>{{$key+1}}</td>
                     <td>{{$position['position']}}</td>
                     <td>{{$position['total_man_month']}}</td>
-                    <td>{{$position['employee_name']}}</td>
                     <td>{{$position['total_mm_utilized']}}</td>
                     <td>{{number_format($position['total'],2)}}</td>
+                    @else
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                    @if($positinoKey>0 && $positions[$positinoKey-1]['employee_name'] == $positions[$positinoKey]['employee_name'])
+                    <td></td>
+                    <td></td>
+
+                    @else
+                    <td>{{$position['employee_name']}}</td>
                     <td>{{$position['employee_total_mm']}}</td>
+
+                    @endif
                     <td>{{number_format($position['billing_rate'])}}</td>
+                    <td>{{$position['total_mm_utilized_billing']}}</td>
                     <td>{{number_format($position['employee_total'],2)}}</td>
                     @foreach($months as $month)
                     <td>{{$position[$month]}}</td>
@@ -49,12 +70,12 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        var table = $('#myTable').DataTable({
+        $('#myTable').DataTable({
             dom: 'Blfrtip',
-
-            rowGroup: {
-                dataSrc: [1]
-            },
+            "ordering": false,
+            // rowGroup: {
+            //     dataSrc: [1]
+            // },
             buttons: [{
                     extend: 'copyHtml5',
                 },
@@ -66,50 +87,29 @@
                 }, {
                     extend: 'csvHtml5',
                 },
+
             ],
+            order: [],
 
-
-            // createdRow: function(row, data, dataIndex) {
-            //     // if (data.member_name != 'xyz') {
-            //     // console.log(dataIndex);
-
-            //     // if (dataIndex == 0) {
-            //     //     $('td:eq(' + dataIndex + ')', row).attr('rowspan', 3);
-            //     // }
-            //     // $('td:eq(1)', row).css('display', 'none');
-            //     //  $('td:eq(2)', row).css('display', 'none');
-            //     //$('td:eq(15)', row).css('display', 'none');
-            //     //$('td:eq(16)', row).css('display', 'none');
-            //     // }
-            // },
             scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
             paging: false,
             fixedColumns: {
-                left: 1,
+                left: 3,
             },
+            "drawCallback": function(settings) {
+                var api = this.api();
+
+                // Output the data for the visible rows to the browser's console
+                console.log(api.rows({
+                    page: 'current'
+                }).data());
+            }
         });
 
 
-        // table.rows().every(function(index) {
-        //     var element = {};
-        //     var d = this.data();
 
-        // });
-
-        // //  console.log(table.row(0).data());
-
-        // // Find indexes of rows which have `Yes` in the second column
-        // var indexes = table.rows().eq(0).filter(function(rowIdx) {
-        //     //console.log(table.cell(rowIdx + 1, 0).data());
-        //     return table.cell(rowIdx, 0).data() == 1 ? true : false;
-        // });
-        // table.rows(indexes)
-        //     .nodes()
-        //     .to$()
-        //     .addClass('highlight');
-        // table.draw();
 
     });
 </script>

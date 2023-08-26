@@ -56,6 +56,7 @@ class MmUtilizationController extends Controller
         $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', 1)->orderBy('invoice_no', 'desc')->get();
         $difference = $this->calculateDifferenceBetweenInvoiceUtilization($invoices);
         $data =  PrMmUtilization::where('pr_detail_id', session('pr_detail_id'))->get();
+        $count = PrMmUtilization::where('pr_detail_id', session('pr_detail_id'))->count();
         return DataTables::of($data)
             ->editColumn('hr_employee_id', function ($row) {
 
@@ -87,6 +88,7 @@ class MmUtilizationController extends Controller
             })
             ->rawColumns(['edit', 'delete'])
             ->with('difference', $difference)
+            ->with('count', $count)
             ->make(true);
     }
 
@@ -146,7 +148,7 @@ class MmUtilizationController extends Controller
     public function exportView(Request $request)
     {
 
-        $prDetailId = 14;
+        $prDetailId = session('pr_detail_id');
         $months = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('month_year')->groupBy('month_year')->orderBy('month_year', 'asc')->pluck('month_year')->toArray();
 
         $employeeIds = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('hr_employee_id')->groupBy('hr_employee_id')->pluck('hr_employee_id')->toArray();
@@ -172,6 +174,7 @@ class MmUtilizationController extends Controller
                 foreach ($billingRates as $key => $billingRate) {
                     $utilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->where('hr_employee_id', $employeeId)->where('billing_rate', $billingRate)->get();
                     $employeeTotal = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->where('hr_employee_id', $employeeId)->where('billing_rate', $billingRate)->select(DB::raw('sum(billing_rate * man_month) as total'))->first()->total;
+                    $employeeTotalMmAsPerBilling = PrMmUtilization::where('pr_detail_id', $prDetailId)->where('pr_position_id', $position->id)->where('hr_employee_id', $employeeId)->where('billing_rate', $billingRate)->sum('man_month');
                     $employeeValue = ['employee_name' => employeeName($employeeId)];
                     foreach ($utilizations as $utilization) {
                         $employeeValue['pr_position_id'] = $position->id;
@@ -183,6 +186,7 @@ class MmUtilizationController extends Controller
                         $employeeValue['employee_total'] = $employeeTotal;
                         $employeeValue['employee_total_mm'] = $employeeTotalMm;
                         $employeeValue['total_mm_utilized'] = $positionTotalMm;
+                        $employeeValue['total_mm_utilized_billing'] =  $employeeTotalMmAsPerBilling;
                         $employeeValue['total'] = $total;
                         $employeeValue['no'] = $positionKey + 1;
 
@@ -202,7 +206,7 @@ class MmUtilizationController extends Controller
             // $positionValue = ['employee_value' => $employeeArray];
             array_push($positionArray, $employeeArray);
         }
-        //   dd($positionArray);
+        //dd($positionArray);
 
         return view('project/mmUtilization/report', compact('months', 'positionArray'));
 

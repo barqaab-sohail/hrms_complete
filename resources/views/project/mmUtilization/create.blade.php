@@ -10,7 +10,7 @@
         </div>
 
         <br>
-        <button type="button" href="{{url('hrms/project/exportView')}}" class="btn btn-danger float-left">Download Report</button>
+        <a id="report_button" type="button" href="{{url('hrms/project/exportView')}}" target="_blank" class="btn btn-danger float-left">View Report</a>
         <thead>
             <tr>
                 <th>Employee Name</th>
@@ -102,6 +102,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#dfference_div").hide();
+        $("#report_button").hide();
         //Enter Comma after three digit
         $('#billing_rate').keyup(function(event) {
 
@@ -179,6 +180,11 @@
                 ajax: "{{ route('mmUtilization.create') }}",
                 drawCallback: function(data) {
 
+                    if (data.json.count > 0) {
+                        $("#report_button").show();
+                    } else {
+                        $("#report_button").hide();
+                    }
                     if (data.json.difference.length > 0) {
                         $("#dfference_div").show();
                     } else {
@@ -243,6 +249,7 @@
                     [2, "desc"]
                 ]
             });
+
 
             $('#createNewMmUtilization').click(function() {
                 $('#json_message_modal').html('');
