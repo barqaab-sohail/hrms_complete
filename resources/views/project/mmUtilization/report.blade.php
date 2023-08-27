@@ -12,6 +12,7 @@
                     <th>Position #</th>
                     <th>Position Name</th>
                     <th>Total Man Month</th>
+                    <th>Total Amount</th>
                     <th>Total MM Utilized</th>
                     <th>Total Cost Utilized</th>
                     <th>Employee Name</th>
@@ -36,9 +37,11 @@
                     <td>{{$key+1}}</td>
                     <td>{{$position['position']}}</td>
                     <td>{{$position['total_man_month']}}</td>
+                    <td>{{number_format($position['total_amount'],0)}}</td>
                     <td>{{$position['total_mm_utilized']}}</td>
                     <td>{{number_format($position['total'],2)}}</td>
                     @else
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -67,27 +70,14 @@
         </table>
     </div>
 </div>
-
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $('#myTable').DataTable({
             dom: 'Blfrtip',
             "ordering": false,
-            // rowGroup: {
-            //     dataSrc: [1]
-            // },
-            buttons: [{
-                    extend: 'copyHtml5',
-                },
-                {
-                    extend: 'excelHtml5',
-                },
-                {
-                    extend: 'pdfHtml5',
-                }, {
-                    extend: 'csvHtml5',
-                },
-
+            buttons: [
+                'copy', 'excel', 'pdf'
             ],
             order: [],
 

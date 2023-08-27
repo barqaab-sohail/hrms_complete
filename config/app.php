@@ -245,6 +245,8 @@ return [
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         //'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'StripeSession'=>Stripe\Checkout\Session::class,
+        'Stripe'=>Stripe\Stripe::class,
 
     ],
 

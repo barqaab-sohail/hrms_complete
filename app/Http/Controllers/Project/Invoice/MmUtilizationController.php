@@ -178,6 +178,7 @@ class MmUtilizationController extends Controller
                     $employeeValue = ['employee_name' => employeeName($employeeId)];
                     foreach ($utilizations as $utilization) {
                         $employeeValue['pr_position_id'] = $position->id;
+                        $employeeValue['total_amount'] = $position->total_amount;
                         $employeeValue['position'] = $position->hrDesignation->name;
                         $employeeValue['nominated_person'] = $position->nominated_person;
                         $employeeValue['total_man_month'] =  $position->total_mm;
@@ -264,7 +265,7 @@ class MmUtilizationController extends Controller
         // }
         // dd($positionArray);
         // // if ($request->ajax()) {
-        // //      $data = DataTables::of($positionArray); 
+        // //      $data = DataTables::of($positionArray);
         // //      $data = $data ->addColumn('key', function ($row) {
         // //             return $row['pr_position_id'];
         // //         })

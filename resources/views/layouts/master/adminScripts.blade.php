@@ -4,7 +4,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.4.0/js/dataTables.rowGroup.min.js"></script>
 <script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/ashl1/datatables-rowsgroup@fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
@@ -39,7 +39,7 @@
 <script src="{{asset('Massets/plugins/c3-master/c3.min.js') }}"></script>
 
 
-<!--CDN ChartJS 
+<!--CDN ChartJS
  -->
 <script src="http://www.chartjs.org/dist/2.7.3/Chart.bundle.js"></script>
 
@@ -94,11 +94,11 @@
 
 <script src="https://cdn.tiny.cloud/1/6k6kj2mbbmwv1jqeh7sqe7jf29uemxfwvq4kzdpz5a4j9gm1/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
-  tinymce.init({
-    selector: 'textarea',
-    forced_root_block: "",
+    tinymce.init({
+        selector: 'textarea',
+        forced_root_block: "",
 
-  });
+    });
 </script>
 
 
@@ -106,35 +106,35 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script>
-  //Email validation on ajax call
-  function isValidEmailAddress(emailAddress) {
-    var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
-    return pattern.test(emailAddress);
-  }
+    //Email validation on ajax call
+    function isValidEmailAddress(emailAddress) {
+        var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+        return pattern.test(emailAddress);
+    }
 </script>
 
 <!-- Sub Menue Button -->
 <script type="text/javascript">
-  $(document).ready(function() {
-    $('.dropdown-item').on('click', function() {
-      $('#dropdownSubMenueText').text($(this).text());
-    });
-
-    var showText = $('.dropdownSubMenue').find('a:first').text();
-    $('#dropdownSubMenueText').text(showText);
-    $(".dropdownSubMenue").hover(function() {
-      $('.reducedCol').removeClass('col-lg-12').addClass('col-lg-10');
-      $(this).addClass('dropdown');
-      var dropdownMenu = $(this).children(".dropdown-menu");
-      if (dropdownMenu.is(":visible")) {
-        dropdownMenu.parent().toggleClass("open");
-        $('.dropdown-item').click(function() {
-          $(".dropdown").removeClass("dropdown");
+    $(document).ready(function() {
+        $('.dropdown-item').on('click', function() {
+            $('#dropdownSubMenueText').text($(this).text());
         });
-      } else {
-        $('.reducedCol').removeClass('col-lg-10').addClass('col-lg-12');
-      }
-    });
 
-  });
+        var showText = $('.dropdownSubMenue').find('a:first').text();
+        $('#dropdownSubMenueText').text(showText);
+        $(".dropdownSubMenue").hover(function() {
+            $('.reducedCol').removeClass('col-lg-12').addClass('col-lg-10');
+            $(this).addClass('dropdown');
+            var dropdownMenu = $(this).children(".dropdown-menu");
+            if (dropdownMenu.is(":visible")) {
+                dropdownMenu.parent().toggleClass("open");
+                $('.dropdown-item').click(function() {
+                    $(".dropdown").removeClass("dropdown");
+                });
+            } else {
+                $('.reducedCol').removeClass('col-lg-10').addClass('col-lg-12');
+            }
+        });
+
+    });
 </script>
