@@ -15,7 +15,7 @@ class HrEmployee extends Model implements Auditable
 
     protected $fillable = ['first_name', 'last_name', 'father_name', 'cnic', 'cnic_expiry', 'date_of_birth', 'employee_no', 'user_id', 'gender_id', 'hr_status_id', 'marital_status_id', 'religion_id', 'domicile_id'];
 
-    protected $appends = ['full_name', 'designation', 'project'];
+    protected $appends = ['full_name', 'designation', 'project', 'joining_date'];
 
     function getFullNameAttribute()
     {
@@ -33,8 +33,11 @@ class HrEmployee extends Model implements Auditable
 
     public function getJoiningDateAttribute()
     {
-        $joiningDate = $this->employeeAppointment->joining_date ?? '';
-        return  $joiningDate ? \Carbon\Carbon::parse($joiningDate)->format('M d, Y') : '';
+        if ($this->employeeAppointment) {
+            return \Carbon\Carbon::parse($this->employeeAppointment->joining_date)->format('M d, Y');
+        } else {
+            return 'N/A';
+        }
     }
 
     public function getLastWorkingDateAttribute()

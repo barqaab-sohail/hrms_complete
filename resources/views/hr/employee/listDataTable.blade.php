@@ -109,8 +109,8 @@
                     name: 'cnic'
                 },
                 {
-                    data: 'date_of_joining',
-                    name: 'date_of_joining'
+                    data: 'joining_date',
+                    name: 'joining_date'
                 },
                 {
                     data: 'mobile',

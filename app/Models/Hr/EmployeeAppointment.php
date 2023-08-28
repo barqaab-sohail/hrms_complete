@@ -8,9 +8,10 @@ use OwenIt\Auditing\Contracts\Auditable;
 class EmployeeAppointment extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    protected $fillable = ['hr_employee_id','hr_letter_type_id','reference_no','joining_date','expiry_date','hr_employee_type_id','remarks','hr_grade_id','hr_category_id','hr_department_id','hr_designation_id','hr_manager_id','office_id','pr_detail_id','hr_salary_id'];
+    protected $fillable = ['hr_employee_id', 'hr_letter_type_id', 'reference_no', 'joining_date', 'expiry_date', 'hr_employee_type_id', 'remarks', 'hr_grade_id', 'hr_category_id', 'hr_department_id', 'hr_designation_id', 'hr_manager_id', 'office_id', 'pr_detail_id', 'hr_salary_id'];
 
-    public function hrEmployee(){
+    public function hrEmployee()
+    {
         return $this->belongsTo('App\Models\Hr\HrEmployee');
     }
 

@@ -32,20 +32,13 @@ class EmployeeController extends Controller
 
     public static function getAllEmployee()
     {
-        return $value = Cache::remember('employees', 3, function () {
+
+
+        return $value = Cache::remember('employees', 0, function () {
 
 
             $data = HrEmployee::select(['id',  'first_name', 'last_name', 'cnic', 'date_of_birth', 'hr_status_id', 'employee_no'])->with([
-                'employeeAppointment' => function ($query) {
-                    return $query->select('expiry_date');
-                },
-                'employeeCurrentDesignation' => function ($query) {
-                    return $query->select('name');
-                }, 'employeeCurrentProject' => function ($query) {
-                    return $query->select('name');
-                }, 'employeeCurrentOffice' => function ($query) {
-                    return $query->select('name');
-                }, 'hrContactMobile:mobile'
+                'employeeCurrentDesignation:name', 'employeeCurrentProject:name', 'employeeCurrentOffice:name', 'hrContactMobile:mobile', 'employeeAppointment', 'hrExit'
             ])->get();
 
             // //first sort with respect to Designation
@@ -189,10 +182,6 @@ class EmployeeController extends Controller
                 })
                 ->addColumn('date_of_birth', function ($data) {
                     return \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y');
-                })
-                ->addColumn('date_of_joining', function ($data) {
-
-                    return $data->joining_date ?? '';
                 })
                 ->addColumn('mobile', function ($data) {
                     return $data->hrContactMobile->mobile ?? '';
