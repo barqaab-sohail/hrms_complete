@@ -34,7 +34,7 @@ class EmployeeController extends Controller
     {
 
 
-        return $value = Cache::remember('employees', 0, function () {
+        return $value = Cache::remember('employees', 3, function () {
 
 
             $data = HrEmployee::select(['id',  'first_name', 'last_name', 'cnic', 'date_of_birth', 'hr_status_id', 'employee_no'])->with([
