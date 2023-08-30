@@ -55,7 +55,7 @@
                         <select name="pr_position_id" id="pr_position_id" class="form-control" data-validation="required">
                             <option value=""></option>
                             @foreach($positions as $position)
-                            <option value="{{$position->id}}" {{(old("pr_position_id")==$position->id? "selected" : "")}}>{{$position->hrDesignation->name}}</option>
+                            <option value="{{$position->id}}" {{(old("pr_position_id")==$position->id? "selected" : "")}}>{{$position->hrDesignation->name}} (Total MM-{{$position->total_mm}})</option>
                             @endforeach
                         </select>
                     </div>

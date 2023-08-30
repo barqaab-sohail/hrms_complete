@@ -179,9 +179,7 @@
                     }
 
                 ],
-                order: [
-                    [2, "desc"]
-                ]
+                order: [],
             });
 
             $('#createNewPosition').click(function() {
