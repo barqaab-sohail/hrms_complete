@@ -131,19 +131,6 @@ class MmUtilizationController extends Controller
         return response()->json($invoice->invoiceMonth);
     }
 
-    public function exportUtilization()
-    {
-
-
-
-        // $fileName = 'utilizations.xlsx';
-        // return Excel::download(new UtilizationExport(14), $fileName);
-    }
-
-    public function insertAtPosition($string, $insert, $position)
-    {
-        return implode($insert, str_split($string, $position));
-    }
 
     public function exportView(Request $request)
     {
@@ -155,11 +142,6 @@ class MmUtilizationController extends Controller
         $prPositions = PrPosition::where('pr_detail_id', $prDetailId)->get();
         //$prPositions = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('pr_position_id')->groupBy('pr_position_id')->get();
         $prMmUtilizations = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('pr_position_id', 'hr_employee_id', 'month_year', 'man_month', 'billing_rate')->get();
-
-        $heading = ['no', 'designation', 'total_man_month', 'employee_name'];
-        foreach ($months as $month) {
-            array_push($heading, $month);
-        }
 
         $positionArray = [];
         foreach ($prPositions as $positionKey => $position) {

@@ -174,10 +174,11 @@ Route::group(['prefix' => 'hrms/cvData', 'middleware' => ['auth', 'XssSanitizer'
 Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Project'], function () {
 
     Route::Resource('/mmUtilization', 'Invoice\MmUtilizationController');
-    Route::get('/exportUtilization', 'Invoice\MmUtilizationController@exportUtilization');
     Route::get('/exportView', 'Invoice\MmUtilizationController@exportView')->name('project.utilization');
+
     Route::get('/invoice/{id}', 'Invoice\MmUtilizationController@invoice');
     Route::Resource('/prDirectCostUtilization', 'Invoice\PrDirectCostUtilizationController');
+    Route::get('/exportViewDirectCost', 'Invoice\PrDirectCostUtilizationController@exportViewDirectCost')->name('project.exportViewDirectCost');
 
     Route::post('/import', 'ProjectController@import')->name('project.import');
     Route::get('/search', 'ProjectController@search')->name('project.search');

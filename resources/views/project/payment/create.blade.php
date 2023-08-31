@@ -3,6 +3,7 @@
   <button type="button" class="btn btn-success float-right" id="createPayment" data-toggle="modal">Add Payment</button>
   @endif
   <h3>Total Invoice Raised = {{$totalInvoiceRaised}} - Invoice Received = {{$totalPaymentReceived}} - Pending Payments = {{$totalPendingPayment}}</h3>
+
   <br>
   <table class="table table-bordered data-table">
     <thead>
@@ -10,7 +11,9 @@
         <th>Invoice No</th>
         <th>Invoice Month</th>
         <th>Invoice Remarks</th>
+        <th>Total Invoice</th>
         <th>Net Amount Received</th>
+        <th>Total Deduction</th>
         <th>Payment Date</th>
         <th>Remarks</th>
         <th>Cheque No.</th>
@@ -245,8 +248,16 @@
             name: 'invoice_remarks'
           },
           {
+            data: "total_invoice",
+            name: 'total_invoice'
+          },
+          {
             data: "amount",
             name: 'amount'
+          },
+          {
+            data: "total_deduction",
+            name: 'total_deduction'
           },
           {
             data: "payment_date",

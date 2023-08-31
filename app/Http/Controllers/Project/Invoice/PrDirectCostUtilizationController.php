@@ -110,4 +110,44 @@ class PrDirectCostUtilizationController extends Controller
 
         return response()->json(['status' => 'OK', 'message' => 'Data Successfully Deleted']);
     }
+
+    public function exportViewDirectCost(Request $request)
+    {
+
+        $prDetailId = 51; //session('pr_detail_id');
+        $months = PrDirectCostUtilization::where('pr_detail_id', $prDetailId)->select('month_year')->groupBy('month_year')->orderBy('month_year', 'asc')->pluck('month_year')->toArray();
+        $directCostDetails = DirectCostDetail::where('pr_detail_id', $prDetailId)->get();
+
+        $prMmUtilizations = PrDirectCostUtilization::where('pr_detail_id', $prDetailId)->select('month_year', 'amount', 'direct_cost_detail_id')->get();
+
+        $directCostArray = [];
+        foreach ($directCostDetails as $directCostDetail) {
+
+
+            $directCostItemUtilizedTotal = PrDirectCostUtilization::where('pr_detail_id', $prDetailId)->where('direct_cost_detail_id', $directCostDetail->id)->sum('amount');
+            $utilizations = PrDirectCostUtilization::where('pr_detail_id', $prDetailId)->where('direct_cost_detail_id', $directCostDetail->id)->get();
+
+            $directCostValue['direct_cost_description'] = $directCostDetail->directCostDescription->name;
+            $directCostValue['total_item_utilized'] =  $directCostItemUtilizedTotal;
+            $directCostValue['total_budget'] =  $directCostDetail->amount;
+
+            foreach ($months as $month) {
+                $month = \Carbon\Carbon::parse($month)->format('Y-m-d');
+                $utilization = PrDirectCostUtilization::where('pr_detail_id', $prDetailId)->where('direct_cost_detail_id', $directCostDetail->id)->where('month_year', $month)->first();
+                $month = \Carbon\Carbon::parse($month)->format('F-Y');
+
+                if ($utilization && $utilization->direct_cost_detail_id == $directCostDetail->id) {
+                    $directCostValue[$month] = $utilization->amount;
+                } else {
+                    // if (!array_key_exists($month, $directCostValue)) {
+                    $directCostValue[$month] = '';
+                    //}
+                }
+            }
+            array_push($directCostArray, $directCostValue);
+        }
+        // dd($directCostArray);
+        // dd('ok');
+        return view('project/direct_cost_utilization/report', compact('months', 'directCostArray'));
+    }
 }

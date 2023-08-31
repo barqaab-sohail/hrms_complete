@@ -38,7 +38,8 @@ class PaymentController extends Controller
         $invoiceIds = Invoice::where('pr_detail_id', session('pr_detail_id'))->pluck('id')->toArray();
         $totalInvoiceRaised = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount') + InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('sales_tax');
         $totalPaymentReceived = PaymentReceive::whereIn('invoice_id', $invoiceIds)->sum('amount');
-        $totalPendingPayment = $totalInvoiceRaised - $totalPaymentReceived;
+        $totalDeduction = PaymentDeduction::where('pr_detail_id', session('pr_detail_id'))->sum('withholding_tax') + PaymentDeduction::where('pr_detail_id', session('pr_detail_id'))->sum('sales_tax') + PaymentDeduction::where('pr_detail_id', session('pr_detail_id'))->sum('others');
+        $totalPendingPayment = $totalInvoiceRaised - $totalPaymentReceived - $totalDeduction;
 
         $totalInvoiceRaised = addComma($totalInvoiceRaised);
         $totalPaymentReceived = addComma($totalPaymentReceived);
@@ -52,7 +53,7 @@ class PaymentController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = PaymentReceive::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
+            $data = PaymentReceive::with('invoice', 'invoiceMonth', 'invoice.invoiceCost', 'deduction', 'paymentStatus')->where('pr_detail_id', session('pr_detail_id'))->latest()->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -96,12 +97,16 @@ class PaymentController extends Controller
 
                     return addComma($row->amount ?? '');
                 })
+                ->addColumn('total_invoice', function ($row) {
+
+                    return addComma($row->invoice->invoiceCost->amount + $row->invoice->invoiceCost->sales_tax);
+                })
                 ->addColumn('payment_status', function ($row) {
 
                     return $row->paymentStatus->name ?? '';
                 })
 
-                ->rawColumns(['Edit', 'Delete', 'amount', 'invoice_no', 'invoice_month', 'invoice_month', 'remarks', 'total_deduction', 'payment_status'])
+                ->rawColumns(['Edit', 'Delete'])
                 ->make(true);
         }
 
