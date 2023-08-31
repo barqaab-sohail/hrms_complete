@@ -302,7 +302,14 @@
 
         order: [
           [0, "desc"]
-        ]
+        ],
+        scrollY: "300px",
+        scrollX: true,
+        scrollCollapse: true,
+        paging: true,
+        fixedColumns: {
+          left: 2,
+        },
       });
 
       $('#createPayment').click(function() {

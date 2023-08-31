@@ -342,6 +342,13 @@
                 order: [
                     [0, "desc"]
                 ],
+                scrollY: "300px",
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
+                fixedColumns: {
+                    left: 3,
+                },
                 drawCallback: function() {
                     if ($('[id^="ViewPDF"]').length > 0) {
                         $('[id^="ViewPDF"]').EZView();
