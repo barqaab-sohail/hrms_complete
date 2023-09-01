@@ -39,35 +39,15 @@
 </div>
 
 
+
 <script>
     $(document).ready(function() {
         $('#myTable').DataTable({
             processing: true,
             serverSide: false,
             dom: 'Blfrtip',
-            buttons: [{
-                    extend: 'copyHtml5',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                    }
-                },
-                {
-                    extend: 'excelHtml5',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                    }
-                },
-                {
-                    extend: 'pdfHtml5',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                    }
-                }, {
-                    extend: 'csvHtml5',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4]
-                    }
-                },
+            buttons: [
+                'copy', 'excel', 'pdf'
             ],
             "aaSorting": [],
 
