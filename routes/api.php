@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //Projects Routes
     Route::get('/projectDocuments/{id}', 'MIS\Project\ProjectController@projectDocuments');
     Route::get('/misProjectLedgerActivity/{projectId}', [ProjectLedgerActivityController::class, 'misProjectLedgerActivity']);
+    Route::get('/updateProjectLedgerActivity/{projectId}', [ProjectLedgerActivityController::class, 'updateProjectLedgerActivity']);
     Route::get('/proejctSummaryMM/{id}', 'MIS\Project\ProjectController@proejctSummaryMM');
     Route::get('/manMonthProjectsStatus', 'MIS\Project\ProjectController@manMonthProjectsStatus');
 

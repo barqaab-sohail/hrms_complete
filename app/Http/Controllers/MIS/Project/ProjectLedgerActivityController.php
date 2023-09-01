@@ -35,7 +35,7 @@ class ProjectLedgerActivityController extends Controller
         //     $ledger = new Ledger();
         //     $ledgerResponse = $ledger->importLedgerActivity($projectId);
         //     $checkUpdate = "Yes";
-        //     dd($ledgerResponse);
+
         //     $statusCode = $ledgerResponse->status();
         // }
 
@@ -49,6 +49,18 @@ class ProjectLedgerActivityController extends Controller
             return response()->json(['total_debit' => $totalDebit, 'total_credit' => $totalCredit, 'balance' => $balance, 'last_update' => $lastUpdate, 'projectCost' => $projectCost, 'update' => $checkUpdate]);
         } else {
             return response()->json(['total_debit' => 0, 'total_credit' => 0, 'balance' => 0, 'projectCost' => $projectCost, 'last_update' => $lastUpdate, 'update' => $checkUpdate]);
+        }
+    }
+
+    public function updateProjectLedgerActivity($projectId)
+    {
+        $ledger = new Ledger();
+        $ledgerResponse = $ledger->importLedgerActivity($projectId);
+        $statusCode = $ledgerResponse->status();
+
+        if ($statusCode == 400) {
+            return $this->misProjectLedgerActivity($projectId);
+        } else {
         }
     }
 }
