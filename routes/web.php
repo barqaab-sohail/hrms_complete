@@ -15,9 +15,9 @@ use App\Http\Controllers\Project\ProjectLedgerActivityController;
 |
 */
 
-Route::get('/newDesign', function () {
-    return view('receipt_detail_1');
-});
+// Route::get('/newDesign', function () {
+//     return statusLeaveEmployee()->count();
+// });
 Route::get('/verifyCard', 'HomeController@employee');
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');
 Route::get('/cardVerificationResult/{employeeId?}', 'HomeController@employeeId')->middleware('XssSanitizer')->name('employee.verification');
@@ -64,6 +64,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/appointmentExpiry', 'HrAlertController@appointmentExpiry')->name('hrAlert.appointmentExpiry');
     Route::get('/licenceExpiry', 'HrAlertController@drivingLicenceExpiry')->name('hrAlert.licenceExpiry');
     Route::get('/pecCardExpiry', 'HrAlertController@pecCardExpiry')->name('hrAlert.pecCardExpiry');
+    Route::get('/leaveStaffActiveStatus', 'HrAlertController@leaveStaffActiveStatus')->name('hrAlert.leaveStaffActiveStatus');
 
     Route::get('/employee/search', 'EmployeeController@search')->name('employee.search');
     Route::get('/employee/search/result', 'EmployeeController@result')->name('employee.result');

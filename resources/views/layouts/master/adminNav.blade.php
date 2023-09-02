@@ -39,7 +39,7 @@
 
                         @canany(['hr edit record','hr delete record'])
                         <li><a class="{{Request::is('hrms/employee/create')?'active':''}}" href="{{route('employee.create')}}">Add Employee</a></li>
-                        <li><a class="{{Request::is('hrms/employee/alertList')?'active':''}}" href="{{route('hrAlert.list')}}">Alerts <i class="fas fa-bell"></i><span class="badge badge-pill badge-danger">{{appointmentExpiryTotal() + cnicExpiryTotal() + drivingLicenceExpiryTotal() + pecCardExpiryTotal()}}</span></a></li>
+                        <li><a class="{{Request::is('hrms/employee/alertList')?'active':''}}" href="{{route('hrAlert.list')}}">Alerts <i class="fas fa-bell"></i><span class="badge badge-pill badge-danger">{{appointmentExpiryTotal() + cnicExpiryTotal() + drivingLicenceExpiryTotal() + pecCardExpiryTotal() +statusLeaveEmployee()->count()}}</span></a></li>
                         <li><a class="{{Request::is('hrms/employee/search')?'active':''}}" href="{{route('employee.search')}}">Search</a></li>
 
                         @endcanany

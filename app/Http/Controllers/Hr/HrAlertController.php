@@ -124,4 +124,24 @@ class HrAlertController extends Controller
 
         return response()->json(['status' => 'Ok', 'full_name' => 'PEC Card Expiry Detail', 'pecCardExpiry' => $data]);
     }
+
+    public function leaveStaffActiveStatus()
+    {
+
+
+
+        $leaves = statusLeaveEmployee();
+        foreach ($leaves as $key => $leave) {
+            $employee = HrEmployee::with('employeeCurrentProject', 'employeeCurrentOffice', 'hrContactMobile')->find($leave->hr_employee_id);
+            $data[] = array(
+                "employee_name" => employeeFullName($employee->id),
+                "employee_project" => $employee->employeeCurrentProject->name ?? '',
+                "employee_office" => $employee->employeeCurrentOffice->name ?? '',
+                "leave_from" => \Carbon\Carbon::parse($leave->from)->format('M d, Y'),
+                "leave_to" => \Carbon\Carbon::parse($leave->to)->format('M d, Y'),
+                "mobile" => $employee->hrContactMobile->mobile ?? '',
+            );
+        }
+        return response()->json(['status' => 'Ok', 'full_name' => 'Leave Employee Status Active', 'leaveStatus' => $data]);
+    }
 }

@@ -140,3 +140,16 @@ function leaveEmployees()
 
     return $leaveEmployees = [1000001, 1000002, 1000004, 1000005, 1000006, 1000007, 1000009, 1000010, 1000040, 1000110, 1000124, 1000126, 1000127, 1000130, 1000131, 1000133, 1000136, 1000137, 1000138, 1000139, 1000141, 1000144, 1000145, 1000146, 1000147, 1000148, 1000149, 1000151, 1000152, 1000153, 1000154, 1000155, 1000156, 1000157, 1000158, 1000159, 1000160, 1000161, 1000167, 1000169, 1000178, 1000274, 1000405, 1000440, 1000008, 1000011, 1000012, 1000013, 1000171, 1000172, 1000173, 1000174, 1000177, 1000181, 1000182, 1000412, 1000183, 1000383, 100164, 1000322];
 }
+
+
+
+function statusLeaveEmployee()
+{
+
+    $activeEmployeesIds = HrEmployee::where('hr_status_id', 1)->pluck('id')->toArray();
+    $today = \Carbon\Carbon::now()->format('Y-m-d');
+    $After5Days = \Carbon\Carbon::now()->addDays(5)->format('Y-m-d');
+
+    return $leaves = Leave::where('le_type_id', 3)->whereBetween('from', [$today, $After5Days])->where('days', '>', 180)->whereIn('hr_employee_id', $activeEmployeesIds)->get();
+    //dd($leaves);
+}

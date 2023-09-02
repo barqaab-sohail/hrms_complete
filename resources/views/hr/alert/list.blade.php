@@ -34,6 +34,10 @@
                         <td><a id="pecCardExpiry" href="{{route('hrAlert.pecCardExpiry')}}" style="color:grey" class="activeRow">PEC Card Expired or Near to Expire Next 10 Days</a></td>
                         <td>{{$pecCardExpiryTotal}}</td>
                     </tr>
+                    <tr>
+                        <td><a id="leaveStaffStatus" href="{{route('hrAlert.leaveStaffActiveStatus')}}" style="color:grey" class="activeRow">Long Leave Employee Active Status</a></td>
+                        <td>{{statusLeaveEmployee()->count()}}</td>
+                    </tr>
 
                 </tbody>
             </table>

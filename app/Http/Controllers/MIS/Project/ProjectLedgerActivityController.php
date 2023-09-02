@@ -22,22 +22,23 @@ class ProjectLedgerActivityController extends Controller
             $lastUpdate = $updatedDate;
         }
 
-        $difference = 29;
+        //set difference for update ledge activities
+        $difference = 19;
         if ($lastUpdate) {
             $lastUpdate =  \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastUpdate->updated_at)->format('d-m-Y');
             $today = \Carbon\Carbon::now();
             $difference = $today->diffInMinutes($lastUpdate);
         }
 
+        //set status code, if after update status code not 400 than get old data
         $statusCode = 400;
 
-        // if ($difference > 30 || !$lastUpdate) {
-        //     $ledger = new Ledger();
-        //     $ledgerResponse = $ledger->importLedgerActivity($projectId);
-        //     $checkUpdate = "Yes";
-
-        //     $statusCode = $ledgerResponse->status();
-        // }
+        if ($difference > 20 || !$lastUpdate) {
+            $ledger = new Ledger();
+            $ledgerResponse = $ledger->importLedgerActivity($projectId);
+            $checkUpdate = "Yes";
+            $statusCode = $ledgerResponse->status();
+        }
 
         $project = PrDetail::find($projectId);
         $projectCost = isset($project->prCost) ? (int)$project->prCost->total_cost : 0;
@@ -48,19 +49,17 @@ class ProjectLedgerActivityController extends Controller
             $balance = $totalDebit - $totalCredit;
             return response()->json(['total_debit' => $totalDebit, 'total_credit' => $totalCredit, 'balance' => $balance, 'last_update' => $lastUpdate, 'projectCost' => $projectCost, 'update' => $checkUpdate]);
         } else {
-            return response()->json(['total_debit' => 0, 'total_credit' => 0, 'balance' => 0, 'projectCost' => $projectCost, 'last_update' => $lastUpdate, 'update' => $checkUpdate]);
-        }
-    }
+            $totalDebit = LedgerActivity::where('pr_detail_id', $projectId)->sum('debit');
+            $totalCredit = LedgerActivity::where('pr_detail_id', $projectId)->sum('credit');
 
-    public function updateProjectLedgerActivity($projectId)
-    {
-        $ledger = new Ledger();
-        $ledgerResponse = $ledger->importLedgerActivity($projectId);
-        $statusCode = $ledgerResponse->status();
-
-        if ($statusCode == 400) {
-            return $this->misProjectLedgerActivity($projectId);
-        } else {
+            if (!$totalDebit) {
+                $totalDebit = 0;
+            }
+            if (!$totalCredit) {
+                $totalCredit = 0;
+            }
+            $balance = $totalDebit - $totalCredit;
+            return response()->json(['total_debit' => $totalDebit, 'total_credit' => $totalCredit, 'balance' => $balance, 'projectCost' => $projectCost, 'last_update' => $lastUpdate, 'update' => $checkUpdate]);
         }
     }
 }

@@ -54,7 +54,8 @@
         dataType: "json",
         success: function(data) {
           $('#alert_name').text(data.full_name);
-          $('#alertDetail > tbody').empty();
+          $('#alertDetail th').eq(2).text('Expiry Date');
+          $('#alertDetail th').eq(3).text('Mobile');
           $("#alertDetail th:last-child, #alertDetail td:last-child").hide();
           // $('#project').remove();      
           $.each(data.cnicExpiry, function() {
@@ -93,6 +94,8 @@
 
           $('#alert_name').text(data.full_name);
           $('#alertDetail > tbody').empty();
+          $('#alertDetail th').eq(2).text('Expiry Date');
+          $('#alertDetail th').eq(3).text('Mobile');
           $("#alertDetail th:last-child, #alertDetail td:last-child").hide();
           $.each(data.appointmentExpiry, function() {
             var office = '';
@@ -129,6 +132,8 @@
 
           $('#alert_name').text(data.full_name);
           $('#alertDetail > tbody').empty();
+          $('#alertDetail th').eq(2).text('Expiry Date');
+          $('#alertDetail th').eq(3).text('Mobile');
           $("#alertDetail th:last-child, #alertDetail td:last-child").hide();
           $.each(data.drivingLicenceExpiryTotal, function() {
             var office = '';
@@ -167,6 +172,9 @@
 
           $('#alert_name').text(data.full_name);
           $('#alertDetail > tbody').empty();
+          $('#alertDetail th').eq(2).text('Expiry Date');
+          $('#alertDetail th').eq(3).text('Mobile');
+          $('#alertDetail th').eq(4).text('PEC No');
           $("#alertDetail th:last-child, #alertDetail td:last-child").show();
           $.each(data.pecCardExpiry, function() {
             var office = '';
@@ -187,6 +195,48 @@
               this.mobile +
               '</td><td>' +
               this.pec +
+              '</td></tr>'
+            );
+          });
+          $('#alertDetailModel').modal('show');
+        }
+      });
+    });
+
+    $('#leaveStaffStatus').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('href');
+      $.ajax({
+        url: url,
+        dataType: "json",
+
+        success: function(data) {
+
+          $('#alert_name').text(data.full_name);
+          $('#alertDetail > tbody').empty();
+          $('#alertDetail th').eq(2).text('Leave From');
+          $('#alertDetail th').eq(3).text('Leave To');
+          $('#alertDetail th').eq(4).text('Mobile No');
+          $("#alertDetail th:last-child, #alertDetail td:last-child").show();
+          $.each(data.leaveStatus, function() {
+            var office = '';
+            if (this.employee_project == 'overhead') {
+              office = this.employee_office;
+            } else {
+              office = this.employee_project;
+            }
+
+            $('#alertDetail > tbody').append(
+              '<tr><td>' +
+              this.employee_name +
+              '</td><td>' +
+              office +
+              '</td><td>' +
+              this.leave_from +
+              '</td><td>' +
+              this.leave_to +
+              '</td><td>' +
+              this.mobile +
               '</td></tr>'
             );
           });
