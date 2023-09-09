@@ -1,7 +1,7 @@
 @extends('layouts.master.master')
-@section('title', 'Man Month Utilization')
+@section('title', 'Direct Cost Utilization Report')
 @section('Heading')
-<h3 class="text-themecolor">Man Month Utilization</h3>
+<h3 class="text-themecolor">Direct Cost Utilization Report</h3>
 @stop
 @section('content')
 <div class="card">

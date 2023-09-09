@@ -53,6 +53,7 @@ class PrDirectCostUtilizationController extends Controller
         $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', 2)->orderBy('invoice_no', 'desc')->get();
         $difference = $this->calculateDifferenceBetweenInvoiceUtilization($invoices);
         $data =  PrDirectCostUtilization::where('pr_detail_id', session('pr_detail_id'))->get();
+        $count = PrDirectCostUtilization::where('pr_detail_id', session('pr_detail_id'))->count();
         return DataTables::of($data)
             ->editColumn('direct_cost_detail_id', function ($row) {
 
@@ -76,6 +77,7 @@ class PrDirectCostUtilizationController extends Controller
             })
             ->rawColumns(['edit', 'delete'])
             ->with('difference', $difference)
+            ->with('count', $count)
             ->make(true);
     }
 

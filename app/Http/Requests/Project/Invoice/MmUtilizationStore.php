@@ -57,7 +57,8 @@ class MmUtilizationStore extends FormRequest
             'hr_employee_id' => ['required'],
             'pr_position_id' => ['required'],
             'invoice_id' => ['required'],
-            'month_year' => ['required', 'date', 'date_equals:' . $invoiceMonth, Rule::unique('pr_mm_utilizations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->utilization_id))],
+            'month_year' => ['required', 'date'], 
+            //'month_year' => ['required', 'date', 'date_equals:' . $invoiceMonth, Rule::unique('pr_mm_utilizations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->utilization_id))],
             'man_month' => ['required', 'numeric', 'between:0.1,2'],
             'billing_rate' => ['required'],
 

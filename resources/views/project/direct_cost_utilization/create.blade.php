@@ -8,7 +8,8 @@
             <select id="difference" name="difference" class="form-control">
             </select>
         </div>
-
+        <br>
+        <a id="report_button" type="button" href="{{url('hrms/project/exportViewDirectCost')}}" target="_blank" class="btn btn-danger float-left">View Report</a>
         <thead>
             <tr>
                 <th>Description</th>
@@ -79,6 +80,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#dfference_div").hide();
+        $("#report_button").hide();
         //Enter Comma after three digit
         $('#amount').keyup(function(event) {
 
@@ -123,7 +125,11 @@
                 serverSide: true,
                 ajax: "{{ route('prDirectCostUtilization.create') }}",
                 drawCallback: function(data) {
-
+                    if (data.json.count > 0) {
+                        $("#report_button").show();
+                    } else {
+                        $("#report_button").hide();
+                    }
                     if (data.json.difference.length > 0) {
                         $("#dfference_div").show();
                     } else {
