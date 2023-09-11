@@ -29,7 +29,12 @@
         </tbody>
     </table>
 </div>
-
+<style>
+    .modal-dialog {
+        max-width: 35%;
+        display: flex;
+    }
+</style>
 <div class="modal fade" id="mmUtilizationModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -71,10 +76,22 @@
 
                     <!-- <label class="control-label">Invoice Month</label> -->
                     <input type="text" name="month_year" id="month_year" value="{{ old('month_year') }}" class="form-control" data-validation="required" hidden readonly>
-
-                    <div class="form-group">
-                        <label class="control-label text-right">Man Month<span class="text_requried">*</span></label><br>
-                        <input type="number" step="0.001" id="man_month" name="man_month" value="{{ old('man_month') }}" class="form-control" data-validation-allowing="range[0.001;1.00],float">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="control-label text-right">Man Month<span class="text_requried">*</span></label><br>
+                                <input type="number" step="0.001" id="man_month" name="man_month" value="{{ old('man_month') }}" class="form-control" data-validation-allowing="range[0.001;1.00],float">
+                            </div>
+                        </div>
+                        <div class="col-md-7" id="charing_div">
+                            <div class="form-check">
+                                <br>
+                                <input class="form-check-input float-right" type="checkbox" name="double_charging" value="true" id="double_charging" checked>
+                                <label class="form-check-label float-right" for="double_charging">
+                                    Avoid Double Charging
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label text-right">Billing Rate<span class="text_requried">*</span></label><br>
@@ -84,11 +101,11 @@
                         <label class="control-label text-right">Total Amount</label><br>
                         <input type="text" id="total_amount" name="total_amount" value="{{ old('total_amount') }}" class="form-control" readonly>
                     </div>
-
                     <div class="form-group">
                         <label class="control-label">Remarks</label>
                         <input type="text" id="remarks" name="remarks" value="{{ old('remarks') }}" class="form-control">
                     </div>
+
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn" value="create">Save changes
                         </button>
@@ -103,6 +120,15 @@
     $(document).ready(function() {
         $("#dfference_div").hide();
         $("#report_button").hide();
+
+        $("#double_charging").change(function() {
+            console.log('ok');
+            if (this.checked) {
+                $("#double_charging").val('true');
+            } else {
+                $("#double_charging").val('false');
+            }
+        });
         //Enter Comma after three digit
         $('#billing_rate').keyup(function(event) {
 
@@ -255,7 +281,7 @@
                 $('#json_message_modal').html('');
                 $('#saveBtn').val("create-Utilization");
                 $('#utilization_id').val('');
-
+                $('#charing_div').addClass('hide');
                 $('#utilizationForm').trigger("reset");
                 $('#pr_position_id').trigger('change');
                 $('#hr_employee_id').trigger('change');
@@ -312,6 +338,9 @@
                         var errorMassage = '';
                         $.each(data.responseJSON.errors, function(key, value) {
                             errorMassage += value + '<br>';
+                            if (value == 'This Employee already entered') {
+                                $('#charing_div').removeClass('hide');
+                            }
                         });
                         $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + errorMassage + '</strong></div>');
 

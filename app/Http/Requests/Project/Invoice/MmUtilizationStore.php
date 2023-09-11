@@ -52,17 +52,28 @@ class MmUtilizationStore extends FormRequest
             $invoice = Invoice::find($this->invoice_id);
             $invoiceMonth = \Carbon\Carbon::parse($invoice->invoiceMonth->invoice_month)->format('Y-m-d');
         }
-        $rules = [
+        if (!$this->double_charging) {
+            $rules = [
 
-            'hr_employee_id' => ['required'],
-            'pr_position_id' => ['required'],
-            'invoice_id' => ['required'],
-            'month_year' => ['required', 'date'], 
-            //'month_year' => ['required', 'date', 'date_equals:' . $invoiceMonth, Rule::unique('pr_mm_utilizations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->utilization_id))],
-            'man_month' => ['required', 'numeric', 'between:0.1,2'],
-            'billing_rate' => ['required'],
+                'hr_employee_id' => ['required'],
+                'pr_position_id' => ['required'],
+                'invoice_id' => ['required'],
+                'month_year' => ['required', 'date'],
+                'man_month' => ['required', 'numeric', 'between:0.1,2'],
+                'billing_rate' => ['required'],
 
-        ];
+            ];
+        } else {
+            $rules = [
+
+                'hr_employee_id' => ['required'],
+                'pr_position_id' => ['required'],
+                'invoice_id' => ['required'],
+                'month_year' => ['required', 'date', 'date_equals:' . $invoiceMonth, Rule::unique('pr_mm_utilizations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->utilization_id))],
+                'man_month' => ['required', 'numeric', 'between:0.1,2'],
+                'billing_rate' => ['required'],
+            ];
+        }
 
         return $rules;
     }
