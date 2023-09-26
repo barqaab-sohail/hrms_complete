@@ -46,6 +46,7 @@
                 <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
                 <form id="utilizationForm" name="utilizationForm" class="form-horizontal">
                     <input type="hidden" name="utilization_id" id="utilization_id">
+                    <input type="hidden" name="pr_detail_id" id="pr_detail_id" value="{{session('pr_detail_id')}}">
                     <div class="form-group">
                         <label class="control-label text-right">Employee Name</label><br>
                         <select name="hr_employee_id" id="hr_employee_id" class="form-control selectTwo" data-validation="required">

@@ -95,7 +95,6 @@ class MmUtilizationController extends Controller
     public function store(MmUtilizationStore $request)
     {
         $input = $request->all();
-        $input['pr_detail_id'] = session('pr_detail_id');
         //$input['month_year'] = \Carbon\Carbon::parse($request->month_year)->format('Y-m-d');
 
         DB::transaction(function () use ($input, $request) {
