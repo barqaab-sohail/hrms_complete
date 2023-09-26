@@ -58,10 +58,22 @@
 
                     <!-- <label class="control-label">Invoice Month</label> -->
                     <input type="text" name="month_year" id="month_year" value="{{ old('month_year') }}" class="form-control" data-validation="required" hidden readonly>
-
+                    <div class="row">
+                    <div class="col-md-5">
                     <div class="form-group">
                         <label class="control-label text-right">Amount<span class="text_requried">*</span></label><br>
                         <input type="text" id="amount" name="amount" value="{{ old('amount') }}" class="form-control" data-validation-allowing="range[10000;10000000],float">
+                    </div>
+                    </div>
+                    <div class="col-md-7" id="charing_div">
+                            <div class="form-check">
+                                <br>
+                                <input class="form-check-input float-right" type="checkbox" name="double_charging" value="true" id="double_charging" checked>
+                                <label class="form-check-label float-right" for="double_charging">
+                                   Avoid Double Charging
+                                </label>
+                            </div>
+                    </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Remarks</label>
@@ -81,6 +93,15 @@
     $(document).ready(function() {
         $("#dfference_div").hide();
         $("#report_button").hide();
+
+        $("#double_charging").change(function() {
+          if (this.checked) {
+              $("#double_charging").val('true');
+          } else {
+              $("#double_charging").val('false');
+          }
+        });
+
         //Enter Comma after three digit
         $('#amount').keyup(function(event) {
 
@@ -184,6 +205,7 @@
 
             $('#createNewUtilization').click(function() {
                 $('#json_message_modal').html('');
+                $('#charing_div').addClass('hide');
                 $('#saveBtn').val("create-Utilization");
                 $('#utilization_id').val('');
                 $('#utilizationForm').trigger("reset");
@@ -235,7 +257,11 @@
                         var errorMassage = '';
                         $.each(data.responseJSON.errors, function(key, value) {
                             errorMassage += value + '<br>';
+                            if (value == 'The month year has already been taken.' ) {
+                                $('#charing_div').removeClass('hide');
+                            }
                         });
+                        
                         $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + errorMassage + '</strong></div>');
 
                         $('#saveBtn').html('Save Changes');

@@ -122,7 +122,7 @@
         $("#report_button").hide();
 
         $("#double_charging").change(function() {
-            console.log('ok');
+          
             if (this.checked) {
                 $("#double_charging").val('true');
             } else {

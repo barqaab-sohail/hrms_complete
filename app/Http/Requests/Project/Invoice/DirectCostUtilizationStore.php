@@ -45,14 +45,23 @@ class DirectCostUtilizationStore extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        if (!$this->double_charging) {
+            $rules = [
 
-            'direct_cost_detail_id' => ['required'],
-            'invoice_id' => ['required'],
-            'month_year' => ['required', 'date', Rule::unique('pr_direct_cost_utilizations')->where(fn ($query) => $query->where('direct_cost_detail_id', request()->direct_cost_detail_id)->where('id', '!=', $this->utilization_id))],
+                'direct_cost_detail_id' => ['required'],
+                'invoice_id' => ['required'],
+                'month_year' => ['required', 'date'],
 
+            ];
+        }else{
+            $rules = [
 
-        ];
+                'direct_cost_detail_id' => ['required'],
+                'invoice_id' => ['required'],
+                'month_year' => ['required', 'date', Rule::unique('pr_direct_cost_utilizations')->where(fn ($query) => $query->where('direct_cost_detail_id', request()->direct_cost_detail_id)->where('id', '!=', $this->utilization_id))],
+
+            ];
+        }
 
         return $rules;
     }
