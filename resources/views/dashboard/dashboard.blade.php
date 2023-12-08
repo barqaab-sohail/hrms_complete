@@ -54,7 +54,7 @@
           </div>
       </form>
     </div> -->
-		@can('Super Admin')
+		@can('tasks')
 		<!--TASK -->
 		<div class="card">
 			<div class="card-body">
