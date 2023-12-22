@@ -55,7 +55,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Expiry Date</label>
-                            <input type="text" name="expiry_date" id="expiry_date" value="{{ old('expiry_date',$data->expiry_date??'') }}" class="form-control" readonly>
+                            <input type="text" name="expiry_date" id="expiry_date" value="{{ old('expiry_date',$data->expiry_date??'') }}" class="form-control date_input" readonly>
                         </div>
                     </div>
                 </div>
