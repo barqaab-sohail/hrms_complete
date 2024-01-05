@@ -284,7 +284,8 @@
 
 
                 },
-                error: function($data) {
+                error: function(data) {
+                    console.log(data);
                     $(this).attr('disabled', 'false');
                     $('.fa-spinner').hide();
                     $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>File Not Created</strong></div>');
