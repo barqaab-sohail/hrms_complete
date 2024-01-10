@@ -45,7 +45,7 @@ class HrAlertController extends Controller
 
     public function appointmentExpiry()
     {
-        $nextTenDays = \Carbon\Carbon::now()->addDays(25)->format('Y-m-d');
+        $nextTenDays = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
         $employees = HrEmployee::where('hr_status_id', 1)->with('employeeAppointment', 'employeeOffice', 'employeeProject')->get();
 
         foreach ($employees as $key => $employee) {
