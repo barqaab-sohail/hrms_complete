@@ -28,6 +28,7 @@
                         <th>Employee No</th>
                         <th>Mobile</th>
                         <th>LandLine Number</th>
+                        <th>Email</th>
                         <th>Emergency Number</th>
                         <th>Type</th>
                         <th>Status</th>
@@ -60,6 +61,7 @@
                         <td>{{$employee->employee_no??''}}</td>
                         <td>{{$employee->hrContactMobile->mobile??''}}</td>
                         <td>{{$employee->hrContactLandline->landline??''}}</td>
+                        <td>{{$employee->hrContactEmail->email??''}}</td>
                         <td>{{$employee->hrEmergency->mobile??''}}</td>
                         <td>{{employeeType($employee->employeeAppointment->hr_employee_type_id??4)}}</td>
                         <td>{{$employee->hr_status_id??''}}</td>

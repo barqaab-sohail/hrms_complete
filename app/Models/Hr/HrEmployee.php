@@ -132,6 +132,11 @@ class HrEmployee extends Model implements Auditable
         return $this->hasOneThrough('App\Models\Hr\HrContactLandline', 'App\Models\Hr\HrContact');
     }
 
+    public function hrContactEmail()
+    {
+        return $this->hasOneThrough('App\Models\Hr\HrContactEmail', 'App\Models\Hr\HrContact');
+    }
+
     public function hrEmergency()
     {
 
