@@ -11,7 +11,7 @@ class HrAlertController extends Controller
 
     public function alertList()
     {
-        $nextTenDays = \Carbon\Carbon::now()->addDays(25)->format('Y-m-d');
+        $nextTenDays = \Carbon\Carbon::now()->addDays(10)->format('Y-m-d');
         $totalCnicExpire = HrEmployee::where('hr_status_id', 1)->where('cnic_expiry', '<', $nextTenDays)->count();
 
         $appointmentExpiryTotal = appointmentExpiryTotal();
