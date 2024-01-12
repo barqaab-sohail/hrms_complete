@@ -36,7 +36,7 @@ Route::post('/mis/login', function(){
 
 
 Route::get('/misProjectLedgerActivity/{projectId}', [ProjectLedgerActivityController::class, 'misProjectLedgerActivity']);
-Route::get('proejctSummaryMM/{id}', 'MIS\Project\ProjectController@proejctSummaryMM');
+Route::get('/proejctSummaryMM/{id}', 'MIS\Project\ProjectController@proejctSummaryMM');
 
 
 
