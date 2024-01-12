@@ -14,10 +14,7 @@ class LoginController extends Controller
 {
     public function login(Request $request)
     {
-        return response()->json([
-            'status' => 200,
-            'message' => 'Loogged In Successfully',
-        ])->setStatusCode(200);
+      
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|max:191',
