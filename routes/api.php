@@ -30,7 +30,6 @@ Route::post('/user/login', 'Android\Auth\UserController@login');
 Route::post('/mis/login', function(){
     return response()->json([
         'validator_errors' => 'OK',
-
     ]);
 });
 
