@@ -12,6 +12,7 @@ use App\Models\Leave\LeStatusType;
 use App\Models\Leave\LeType;
 use App\Models\Leave\LePerformDuty;
 use App\Models\Hr\HrEmployee;
+use Illuminate\Support\Facades\RateLimiter;
 use DB;
 use DataTables;
 
@@ -313,5 +314,48 @@ class LeaveController extends Controller
             $leaveBalance = true;
             return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
+    }
+
+    public function onlineLeave(){
+        return view('leave.onlineLeave.onlineLeave');
+    }
+
+    public function employeeData(Request $request){
+
+         // Following function restrict maximum 5 request in 1 minute
+         $executed = RateLimiter::attempt(
+            'send-message:',
+            $perMinute = 3,
+            function () {
+                // Send message...
+            }
+        );
+
+        if (!$executed) {
+            return 'Too many Request sent!, Please retry after some time';
+        }
+        
+        $employee = HrEmployee::where('cnic', $request->cnic)->first();
+
+        if($employee){
+
+            if ($employee->employeeCategory->last()->name == 'A') {
+                $leaveTypes = LeType::all();
+                $casualLeave = casualLeave($employee->id);
+                $annualTotalLeave= annualTotalLeaveBalance($employee->id);
+            } else {
+                $leaveTypes =  LeType::whereIn('id', array(1, 3, 4))->get();
+                $casualLeave = casualLeave($employee->id);
+                $annualTotalLeave= 0;
+            }
+           
+            return view('leave.onlineLeave.applyLeave', compact('employee', 'leaveTypes','casualLeave','annualTotalLeave'));
+
+        }else{
+            return redirect()->back()->with('error', 'No Data Found');
+        }
+       
+        
+      
     }
 }

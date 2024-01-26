@@ -26,12 +26,8 @@ use App\Http\Controllers\MIS\LoginController;
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 //Route::post('/mis/login', 'MIS\LoginController@login');
-//Route::post('/mis/login', [LoginController::class, 'login']);
-Route::post('/mis/login', function(){
-    return response()->json([
-        'validator_errors' => 'OK',
-    ]);
-});
+Route::post('/mis/login', [LoginController::class, 'login']);
+
 
 
 Route::get('/misProjectLedgerActivity/{projectId}', [ProjectLedgerActivityController::class, 'misProjectLedgerActivity']);

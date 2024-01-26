@@ -19,6 +19,7 @@ use App\Http\Controllers\Project\ProjectLedgerActivityController;
 //     return statusLeaveEmployee()->count();
 // });
 Route::get('/verifyCard', 'HomeController@employee');
+
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');
 Route::get('/cardVerificationResult/{employeeId?}', 'HomeController@employeeId')->middleware('XssSanitizer')->name('employee.verification');
 Route::get('/assestVerificationResult/{assetCode}', 'Asset\AssetController@verification')->middleware('XssSanitizer')->name('asset.verification');
@@ -261,6 +262,8 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
 
 
 //Leave Routes
+Route::get('/onlineLeave', 'Leave\LeaveController@onlineLeave');
+Route::post('/leaveEmployeeData', 'Leave\LeaveController@employeeData')->name('leave.employeeData');
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Leave'], function () {
     Route::resource('/leave', 'LeaveController', ['except' => ['show']]);
     Route::get('/leaveType/{id?}', 'LeaveController@leaveType')->name('leaveType');
