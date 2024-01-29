@@ -58,7 +58,7 @@
 
   <div class='container-fluid'>
     <div class="card mx-auto col-md-12 col-10 mt-5">
-      <img id="employee_picture" class='mx-auto img-thumbnail' width="150" height="auto" />
+      <img class='mx-auto img-thumbnail' width="150" height="auto" />
       <div class="card-body text-center mx-auto">
         <div class='cvp'>
           <h5 class="card-title font-weight-bold" id="emp_name"></h5>
@@ -249,7 +249,6 @@
             }
           
             if (data.data.picture) {
-              console.log(data.data.picture);
               var image = data.data.picture.path + data.data.picture.file_name;
               var imageurl = "{{asset('storage/:id')}}".replace(':id', image);
               $(".img-thumbnail").attr('src', imageurl);
