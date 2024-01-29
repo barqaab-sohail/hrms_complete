@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7dcf9bbf7c8ea5729e04324822b6636",
+    "content-hash": "b1e6352a3bdadc5df0cd06d2cbf9ca66",
     "packages": [
         {
             "name": "asika/pdf2text",
@@ -10834,5 +10834,5 @@
         "php": "^7.2.5|^8.0|^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.2.0"
 }
