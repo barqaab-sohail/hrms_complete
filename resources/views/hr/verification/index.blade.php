@@ -58,7 +58,7 @@
 
   <div class='container-fluid'>
     <div class="card mx-auto col-md-12 col-10 mt-5">
-      <img class='mx-auto img-thumbnail' width="150" height="auto" />
+      <img id="employee_picture" class='mx-auto img-thumbnail' width="150" height="auto" />
       <div class="card-body text-center mx-auto">
         <div class='cvp'>
           <h5 class="card-title font-weight-bold" id="emp_name"></h5>
@@ -242,10 +242,10 @@
             } else {
               $('#emp_status').text('Current Status: Not Working');
             }
-            if (data.data.employee_appointment.expiry_date == null) {
+            if (data.data.employee_appointment?.expiry_date == null) {
               $('#emp_expiry').html(' Contract Expiry:  Not Applicable');
             } else {
-              $('#emp_expiry').html(' Contract Expiry: ' + dateInDayMonthYear(data.data.employee_appointment.expiry_date));
+              $('#emp_expiry').html(' Contract Expiry: ' + dateInDayMonthYear(data.data.employee_appointment?.expiry_date));
             }
           
             if (data.data.picture) {
