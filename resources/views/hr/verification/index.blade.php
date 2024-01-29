@@ -249,11 +249,12 @@
             }
           
             if (data.data.picture) {
+              console.log(data.data.picture);
               var image = data.data.picture.path + data.data.picture.file_name;
               var imageurl = "{{asset('storage/:id')}}".replace(':id', image);
               $(".img-thumbnail").attr('src', imageurl);
             }else{
-              $(".img-thumbnail").attr('src', '');
+              $(".img-thumbnail").attr('src', "{{asset('Massets/images/default.png')}}");
             }
 
             $('img').on('error', function() {
