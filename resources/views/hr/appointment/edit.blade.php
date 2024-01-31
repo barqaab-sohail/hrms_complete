@@ -309,13 +309,23 @@
             return date;
         }
 
+        function addMonths(date, months) {
+            var d = date.getDate();
+            date.setMonth(date.getMonth() + +months);
+            if (date.getDate() != d) {
+            date.setDate(0);
+            }
+            return date;
+        }
+
         // Automatic add Expiry
         $("#duration").change(function() {
             var addMonth = $(this).val();
             if (addMonth) {
                 var joiningDate = $("#joining_date").val();
-                var addMonth = $(this).val();
-                var expiryDate = addMonths(new Date(joiningDate), addMonth) - 1;
+                //var addMonth = $(this).val();
+                //var expiryDate = addMonths(new Date(joiningDate), addMonth) - 1;
+                var expiryDate =  addMonths(new Date(joiningDate), addMonth) -1;
                 var dateFormat = dateInDayMonthYear(expiryDate);
                 $("#expiry_date").val(dateFormat);
                 $(".fa-trash-alt").show();
