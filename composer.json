@@ -19,6 +19,9 @@
         "laravel/framework": "^11.0",
 =======
         "laravel/framework": "^8.0",
+<<<<<<< HEAD
+>>>>>>> c63c219014562e746037ddb9a3d04f2f382d0b0e
+=======
 >>>>>>> c63c219014562e746037ddb9a3d04f2f382d0b0e
         "laravel/sanctum": "*",
         "laravel/tinker": "^2.0",
