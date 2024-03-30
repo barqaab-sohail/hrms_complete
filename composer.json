@@ -15,7 +15,11 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "h4cc/wkhtmltoimage-i386": "0.12.x",
         "h4cc/wkhtmltopdf-i386": "0.12.x",
+<<<<<<< HEAD
         "laravel/framework": "^11.0",
+=======
+        "laravel/framework": "^8.0",
+>>>>>>> c63c219014562e746037ddb9a3d04f2f382d0b0e
         "laravel/sanctum": "*",
         "laravel/tinker": "^2.0",
         "maatwebsite/excel": "^3.1",
