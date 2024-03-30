@@ -242,16 +242,18 @@
             } else {
               $('#emp_status').text('Current Status: Not Working');
             }
-            if (data.data.employee_appointment.expiry_date == null) {
+            if (data.data.employee_appointment?.expiry_date == null) {
               $('#emp_expiry').html(' Contract Expiry:  Not Applicable');
             } else {
-              $('#emp_expiry').html(' Contract Expiry: ' + dateInDayMonthYear(data.data.employee_appointment.expiry_date));
+              $('#emp_expiry').html(' Contract Expiry: ' + dateInDayMonthYear(data.data.employee_appointment?.expiry_date));
             }
-
+          
             if (data.data.picture) {
               var image = data.data.picture.path + data.data.picture.file_name;
               var imageurl = "{{asset('storage/:id')}}".replace(':id', image);
               $(".img-thumbnail").attr('src', imageurl);
+            }else{
+              $(".img-thumbnail").attr('src', "{{asset('Massets/images/default.png')}}");
             }
 
             $('img').on('error', function() {

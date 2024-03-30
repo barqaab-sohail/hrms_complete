@@ -55,7 +55,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Expiry Date</label>
-                            <input type="text" name="expiry_date" id="expiry_date" value="{{ old('expiry_date',$data->expiry_date??'') }}" class="form-control" readonly>
+                            <input type="text" name="expiry_date" id="expiry_date" value="{{ old('expiry_date',$data->expiry_date??'') }}" class="form-control date_input" readonly>
                         </div>
                     </div>
                 </div>
@@ -309,13 +309,23 @@
             return date;
         }
 
+        function addMonths(date, months) {
+            var d = date.getDate();
+            date.setMonth(date.getMonth() + +months);
+            if (date.getDate() != d) {
+            date.setDate(0);
+            }
+            return date;
+        }
+
         // Automatic add Expiry
         $("#duration").change(function() {
             var addMonth = $(this).val();
             if (addMonth) {
                 var joiningDate = $("#joining_date").val();
-                var addMonth = $(this).val();
-                var expiryDate = addMonths(new Date(joiningDate), addMonth) - 1;
+                //var addMonth = $(this).val();
+                //var expiryDate = addMonths(new Date(joiningDate), addMonth) - 1;
+                var expiryDate =  addMonths(new Date(joiningDate), addMonth) -1;
                 var dateFormat = dateInDayMonthYear(expiryDate);
                 $("#expiry_date").val(dateFormat);
                 $(".fa-trash-alt").show();

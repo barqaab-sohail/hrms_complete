@@ -45,6 +45,10 @@
 			var table = $('#myTable').DataTable({
 				processing: true,
 				serverSide: true,
+				lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
+                ],
 				dom: 'Blfrtip',
 				buttons: [{
 						extend: 'copyHtml5',

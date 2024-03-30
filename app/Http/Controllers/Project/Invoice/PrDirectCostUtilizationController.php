@@ -116,7 +116,7 @@ class PrDirectCostUtilizationController extends Controller
     public function exportViewDirectCost(Request $request)
     {
 
-        $prDetailId = 51; //session('pr_detail_id');
+        $prDetailId = session('pr_detail_id');
         $months = PrDirectCostUtilization::where('pr_detail_id', $prDetailId)->select('month_year')->groupBy('month_year')->orderBy('month_year', 'asc')->pluck('month_year')->toArray();
         $directCostDetails = DirectCostDetail::where('pr_detail_id', $prDetailId)->get();
 

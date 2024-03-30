@@ -54,6 +54,7 @@
         dataType: "json",
         success: function(data) {
           $('#alert_name').text(data.full_name);
+          $('#alertDetail > tbody').empty();
           $('#alertDetail th').eq(2).text('Expiry Date');
           $('#alertDetail th').eq(3).text('Mobile');
           $("#alertDetail th:last-child, #alertDetail td:last-child").hide();
@@ -84,14 +85,13 @@
 
     $('#appointmentExpiryDetail').click(function(e) {
       e.preventDefault();
-
       var url = $(this).attr('href');
       $.ajax({
         url: url,
         dataType: "json",
 
         success: function(data) {
-
+          
           $('#alert_name').text(data.full_name);
           $('#alertDetail > tbody').empty();
           $('#alertDetail th').eq(2).text('Expiry Date');

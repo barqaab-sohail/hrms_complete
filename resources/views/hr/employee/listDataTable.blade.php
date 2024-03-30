@@ -45,7 +45,6 @@
         $('#myTable').DataTable({
             processing: true,
             serverSide: false,
-            deferRender: true,
             dom: 'Blfrtip',
             buttons: [
                 'copy', 'excel', 'pdf'
