@@ -1,6 +1,10 @@
-"felixkiss/uniquewith-validator": "3.4.2",
+//following two are deprecated 
 "fideloper/proxy": "^4.2",
 "fruitcake/laravel-cors": "^3.0",
+
+
+
+"felixkiss/uniquewith-validator": "3.4.2",
 "yajra/laravel-datatables-oracle": "~9.0"
 "spatie/laravel-backup": "^6.8",
   "laravel/ui": "^3.0",
