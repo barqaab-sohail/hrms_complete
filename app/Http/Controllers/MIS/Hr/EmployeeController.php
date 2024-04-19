@@ -9,6 +9,10 @@ use App\Models\Hr\HrDocumentation;
 
 class EmployeeController extends Controller
 {
+    public function employee($id)
+    {
+        return HrEmployee::find($id);
+    }
     public function index()
     {
 

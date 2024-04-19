@@ -4,6 +4,7 @@ namespace App\Models\Hr;
 
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Hr\EmployeeSalary;
 use DB;
 
 
@@ -15,13 +16,22 @@ class HrEmployee extends Model implements Auditable
 
     protected $fillable = ['first_name', 'last_name', 'father_name', 'cnic', 'cnic_expiry', 'date_of_birth', 'employee_no', 'user_id', 'gender_id', 'hr_status_id', 'marital_status_id', 'religion_id', 'domicile_id'];
 
-    protected $appends = ['full_name', 'designation', 'project', 'joining_date'];
+    protected $appends = ['full_name', 'designation', 'project', 'joining_date', 'current_salary'];
 
     function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;
     }
 
+    function getCurrentSalaryAttribute()
+    {
+        $hrSalary = $this->employeeCurrentSalary ?? '';
+        if ($hrSalary) {
+            $data = EmployeeSalary::where('hr_employee_id', $this->id)->where('hr_salary_id', $hrSalary->id)->first();
+            return ['effective_date' => $data->effective_date ?? '', 'salary' => $hrSalary->total_salary];
+        }
+        return 'N/A';
+    }
     function getDesignationAttribute()
     {
         return $this->employeeCurrentDesignation->name ?? '';

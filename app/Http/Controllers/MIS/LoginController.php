@@ -14,7 +14,7 @@ class LoginController extends Controller
 {
     public function login(Request $request)
     {
-      
+
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|max:191',
@@ -42,6 +42,8 @@ class LoginController extends Controller
                     'message' => 'You are not Authorized',
                 ])->setStatusCode(402);
             } else {
+                //$token = $user->createToken($user->email . '_token')->plainTextToken;
+                $user->tokens()->where('name', $user->email . '_token')->delete();
                 $token = $user->createToken($user->email . '_token')->plainTextToken;
                 $picture = HrDocumentation::where('hr_employee_id', $user->hrEmployee->id)->where('description', 'picture')->first();
                 return response()->json([

@@ -23,6 +23,12 @@ use App\Http\Controllers\MIS\LoginController;
 // });
 
 
+// Start Temp Routing
+
+Route::get('/employee/{id}', 'MIS\Hr\EmployeeController@employee');
+
+// End Temp Routing
+
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 //Route::post('/mis/login', 'MIS\LoginController@login');
@@ -36,7 +42,7 @@ Route::get('/proejctSummaryMM/{id}', 'MIS\Project\ProjectController@proejctSumma
 
 
 // DashBoard / MIS API
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::middleware("auth:sanctum")->group(function () {
     //Projects Routes
     Route::post('/mis/logout', 'MIS\LoginController@logout');
     Route::get('/invoiceData', 'Dashboard\DashboardController@invoiceData');
@@ -54,6 +60,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //HR Routes
     Route::get('/employees', 'MIS\Hr\EmployeeController@index');
     Route::get('/employeeDocuments/{id}', 'MIS\Hr\EmployeeDocumentController@show');
+    Route::get('/employeeList', 'MIS\Hr\EmployeeController@index');
 
 
     //Assets Routes
