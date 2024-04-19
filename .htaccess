@@ -16,6 +16,11 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ server.php
 </IfModule>
+
+#Following Two Lines Sanctum API
+RewriteCond %{HTTP:Authorization} ^(.+)$
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 RewriteCond %{HTTP_HOST} ^hrms\.barqaab\.pk$ [OR]
 RewriteCond %{HTTP_HOST} ^www\.hrms\.barqaab\.pk$
 RewriteRule ^/?$ "https\:\/\/barqaab\.pk\/hrms\/public\/login" [R=301,L]
