@@ -42,14 +42,14 @@ class EmployeeController extends Controller
             return $pos_a - $pos_b;
         });
 
-        $defaultPicture = asset('Massets/images/default.png');
+        //$defaultPicture = asset('Massets/images/default.png');
         foreach ($data as $employee) {
             // $picture = HrDocumentation::where('hr_employee_id', $employee->id)->where('description', 'Picture')->first();
-            if ($employee->picture) {
-                $picture = asset('storage/' . $employee->picture->path . $employee->picture->file_name);
-            } else {
-                $picture = $defaultPicture;
-            }
+            // if ($employee->picture) {
+            //     $picture = asset('storage/' . $employee->picture->path . $employee->picture->file_name);
+            // } else {
+            //     $picture = $defaultPicture;
+            // }
 
             $employees[] =  array(
                 "id" => $employee->id ?? '',
@@ -61,8 +61,9 @@ class EmployeeController extends Controller
                 "designation" => $employee->designation ?? '',
                 "blood_group" => $employee->hrBloodGroup->name ?? '',
                 "age" => \Carbon\Carbon::parse($employee->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days'),
-                "picture" => $picture,
+                "picture" => $employee->picture,
                 "mobile" => $employee->hrContactMobile->mobile ?? '',
+                "salary" => $employee->currentSalary ?? '',
                 "status" => $employee->hr_status_id ?? ''
             );
         }
