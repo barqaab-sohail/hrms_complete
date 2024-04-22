@@ -11,7 +11,34 @@ class EmployeeController extends Controller
 {
     public function employee($id)
     {
-        return HrEmployee::find($id);
+        $data =  HrEmployee::with('hrContactMobile', 'hrBloodGroup', 'hrDocumentations', 'hrEducation')->find($id);
+
+
+        foreach ($data->hrEducation as $education) {
+            $educations[] = array(
+                'institute' => $education->institute
+            );
+        }
+
+        $employee = [
+            'full_name' => $data->full_name ?? '',
+            'designation' => $data->designation ?? '',
+            'picture' => $data->picture ?? '',
+            'cinc' => $data->cnic ?? '',
+            'joining_date' => $data->joining_date ?? '',
+            'date_of_birth' => $data->date_of_birth ? \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y') : '',
+            'project' => $data->project ?? '',
+            'hr_status_id' => $data->hr_status_id ?? '',
+            'current_salary' => $data->current_salary['salary'] ?? '',
+            'salary_effective_date' => $data->current_salary['effective_date'] ?? '',
+            'hr_blood_group' => $data->hrBloodGroup->name ?? '',
+            'educations' =>  $educations ?? '',
+            'documents' => $data->hrDocumentations ?? ''
+
+
+        ];
+
+        return response()->json($employee);
     }
     public function index()
     {

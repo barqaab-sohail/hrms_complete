@@ -316,7 +316,7 @@ class HrEmployee extends Model implements Auditable
 
     public function hrDocumentations()
     {
-        return $this->hasMany('App\Models\Hr\HrDocumentation');
+        return $this->hasMany('App\Models\Hr\HrDocumentation')->select('description', 'hr_employee_id', 'extension', 'path', 'file_name', 'document_date', 'size');
     }
 
     public function hrContactPermanent()
