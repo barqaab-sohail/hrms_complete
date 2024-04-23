@@ -11,20 +11,24 @@ class EmployeeController extends Controller
 {
     public function employee($id)
     {
-        $data =  HrEmployee::with('hrContactMobile', 'hrBloodGroup', 'hrDocumentations', 'hrEducation')->find($id);
+        $data =  HrEmployee::with('hrContactMobile', 'hrBloodGroup', 'hrDocumentations', 'hrEducation', 'hrEmergency', 'hrExperiences', 'hrContactEmail', 'hrContactPermanent')->find($id);
 
 
         foreach ($data->hrEducation as $education) {
             $educations[] = array(
-                'institute' => $education->institute
+                'institute' => $education->institute,
+                'degree' => $education->education->degree_name ?? '',
+                'from' => $education->from ?? '',
+                'to' => $education->to ?? ''
             );
         }
 
         $employee = [
             'full_name' => $data->full_name ?? '',
+            'father_name' => $data->father_name ?? '',
             'designation' => $data->designation ?? '',
             'picture' => $data->picture ?? '',
-            'cinc' => $data->cnic ?? '',
+            'cnic' => $data->cnic ?? '',
             'joining_date' => $data->joining_date ?? '',
             'date_of_birth' => $data->date_of_birth ? \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y') : '',
             'project' => $data->project ?? '',
@@ -32,8 +36,16 @@ class EmployeeController extends Controller
             'current_salary' => $data->current_salary['salary'] ?? '',
             'salary_effective_date' => $data->current_salary['effective_date'] ?? '',
             'hr_blood_group' => $data->hrBloodGroup->name ?? '',
+            'mobile' => $data->hrContactMobile->mobile ?? '',
+            'emgergencyContactName' => $data->hrEmergency?->name ?? '',
+            'emgergencyContactRelaction' => $data->hrEmergency?->relation ?? '',
+            'emgergencyContact' => $data->hrEmergency?->mobile ?? '',
+            'email' => $data->hrContactEmail->email ?? '',
+            'address' => $data->hrContactPermanent->complete_address ?? '',
+            'experiences' => $data->hrExperiences ?? '',
             'educations' =>  $educations ?? '',
-            'documents' => $data->hrDocumentations ?? ''
+            'documents' => $data->hrDocumentations ?? '',
+
 
 
         ];

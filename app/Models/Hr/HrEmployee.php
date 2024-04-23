@@ -72,6 +72,11 @@ class HrEmployee extends Model implements Auditable
         return $this->hasMany('App\Models\Hr\EmployeeManager', 'hr_manager_id');
     }
 
+    public function hrExperiences()
+    {
+        return $this->hasMany('App\Models\Hr\HrExperience')->select('organization', 'hr_employee_id', 'from', 'to', 'job_title')->orderBy('to', 'ASC');
+    }
+
 
     public function hrEmployeeHusband()
     {
@@ -313,6 +318,7 @@ class HrEmployee extends Model implements Auditable
     {
         return $this->hasMany('App\Models\Hr\HrContact');
     }
+
 
     public function hrDocumentations()
     {
