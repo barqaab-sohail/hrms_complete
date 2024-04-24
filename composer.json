@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.2|7.3|^8.2",
+        "php": "^7.2|7.3|^8.|^8.1",
         "asika/pdf2text": "1.*",
         "barryvdh/laravel-dompdf": "^2.0.1",
         "barryvdh/laravel-snappy": "^1.0",
@@ -33,7 +33,6 @@
         "yajra/laravel-datatables-buttons": "^11.0",
         "yajra/laravel-datatables-html": "^11.0",
         "yajra/laravel-datatables-oracle": "^11.0"
-     
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
@@ -45,7 +44,7 @@
         "sort-packages": true,
         "platform-check": false,
         "platform": {
-        "php": "8.3"
+            "php": "8.3"
         }
     },
     "extra": {

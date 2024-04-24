@@ -25,7 +25,7 @@ use App\Http\Controllers\MIS\LoginController;
 
 // Start Temp Routing
 
-Route::get('/employee/{id}', 'MIS\Hr\EmployeeController@employee');
+
 
 // End Temp Routing
 
@@ -61,6 +61,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::get('/employees', 'MIS\Hr\EmployeeController@index');
     Route::get('/employeeDocuments/{id}', 'MIS\Hr\EmployeeDocumentController@show');
     Route::get('/employeeList', 'MIS\Hr\EmployeeController@index');
+    Route::get('/employee/{id}', 'MIS\Hr\EmployeeController@employee');
 
 
     //Assets Routes
