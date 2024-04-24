@@ -21,9 +21,9 @@ RewriteRule ^ server.php
 RewriteCond %{HTTP:Authorization} ^(.+)$
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-RewriteCond %{HTTP_HOST} ^hrms\.barqaab\.pk$ [OR]
-RewriteCond %{HTTP_HOST} ^www\.hrms\.barqaab\.pk$
-RewriteRule ^/?$ "https\:\/\/barqaab\.pk\/hrms\/public\/login" [R=301,L]
+RewriteCond %{HTTP_HOST} ^hrms11\.barqaab\.pk$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.hrms11\.barqaab\.pk$
+RewriteRule ^/?$ "https\:\/\/barqaab\.pk\/hrms11\/public\/login" [R=301,L]
 
 # php -- BEGIN cPanel-generated handler, do not edit
 # Set the “ea-php81” package as the default “PHP” programming language.
