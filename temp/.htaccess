@@ -1,0 +1,6 @@
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^hrms11\.barqaab\.pk$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.hrms11\.barqaab\.pk$
+RewriteRule ^/?$ "https\:\/\/hrms11\.barqaab\.pk\/login" [R=301,L]
+
