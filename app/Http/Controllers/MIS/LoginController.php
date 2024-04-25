@@ -65,7 +65,7 @@ class LoginController extends Controller
         // auth()->user()->tokens()->delete();
 
         $user = User::where('email', $request->email)->first();
-        $user->tokens()->delete();
+        $user->tokens()->where('name', $user->email . '_token')->delete();
         return response()->json([
             'status' => 200,
             'message' => 'Sucessfully Logout'

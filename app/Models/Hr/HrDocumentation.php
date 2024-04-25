@@ -9,25 +9,27 @@ use OwenIt\Auditing\Contracts\Auditable;
 class HrDocumentation extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    protected $fillable = ['hr_employee_id','description','document_date','file_name','size','path','extension','content'];
+    protected $fillable = ['hr_employee_id', 'description', 'document_date', 'file_name', 'size', 'path', 'extension', 'content'];
 
-    
+    protected $appends = ['full_path'];
+
+    function getFullPathAttribute()
+    {
+        return url('/storage/' . $this->path . $this->file_name);
+    }
 
     public function hrDocumentationProject()
     {
         return $this->hasOne('App\Models\Hr\HrDocumentationProject');
-        
     }
 
     public function hrDocumentName()
     {
         return $this->belongsToMany('App\Models\Hr\HrDocumentName');
-        
     }
 
-    public function hrEmployee(){
+    public function hrEmployee()
+    {
         return $this->belongsTo('App\Models\Hr\HrEmployee');
     }
-
-    
 }
