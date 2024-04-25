@@ -54,3 +54,5 @@
 [19-Apr-2024 12:19:50 UTC] PHP Parse error:  syntax error, unexpected token ")" in /home/barqaabp/public_html/hrms11/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 680
 [19-Apr-2024 12:20:21 UTC] PHP Parse error:  syntax error, unexpected token ")" in /home/barqaabp/public_html/hrms11/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 680
 [24-Apr-2024 12:50:02 UTC] PHP Parse error:  syntax error, unexpected token ")" in /home/barqaabp/public_html/hrms11/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 680
+[25-Apr-2024 04:33:01 UTC] PHP Parse error:  syntax error, unexpected token ")" in /home/barqaabp/public_html/hrms11/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 680
+[25-Apr-2024 04:35:53 UTC] PHP Parse error:  syntax error, unexpected token ")" in /home/barqaabp/public_html/hrms11/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 680
