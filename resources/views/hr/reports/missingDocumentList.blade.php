@@ -11,18 +11,20 @@
 		<div class="table-responsive m-t-40">
 			<table id="myTable" class="table table-bordered table-striped">
 				<thead>
-					<tr>
-						<th>Employee ID</th>
-						<th>Employee Name</th>
-						<th>Division</th>
-						<th>Project</th>
-						<th>CNIC Front</th>
-						<th>Appointment Letter</th>
-						<th>HR Form</th>
-						<th>Joining Report</th>
-						<th>Engineering Degree</th>
-						<th>Educational Documents</th>
-						<th>Mobile</th>
+					<tr class="text-center">
+						<th class="text-center bg-primary text-white">Employee ID</th>
+						<th class="text-center bg-primary text-white">Employee Name</th>
+						<th class="text-center bg-primary text-white">Division</th>
+						<th class="text-center bg-primary text-white">Project</th>
+						<th class="text-center bg-primary text-white">CNIC Front</th>
+						<th class="text-center bg-primary text-white">Picture</th>
+						<th class="text-center bg-primary text-white">Signed Appointment</th>
+						<th class="text-center bg-primary text-white">Appointment Letter</th>
+						<th class="text-center bg-primary text-white">HR Form</th>
+						<th class="text-center bg-primary text-white">Joining Report</th>
+						<th class="text-center bg-primary text-white">Engineering Degree</th>
+						<th class="text-center bg-primary text-white">Educational Documents</th>
+						<th class="text-center bg-primary text-white">Mobile</th>
 
 						<th style="width:5%">Edit</th>
 						<th style="width:5%">Delete</th>
@@ -33,17 +35,19 @@
 				<tbody>
 					@foreach($employees as $employee)
 					<tr>
-						<td>{{$employee->employee_no}}</td>
-						<td>{{$employee->first_name}} {{$employee->last_name}}</td>
-						<td>{{$employee->employeeCurrentDepartment->name??''}}</td>
-						<td>{{$employee->employeeProject->last()->name??''}}</td>
-						<td>{{$employee->cnicFront->first()?'Avaiable':'Missing'}}</td>
-						<td>{{$employee->appointmentLetter->first()?'Avaiable':'Missing'}}</td>
-						<td>{{$employee->hrForm->first()?'Avaiable':'Missing'}}</td>
-						<td>{{$employee->joiningReport->first()?'Avaiable':'Missing'}}</td>
-						<td>{{$employee->engineeringDegree->first()?'Avaiable':'Missing'}}</td>
-						<td>{{$employee->educationalDocuments->first()?'Avaiable':'Missing'}}</td>
-						<td>{{$employee->hrContactMobile->mobile??''}}</td>
+						<td class="text-left">{{$employee->employee_no}}</td>
+						<td class="text-left">{{$employee->first_name}} {{$employee->last_name}}</td>
+						<td class="text-left">{{$employee->employeeCurrentDepartment->name??''}}</td>
+						<td class="text-left">{{$employee->employeeProject->last()->name??''}}</td>
+						<td class="text-left">{{$employee->cnicFront->first()?'Avaiable':'Missing'}}</td>
+						<td class="text-left">{{$employee->picture?'Avaiable':'Missing'}}</td>
+						<td class="text-left">{{$employee->signedAppointmentLetter?'Avaiable':'Missing'}}</td>
+						<td class="text-left">{{$employee->appointmentLetter->first()?'Avaiable':'Missing'}}</td>
+						<td class="text-left">{{$employee->hrForm->first()?'Avaiable':'Missing'}}</td>
+						<td class="text-left">{{$employee->joiningReport->first()?'Avaiable':'Missing'}}</td>
+						<td class="text-left">{{$employee->engineeringDegree->first()?'Avaiable':'Missing'}}</td>
+						<td class="text-left">{{$employee->educationalDocuments->first()?'Avaiable':'Missing'}}</td>
+						<td class="text-left">{{$employee->hrContactMobile->mobile??''}}</td>
 
 
 						<td>
