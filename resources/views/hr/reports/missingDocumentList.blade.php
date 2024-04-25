@@ -18,7 +18,7 @@
 						<th class="text-center bg-primary text-white">Project</th>
 						<th class="text-center bg-primary text-white">CNIC Front</th>
 						<th class="text-center bg-primary text-white">Picture</th>
-						<th class="text-center bg-primary text-white">Sig. Appointment</th>
+						<th class="text-center bg-primary text-white">Signed Appointment</th>
 						<th class="text-center bg-primary text-white">Appointment Letter</th>
 						<th class="text-center bg-primary text-white">HR Form</th>
 						<th class="text-center bg-primary text-white">Joining Report</th>
