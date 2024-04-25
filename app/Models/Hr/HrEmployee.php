@@ -634,6 +634,8 @@ class HrEmployee extends Model implements Auditable
         return $this->hasOne('App\Models\Hr\HrDocumentation')->where('description', '=', 'Picture');
     }
 
+
+
     public function employeePicture()
     {
         $picture = HrDocumentation::where([['description', 'Picture'], ['hr_employee_id', session('hr_employee_id')]])->first();

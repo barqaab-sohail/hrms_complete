@@ -34,7 +34,7 @@ class HrReportsController extends Controller
     public function missingDocumentList()
     {
 
-        $employees = HrEmployee::where('hr_status_id', 1)->with('employeeProject', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'educationalDocuments')->get();
+        $employees = HrEmployee::where('hr_status_id', 1)->with('employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
 
         return view('hr.reports.missingDocumentList', compact('employees'));
     }
