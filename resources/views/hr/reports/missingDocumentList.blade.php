@@ -12,19 +12,19 @@
 			<table id="myTable" class="table table-bordered table-striped">
 				<thead>
 					<tr class="text-center">
-						<th class="text-center bg-primary text-white">Employee ID</th>
-						<th class="text-center bg-primary text-white">Employee Name</th>
-						<th class="text-center bg-primary text-white">Division</th>
-						<th class="text-center bg-primary text-white">Project</th>
-						<th class="text-center bg-primary text-white">CNIC Front</th>
-						<th class="text-center bg-primary text-white">Picture</th>
-						<th class="text-center bg-primary text-white">Signed Appointment</th>
-						<th class="text-center bg-primary text-white">Appointment Letter</th>
-						<th class="text-center bg-primary text-white">HR Form</th>
-						<th class="text-center bg-primary text-white">Joining Report</th>
-						<th class="text-center bg-primary text-white">Engineering Degree</th>
-						<th class="text-center bg-primary text-white">Educational Documents</th>
-						<th class="text-center bg-primary text-white">Mobile</th>
+						<th class="text-left bg-primary text-white">Employee ID</th>
+						<th class="text-left bg-primary text-white">Employee Name</th>
+						<th class="text-left bg-primary text-white">Division</th>
+						<th class="text-left bg-primary text-white">Project</th>
+						<th class="text-left bg-primary text-white">CNIC Front</th>
+						<th class="text-left bg-primary text-white">Picture</th>
+						<th class="text-left bg-primary text-white">Signed Appointment</th>
+						<th class="text-left bg-primary text-white">Appointment Letter</th>
+						<th class="text-left bg-primary text-white">HR Form</th>
+						<th class="text-left bg-primary text-white">Joining Report</th>
+						<th class="text-left bg-primary text-white">Engineering Degree</th>
+						<th class="text-left bg-primary text-white">Educational Documents</th>
+						<th class="text-left bg-primary text-white">Mobile</th>
 
 						<th style="width:5%">Edit</th>
 						<th style="width:5%">Delete</th>
