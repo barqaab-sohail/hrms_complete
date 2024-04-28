@@ -40,9 +40,22 @@ class PrDetail extends Model implements Auditable
         return $this->belongsTo('App\Models\Common\Client');
     }
 
+    public function prDivision(){
+        return $this->hasOne('App\Models\Project\PrDivision','id','pr_division_id');
+    }
+
+    public function contractType(){
+        return $this->hasOne('App\Models\Common\ContractType','id','contract_type_id');
+
+    }
+
     public function prCost()
     {
         return $this->hasOne('App\Models\Project\Cost\PrCost');
+    }
+
+    public function prStatus(){
+        return $this->hasOne('App\Models\Project\PrStatus','id','pr_status_id');
     }
 
     public function prCustomerNo()

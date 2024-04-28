@@ -10,6 +10,48 @@ use PhpParser\Node\Expr\Cast\Double;
 
 class ProjectController extends Controller
 {
+    
+    public function projects($status=null, $division=null){
+        if($status=='0'){
+            $status=null;
+        }
+        if($status != null && $division !=null){
+            $data = PrDetail::where('pr_status_id', $status)->where('pr_division_id', $division)->get();
+        }elseif ($status !=null){
+            $data = PrDetail::where('pr_status_id', $status)->get();
+
+        }elseif ($division !=null){
+            $data = PrDetail::where('pr_division_id', $division)->get();
+
+        }else{
+            $data = PrDetail::all();
+
+        }
+        
+        foreach ($data as $project){
+            $projects[] =  array(
+                'id'=>$project->id,
+                'name'=>$project->name,
+                "contract_type_id"=>$project->contractType->name??'',
+                "client"=>$project->client->name??'',
+                "commencement_date"=>$project->commencement_date??'',
+                "contractual_completion_date"=>$project->contractua??'',
+                "actual_completion_date"=>$project->actual_completion_date??'',
+                "sub_projects"=>$project->sub_project??'',
+                "status"=>$project->prStatus->name??'',
+                "role"=>$project->prRole->name??'',
+                "division"=>$project->prDivision->name??'',
+                "share"=>$project->share??'',
+                "project_no"=>$project->project_no??'',
+            );
+        }
+
+
+        return response()->json($projects);
+        
+    }
+    
+    
     public function projectDocuments($projectId)
     {
 

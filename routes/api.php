@@ -6,6 +6,7 @@ use App\User;
 use App\Models\MisUser;
 use App\Http\Controllers\MIS\Project\ProjectLedgerActivityController;
 use App\Http\Controllers\MIS\LoginController;
+use App\Http\Controllers\MIS\Project\ProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,7 @@ use App\Http\Controllers\MIS\LoginController;
 
 
 // End Temp Routing
-
+Route::get('/projects/{status?}/{division?}',[ProjectController::class, 'projects']);
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 //Route::post('/mis/login', 'MIS\LoginController@login');
