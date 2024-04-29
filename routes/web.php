@@ -18,6 +18,9 @@ use App\Http\Controllers\Project\ProjectLedgerActivityController;
 // Route::get('/newDesign', function () {
 //     return statusLeaveEmployee()->count();
 // });
+Route::get('/storagepath', function () {
+    echo base_path();
+});
 Route::get('/verifyCard', 'HomeController@employee');
 
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');

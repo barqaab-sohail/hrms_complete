@@ -7,6 +7,7 @@ use App\Models\MisUser;
 use App\Http\Controllers\MIS\Project\ProjectLedgerActivityController;
 use App\Http\Controllers\MIS\LoginController;
 use App\Http\Controllers\MIS\Project\ProjectController;
+use App\Http\Controllers\Mis\ChartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,8 @@ use App\Http\Controllers\MIS\Project\ProjectController;
 
 
 // End Temp Routing
-Route::get('/projects/{status?}/{division?}',[ProjectController::class, 'projects']);
+Route::get('/projects/{status?}/{division?}', [ProjectController::class, 'projects']);
+Route::get('/charts', [ChartController::class, 'index']);
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 //Route::post('/mis/login', 'MIS\LoginController@login');
