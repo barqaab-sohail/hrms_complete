@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MIS\Asset\AssetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\User;
@@ -31,6 +32,7 @@ use App\Http\Controllers\Mis\ChartController;
 
 // End Temp Routing
 Route::get('/projects/{status?}/{division?}', [ProjectController::class, 'projects']);
+Route::get('/assetSubClasses', [AssetController::class, 'assetSubClasses']);
 Route::get('/charts', [ChartController::class, 'index']);
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\MIS\Asset;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Asset\Asset;
+use App\Models\Asset\AsSubClass;
 
 class AssetController extends Controller
 {
@@ -30,5 +31,19 @@ class AssetController extends Controller
             );
         }
         return response()->json($assets);
+    }
+
+    public function assetSubClasses()
+    {
+
+        $subClasses = AsSubClass::all();
+        $asset = Asset::with('asClass', 'currentOwnership')->get();
+        foreach ($subClasses as $subClass) {
+
+            $data[] =  array(
+                'Name' => gettype($asset)
+            );
+        }
+        return response()->json($data);
     }
 }
