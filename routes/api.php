@@ -33,6 +33,7 @@ use App\Http\Controllers\Mis\ChartController;
 // End Temp Routing
 Route::get('/projects/{status?}/{division?}', [ProjectController::class, 'projects']);
 Route::get('/assetSubClasses', [AssetController::class, 'assetSubClasses']);
+Route::get('/asset/{subClassId}', [AssetController::class, 'subClassList']);
 Route::get('/charts', [ChartController::class, 'index']);
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
