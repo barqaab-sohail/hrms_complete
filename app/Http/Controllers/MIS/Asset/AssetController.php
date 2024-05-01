@@ -39,31 +39,33 @@ class AssetController extends Controller
         $subClasses = AsSubClass::all();
         $asset = Asset::with('asClass', 'currentOwnership')->get();
         foreach ($subClasses as $subClass) {
-            if($asset->where('as_sub_class_id',$subClass->id)->count() !=0){
+            if ($asset->where('as_sub_class_id', $subClass->id)->count() != 0) {
                 $data[] =  array(
-                    'id'=>$subClass->id, 
-                    'name' =>$subClass->name, 
-                    'count'=>$asset->where('as_sub_class_id',$subClass->id)->count(),
+                    'id' => $subClass->id,
+                    'name' => $subClass->name,
+                    'count' => $asset->where('as_sub_class_id', $subClass->id)->count(),
                 );
             }
         }
-       // $data = $asset->where('as_sub_class_id',1)->count();
+        // $data = $asset->where('as_sub_class_id',1)->count();
         return response()->json($data);
     }
 
-    public function subClassList($subClassId){
-        $assets = Asset::where('as_sub_class_id',$subClassId)->with('asOwnership','asCurrentAllocation','asCurrentLocation','asPicture')->get();
+    public function subClassList($subClassId)
+    {
+        $assets = Asset::where('as_sub_class_id', $subClassId)->with('asOwnership', 'asCurrentAllocation', 'asCurrentLocation', 'asPicture')->get();
 
-        foreach ($assets as $asset){
-            $location = $asset->asCurrentLocation->name??'';
-            $employee = $asset->asCurrentAllocation->full_name??'';
-            $designation = $asset->asCurrentAllocation->designation??'';
-            $allocation = $employee!=""?$employee. ', '.$designation:'';
-            $data[]=array(
-                'name'=>$asset->description??'',
-                'picture'=> asset('/storage/' . $asset->asPicture->path . $asset->asPicture->file_name),
-                'location'=>$location,
-                'allocation'=>$allocation,
+        foreach ($assets as $asset) {
+            $location = $asset->asCurrentLocation->name ?? '';
+            $employee = $asset->asCurrentAllocation->full_name ?? '';
+            $designation = $asset->asCurrentAllocation->designation ?? '';
+            $allocation = $employee != "" ? $employee . ', ' . $designation : '';
+            $data[] = array(
+                'name' => $asset->description ?? '',
+                //'picture'=> asset('/storage/' . $asset->asPicture->path . $asset->asPicture->file_name),
+                'picture' => "https://barqaab.pk/hrms/storage/" . $asset->asPicture->path . $asset->asPicture->file_name,
+                'location' => $location,
+                'allocation' => $allocation,
             );
         }
         return response()->json($data);

@@ -9,6 +9,7 @@ use App\Http\Controllers\MIS\Project\ProjectLedgerActivityController;
 use App\Http\Controllers\MIS\LoginController;
 use App\Http\Controllers\MIS\Project\ProjectController;
 use App\Http\Controllers\Mis\ChartController;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,12 @@ Route::get('/proejctSummaryMM/{id}', 'MIS\Project\ProjectController@proejctSumma
 
 // DashBoard / MIS API
 Route::middleware("auth:sanctum")->group(function () {
+
+    Route::get('/cacheClear', function () {
+        Artisan::call('cache:clear');
+        return 'ok';
+    });
+
     //Projects Routes
     Route::post('/mis/logout', 'MIS\LoginController@logout');
     Route::get('/invoiceData', 'Dashboard\DashboardController@invoiceData');
@@ -64,7 +71,7 @@ Route::middleware("auth:sanctum")->group(function () {
 
 
     //HR Routes
-    Route::get('/employees', 'MIS\Hr\EmployeeController@index');
+    Route::get('/employees/{cacheStatus?}', 'MIS\Hr\EmployeeController@index');
     Route::get('/employeeDocuments/{id}', 'MIS\Hr\EmployeeDocumentController@show');
     Route::get('/employeeList', 'MIS\Hr\EmployeeController@index');
     Route::get('/employee/{id}', 'MIS\Hr\EmployeeController@employee');

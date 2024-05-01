@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDocumentation;
+use Illuminate\Support\Facades\Cache;
 
 class EmployeeController extends Controller
 {
     public function employee($id)
     {
+
         $data =  HrEmployee::with('hrContactMobile', 'hrBloodGroup', 'hrDocumentations', 'hrEducation', 'hrEmergency', 'hrExperiences', 'hrContactEmail', 'hrContactPermanent')->find($id);
 
 
@@ -52,8 +54,14 @@ class EmployeeController extends Controller
 
         return response()->json($employee);
     }
-    public function index()
+    public function index(bool $cacheStatus = true)
     {
+
+        if (Cache::has('employeeList') && $cacheStatus) {
+            $data = Cache::get('employeeList');
+            return response()->json($data);
+        }
+
 
         $data = HrEmployee::with('employeeDesignation', 'picture', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
         //first sort with respect to Designation
@@ -106,7 +114,7 @@ class EmployeeController extends Controller
                 "status" => $employee->hr_status_id ?? ''
             );
         }
-
+        Cache::put('employeeList', $employees, now()->addHour(2));
         return response()->json($employees);
     }
 }
