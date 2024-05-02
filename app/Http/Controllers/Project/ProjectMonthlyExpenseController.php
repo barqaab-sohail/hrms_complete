@@ -129,15 +129,14 @@ class ProjectMonthlyExpenseController extends Controller
         $importRecord = 0;
         $updateRecord = 0;
         $years = calculateSyncYears($prDetailId);
+
         $prDetail = PrDetail::find($prDetailId);
         $projectNo = $prDetail->project_no;
         // return response()->json(['error' => 'Testing from start', 'years' => implode(",", $years), 'projectNo' => $projectNo]);
         foreach ($years as $year) {
             $data = $this->loadHtmlFile($projectNo, $year);
             if ($data['projectNo'] !=  $prDetail->project_no) {
-                return response()->json(['error' => 'Project No is not match with this file']);
-            } else if ($data['reportName'] != "Project Wise Income Statement" && $data['reportName'] != "Project Wise Income Statements") {
-                return response()->json(['error' => 'Report is not match with this file']);
+                return response()->json(['error' => "Project No is not match with this file "]);
             } else {
                 foreach ($data['months'] as $key => $value) {
                     $date = \Carbon\Carbon::parse($data['months'][$key])->format('Y-m-d');
@@ -188,17 +187,19 @@ class ProjectMonthlyExpenseController extends Controller
 
     public function loadHtmlFile($projectNo, $year)
     {
-        $url = "http://79.110.232.23:8888/reports/rwservlet?userid=BARQAAB/BARQAAB@scar&domain=classicdomain&report=D:\app\SYSTEM\BARQAAB\REPORTS\FR_PROJ_12MONTHS_FIN_SMRY&destype=CACHE&desformat=HTML&paramform=no&PPCD=__YEAR&PMCD=07&PMNODE=06FS30636&PUNCD=0001&PSTNATURE=01&PENNATURE=02&PSTREGION=01&PENREGION=05&PSTPROVINCE=01&PENPROVINCE=06&PSTCD=01__PROJECTNO&PENCD=012086&PSTDT=&PENDT=&PSTUC=0001&PENUC=9999&PUNCD=0001&PSTNATURE=01&PENNATURE=02&PSTREGION=01&PENREGION=05&PSTPROVINCE=01&PENPROVINCE=06&PSTVT=AAA&PENVT=ZZZ&PVST=&PPST=";
-
+        $url = "http://79.110.232.23:8888/reports/rwservlet?userid=BARQAAB/BARQAAB@scar&domain=classicdomain&report=D:\app\SYSTEM\BARQAAB\REPORTS\FR_PROJ_FINREP_DTL&destype=CACHE&desformat=HTML&paramform=no&PPCD=__YEAR&PMCD=07&PMNODE=06FS30636&PUNCD=0001&PSTNATURE=01&PENNATURE=02&PSTREGION=01&PENREGION=05&PSTPROVINCE=01&PENPROVINCE=06&PSTCD=01__PROJECTNO&PENCD=01__PROJECTNO&PSTDT=&PENDT=&PSTUC=0001&PENUC=9999&PUNCD=0001&PSTNATURE=01&PENNATURE=02&PSTREGION=01&PENREGION=05&PSTPROVINCE=01&PENPROVINCE=06&PSTVT=AAA&PENVT=ZZZ&PVST=&PPST=";
 
         $url = str_replace("__YEAR", substr($year, -2), $url);
         $url = str_replace("__PROJECTNO", $projectNo, $url);
+
+        //$url = "http://79.110.232.23:8888/reports/rwservlet?userid=BARQAAB/BARQAAB@scar&domain=classicdomain&report=D:\app\SYSTEM\BARQAAB\REPORTS\FR_PROJ_FINREP_DTL&destype=CACHE&desformat=HTML&paramform=no&PPCD=23&PMCD=07&PMNODE=06FS30636&PUNCD=0001&PSTNATURE=01&PENNATURE=02&PSTREGION=01&PENREGION=05&PSTPROVINCE=01&PENPROVINCE=06&PSTCD=012064&PENCD=012064&PSTDT=&PENDT=&PSTUC=0001&PENUC=9999&PUNCD=0001&PSTNATURE=01&PENNATURE=02&PSTREGION=01&PENREGION=05&PSTPROVINCE=01&PENPROVINCE=06&PSTVT=AAA&PENVT=ZZZ&PVST=&PPST=";
         $htmlContent = file_get_contents($url);
         $htmlContent = str_replace("&nbsp;", " ", $htmlContent);
         $htmlContent = strip_tags($htmlContent, ['td']);
         $DOM = new \DOMDocument();
-        $DOM->loadHTML($htmlContent);
 
+        $DOM->loadHTML($htmlContent);
+        //  dd($DOM);
         $Detail = $DOM->getElementsByTagName('td');
 
         foreach ($Detail as $sNodeDetail) {
@@ -227,29 +228,33 @@ class ProjectMonthlyExpenseController extends Controller
             if ($value == "Project Wise Income Statement") {
                 $reportName = $value;
             }
-            if ($value == "REVENUE FROM  OPERATIONS") {
+
+            if ($value == "REVENUE FROM OPERATIONS") {
                 $revenueFromOperationKey = $key;
             }
-            if ($value == "REIMBURSEABLE SALARIE") {
+            if ($value == "REIMBURSEABLE SALARIES & ALLOWNCES") {
                 $reimbursementSalaryKey = $key;
             }
-            if ($value == "REIMBURSEABLE EXPENSE") {
+            if ($value == "REIMBURSEABLE EXPENSES") {
                 $reimbursementExpensesKey = $key;
             }
-            if ($value == "NON REMIBURSABLE EXPE") {
+            if ($value == "NON REMIBURSABLE EXPENSES - LUMPSUM  PROJECTS") {
                 $nonReimbursementExpensesKey = $key;
             }
-            if ($value == "NON REIMBURSEABLESAL") {
+
+            if ($value == "NON REIMBURSEABLESALARIES- LUMPSUM  PROJECTS") {
                 $nonReimbursementSalaryKey  = $key;
             }
-            if ($value == "For The Year") {
+            if ($value == "Projects Financial Summary for the year") {
                 $yearKey  = $key + 2;
             }
             if ($value == "Project Code and Name:") {
                 $projectNoKey  = $key + 2;
             }
         }
-        $year = '20' . $aDataTableDetailHTML[0][$yearKey];
+
+
+        $year = '20' . (substr($aDataTableDetailHTML[0][$yearKey], -2) - 1);
         $nextYear = $year + 1;
         array_push($months, 'Jul' . '-' . $year, 'Aug' . '-' . $year, 'Sep' . '-' . $year, 'Oct' . '-' . $year, 'Nov' . '-' . $year, 'Dec' . '-' . $year, 'Jan' . '-' . $nextYear, 'Feb' . '-' . $nextYear, 'Mar' . '-' . $nextYear, 'Apr' . '-' . $nextYear, 'May' . '-' . $nextYear, 'Jun' . '-' . $nextYear);
         $twoArray = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
@@ -268,8 +273,9 @@ class ProjectMonthlyExpenseController extends Controller
         foreach ($twoArray as $val) {
             array_push($revenue, intval(str_replace(',', '', $aDataTableDetailHTML[0][($revenueFromOperationKey  + $val)])));
         }
-        $projectNo = substr($aDataTableDetailHTML[0][$projectNoKey], -4);
+        //$projectNo = substr($aDataTableDetailHTML[0][$projectNoKey], -4);
         $data = ['months' => $months, 'projectNo' => $projectNo, 'salaries' => $salaries, 'expenses' => $expenses, 'nonRSalaries' => $nonRSalaries, 'nonRExpenses' => $nonRExpenses, 'reportName' => $reportName, 'revenue' => $revenue];
+
         return $data;
     }
 }
