@@ -8,7 +8,7 @@ use App\Models\MisUser;
 use App\Http\Controllers\MIS\Project\ProjectLedgerActivityController;
 use App\Http\Controllers\MIS\LoginController;
 use App\Http\Controllers\MIS\Project\ProjectController;
-use App\Http\Controllers\Mis\ChartController;
+use App\Http\Controllers\MIS\ChartController;
 use Illuminate\Support\Facades\Artisan;
 
 /*
