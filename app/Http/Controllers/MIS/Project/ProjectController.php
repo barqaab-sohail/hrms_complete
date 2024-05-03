@@ -33,7 +33,7 @@ class ProjectController extends Controller
                 "contract_type_id" => $project->contractType->name ?? '',
                 "client" => $project->client->name ?? '',
                 "commencement_date" => $project->commencement_date ?? '',
-                "contractual_completion_date" => $project->contractua ?? '',
+                "contractual_completion_date" => $project->contractual_completion_date ?? '',
                 "actual_completion_date" => $project->actual_completion_date ?? '',
                 "sub_projects" => $project->sub_project ?? '',
                 "status" => $project->prStatus->name ?? '',
@@ -48,6 +48,25 @@ class ProjectController extends Controller
         return response()->json($projects);
     }
 
+    public function projectDetail($projectId)
+    {
+        $data = PrDetail::with('contractType', 'prStatus', 'prRole', 'prDivision', 'client', 'ledgerActivity', 'prCost')->find($projectId);
+        $project = [
+            'name' => $data->name,
+            'project_no' => $data->project_no ?? '',
+            'commencement_date' => $data->commencement_date,
+            'share' => $data->share ?? '',
+            'role' => $data->prRole->name ?? '',
+            'client' => $data->client->name ?? '',
+            'contract_type' => $data->contractType->name ?? '',
+            'status' => $data->prStatus->name ?? '',
+            'payment_received' => $data->ledgerActivity->sum('credit'),
+            'total_invoice' => $data->ledgerActivity->sum('debit'),
+            'total_consultancy' => $data->prCost,
+
+        ];
+        return response()->json($project);
+    }
 
     public function projectDocuments($projectId)
     {
@@ -75,6 +94,7 @@ class ProjectController extends Controller
             'budget_utilization' =>  rtrim($budgetUtilized, "%"),
             'remaining_budget' => "$remainingBudget",
             'current_progress' => currentProgress($projectId),
+            'status' => $prDetail->prStatus->name,
         ];
         return response()->json($porjectSummary);
     }

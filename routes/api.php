@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Artisan;
 
 // End Temp Routing
 Route::get('/projects/{status?}/{division?}', [ProjectController::class, 'projects']);
+Route::get('/project/{id}', [ProjectController::class, 'projectDetail']);
 Route::get('/assetSubClasses', [AssetController::class, 'assetSubClasses']);
 Route::get('/asset/{subClassId}', [AssetController::class, 'subClassList']);
 Route::get('/charts', [ChartController::class, 'index']);
