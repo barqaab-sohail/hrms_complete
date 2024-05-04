@@ -125,6 +125,11 @@ class PrDetail extends Model implements Auditable
         return $this->hasOne('App\Models\Project\PrMonthlyExpense')->orderby('month', 'desc');
     }
 
+    public function expenses()
+    {
+        return $this->hasMany('App\Models\Project\PrMonthlyExpense');
+    }
+
     public function latestPaymentMonth()
     {
         return $this->hasOne('App\Models\Project\Payment\PaymentReceive')->orderby('payment_date', 'desc');
@@ -144,6 +149,6 @@ class PrDetail extends Model implements Auditable
 
     public function ledgerActivity()
     {
-        return $this->hasMany('App\Models\Project\LedgerActivity');
+        return $this->hasMany('App\Models\Project\LedgerActivity')->orderby('voucher_date', 'desc');
     }
 }

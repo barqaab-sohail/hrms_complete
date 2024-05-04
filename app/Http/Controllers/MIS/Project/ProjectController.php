@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\MIS\Project;
 
 use App\Http\Controllers\Controller;
+use App\Models\Project\LedgerActivity;
 use Illuminate\Http\Request;
 use App\Models\Project\PrDocument;
 use App\Models\Project\PrDetail;
@@ -50,7 +51,25 @@ class ProjectController extends Controller
 
     public function projectDetail($projectId)
     {
-        $data = PrDetail::with('contractType', 'prStatus', 'prRole', 'prDivision', 'client', 'ledgerActivity', 'prCost')->find($projectId);
+        $data = PrDetail::with('contractType', 'prStatus', 'prRole', 'prDivision', 'client', 'ledgerActivity', 'prCost', 'latestExpenseMonth', 'expenses')->find($projectId);
+        $budgetUtilized = budgetUtilization($projectId);
+        $remainingBudget = $budgetUtilized != '0.0' ? 100 - rtrim($budgetUtilized, "%") : '0.0';
+        $expenses = $data->expenses;
+        $ledgerActivity = $data->ledgerActivity;
+        $totalSalaryExpenses = $expenses->sum('salary_expense');
+        $totalReimbursableExpenses = $expenses->sum('non_salary_expense');
+        $totalNonReimbursableSalaryExpenses = $expenses->sum('non_reimbursable_salary');
+        $totalNonReimbursableExpenses = $expenses->sum('non_reimbursable_expense');
+        $totalInvoices = $ledgerActivity->sum('debit');
+        $paymentReceived = $ledgerActivity->sum('credit');
+        $lastPaymentReceived = $ledgerActivity->where('credit', '!=', 0)->first()->credit ?? '';
+        $lastPaymentDate = $ledgerActivity->where('credit', '!=', 0)->first()->voucher_date ?? '';
+        $lastInvoiceAmount =  $ledgerActivity->where('debit', '!=', 0)->first()->debit ?? '';
+        $lastInvoiceDate = $ledgerActivity->where('debit', '!=', 0)->first()->voucher_date ?? '';
+        $currentProgressWithDate = currentProgress($projectId);
+        $currentProgress = explode("-", $currentProgressWithDate)[3] ?? '';
+        $progressDate =  mb_substr($currentProgressWithDate, 0, 10);
+
         $project = [
             'name' => $data->name,
             'project_no' => $data->project_no ?? '',
@@ -60,9 +79,25 @@ class ProjectController extends Controller
             'client' => $data->client->name ?? '',
             'contract_type' => $data->contractType->name ?? '',
             'status' => $data->prStatus->name ?? '',
-            'payment_received' => $data->ledgerActivity->sum('credit'),
-            'total_invoice' => $data->ledgerActivity->sum('debit'),
-            'total_consultancy' => $data->prCost,
+            'totalSalaryExpenses' => $totalSalaryExpenses,
+            'totalReimbursableExpenses' => $totalReimbursableExpenses,
+            'totalNoReimbursableSalaryExpenses' => $totalNonReimbursableSalaryExpenses,
+            'totalNonReimbursableExpenses' => $totalNonReimbursableExpenses,
+            'totalExpenses' => $totalSalaryExpenses + $totalReimbursableExpenses + $totalNonReimbursableSalaryExpenses + $totalNonReimbursableExpenses,
+            'expensesUpto' => $data->latestExpenseMonth->month ?? '',
+            'totalInvoices' => $totalInvoices,
+            'paymentReceived' => $paymentReceived,
+            'pendingPayment' => $totalInvoices - $paymentReceived,
+            'lastPaymentReceived' => $lastPaymentReceived,
+            'lastPaymentDate' => $lastPaymentDate,
+            'lastInvoiceAmount' => $lastInvoiceAmount,
+            'lastInvoiceDate' => $lastInvoiceDate,
+            'totalConsultancy' => $data->prCost->total_cost ?? '',
+            'last_invoice' => lastInvoiceMonth($projectId),
+            'budget_utilization' =>  rtrim($budgetUtilized, "%"),
+            'remaining_budget' => "$remainingBudget",
+            'current_progress' => str_replace(' ', '', $currentProgress),
+            'progress_date' => $progressDate,
 
         ];
         return response()->json($project);
