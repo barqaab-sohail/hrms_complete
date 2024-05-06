@@ -30,10 +30,10 @@ class ChartController extends Controller
         $power = departmentChart()['power'];
         $water = departmentChart()['water'];
 
-        $departmentChart = ['Power' => $power, 'Water' => $water, 'Finance' => $finance];
-        $employeeSkillChart = ['Other Employees' => $othersEmployees, 'PEC Registered Employees' => $pecRegisteredEngineers, 'Associated Engineers' => $associatedEngineers];
-        $employeeCategoryChart = ['Category A' => $categoryA, 'Category B' => $categoryB, 'Category C' => $categoryC];
-        $employeeAgeChart = ['Below Forty' => $countBelowForty, 'Below Fifty' => $countBelowFifty, 'Below Sixty' => $countBelowSixty, 'Below Seventy' => $countBelowSeventy, 'Above Seventy' => $countAboveSeventy];
+        $departmentChart = ["Power - ($power)" => $power, "Water - ($water)" => $water, "Finance - ($finance)" => $finance];
+        $employeeSkillChart = ["Other Employees - ($othersEmployees)" => $othersEmployees, "PEC Registered Employees - ($pecRegisteredEngineers)" => $pecRegisteredEngineers, "Associated Engineers - ($associatedEngineers)" => $associatedEngineers];
+        $employeeCategoryChart = ["Category A - ($categoryA)" => $categoryA, "Category B - ($categoryB)" => $categoryB, "Category C - ($categoryC)" => $categoryC];
+        $employeeAgeChart = ["Below Forty Years - ($countBelowForty)" => $countBelowForty, "Between 40 to 50 Years - ($countBelowFifty)" => $countBelowFifty, "Between 50 to 60 Years - ($countBelowSixty)" => $countBelowSixty, "Between 60 to 70 Years - ($countBelowSeventy)" => $countBelowSeventy, "Above Seventy Years - ($countAboveSeventy)" => $countAboveSeventy];
 
 
 
