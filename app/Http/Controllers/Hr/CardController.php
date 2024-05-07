@@ -45,7 +45,7 @@ class CardController extends Controller
 
         $fpdi = new FPDI;
         $employee = HrEmployee::find($employeeid);
-        $picture =  asset('storage/' . $employee->picture->path .  $employee->picture->file_name);
+        $picture =  $employee->picture;
         $count = $fpdi->setSourceFile($file);
         $nameLength = Str::length($employee->full_name);
         $designationLength = Str::length($employee->designation);
