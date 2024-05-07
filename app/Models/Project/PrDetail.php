@@ -14,6 +14,10 @@ class PrDetail extends Model implements Auditable
     protected $fillable = ['name', 'client_id', 'commencement_date', 'contractual_completion_date', 'actual_completion_date', 'sub_projects', 'pr_status_id', 'pr_role_id', 'contract_type_id', 'pr_division_id', 'project_no', 'share'];
 
 
+    public function getCommencementDateAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('M d, Y');
+    }
     // //default value of pr_status_id=1
     // protected $attributes = [
     //     'pr_status_id' => 1 //default value of pr_status_id is 1 
@@ -150,5 +154,10 @@ class PrDetail extends Model implements Auditable
     public function ledgerActivity()
     {
         return $this->hasMany('App\Models\Project\LedgerActivity')->orderby('voucher_date', 'desc');
+    }
+
+    public function prDocuments()
+    {
+        return $this->hasMany('App\Models\Project\PrDocument')->select('description', 'pr_detail_id', 'reference_no', 'extension', 'path', 'file_name', 'document_date', 'size');;
     }
 }

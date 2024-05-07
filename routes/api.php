@@ -10,6 +10,7 @@ use App\Http\Controllers\MIS\LoginController;
 use App\Http\Controllers\MIS\Project\ProjectController;
 use App\Http\Controllers\MIS\ChartController;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Hr\CardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,7 @@ use Illuminate\Support\Facades\Artisan;
 
 
 // End Temp Routing
+Route::get('/card/{id}', [CardController::class, 'getEmployeePicture']);
 Route::get('/projects/{status?}/{division?}', [ProjectController::class, 'projects']);
 Route::get('/project/{id}', [ProjectController::class, 'projectDetail']);
 Route::get('/assetSubClasses', [AssetController::class, 'assetSubClasses']);

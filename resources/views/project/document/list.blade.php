@@ -30,7 +30,7 @@
 						<td>{{$documentId->description}}</td>
 						<td>{{$documentId->reference_no}}</td>
 						<td>{{$documentId->document_date}}</td>
-						<td>{{round(($documentId->size/1000000),2)}}</td>
+						<td>{{$documentId->size}}</td>
 						<td class="copyLink" link="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: '') }}"><a><img src="{{asset('Massets/images/copyLink.png')}}" width=30 /></a></td>
 						@if(($documentId->extension == "jpg")||($documentId->extension == "jpeg")||($documentId->extension == "png"))
 						<td><img id="ViewIMG" src="{{asset(isset($documentId->file_name)? 'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" href="{{asset(isset($documentId->file_name)?  'storage/'.$documentId->path.$documentId->file_name: 'Massets/images/document.png') }}" width=30 /></td>

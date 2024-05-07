@@ -51,7 +51,7 @@ class ProjectController extends Controller
 
     public function projectDetail($projectId)
     {
-        $data = PrDetail::with('contractType', 'prStatus', 'prRole', 'prDivision', 'client', 'ledgerActivity', 'prCost', 'latestExpenseMonth', 'expenses')->find($projectId);
+        $data = PrDetail::with('contractType', 'prStatus', 'prRole', 'prDivision', 'client', 'ledgerActivity', 'prCost', 'latestExpenseMonth', 'expenses', 'prDocuments')->find($projectId);
         $budgetUtilized = budgetUtilization($projectId);
         $remainingBudget = $budgetUtilized != '0.0' ? 100 - rtrim($budgetUtilized, "%") : '0.0';
         $expenses = $data->expenses;
@@ -74,7 +74,8 @@ class ProjectController extends Controller
         $project = [
             'name' => $data->name,
             'project_no' => $data->project_no ?? '',
-            'commencement_date' => $data->commencement_date,
+            'commencement_date' => $data->commencement_date ? \Carbon\Carbon::parse($data->commencement_date)->format('M d, Y') : '',
+            'contractualCompletionDate' => $data->contractual_completion_date ? \Carbon\Carbon::parse($data->contractual_completion_date)->format('M d, Y') : '',
             'share' => $data->share ?? '',
             'role' => $data->prRole->name ?? '',
             'client' => $data->client->name ?? '',
@@ -99,6 +100,7 @@ class ProjectController extends Controller
             'remaining_budget' => "$remainingBudget",
             'current_progress' => str_replace(' ', '', $currentProgress),
             'progress_date' => $progressDate,
+            'documents' => $data->prDocuments,
 
         ];
         return response()->json($project);

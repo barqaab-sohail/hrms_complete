@@ -23,8 +23,8 @@ class CardController extends Controller
     public function getEmployeePicture($employeeId)
     {
         $employee = HrEmployee::find($employeeId);
-        $picture =  asset('storage/' . $employee->picture->path .  $employee->picture->file_name);
-        return $picture;
+        // $picture =  asset('storage/' . $employee->picture->path .  $employee->picture->file_name);
+        return $employee->picture;
     }
 
 

@@ -29,7 +29,7 @@ class HrEmployee extends Model implements Auditable
         $hrSalary = $this->employeeCurrentSalary ?? '';
         if ($hrSalary) {
             $data = EmployeeSalary::where('hr_employee_id', $this->id)->where('hr_salary_id', $hrSalary->id)->first();
-            return ['effective_date' => $data->effective_date ?? '', 'salary' => $hrSalary->total_salary];
+            return ['effective_date' => \Carbon\Carbon::parse($data->effective_date)->format('M d, Y'), 'salary' => number_format($hrSalary->total_salary)];
         }
         return 'N/A';
     }

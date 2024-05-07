@@ -13,11 +13,22 @@ class PrDocument extends Model implements Auditable
     ];
 
 
-    protected $fillable = ['pr_detail_id','reference_no','description','document_date','file_name','size','path','extension','pr_folder_name_id'];
+    protected $fillable = ['pr_detail_id', 'reference_no', 'description', 'document_date', 'file_name', 'size', 'path', 'extension', 'pr_folder_name_id'];
 
+    protected $appends = ['full_path'];
 
-    public function prDocumentContent(){
+    function getFullPathAttribute()
+    {
+        return url('/storage/' . $this->path . $this->file_name);
+    }
+
+    function getSizeAttribute($value)
+    {
+        return (round(($value / 1000000), 2));
+    }
+
+    public function prDocumentContent()
+    {
         return $this->hasOne('App\Models\Project\PrDocumentContent');
     }
-   
 }
