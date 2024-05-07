@@ -6183,3 +6183,7 @@
 #56 D:\\xampp\\htdocs\\hrms\\public\\index.php(54): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #57 {main}
 "} 
+[2024-05-07 16:32:22] local.ERROR: Declaration of App\DataTables\Leave\LeaveListDataTable::filename() must be compatible with Yajra\DataTables\Services\DataTable::filename(): string {"userId":1,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Declaration of App\\DataTables\\Leave\\LeaveListDataTable::filename() must be compatible with Yajra\\DataTables\\Services\\DataTable::filename(): string at D:\\xampp\\htdocs\\hrms\\app\\DataTables\\Leave\\LeaveListDataTable.php:154)
+[stacktrace]
+#0 {main}
+"} 

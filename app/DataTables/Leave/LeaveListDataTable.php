@@ -151,8 +151,8 @@ class LeaveListDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
-    {
-        return 'Leave\LeaveList_' . date('YmdHis');
-    }
+    // protected function filename()
+    // {
+    //     return 'Leave\LeaveList_' . date('YmdHis');
+    // }
 }
