@@ -66,16 +66,15 @@ class DocumentationController extends Controller
         }
 
         $employee = HrEmployee::find(session('hr_employee_id'));
-        $employeeFullName = strtolower($employee->first_name) . '_' . strtolower($employee->last_name);
+        $employeeName = str_replace(' ', '_', strtolower($employee->full_name));
 
 
-
-        DB::transaction(function () use ($request, $input, $employeeFullName) {
+        DB::transaction(function () use ($request, $input, $employeeName) {
 
             $extension = request()->document->getClientOriginalExtension();
 
             $fileName = session('hr_employee_id') . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
-            $folderName = "hr/documentation/" . session('hr_employee_id') . '-' . $employeeFullName . "/";
+            $folderName = "hr/documentation/" . session('hr_employee_id') . '-' . $employeeName . "/";
             //store file
             $request->file('document')->storeAs('public/' . $folderName, $fileName);
 
