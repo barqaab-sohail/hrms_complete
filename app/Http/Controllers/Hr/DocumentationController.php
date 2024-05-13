@@ -76,7 +76,7 @@ class DocumentationController extends Controller
             $fileName = session('hr_employee_id') . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
             $folderName = "hr/documentation/" . session('hr_employee_id') . '-' . $employeeName . "/";
             //store file
-            $request->file('document')->storeAs('public/' . $folderName, $fileName);
+            $request->file('document')->storeAs('public/' . $folderName, $fileName,'public');
 
             $file_path = storage_path('app/public/' . $folderName . $fileName);
 
