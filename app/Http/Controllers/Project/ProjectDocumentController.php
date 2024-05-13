@@ -67,7 +67,7 @@ class ProjectDocumentController extends Controller
     }
 
 
-    public function store(DocumentStore $request)
+    public function store(Request $request)
     {
 
         $input = $request->all();
