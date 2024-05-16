@@ -27,7 +27,7 @@
         <div class="card mx-auto col-md-12 col-10 mt-5">
             @if($data)
             @if($data->picture)
-            <img class='mx-auto img-thumbnail' src="{{asset('storage/'.$data->picture)}}" width="150" height="auto" />
+            <img class='mx-auto img-thumbnail' src="{{$data->picture}}" width="150" height="auto" />
             @else
             <img class='mx-auto img-thumbnail' src="{{asset('Massets/images/default.png')}}" width="150" height="auto" />
             @endif
