@@ -25,7 +25,7 @@
 								<td>{{$userPermission->name}}</td>
 								 <td class="text-center">
 								 @can('hr edit record')
-								 <form  id="deletePermission{{$userPermission->id}}" action="{{route('userLogin.destroy',$userPermission->id)}}" method="POST">
+								 <form  id="deletePermission{{$userPermission->id}}" action="{{route('userLogin.destroy',$userPermission->name)}}" method="POST">
 								 @method('DELETE')
 								 @csrf
 								 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you Sure to Delete')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>

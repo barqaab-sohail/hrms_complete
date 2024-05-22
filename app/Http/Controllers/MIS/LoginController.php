@@ -40,7 +40,7 @@ class LoginController extends Controller
                 return response()->json([
                     'status' => 402,
                     'message' => 'You are not Authorized',
-                ])->setStatusCode(402);
+                ])->setStatusCode(401);
             } else {
                 //$token = $user->createToken($user->email . '_token')->plainTextToken;
                 $user->tokens()->where('name', $user->email . '_token')->delete();

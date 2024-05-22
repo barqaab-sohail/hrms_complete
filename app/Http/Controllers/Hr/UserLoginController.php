@@ -44,7 +44,6 @@ class UserLoginController extends Controller
 					$user->update(['email' => $request->email]);
 				}
 			} else {
-
 				$user = User::create(['email' => $request->email, 'password' => Hash::make(Str::random(8))]);
 				$employee->update(['user_id' => $user->id]);
 			}
@@ -58,11 +57,11 @@ class UserLoginController extends Controller
 		return response()->json(['status' => 'OK', 'message' => "Permission Successfully Saved"]);
 	}
 
-	public function destroy($id)
+	public function destroy($perminationName)
 	{
 		$data = HrEmployee::find(session('hr_employee_id'));
 		$user = User::where('id', $data->user_id)->first();
-		$user->revokePermissionTo($id);
+		$user->revokePermissionTo($perminationName);
 		return response()->json(['status' => 'OK', 'message' => "Permission Successfully Deleted"]);
 	}
 

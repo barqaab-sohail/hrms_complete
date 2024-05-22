@@ -29,7 +29,7 @@
                             <select name="permission" class="form-control selectTwo">
                                 <option value=""></option>
                                 @foreach($permissions as $permission)
-                                <option value="{{$permission->id}}" {{(old("permission")==$permission->id? "selected" : "")}}>{{$permission->name}}</option>
+                                <option value="{{$permission->name}}" {{(old("permission")==$permission->id? "selected" : "")}}>{{$permission->name}}</option>
                                 @endforeach
 
                             </select>
