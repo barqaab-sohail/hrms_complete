@@ -139,7 +139,7 @@ class EmployeeController extends Controller
 
     public function index(Request $request)
     {
-
+      
         if ($request->ajax()) {
 
             $value = $this->getAllEmployee();

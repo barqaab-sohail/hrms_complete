@@ -51,9 +51,7 @@
         $('#myDataTable').DataTable({
             stateSave: false,
             dom: 'Blfrtip',
-            order: [
-                [3, 'asc']
-            ],
+            order: [ ],
             buttons: [{
                     extend: 'copyHtml5',
                     exportOptions: {
