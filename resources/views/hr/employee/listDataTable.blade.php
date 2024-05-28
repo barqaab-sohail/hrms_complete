@@ -8,6 +8,7 @@
     <div class="card-body">
         <h4 class="card-title" style="color:black">List of Employees</h4>
         <div class="table-responsive m-t-40">
+            <button id="refresh" class="float-right btn btn-primary" href="#">Refresh</button>
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -20,6 +21,10 @@
                         <th>Last W/D</th>
                         <th>CNIC</th>
                         <th>Date of Joining</th>
+                        <th>Age</th>
+                        <th>Salary</th>
+                        <th>Effective Salary</th>
+                        <th class="text-center" style="width:5%">Expiry</th>
                         <th>Mobile</th>
 
                         @can('hr view record')
@@ -27,7 +32,6 @@
                         @endcan
 
                         @role('Super Admin')
-                        <th class="text-center" style="width:5%">Expiry</th>
                         <th class="text-center" style="width:5%">Delete</th>
                         @endrole
                     </tr>
@@ -42,12 +46,23 @@
 
 <script>
     $(document).ready(function() {
+        // $('#myTable').DataTable().ajax.reload();
+        $("#refresh").click(function (){
+            console.log('okkkkkkk');
+           
+        });
         $('#myTable').DataTable({
             processing: true,
             serverSide: false,
             dom: 'Blfrtip',
             buttons: [
-                'copy', 'excel', 'pdf'
+                'copy', 'excel', 'pdf',{
+            text: 'Reload',
+            action: function ( e, dt, node, config ) {
+               // dt.ajax.reload();
+               dt.ajax.url("{{ route('employee.index') }}").load();
+            }
+        }
             ],
             "aaSorting": [],
 
@@ -93,9 +108,26 @@
                     name: 'joining_date'
                 },
                 {
+                    data: 'age',
+                    name: 'age'
+                },
+                {
+                    data: 'salary',
+                    name: 'salary'
+                },
+                {
+                    data: 'effective_date',
+                    name: 'effective_date'
+                },
+                {
+                    data: 'expiry_date',
+                    name: 'expiry_date'
+                },
+                {
                     data: 'mobile',
                     name: 'mobile'
                 },
+                
                 @can('hr edit documentation') {
                     data: 'edit',
                     name: 'edit',
@@ -103,10 +135,7 @@
                     searchable: false
                 },
                 @endcan
-                @role('Super Admin') {
-                    data: 'expiry_date',
-                    name: 'expiry_date'
-                },
+                @role('Super Admin') 
                 {
                     data: 'delete',
                     name: 'delete',
