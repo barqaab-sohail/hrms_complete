@@ -8,7 +8,6 @@
     <div class="card-body">
         <h4 class="card-title" style="color:black">List of Employees</h4>
         <div class="table-responsive m-t-40">
-            <button id="refresh" class="float-right btn btn-primary" href="#">Refresh</button>
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -57,10 +56,10 @@
             dom: 'Blfrtip',
             buttons: [
                 'copy', 'excel', 'pdf',{
-            text: 'Reload',
+            text: 'Refresh',
             action: function ( e, dt, node, config ) {
-               // dt.ajax.reload();
-               dt.ajax.url("{{ route('employee.index') }}").load();
+                //dt.ajax.reload();
+               dt.ajax.url("{{ route('employees.refresh') }}").load();
             }
         }
             ],

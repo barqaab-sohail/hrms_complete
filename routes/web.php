@@ -20,10 +20,6 @@ use App\Http\Controllers\Project\ProjectLedgerActivityController;
 // });
 
 Route::get('/verifyCard', 'HomeController@employee');
-Route::get('/refresh',function(){
-\Artisan::call('cache:clear');
-return true;
-})->name('cache.clear');
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');
 Route::get('/cardVerificationResult/{employeeId?}', 'HomeController@employeeId')->middleware('XssSanitizer')->name('employee.verification');
 Route::get('/assestVerificationResult/{assetCode}', 'Asset\AssetController@verification')->middleware('XssSanitizer')->name('asset.verification');
@@ -77,6 +73,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
 
     Route::get('/employee/user/data/{id}', 'EmployeeController@userData')->name('user.data');
     Route::resource('/employee', 'EmployeeController');
+    Route::get('/employees/refresh','EmployeeController@refresh')->name('employees.refresh');
 
 
     //all Employee list including terminated/resigned/retired
