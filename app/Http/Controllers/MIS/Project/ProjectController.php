@@ -51,7 +51,8 @@ class ProjectController extends Controller
 
     public function projectDetail($projectId)
     {
-        $data = PrDetail::with('contractType', 'prStatus', 'prRole', 'prDivision', 'client', 'ledgerActivity', 'prCost', 'latestExpenseMonth', 'expenses', 'prDocuments')->find($projectId);
+        $data = PrDetail::with('contractType','latestInvoiceMonth', 'prStatus', 'prRole', 'prDivision', 'client', 'ledgerActivity', 'prCost', 'latestExpenseMonth', 'expenses', 'prDocuments')->find($projectId);
+        $totalCostWithouSalesTax = $data->prCost ? (int) $data->prCost->total_cost ?? 0 - $data->prCost->sales_tax ?? 0 : 0;
         $budgetUtilized = budgetUtilization($projectId);
         $remainingBudget = $budgetUtilized != '0.0' ? 100 - rtrim($budgetUtilized, "%") : '0.0';
         $expenses = $data->expenses;
@@ -61,16 +62,19 @@ class ProjectController extends Controller
         $totalNonReimbursableSalaryExpenses = $expenses->sum('non_reimbursable_salary');
         $totalNonReimbursableExpenses = $expenses->sum('non_reimbursable_expense');
         $totalInvoices = $ledgerActivity->sum('debit');
+        $totalInvoicesWithoutSalesTax = totalInvoicesWithoutSalesTax($projectId);
+        $remainingAmount = $totalCostWithouSalesTax - $totalInvoicesWithoutSalesTax;
         $paymentReceived = $ledgerActivity->sum('credit');
         $lastPaymentReceived = $ledgerActivity->where('credit', '!=', 0)->first()->credit ?? '';
         $lastPaymentDate = $ledgerActivity->where('credit', '!=', 0)->first()->voucher_date ?? '';
         $lastInvoiceAmount =  $ledgerActivity->where('debit', '!=', 0)->first()->debit ?? '';
-        $lastInvoiceDate = $ledgerActivity->where('debit', '!=', 0)->first()->voucher_date ?? '';
+        $lastInvoiceDate =$data->latestInvoiceMonth?->invoice_month ??'';
         $currentProgressWithDate = currentProgress($projectId);
         $currentProgress = explode("-", $currentProgressWithDate)[3] ?? '';
         $progressDate =  mb_substr($currentProgressWithDate, 0, 10);
         $pendingPayment = $totalInvoices - $paymentReceived;
         $totalExpenses = $totalSalaryExpenses + $totalReimbursableExpenses + $totalNonReimbursableSalaryExpenses + $totalNonReimbursableExpenses;
+        
         $project = [
             'name' => $data->name,
             'project_no' => $data->project_no ?? '',
@@ -88,6 +92,7 @@ class ProjectController extends Controller
             'totalExpenses' => $totalExpenses ? number_format($totalExpenses) : '',
             'expensesUpto' => $data->latestExpenseMonth->month ?? '',
             'totalInvoices' => $totalInvoices ? number_format($totalInvoices) : '',
+            'totalInvoicesWithoutSalesTax'=>$totalInvoicesWithoutSalesTax?number_format($totalInvoicesWithoutSalesTax) : '',
             'paymentReceived' => $paymentReceived ? number_format($paymentReceived) : '',
             'pendingPayment' =>  $pendingPayment ? number_format($pendingPayment) : '',
             'lastPaymentReceived' => $lastPaymentReceived ? number_format($lastPaymentReceived) : '',
@@ -96,6 +101,7 @@ class ProjectController extends Controller
             'lastInvoiceDate' => $lastInvoiceDate,
             'totalConsultancy' => $data->prCost?->total_cost ? number_format($data->prCost->total_cost) : '',
             'last_invoice' => lastInvoiceMonth($projectId),
+            'remainingAmount'=>$remainingAmount ? number_format($remainingAmount) : '',
             'budget_utilization' =>  rtrim($budgetUtilized, "%"),
             'remaining_budget' => "$remainingBudget",
             'current_progress' => str_replace(' ', '', $currentProgress),
