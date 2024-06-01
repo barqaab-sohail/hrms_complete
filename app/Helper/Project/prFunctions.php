@@ -165,7 +165,7 @@ function totalInvoicesAmount($projectId)
 function totalInvoicesWithoutSalesTax($projectId)
 {
 
-    $invoicesId = Invoice::where('pr_detail_id', $projectId)->pluck('id')->toArray();
+    $invoicesId = Invoice::where('pr_detail_id', $projectId)->where('invoice_type_id', '!=', 3)->pluck('id')->toArray();
     if($invoicesId){
         $totalInvoices = InvoiceCost::whereIn('invoice_id', $invoicesId)->sum('amount');
         return $totalInvoices;
