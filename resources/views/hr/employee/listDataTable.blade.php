@@ -52,19 +52,20 @@
         });
         $('#myTable').DataTable({
             processing: true,
-            serverSide: false,
+            serverSide: true,
             dom: 'Blfrtip',
+            length:2000,
             buttons: [
                 'copy', 'excel', 'pdf',{
-            text: 'Refresh',
-            action: function ( e, dt, node, config ) {
-                //dt.ajax.reload();
-               dt.ajax.url("{{ route('employees.refresh') }}").load();
-            }
-        }
+                text: 'Refresh',
+                    action: function ( e, dt, node, config ) {
+                        //dt.ajax.reload();
+                    dt.ajax.url("{{ route('employees.refresh') }}").load();
+                    }
+                }
             ],
             "aaSorting": [],
-
+         
             ajax: {
                 url: "{{ route('employee.index') }}",
             },
