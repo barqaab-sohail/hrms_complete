@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
-
+use App\Models\Hr\HrExperience;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +26,14 @@ Route::get('/assestVerificationResult/{assetCode}', 'Asset\AssetController@verif
 
 Route::get('/dashboard', 'HomeController@index')->middleware('auth')->name('dashboard');
 //Route::get ('insert','Hr\EmployeeController@insert');
-Route::get('/test', 'TestController@test');
+Route::get('/test', function(){
+    $data =HrExperience::where('hr_employee_id',253)->get();
+    foreach ($data as $experience){
+        echo $experience->job_title.'------'.$experience->to. "<br>";
+    }
+    
+
+});
 Auth::routes();
 
 // Route::group(['prefix' => 'code', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Auth','name' =>'opt.'], function(){
