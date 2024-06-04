@@ -56,6 +56,8 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Expiry Date</label>
                             <input type="text" name="expiry_date" id="expiry_date" value="{{ old('expiry_date',$data->expiry_date??'') }}" class="form-control date_input" readonly>
+                            <br>
+                            @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan
                         </div>
                     </div>
                 </div>
