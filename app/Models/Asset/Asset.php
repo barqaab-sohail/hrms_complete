@@ -9,7 +9,17 @@ class Asset extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     protected $fillable = ['description', 'asset_code', 'as_sub_class_id'];
+    protected $appends = ['picture'];
 
+    function getPictureAttribute()
+    {
+      
+        $picture = AsDocumentation::where('asset_id', $this->id)->where('description', 'image')->first();
+        if ($picture) {
+            return asset('/storage/' . $picture->path . $picture?->file_name);
+        }
+        return '';
+    }
 
     public function companyAsset()
     {
@@ -144,7 +154,7 @@ class Asset extends Model implements Auditable
 
     public function asDocumentation()
     {
-        return $this->hasOne('App\Models\Asset\AsDocumentation');
+        return $this->hasMany('App\Models\Asset\AsDocumentation');
     }
 
     public function asPicture()
@@ -157,5 +167,10 @@ class Asset extends Model implements Auditable
     {
 
         return $this->hasMany('App\Models\Asset\AsLocation');
+    }
+
+    public function asMaintenances()
+    {
+        return $this->hasMany('App\Models\Asset\AsMaintenance');
     }
 }

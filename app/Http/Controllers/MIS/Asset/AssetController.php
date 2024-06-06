@@ -62,6 +62,7 @@ class AssetController extends Controller
             $allocation = $employee != "" ? $employee . ', ' . $designation : '';
             $data[] = array(
                 'name' => $asset->description ?? '',
+                'id'=>$asset->id,
                 //'picture'=> asset('/storage/' . $asset->asPicture->path . $asset->asPicture->file_name),
                 'picture' => "https://barqaab.pk/hrms/storage/" . $asset->asPicture->path . $asset->asPicture->file_name,
                 'location' => $location,
@@ -69,5 +70,41 @@ class AssetController extends Controller
             );
         }
         return response()->json($data);
+    }
+
+    public function asset($assetId){
+
+        $data =  Asset::find($assetId);
+
+        $allocation = $data->asCurrentAllocation;
+        $maintenances = $data->asMaintenances;
+        if($maintenances->sum('maintenance_cost')=='0'){
+            $maintenances =null;
+        }
+        $condition = $data->asCondition?$data->asCondition->name:'Working';
+        
+
+        $asset = [
+            'id'=>$data->id,
+            'description'=>$data->description,
+            'asset_code'=>$data->asset_code,
+            'asset_picture'=>$data->picture??'',
+            'condition'=>$condition,
+            'purchase_condition'=>$data->asPurchaseCondition?->name,
+            'purchase_date'=>$data->asPurchase?\Carbon\Carbon::parse($data->asPurchase->purchase_date)->format('M d, Y'):'',
+            'purchase_cost'=>$data->asPurchase?number_format($data->asPurchase->purchase_cost,0):'',
+            'location_office'=>$data->asCurrentLocation?->name,
+            'location_address'=>$data->asCurrentLocation?->address,
+            'allocation_name'=>$allocation?->full_name,
+            'allocation_designation'=>$allocation?->designation,
+            'allocation_picture'=>$allocation?->picture,
+            'maintenance_cost'=>$maintenances?number_format($maintenances->sum('maintenance_cost'),0):'',
+            'maintenances'=>$maintenances,
+            'documents'=>$data->asDocumentation,
+            
+        ];
+
+        return $asset;
+
     }
 }

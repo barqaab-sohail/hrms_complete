@@ -33,11 +33,10 @@ use App\Http\Controllers\Hr\CardController;
 
 
 // End Temp Routing
+
+
+//Projects Routes
 Route::get('/card/{id}', [CardController::class, 'getEmployeePicture']);
-Route::get('/projects/{status?}/{division?}', [ProjectController::class, 'projects']);
-Route::get('/project/{id}', [ProjectController::class, 'projectDetail']);
-Route::get('/assetSubClasses', [AssetController::class, 'assetSubClasses']);
-Route::get('/asset/{subClassId}', [AssetController::class, 'subClassList']);
 Route::get('/charts', [ChartController::class, 'index']);
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
@@ -70,7 +69,9 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::get('/currentMonthInvoices', 'Dashboard\DashboardController@currentMonthInvoices');
     Route::get('/lastMonthInvoices', 'Dashboard\DashboardController@lastMonthInvoices');
     Route::get('/totalBudgetExpenditure/{id}', 'Dashboard\DashboardController@totalBudgetExpenditure');
-
+    Route::get('/projects/{status?}/{division?}', [ProjectController::class, 'projects']);
+    Route::get('/project/{id}', [ProjectController::class, 'projectDetail']);
+    Route::get('/projectDocuments/{id}', 'MIS\Project\ProjectController@projectDocuments');
 
 
     //HR Routes
@@ -82,9 +83,10 @@ Route::middleware("auth:sanctum")->group(function () {
 
     //Assets Routes
     Route::get('/assets', 'MIS\Asset\AssetController@index');
-
-    //Projects Routes
-    Route::get('/projectDocuments/{id}', 'MIS\Project\ProjectController@projectDocuments');
+    Route::get('/assetSubClasses', [AssetController::class, 'assetSubClasses']);
+    Route::get('/asset/{assetId}', 'MIS\Asset\AssetController@asset');
+    Route::get('/subclass/{subClassId}', [AssetController::class, 'subClassList']);
+    
 
 
     Route::get('/manMonthProjectsStatus', 'MIS\Project\ProjectController@manMonthProjectsStatus');
