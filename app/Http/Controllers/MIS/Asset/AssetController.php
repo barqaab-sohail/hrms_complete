@@ -74,7 +74,7 @@ class AssetController extends Controller
 
     public function asset($assetId){
 
-        $data =  Asset::find($assetId);
+        $data =  Asset::with('asDocumentations','asCurrentAllocation','asMaintenances','asCondition','asPurchaseCondition')->find($assetId);
 
         $allocation = $data->asCurrentAllocation;
         $maintenances = $data->asMaintenances;
@@ -100,7 +100,7 @@ class AssetController extends Controller
             'allocation_picture'=>$allocation?->picture,
             'maintenance_cost'=>$maintenances?number_format($maintenances->sum('maintenance_cost'),0):'',
             'maintenances'=>$maintenances,
-            'documents'=>$data->asDocumentation,
+            'documents'=>$data->asDocumentations,
             
         ];
 

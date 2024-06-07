@@ -154,6 +154,11 @@ class Asset extends Model implements Auditable
 
     public function asDocumentation()
     {
+        return $this->hasOne('App\Models\Asset\AsDocumentation');
+    }
+
+    public function asDocumentations()
+    {
         return $this->hasMany('App\Models\Asset\AsDocumentation');
     }
 
