@@ -41,27 +41,7 @@ class AsMaintenanceController extends Controller
                             return $btn;
                     })
                 
-                    ->addColumn('maintenance_detail', function($row){                
-                        
-                        $btn = $row->maintenance_detail;
-                                                
-                        return $btn;  
-                           
-                    })
-                    ->addColumn('maintenance_cost', function($row){                
-                        
-                        $btn = number_format($row->maintenance_cost);
-                                                
-                        return $btn;  
-                           
-                    })
-                    ->addColumn('maintenance_date', function($row){                
-                       
-                        $btn = $row->maintenance_date;
-                        
-                        return $btn;          
-                    })
-                    ->rawColumns(['Edit','Delete','maintenance_detail','maintenance_cost','maintenance_date'])
+                    ->rawColumns(['Edit','Delete'])
                     ->make(true);
           
         }

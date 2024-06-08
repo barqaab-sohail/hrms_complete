@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Asset;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Asset\AsConsumable;
+use App\Models\Asset\Consumable;
 use App\Http\Requests\Asset\AsConsumableStore;
 use DataTables;
 use DB;
@@ -12,8 +13,8 @@ use DB;
 class AsConsumableController extends Controller
 {
     public function index(){
-
-        $view =  view('asset.maintenance.create')->render();
+        $consumableItems = Consumable::all();
+        $view =  view('asset.consumable.create',compact('consumableItems'))->render();
      return response()->json($view);
  }
 
@@ -21,75 +22,62 @@ class AsConsumableController extends Controller
 
      if ($request->ajax()) {
 
-         $data= AsMaintenance::where('asset_id',session('asset_id'))
+         $data= AsConsumable::where('asset_id',session('asset_id'))
                      ->latest()->get();
         
 
          return  DataTables::of($data)
                  ->addIndexColumn()  
+                 ->editColumn('consumable_id', function($row){                
+                        
+                    $btn = $row->consumable->name;
+                                            
+                    return $btn;  
+                       
+                })
                  ->addColumn('Edit', function($row){
                     
-                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editMaintenance">Edit</a>';
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editConsumable">Edit</a>';
                                           
                          return $btn;
                  })
                  ->addColumn('Delete', function($row){                
                      
-                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMaintenance">Delete</a>';
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteConsumable">Delete</a>';
                         
                               
                          return $btn;
                  })
              
-                 ->addColumn('maintenance_detail', function($row){                
-                     
-                     $btn = $row->maintenance_detail;
-                                             
-                     return $btn;  
-                        
-                 })
-                 ->addColumn('maintenance_cost', function($row){                
-                     
-                     $btn = number_format($row->maintenance_cost);
-                                             
-                     return $btn;  
-                        
-                 })
-                 ->addColumn('maintenance_date', function($row){                
-                    
-                     $btn = $row->maintenance_date;
-                     
-                     return $btn;          
-                 })
-                 ->rawColumns(['Edit','Delete','maintenance_detail','maintenance_cost','maintenance_date'])
+                 ->rawColumns(['Edit','Delete'])
                  ->make(true);
        
      }
      
-     $view =  view('asset.maintenance.create')->render();
+     $view =  view('asset.consumable.create')->render();
      return response()->json($view);
 
  }
 
- public function store (AsMaintenanceStore $request){
+ public function store (AsConsumableStore $request){
 
      $input = $request->all();
-     if($request->filled('maintenance_date')){
-         $input ['maintenance_date']= \Carbon\Carbon::parse($request->maintenance_date)->format('Y-m-d');
+     if($request->filled('consumable_date')){
+         $input ['consumable_date']= \Carbon\Carbon::parse($request->consumable_date)->format('Y-m-d');
      }
 
-     if($request->filled('maintenance_cost')){
-         $input ['maintenance_cost'] = (int)str_replace(',', '', $input['maintenance_cost']);
+     if($request->filled('consumable_cost')){
+         $input ['consumable_cost'] = (int)str_replace(',', '', $input['consumable_cost']);
      }
 
      DB::transaction(function () use ($input) {  
          
         
-             AsMaintenance::updateOrCreate(['id' => $input['as_maintenance_id']],
+             AsConsumable::updateOrCreate(['id' => $input['as_consumable_id']],
                  
-                 ['maintenance_detail'=> $input['maintenance_detail'],
-                 'maintenance_cost'=> $input['maintenance_cost'],
-                 'maintenance_date'=> $input['maintenance_date'],
+                 ['consumable_id'=> $input['consumable_id'],
+                 'consumable_cost'=> $input['consumable_cost'],
+                 'consumable_date'=> $input['consumable_date'],
                  'asset_id'=> session('asset_id')]); 
 
      }); // end transcation      
@@ -100,15 +88,15 @@ class AsConsumableController extends Controller
  public function edit($id)
  {
      
-     $asMaintenance = AsMaintenance::find($id);
+     $asConsumable = AsConsumable::find($id);
  
-     return response()->json($asMaintenance);
+     return response()->json($asConsumable);
  }
 
  public function destroy ($id){
 
      DB::transaction(function () use ($id) {  
-         AsMaintenance::find($id)->delete(); 
+        AsConsumable::find($id)->delete(); 
      }); // end transcation 
 
      return response()->json(['success'=>"data  delete successfully."]);

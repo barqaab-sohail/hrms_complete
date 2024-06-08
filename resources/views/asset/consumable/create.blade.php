@@ -1,23 +1,28 @@
 <div style="margin-top:10px; margin-right: 10px;">
-    <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Maintenance</button>
+    <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Consumable</button>
 </div>
 
 
 <div class="card-body">
 
-    <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formMaintenance" enctype="multipart/form-data">
+    <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formConsumable" enctype="multipart/form-data">
         {{csrf_field()}}
           <div class="form-body">
             
-            <h3 class="box-title" id="formHeading">Maintenance</h3>
+            <h3 class="box-title" id="formHeading">Consumable</h3>
             <hr class="m-t-0 m-b-40">
             <div class="row">
-              <input type="hidden" name="as_maintenance_id" id="as_maintenance_id"/>
+              <input type="hidden" name="as_consumable_id" id="as_consumable_id"/>
                 <div class="col-md-6">
                   <div class="form-group row">
                     <div class="col-md-12">
-                        <label class="control-label text-right">Maintenance Detail<span class="text_requried">*</span></label>
-                        <input type="text" name="maintenance_detail" id="maintenance_detail" value="{{ old('maintenance_detail') }}" data-validation="required" class="form-control" placeholder="Enter Maintenance Detail">
+                        <label class="control-label text-right">Consumable Item<span class="text_requried">*</span></label>
+                        <select name="consumable_id" id="consumable_id" class="form-control selectTwo">
+                        <option value=""></option>
+                        @foreach($consumableItems as $item)
+                        <option value="{{$item->id}}" {{(old("consumable_id")==$item->id? "selected" : "")}}>{{$item->name}}</option>
+                        @endforeach
+                    </select>
                       
                     </div>
                   </div>
@@ -25,8 +30,8 @@
                 <div class="col-md-3">
                     <div class="form-group row">
                       <div class="col-md-12">
-                          <label class="control-label text-right">Maintenance Cost<span class="text_requried">*</span></label>
-                          <input type="text" name="maintenance_cost" id="maintenance_cost" value="{{ old('maintenance_cost') }}" data-validation="required" class="form-control" placeholder="Enter Maintenance Cost">
+                          <label class="control-label text-right">Cost<span class="text_requried">*</span></label>
+                          <input type="text" name="consumable_cost" id="consumable_cost" value="{{ old('consumable_cost') }}" data-validation="required" class="form-control" placeholder="Enter Consumable Cost">
                           
                       </div>
                     </div>
@@ -37,7 +42,7 @@
                     <div class="col-md-12">
                         <label class="control-label text-right">Date<span class="text_requried">*</span></label>
                         
-                        <input type="text" id="maintenance_date" name="maintenance_date" value="{{ old('maintenance_date') }}" class="form-control date_input" data-validation="required" readonly>
+                        <input type="text" id="consumable_date" name="consumable_date" value="{{ old('consumable_date') }}" class="form-control date_input" data-validation="required" readonly>
     
                         <br>
                         <i class="fas fa-trash-alt text_requried"></i>
@@ -67,7 +72,7 @@
 <table class="table table-bordered data-table" width=100%>
     <thead>
       <tr>
-          <th>Maintenance Detail</th>
+          <th>Consumable Detail</th>
           <th>Cost</th>
           <th>Date</th>
           <th>Edit</th>
@@ -87,9 +92,9 @@ $(document).ready(function(){
 
        // formFunctions();
 
-       $('#formMaintenance').hide();   
+       $('#formConsumable').hide();   
 
-       $('#maintenance_cost').keyup(function(event) {
+       $('#consumable_cost').keyup(function(event) {
 
       // skip for arrow keys
       if(event.which >= 37 && event.which <= 40) return;
@@ -115,12 +120,12 @@ $(function () {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('asMaintenance.create') }}",
+        ajax: "{{ route('asConsumable.create') }}",
         columns: [
             
-            {data: "maintenance_detail", name: 'maintenance_detail'},
-            {data: "maintenance_cost", name: 'maintenance_cost'},
-            {data: "maintenance_date", name: 'maintenance_date'},
+            {data: "consumable_id", name: 'consumable_id'},
+            {data: "consumable_cost", name: 'consumable_cost'},
+            {data: "consumable_date", name: 'consumable_date'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
 
@@ -129,33 +134,33 @@ $(function () {
     });
 
     $('#hideButton').click(function(){
-            $('#formMaintenance').toggle();
-            $('#formMaintenance').trigger("reset");
+            $('#formConsumable').toggle();
+            $('#formConsumable').trigger("reset");
           
     });
 
-    $('body').unbind().on('click', '.editMaintenance', function () {
+    $('body').unbind().on('click', '.editConsumable', function () {
 
 
-      var as_maintenance_id = $(this).data('id');
+      var as_consumable_id = $(this).data('id');
 
-      $.get("{{ url('hrms/asMaintenance') }}" +'/' + as_maintenance_id +'/edit', function (data) {
-          $('#formMaintenance').show(); 
-          $('#formHeading').html("Edit Maintenance");
-          $('#as_maintenance_id').val(data.id);
-          $('#maintenance_detail').val(data.maintenance_detail);
-          $('#maintenance_cost').val((data.maintenance_cost).toLocaleString());
-          $('#maintenance_date').val(data.maintenance_date);
+      $.get("{{ url('hrms/asConsumable') }}" +'/' + as_consumable_id +'/edit', function (data) {
+          $('#formConsumable').show(); 
+          $('#formHeading').html("Edit Consumable");
+          $('#as_consumable_id').val(data.id);
+          $('#consumable_id').val(data.consumable_id).trigger('change');
+          $('#consumable_cost').val((data.consumable_cost).toLocaleString());
+          $('#consumable_date').val(data.consumable_date);
       })
    });
     
-      $("#formMaintenance").submit(function(e) {
+      $("#formConsumable").submit(function(e) {
         e.preventDefault();
         var formData = new FormData(this);
 
         $.ajax({
           data: formData,
-          url: "{{ route('asMaintenance.store') }}",
+          url: "{{ route('asConsumable.store') }}",
           type: "POST",
           //dataType: 'json',
            contentType: false,
@@ -166,8 +171,8 @@ $(function () {
                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');
               }else{
 
-                $('#formMaintenance').trigger("reset");
-                $('#formMaintenance').toggle();
+                $('#formConsumable').trigger("reset");
+                $('#formConsumable').toggle();
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');  
 
                 table.draw();
@@ -187,15 +192,15 @@ $(function () {
       });
     });
     
-    $('body').on('click', '.deleteMaintenance', function () {
+    $('body').on('click', '.deleteConsumable', function () {
      
-        var as_maintenance_id = $(this).data("id");
+        var as_consumable_id = $(this).data("id");
 
         var con = confirm("Are You sure want to delete !");
         if(con){
           $.ajax({
             type: "DELETE",
-            url: "{{ route('asMaintenance.store') }}"+'/'+as_maintenance_id,
+            url: "{{ route('asConsumable.store') }}"+'/'+as_consumable_id,
             success: function (data) {
                 table.draw();
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');
