@@ -27,7 +27,7 @@ class LeaveStore extends FormRequest
         $endDate = $this->yearFrom . '-12-31';
 
         $employee = HrEmployee::find($request->hr_employee_id);
-        $joiningDate = $employee->employeeAppointment->joining_date;
+        $joiningDate = $employee->employeeAppointment?->joining_date;
 
         //check total casual leave balance
         $totalCasualLeave = 0;

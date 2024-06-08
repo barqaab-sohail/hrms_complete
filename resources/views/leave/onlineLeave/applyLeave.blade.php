@@ -30,7 +30,7 @@
                                         <div class="form-group row">
                                             <div class="col-md-12">
                                                 <label class="control-label text-right">Employee Name<span class="text_requried">*</span></label>
-                                                <input type="text" name="full_name" value="{{ old('full_name', $employee->full_name) }}" class="form-control" data-validation="required" readonly>
+                                                <input type="text" name="hr_employee_id" value="{{ old('hr_employee_id', $employee->full_name) }}" class="form-control" data-validation="required" readonly>
                                                 
                                             </div>
                                         </div>

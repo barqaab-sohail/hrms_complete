@@ -263,6 +263,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/asLocation', 'AsLocationController');
     Route::resource('/asOwnership', 'AsOwnershipController');
     Route::resource('/asMaintenance', 'AsMaintenanceController');
+    Route::resource('/asConsumable', 'AsConsumableController');
     Route::resource('/asCondition', 'AsConditionController');
     Route::get('/asset/sub_classes/{id?}', 'AssetController@getSubClasses');
     Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
@@ -272,7 +273,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
 //Leave Routes
 Route::get('/onlineLeave', 'Leave\LeaveController@onlineLeave');
 Route::post('/leaveEmployeeData', 'Leave\LeaveController@employeeData')->name('leave.employeeData');
-Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Leave'], function () {
+Route::group(['prefix' => 'hrms', 'middleware' => ['XssSanitizer'], 'namespace' => 'Leave'], function () {
     Route::resource('/leave', 'LeaveController', ['except' => ['show']]);
     Route::get('/leaveType/{id?}', 'LeaveController@leaveType')->name('leaveType');
     Route::resource('leaveStatus', 'LeaveStatusController');

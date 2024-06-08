@@ -122,7 +122,7 @@ class LeaveController extends Controller
         return response()->json($states);
     }
 
-    public function store(LeaveStore $request)
+    public function store(Request $request)
     {
 
         $input = $request->all();
