@@ -33,6 +33,11 @@ class AsMaintenanceController extends Controller
                                              
                             return $btn;
                     })
+                    ->editColumn('maintenance_date', function($row){                
+                        
+                        return \Carbon\Carbon::parse($row->maintenance_date)->format('M d, Y');
+                            
+                     })
                     ->addColumn('Delete', function($row){                
                         
                            $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMaintenance">Delete</a>';

@@ -13,7 +13,7 @@
             <hr class="m-t-0 m-b-40">
             <div class="row">
               <input type="hidden" name="as_consumable_id" id="as_consumable_id"/>
-                <div class="col-md-6">
+                <div class="col-md-3">
                   <div class="form-group row">
                     <div class="col-md-12">
                         <label class="control-label text-right">Consumable Item<span class="text_requried">*</span></label>
@@ -27,7 +27,30 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                  <div class="form-group row">
+                    <div class="col-md-12">
+                        <label class="control-label text-right">Quantity<span class="text_requried">*</span></label>
+                        <input type="text" name="consumable_qty" id="consumable_qty" value="{{ old('consumable_qty') }}" data-validation="required" class="form-control" placeholder="Enter Quantity">
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group row">
+                    <div class="col-md-12">
+                        <label class="control-label text-right">Unit<span class="text_requried">*</span></label>
+                        <select name="unit_id" id="unit_id" class="form-control selectTwo">
+                        <option value=""></option>
+                        @foreach($units as $unit)
+                        <option value="{{$unit->id}}" {{(old("unit_id")==$unit->id? "selected" : "")}}>{{$unit->name}}</option>
+                        @endforeach
+                    </select>
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-2">
                     <div class="form-group row">
                       <div class="col-md-12">
                           <label class="control-label text-right">Cost<span class="text_requried">*</span></label>
@@ -74,6 +97,8 @@
       <tr>
           <th>Consumable Detail</th>
           <th>Cost</th>
+          <th>Quantity</th>
+          <th>Unit</th>
           <th>Date</th>
           <th>Edit</th>
           <th>Delete</th>
@@ -90,7 +115,8 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-       // formFunctions();
+      
+    // formFunctions();
 
        $('#formConsumable').hide();   
 
@@ -125,6 +151,8 @@ $(function () {
             
             {data: "consumable_id", name: 'consumable_id'},
             {data: "consumable_cost", name: 'consumable_cost'},
+            {data: "consumable_qty", name: 'consumable_qty'},
+            {data: "unit_id", name: 'unit_id'},
             {data: "consumable_date", name: 'consumable_date'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
@@ -149,6 +177,8 @@ $(function () {
           $('#formHeading').html("Edit Consumable");
           $('#as_consumable_id').val(data.id);
           $('#consumable_id').val(data.consumable_id).trigger('change');
+          $('#unit_id').val(data.unit_id).trigger('change');
+          $('#consumable_qty').val(data.consumable_qty);
           $('#consumable_cost').val((data.consumable_cost).toLocaleString());
           $('#consumable_date').val(data.consumable_date);
       })

@@ -23,6 +23,8 @@ class AsConsumableStore extends FormRequest
     {
         $rules = [
             'consumable_id'=> 'required',
+            'unit_id'=> 'required',
+            'consumable_qty'=> 'required',
             'consumable_cost'=> 'required',
             'consumable_date'=> 'required',
             ];

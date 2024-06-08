@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Asset\AsConsumable;
 use App\Models\Asset\Consumable;
+use App\Models\Asset\Unit;
 use App\Http\Requests\Asset\AsConsumableStore;
 use DataTables;
 use DB;
@@ -14,7 +15,8 @@ class AsConsumableController extends Controller
 {
     public function index(){
         $consumableItems = Consumable::all();
-        $view =  view('asset.consumable.create',compact('consumableItems'))->render();
+        $units = Unit::all();
+        $view =  view('asset.consumable.create',compact('consumableItems','units'))->render();
      return response()->json($view);
  }
 
@@ -30,11 +32,19 @@ class AsConsumableController extends Controller
                  ->addIndexColumn()  
                  ->editColumn('consumable_id', function($row){                
                         
-                    $btn = $row->consumable->name;
-                                            
-                    return $btn;  
+                   return $row->consumable->name;
                        
                 })
+                ->editColumn('unit_id', function($row){                
+                        
+                    return $row->unit?->name;
+                        
+                 })
+                 ->editColumn('consumable_date', function($row){                
+                        
+                    return \Carbon\Carbon::parse($row->consumable_date)->format('M d, Y');
+                        
+                 })
                  ->addColumn('Edit', function($row){
                     
                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editConsumable">Edit</a>';
@@ -76,7 +86,9 @@ class AsConsumableController extends Controller
              AsConsumable::updateOrCreate(['id' => $input['as_consumable_id']],
                  
                  ['consumable_id'=> $input['consumable_id'],
+                 'unit_id'=> $input['unit_id'],
                  'consumable_cost'=> $input['consumable_cost'],
+                 'consumable_qty'=> $input['consumable_qty'],
                  'consumable_date'=> $input['consumable_date'],
                  'asset_id'=> session('asset_id')]); 
 

@@ -16,11 +16,14 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('asset_id')->unsigned();
             $table->bigInteger('consumable_id')->unsigned();
+            $table->bigInteger('unit_id')->unsigned()->nullable();
             $table->integer('consumable_cost');
+            $table->integer('consumable_qty')->nullable();
             $table->date('consumable_date');
             $table->timestamps();
             $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
-            $table->foreign('consumable_id')->references('id')->on('consumables')->onDelete('cascade');
+            $table->foreign('consumable_id')->references('id')->on('consumables');
+            $table->foreign('unit_id')->references('id')->on('units');
         });
     }
 

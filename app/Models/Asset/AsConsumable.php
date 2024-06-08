@@ -10,11 +10,15 @@ class AsConsumable extends Model implements Auditable
 {
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
-    protected $fillable = ['asset_id','consumable_id','consumable_cost','consumable_date'];
+    protected $fillable = ['asset_id','consumable_id','unit_id','consumable_cost','consumable_qty','consumable_date'];
 
     
     //belong to Consumable Items
     public function consumable(){
         return $this->belongsTo('App\Models\Asset\Consumable');
+    }
+
+    public function unit(){
+        return $this->belongsTo('App\Models\Asset\Unit');
     }
 }
