@@ -24,7 +24,7 @@ class AsConsumableController extends Controller
 
      if ($request->ajax()) {
 
-         $data= AsConsumable::where('asset_id',session('asset_id'))
+         $data= AsConsumable::where('asset_id',$request->assetId)
                      ->latest()->get();
         
 
@@ -90,7 +90,7 @@ class AsConsumableController extends Controller
                  'consumable_cost'=> $input['consumable_cost'],
                  'consumable_qty'=> $input['consumable_qty'],
                  'consumable_date'=> $input['consumable_date'],
-                 'asset_id'=> session('asset_id')]); 
+                 'asset_id'=> $input['asset_id']]); 
 
      }); // end transcation      
     return response()->json(['success'=>"Data saved successfully."]);

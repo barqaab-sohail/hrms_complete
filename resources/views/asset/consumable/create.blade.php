@@ -13,6 +13,7 @@
             <hr class="m-t-0 m-b-40">
             <div class="row">
               <input type="hidden" name="as_consumable_id" id="as_consumable_id"/>
+              
                 <div class="col-md-3">
                   <div class="form-group row">
                     <div class="col-md-12">
@@ -114,8 +115,7 @@
         
 <script type="text/javascript">
 $(document).ready(function(){
-
-      
+    
     // formFunctions();
 
        $('#formConsumable').hide();   
@@ -146,7 +146,9 @@ $(function () {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('asConsumable.create') }}",
+        ajax:{url:"{{ route('asConsumable.create') }}", data: {
+            assetId: $("#id").val()
+        }},
         columns: [
             
             {data: "consumable_id", name: 'consumable_id'},
@@ -187,7 +189,7 @@ $(function () {
       $("#formConsumable").submit(function(e) {
         e.preventDefault();
         var formData = new FormData(this);
-
+        formData.append("asset_id", $("#id").val());
         $.ajax({
           data: formData,
           url: "{{ route('asConsumable.store') }}",

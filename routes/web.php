@@ -263,6 +263,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/asLocation', 'AsLocationController');
     Route::resource('/asOwnership', 'AsOwnershipController');
     Route::resource('/asMaintenance', 'AsMaintenanceController');
+    Route::get('/asConsumables','AsConsumableController@create')->name('asConsumable.list');
     Route::resource('/asConsumable', 'AsConsumableController');
     Route::resource('/asCondition', 'AsConditionController');
     Route::get('/asset/sub_classes/{id?}', 'AssetController@getSubClasses');
