@@ -115,7 +115,9 @@ $(function () {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('asMaintenance.create') }}",
+        ajax:{url:"{{ route('asMaintenance.create') }}", data: {
+            assetId: $("#id").val()
+        }},
         columns: [
             
             {data: "maintenance_detail", name: 'maintenance_detail'},
@@ -152,7 +154,7 @@ $(function () {
       $("#formMaintenance").submit(function(e) {
         e.preventDefault();
         var formData = new FormData(this);
-
+        formData.append("asset_id", $("#id").val());
         $.ajax({
           data: formData,
           url: "{{ route('asMaintenance.store') }}",

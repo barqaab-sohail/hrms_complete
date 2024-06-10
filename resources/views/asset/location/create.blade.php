@@ -154,7 +154,9 @@
     var table = $('.data-table').DataTable({
       processing: true,
       serverSide: true,
-      ajax: "{{ route('asLocation.create') }}",
+      ajax:{url:"{{ route('asLocation.create') }}", data: {
+            assetId: $("#id").val()
+        }},
       columns: [
 
         {
@@ -226,7 +228,7 @@
       }, 3000);
       e.preventDefault();
       var formData = new FormData(this);
-
+      formData.append("asset_id", $("#id").val());
       $.ajax({
         data: formData,
         url: "{{ route('asLocation.store') }}",

@@ -18,7 +18,7 @@
                   <div class="form-group row">
                     <div class="col-md-12">
                         <label class="control-label text-right">Consumable Item<span class="text_requried">*</span></label>
-                        <select name="consumable_id" id="consumable_id" class="form-control selectTwo">
+                        <select name="consumable_id" id="consumable_id" class="form-control selectTwo" data-validation="required">
                         <option value=""></option>
                         @foreach($consumableItems as $item)
                         <option value="{{$item->id}}" {{(old("consumable_id")==$item->id? "selected" : "")}}>{{$item->name}}</option>
@@ -31,8 +31,8 @@
                 <div class="col-md-2">
                   <div class="form-group row">
                     <div class="col-md-12">
-                        <label class="control-label text-right">Quantity<span class="text_requried">*</span></label>
-                        <input type="text" name="consumable_qty" id="consumable_qty" value="{{ old('consumable_qty') }}" data-validation="required" class="form-control" placeholder="Enter Quantity">
+                        <label class="control-label text-right">Quantity</label>
+                        <input type="text" name="consumable_qty" id="consumable_qty" value="{{ old('consumable_qty') }}"  class="form-control" placeholder="Enter Quantity">
                       
                     </div>
                   </div>
@@ -40,7 +40,7 @@
                 <div class="col-md-2">
                   <div class="form-group row">
                     <div class="col-md-12">
-                        <label class="control-label text-right">Unit<span class="text_requried">*</span></label>
+                        <label class="control-label text-right">Unit</label>
                         <select name="unit_id" id="unit_id" class="form-control selectTwo">
                         <option value=""></option>
                         @foreach($units as $unit)
@@ -166,7 +166,8 @@ $(function () {
     $('#hideButton').click(function(){
             $('#formConsumable').toggle();
             $('#formConsumable').trigger("reset");
-          
+            $('#consumable_id').trigger('change');
+            $('#unit_id').trigger('change');
     });
 
     $('body').unbind().on('click', '.editConsumable', function () {

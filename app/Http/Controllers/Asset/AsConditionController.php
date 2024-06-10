@@ -22,7 +22,7 @@ class AsConditionController extends Controller
 
     	if ($request->ajax()) {
 
-            $data= AsCondition::where('asset_id',session('asset_id'))
+            $data= AsCondition::where('asset_id',$request->assetId)
                         ->latest()->get();
            
 
@@ -79,7 +79,7 @@ class AsConditionController extends Controller
                     
                     ['as_condition_type_id'=> $input['as_condition_type_id'],
                     'condition_date'=> $input['condition_date'],
-                    'asset_id'=> session('asset_id')]); 
+                    'asset_id'=> $input['asset_id']]); 
 
         }); // end transcation      
        return response()->json(['success'=>"Data saved successfully."]);

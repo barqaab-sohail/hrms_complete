@@ -18,6 +18,8 @@ class ConsumableSeeder extends Seeder
         $consumables = array(
         	array('name' => 'Petrol'),
         	array('name' => 'Diesel'),
+            array('name' => 'M-Tag'),
+            array('name' => 'Toll Tax'),
         );
         DB::table('consumables')->insert($consumables);
     }

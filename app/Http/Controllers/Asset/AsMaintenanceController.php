@@ -21,7 +21,7 @@ class AsMaintenanceController extends Controller
 
     	if ($request->ajax()) {
 
-            $data= AsMaintenance::where('asset_id',session('asset_id'))
+            $data= AsMaintenance::where('asset_id',$request->assetId)
                         ->latest()->get();
            
 
@@ -75,7 +75,7 @@ class AsMaintenanceController extends Controller
                     ['maintenance_detail'=> $input['maintenance_detail'],
                     'maintenance_cost'=> $input['maintenance_cost'],
                     'maintenance_date'=> $input['maintenance_date'],
-                    'asset_id'=> session('asset_id')]); 
+                    'asset_id'=> $input['asset_id']]); 
 
         }); // end transcation      
        return response()->json(['success'=>"Data saved successfully."]);

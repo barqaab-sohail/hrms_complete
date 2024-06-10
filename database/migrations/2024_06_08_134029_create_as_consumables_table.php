@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('consumable_id')->unsigned();
             $table->bigInteger('unit_id')->unsigned()->nullable();
             $table->integer('consumable_cost');
-            $table->integer('consumable_qty')->nullable();
+            $table->decimal('consumable_qty',5,2)->nullable();
             $table->date('consumable_date');
             $table->timestamps();
             $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
