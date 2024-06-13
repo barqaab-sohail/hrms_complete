@@ -11,7 +11,6 @@
             <h3 class="box-title">Edit Asset Detail</h3>
 
             <hr class="m-t-0 m-b-40">
-
             <div class="row">
                 <div class="col-md-2">
                     <div class="form-group row">

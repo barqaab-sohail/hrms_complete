@@ -332,7 +332,7 @@ class EmployeeController extends Controller
 
         $oldData = HrEmployee::find($id);
 
-        DB::transaction(function () use ($input, $id, &$newData) {
+        DB::transaction(function () use ($input, $id ) {
             HrEmployee::findOrFail($id)->update($input);
 
             if ($input['husband_name']) {
@@ -341,19 +341,8 @@ class EmployeeController extends Controller
                 HrEmployeeHusband::where('hr_employee_id', $id)->delete();
             }
         }); // end transcation
-        $newData = HrEmployee::find($id);
-        //Any Editin Email to Administrator
-        // $user = User::where('email', 'sohail.afzal@barqaab.com')->first();
-        // if($user){
-        //     $data = $newData->compareTo($oldData);
-        //     if($data->count()>0){
-        //         $user->notify(New UpdateRecordNotification($data, $oldData));
-        //     }
-        // }
-
+       
         if ($request->ajax()) {
-            //remove cache
-            //Cache::forget('employees');
             return response()->json(['status' => 'OK', 'message' => "Data Successfully Updated"]);
         } else {
             return back()->with('message', 'Data Successfully Updated');

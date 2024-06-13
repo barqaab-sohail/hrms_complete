@@ -32,11 +32,7 @@ class AsPurchaseController extends Controller
 
     public function update(AsPurchaseStore $request, $id){
 
-        //ensure client end is is not changed
-        if($id != session('asset_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
-
+   
         $input = $request->all();
 
         if($request->filled('purchase_date')){
@@ -47,10 +43,10 @@ class AsPurchaseController extends Controller
         	$input ['purchase_cost'] = (int)str_replace(',', '', $input['purchase_cost']);
         }
 
-        DB::transaction(function () use ($input) {  
+        DB::transaction(function () use ($input, $id) {  
 
         	
-            AsPurchase::updateOrCreate(['asset_id'=> session('asset_id')],
+            AsPurchase::updateOrCreate(['asset_id'=> $id],
             	[
                 'as_purchase_condition_id'=> $input['as_purchase_condition_id'],
                 'purchase_cost'=> $input ['purchase_cost'],
