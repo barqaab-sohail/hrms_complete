@@ -216,7 +216,7 @@
             var url = $(this).attr('href');
             var $el = $(this).find( "i" ).toggleClass('fa-folder-open');
             if ($el.hasClass('fa-folder-open')) {
-                refreshTable(url);
+               // refreshTable(url);
             }else{
                 $('#myDataDiv').remove();
             }
@@ -268,7 +268,7 @@
 
             var folderUrl = $('.fa-folder-open').closest('a').attr('href');
             if (typeof folderUrl  !== "undefined"){
-                refreshTable(folderUrl,1000);
+                //refreshTable(folderUrl,1000);
             }
 
 		});

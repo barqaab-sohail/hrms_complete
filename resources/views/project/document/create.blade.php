@@ -193,7 +193,7 @@
             var $el = $(this).find("i").toggleClass('fa-folder-open');
             if ($el.hasClass('fa-folder-open')) {
 
-                refreshTable(url);
+               // refreshTable(url);
             } else {
                 $('#myDataDiv').remove();
             }
@@ -201,7 +201,7 @@
         });
 
 
-        refreshTable("{{route('projectDocument.table')}}");
+     //   refreshTable("{{route('projectDocument.table')}}");
 
 
         //submit function

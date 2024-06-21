@@ -67,13 +67,8 @@ class ProjectDocumentController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(DocumentStore $request)
     {
-
-        $validated = $request->validate([
-            'document' => 'required|file|max:3000|mimes:doc,docx,xls,xlsx,jpeg,jpg,png,pdf',
-            'description' => 'required',
-        ]);
 
         $input = $request->all();
 

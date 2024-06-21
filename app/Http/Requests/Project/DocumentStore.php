@@ -63,9 +63,6 @@ class DocumentStore extends FormRequest
 
         return [
             'document.mimes' => ' Only doc, docx, xls, xlsx, jpeg, jpg, png, pdf type attachment allowed',
-
-
-
         ];
     }
 }
