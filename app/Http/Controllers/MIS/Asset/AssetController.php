@@ -74,13 +74,29 @@ class AssetController extends Controller
 
     public function asset($assetId){
 
-        $data =  Asset::with('asDocumentations','asCurrentAllocation','asMaintenances','asCondition','asPurchaseCondition')->find($assetId);
+        $data =  Asset::with('asDocumentations','asCurrentAllocation','asConsumables','asMaintenances','asCondition','asPurchaseCondition')->find($assetId);
 
         $allocation = $data->asCurrentAllocation;
         $maintenances = $data->asMaintenances;
         if($maintenances->sum('maintenance_cost')=='0'){
             $maintenances =null;
+            $maintenanceTo = null;
+            $maintenanceFrom = null;
+        }else{
+            $maintenanceTo = \Carbon\Carbon::parse($maintenances->max('maintenance_date'))->format('M d, Y');
+            $maintenanceFrom = \Carbon\Carbon::parse($maintenances->min('maintenance_date'))->format('M d, Y');
         }
+
+        $consumables = $data->asConsumables;
+        if($consumables->sum('consumable_cost')=='0'){
+            $consumables =null;
+            $consumablesTo = null;
+            $consumablesFrom = null;
+        }else{
+            $consumablesTo = \Carbon\Carbon::parse($consumables->max('consumable_date'))->format('M d, Y');
+            $consumablesFrom = \Carbon\Carbon::parse($consumables->min('consumable_date'))->format('M d, Y');
+        }
+
         $condition = $data->asCondition?$data->asCondition->name:'Working';
         
 
@@ -99,7 +115,13 @@ class AssetController extends Controller
             'allocation_designation'=>$allocation?->designation,
             'allocation_picture'=>$allocation?->picture,
             'maintenance_cost'=>$maintenances?number_format($maintenances->sum('maintenance_cost'),0):'',
+            'maintenance_from'=>$maintenanceFrom,
+            'maintenance_to'=>$maintenanceTo,
             'maintenances'=>$maintenances,
+            'consumable_cost'=>$consumables?number_format($consumables->sum('consumable_cost'),0):'',
+            'consumable_from'=>$consumablesFrom,
+            'consumable_to'=>$consumablesTo,
+            'consumables'=>$consumables,
             'documents'=>$data->asDocumentations,
             
         ];

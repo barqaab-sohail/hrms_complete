@@ -178,4 +178,9 @@ class Asset extends Model implements Auditable
     {
         return $this->hasMany('App\Models\Asset\AsMaintenance');
     }
+
+    public function asConsumables()
+    {
+        return $this->hasMany('App\Models\Asset\AsConsumable');
+    }
 }
