@@ -92,7 +92,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/experience', 'ExperienceController');
     Route::resource('/salary', 'SalaryController', ['only' => ['store']]);
     Route::resource('/appointment', 'AppointmentController', ['only' => ['edit', 'update']]);
-    Route::get('/contact/refreshTable', 'ContactController@refreshTable')->name('contact.table');
+    Route::get('/contact/refreshTable/{id?}', 'ContactController@refreshTable')->name('contact.table');
     Route::resource('/contact', 'ContactController');
     Route::resource('/emergency', 'EmergencyController');
     Route::resource('/nextToKin', 'NextToKinController');

@@ -307,9 +307,9 @@ class EmployeeController extends Controller
         session()->put('hr_employee_id', $data->id);
 
         if ($request->ajax()) {
-            return view('hr.employee.ajax', compact('genders', 'maritalStatuses', 'religions', 'data'));
+            return view('hr.employee.ajax', compact('genders', 'maritalStatuses', 'religions', 'data','id'));
         } else {
-            return view('hr.employee.edit', compact('genders', 'maritalStatuses', 'religions', 'data'));
+            return view('hr.employee.edit', compact('genders', 'maritalStatuses', 'religions', 'data','id'));
         }
     }
 

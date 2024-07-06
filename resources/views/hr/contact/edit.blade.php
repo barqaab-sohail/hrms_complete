@@ -179,7 +179,7 @@
 <script>
 $(document).ready(function(){
    
-     refreshTable("{{route('contact.table')}}");
+     refreshTable("{{route('contact.table')}}"+'/'+$("#id").val());
      formFunctions();
 
       // $("form").submit(function (e) {
@@ -192,7 +192,7 @@ $(document).ready(function(){
      $('.fa-spinner').show();     
      event.preventDefault();
       submitForm(this, url);
-      refreshTable("{{route('contact.table')}}",300);
+      refreshTable("{{route('contact.table')}}"+'/'+$("#id").val(),300);
         
     }); //end submit
 

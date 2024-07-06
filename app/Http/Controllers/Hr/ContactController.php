@@ -23,15 +23,15 @@ class ContactController extends Controller
     }
 
 
-    public function create(Request $request){
+    public function show(Request $request, $id){
 
     	$countries = Country::all();
     	$hrContactTypes = HrContactType::all();
 
-    	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
+    	$hrContacts =  HrContact::where('hr_employee_id', $id)->get();
 
         if($request->ajax()){
-            return view('hr.contact.create', compact('countries','hrContactTypes','hrContacts'));
+            return view('hr.contact.create', compact('countries','hrContactTypes','hrContacts','id'));
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
@@ -40,8 +40,6 @@ class ContactController extends Controller
 
     public function store (ContactStore $request){
     	$input = $request->all();
-    	$input['hr_employee_id']=session('hr_employee_id');
-
     	DB::transaction(function () use ($input, $request) {  
     		$hrContact = HrContact::create($input);
 
@@ -117,8 +115,8 @@ class ContactController extends Controller
     	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
     }
 
-    public function refreshTable(){
-        $hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
+    public function refreshTable($id){
+        $hrContacts =  HrContact::where('hr_employee_id', $id)->get();
         $contactIds = $hrContacts->pluck('id')->toArray();
         //For security checking
         session()->put('contact_delete_ids', $contactIds);

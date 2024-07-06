@@ -26,9 +26,9 @@ class ProjectController extends Controller
     {
         //$user = User::permission()
         $projects = collect();
-        $waterProjects = PrDetail::with('client', 'prRole')->where('pr_division_id', 1)->whereNotIn('name', array('overhead'))->get();
+        $waterProjects = PrDetail::with('client', 'prRole','prCost','prDivision')->where('pr_division_id', 1)->whereNotIn('name', array('overhead'))->get();
 
-        $powerProjects = PrDetail::with('client', 'prRole')->where('pr_division_id', 2)->get();
+        $powerProjects = PrDetail::with('client', 'prRole','prCost','prDivision')->where('pr_division_id', 2)->get();
 
         return view('project.detail.list', compact('projects', 'waterProjects', 'powerProjects'));
     }

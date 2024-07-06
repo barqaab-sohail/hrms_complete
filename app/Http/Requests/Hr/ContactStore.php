@@ -24,6 +24,7 @@ class ContactStore extends FormRequest
     public function rules()
     {
         return [
+            'hr_employee_id'=> 'required',
             'hr_contact_type_id'=> 'required',
             'house'=> 'nullable|max:190',
             'street'=> 'nullable|max:190',

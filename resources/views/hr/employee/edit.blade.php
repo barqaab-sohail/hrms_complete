@@ -18,7 +18,7 @@
 	<div class="col-lg-12 reducedCol">
 		<div class="card card-outline-info">
 			<div class="row">
-				<input hidden value="{{$data->id}}" name="id"/>
+				<input hidden value="{{$data->id}}" name="id" id="id"/>
 				<div class="col-lg-12 addAjax">
 					@include('hr.employee.ajax')
 				</div> <!-- end col-lg-12 -->

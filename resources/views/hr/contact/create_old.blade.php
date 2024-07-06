@@ -1,20 +1,18 @@
-<div style="margin-top:10px; margin-right: 10px;">
-    <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Contact</button>
-</div>
 
-
-<div class="card-body">
-
-    <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formContact" enctype="multipart/form-data">
-        {{csrf_field()}}
-          <div class="form-body">
-            
-            <h3 class="box-title" id="formHeading">Employee Contact</h3>
-            <hr class="m-t-0 m-b-40">
-            <div class="row">
-              <input type="hidden" name="contact_id" id="contact_id"/>
-              
-              <div class="row">
+    <div style="margin-top:10px; margin-right: 10px;">
+        <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Contact</button>
+    </div>
+         
+    <div class="card-body">
+        <form id= "formContact" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('contact.store')}}" enctype="multipart/form-data">
+        @csrf
+        <input hidden value="{{$id}}" name="hr_employee_id" />
+            <div class="form-body">
+                    
+                <h3 class="box-title">Contact Detail</h3>
+                
+                <hr class="m-t-0 m-b-40">
+                <div class="row">
                     <div class="col-md-2">
                         <div class="form-group row">
                      
@@ -162,34 +160,38 @@
                 </div>
             </div>
             @endcan
-    </form>
-    
-<br>
-<table class="table table-bordered data-table" width=100%>
-    <thead>
-      <tr>
-        <th>Contact Type</th>
-        <th>Address</th> 
-        <th>Mobile</th> 
-        <th>Email</th> 
-        @can('hr edit contact')
-        <th colspan="2" class="text-center"style="width:10%"> Actions </th> 
-        @endcan 
-      </tr>
-    </thead>
-    <tbody>
-        
-    </tbody>
-</table>
+        </form>
 
-   
-</div>
         
-<script type="text/javascript">
+	</div> <!-- end card body -->    
+    <div class="row">
+      <div class="col-md-12 table-container">
+
+      </div>
+    </div>
+<script>
 $(document).ready(function(){
     
-    // formFunctions();
-    $('#formContact').hide();   
+    refreshTable("{{route('contact.table',$id)}}",300);
+    isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
+     
+    $('#formContact').hide();
+    $('#hideButton').click(function(){
+        $('#formContact').toggle();
+        resetForm();
+    });
+
+      //submit function
+      $("#formContact").submit(function(e) { 
+      e.preventDefault();
+      var url = $(this).attr('action');
+            $('.fa-spinner').show(); 
+            console.log(this);
+      submitForm(this, url,1);
+      refreshTable("{{route('contact.table',$id)}}");
+    });
+
+
     $('#country').change(function(){
       var cid = $(this).val();
         if(cid){
@@ -244,129 +246,6 @@ $(document).ready(function(){
         }
 
     });
-       
-}); 
-      //start function
-$(function () {
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-    });
-    var table = $('.data-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax:{url:"{{ route('contact.create') }}", data: {
-            hrEmployeeId: $("#id").val()
-        }},
-        columns: [
-            {data: "contact_type", name: 'contact_type'},
-            {data: "address", name: 'address'},
-            {data: "mobile", name: 'mobile'},
-            {data: "email", name: 'email'},
-            {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
-            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
-
-        ],
-        order: [[ 1, "desc" ]]
-    });
-
-    $('#hideButton').click(function(){
-            $('#formContact').toggle();
-            $('#formContact').trigger("reset");
-            $('#hr_contact_type_id').trigger('change');
-            $('#city').trigger('change');
-            $('#state').trigger('change');
-            $('#country').trigger('change');
-    });
-
-    $('body').unbind().on('click', '.editContact', function () {
-
-
-      var contact_id = $(this).data('id');
-
-      $.get("{{ url('hrms/contact') }}" +'/' + contact_id +'/edit', function (data) {
-          $('#formContact').show(); 
-          $('#formHeading').html("Edit Contact");
-          $('#contact_id').val(data.id);
-          $('#hr_contact_type_id').val(data.hr_contact_type_id).trigger('change');
-          $('#city').val(data.city).trigger('change');
-          $('#state').val(data.state).trigger('change');
-          $('#country').val(data.country).trigger('change');
-          $('#house').val(data.house);
-          $('#street').val(data.street);
-          $('#town').val(data.town);
-          $('#tehsil').val(data.tehsil);
-          $('#mobile').val(data.mobile);
-          $('#landline').val(data.landline);
-          $('#email').val(data.email);
-         
-      })
-   });
-    
-      $("#formContact").submit(function(e) {
-        e.preventDefault();
-        var formData = new FormData(this);
-        formData.append("hr_employee_id", $("#id").val());
-        $.ajax({
-          data: formData,
-          url: "{{ route('contact.store') }}",
-          type: "POST",
-          //dataType: 'json',
-           contentType: false,
-           cache: false,
-           processData: false,
-          success: function (data) {
-              if(data.error){
-                $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');
-              }else{
-
-                $('#formContact').trigger("reset");
-                $('#formContact').toggle();
-                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');  
-
-                table.draw();
-              }
-        
-          },
-          error: function (data) {
-              
-              var errorMassage = '';
-              $.each(data.responseJSON.errors, function (key, value){
-                errorMassage += value + '<br>';  
-                });
-                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
-
-              $('#saveBtn').html('Save Changes');
-          }
-      });
-    });
-    
-    $('body').on('click', '.deleteContact', function () {
-     
-        var contact_id = $(this).data("id");
-
-        var con = confirm("Are You sure want to delete !");
-        if(con){
-          $.ajax({
-            type: "DELETE",
-            url: "{{ route('contact.store') }}"+'/'+contact_id,
-            success: function (data) {
-                table.draw();
-                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');
-                if(data.error){
-                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
-                }
-  
-            },
-            error: function (data) {
-                
-            }
-          });
-        }
-    });
-  });// end function
-
-      
-            
+});
 </script>
+

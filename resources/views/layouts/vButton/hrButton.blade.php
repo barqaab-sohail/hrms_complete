@@ -5,19 +5,19 @@
 
       <div class="dropdown-menu" role="group" aria-labelledby="dropdownMenuButton" style="width: 100%;">
 
-            <a type="submit" role="button" style="color:white" id="addEmployee" href="{{route('employee.edit',session('hr_employee_id'))}}" class="dropdown-item btn btn-success " {{Request::is('hrms/employee/*/edit')?'style=background-color:#737373':''}}>Employee Information</a>
+            <a type="submit" role="button" style="color:white" id="addEmployee" href="{{route('employee.edit',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/employee/*/edit')?'style=background-color:#737373':''}}>Employee Information</a>
 
             @canany(['hr edit appointment','hr view appointment'])
-            <a type="submit" id="addAppointment" style="color:white" role="button" href="{{route('appointment.edit',session('hr_employee_id'))}}" class="dropdown-item btn btn-success " {{Request::is('hrms/appointment/')?'style=background-color:#737373':''}}>Appointment Detail</a>
+            <a type="submit" id="addAppointment" style="color:white" role="button" href="{{route('appointment.edit',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/appointment/')?'style=background-color:#737373':''}}>Appointment Detail</a>
             @endcan
 
             @canany(['hr edit contact','hr view contact'])
-            <a type="submit" id="addContact" style="color:white" role="button" href="{{route('contact.create')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/contact/create')?'style=background-color:#737373':''}}>Contact Detail</a>
+            <a type="submit" id="addContact" style="color:white" role="button" href="{{route('contact.show',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/contact/create')?'style=background-color:#737373':''}}>Contact Detail</a>
 
-            <a type="submit" id="addEmergency" style="color:white" role="button" href="{{route('emergency.edit',session('hr_employee_id'))}}" class="dropdown-item btn btn-success " {{Request::is('hrms/emergency/')?'style=background-color:#737373':''}}>Emergency Contact</a>
+            <a type="submit" id="addEmergency" style="color:white" role="button" href="{{route('emergency.edit',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/emergency/')?'style=background-color:#737373':''}}>Emergency Contact</a>
 
-            <a type="submit" id="addNextToKin" style="color:white" role="button" href="{{route('nextToKin.edit',session('hr_employee_id'))}}" class="dropdown-item btn btn-success " {{Request::is('hrms/nextToKin/')?'style=background-color:#737373':''}}>Next to Kin</a>
-            <a type="submit" id="addAdditionalInformation" style="color:white" role="button" href="{{route('additionalInformation.edit',session('hr_employee_id'))}}" class="dropdown-item btn btn-success " {{Request::is('hrms/additionalInformation/')?'style=background-color:#737373':''}}>Additional Information</a>
+            <a type="submit" id="addNextToKin" style="color:white" role="button" href="{{route('nextToKin.edit',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/nextToKin/')?'style=background-color:#737373':''}}>Next to Kin</a>
+            <a type="submit" id="addAdditionalInformation" style="color:white" role="button" href="{{route('additionalInformation.edit',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/additionalInformation/')?'style=background-color:#737373':''}}>Additional Information</a>
             @endcan
 
             @canany(['hr edit education','hr view education'])
@@ -54,7 +54,7 @@
             @endcan
 
             @can('Super Admin')
-            <a type="submit" id="addUserLogin" style="color:white" role="button" href="{{route('userLogin.edit',session('hr_employee_id'))}}" class="dropdown-item btn btn-success " {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Rights Detail</a>
+            <a type="submit" id="addUserLogin" style="color:white" role="button" href="{{route('userLogin.edit',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Rights Detail</a>
             @endcan
 
       </div>
