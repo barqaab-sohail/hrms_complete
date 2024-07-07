@@ -27,7 +27,6 @@ class AsConsumableController extends Controller
          $data= AsConsumable::where('asset_id',$request->assetId)
                      ->latest()->get();
         
-
          return  DataTables::of($data)
                  ->addIndexColumn()  
                  ->editColumn('consumable_id', function($row){                

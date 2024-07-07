@@ -12,7 +12,7 @@
             @endcan
 
             @canany(['hr edit contact','hr view contact'])
-            <a type="submit" id="addContact" style="color:white" role="button" href="{{route('contact.show',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/contact/create')?'style=background-color:#737373':''}}>Contact Detail</a>
+            <a type="submit" id="addContact" style="color:white" role="button" href="{{route('contact.create')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/contact/create')?'style=background-color:#737373':''}}>Contact Detail</a>
 
             <a type="submit" id="addEmergency" style="color:white" role="button" href="{{route('emergency.edit',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/emergency/')?'style=background-color:#737373':''}}>Emergency Contact</a>
 

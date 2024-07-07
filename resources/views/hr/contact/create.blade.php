@@ -187,7 +187,7 @@
         
 <script type="text/javascript">
 $(document).ready(function(){
-    
+    console.log('hr employee id '+  $("#id").val());
     // formFunctions();
     $('#formContact').hide();   
     $('#country').change(function(){
@@ -260,7 +260,7 @@ $(function () {
             hrEmployeeId: $("#id").val()
         }},
         columns: [
-            {data: "contact_type", name: 'contact_type'},
+            {data: "contact_type_id", name: 'contact_type_id'},
             {data: "address", name: 'address'},
             {data: "mobile", name: 'mobile'},
             {data: "email", name: 'email'},
