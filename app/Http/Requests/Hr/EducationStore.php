@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Hr;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use DB;
 
@@ -16,13 +17,13 @@ class EducationStore extends FormRequest
 
       public function __construct(\Illuminate\Http\Request $request)
     {
-        Validator::extend('unique_education', function ($attribute, $value, $parameters, $validator) {
-                $count = DB::table('hr_educations')->where('education_id', $value)
-                                    ->where('hr_employee_id', $parameters[0])
-                                    ->count();
+        // Validator::extend('unique_education', function ($attribute, $value, $parameters, $validator) {
+        //         $count = DB::table('hr_educations')->where('education_id', $value)
+        //                             ->where('hr_employee_id', $parameters[0])
+        //                             ->count();
 
-            return $count === 0;
-        });
+        //     return $count === 0;
+        // });
 
 
     }
@@ -40,9 +41,10 @@ class EducationStore extends FormRequest
      */
     public function rules()
     {
+       
+     
         $rules = [
-            
-            
+            'education_id'=>['required', Rule::unique('hr_educations')->where(fn ($query) => $query->where('hr_employee_id', request()->hr_employee_id)->where('id', '!=', $this->hr_education_id))],
             'institute'=> 'nullable|max:190',
             'major'=> 'nullable|max:190',
             'from'=> 'nullable|max:4',

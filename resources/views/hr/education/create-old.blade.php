@@ -1,24 +1,23 @@
-<div style="margin-top:10px; margin-right: 10px;">
-    <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Education</button>
-</div>
 
+    <div style="margin-top:10px; margin-right: 10px;">
+        <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Education</button>
+    </div>
+         
+    <div class="card-body">
+        <form id= "education" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('education.store')}}" enctype="multipart/form-data">
+        @csrf
+            <div class="form-body">
+                    
+                <h3 class="box-title">Add Education</h3>
+                
+                <hr class="m-t-0 m-b-40">
 
-<div class="card-body">
-
-    <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formEducation" enctype="multipart/form-data">
-        {{csrf_field()}}
-          <div class="form-body">
-            
-            <h3 class="box-title" id="formHeading">Education Education</h3>
-            <hr class="m-t-0 m-b-40">
-              <input type="hidden" name="hr_education_id" id="hr_education_id"/>
-              
-              <div class="row">
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group row">
                             <div class="col-md-12">
                                	<label class="control-label text-right">Name of Degree<span class="text_requried">*</span></label><br>
-                                <select id="education_id" name="education_id" data-validation="required" class="form-control selectTwo">
+                                <select id="education_id" name="education_id" data-validation="required" class="form-control">
                                    <option></option>
                                     @foreach($degrees as $degree)
                                     <option value="{{$degree->id}}" {{(old("education_id")==$degree->id? "selected" : "")}}>{{$degree->degree_name}}</option>
@@ -124,7 +123,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="control-label text-right">Country<span class="text_requried">*</span></label>       
-                                <select  name="country_id" id="country_id" data-validation="required" class="form-control selectTwo">
+                                <select  name="country_id" id="country" data-validation="required" class="form-control selectTwo">
                                     <option value=""></option>
                                 @foreach($countries as $country)
                                     <option value="{{$country->id}}" {{(old("country_id")==$country->id? "selected" : "")}}>{{$country->name}}</option>
@@ -134,180 +133,91 @@
                         </div>
                     </div>
                 </div><!--/End Row-->
+
                
             </div> <!--/End Form Boday-->
 
             <hr>
+
             @can('hr edit education')
             <div class="form-actions">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save Contact</button>        
+                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Add Education</button>        
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             @endcan
-    </form>
+        </form>
+	</div> <!-- end card body --> 
+        <div class="row">
+             <div class="col-md-12 table-container">
+           
+            
+            </div>
+        </div>   
     @include('cv.detail.eduModal')
-    <br>
-        <table class="table table-bordered data-table" width=100%>
-            <thead>
-            <tr>
-                <th>Degree Name</th>
-				<th>Institute</th>
-				<th>Passing Year</th>
-                <th>Edit</th>
-                <th>Delete</th> 
-                <!-- <th colspan="2" class="text-center"style="width:10%"> Actions </th>  -->
-            </tr>
-            </thead>
-            <tbody>
-                
-            </tbody>
-        </table>
-    </div>
-
-
-   
-
-        
-<script type="text/javascript">
+  
+<script>
 $(document).ready(function(){
+    isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
 
-    $('#formEducation').hide();   
-    
+    refreshTable("{{route('education.table')}}");
+    $('#education_id').chosen();
+
+    $('#education').hide();
+    $('#hideButton').click(function(){
+          $('#education').toggle();
+          resetForm();
+    });
+   
     $('#marks_obtain, #total_marks').on('change',function(){
+
         if($(this).val() !=''){
         $(this).attr('data-validation','number');
         }else {
-            $(this).removeAttr('data-validation');
+             $(this).removeAttr('data-validation');
         }
-    });    
-}); 
-      //start function
-$(function () {
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-    });
-    var table = $('.data-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax:{url:"{{ route('education.create') }}", data: {
-            hrEmployeeId: $("#hr_employee_id").val()
-        }},
-        columns: [
-            {data: "education_id", name: 'education_id'},
-            {data: "institute", name: 'institute'},
-            {data: "to", name: 'to'},
-            {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
-            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
-
-        ],
-        order: [[ 1, "desc" ]]
     });
 
-    $('#hideButton').click(function(){
-          
-            $('#formEducation').toggle();
-            $('#formEducation').trigger("reset");
-            $('#hr_education_id').val('');
-
-            $('#education_id').trigger('change');
-            $('#from').trigger('change');
-            $('#to').trigger('change');
-            $('#country_id').trigger('change');
-    });
-
-    $('body').unbind().on('click', '.editEducation', function () {
-      var hr_education_id = $(this).data('id');
+    //submit function
+     $("#education").submit(function(e) { 
         
-      $.get("{{ url('hrms/education') }}" +'/' + hr_education_id +'/edit', function (data) {
-        console.log('data..'+data.country_id);
-          $('#formEducation').show(); 
-          $('#formHeading').html("Edit Education");
-          $('#hr_education_id').val(data.id);
-          $('#education_id').val(data.education_id).trigger('change');
-          $('#institute').val(data.institute);
-          $('#major').val(data.major);
-          $('#from').val(data.from).trigger('change');
-          $('#to').val(data.to).trigger('change');
-          $('#total_marks').val(data.total_marks);
-          $('#marks_obtain').val(data.marks_obtain);
-          $('#grade').val(data.grade);
-          $('#country_id').val(data.country_id).trigger('change');;
-         
-      })
-   });
-    
-      $("#formEducation").submit(function(e) {
         e.preventDefault();
-        var formData = new FormData(this);
-        formData.append("hr_employee_id", $("#hr_employee_id").val());
-        $.ajax({
-          data: formData,
-          url: "{{ route('education.store') }}",
-          type: "POST",
-          //dataType: 'json',
-           contentType: false,
-           cache: false,
-           processData: false,
-          success: function (data) {
-              if(data.error){
-                $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');
-              }else{
-
-                $('#formEducation').trigger("reset");
-                $('#formEducation').toggle();
-                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');  
-
-                table.draw();
-              }
-        
-          },
-          error: function (data) {
-              
-              var errorMassage = '';
-              $.each(data.responseJSON.errors, function (key, value){
-                errorMassage += value + '<br>';  
-                });
-                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
-
-              $('#saveBtn').html('Save Changes');
-          }
-      });
+        var url = $(this).attr('action');
+        $('.fa-spinner').show(); 
+        submitForm(this, url,1);
+       refreshTable("{{route('education.table')}}",1000);
     });
-    
-    $('body').on('click', '.deleteEducation', function () {
-     
-        var hr_education_id = $(this).data("id");
 
-        var con = confirm("Are You sure want to delete !");
-        if(con){
-          $.ajax({
-            type: "DELETE",
-            url: "{{ route('contact.store') }}"+'/'+hr_education_id,
-            success: function (data) {
-                table.draw();
-                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');
-                if(data.error){
-                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
-                }
-  
-            },
-            error: function (data) {
-                
-            }
-          });
-        }
-    });
-  });// end function
 
-      
-            
+
+    $('.fa-trash-alt').hide();
+    // $('#from, #to').datepicker( {
+    // changeMonth: true,
+    // changeYear: true,
+    // showButtonPanel: true,
+    // dateFormat: 'MM yy',
+    // onClose: function(dateText, inst) { 
+    //     $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+    //     $(this).siblings('i').show();
+    // }
+    // });
+
+    // $(".fa-trash-alt").click(function (){
+    //     if(confirm("Are you sure to clear date")){
+    //     $(this).siblings('input').val("");
+    //     $(this).hide();
+    //     $(this).siblings('span').text("");
+    //     }
+    // });
+});
+
 </script>
+
+
+

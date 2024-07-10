@@ -11,7 +11,6 @@
             
             <h3 class="box-title" id="formHeading">Employee Contact</h3>
             <hr class="m-t-0 m-b-40">
-            <div class="row">
               <input type="hidden" name="contact_id" id="contact_id"/>
               
               <div class="row">
@@ -36,7 +35,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">House No.</label><br>
 
-                                <input type="text"  name="house" value="{{ old('house') }}"  class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter House No">
+                                <input type="text"  name="house"  id="house" value="{{ old('house') }}"  class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter House No">
                             </div>
                         </div>
                     </div>
@@ -46,7 +45,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Street No/Society</label>
                                 
-                                <input type="text" name="street" value="{{ old('street') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Street No and Society">
+                                <input type="text" name="street" id="street" value="{{ old('street') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Street No and Society">
 
                             </div>
                         </div>
@@ -56,7 +55,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                <label class="control-label text-right">Town/Village</label>
-                               <input type="text" name="town" value="{{ old('town') }}" class="form-control" data-validation=" required length"  data-validation-length="max190" placeholder="Enter Town or Village">
+                               <input type="text" name="town" id="town" value="{{ old('town') }}" class="form-control" data-validation=" required length"  data-validation-length="max190" placeholder="Enter Town or Village">
 
                             </div>
                         </div>
@@ -68,7 +67,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                               <label class="control-label text-right">Tehsil</span></label> 
-                              <input type="text" name="tehsil" value="{{ old('tehsil') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Tehsil">
+                              <input type="text" name="tehsil" id="tehsil" value="{{ old('tehsil') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Tehsil">
                                 
                                
                             </div>
@@ -128,7 +127,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Landline No.</label>
                                 
-                               <input type="text" name="landline" value="{{ old('landline') }}"  data-validation="length"  data-validation-length="max15" class="form-control" placeholder="0092-42-00000000">
+                               <input type="text" name="landline" id="landline" value="{{ old('landline') }}"  data-validation="length"  data-validation-length="max15" class="form-control" placeholder="0092-42-00000000">
                                 
                             </div>
                         </div>
@@ -139,7 +138,7 @@
                             <div class="col-md-12">
                               <label class="control-label text-right">Email</label>
                                 
-                              <input type="email" name="email" value="{{ old('emal') }}" data-validation="length"  data-validation-length="max50" class="form-control" placeholder="Enter Email Address">
+                              <input type="email" name="email" id="email"  value="{{ old('emal') }}" data-validation="length"  data-validation-length="max50" class="form-control" placeholder="Enter Email Address">
                                 
                             </div>
                         </div>
@@ -163,31 +162,32 @@
             </div>
             @endcan
     </form>
-    
-<br>
-<table class="table table-bordered data-table" width=100%>
-    <thead>
-      <tr>
-        <th>Contact Type</th>
-        <th>Address</th> 
-        <th>Mobile</th> 
-        <th>Email</th> 
-        @can('hr edit contact')
-        <th colspan="2" class="text-center"style="width:10%"> Actions </th> 
-        @endcan 
-      </tr>
-    </thead>
-    <tbody>
-        
-    </tbody>
-</table>
+
+    <br>
+        <table class="table table-bordered data-table" width=100%>
+            <thead>
+            <tr>
+                <th>Contact Type</th>
+                <th>Address</th> 
+                <th>Mobile</th> 
+                <th>Email</th>
+                <th>Edit</th>
+                <th>Delete</th> 
+                <!-- <th colspan="2" class="text-center"style="width:10%"> Actions </th>  -->
+            </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
+
 
    
-</div>
+
         
 <script type="text/javascript">
 $(document).ready(function(){
-    console.log('hr employee id '+  $("#id").val());
     // formFunctions();
     $('#formContact').hide();   
     $('#country').change(function(){
@@ -257,7 +257,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax:{url:"{{ route('contact.create') }}", data: {
-            hrEmployeeId: $("#id").val()
+            hrEmployeeId: $("#hr_employee_id").val()
         }},
         columns: [
             {data: "contact_type_id", name: 'contact_type_id'},
@@ -272,8 +272,10 @@ $(function () {
     });
 
     $('#hideButton').click(function(){
+          
             $('#formContact').toggle();
             $('#formContact').trigger("reset");
+            $('#contact_id').val('');
             $('#hr_contact_type_id').trigger('change');
             $('#city').trigger('change');
             $('#state').trigger('change');
@@ -284,22 +286,26 @@ $(function () {
 
 
       var contact_id = $(this).data('id');
-
+        
       $.get("{{ url('hrms/contact') }}" +'/' + contact_id +'/edit', function (data) {
           $('#formContact').show(); 
           $('#formHeading').html("Edit Contact");
           $('#contact_id').val(data.id);
           $('#hr_contact_type_id').val(data.hr_contact_type_id).trigger('change');
-          $('#city').val(data.city).trigger('change');
-          $('#state').val(data.state).trigger('change');
-          $('#country').val(data.country).trigger('change');
+          $('#country').val(data.country_id).trigger('change');
           $('#house').val(data.house);
           $('#street').val(data.street);
           $('#town').val(data.town);
           $('#tehsil').val(data.tehsil);
-          $('#mobile').val(data.mobile);
-          $('#landline').val(data.landline);
-          $('#email').val(data.email);
+          $('#mobile').val(data.mobile?.mobile);
+          $('#landline').val(data.landline?.landline);
+          $('#email').val(data.email?.email);
+            setTimeout(function() { 
+            $('#state').val(data.state_id).trigger('change');
+            }, 1000);
+            setTimeout(function() { 
+                $('#city').val(data.city_id).trigger('change');
+            }, 2000);
          
       })
    });
@@ -307,7 +313,8 @@ $(function () {
       $("#formContact").submit(function(e) {
         e.preventDefault();
         var formData = new FormData(this);
-        formData.append("hr_employee_id", $("#id").val());
+        formData.append("hr_employee_id", $("#hr_employee_id").val());
+        console.log(this);
         $.ajax({
           data: formData,
           url: "{{ route('contact.store') }}",

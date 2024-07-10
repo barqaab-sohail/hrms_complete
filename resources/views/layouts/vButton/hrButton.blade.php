@@ -12,7 +12,7 @@
             @endcan
 
             @canany(['hr edit contact','hr view contact'])
-            <a type="submit" id="addContact" style="color:white" role="button" href="{{route('contact.create')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/contact/create')?'style=background-color:#737373':''}}>Contact Detail</a>
+            <a type="submit" id="addContact" style="color:white" role="button" href="{{route('contact.show',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/contact/create')?'style=background-color:#737373':''}}>Contact Detail</a>
 
             <a type="submit" id="addEmergency" style="color:white" role="button" href="{{route('emergency.edit',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/emergency/')?'style=background-color:#737373':''}}>Emergency Contact</a>
 
@@ -21,7 +21,7 @@
             @endcan
 
             @canany(['hr edit education','hr view education'])
-            <a type="submit" id="addEducation" style="color:white" role="button" href="{{route('education.create')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/education/create')?'style=background-color:#737373':''}}>Education</a>
+            <a type="submit" id="addEducation" style="color:white" role="button" href="{{route('education.show',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/education/create')?'style=background-color:#737373':''}}>Education</a>
             @endcan
 
             @canany(['hr edit experience','hr view experience'])
