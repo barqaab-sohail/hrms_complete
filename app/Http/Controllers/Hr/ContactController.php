@@ -83,7 +83,7 @@ class ContactController extends Controller
                     ]);
             }
         }); // end transcation      
-       return response()->json(['success'=>"Data saved successfully."]);
+       return response()->json(['success'=>"Contact saved successfully."]);
    
     }
 
@@ -226,7 +226,7 @@ class ContactController extends Controller
         DB::transaction(function () use ($id) {  
             HrContact::find($id)->delete(); 
         }); // end transcation 
-        return response()->json(['success'=>"data  delete successfully."]);
+        return response()->json(['success'=>"Contact  delete successfully."]);
     }
 
     public function refreshTable($id){

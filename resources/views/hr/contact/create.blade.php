@@ -360,6 +360,7 @@ $(function () {
             url: "{{ route('contact.store') }}"+'/'+contact_id,
             success: function (data) {
                 table.draw();
+                $('#formContact').toggle();
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');
                 if(data.error){
                   $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    

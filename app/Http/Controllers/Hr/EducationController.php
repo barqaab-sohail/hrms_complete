@@ -106,9 +106,20 @@ class EducationController extends Controller
 
     public function edit($id)
     {
-        $contact = HrEducation::with('education')->find($id);
-        return response()->json($contact);
+        $education = HrEducation::with('education')->find($id);
+        return response()->json($education);
     }
+
+    public function destroy($id){
+        
+        DB::transaction(function () use ($id) {         
+        
+            HrEducation::find($id)->delete();
+        }); // end transcation 
+
+        return response()->json(['status'=> 'OK', 'message' => 'Education Successfully Deleted']);
+    }
+
 
     // public function edit(Request $request, $id){
     //     //For security checking
@@ -131,56 +142,47 @@ class EducationController extends Controller
 
     // }
 
-    public function update(EducationStore $request, $id){
-         //ensure client end id is not changed
-        if($id != session('education_edit_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
+    // public function update(EducationStore $request, $id){
+    //      //ensure client end id is not changed
+    //     if($id != session('education_edit_id')){
+    //         return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+    //     }
 
 
-        $input = $request->all();
-        $uniqueEducation=true;
-        $degreeNames = HrEducation::where('hr_employee_id', session('hr_employee_id'))
-                                ->where('id','!=',$id)
-                                ->get();
+    //     $input = $request->all();
+    //     $uniqueEducation=true;
+    //     $degreeNames = HrEducation::where('hr_employee_id', session('hr_employee_id'))
+    //                             ->where('id','!=',$id)
+    //                             ->get();
 
 
-        foreach($degreeNames as $degreeName){
-            $combineDegree = $degreeName->hr_employee_id.$degreeName->education_id;
-            $combineRequest = session('hr_employee_id').$request->education_id;
+    //     foreach($degreeNames as $degreeName){
+    //         $combineDegree = $degreeName->hr_employee_id.$degreeName->education_id;
+    //         $combineRequest = session('hr_employee_id').$request->education_id;
 
-            if($combineDegree == $combineRequest){
-                $uniqueEducation=false;
-            }
-        }
+    //         if($combineDegree == $combineRequest){
+    //             $uniqueEducation=false;
+    //         }
+    //     }
 
-        if($uniqueEducation){
-        DB::transaction(function () use ($input, $id) {  
+    //     if($uniqueEducation){
+    //     DB::transaction(function () use ($input, $id) {  
 
-            HrEducation::findOrFail($id)->update($input);
+    //         HrEducation::findOrFail($id)->update($input);
 
-        }); // end transcation
+    //     }); // end transcation
         
-        return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
-        }else{
-            return response()->json(['status'=> 'Not OK', 'message' => "This degree is already saved"]);
-        }
-    }
+    //     return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
+    //     }else{
+    //         return response()->json(['status'=> 'Not OK', 'message' => "This degree is already saved"]);
+    //     }
+    // }
 
 
 
 
 
-    public function destroy($id){
-        
-        if(!in_array($id, session('education_delete_ids'))){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
-        
-        HrEducation::find($id)->delete();
 
-        return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Deleted']);
-    }
 
 
 

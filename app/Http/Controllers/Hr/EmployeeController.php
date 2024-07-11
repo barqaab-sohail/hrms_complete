@@ -317,10 +317,11 @@ class EmployeeController extends Controller
     public function update(EmployeeStore $request, $id)
     {
 
-        //ensure client end is is not changed
-        if ($id != session('hr_employee_id')) {
-            return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
+       
+        // //ensure client end is is not changed
+        // if ($id != session('hr_employee_id')) {
+        //     return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        // }
 
         $input = $request->all();
         if ($request->filled('date_of_birth')) {

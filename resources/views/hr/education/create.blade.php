@@ -9,7 +9,7 @@
         {{csrf_field()}}
           <div class="form-body">
             
-            <h3 class="box-title" id="formHeading">Education Education</h3>
+            <h3 class="box-title" id="formHeading">Employee Education</h3>
             <hr class="m-t-0 m-b-40">
               <input type="hidden" name="hr_education_id" id="hr_education_id"/>
               
@@ -144,7 +144,7 @@
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save Contact</button>        
+                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save Education</button>        
                             </div>
                         </div>
                     </div>
@@ -228,7 +228,7 @@ $(function () {
       var hr_education_id = $(this).data('id');
         
       $.get("{{ url('hrms/education') }}" +'/' + hr_education_id +'/edit', function (data) {
-        console.log('data..'+data.country_id);
+
           $('#formEducation').show(); 
           $('#formHeading').html("Edit Education");
           $('#hr_education_id').val(data.id);
@@ -261,10 +261,10 @@ $(function () {
               if(data.error){
                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');
               }else{
-
+              
                 $('#formEducation').trigger("reset");
                 $('#formEducation').toggle();
-                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');  
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');  
 
                 table.draw();
               }
@@ -291,10 +291,11 @@ $(function () {
         if(con){
           $.ajax({
             type: "DELETE",
-            url: "{{ route('contact.store') }}"+'/'+hr_education_id,
+            url: "{{ route('education.store') }}"+'/'+hr_education_id,
             success: function (data) {
                 table.draw();
-                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');
+                $('#formEducation').toggle();
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                 if(data.error){
                   $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
                 }

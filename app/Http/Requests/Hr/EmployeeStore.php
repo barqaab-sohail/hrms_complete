@@ -29,13 +29,13 @@ class EmployeeStore extends FormRequest
             'last_name' => 'required',
             'father_name' => 'required_if:husband_name,null',
             'husband_name' => 'required_if:father_name,null',
-            'cnic' => 'required|min:15|max:15|unique:hr_employees,cnic,' . session('hr_employee_id'),
+            'cnic' => 'required|min:15|max:15|unique:hr_employees,cnic,' . $this->hr_employee_id,
             'date_of_birth' => 'required|date|before:18 years ago',
             'cnic_expiry' => 'required|date',
             'gender_id' => 'required',
             'marital_status_id' => 'required',
             'religion_id' => 'required',
-            'employee_no' => 'digits:7|unique:hr_employees,employee_no,' . session('hr_employee_id'),
+            'employee_no' => 'digits:7|unique:hr_employees,employee_no,' . $this->hr_employee_id,
         ];
     }
 

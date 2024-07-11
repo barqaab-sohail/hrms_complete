@@ -3,7 +3,7 @@
 </div>
 
 <div class="card-body">
-    <form id="formEditEmployee" method="post" action="{{route('employee.update',$data->id)}}" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
+    <form id="formEditEmployee" method="post" action="{{route('employee.update',$id)}}" class="form-horizontal form-prevent-multiple-submits" enctype="multipart/form-data">
         @method('PATCH')
         @csrf
         <div class="form-body">
@@ -11,7 +11,7 @@
             <h3 class="box-title">Edit Employee Information</h3>
 
             <hr class="m-t-0 m-b-40">
-
+            <input type="hidden" name="hr_employee_id" id="hr_employee_id" value="{{$id}}"/>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group row">

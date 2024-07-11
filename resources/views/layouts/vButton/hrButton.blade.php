@@ -25,11 +25,11 @@
             @endcan
 
             @canany(['hr edit experience','hr view experience'])
-            <a type="submit" id="addExperience" style="color:white" role="button" href="{{route('experience.create')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/experience/create')?'style=background-color:#737373':''}}>Experience</a>
+            <a type="submit" id="addExperience" style="color:white" role="button" href="{{route('experience.show', $id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/experience/create')?'style=background-color:#737373':''}}>Experience</a>
             @endcan
 
             @canany(['hr edit promotion','hr view promotion'])
-            <a type="submit" role="button" style="color:white" id="addPromotion" href="{{route('promotion.create')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/promotion/create')?'style=background-color:#737373':''}}>Promotion</a>
+            <a type="submit" role="button" style="color:white" id="addPromotion" href="{{route('promotion.show', $id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/promotion/create')?'style=background-color:#737373':''}}>Promotion</a>
             @endcan
 
             @canany(['hr edit posting','hr view posting'])
