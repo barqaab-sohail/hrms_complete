@@ -12,43 +12,88 @@ use App\Models\Hr\HrPosting;
 use App\Models\Hr\HrDocumentation;
 use App\Models\Hr\HrDocumentNameDocumentation;
 use App\Http\Requests\Hr\DocumentationStore;
+use DataTables;
 use DB;
 
 class DocumentationController extends Controller
 {
-    public function create(Request $request)
-    {
-
-
-        $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->orderBy('document_date', 'desc')->get();
-
-
-        // $documentIds = $documentIds->sortByDesc('document_date');
-
-        // $documentIds->all();
-
-        // foreach ($documentIds as $id){
-        //     echo $id->description;
-        //     echo '<br>';
-        // }
-        // dd();
-
-
-        $Ids = $documentIds->pluck('id')->toArray();
-        //For security checking
-        session()->put('document_delete_ids', $Ids);
-
-
+    
+    
+    public function show(Request $request, $id){
 
         $documentNames = HrDocumentName::all();
 
-        if ($request->ajax()) {
-            $view = view('hr.documentation.create', compact('documentNames'))->render();
-            return response()->json($view);
-        } else {
+        if($request->ajax()){
+            return  view('hr.documentation.create', compact('documentNames'));
+        }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
     }
+    
+    public function create(Request $request){
+        if ($request->ajax()) {
+          $data= HrDocumentation::where('hr_employee_id', $request->hrEmployeeId)
+          ->latest()->get();
+          return  DataTables::of($data)
+                  ->addIndexColumn()
+                  ->addColumn('document', function ($row){
+                    return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="'.$row->full_path.'" width="30/" style="cursor: pointer;">';
+                  })
+                  ->addColumn('copy_link', function ($row){
+                    return '<a class="copyLink" link="'.$row->full_path.'" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+                  })   
+                 ->addColumn('Edit', function($row){
+                     
+                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editPosting">Edit</a>';
+                                           
+                          return $btn;
+                  })
+                  ->addColumn('Delete', function($row){                
+                      
+                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deletePosting">Delete</a>';
+                                
+                          return $btn;
+                  })
+              
+                  ->rawColumns(['document','copy_link','Edit','Delete'])
+                  ->make(true);
+        
+      }
+ 
+    }
+    
+    
+    // public function create(Request $request)
+    // {
+
+    //     $documentIds = HrDocumentation::where('hr_employee_id', session('hr_employee_id'))->orderBy('document_date', 'desc')->get();
+
+    //     // $documentIds = $documentIds->sortByDesc('document_date');
+
+    //     // $documentIds->all();
+
+    //     // foreach ($documentIds as $id){
+    //     //     echo $id->description;
+    //     //     echo '<br>';
+    //     // }
+    //     // dd();
+
+
+    //     $Ids = $documentIds->pluck('id')->toArray();
+    //     //For security checking
+    //     session()->put('document_delete_ids', $Ids);
+
+
+
+    //     $documentNames = HrDocumentName::all();
+
+    //     if ($request->ajax()) {
+    //         $view = view('hr.documentation.create', compact('documentNames'))->render();
+    //         return response()->json($view);
+    //     } else {
+    //         return back()->withError('Please contact to administrator, SSE_JS');
+    //     }
+    // }
 
     public function store(DocumentationStore $request)
     {

@@ -28,13 +28,14 @@ use App\Models\Hr\PostingDesignation;
 use App\Models\Hr\PostingProject;
 use App\Models\Hr\PostingOffice;
 use App\Http\Requests\Hr\PostingStore;
+use DataTables;
 use DB;
 
 class PostingController extends Controller
 {
 
-    public function create(Request $request)
-    {
+
+    public function show(Request $request, $id){
 
         $designations = HrDesignation::all();
         $departments = HrDepartment::all();
@@ -42,151 +43,90 @@ class PostingController extends Controller
         $managers = HrEmployee::with('employeeDesignation')->get();
         $salaries = HrSalary::all();
         $offices = Office::all();
-        $hrPostings = HrPosting::where('hr_employee_id', session('hr_employee_id'))->get();
+        $hrPostings = HrPosting::where('hr_employee_id', $id)->get();
 
-
-        if ($request->ajax()) {
-            $view =  view('hr.posting.create', compact('designations', 'departments', 'projects', 'managers', 'salaries', 'offices', 'hrPostings'))->render();
-
-            return response()->json($view);
-        } else {
+        if($request->ajax()){
+            return  view('hr.posting.create', compact('designations', 'departments', 'projects', 'managers', 'salaries', 'offices', 'hrPostings'));
+        }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
     }
 
-    public function store(PostingStore $request)
-    {
-        $input = $request->all();
+    public function create(Request $request){
+        if ($request->ajax()) {
+          $data= HrPosting::where('hr_employee_id', $request->hrEmployeeId)
+          ->latest()->get();
+          return  DataTables::of($data)
+                  ->addIndexColumn()
+                  ->addColumn('document', function ($row){
+                    return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="'.$row->full_path.'" width="30/" style="cursor: pointer;">';
+                  })  
+                 ->addColumn('Edit', function($row){
+                     
+                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editPosting">Edit</a>';
+                                           
+                          return $btn;
+                  })
+                  ->addColumn('Delete', function($row){                
+                      
+                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deletePosting">Delete</a>';
+                                
+                          return $btn;
+                  })
+              
+                  ->rawColumns(['document','Edit','Delete'])
+                  ->make(true);
+        
+      }
+ 
+    }
 
+    public function store(PostingStore $request){
+
+        $input = $request->all();
+      
         if ($request->filled('effective_date')) {
             $input['effective_date'] = \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
         }
 
-        $employee = HrEmployee::find(session('hr_employee_id'));
+        $employee = HrEmployee::find($request->hr_employee_id);
         $employeeFullName = strtolower($employee->first_name) . '_' . strtolower($employee->last_name);
+       
+        DB::transaction(function () use ($request, $input, $employeeFullName) {  
+            
+            if ($request->hasFile('document')){
+                $extension = request()->document->getClientOriginalExtension();
+                $fileName = $request->hr_employee_id . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', $input['remarks'])) . '-' . time() . '.' . $extension;
+                $folderName = "hr/documentation/" . $request->hr_employee_id . '-' . $employeeFullName . "/";
+                //store file
+                $request->file('document')->storeAs('public/' . $folderName, $fileName);
 
-        DB::transaction(function () use ($request, $input, $employeeFullName) {
+                $file_path = storage_path('app/public/' . $folderName . $fileName);
 
-            $input['hr_employee_id'] = session('hr_employee_id');
-
-            $extension = request()->document->getClientOriginalExtension();
-            $fileName = session('hr_employee_id') . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', $input['remarks'])) . '-' . time() . '.' . $extension;
-            $folderName = "hr/documentation/" . session('hr_employee_id') . '-' . $employeeFullName . "/";
-            //store file
-            $request->file('document')->storeAs('public/' . $folderName, $fileName);
-
-            $file_path = storage_path('app/public/' . $folderName . $fileName);
-
-            $input['content'] = '';
-
-            if ($extension == 'pdf') {
-                $reader = new \Asika\Pdf2text;
-                $input['content'] = mb_strtolower($reader->decode($file_path));
-            }
-            $input['description'] = $input['remarks'];
-            $input['file_name'] = $fileName;
-            $input['size'] = $request->file('document')->getSize();
-            $input['path'] = $folderName;
-            $input['extension'] = $extension;
-            $input['document_date'] = $input['effective_date'];
-
-            $hrDocumentation = HrDocumentation::create($input);
-            $input['hr_documentation_id'] = $hrDocumentation->id;
-
-            $hrPosting = HrPosting::create($input);
-            $input['hr_posting_id'] = $hrPosting->id;
-
-            if ($request->filled('hr_designation_id')) {
-                $employeeDesignation = EmployeeDesignation::create($input);
-                $input['employee_designation_id'] = $employeeDesignation->id;
-                PostingDesignation::create($input);
-            }
-
-            if ($request->filled('hr_department_id')) {
-                $employeeDepartment = EmployeeDepartment::create($input);
-                $input['employee_department_id'] = $employeeDepartment->id;
-                PostingDepartment::create($input);
-            }
-
-            if ($request->filled('hr_salary_id')) {
-                $employeeSalary = EmployeeSalary::create($input);
-                $input['employee_salary_id'] = $employeeSalary->id;
-                PostingSalary::create($input);
-            }
-
-            if ($request->filled('hr_manager_id')) {
-                $employeeManager = EmployeeManager::create($input);
-                $input['employee_manager_id'] = $employeeManager->id;
-                PostingManager::create($input);
-            }
-
-            if ($request->filled('pr_detail_id')) {
-                $employeeProject = EmployeeProject::create($input);
-                $input['employee_project_id'] = $employeeProject->id;
-                Postingproject::create($input);
-            }
-
-            if ($request->filled('office_id')) {
-                $employeeOffice = EmployeeOffice::create($input);
-                $input['employee_office_id'] = $employeeOffice->id;
-                PostingOffice::create($input);
-            }
-        });  //end transaction
-
-        return response()->json(['status' => 'OK', 'message' => "Data Successfully Saved"]);
-    }
-
-    public function edit(Request $request, $id)
-    {
-        //For security checking
-        session()->put('posting_edit_id', $id);
-
-        $designations = HrDesignation::all();
-        $departments = HrDepartment::all();
-        $projects = PrDetail::all();
-        $managers = HrEmployee::all();
-        $salaries = HrSalary::all();
-        $offices = Office::all();
-        $data = HrPosting::with('project', 'hrManager', 'hrDesignation', 'hrSalary', 'hrDepartment', 'office')->find($id);
-
-        $hrPostings = HrPosting::where('hr_employee_id', session('hr_employee_id'));
-
-        if ($request->ajax()) {
-            $view =  view('hr.posting.edit', compact('designations', 'departments', 'projects', 'managers', 'salaries', 'offices', 'hrPostings', 'data'))->render();
-            return response()->json($view);
-        } else {
-            return back()->withError('Please contact to administrator, SSE_JS');
-        }
-    }
-
-    public function update(Request $request, $id)
-    {
-        //ensure client end id is not changed
-        if ($id != session('posting_edit_id')) {
-            return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        } else {
-            $data = HrPosting::find(session('posting_edit_id'));
-            if ($data) {
-                if ($data->hr_employee_id != session('hr_employee_id')) {
-                    return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
+                $input['content'] = '';
+                if ($extension == 'pdf') {
+                    $reader = new \Asika\Pdf2text;
+                    $input['content'] = mb_strtolower($reader->decode($file_path));
                 }
+                $input['description'] = $input['remarks'];
+                $input['file_name'] = $fileName;
+                $input['size'] = $request->file('document')->getSize();
+                $input['path'] = $folderName;
+                $input['document_date'] = $input['effective_date'];
+                $input['extension'] = $extension;
+                $input['hr_employee_id'] = $input['hr_employee_id'];
+                $hrDocumentation = HrDocumentation::create($input);
+                $input['hr_documentation_id'] = $hrDocumentation->id;
             }
-        }
 
-        $input = $request->all();
+            $hrposting = HrPosting::updateOrCreate(['id' => $input['posting_id']], $input);
+           
+            $input['hr_posting_id'] = $hrposting->id;
 
-        if ($request->filled('effective_date')) {
-            $input['effective_date'] = \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
-        }
 
-        DB::transaction(function () use ($id, $input, $request) {
-
-            HrPosting::findOrFail($id)->update($input);
-            $input['hr_employee_id'] = session('hr_employee_id');
-            $input['hr_posting_id'] = $id;
-
+            //check desination filled or not
             if ($request->filled('hr_designation_id')) {
-                $postingDesignation = PostingDesignation::where('hr_posting_id', $id)->first();
+                $postingDesignation = PostingDesignation::where('hr_posting_id', $input['posting_id'])->first();
                 $employeeDesignation = EmployeeDesignation::updateOrCreate(
                     ['id' => $postingDesignation->employee_designation_id ?? ''],       //It is find and update 
                     $input
@@ -197,7 +137,7 @@ class PostingController extends Controller
                     $input
                 );
             } else {
-                $postingDesignation = PostingDesignation::where('hr_posting_id', $id)->first();
+                $postingDesignation = PostingDesignation::where('hr_posting_id', $input['posting_id'])->first();
                 if ($postingDesignation) {
                     $employeeDesignation = EmployeeDesignation::where('id', $postingDesignation->employee_designation_id)->first();
                     $postingDesignation->delete();
@@ -205,8 +145,10 @@ class PostingController extends Controller
                 }
             }
 
+          
+
             if ($request->filled('hr_department_id')) {
-                $postingDepartment = PostingDepartment::where('hr_posting_id', $id)->first();
+                $postingDepartment = PostingDepartment::where('hr_posting_id', $input['posting_id'])->first();
                 $employeeDepartment = EmployeeDepartment::updateOrCreate(
                     ['id' => $postingDepartment->employee_department_id ?? ''],       //It is find and update 
                     $input
@@ -217,7 +159,7 @@ class PostingController extends Controller
                     $input
                 );
             } else {
-                $postingDepartment = PostingDepartment::where('hr_posting_id', $id)->first();
+                $postingDepartment = PostingDepartment::where('hr_posting_id', $input['posting_id'])->first();
                 if ($postingDepartment) {
                     $employeeDepartment = EmployeeDepartment::where('id', $postingDepartment->employee_department_id)->first();
                     $postingDepartment->delete();
@@ -225,8 +167,28 @@ class PostingController extends Controller
                 }
             }
 
+            if ($request->filled('hr_salary_id')) {
+                $postingSalary = PostingSalary::where('hr_posting_id', $input['posting_id'])->first();
+                $employeeSalary = EmployeeSalary::updateOrCreate(
+                    ['id' => $postingSalary->employee_salary_id ?? ''],       //It is find and update 
+                    $input
+                );
+                $input['employee_salary_id'] = $employeeSalary->id;
+                PostingSalary::updateOrCreate(
+                    ['hr_posting_id' => $postingSalary->hr_posting_id ?? ''],       //It is find and update 
+                    $input
+                );
+            } else {
+                $postingSalary = PostingSalary::where('hr_posting_id', $input['posting_id'])->first();
+                if ($postingSalary) {
+                    $employeeSalary = EmployeeSalary::where('id', $postingSalary->employee_salary_id)->first();
+                    $postingSalary->delete();
+                    $employeeSalary->delete();
+                }
+            }
+
             if ($request->filled('hr_manager_id')) {
-                $postingManager = PostingManager::where('hr_posting_id', $id)->first();
+                $postingManager = PostingManager::where('hr_posting_id', $input['posting_id'])->first();
                 $employeeManager = EmployeeManager::updateOrCreate(
                     ['id' => $postingManager->employee_manager_id ?? ''],       //It is find and update 
                     $input
@@ -237,7 +199,7 @@ class PostingController extends Controller
                     $input
                 );
             } else {
-                $postingManager = PostingManager::where('hr_posting_id', $id)->first();
+                $postingManager = PostingManager::where('hr_posting_id', $input['posting_id'])->first();
                 if ($postingManager) {
                     $employeeManager = EmployeeManager::where('id', $postingManager->employee_manager_id)->first();
                     $postingManager->delete();
@@ -245,29 +207,8 @@ class PostingController extends Controller
                 }
             }
 
-            if ($request->filled('hr_salary_id')) {
-                $postingSalary = PostingSalary::where('hr_posting_id', $id)->first();
-                $employeeSalary = EmployeeSalary::updateOrCreate(
-                    ['id' => $postingSalary->employee_salary_id ?? ''],       //It is find and update 
-                    $input
-                );
-                $input['employee_salary_id'] = $employeeSalary->id;
-
-                PostingSalary::updateOrCreate(
-                    ['hr_posting_id' => $postingSalary->hr_posting_id ?? ''],       //It is find and update 
-                    $input
-                );
-            } else {
-                $postingSalary = PostingSalary::where('hr_posting_id', $id)->first();
-                if ($postingSalary) {
-                    $employeeSalary = EmployeeSalary::where('id', $postingSalary->employee_salary_id)->first();
-                    $postingSalary->delete();
-                    $employeeSalary->delete();
-                }
-            }
-
             if ($request->filled('pr_detail_id')) {
-                $postingProject = PostingProject::where('hr_posting_id', $id)->first();
+                $postingProject = PostingProject::where('hr_posting_id', $input['posting_id'])->first();
                 $employeeProject = EmployeeProject::updateOrCreate(
                     ['id' => $postingProject->employee_project_id ?? ''],       //It is find and update 
                     $input
@@ -278,7 +219,7 @@ class PostingController extends Controller
                     $input
                 );
             } else {
-                $postingProject = PostingProject::where('hr_posting_id', $id)->first();
+                $postingProject = PostingProject::where('hr_posting_id', $input['posting_id'])->first();
                 if ($postingProject) {
                     $employeeProject = EmployeeProject::where('id', $postingProject->employee_project_id)->first();
                     $postingProject->delete();
@@ -287,7 +228,7 @@ class PostingController extends Controller
             }
 
             if ($request->filled('office_id')) {
-                $postingOffice = PostingOffice::where('hr_posting_id', $id)->first();
+                $postingOffice = PostingOffice::where('hr_posting_id', $input['posting_id'])->first();
                 $employeeOffice = EmployeeOffice::updateOrCreate(
                     ['id' => $postingOffice->employee_office_id ?? ''],       //It is find and update 
                     $input
@@ -298,7 +239,7 @@ class PostingController extends Controller
                     $input
                 );
             } else {
-                $postingOffice = PostingOffice::where('hr_posting_id', $id)->first();
+                $postingOffice = PostingOffice::where('hr_posting_id', $input['posting_id'])->first();
                 if ($postingOffice) {
                     $employeeOffice = EmployeeOffice::where('id', $postingOffice->employee_office_id)->first();
                     $postingOffice->delete();
@@ -306,66 +247,24 @@ class PostingController extends Controller
                 }
             }
 
+            
+        }); // end transcation    
 
-
-            //if document 
-            if ($request->hasFile('document')) {
-                $employee = HrEmployee::find(session('hr_employee_id'));
-                $employeeFullName = strtolower($employee->first_name) . '_' . strtolower($employee->last_name);
-
-                $input['hr_employee_id'] = session('hr_employee_id');
-                $extension = request()->document->getClientOriginalExtension();
-                $fileName = session('hr_employee_id') . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', $input['remarks'])) . '-' . time() . '.' . $extension;
-                $folderName = "hr/documentation/" . session('hr_employee_id') . '-' . $employeeFullName . "/";
-                //store file
-                $request->file('document')->storeAs('public/' . $folderName, $fileName);
-
-                $file_path = storage_path('app/public/' . $folderName . $fileName);
-
-                $input['content'] = '';
-
-                if ($extension == 'pdf') {
-                    $reader = new \Asika\Pdf2text;
-                    $input['content'] = mb_strtolower($reader->decode($file_path));
-                }
-                $input['description'] = $input['remarks'];
-                $input['file_name'] = $fileName;
-                $input['size'] = $request->file('document')->getSize();
-                $input['path'] = $folderName;
-                $input['extension'] = $extension;
-                $input['document_date'] = $input['effective_date'];
-
-
-                $hrPosting = HrPosting::find($id);
-
-                //Delete Old File
-                $hrDocument = HrDocumentation::findOrFail($hrPosting->hr_documentation_id);
-                $path = public_path('storage/' . $hrDocument->path . $hrDocument->file_name);
-                if (File::exists($path)) {
-                    File::delete($path);
-                }
-                //Update file detail
-                HrDocumentation::findOrFail($hrDocument->id)->update($input);
-            } else
-            //only document date change
-            {
-                $input['description'] = $input['remarks'];
-                $input['document_date'] = $input['effective_date'];
-                $hrPosting = HrPosting::find($id);
-                $hrDocument = HrDocumentation::findOrFail($hrPosting->hr_documentation_id);
-                HrDocumentation::findOrFail($hrDocument->id)->update($input);
-            }
-        });  //end transaction
-
-        return response()->json(['status' => 'OK', 'message' => "Data Successfully Saved"]);
+        
+        return response()->json(['status'=> 'OK', 'message' => "Posting Successfully Saved"]);
     }
+
+
+    public function edit($id)
+    {
+        $hrPosting = HrPosting::with('hrDesignation','project','hrSalary','hrManager','hrDepartment','office')->find($id);
+        return response()->json($hrPosting);
+    }
+
 
     public function destroy($id)
     {
-        if (!in_array($id, session('posting_delete_ids'))) {
-            return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
-
+        
         DB::transaction(function () use ($id) {
             $postingSalary = PostingSalary::where('hr_posting_id', $id)->first();
             $employeeSalary = EmployeeSalary::where('id', $postingSalary->employee_salary_id ?? '')->first();
@@ -419,8 +318,337 @@ class PostingController extends Controller
         }); // end transcation
 
 
-        return response()->json(['status' => 'OK', 'message' => 'Data Successfully Deleted']);
+        return response()->json(['status' => 'OK', 'message' => 'Posting Successfully Deleted']);
     }
+
+    // public function create(Request $request)
+    // {
+
+    //     $designations = HrDesignation::all();
+    //     $departments = HrDepartment::all();
+    //     $projects = PrDetail::all();
+    //     $managers = HrEmployee::with('employeeDesignation')->get();
+    //     $salaries = HrSalary::all();
+    //     $offices = Office::all();
+    //     $hrPostings = HrPosting::where('hr_employee_id', session('hr_employee_id'))->get();
+
+
+    //     if ($request->ajax()) {
+    //         $view =  view('hr.posting.create', compact('designations', 'departments', 'projects', 'managers', 'salaries', 'offices', 'hrPostings'))->render();
+
+    //         return response()->json($view);
+    //     } else {
+    //         return back()->withError('Please contact to administrator, SSE_JS');
+    //     }
+    // }
+
+    // public function store(PostingStore $request)
+    // {
+    //     $input = $request->all();
+
+    //     if ($request->filled('effective_date')) {
+    //         $input['effective_date'] = \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
+    //     }
+
+    //     $employee = HrEmployee::find(session('hr_employee_id'));
+    //     $employeeFullName = strtolower($employee->first_name) . '_' . strtolower($employee->last_name);
+
+    //     DB::transaction(function () use ($request, $input, $employeeFullName) {
+
+    //         $input['hr_employee_id'] = session('hr_employee_id');
+
+    //         $extension = request()->document->getClientOriginalExtension();
+    //         $fileName = session('hr_employee_id') . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', $input['remarks'])) . '-' . time() . '.' . $extension;
+    //         $folderName = "hr/documentation/" . session('hr_employee_id') . '-' . $employeeFullName . "/";
+    //         //store file
+    //         $request->file('document')->storeAs('public/' . $folderName, $fileName);
+
+    //         $file_path = storage_path('app/public/' . $folderName . $fileName);
+
+    //         $input['content'] = '';
+
+    //         if ($extension == 'pdf') {
+    //             $reader = new \Asika\Pdf2text;
+    //             $input['content'] = mb_strtolower($reader->decode($file_path));
+    //         }
+    //         $input['description'] = $input['remarks'];
+    //         $input['file_name'] = $fileName;
+    //         $input['size'] = $request->file('document')->getSize();
+    //         $input['path'] = $folderName;
+    //         $input['extension'] = $extension;
+    //         $input['document_date'] = $input['effective_date'];
+
+    //         $hrDocumentation = HrDocumentation::create($input);
+    //         $input['hr_documentation_id'] = $hrDocumentation->id;
+
+    //         $hrPosting = HrPosting::create($input);
+    //         $input['hr_posting_id'] = $hrPosting->id;
+
+    //         if ($request->filled('hr_designation_id')) {
+    //             $employeeDesignation = EmployeeDesignation::create($input);
+    //             $input['employee_designation_id'] = $employeeDesignation->id;
+    //             PostingDesignation::create($input);
+    //         }
+
+    //         if ($request->filled('hr_department_id')) {
+    //             $employeeDepartment = EmployeeDepartment::create($input);
+    //             $input['employee_department_id'] = $employeeDepartment->id;
+    //             PostingDepartment::create($input);
+    //         }
+
+    //         if ($request->filled('hr_salary_id')) {
+    //             $employeeSalary = EmployeeSalary::create($input);
+    //             $input['employee_salary_id'] = $employeeSalary->id;
+    //             PostingSalary::create($input);
+    //         }
+
+    //         if ($request->filled('hr_manager_id')) {
+    //             $employeeManager = EmployeeManager::create($input);
+    //             $input['employee_manager_id'] = $employeeManager->id;
+    //             PostingManager::create($input);
+    //         }
+
+    //         if ($request->filled('pr_detail_id')) {
+    //             $employeeProject = EmployeeProject::create($input);
+    //             $input['employee_project_id'] = $employeeProject->id;
+    //             Postingproject::create($input);
+    //         }
+
+    //         if ($request->filled('office_id')) {
+    //             $employeeOffice = EmployeeOffice::create($input);
+    //             $input['employee_office_id'] = $employeeOffice->id;
+    //             PostingOffice::create($input);
+    //         }
+    //     });  //end transaction
+
+    //     return response()->json(['status' => 'OK', 'message' => "Data Successfully Saved"]);
+    // }
+
+    // public function edit(Request $request, $id)
+    // {
+    //     //For security checking
+    //     session()->put('posting_edit_id', $id);
+
+    //     $designations = HrDesignation::all();
+    //     $departments = HrDepartment::all();
+    //     $projects = PrDetail::all();
+    //     $managers = HrEmployee::all();
+    //     $salaries = HrSalary::all();
+    //     $offices = Office::all();
+    //     $data = HrPosting::with('project', 'hrManager', 'hrDesignation', 'hrSalary', 'hrDepartment', 'office')->find($id);
+
+    //     $hrPostings = HrPosting::where('hr_employee_id', session('hr_employee_id'));
+
+    //     if ($request->ajax()) {
+    //         $view =  view('hr.posting.edit', compact('designations', 'departments', 'projects', 'managers', 'salaries', 'offices', 'hrPostings', 'data'))->render();
+    //         return response()->json($view);
+    //     } else {
+    //         return back()->withError('Please contact to administrator, SSE_JS');
+    //     }
+    // }
+
+    // public function update(Request $request, $id)
+    // {
+    //     //ensure client end id is not changed
+    //     if ($id != session('posting_edit_id')) {
+    //         return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
+    //     } else {
+    //         $data = HrPosting::find(session('posting_edit_id'));
+    //         if ($data) {
+    //             if ($data->hr_employee_id != session('hr_employee_id')) {
+    //                 return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
+    //             }
+    //         }
+    //     }
+
+    //     $input = $request->all();
+
+    //     if ($request->filled('effective_date')) {
+    //         $input['effective_date'] = \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
+    //     }
+
+    //     DB::transaction(function () use ($id, $input, $request) {
+
+    //         HrPosting::findOrFail($id)->update($input);
+    //         $input['hr_employee_id'] = session('hr_employee_id');
+    //         $input['hr_posting_id'] = $id;
+
+    //         if ($request->filled('hr_designation_id')) {
+    //             $postingDesignation = PostingDesignation::where('hr_posting_id', $id)->first();
+    //             $employeeDesignation = EmployeeDesignation::updateOrCreate(
+    //                 ['id' => $postingDesignation->employee_designation_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //             $input['employee_designation_id'] = $employeeDesignation->id;
+    //             PostingDesignation::updateOrCreate(
+    //                 ['hr_posting_id' => $postingDesignation->hr_posting_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //         } else {
+    //             $postingDesignation = PostingDesignation::where('hr_posting_id', $id)->first();
+    //             if ($postingDesignation) {
+    //                 $employeeDesignation = EmployeeDesignation::where('id', $postingDesignation->employee_designation_id)->first();
+    //                 $postingDesignation->delete();
+    //                 $employeeDesignation->delete();
+    //             }
+    //         }
+
+    //         if ($request->filled('hr_department_id')) {
+    //             $postingDepartment = PostingDepartment::where('hr_posting_id', $id)->first();
+    //             $employeeDepartment = EmployeeDepartment::updateOrCreate(
+    //                 ['id' => $postingDepartment->employee_department_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //             $input['employee_department_id'] = $employeeDepartment->id;
+    //             PostingDepartment::updateOrCreate(
+    //                 ['hr_posting_id' => $postingDepartment->hr_posting_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //         } else {
+    //             $postingDepartment = PostingDepartment::where('hr_posting_id', $id)->first();
+    //             if ($postingDepartment) {
+    //                 $employeeDepartment = EmployeeDepartment::where('id', $postingDepartment->employee_department_id)->first();
+    //                 $postingDepartment->delete();
+    //                 $employeeDepartment->delete();
+    //             }
+    //         }
+
+    //         if ($request->filled('hr_manager_id')) {
+    //             $postingManager = PostingManager::where('hr_posting_id', $id)->first();
+    //             $employeeManager = EmployeeManager::updateOrCreate(
+    //                 ['id' => $postingManager->employee_manager_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //             $input['employee_manager_id'] = $employeeManager->id;
+    //             PostingManager::updateOrCreate(
+    //                 ['hr_posting_id' => $postingManager->hr_posting_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //         } else {
+    //             $postingManager = PostingManager::where('hr_posting_id', $id)->first();
+    //             if ($postingManager) {
+    //                 $employeeManager = EmployeeManager::where('id', $postingManager->employee_manager_id)->first();
+    //                 $postingManager->delete();
+    //                 $employeeManager->delete();
+    //             }
+    //         }
+
+    //         if ($request->filled('hr_salary_id')) {
+    //             $postingSalary = PostingSalary::where('hr_posting_id', $id)->first();
+    //             $employeeSalary = EmployeeSalary::updateOrCreate(
+    //                 ['id' => $postingSalary->employee_salary_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //             $input['employee_salary_id'] = $employeeSalary->id;
+
+    //             PostingSalary::updateOrCreate(
+    //                 ['hr_posting_id' => $postingSalary->hr_posting_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //         } else {
+    //             $postingSalary = PostingSalary::where('hr_posting_id', $id)->first();
+    //             if ($postingSalary) {
+    //                 $employeeSalary = EmployeeSalary::where('id', $postingSalary->employee_salary_id)->first();
+    //                 $postingSalary->delete();
+    //                 $employeeSalary->delete();
+    //             }
+    //         }
+
+    //         if ($request->filled('pr_detail_id')) {
+    //             $postingProject = PostingProject::where('hr_posting_id', $id)->first();
+    //             $employeeProject = EmployeeProject::updateOrCreate(
+    //                 ['id' => $postingProject->employee_project_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //             $input['employee_project_id'] = $employeeProject->id;
+    //             PostingProject::updateOrCreate(
+    //                 ['hr_posting_id' => $postingProject->hr_posting_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //         } else {
+    //             $postingProject = PostingProject::where('hr_posting_id', $id)->first();
+    //             if ($postingProject) {
+    //                 $employeeProject = EmployeeProject::where('id', $postingProject->employee_project_id)->first();
+    //                 $postingProject->delete();
+    //                 $employeeProject->delete();
+    //             }
+    //         }
+
+    //         if ($request->filled('office_id')) {
+    //             $postingOffice = PostingOffice::where('hr_posting_id', $id)->first();
+    //             $employeeOffice = EmployeeOffice::updateOrCreate(
+    //                 ['id' => $postingOffice->employee_office_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //             $input['employee_office_id'] = $employeeOffice->id;
+    //             PostingOffice::updateOrCreate(
+    //                 ['hr_posting_id' => $postingOffice->hr_posting_id ?? ''],       //It is find and update 
+    //                 $input
+    //             );
+    //         } else {
+    //             $postingOffice = PostingOffice::where('hr_posting_id', $id)->first();
+    //             if ($postingOffice) {
+    //                 $employeeOffice = EmployeeOffice::where('id', $postingOffice->employee_office_id)->first();
+    //                 $postingOffice->delete();
+    //                 $employeeOffice->delete();
+    //             }
+    //         }
+
+
+
+    //         //if document 
+    //         if ($request->hasFile('document')) {
+    //             $employee = HrEmployee::find(session('hr_employee_id'));
+    //             $employeeFullName = strtolower($employee->first_name) . '_' . strtolower($employee->last_name);
+
+    //             $input['hr_employee_id'] = session('hr_employee_id');
+    //             $extension = request()->document->getClientOriginalExtension();
+    //             $fileName = session('hr_employee_id') . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', $input['remarks'])) . '-' . time() . '.' . $extension;
+    //             $folderName = "hr/documentation/" . session('hr_employee_id') . '-' . $employeeFullName . "/";
+    //             //store file
+    //             $request->file('document')->storeAs('public/' . $folderName, $fileName);
+
+    //             $file_path = storage_path('app/public/' . $folderName . $fileName);
+
+    //             $input['content'] = '';
+
+    //             if ($extension == 'pdf') {
+    //                 $reader = new \Asika\Pdf2text;
+    //                 $input['content'] = mb_strtolower($reader->decode($file_path));
+    //             }
+    //             $input['description'] = $input['remarks'];
+    //             $input['file_name'] = $fileName;
+    //             $input['size'] = $request->file('document')->getSize();
+    //             $input['path'] = $folderName;
+    //             $input['extension'] = $extension;
+    //             $input['document_date'] = $input['effective_date'];
+
+
+    //             $hrPosting = HrPosting::find($id);
+
+    //             //Delete Old File
+    //             $hrDocument = HrDocumentation::findOrFail($hrPosting->hr_documentation_id);
+    //             $path = public_path('storage/' . $hrDocument->path . $hrDocument->file_name);
+    //             if (File::exists($path)) {
+    //                 File::delete($path);
+    //             }
+    //             //Update file detail
+    //             HrDocumentation::findOrFail($hrDocument->id)->update($input);
+    //         } else
+    //         //only document date change
+    //         {
+    //             $input['description'] = $input['remarks'];
+    //             $input['document_date'] = $input['effective_date'];
+    //             $hrPosting = HrPosting::find($id);
+    //             $hrDocument = HrDocumentation::findOrFail($hrPosting->hr_documentation_id);
+    //             HrDocumentation::findOrFail($hrDocument->id)->update($input);
+    //         }
+    //     });  //end transaction
+
+    //     return response()->json(['status' => 'OK', 'message' => "Data Successfully Saved"]);
+    // }
+
+    
 
     public function refreshTable()
     {

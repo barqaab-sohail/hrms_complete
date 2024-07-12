@@ -32,7 +32,7 @@ class PromotionStore extends FormRequest
         ];
 
         //If method is POST then document is required otherwise in Patch method document is nullable.
-        if ($this->getMethod() == 'POST') {
+        if (!request()->has('promotion_id')) {
             $rules += ['document'=>'required|file|max:2000|mimes:pdf'];
         }else{
              $rules += ['document'=>'nullable|file|max:2000|mimes:pdf'];

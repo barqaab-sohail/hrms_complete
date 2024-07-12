@@ -12,6 +12,18 @@ class HrPosting extends Model implements Auditable
 
     protected $fillable = ['hr_employee_id', 'hr_documentation_id', 'effective_date', 'remarks'];
 
+    protected $appends = ['full_path'];
+
+    function getFullPathAttribute()
+    {
+        return url('/storage/' . $this->HrDocumentation->path . $this->HrDocumentation->file_name);
+    }
+
+
+    public function HrDocumentation(){
+        return $this->belongsTo('App\Models\Hr\HrDocumentation');
+    }
+
     public function hrDesignation()
     {
         return $this->hasOneThrough(

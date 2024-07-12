@@ -42,8 +42,6 @@ class PromotionController extends Controller
         $hrCategories = HrCategory::all();
         $hrPromotions = HrPromotion::where('hr_employee_id', $id)->with('hrDocumentation')->orderByRaw('ISNULL(effective_date), effective_date desc')->get();
 
-
-
         if($request->ajax()){
             return  view('hr.promotion.create', compact('salaries', 'designations', 'managers', 'departments', 'hrGrades', 'hrCategories', 'hrPromotions'));
         }else{
@@ -52,14 +50,13 @@ class PromotionController extends Controller
     }
 
     public function create(Request $request){
-
         if ($request->ajax()) {
           $data= HrPromotion::where('hr_employee_id', $request->hrEmployeeId)
           ->latest()->get();
           return  DataTables::of($data)
                   ->addIndexColumn()
                   ->addColumn('document', function ($row){
-                    return 'testing';
+                    return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="'.$row->full_path.'" width="30/" style="cursor: pointer;">';
                   })  
                  ->addColumn('Edit', function($row){
                      
@@ -74,7 +71,7 @@ class PromotionController extends Controller
                           return $btn;
                   })
               
-                  ->rawColumns(['Edit','Delete'])
+                  ->rawColumns(['document','Edit','Delete'])
                   ->make(true);
         
       }
@@ -94,37 +91,33 @@ class PromotionController extends Controller
        
         DB::transaction(function () use ($request, $input, $employeeFullName) {  
             
-        
-            $extension = request()->document->getClientOriginalExtension();
-            $fileName = session('hr_employee_id') . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', $input['remarks'])) . '-' . time() . '.' . $extension;
-            $folderName = "hr/documentation/" . session('hr_employee_id') . '-' . $employeeFullName . "/";
-            //store file
-            $request->file('document')->storeAs('public/' . $folderName, $fileName);
+            if ($request->hasFile('document')){
+                $extension = request()->document->getClientOriginalExtension();
+                $fileName = $request->hr_employee_id . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', $input['remarks'])) . '-' . time() . '.' . $extension;
+                $folderName = "hr/documentation/" . $request->hr_employee_id . '-' . $employeeFullName . "/";
+                //store file
+                $request->file('document')->storeAs('public/' . $folderName, $fileName);
 
-            $file_path = storage_path('app/public/' . $folderName . $fileName);
-
-            $input['content'] = '';
-
-            if ($extension == 'pdf') {
-                $reader = new \Asika\Pdf2text;
-                $input['content'] = mb_strtolower($reader->decode($file_path));
+                $file_path = storage_path('app/public/' . $folderName . $fileName);
+                $input['content'] = '';
+                if ($extension == 'pdf') {
+                    $reader = new \Asika\Pdf2text;
+                    $input['content'] = mb_strtolower($reader->decode($file_path));
+                }
+                $input['description'] = $input['remarks'];
+                $input['file_name'] = $fileName;
+                $input['size'] = $request->file('document')->getSize();
+                $input['path'] = $folderName;
+                $input['document_date'] = $input['effective_date'];
+                $input['extension'] = $extension;
+                $input['hr_employee_id'] = $input['hr_employee_id'];
+                $hrDocumentation = HrDocumentation::create($input);
+                $input['hr_documentation_id'] = $hrDocumentation->id;
             }
-            $input['description'] = $input['remarks'];
-            $input['file_name'] = $fileName;
-            $input['size'] = $request->file('document')->getSize();
-            $input['path'] = $folderName;
-            $input['document_date'] = $input['effective_date'];
-            $input['extension'] = $extension;
-            $input['hr_employee_id'] = $input['hr_employee_id'];
-
-            $hrDocumentation = HrDocumentation::create($input);
-
-            $input['hr_documentation_id'] = $hrDocumentation->id;
 
             $hrPromotion = HrPromotion::updateOrCreate(['id' => $input['promotion_id']], $input);
            
             $input['hr_promotion_id'] = $hrPromotion->id;
-
 
             //check desination filled or not
             if ($request->filled('hr_designation_id')) {
@@ -251,8 +244,95 @@ class PromotionController extends Controller
         }); // end transcation    
 
         
-        return response()->json(['status'=> 'OK', 'message' => "Experience Successfully Saved"]);
+        return response()->json(['status'=> 'OK', 'message' => "Promotion Successfully Saved"]);
     }
+
+    public function edit($id)
+    {
+        $hrPromotion = HrPromotion::with('hrDesignation','hrSalary','hrGrade','hrManager','hrDepartment','hrCategory')->find($id);
+        return response()->json($hrPromotion);
+    }
+
+
+    public function destroy($id)
+    {
+       
+        DB::transaction(function () use ($id) {
+            $promotionSalary = PromotionSalary::where('hr_promotion_id', $id)->first();
+            $employeeSalary = EmployeeSalary::where('id', $promotionSalary->employee_salary_id ?? '')->first();
+
+            $promotionDesignation = PromotionDesignation::where('hr_promotion_id', $id)->first();
+            $employeeDesignation = EmployeeDesignation::where('id', $promotionDesignation->employee_designation_id ?? '')->first();
+
+            $promotionDepartment = PromotionDepartment::where('hr_promotion_id', $id)->first();
+            $employeeDepartment = EmployeeDepartment::where('id', $promotionDepartment->employee_department_id ?? '')->first();
+
+            $promotionCategory = PromotionCategory::where('hr_promotion_id', $id)->first();
+            $employeeCategory = EmployeeCategory::where('id', $promotionCategory->employee_category_id ?? '')->first();
+
+            $promotionGrade = PromotionGrade::where('hr_promotion_id', $id)->first();
+            $employeeGrade = EmployeeGrade::where('id', $promotionGrade->employee_grade_id ?? '')->first();
+
+            $promotionManager = PromotionManager::where('hr_promotion_id', $id)->first();
+            $employeeManager = EmployeeManager::where('id', $promotionManager->employee_manager_id ?? '')->first();
+
+            $hrPromotion = HrPromotion::find($id);
+            $hrPromotion->delete();
+            if ($employeeSalary) {
+                $employeeSalary->delete();
+            }
+            if ($employeeDesignation) {
+                $employeeDesignation->delete();
+            }
+            if ($employeeDepartment) {
+                $employeeDepartment->delete();
+            }
+            if ($employeeCategory) {
+                $employeeCategory->delete();
+            }
+            if ($employeeGrade) {
+                $employeeGrade->delete();
+            }
+            if ($employeeManager) {
+                $employeeManager->delete();
+            }
+
+            $hrDocument = HrDocumentation::findOrFail($hrPromotion->hr_documentation_id);
+            $path = public_path('storage/' . $hrDocument->path . $hrDocument->file_name);
+            if (File::exists($path)) {
+                File::delete($path);
+            }
+            $hrDocument->forceDelete();
+
+        }); // end transcation
+
+
+        return response()->json(['status' => 'OK', 'message' => 'Promotion Successfully Deleted']);
+    }
+
+    // public function edit(Request $request, $id)
+    // {
+    //     //For security checking
+    //     session()->put('promotion_edit_id', $id);
+
+    //     $salaries = HrSalary::all();
+    //     $designations = HrDesignation::all();
+    //     $managers = HrEmployee::all();
+    //     $departments = HrDepartment::all();
+    //     $hrGrades = HrGrade::all();
+    //     $hrCategories = HrCategory::all();
+    //     $hrPromotions =  HrPromotion::where('hr_employee_id', session('hr_employee_id'))->get();
+    //     $data = HrPromotion::find($id);
+
+
+    //     if ($request->ajax()) {
+
+    //         $view =  view('hr.promotion.edit', compact('salaries', 'designations', 'managers', 'departments', 'hrPromotions', 'hrGrades', 'hrCategories', 'data'))->render();
+    //         return response()->json($view);
+    //     } else {
+    //         return back()->withError('Please contact to administrator, SSE_JS');
+    //     }
+    // }
 
     // public function create(Request $request)
     // {
@@ -359,29 +439,7 @@ class PromotionController extends Controller
     //     return response()->json(['status' => 'OK', 'message' => "Data Successfully Saved"]);
     // }
 
-    public function edit(Request $request, $id)
-    {
-        //For security checking
-        session()->put('promotion_edit_id', $id);
-
-        $salaries = HrSalary::all();
-        $designations = HrDesignation::all();
-        $managers = HrEmployee::all();
-        $departments = HrDepartment::all();
-        $hrGrades = HrGrade::all();
-        $hrCategories = HrCategory::all();
-        $hrPromotions =  HrPromotion::where('hr_employee_id', session('hr_employee_id'))->get();
-        $data = HrPromotion::find($id);
-
-
-        if ($request->ajax()) {
-
-            $view =  view('hr.promotion.edit', compact('salaries', 'designations', 'managers', 'departments', 'hrPromotions', 'hrGrades', 'hrCategories', 'data'))->render();
-            return response()->json($view);
-        } else {
-            return back()->withError('Please contact to administrator, SSE_JS');
-        }
-    }
+    
 
 
     // public function update(PromotionStore $request, $id)
@@ -584,69 +642,69 @@ class PromotionController extends Controller
     //     return response()->json(['status' => 'OK', 'message' => "Data Successfully Updated"]);
     // }
 
-    public function destroy($id)
-    {
-        if (!in_array($id, session('promotion_delete_ids'))) {
-            return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
+    // public function destroy($id)
+    // {
+    //     if (!in_array($id, session('promotion_delete_ids'))) {
+    //         return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
+    //     }
 
-        DB::transaction(function () use ($id) {
-            $promotionSalary = PromotionSalary::where('hr_promotion_id', $id)->first();
-            $employeeSalary = EmployeeSalary::where('id', $promotionSalary->employee_salary_id ?? '')->first();
+    //     DB::transaction(function () use ($id) {
+    //         $promotionSalary = PromotionSalary::where('hr_promotion_id', $id)->first();
+    //         $employeeSalary = EmployeeSalary::where('id', $promotionSalary->employee_salary_id ?? '')->first();
 
-            $promotionDesignation = PromotionDesignation::where('hr_promotion_id', $id)->first();
-            $employeeDesignation = EmployeeDesignation::where('id', $promotionDesignation->employee_designation_id ?? '')->first();
+    //         $promotionDesignation = PromotionDesignation::where('hr_promotion_id', $id)->first();
+    //         $employeeDesignation = EmployeeDesignation::where('id', $promotionDesignation->employee_designation_id ?? '')->first();
 
-            $promotionDepartment = PromotionDepartment::where('hr_promotion_id', $id)->first();
-            $employeeDepartment = EmployeeDepartment::where('id', $promotionDepartment->employee_department_id ?? '')->first();
+    //         $promotionDepartment = PromotionDepartment::where('hr_promotion_id', $id)->first();
+    //         $employeeDepartment = EmployeeDepartment::where('id', $promotionDepartment->employee_department_id ?? '')->first();
 
-            $promotionCategory = PromotionCategory::where('hr_promotion_id', $id)->first();
-            $employeeCategory = EmployeeCategory::where('id', $promotionCategory->employee_category_id ?? '')->first();
+    //         $promotionCategory = PromotionCategory::where('hr_promotion_id', $id)->first();
+    //         $employeeCategory = EmployeeCategory::where('id', $promotionCategory->employee_category_id ?? '')->first();
 
-            $promotionGrade = PromotionGrade::where('hr_promotion_id', $id)->first();
-            $employeeGrade = EmployeeGrade::where('id', $promotionGrade->employee_grade_id ?? '')->first();
+    //         $promotionGrade = PromotionGrade::where('hr_promotion_id', $id)->first();
+    //         $employeeGrade = EmployeeGrade::where('id', $promotionGrade->employee_grade_id ?? '')->first();
 
-            $promotionManager = PromotionManager::where('hr_promotion_id', $id)->first();
-            $employeeManager = EmployeeManager::where('id', $promotionManager->employee_manager_id ?? '')->first();
-
-
-
-            $hrPromotion = HrPromotion::find($id);
-            $hrPromotion->delete();
-            if ($employeeSalary) {
-                $employeeSalary->delete();
-            }
-            if ($employeeDesignation) {
-                $employeeDesignation->delete();
-            }
-            if ($employeeDepartment) {
-                $employeeDepartment->delete();
-            }
-            if ($employeeCategory) {
-                $employeeCategory->delete();
-            }
-            if ($employeeGrade) {
-                $employeeGrade->delete();
-            }
-            if ($employeeManager) {
-                $employeeManager->delete();
-            }
-
-            $hrDocument = HrDocumentation::findOrFail($hrPromotion->hr_documentation_id);
-            $path = public_path('storage/' . $hrDocument->path . $hrDocument->file_name);
-            if (File::exists($path)) {
-                File::delete($path);
-            }
-            $hrDocument->forceDelete();
+    //         $promotionManager = PromotionManager::where('hr_promotion_id', $id)->first();
+    //         $employeeManager = EmployeeManager::where('id', $promotionManager->employee_manager_id ?? '')->first();
 
 
-            //app('App\Http\Controllers\Hr\DocumentationController')->destroy($hrPromotion->hr_documentation_id);
 
-        }); // end transcation
+    //         $hrPromotion = HrPromotion::find($id);
+    //         $hrPromotion->delete();
+    //         if ($employeeSalary) {
+    //             $employeeSalary->delete();
+    //         }
+    //         if ($employeeDesignation) {
+    //             $employeeDesignation->delete();
+    //         }
+    //         if ($employeeDepartment) {
+    //             $employeeDepartment->delete();
+    //         }
+    //         if ($employeeCategory) {
+    //             $employeeCategory->delete();
+    //         }
+    //         if ($employeeGrade) {
+    //             $employeeGrade->delete();
+    //         }
+    //         if ($employeeManager) {
+    //             $employeeManager->delete();
+    //         }
+
+    //         $hrDocument = HrDocumentation::findOrFail($hrPromotion->hr_documentation_id);
+    //         $path = public_path('storage/' . $hrDocument->path . $hrDocument->file_name);
+    //         if (File::exists($path)) {
+    //             File::delete($path);
+    //         }
+    //         $hrDocument->forceDelete();
 
 
-        return response()->json(['status' => 'OK', 'message' => 'Data Successfully Deleted']);
-    }
+    //         //app('App\Http\Controllers\Hr\DocumentationController')->destroy($hrPromotion->hr_documentation_id);
+
+    //     }); // end transcation
+
+
+    //     return response()->json(['status' => 'OK', 'message' => 'Data Successfully Deleted']);
+    // }
 
 
     public function refreshTable()

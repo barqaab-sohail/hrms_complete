@@ -33,11 +33,11 @@
             @endcan
 
             @canany(['hr edit posting','hr view posting'])
-            <a type="submit" role="button" style="color:white" id="addPosting" href="{{route('posting.create')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/posting/create')?'style=background-color:#737373':''}}>Transfer/Posting</a>
+            <a type="submit" role="button" style="color:white" id="addPosting" href="{{route('posting.show',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/posting/create')?'style=background-color:#737373':''}}>Transfer/Posting</a>
             @endcan
 
             @canany(['hr edit documentation','hr view documentation'])
-            <a type="submit" role="button" style="color:white" id="addDocumentation" href="{{route('documentation.create')}}" class="dropdown-item btn btn-success " {{Request::is('hrms/documentation/create')?'style=background-color:#737373':''}}>Employee Documentation</a>
+            <a type="submit" role="button" style="color:white" id="addDocumentation" href="{{route('documentation.show',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/documentation/create')?'style=background-color:#737373':''}}>Employee Documentation</a>
             @endcan
 
 

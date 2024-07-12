@@ -297,15 +297,20 @@ $(function () {
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
 
         ],
+        "drawCallback": function(settings) {
+					$("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
+
+        },
         order: [[ 1, "desc" ]]
     });
 
     $('#hideButton').click(function(){
-          
+            $('#pdf').attr('src','').hide();
+            $('#h6').html("Click On Image to Add Pdf Document<span class='text_requried'>*</span>");
             $('#formPromotion').toggle();
             $('#formPromotion').trigger("reset");
             $('#promotion_id').val('');
-
+            $('#view').attr('data-validation','required');
             $('#hr_designation_id').trigger('change');
             $('#hr_salary_id').trigger('change');
             $('#hr_grade_id').trigger('change');
@@ -319,19 +324,20 @@ $(function () {
       var promotion_id = $(this).data('id');
         
       $.get("{{ url('hrms/promotion') }}" +'/' + promotion_id +'/edit', function (data) {
-
+      //  console.log(JSON.stringify(data));
           $('#formPromotion').show(); 
           $('#formHeading').html("Edit Promotion");
           $('#promotion_id').val(data.id);
-          $('#hr_designation_id').val(data.hr_designation_id).trigger('change');
+          $('#hr_designation_id').val(data.hr_designation?.hr_designation_id).trigger('change');
           $('#effective_date').val(data.effective_date);
-          $('#hr_salary_id').val(data.hr_salary_id).trigger('change');
-          $('#hr_grade_id').val(data.hr_grade_id).trigger('change');
-          $('#hr_manager_id').val(data.hr_manager_id).trigger('change');
-          $('#hr_department_id').val(data.hr_department_id).trigger('change');
-          $('#hr_category_id').val(data.hr_category_id).trigger('change');
+          $('#hr_salary_id').val(data.hr_salary?.hr_salary_id).trigger('change');
+          $('#hr_grade_id').val(data.hr_grade?.hr_grade_id).trigger('change');
+          $('#hr_manager_id').val(data.hr_manager?.hr_manager_id).trigger('change');
+          $('#hr_department_id').val(data.hr_department?.hr_department_id).trigger('change');
+          $('#hr_category_id').val(data.hr_category?.hr_category_id).trigger('change');
           $('#forward_slash').val(data.remarks);
-          $('#pdf').val(data.document);
+          $('#pdf').val(data.full_path);
+          $('#view').removeAttr('data-validation');
       })
    });
     
