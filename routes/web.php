@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
 use App\Models\Hr\HrExperience;
-
+use App\Models\Hr\HrEmployee;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +17,9 @@ use App\Models\Hr\HrExperience;
 
 // Route::get('/newDesign', function () {
 //     return statusLeaveEmployee()->count();
+// });
+// Route::get('/testing123',function(){
+//     return HrEmployee::select('id','first_name')->get();
 // });
 
 Route::get('/verifyCard', 'HomeController@employee');

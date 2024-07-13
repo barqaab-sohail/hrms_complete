@@ -18,7 +18,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Reference No.<span class="text_requried">*</span></label><br>
 
-                            <input type="text" name="reference_no" value="{{ old('reference_no', $data->reference_no??'') }}" class="form-control exempted" data-validation="required" placeholder="Enter Appointment Letter Reference No">
+                            <input type="text" name="reference_no" value="{{ old('reference_no', $hrEmployee->employeeAppointment->reference_no??'') }}" class="form-control exempted" data-validation="required" placeholder="Enter Appointment Letter Reference No">
                         </div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Joining Date<span class="text_requried">*</span></label>
 
-                            <input type="text" name="joining_date" id="joining_date" value="{{ old('joining_date',$data->joining_date??'') }}" class="form-control date_input" data-validation="required" readonly>
+                            <input type="text" name="joining_date" id="joining_date" value="{{ old('joining_date',$hrEmployee->employeeAppointment->joining_date??'') }}" class="form-control date_input" data-validation="required" readonly>
 
                             <br>
                             @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan
@@ -55,7 +55,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Expiry Date</label>
-                            <input type="text" name="expiry_date" id="expiry_date" value="{{ old('expiry_date',$data->expiry_date??'') }}" class="form-control date_input" readonly>
+                            <input type="text" name="expiry_date" id="expiry_date" value="{{ old('expiry_date',$hrEmployee->employeeAppointment->expiry_date??'') }}" class="form-control date_input" readonly>
                             <br>
                             @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan
                         </div>
@@ -69,10 +69,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Designation/Position<span class="text_requried">*</span></label>
                             <select id="hr_designation_id" name="hr_designation_id" class="form-control selectTwo" data-validation="required">
-                                <option value=""></option>
-                                @foreach($designations as $designation)
-                                <option value="{{$designation->id}}" {{(old("hr_designation_id",$data->hr_designation_id??'')==$designation->id? "selected" : "")}}>{{$designation->name}}</option>
-                                @endforeach
+                               <option value="$hrEmployee->employeeAppointment->appointmentDesignation->id??''">{{$hrEmployee->employeeAppointment->appointmentDesignation->name??''}}</option>
                             </select>
                             @can('hr add designation')
                             <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#designationModal"><i class="fas fa-plus"></i>
@@ -89,10 +86,8 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">HOD<span class="text_requried">*</span></label>
                             <select id="hr_manager_id" name="hr_manager_id" class="form-control selectTwo" data-validation="required">
-                                <option value=""></option>
-                                @foreach($employees as $manager)
-                                <option value="{{$manager->id}}" {{(old("hr_manager_id",$data->hr_manager_id??'')==$manager->id? "selected" : "")}}>{{$manager->first_name}} {{$manager->last_name}} - {{$manager->employeeCurrentDesignation->name??''}}- {{$manager->employee_no}}</option>
-                                @endforeach
+                            <option value="$hrEmployee->employeeAppointment->appointmentHOD->id??''">{{$hrEmployee->employeeAppointment->appointmentHOD->full_name??''}}</option>
+                               
                             </select>
 
 
@@ -105,10 +100,8 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Department<span class="text_requried">*</span></label>
                             <select id="hr_department_id" name="hr_department_id" class="form-control selectTwo" data-validation="required">
-                                <option value=""></option>
-                                @foreach($departments as $department)
-                                <option value="{{$department->id}}" {{(old("hr_department_id",$data->hr_department_id??'')==$department->id? "selected" : "")}}>{{$department->name}}</option>
-                                @endforeach
+                            <option value="$hrEmployee->employeeAppointment->appointmentDepartment->id??''">{{$hrEmployee->employeeAppointment->appointmentDepartment->name??''}}</option>
+                                
                             </select>
 
 
@@ -121,10 +114,8 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Category<span class="text_requried">*</span></label>
                             <select name="hr_category_id" class="form-control selectTwo" data-validation="required">
-                                <option value=""></option>
-                                @foreach($hrCategories as $hrCategory)
-                                <option value="{{$hrCategory->id}}" {{(old("hr_category_id",$data->hr_category_id??'')==$hrCategory->id? "selected" : "")}}>{{$hrCategory->name}}</option>
-                                @endforeach
+                            <option value="$hrEmployee->employeeAppointment->appointmentCategory->id??''">{{$hrEmployee->employeeAppointment->appointmentCategory->name??''}}</option>
+                                
                             </select>
 
 
@@ -140,10 +131,8 @@
                             <label class="control-label text-right">Salary<span class="text_requried">*</span></label>
 
                             <select id="hr_salary_id" name="hr_salary_id" class="form-control selectTwo" data-validation="required">
-                                <option value=""></option>
-                                @foreach($salaries as $salary)
-                                <option value="{{$salary->id}}" {{(old("hr_salary_id",$data->hr_salary_id??'')==$salary->id? "selected" : "")}}>{{number_format($salary->total_salary,0)}}</option>
-                                @endforeach
+                            <option value="$hrEmployee->employeeAppointment->appointmentSalary->id??''">{{$hrEmployee->employeeAppointment->appointmentSalary->total_salary??''}}</option>
+                               
 
                             </select>
 
@@ -161,10 +150,8 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Grade</label>
                             <select name="hr_grade_id" class="form-control selectTwo">
-                                <option value=""></option>
-                                @foreach($hrGrades as $hrGrade)
-                                <option value="{{$hrGrade->id}}" {{(old("hr_grade_id",$data->hr_grade_id??'')==$hrGrade->id? "selected" : "")}}>{{$hrGrade->name}}</option>
-                                @endforeach
+                            <option value="$hrEmployee->employeeAppointment->appointmentGrade->id??''">{{$hrEmployee->employeeAppointment->appointmentGrade->name??''}}</option>
+                               
                             </select>
 
 
@@ -177,10 +164,8 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Appointment Letter Type<span class="text_requried">*</span></label>
                             <select id="hr_letter_type_id" name="hr_letter_type_id" class="form-control selectTwo" data-validation="required">
-                                <option value=""></option>
-                                @foreach($letterTypes as $letterType)
-                                <option value="{{$letterType->id}}" {{(old("hr_letter_type_id",$data->hr_letter_type_id??'')==$letterType->id? "selected" : "")}}>{{$letterType->name}}</option>
-                                @endforeach
+                            <option value="$hrEmployee->employeeAppointment->appointmentLetterType->id??''">{{$hrEmployee->employeeAppointment->appointmentLetterType->name??''}}</option>
+                               
                             </select>
 
 
@@ -193,10 +178,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Project<span class="text_requried">*</span></label>
                             <select id="pr_detail_id" name="pr_detail_id" class="form-control selectTwo" data-validation="required">
-                                <option value=""></option>
-                                @foreach($projects as $project)
-                                <option value="{{$project->id}}" {{(old("pr_detail_id",$data->pr_detail_id??'')==$project->id? "selected" : "")}}>{{$project->name}}</option>
-                                @endforeach
+                            <option value="$hrEmployee->employeeAppointment->appointmentProject->id??''">{{$hrEmployee->employeeAppointment->appointmentProject->name??''}}</option>
                             </select>
 
 
@@ -212,10 +194,8 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Employee Type<span class="text_requried">*</span></label>
                             <select name="hr_employee_type_id" class="form-control selectTwo" data-validation="required">
-                                <option value=""></option>
-                                @foreach($hrEmployeeTypes as $hrEmployeeType)
-                                <option value="{{$hrEmployeeType->id}}" {{(old("hr_employee_type_id",$data->hr_employee_type_id??'')==$hrEmployeeType->id? "selected" : "")}}>{{$hrEmployeeType->name}}</option>
-                                @endforeach
+                            <option value="$hrEmployee->employeeAppointment->appointmentEmployeeType->id??''">{{$hrEmployee->employeeAppointment->appointmentEmployeeType->name??''}}</option>
+                               
 
                             </select>
 
@@ -229,10 +209,8 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Office<span class="text_requried">*</span></label>
                             <select id="office_id" name="office_id" class="form-control selectTwo" data-validation="required">
-                                <option value=""></option>
-                                @foreach($offices as $office)
-                                <option value="{{$office->id}}" {{(old("office_id",$data->office_id??'')==$office->id? "selected" : "")}}>{{$office->name}}</option>
-                                @endforeach
+                            <option value="$hrEmployee->employeeAppointment->appointmentOffice->id??''">{{$hrEmployee->employeeAppointment->appointmentOffice->name??''}}</option>
+                                
 
                             </select>
 
@@ -245,7 +223,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Remarks</label>
-                            <input type="text" name="remarks" value="{{ old('remarks',$data->remarks??'') }}" data-validation="length" data-validation-length="max190" class="form-control" placeholder="Enter Remarks if any">
+                            <input type="text" name="remarks" value="{{ old('remarks',$hrEmployee->employeeAppointment->remarks??'') }}" data-validation="length" data-validation-length="max190" class="form-control" placeholder="Enter Remarks if any">
 
 
                         </div>

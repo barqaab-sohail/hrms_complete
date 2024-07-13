@@ -298,7 +298,9 @@ $(function () {
 
         ],
         "drawCallback": function(settings) {
+            if(this.api().rows().data().length>0){
 					$("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
+            }
 
         },
         order: [[ 1, "desc" ]]
@@ -336,7 +338,13 @@ $(function () {
           $('#hr_department_id').val(data.hr_department?.hr_department_id).trigger('change');
           $('#hr_category_id').val(data.hr_category?.hr_category_id).trigger('change');
           $('#forward_slash').val(data.remarks);
-          $('#pdf').val(data.full_path);
+          if(data.hr_documentation.extension =='pdf'){
+            $("#pdf").show();
+            $('#pdf').attr('src',data.hr_documentation.full_path);
+          }else{
+            $("#pdf").hide();
+            $('#pdf').attr('src','');
+          }
           $('#view').removeAttr('data-validation');
       })
    });
@@ -390,7 +398,11 @@ $(function () {
             url: "{{ route('promotion.store') }}"+'/'+promotion_id,
             success: function (data) {
                 table.draw();
-                $('#formPromotion').toggle();
+               
+                if($('#formPromotion:visible').length != 0)
+                    {
+                        $('#formPromotion').toggle();
+                    }
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                 if(data.error){
                   $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    

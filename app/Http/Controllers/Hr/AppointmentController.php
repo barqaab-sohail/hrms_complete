@@ -32,23 +32,27 @@ class AppointmentController extends Controller
     public function edit(Request $request, $id)
     {
 
-        $salaries = HrSalary::all();
-        $designations = HrDesignation::all();
-        $employees = HrEmployee::all();
-        $departments = HrDepartment::all();
-        $letterTypes = HrLetterType::all();
-        $projects = PrDetail::all();
-        $offices = Office::all();
-        $hrGrades = HrGrade::all();
-        $hrCategories = HrCategory::all();
-        $hrEmployeeTypes = HrEmployeeType::all();
+        // $salaries = HrSalary::all();
+        // $designations = HrDesignation::all();
+        // $employees = HrEmployee::all();
+        // $departments = HrDepartment::all();
+        // $letterTypes = HrLetterType::all();
+        // $projects = PrDetail::all();
+        // $offices = Office::all();
+        // $hrGrades = HrGrade::all();
+        // $hrCategories = HrCategory::all();
+        // $hrEmployeeTypes = HrEmployeeType::all();
 
-        $data = EmployeeAppointment::where('hr_employee_id', session('hr_employee_id'))
-            ->first();
+        // $data = EmployeeAppointment::where('hr_employee_id', session('hr_employee_id'))
+        //     ->first();
+        $hrEmployee = HrEmployee::find($id);
 
         if ($request->ajax()) {
-            $view =  view('hr.appointment.edit', compact('data', 'salaries', 'designations', 'employees', 'departments', 'letterTypes', 'projects', 'offices', 'hrGrades', 'hrCategories', 'hrEmployeeTypes'))->render();
+            $view =  view('hr.appointment.edit', compact('hrEmployee'))->render();
             return response()->json($view);
+           
+            // $view =  view('hr.appointment.edit', compact('data', 'salaries', 'designations', 'employees', 'departments', 'letterTypes', 'projects', 'offices', 'hrGrades', 'hrCategories', 'hrEmployeeTypes'))->render();
+            // return response()->json($view);
         } else {
             return back()->withError('Please contact to administrator, SSE_JS');
         }

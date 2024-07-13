@@ -59,7 +59,7 @@ class DocumentationStore extends FormRequest
         ];
 
         //If method is POST then document is required otherwise in Patch method document is nullable.
-        if ($this->getMethod() == 'POST') {
+        if (!request()->has('document_id')) {
             $rules += ['description' => 'not_in:' . $this->documentNames, 'document' => 'required|file|max:' . $this->limit . '|mimes:' . $this->mime_type,];
         }
 

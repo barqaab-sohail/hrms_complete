@@ -108,11 +108,17 @@
             <thead>
             <tr>
                 <th>Document Name</th>
+                @can('hr document date')
                 <th>Date</th>
+                @endcan
                 <th>View</th>
                 <th>Copy Link</th>
+                @can('hr edit documentation')
                 <th>Edit</th>
+                @endcan
+                @can('hr delete documentation')
                 <th>Delete</th> 
+                @endcan
                 <!-- <th colspan="2" class="text-center"style="width:10%"> Actions </th>  -->
             </tr>
             </thead>
@@ -135,16 +141,7 @@ $(document).ready(function(){
 
     $('#formDocument').hide();   
     $("#pdf").hide();
-    $("#document_name").change(function() {
-        var other = $('#document_name').val();
-        if (other == 'Other') {
-            $('.hideDiv').show();
-            $('#forward_slash').attr('data-validation', 'required');
-        } else {
-            $('.hideDiv').hide();
-            $('#forward_slash').removeAttr('data-validation').val('');
-        }
-    });
+   
 
         $("#view").change(function() {
             var fileName = this.files[0].name;
@@ -227,15 +224,27 @@ $(function () {
         }},
         columns: [
             {data: "description", name: 'description'},
+            @can('hr document date')
             {data: "document_date", name: 'document_date'},
+            @endcan
             {data: "document", name: 'document'},
             {data: "copy_link", name: 'copy_link'},
+            @can('hr edit documentation')
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
+            @endcan
+            @can('hr delete documentation')
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
+            @endcan
+          
 
         ],
         "drawCallback": function(settings) {
-			$("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
+            
+            if(this.api().rows().data().length>0){
+			    $("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
+            }
+            
+            
             $('.copyLink').click(function() {
 			var text = $(this).attr('link').replace(" ", "%20");
 			navigator.clipboard.writeText(text);
@@ -246,6 +255,17 @@ $(function () {
                 $(this).css('cursor', 'pointer').attr('title', 'Click for Copy Link');
             }, function() {
                 $(this).css('cursor', 'auto');
+            });
+
+            $("#hr_document_name_id").change(function() {
+                var other = $('#hr_document_name_id').val();
+                if (other == 'Other') {
+                    $('.hideDiv').show();
+                    $('#forward_slash').attr('data-validation', 'required');
+                } else {
+                    $('.hideDiv').hide();
+                    $('#forward_slash').removeAttr('data-validation').val('');
+                }
             });
 
         },
@@ -269,11 +289,27 @@ $(function () {
           $('#formDocument').show(); 
           $('#formHeading').html("Edit Document");
           $('#document_id').val(data.id);
-          $('#hr_document_name_id').val(data.hr_document_name?.hr_document_name_id).trigger('change');
+          if(data.hr_document_name?.[0]){
+          $('#hr_document_name_id').val(data.hr_document_name?.[0].pivot.hr_document_name_id).trigger('change');
+          }else{
+            $('#hr_document_name_id').val('Other').trigger('change');
+          }
           $('#document_date').val(data.document_date);
-          $('#description').val(data.description);
-          $('#pdf').val(data.full_path);
+          $('#forward_slash').val(data.description);
+          if(data.extension=='pdf'){
+            $("#pdf").show();
+            $('#pdf').attr('src',data.full_path);
+            $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}");
+          }else{
+            $('#wizardPicturePreview').attr('src',data.full_path);
+            $("#pdf").hide();
+            $('#pdf').attr('src','');
+          }
+          
+          
+          
           $('#view').removeAttr('data-validation');
+
       })
    });
     
@@ -326,8 +362,16 @@ $(function () {
             url: "{{ route('documentation.store') }}"+'/'+document_id,
             success: function (data) {
                 table.draw();
-                $('#formDocument').toggle();
+                if($('#formDocument:visible').length != 0)
+                    {
+                        $('#formDocument').toggle();
+                    }
+                
+                if(data.status=="Not OK"){
+                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');    
+                }else{
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
+                }
                 if(data.error){
                   $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
                 }
