@@ -20,7 +20,7 @@ class UserLoginController extends Controller
 		$data = HrEmployee::find($id);
 		$user = User::where('id', $data->user_id)->first();
 		$permissions = Permission::all();
-		$picture = HrDocumentation::where([['hr_employee_id', '=', session('hr_employee_id')], ['description', '=', 'picture']])->first();
+		$picture = HrDocumentation::where([['hr_employee_id', '=', $id], ['description', '=', 'picture']])->first();
 
 		if ($request->ajax()) {
 			$view = view('hr.login.create', compact('data', 'permissions', 'picture'))->render();

@@ -303,7 +303,7 @@ class EmployeeController extends Controller
         $genders = Gender::all();
         $maritalStatuses = MaritalStatus::all();
         $religions = Religion::all();
-        $data = HrEmployee::find($id);
+        $data = HrEmployee::with('hrEmployeeHusband')->find($id);
         session()->put('hr_employee_id', $data->id);
 
         if ($request->ajax()) {

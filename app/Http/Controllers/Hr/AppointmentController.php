@@ -29,11 +29,34 @@ use DB;
 
 class AppointmentController extends Controller
 {
+    
+    public function getData(){
+        $salaries = DB::table('hr_salaries')->select('id','total_salary')->get();
+        $designations = DB::table('hr_designations')->select('id','name')->get();
+        $departments = DB::table('hr_departments')->select('id','name')->get();
+        $categories = DB::table('hr_categories')->select('id','name')->get();
+        $managers = DB::table('hr_employees')
+        ->join('employee_designations','hr_employees.id', '=', 'employee_designations.hr_employee_id')
+        ->join('hr_designations', function($join){
+            $join->on('hr_designations.id', '=', 'employee_designations.hr_designation_id')
+            ->where('hr_designations.level','<',7);
+        }) 
+        ->select('hr_employees.id','hr_employees.first_name','hr_employees.last_name','hr_employees.employee_no','hr_designations.name as designation')->groupBy('employee_designations.hr_employee_id')->orderBy('employee_designations.effective_date','DESC')->get();
+        $letterTypes = DB::table('hr_letter_types')->select('id','name')->get();
+        $projects = DB::table('pr_details')->select('id','name','project_no')->get();
+        $offices = DB::table('offices')->select('id','name')->get();
+        $grades = DB::table('hr_grades')->select('id','name')->get();
+        $employeeTypes = DB::table('hr_employee_types')->select('id','name')->get();
+        return response()->json(['salaries'=>$salaries,'designations'=>$designations,'departments'=>$departments,'categories'=>$categories,'managers'=>$managers,'letterTypes'=>$letterTypes,'projects'=>$projects, 'offices'=>$offices,'grades'=>$grades,'employeeTypes'=>$employeeTypes]);
+
+    }
+    
+    
     public function edit(Request $request, $id)
     {
 
         // $salaries = HrSalary::all();
-        // $designations = HrDesignation::all();
+        //$designations = HrDesignation::all();
         // $employees = HrEmployee::all();
         // $departments = HrDepartment::all();
         // $letterTypes = HrLetterType::all();

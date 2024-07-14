@@ -19,7 +19,15 @@ use App\Models\Hr\HrEmployee;
 //     return statusLeaveEmployee()->count();
 // });
 // Route::get('/testing123',function(){
-//     return HrEmployee::select('id','first_name')->get();
+//     $data =  DB::table('hr_employees')
+//     ->join('employee_designations','hr_employees.id', '=', 'employee_designations.hr_employee_id')
+//     ->join('hr_designations', function($join){
+//         $join->on('hr_designations.id', '=', 'employee_designations.hr_designation_id')
+//         ->where('hr_designations.level','<',7);
+//     }) 
+//     ->select('hr_employees.id','hr_employees.first_name','hr_employees.last_name','hr_employees.employee_no','hr_designations.name as designation','hr_designations.level')->groupBy('employee_designations.hr_employee_id')->orderBy('employee_designations.effective_date','DESC')->get();
+
+//     return $data;
 // });
 
 Route::get('/verifyCard', 'HomeController@employee');
@@ -95,6 +103,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/experience', 'ExperienceController');
     Route::resource('/salary', 'SalaryController', ['only' => ['store']]);
     Route::resource('/appointment', 'AppointmentController', ['only' => ['edit', 'update']]);
+    Route::get('/getAppointmentData','AppointmentController@getData');
     Route::get('/contact/refreshTable/{id?}', 'ContactController@refreshTable')->name('contact.table');
     Route::resource('/contact', 'ContactController');
     Route::resource('/emergency', 'EmergencyController');

@@ -11,12 +11,10 @@ use DataTables;
 
 class EmployeeOfficeController extends Controller
 {
-    public function index()
+    public function show($id)
     {
-
         $offices = Office::all();
-
-        $view =  view('hr.office.create', compact('offices'))->render();
+        $view =  view('hr.office.create', compact('offices','id'))->render();
         return response()->json($view);
     }
 
@@ -24,7 +22,7 @@ class EmployeeOfficeController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = EmployeeOffice::where('hr_employee_id', session('hr_employee_id'))->latest()->get();
+            $data = EmployeeOffice::where('hr_employee_id', $request->hrEmployeeId)->latest()->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -87,10 +85,10 @@ class EmployeeOfficeController extends Controller
         return response()->json($employeeOffice);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
 
-        $employeeOffice = EmployeeOffice::where('hr_employee_id', session('hr_employee_id'))->first();
+        $employeeOffice = EmployeeOffice::where('hr_employee_id', $request->hrEmployeeId)->first();
 
         if ($employeeOffice->id == $id) {
             return response()->json(['error' => 'data  not deleted. data update from Appointment']);

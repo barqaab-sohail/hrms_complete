@@ -13,13 +13,13 @@ use App\Imports\EmployeeSalaryImport;
 class EmployeeSalaryController extends Controller
 {
     
-    public function index() {
+    public function show($id) {
         
         $hrSalaries = HrSalary::all();
         
-        $employeeSalaries = EmployeeSalary::where('hr_employee_id',session('hr_employee_id'))->get();
+        $employeeSalaries = EmployeeSalary::where('hr_employee_id',$id)->get();
 
-        $view =  view('hr.salary.create', compact('hrSalaries','employeeSalaries'))->render();
+        $view =  view('hr.salary.create', compact('hrSalaries','employeeSalaries','id'))->render();
         return response()->json($view);
 
     }
@@ -27,7 +27,7 @@ class EmployeeSalaryController extends Controller
     public function create(Request $request) {
 
         if ($request->ajax()) {
-            $data = EmployeeSalary::where('hr_employee_id',session('hr_employee_id'))->latest()->get();
+            $data = EmployeeSalary::where('hr_employee_id',$request->hrEmployeeId)->latest()->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
@@ -55,7 +55,7 @@ class EmployeeSalaryController extends Controller
 
         $hrSalaries = HrSalary::all();
         
-        $employeeSalaries = EmployeeSalary::where('hr_employee_id',session('hr_employee_id'))->get();
+        $employeeSalaries = EmployeeSalary::where('hr_employee_id',$request->hrEmployeeId)->get();
 
         $view =  view('hr.salary.create', compact('hrSalaries','employeeSalaries'))->render();
         return response()->json($view);
@@ -96,9 +96,9 @@ class EmployeeSalaryController extends Controller
         return response()->json($employeeSalary);
     }
 
-    public function destroy ($id){
+    public function destroy (Request $request, $id){
 
-    	$employeeSalary = EmployeeSalary::where('hr_employee_id',session('hr_employee_id'))->first();
+    	$employeeSalary = EmployeeSalary::where('hr_employee_id',$request->hrEmployeeId)->first();
 
         if($employeeSalary->id==$id)
         {

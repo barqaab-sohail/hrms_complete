@@ -28,7 +28,7 @@
                 <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
                 <form id="bankForm" name="bankForm" action="{{route('employeeBank.store')}}" class="form-horizontal">
                     <input type="hidden" name="employee_bank_id" id="employee_bank_id">
-                    <input type="hidden" name="hr_employee_id" id="hr_employee_id" value="{{session('hr_employee_id')}}">
+                    <input type="hidden" name="hr_employee_id" id="hr_employee_id" value="{{$id}}">
 
                     <div class="form-group row">
                         <div class="col-md-12">
@@ -70,7 +70,9 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('employeeBank.create') }}",
+                ajax: {url:"{{ route('employeeBank.create') }}", data: {
+                    hrEmployeeId: $("#hr_employee_id").val()
+                }},
                 columns: [{
                         data: "bank_id",
                         name: 'bank_id'

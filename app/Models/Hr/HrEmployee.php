@@ -67,6 +67,9 @@ class HrEmployee extends Model implements Auditable
     }
 
 
+    
+
+
     public function employeeManager()
     {
         return $this->hasMany('App\Models\Hr\EmployeeManager', 'hr_manager_id');

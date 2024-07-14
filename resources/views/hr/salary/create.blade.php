@@ -28,7 +28,7 @@
         <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
         <form id="salaryForm" name="salaryForm" action="{{route('employeeSalary.store')}}" class="form-horizontal">
           <input type="hidden" name="employee_salary_id" id="employee_salary_id">
-          <input type="hidden" name="hr_employee_id" id="hr_employee_id" value="{{session('hr_employee_id')}}">
+          <input type="hidden" name="hr_employee_id" id="hr_employee_id" value="{{$id}}">
           <div class="form-group">
             <label class="control-label text-right">Total Salary<span class="text_requried">*</span></label><br>
             <input type="text" name="hr_salary" id="hr_salary" value="{{old('hr_salary')}}" class="form-control" data-validation="required">
@@ -85,7 +85,9 @@
       var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('employeeSalary.create') }}",
+        ajax: {url:"{{ route('employeeSalary.create') }}",
+        data:{hrEmployeeId: $("#hr_employee_id").val()
+        }},
         columns: [{
             data: "totalSalary",
             name: 'hr_salary'
@@ -179,6 +181,7 @@
           $.ajax({
             type: "DELETE",
             url: "{{ route('employeeSalary.store') }}" + '/' + employee_salary_id,
+            data: {hrEmployeeId: $("#hr_employee_id").val()},
             success: function(data) {
               table.draw();
               if (data.error) {

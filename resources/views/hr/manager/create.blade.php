@@ -34,7 +34,7 @@
                           <select  name="hr_manager_id"  id="hr_manager_id" class="form-control selectTwo" data-validation="required">
                               <option value=""></option>
                               @foreach ($employees as $employee)
-                              <option value="{{$employee->id}}">{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}} -  {{$employee->hrDesignation->last()->name??''}}</option>
+                              <option value="{{$employee->id}}">{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}} -  {{$employee->designation}}</option>
                               @endforeach
                             </select>
                     </div>
@@ -69,7 +69,9 @@ $(document).ready(function() {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('manager.create') }}",
+        ajax:{url:"{{ route('manager.create') }}", data: {
+            hrEmployeeId: $("#hr_employee_id").val()
+        }},
         columns: [
             {data: "fullName", name: 'hr_manager_id'},
             {data: 'effective_date', name: 'effective_date'},
@@ -147,6 +149,7 @@ $(document).ready(function() {
           $.ajax({
             type: "DELETE",
             url: "{{ route('manager.store') }}"+'/'+employee_manager_id,
+            data: {hrEmployeeId: $("#hr_employee_id").val()},
             success: function (data) {
                 table.draw();
                 if(data.error){
