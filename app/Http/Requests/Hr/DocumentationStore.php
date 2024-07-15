@@ -21,7 +21,7 @@ class DocumentationStore extends FormRequest
         $this->documentNames =  HrDocumentName::all()->pluck('name')->toArray();
         $this->documentNames = implode(',', $this->documentNames);
 
-        $request->request->add(['hr_employee_id' => session('hr_employee_id')]);
+        $request->request->add(['hr_employee_id' => $request->hr_employee_id]);
 
         if ($request->hr_document_name_id != 'Other') {
             $documentName =  HrDocumentName::find($request->hr_document_name_id);

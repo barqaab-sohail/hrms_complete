@@ -57,7 +57,7 @@ class EducationStore extends FormRequest
 
         //If POST Method then run this code otherwise in Patch Method dupblicate checck in uptdate function in controller.
         if ($this->getMethod() == 'POST') {
-        $rules += ['education_id'=> "required|unique_education:".session('hr_employee_id')];
+        $rules += ['education_id'=> "required|unique_education:".request()->hr_employee_id];
         }
 
     return $rules;
