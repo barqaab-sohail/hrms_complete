@@ -21,13 +21,13 @@ class AdditionalInformationController extends Controller
     
 	public function edit(Request $request, $id){
 
-		$employee= HrEmployee::find(session('hr_employee_id'));
+		$employee= HrEmployee::find($id);
 
 		$bloodGroups = BloodGroup::all();
         $memberships = Membership::all();
 
 		if($request->ajax()){
-            $view =  view('hr.additionalInformation.edit', compact('employee','bloodGroups','memberships'))->render();
+            $view =  view('hr.additionalInformation.edit', compact('employee','bloodGroups','memberships','id'))->render();
             return response()->json($view);
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
@@ -38,12 +38,7 @@ class AdditionalInformationController extends Controller
 
 	public function update(AdditionalInformationStore $request, $id){
 
-        //ensure client end is is not changed
-        if($id != session('hr_employee_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
-
-        
+                
 		$input = $request->all();
 		if($request->filled('licence_expiry')){
           $input ['licence_expiry']= \Carbon\Carbon::parse($request->licence_expiry)->format('Y-m-d');
@@ -57,49 +52,49 @@ class AdditionalInformationController extends Controller
         }
 
 
-        $input['hr_employee_id'] = session('hr_employee_id');
+        $input['hr_employee_id'] = $id;
        
         DB::transaction(function () use ($input) {  
 
 
         	if($input['licence_no'] != null ){
         	HrDriving::updateOrCreate(
-                    ['hr_employee_id'=> session('hr_employee_id')],       //It is find and update 
+                    ['hr_employee_id'=>  $input['hr_employee_id']],       //It is find and update 
                     $input);  
         	}else{
-        		HrDriving::where('hr_employee_id', session('hr_employee_id'))->delete();
+        		HrDriving::where('hr_employee_id',  $input['hr_employee_id'])->delete();
         	}
 
         	if($input['blood_group_id'] != null ){
         	HrBloodGroup::updateOrCreate(
-                    ['hr_employee_id'=> session('hr_employee_id')],       //It is find and update 
+                    ['hr_employee_id'=>  $input['hr_employee_id']],       //It is find and update 
                     $input);  
         	}else{
-        		HrBloodGroup::where('hr_employee_id', session('hr_employee_id'))->delete();
+        		HrBloodGroup::where('hr_employee_id',  $input['hr_employee_id'])->delete();
         	}
 
         	if($input['passport_no'] != null ){
         	HrPassport::updateOrCreate(
-                    ['hr_employee_id'=> session('hr_employee_id')],       //It is find and update 
+                    ['hr_employee_id'=>  $input['hr_employee_id']],       //It is find and update 
                     $input);  
         	}else{
-        		HrPassport::where('hr_employee_id', session('hr_employee_id'))->delete();
+        		HrPassport::where('hr_employee_id',  $input['hr_employee_id'])->delete();
         	}
 
         	if($input['detail'] != null ){
         	HrDisability::updateOrCreate(
-                    ['hr_employee_id'=> session('hr_employee_id')],       //It is find and update 
+                    ['hr_employee_id'=>  $input['hr_employee_id']],       //It is find and update 
                     $input);  
         	}else{
-        		HrDisability::where('hr_employee_id', session('hr_employee_id'))->delete();
+        		HrDisability::where('hr_employee_id',  $input['hr_employee_id'])->delete();
         	}
 
             if($input['membership_id'] != null ){
             HrMembership::updateOrCreate(
-                    ['hr_employee_id'=> session('hr_employee_id')],       //It is find and update 
+                    ['hr_employee_id'=>  $input['hr_employee_id']],       //It is find and update 
                     $input);  
             }else{
-                HrMembership::where('hr_employee_id', session('hr_employee_id'))->delete();
+                HrMembership::where('hr_employee_id',  $input['hr_employee_id'])->delete();
             }
 
 

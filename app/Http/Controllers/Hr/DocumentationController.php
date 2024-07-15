@@ -24,7 +24,7 @@ class DocumentationController extends Controller
         $documentNames = HrDocumentName::all();
 
         if($request->ajax()){
-            return  view('hr.documentation.create', compact('documentNames'));
+            return  view('hr.documentation.create', compact('documentNames','id'));
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
@@ -68,7 +68,7 @@ class DocumentationController extends Controller
 
     public function store(DocumentationStore $request){
 
-        $input = $request->only('hr_document_name_id', 'description', 'document','document_id');
+        $input = $request->only('hr_document_name_id', 'description', 'document','document_id','hr_employee_id');
 
         if ($request->filled('document_date')) {
             $input['document_date'] = \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
@@ -78,7 +78,7 @@ class DocumentationController extends Controller
             $input['description'] = HrDocumentName::find($input['hr_document_name_id'])->name;
         }
 
-        $employee = HrEmployee::find(session('hr_employee_id'));
+        $employee = HrEmployee::find($input['hr_employee_id']);
         $employeeName = str_replace(' ', '_', strtolower($employee->full_name));
 
 
@@ -87,8 +87,8 @@ class DocumentationController extends Controller
             if ($request->hasFile('document')){
                 $extension = request()->document->getClientOriginalExtension();
 
-                $fileName = session('hr_employee_id') . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
-                $folderName = "hr/documentation/" . session('hr_employee_id') . '-' . $employeeName . "/";
+                $fileName = $input['hr_employee_id'] . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
+                $folderName = "hr/documentation/" . $input['hr_employee_id'] . '-' . $employeeName . "/";
                 //store file
                 $request->file('document')->storeAs('public/' . $folderName, $fileName);
 

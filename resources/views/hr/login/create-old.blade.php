@@ -26,7 +26,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Permissions<span class="text_requried">*</span></label>
-                            <select name="permission" class="form-control selectTwo">
+                            <select name="permission"  class="form-control selectTwo">
                                 <option value=""></option>
                                 @foreach($permissions as $permission)
                                 <option value="{{$permission->name}}" {{(old("permission")==$permission->id? "selected" : "")}}>{{$permission->name}}</option>

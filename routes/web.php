@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
 use App\Models\Hr\HrExperience;
 use App\Models\Hr\HrEmployee;
+use App\User;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,9 +18,13 @@ use App\Models\Hr\HrEmployee;
 |
 */
 
-// Route::get('/newDesign', function () {
-//     return statusLeaveEmployee()->count();
-// });
+Route::get('/newDesign', function () {
+
+    $hrEmployee = HrEmployee::find(20);
+    $user = User::where('id', $hrEmployee->user_id)->first();
+    $data = $user->getAllPermissions();
+    return  $data;
+});
 // Route::get('/testing123',function(){
 //     $data =  DB::table('hr_employees')
 //     ->join('employee_designations','hr_employees.id', '=', 'employee_designations.hr_employee_id')
@@ -123,7 +130,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/documentation/refreshTable', 'DocumentationController@refreshTable')->name('documentation.table');
     Route::resource('/documentation', 'DocumentationController');
     Route::get('/userLogin/refreshTable', 'UserLoginController@refreshTable')->name('userLogin.table');
-    Route::resource('/userLogin', 'UserLoginController', ['only' => ['edit', 'store', 'destroy']]);
+    Route::resource('/userLogin', 'UserLoginController', ['only' => ['show', 'store', 'destroy','create']]);
     Route::resource('/picture', 'PictureController', ['only' => ['edit', 'store']]);
     Route::resource('/additionalInformation', 'AdditionalInformationController', ['only' => ['edit', 'update']]);
     Route::resource('/designation', 'DesignationController', ['only' => ['store']]);

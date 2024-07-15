@@ -54,7 +54,7 @@
             @endcan
 
             @can('Super Admin')
-            <a type="submit" id="addUserLogin" style="color:white" role="button" href="{{route('userLogin.edit',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Rights Detail</a>
+            <a type="submit" id="addUserLogin" style="color:white" role="button" href="{{route('userLogin.show',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/userLogin/')?'style=background-color:#737373':''}}>User Rights Detail</a>
             @endcan
 
       </div>

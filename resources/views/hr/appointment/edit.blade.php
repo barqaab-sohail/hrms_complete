@@ -3,7 +3,7 @@
 </div>
 
 <div class="card-body">
-    <form id="formAppointment" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('appointment.update',session('hr_employee_id'))}}" enctype="multipart/form-data">
+    <form id="formAppointment" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('appointment.update',$id)}}" enctype="multipart/form-data">
         @method('PATCH')
         @csrf
         <div class="form-body">

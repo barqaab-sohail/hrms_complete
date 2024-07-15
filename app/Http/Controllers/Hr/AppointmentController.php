@@ -71,7 +71,7 @@ class AppointmentController extends Controller
         $hrEmployee = HrEmployee::find($id);
 
         if ($request->ajax()) {
-            $view =  view('hr.appointment.edit', compact('hrEmployee'))->render();
+            $view =  view('hr.appointment.edit', compact('hrEmployee','id'))->render();
             return response()->json($view);
            
             // $view =  view('hr.appointment.edit', compact('data', 'salaries', 'designations', 'employees', 'departments', 'letterTypes', 'projects', 'offices', 'hrGrades', 'hrCategories', 'hrEmployeeTypes'))->render();
@@ -84,11 +84,7 @@ class AppointmentController extends Controller
 
     public function update(AppointmentStore $request, $id)
     {
-        //ensure client end is is not changed
-        if ($id != session('hr_employee_id')) {
-            return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
-
+        
         $input = $request->all();
         if ($request->filled('joining_date')) {
             $input['joining_date'] = \Carbon\Carbon::parse($request->joining_date)->format('Y-m-d');
@@ -96,7 +92,7 @@ class AppointmentController extends Controller
         if ($request->filled('expiry_date')) {
             $input['expiry_date'] = \Carbon\Carbon::parse($request->expiry_date)->format('Y-m-d');
         }
-        $input['hr_employee_id'] = session('hr_employee_id');
+        $input['hr_employee_id'] = $id;
         $input['effective_date'] = $input['joining_date'];
 
         $appointment = EmployeeAppointment::where('hr_employee_id', $id)->first();
@@ -158,7 +154,7 @@ class AppointmentController extends Controller
                 );
             }
             if ($request->filled('expiry_date')) {
-                $data = EmployeeContract::where('hr_employee_id', session('hr_employee_id'))->orderBy('to', 'desc')->first();
+                $data = EmployeeContract::where('hr_employee_id', $input['hr_employee_id'])->orderBy('to', 'desc')->first();
                 if (empty($data) ||  $data->to < $input['expiry_date']) {
                     EmployeeContract::Create(
                         [
