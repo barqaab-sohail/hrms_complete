@@ -32,8 +32,19 @@ class DocumentationController extends Controller
     
     public function create(Request $request){
         if ($request->ajax()) {
-          $data= HrDocumentation::where('hr_employee_id', $request->hrEmployeeId)
-          ->latest()->get();
+        //  $data= HrDocumentation::where('hr_employee_id', $request->hrEmployeeId)
+        $documentIds = HrDocumentation::where('hr_employee_id', $request->hrEmployeeId)->orderByRaw('ISNULL(document_date), document_date desc')->get();
+
+        $order = array('Joining Report', 'Appointment Letter', 'HR Form', 'CNIC Front', 'CNIC Back', 'Original CV', 'BARQAAB CV', 'Engineering Degree MSc', 'Engineering Degree BSc', 'Educational Documents', 'Experience Certificates', 'PEC Letter', 'PEC Front', 'PEC Back', 'Pec Letter', 'Picture', 'Driving License Front', 'Driving License Back', 'Application', 'Domicile');
+
+        $documentIds = $documentIds->sort(function ($a, $b) use ($order) {
+            $pos_a = array_search($a->description, $order);
+            $pos_b = array_search($b->description, $order);
+            return $pos_a - $pos_b;
+        });
+
+        $data = $documentIds->sortByDesc('document_date');
+          //->latest()->get();
           return  DataTables::of($data)
                   ->addIndexColumn()
                   ->addColumn('document', function ($row){

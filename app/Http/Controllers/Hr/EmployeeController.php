@@ -30,9 +30,25 @@ use PDF;
 class EmployeeController extends Controller
 {
 
+    public function testing(){
+
+        return DB::table('employee_designations')->select('hr_employee_id','hr_designation_id','effective_date')->distinct('hr_employee_id')->orderBy('effective_date','DESC')->get();
+        $data =  DB::table('hr_employees')
+        ->leftJoin('employee_designations', function ($join){
+            
+            $join->on('hr_employees.id', '=', 'employee_designations.hr_employee_id');
+        })
+        ->join('hr_designations',function($join){
+            $join->on('hr_designations.id', '=', 'employee_designations.hr_designation_id');
+        })
+        
+        ->select('hr_employees.id','hr_employees.first_name','hr_employees.last_name','hr_employees.employee_no','hr_designations.name as designation')->get();
+        //->orderBy('employee_designations.effective_date','DESC')->groupBy('employee_designations.hr_employee_id')
+        return $data;
+    }
+
     public static function getAllEmployee()
     {
-
 
         return $value = Cache::remember('employees', 3, function () {
 
@@ -78,36 +94,36 @@ class EmployeeController extends Controller
         });
     }
 
-    public static function getEmployees()
+    public function getEmployees()
     {
 
        
 
-        if (Cache::has('employees')) {
-            $data = Cache::get('employees');
-            return $data;
-        }
+        // if (Cache::has('employees')) {
+        //     $data = Cache::get('employees');
+        //     return $data;
+        // }
 
 
         $data = HrEmployee::with('employeeDesignation', 'picture', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
        
+        $data = $this->employeeSortData($data);
+        // $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
+        // $second = range(1000001, 1099999);
+        // $employeeNos = array_merge($first,  $second);
 
-        $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
-        $second = range(1000001, 1099999);
-        $employeeNos = array_merge($first,  $second);
+        // $data =  $data->sortBy(function ($model) use ($employeeNos) {
+        //     return array_search($model->employee_no, $employeeNos);
+        // });
 
-        $data =  $data->sortBy(function ($model) use ($employeeNos) {
-            return array_search($model->employee_no, $employeeNos);
-        });
+        // //   // second sort with respect to Hr Status
+        // $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'ManMonth Ended', 'Death');
 
-        //   // second sort with respect to Hr Status
-        $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'ManMonth Ended', 'Death');
-
-        $data = $data->sort(function ($a, $b) use ($hrStatuses) {
-            $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
-            $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
-            return $pos_a - $pos_b;
-        });
+        // $data = $data->sort(function ($a, $b) use ($hrStatuses) {
+        //     $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
+        //     $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
+        //     return $pos_a - $pos_b;
+        // });
 
         //$defaultPicture = asset('Massets/images/default.png');
         foreach ($data as $employee) {
@@ -185,8 +201,37 @@ class EmployeeController extends Controller
                 "hr_status_id" => $employee->hr_status_id ?? ''
             );
         }
-        Cache::put('employees', $employees, now()->addHour(12));
+//        Cache::put('employees', $employees, now()->addHour(12));
         return $employees;
+    }
+
+    public function getEmployeeData(){
+
+
+
+
+    }
+
+    public function employeeSortData($employees){
+        $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
+        $second = range(1000001, 1099999);
+        $employeeNos = array_merge($first,  $second);
+
+        $employees =  $employees->sortBy(function ($model) use ($employeeNos) {
+            return array_search($model->employee_no, $employeeNos);
+        });
+
+        //   // second sort with respect to Hr Status
+        $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'ManMonth Ended', 'Death');
+
+        $employees = $employees->sort(function ($a, $b) use ($hrStatuses) {
+            $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
+            $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
+            return $pos_a - $pos_b;
+        });
+
+        return $employees;
+
     }
 
     public function create()

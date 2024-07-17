@@ -131,6 +131,7 @@ $(function () {
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');  
 
                 table.draw();
+                clearMessage();
               }
         
           },
@@ -161,6 +162,7 @@ $(function () {
                   $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
                 }else{
                 table.draw();
+                clearMessage();
                 $('#formPermission').toggle();
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
                 }

@@ -335,6 +335,7 @@ $(function () {
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');  
 
                 table.draw();
+                clearMessage();
               }
         
           },
@@ -362,6 +363,7 @@ $(function () {
             url: "{{ route('documentation.store') }}"+'/'+document_id,
             success: function (data) {
                 table.draw();
+                clearMessage();
                 if($('#formDocument:visible').length != 0)
                     {
                         $('#formDocument').toggle();

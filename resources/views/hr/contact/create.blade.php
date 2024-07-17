@@ -333,6 +333,7 @@ $(function () {
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');  
 
                 table.draw();
+                clearMessage();
               }
         
           },
@@ -360,6 +361,7 @@ $(function () {
             url: "{{ route('contact.store') }}"+'/'+contact_id,
             success: function (data) {
                 table.draw();
+                clearMessage();
                 $('#formContact').toggle();
                 $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');
                 if(data.error){

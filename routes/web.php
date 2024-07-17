@@ -25,17 +25,7 @@ Route::get('/newDesign', function () {
     $data = $user->getAllPermissions();
     return  $data;
 });
-// Route::get('/testing123',function(){
-//     $data =  DB::table('hr_employees')
-//     ->join('employee_designations','hr_employees.id', '=', 'employee_designations.hr_employee_id')
-//     ->join('hr_designations', function($join){
-//         $join->on('hr_designations.id', '=', 'employee_designations.hr_designation_id')
-//         ->where('hr_designations.level','<',7);
-//     }) 
-//     ->select('hr_employees.id','hr_employees.first_name','hr_employees.last_name','hr_employees.employee_no','hr_designations.name as designation','hr_designations.level')->groupBy('employee_designations.hr_employee_id')->orderBy('employee_designations.effective_date','DESC')->get();
-
-//     return $data;
-// });
+Route::get('/testing123', 'Hr\EmployeeController@testing');
 
 Route::get('/verifyCard', 'HomeController@employee');
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');

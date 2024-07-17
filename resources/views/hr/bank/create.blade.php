@@ -138,6 +138,7 @@
                         $('#bankForm').trigger("reset");
                         $('#ajaxModel').modal('hide');
                         table.draw();
+                        clearMessage();
                     },
                     error: function(data) {
                         $('.btn-prevent-multiple-submits').removeAttr('disabled');
@@ -162,6 +163,7 @@
                         url: "{{ route('employeeBank.store') }}" + '/' + employee_bank_id,
                         success: function(data) {
                             table.draw();
+                            clearMessage();
                             if (data.error) {
                                 $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + data.error + '</strong></div>');
                             }

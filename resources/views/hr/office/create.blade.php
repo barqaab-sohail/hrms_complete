@@ -138,6 +138,7 @@
                         $('#officeForm').trigger("reset");
                         $('#ajaxModel').modal('hide');
                         table.draw();
+                        clearMessage();
 
                     },
                     error: function(data) {
@@ -164,6 +165,7 @@
                         data: {hrEmployeeId: $("#hr_employee_id").val()},
                         success: function(data) {
                             table.draw();
+                            clearMessage();
                             if (data.error) {
                                 $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + data.error + '</strong></div>');
                             }

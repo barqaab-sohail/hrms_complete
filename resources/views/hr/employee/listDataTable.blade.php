@@ -52,9 +52,8 @@
         });
         $('#myTable').DataTable({
             processing: true,
-            serverSide: true,
+            serverSide: false,
             dom: 'Blfrtip',
-            length:2000,
             buttons: [
                 'copy', 'excel', 'pdf',{
                 text: 'Refresh',

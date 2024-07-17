@@ -30,6 +30,10 @@
 
 <script>
 	$(document).ready(function() {
+
+//$("#json_message").delay(2000).hide();
+
+   
 		$(".preloaderAjax").fadeOut();
 		formFunctions();
 		isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
