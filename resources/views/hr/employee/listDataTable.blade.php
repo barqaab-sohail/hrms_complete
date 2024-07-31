@@ -25,11 +25,6 @@
                         <th>Effective Salary</th>
                         <th class="text-center" style="width:5%">Expiry</th>
                         <th>Mobile</th>
-
-                        @can('hr view record')
-                        <th class="text-center" style="width:5%">Edit</th>
-                        @endcan
-
                         @role('Super Admin')
                         <th class="text-center" style="width:5%">Delete</th>
                         @endrole
@@ -52,7 +47,7 @@
         });
         $('#myTable').DataTable({
             processing: true,
-            serverSide: false,
+            serverSide: true,
             dom: 'Blfrtip',
             buttons: [
                 'copy', 'excel', 'pdf',{
@@ -126,14 +121,6 @@
                     data: 'mobile',
                     name: 'mobile'
                 },
-                
-                @can('hr edit documentation') {
-                    data: 'edit',
-                    name: 'edit',
-                    orderable: false,
-                    searchable: false
-                },
-                @endcan
                 @role('Super Admin') 
                 {
                     data: 'delete',

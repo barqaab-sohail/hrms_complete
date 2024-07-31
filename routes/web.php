@@ -18,15 +18,13 @@ use App\User;
 |
 */
 
-Route::get('/newDesign', function () {
+// Route::get('/newDesign', function () {
 
-    $hrEmployee = HrEmployee::find(20);
-    $user = User::where('id', $hrEmployee->user_id)->first();
-    $data = $user->getAllPermissions();
-    return  $data;
-});
-Route::get('/testing123', 'Hr\EmployeeController@testing');
-
+//     $hrEmployee = HrEmployee::find(20);
+//     $user = User::where('id', $hrEmployee->user_id)->first();
+//     $data = $user->getAllPermissions();
+//     return  $data;
+// });
 Route::get('/verifyCard', 'HomeController@employee');
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');
 Route::get('/cardVerificationResult/{employeeId?}', 'HomeController@employeeId')->middleware('XssSanitizer')->name('employee.verification');
