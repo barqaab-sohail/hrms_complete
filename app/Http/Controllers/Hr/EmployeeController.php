@@ -58,9 +58,9 @@ class EmployeeController extends Controller
                                  </form>';
             }
 
-            $projectName = $employee->employeeCurrentProject?->name??'';
+            $project = $employee->employeeCurrentProject->name??'';
 
-            if ( $projectName == 'overhead') {
+            if ( $project == 'overhead') {
                 $project = $employee->employeeCurrentOffice?->name ?? '';
             }
 
@@ -97,13 +97,13 @@ class EmployeeController extends Controller
         return $employees;
     }
 
-    // public function refresh(){
-    //     \Artisan::call('cache:clear');
-    //     $value = $this->getEmployees();
-    //     $value = collect($value);
-    //     return DataTables::of($value)->rawColumns(['full_name','project','delete'])->toJson();
+    public function refresh(){
+        \Artisan::call('cache:clear');
+        $value = $this->getEmployees();
+        $value = collect($value);
+        return DataTables::of($value)->rawColumns(['full_name','project','delete'])->toJson();
 
-    // }
+    }
 
     public function index(Request $request)
     {

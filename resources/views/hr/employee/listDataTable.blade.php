@@ -41,14 +41,15 @@
 <script>
     $(document).ready(function() {
         // $('#myTable').DataTable().ajax.reload();
-        $("#refresh").click(function (){
-            console.log('okkkkkkk');
-           
-        });
-        $('#myTable').DataTable({
+      
+    $('#myTable').DataTable({
             processing: true,
             serverSide: true,
             dom: 'Blfrtip',
+            lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
+                ],
             buttons: [
                 'copy', 'excel', 'pdf',{
                 text: 'Refresh',
@@ -131,8 +132,6 @@
                 @endrole
             ]
         });
-
-
 
 
 
