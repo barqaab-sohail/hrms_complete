@@ -2,6 +2,7 @@
 /storage
 /public/hot
 /public/storage
+/public/*.pdf
 /storage/*.key
 /vendor
 .env
