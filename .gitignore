@@ -1,8 +1,10 @@
 /node_modules
 /storage
+/storage/logs/laravel.log
 /public/hot
 /public/storage
-/public/*.pdf
+/public/sample_output.pdf
+/public/prints_output.pdf
 /storage/*.key
 /vendor
 .env
