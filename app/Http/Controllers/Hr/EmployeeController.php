@@ -38,12 +38,12 @@ class EmployeeController extends Controller
             return $data;
         }
 
-        $data = HrEmployee::with('employeeCurrentProject','employeeCurrentDesignation', 'employeeCurrentOffice','hrExit', 'employeeAppointment', 'hrContactMobile','hrBloodGroup','employeeCurrentSalary',)->get();
+        $data = HrEmployee::with('employeeCurrentProject','employeeCurrentDesignation', 'employeeCurrentOffice','hrExit', 'employeeAppointment', 'hrContactMobile','hrBloodGroup','employeeCurrentSalary')->get();
        
         $data = $this->employeeSortData($data);
         
         foreach ($data as $employee) {
-            
+           
             $lastWorkingDate='';
             if ($employee->hr_status_id == "Active") {
                 $lastWorkingDate='';
@@ -71,7 +71,13 @@ class EmployeeController extends Controller
                         $fullName = $employee->full_name;
             }
 
-          
+            $salary = '';
+            $effectiveDate='';
+            
+            if($employee->current_salary){
+                $salary = $employee->current_salary['salary'];
+                $effectiveDate= $employee->current_salary['effective_date'];
+            }
             
             $employees[] =  array(
                 "id" => $employee->id ?? '',
@@ -84,8 +90,8 @@ class EmployeeController extends Controller
                 "blood_group" => $employee->hrBloodGroup->name ?? '',
                 "age" => \Carbon\Carbon::parse($employee->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days'),
                 "mobile" => $employee->hrContactMobile->mobile ?? '',
-                "salary" => number_format($employee->employeeCurrentSalary?->total_salary),
-                'effective_date'=>$employee->employeeCurrentSalary?->effective_date,
+                "salary" => $salary,
+                'effective_date'=> $effectiveDate,
                 "project" =>  $project,
                 "delete" =>  $delete,
                 "last_working_date" =>  $lastWorkingDate,

@@ -32,14 +32,7 @@ Route::get('/assestVerificationResult/{assetCode}', 'Asset\AssetController@verif
 
 Route::get('/dashboard', 'HomeController@index')->middleware('auth')->name('dashboard');
 //Route::get ('insert','Hr\EmployeeController@insert');
-Route::get('/test', function(){
-    $data =HrExperience::where('hr_employee_id',253)->get();
-    foreach ($data as $experience){
-        echo $experience->job_title.'------'.$experience->to. "<br>";
-    }
-    
-
-});
+Route::get('/test', 'Hr\EmployeeController@getEmployees');
 Auth::routes();
 
 // Route::group(['prefix' => 'code', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Auth','name' =>'opt.'], function(){
