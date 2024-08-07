@@ -666,4 +666,10 @@ class HrEmployee extends Model implements Auditable
             'hr_salary_id'                             //Forein Key in Immediate Model of Final Model
         )->orderBy('employee_salaries.effective_date', 'desc');
     }
+
+
+    public function salayEffectiveDate()
+    {
+        return $this->hasOne('App\Models\Hr\EmployeeSalary')->orderBy('effective_date', 'desc');
+    }
 }

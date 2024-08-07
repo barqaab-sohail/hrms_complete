@@ -38,7 +38,7 @@ class EmployeeController extends Controller
             return $data;
         }
 
-        $data = HrEmployee::with('employeeCurrentProject','employeeCurrentDesignation', 'employeeCurrentOffice','hrExit', 'employeeAppointment', 'hrContactMobile','hrBloodGroup','employeeCurrentSalary')->get();
+        $data = HrEmployee::with('employeeCurrentProject','employeeCurrentDesignation', 'employeeCurrentOffice','hrExit', 'employeeAppointment', 'hrContactMobile','hrBloodGroup','employeeCurrentSalary','salayEffectiveDate')->get();
        
         $data = $this->employeeSortData($data);
         
@@ -71,12 +71,11 @@ class EmployeeController extends Controller
                         $fullName = $employee->full_name;
             }
 
-            $salary = '';
             $effectiveDate='';
-            
-            if($employee->current_salary){
-                $salary = $employee->current_salary['salary'];
-                $effectiveDate= $employee->current_salary['effective_date'];
+            $salary='';
+            if($employee->employeeCurrentSalary){
+                $salary=  number_format($employee->employeeCurrentSalary->total_salary);
+                $effectiveDate= \Carbon\Carbon::parse($employee->salayEffectiveDate->effective_date)->format('M d, Y');
             }
             
             $employees[] =  array(
