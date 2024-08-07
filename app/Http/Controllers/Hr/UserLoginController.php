@@ -33,22 +33,26 @@ class UserLoginController extends Controller
 
         if ($request->ajax()) {
 
-		$hrEmployee = HrEmployee::find($request->hrEmployeeId);
-		$user = User::where('id', $hrEmployee->user_id)->first();
-		$data = $user->getAllPermissions();
-          return  DataTables::of($data)
-                  ->addIndexColumn()  
-                  ->addColumn('Delete', function($row){                
-                      
-                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->name.'" data-original-title="Delete" class="btn btn-danger btn-sm deletePermission">Delete</a>';
-                                
-                          return $btn;
-                  })
-              
-                  ->rawColumns(['Delete'])
-                  ->make(true);
-        
-      }
+			$hrEmployee = HrEmployee::find($request->hrEmployeeId);
+			$user = User::where('id', $hrEmployee->user_id)->first();
+			if($user){
+			$data = $user->getAllPermissions();
+			return  DataTables::of($data)
+					->addIndexColumn()  
+					->addColumn('Delete', function($row){                
+						
+							$btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->name.'" data-original-title="Delete" class="btn btn-danger btn-sm deletePermission">Delete</a>';
+									
+							return $btn;
+					})
+				
+					->rawColumns(['Delete'])
+					->make(true);
+			
+			}else{
+				return [];
+			}
+		}
  
   	}
 
