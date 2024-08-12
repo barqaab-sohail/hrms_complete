@@ -33,6 +33,8 @@ class EmployeeController extends Controller
     public function getEmployees()
     {
 
+        // cache data 
+
         if (Cache::has('employees')) {
             $data = Cache::get('employees');
             return $data;
