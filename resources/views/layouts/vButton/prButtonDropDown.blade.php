@@ -5,8 +5,8 @@
 
     <div class="dropdown-menu" role="group" aria-labelledby="dropdownMenuButton" style="width: 100%;">
 
-        <a type="submit" role="button" id="addProject" href="{{route('project.edit',session('pr_detail_id'))}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/project/*/edit')?'style=background-color:#737373,':''}}>Project Detail</a>
-        @if(projectProgressRight(session('pr_detail_id')))
+        <a type="submit" role="button" id="addProject" href="{{route('project.edit',$data->id)}}" style="color:white" class="dropdown-item btn btn-success " {{Request::is('hrms/project/*/edit')?'style=background-color:#737373,':''}}>Project Detail</a>
+        @if(projectProgressRight($data->id))
         <a type="submit" role="button" style="color:white" id="addContractor" href="{{route('projectContractor.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectContractor/index')?'style=background-color:#737373':''}}>Contractor Detail</a>
         <a type="submit" role="button" style="color:white" id="addActualVsSchedule" href="{{route('actualVsScheduledProgress.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/actualVsScheduledProgress/index')?'style=background-color:#737373':''}}>Actual vs Scheduled</a>
         <a type="submit" role="button" style="color:white" id="addDelayReason" href="{{route('delayReason.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/delayReason/index')?'style=background-color:#737373':''}}>Delay Reasons</a>
@@ -25,7 +25,7 @@
         @endif
         <a type="submit" role="button" style="color:white" id="addStaff" href="{{route('projectStaff.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectStaff/index')?'style=background-color:#737373':''}}>Project Staff</a>
         @endcan
-        @if(isViewInvoice(session('pr_detail_id')) || isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id')) || auth()->user()->can('pr invoice'))
+        @if(isViewInvoice($data->id) || isEditInvoice($data->id) || isDeleteInvoice($data->id) || auth()->user()->can('pr invoice'))
         <a type="submit" role="button" style="color:white" id="addInvoice" href="{{route('projectInvoice.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectInvoice/index')?'style=background-color:#737373':''}}>Invoices</a>
         @if($data->contract_type_id ==2)
         <a type="submit" role="button" style="color:white" id="addMmUtilization" href="{{route('mmUtilization.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/mmUtilization/index')?'style=background-color:#737373':''}}>Man Month Utilization</a>
@@ -36,7 +36,7 @@
         @can('pr ledger activity')
         <a type="submit" role="button" style="color:white" id="addProgressActivities" href="{{route('projectLedgerActivity.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectLedgerActivity/index')?'style=background-color:#737373':''}}>Ledger Activity</a>
         @endcan
-        @if(projectPaymentRight(session('pr_detail_id')))
+        @if(projectPaymentRight($data->id))
         <a type="submit" role="button" style="color:white" id="addPayment" href="{{route('projectPayment.index')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectPayment/index')?'style=background-color:#737373':''}}>Payments</a>
         @endif
         @can('pr view progress')
@@ -48,7 +48,7 @@
         @endcan
 
         @can('pr view documentation')
-        <a type="submit" role="button" style="color:white" id="addDocument" href="{{route('projectDocument.create')}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectDocument/create')?'style=background-color:#737373':''}}>Documentation</a>
+        <a type="submit" role="button" style="color:white" id="addDocument" href="{{route('projectDocument.show',$data->id)}}" class="dropdown-item btn btn-success " {Request::is('hrms/projectDocument/show')?'style=background-color:#737373':''}}>Documentation</a>
         @endcan
 
 

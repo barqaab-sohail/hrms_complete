@@ -13,23 +13,81 @@ use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDocumentation;
 use App\Models\Hr\HrDocumentationProject;
 use App\Helper\DocxConversion;
+use DataTables;
 use DB;
 
 class ProjectDocumentController extends Controller
 {
 
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $folderName = PrFolderName::find($id);
-        $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))
-            ->where('pr_folder_name_id', $id)->get();
-        $Ids = $documentIds->pluck('id')->toArray();
-        //For security checking
-        session()->put('pr_document_delete_ids', $Ids);
-
-        return view('project.document.list', compact('documentIds', 'folderName'));
+        $prFolderNames = PrFolderName::all();
+        $documentIds = PrDocument::where('pr_detail_id', $id)->get();
+        $employees = HrEmployee::where('hr_status_id', 1)->get();
+        if ($request->ajax()) {
+            $view = view('project.document.create', compact('prFolderNames', 'documentIds', 'employees'))->render();
+            return response()->json($view);
+        } else {
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }
+            //->where('pr_folder_name_id', $id)
+       // $Ids = $documentIds->pluck('id')->toArray();
+        
     }
+
+    public function create(Request $request){
+
+        if ($request->ajax()) {
+       
+        $data = PrDocument::where('pr_detail_id', $request->prDetailId)->orderByRaw('ISNULL(document_date), document_date desc')->get();
+          //->latest()->get();
+          return  DataTables::of($data)
+                  ->addIndexColumn()
+                  ->addColumn('document', function ($row){
+                    if($row->extension!='pdf'){
+                        return '<img id="ViewIMG" src="'.$row->full_path.'" href="'.$row->full_path.'" width="30/" style="cursor: pointer;">';
+                    }else{
+                        return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="'.$row->full_path.'" width="30/" style="cursor: pointer;">';
+                    }
+                  })
+                  ->addColumn('copy_link', function ($row){
+                    return '<a class="copyLink" link="'.$row->full_path.'" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+                  })   
+                 ->addColumn('Edit', function($row){
+                     
+                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editDocument">Edit</a>';
+                                           
+                          return $btn;
+                  })
+                  ->addColumn('Delete', function($row){                
+                      
+                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
+                                
+                          return $btn;
+                  })
+              
+                  ->rawColumns(['document','copy_link','Edit','Delete'])
+                  ->make(true);
+        
+      }
+ 
+    }
+
+    // public function create(Request $request)
+    // {
+
+    //     $prFolderNames = PrFolderName::all();
+    //     $documentIds = PrDocument::where('pr_detail_id', $request->pr_detail_id)->get();
+    //     $employees = HrEmployee::where('hr_status_id', 1)->get();
+
+    //     if ($request->ajax()) {
+    //         $view = view('project.document.create', compact('prFolderNames', 'documentIds', 'employees'))->render();
+    //         return response()->json($view);
+    //     } else {
+    //         return back()->withError('Please contact to administrator, SSE_JS');
+    //     }
+    // }
 
     public function reference(Request $request)
     {
@@ -50,28 +108,9 @@ class ProjectDocumentController extends Controller
         }
     }
 
-    public function create(Request $request)
-    {
+    public function store(DocumentStore $request){
 
-        $prFolderNames = PrFolderName::all();
-        $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))->get();
-
-        $employees = HrEmployee::where('hr_status_id', 1)->get();
-
-        if ($request->ajax()) {
-            $view = view('project.document.create', compact('prFolderNames', 'documentIds', 'employees'))->render();
-            return response()->json($view);
-        } else {
-            return back()->withError('Please contact to administrator, SSE_JS');
-        }
-    }
-
-
-    public function store(DocumentStore $request)
-    {
-
-        $input = $request->all();
-
+        $input = $request->only('pr_folder_name_id','reference_no', 'description', 'document','pr_document_id','pr_detail_id');
 
         if ($request->filled('document_date')) {
             $input['document_date'] = \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
@@ -79,82 +118,157 @@ class ProjectDocumentController extends Controller
 
         DB::transaction(function () use ($request, $input) {
 
-            $extension = request()->document->getClientOriginalExtension();
+            // Document_id and document - Update and have document
+            //No document_id and document - Create document and have document
+            //Document_id and No document - Update and no document
 
-            $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
-            $folderName = "project/" . session('pr_detail_id') . "/";
-            //store file
-            $request->file('document')->storeAs('public/' . $folderName, $fileName);
+            
+           // Only document avaialble and pr_document_id is null, Create new record
+            if ($request->hasFile('document') && !$request->pr_document_id){
+                $extension = request()->document->getClientOriginalExtension();
 
-            $file_path = storage_path('app/public/' . $folderName . $fileName);
+                $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
+                $folderName = "project/" . $request->pr_detail_id . "/";
+                //store file
+                $request->file('document')->storeAs('public/' . $folderName, $fileName);
 
-            $input['content'] = '';
+                $file_path = storage_path('app/public/' . $folderName . $fileName);
 
-            if (($extension == 'doc') || ($extension == 'docx')) {
-                $text = new DocxConversion($file_path);
-                $input['content'] = mb_strtolower($text->convertToText());
-            } else if ($extension == 'pdf') {
-                $reader = new \Asika\Pdf2text;
-                $input['content'] = mb_strtolower($reader->decode($file_path));
-            }
+                $input['content'] = '';
 
-
-            $input['file_name'] = $fileName;
-            $input['size'] = $request->file('document')->getSize();
-            $input['path'] = $folderName;
-            $input['extension'] = $extension;
-            $input['pr_detail_id'] = session('pr_detail_id');
-
-            $prDocument = PrDocument::create($input);
-            $input['pr_document_id'] = $prDocument->id;
-            // $test = $input['content'];
-            //$test = strlen($input['content']);
-            if (strlen($input['content']) > 50 && strlen($input['content']) < 16777200) {
-
-                PrDocumentContent::create($input);
-            }
-
-            //add document path into employee record    
-            if ($request->filled("hr_employee_id.0")) {
-                if (strlen($input['content']) > 65000) {
-                    $input['content'] = '';
+                if (($extension == 'doc') || ($extension == 'docx')) {
+                    $text = new DocxConversion($file_path);
+                    $input['content'] = mb_strtolower($text->convertToText());
+                } else if ($extension == 'pdf') {
+                    $reader = new \Asika\Pdf2text;
+                    $input['content'] = mb_strtolower($reader->decode($file_path));
                 }
-                for ($i = 0; $i < count($request->input('hr_employee_id')); $i++) {
-                    $input['hr_employee_id'] = $request->input("hr_employee_id.$i");
-                    $input['pr_document_id'] = $prDocument->id;
-                    $hrDocumentation = HrDocumentation::create($input);
-                    $input['hr_documentation_id'] = $hrDocumentation->id;
 
-                    HrDocumentationProject::create($input);
+                $input['file_name'] = $fileName;
+                $input['size'] = $request->file('document')->getSize();
+                $input['path'] = $folderName;
+                $input['extension'] = $extension;
+                $input['pr_detail_id'] = session('pr_detail_id');
+
+                $prDocument = PrDocument::create($input);
+                $input['pr_document_id'] = $prDocument->id;
+                if (strlen($input['content']) > 50 && strlen($input['content']) < 16777200) {
+                    PrDocumentContent::create($input);
                 }
+
             }
+            // No Document only update database content
+            else if($request->pr_document_id){
+
+
+            }
+           
+
+
+           
+
         });  //end transaction
 
-        return response()->json(['status' => 'OK', 'message' => "Data Successfully Saved"]);
+        
+        return response()->json(['status'=> 'OK', 'message' => "Document Successfully Saved"]);
     }
 
 
-    public function edit(Request $request, $id)
+    // public function store(DocumentStore $request)
+    // {
+
+    //     $input = $request->all();
+
+
+    //     if ($request->filled('document_date')) {
+    //         $input['document_date'] = \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
+    //     }
+
+    //     DB::transaction(function () use ($request, $input) {
+
+    //         $extension = request()->document->getClientOriginalExtension();
+
+    //         $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
+    //         $folderName = "project/" . session('pr_detail_id') . "/";
+    //         //store file
+    //         $request->file('document')->storeAs('public/' . $folderName, $fileName);
+
+    //         $file_path = storage_path('app/public/' . $folderName . $fileName);
+
+    //         $input['content'] = '';
+
+    //         if (($extension == 'doc') || ($extension == 'docx')) {
+    //             $text = new DocxConversion($file_path);
+    //             $input['content'] = mb_strtolower($text->convertToText());
+    //         } else if ($extension == 'pdf') {
+    //             $reader = new \Asika\Pdf2text;
+    //             $input['content'] = mb_strtolower($reader->decode($file_path));
+    //         }
+
+
+    //         $input['file_name'] = $fileName;
+    //         $input['size'] = $request->file('document')->getSize();
+    //         $input['path'] = $folderName;
+    //         $input['extension'] = $extension;
+    //         $input['pr_detail_id'] = session('pr_detail_id');
+
+    //         $prDocument = PrDocument::create($input);
+    //         $input['pr_document_id'] = $prDocument->id;
+    //         // $test = $input['content'];
+    //         //$test = strlen($input['content']);
+    //         if (strlen($input['content']) > 50 && strlen($input['content']) < 16777200) {
+
+    //             PrDocumentContent::create($input);
+    //         }
+
+    //         //add document path into employee record    
+    //         if ($request->filled("hr_employee_id.0")) {
+    //             if (strlen($input['content']) > 65000) {
+    //                 $input['content'] = '';
+    //             }
+    //             for ($i = 0; $i < count($request->input('hr_employee_id')); $i++) {
+    //                 $input['hr_employee_id'] = $request->input("hr_employee_id.$i");
+    //                 $input['pr_document_id'] = $prDocument->id;
+    //                 $hrDocumentation = HrDocumentation::create($input);
+    //                 $input['hr_documentation_id'] = $hrDocumentation->id;
+
+    //                 HrDocumentationProject::create($input);
+    //             }
+    //         }
+    //     });  //end transaction
+
+    //     return response()->json(['status' => 'OK', 'message' => "Data Successfully Saved"]);
+    // }
+
+
+    public function edit($id)
     {
-        //For security checking
-        session()->put('pr_document_edit_id', $id);
-
-        $employees = HrEmployee::where('hr_status_id', 1)->get();
-        $hrDocumentationIds = HrDocumentationProject::where('pr_document_id', $id)->get()->pluck('hr_documentation_id')->toArray();
-
-        $employeeDocuments = HrDocumentation::wherein('id', $hrDocumentationIds)->get()->pluck('hr_employee_id')->toArray();
-
-
-        $prFolderNames = PrFolderName::all();
-
-        $data = PrDocument::find($id);
-
-        if ($request->ajax()) {
-            return view('project.document.edit', compact('prFolderNames', 'data', 'employees', 'employeeDocuments'));
-        } else {
-            return back()->withError('Please contact to administrator, SSE_JS');
-        }
+        $prDocument = PrDocument::find($id);
+        return response()->json($prDocument);
     }
+
+
+    // public function edit(Request $request, $id)
+    // {
+    //     //For security checking
+    //     session()->put('pr_document_edit_id', $id);
+
+    //     $employees = HrEmployee::where('hr_status_id', 1)->get();
+    //     $hrDocumentationIds = HrDocumentationProject::where('pr_document_id', $id)->get()->pluck('hr_documentation_id')->toArray();
+
+    //     $employeeDocuments = HrDocumentation::wherein('id', $hrDocumentationIds)->get()->pluck('hr_employee_id')->toArray();
+
+
+    //     $prFolderNames = PrFolderName::all();
+
+    //     $data = PrDocument::find($id);
+
+    //     if ($request->ajax()) {
+    //         return view('project.document.edit', compact('prFolderNames', 'data', 'employees', 'employeeDocuments'));
+    //     } else {
+    //         return back()->withError('Please contact to administrator, SSE_JS');
+    //     }
+    // }
 
 
     public function update(Request $request, $id)

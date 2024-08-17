@@ -1,23 +1,25 @@
 @can('pr edit document')
 <div style="margin-top:10px; margin-right: 10px;">
-    <button type="button" id="hideButton" class="btn btn-success float-right">Add Document</button>
+    <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Document</button>
 </div>
 @endcan
 
-<div class="card-body" id="hideDiv">
-    <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formDocument" enctype="multipart/form-data">
+<div class="card-body">
+
+<form method="post" class="form-horizontal form-prevent-multiple-submits" id="formDocument" enctype="multipart/form-data">
         {{csrf_field()}}
         <div class="form-body">
 
             <h3 class="box-title">Document</h3>
             <hr class="m-t-0 m-b-40">
+            <input type="hidden" name="pr_document_id" id="pr_document_id"/>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Folder Name<span class="text_requried">*</span></label>
 
-                            <select name="pr_folder_name_id" id="document_name" data-validation="required" class="form-control selectTwo">
+                            <select name="pr_folder_name_id" id="pr_folder_name_id" data-validation="required" class="form-control selectTwo">
                                 <option value=""></option>
                                 @foreach($prFolderNames as $prFolderName)
                                 <option value="{{$prFolderName->id}}" {{(old("pr_folder_name_id")==$prFolderName->id? "selected" : "")}}>{{$prFolderName->name}}</option>
@@ -41,7 +43,7 @@
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Date<span class="text_requried">*</span></label>
-                            <input type="text" name="document_date" value="{{ old('document_date') }}" class="form-control date_input" data-validation="required" readonly placeholder="Enter Document Detail">
+                            <input type="text" name="document_date" id="document_date" value="{{ old('document_date') }}" class="form-control date_input" data-validation="required" readonly >
                             <br>
                             <i class="fas fa-trash-alt text_requried"></i>
                         </div>
@@ -56,7 +58,7 @@
                         <div class="col-md-12">
 
                             <label class="control-label text-right">Document Description</label>
-                            <input type="text" name="description" value="{{ old('description') }}" class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Document Detail">
+                            <input type="text" name="description" id="description"  value="{{ old('description') }}" class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Document Detail">
 
                         </div>
                     </div>
@@ -136,91 +138,95 @@
         </div>
     </form>
 
-</div>
 
-
-<div class="row">
-    @foreach($prFolderNames as $prFolderName)
-    <div class="col-md-3 ">
-        <div class="form-group row">
-            <div class="col-md-12">
-                <a id="documentList{{$prFolderName->id}}" href="{{route('projectDocument.show',$prFolderName->id)}}" data-toggle="tooltip" data-original-title="Edit">
-                    <i class="fa fa-folder fa-3x" style="color:#cfca3e;" aria-hidden="true"></i>
-                    <p style="color:black;">{{$prFolderName->name}}</p>
-                </a>
+    <!-- <div class="row">
+        @foreach($prFolderNames as $prFolderName)
+        <div class="col-md-3 ">
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <a id="documentList{{$prFolderName->id}}" href="{{route('projectDocument.show',$prFolderName->id)}}" data-toggle="tooltip" data-original-title="Edit">
+                        <i class="fa fa-folder fa-3x" style="color:#cfca3e;" aria-hidden="true"></i>
+                        <p style="color:black;">{{$prFolderName->name}}</p>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-    @endforeach
-</div>
+        @endforeach
+    </div> -->
+       
+    <table class="table table-bordered data-table" width=100%>
+            <thead>
+            <tr>
+                <th>Document Name</th>
+                <th>Date</th>
+                <th>View</th>
+                <th>Copy Link</th>
+                <th>Edit</th>
+                <th>Delete</th> 
+            </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
 
+</div>   
 
-
-<div class="row">
-    <div class="col-md-12 table-container">
-
-
-    </div>
-</div>
-
+        
 <script>
     $(document).ready(function() {
+
+        $('#formDocument').hide();
 
         $('.employeeName').hide();
         $('#employee_file').click(function() {
             $('.employeeName').toggle();
             $("#hr_employee_id").val('').select2('val', 'All');
-
         });
 
+        // $('#hideDiv').hide();
+        // $('#hideButton').click(function() {
+        //     $('#hideDiv').toggle();
+        // });
 
 
+        // $('a[id^=documentList]').click(function(e) {
+        //     $('#hideDiv').hide();
+        //     e.preventDefault();
+        //     $('a[id^=documentList]').not(this).find('i').attr('class', 'fa fa-folder fa-3x')
 
-        $('#hideDiv').hide();
-        $('#hideButton').click(function() {
-            $('#hideDiv').toggle();
+        //     var url = $(this).attr('href');
+        //     var $el = $(this).find("i").toggleClass('fa-folder-open');
+        //     if ($el.hasClass('fa-folder-open')) {
 
-        });
+        //         refreshTable(url);
+        //     } else {
+        //         $('#myDataDiv').remove();
+        //     }
 
-
-
-        $('a[id^=documentList]').click(function(e) {
-            $('#hideDiv').hide();
-            e.preventDefault();
-            $('a[id^=documentList]').not(this).find('i').attr('class', 'fa fa-folder fa-3x')
-
-            var url = $(this).attr('href');
-            var $el = $(this).find("i").toggleClass('fa-folder-open');
-            if ($el.hasClass('fa-folder-open')) {
-
-                refreshTable(url);
-            } else {
-                $('#myDataDiv').remove();
-            }
-
-        });
+        // });
 
 
-        refreshTable("{{route('projectDocument.table')}}");
+        //refreshTable("{{route('projectDocument.table')}}");
 
 
         //submit function
-        $("#formDocument").submit(function(e) {
-            e.preventDefault();
-            var url = "{{route('projectDocument.store')}}";
-            $('.fa-spinner').show();
-            submitForm(this, url);
-            resetForm();
-            $('#wizardPicturePreview').attr('src', "{{asset('Massets/images/document.png')}}").attr('width', '150');
-            $('#pdf').attr('src', '');
-            $('#h6').text('Click On Image to Add Document');
+        // $("#formDocument").submit(function(e) {
+        //     e.preventDefault();
+        //     var url = "{{route('projectDocument.store')}}";
+        //     $('.fa-spinner').show();
+        //     submitForm(this, url);
+        //     resetForm();
+        //     $('#wizardPicturePreview').attr('src', "{{asset('Massets/images/document.png')}}").attr('width', '150');
+        //     $('#pdf').attr('src', '');
+        //     $('#h6').text('Click On Image to Add Document');
 
-            var folderUrl = $('.fa-folder-open').closest('a').attr('href');
-            if (typeof folderUrl !== "undefined") {
-                refreshTable(folderUrl,1000);
-            }
+        //     var folderUrl = $('.fa-folder-open').closest('a').attr('href');
+        //     if (typeof folderUrl !== "undefined") {
+        //         refreshTable(folderUrl,1000);
+        //     }
 
-        });
+        // });
         $("#pdf").hide();
         // Prepare the preview for profile picture
         $("#view").change(function() {
@@ -247,7 +253,7 @@
                     $("#pdf").hide();
                     document.getElementById("h6").innerHTML = "MS Excel Document is Attached";
                 } else {
-                    alert('Only Doc, Docx, Xls, Xlsx, PDF, JPG and PNG Files Allowed');
+                    alert('Only Doc, Docx, Xls, Xlsx, PDF Allowed');
                     $(this).val('');
                 }
             }
@@ -310,4 +316,157 @@
         });
 
     }); //end document ready
+
+//start function
+$(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        lengthMenu: [
+                    [10, 25, 50, 100, -1],
+                    [10, 25, 50, 100, 'All'],
+        ],
+        ajax:{url:"{{ route('projectDocument.create') }}", data: {
+            prDetailId: $("#pr_detail_id").val()
+        }},
+        columns: [
+            {data: "description", name: 'description'},
+            {data: "document_date", name: 'document_date'},
+            {data: "document", name: 'document'},
+            {data: "copy_link", name: 'copy_link'},
+            {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
+            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
+        ],
+        "drawCallback": function(settings) {
+            if(this.api().rows().data().length>0){
+			    $("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
+            }
+
+            $('.copyLink').click(function() {
+			var text = $(this).attr('link').replace(" ", "%20");
+			navigator.clipboard.writeText(text);
+			alert('Link Copied');
+            });
+            $('.copyLink').hover(function() {
+                $(this).css('cursor', 'pointer').attr('title', 'Click for Copy Link');
+            }, function() {
+                $(this).css('cursor', 'auto');
+            });
+
+        },
+        order: [[ 1, "desc" ]]
+    });
+
+    $('#hideButton').click(function(){
+            $('#pdf').attr('src','').hide();
+            $('#h6').html("Click On Image to Add Pdf Document<span class='text_requried'>*</span>");
+            $('#formDocument').toggle();
+            $('#formDocument').trigger("reset");
+            $('#pr_document_id').val('');
+            $('#view').attr('data-validation','required');
+            $('#hr_document_name_id').trigger('change');
+    });
+
+    $('body').unbind().on('click', '.editDocument', function () {
+      var pr_document_id = $(this).data('id');
+        
+      $.get("{{ url('hrms/project/projectDocument') }}" +'/' + pr_document_id +'/edit', function (data) {
+          $('#formDocument').show(); 
+          $('#formHeading').html("Edit Document");
+          $('#pr_document_id').val(data.id);
+          $('#document_date').val(data.document_date);
+          $('#forward_slash').val(data.description);
+          if(data.extension=='pdf'){
+            $("#pdf").show();
+            $('#pdf').attr('src',data.full_path);
+            $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}");
+          }else{
+            $('#wizardPicturePreview').attr('src',data.full_path);
+            $("#pdf").hide();
+            $('#pdf').attr('src','');
+          }
+          
+          $('#view').removeAttr('data-validation');
+
+      })
+   });
+    
+      $("#formDocument").submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("pr_detail_id", $("#pr_detail_id").val());
+        $.ajax({
+          data: formData,
+          url: "{{ route('projectDocument.store') }}",
+          type: "POST",
+          //dataType: 'json',
+           contentType: false,
+           cache: false,
+           processData: false,
+          success: function (data) {
+              if(data.error){
+                $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');
+              }else{
+              
+                $('#formDocument').trigger("reset");
+                $('#formDocument').toggle();
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');  
+
+                table.draw();
+                clearMessage();
+              }
+        
+          },
+          error: function (data) {
+              
+              var errorMassage = '';
+              $.each(data.responseJSON.errors, function (key, value){
+                errorMassage += value + '<br>';  
+                });
+                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
+    
+    $('body').on('click', '.deleteDocument', function () {
+     
+        var pr_document_id = $(this).data("id");
+
+        var con = confirm("Are You sure want to delete !");
+        if(con){
+          $.ajax({
+            type: "DELETE",
+            url: "{{ route('projectDocument.store') }}"+'/'+pr_document_id,
+            success: function (data) {
+                table.draw();
+                clearMessage();
+                if($('#formDocument:visible').length != 0)
+                    {
+                        $('#formDocument').toggle();
+                    }
+                
+                if(data.status=="Not OK"){
+                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');    
+                }else{
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
+                }
+                if(data.error){
+                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+                }
+  
+            },
+            error: function (data) {
+                
+            }
+          });
+        }
+    });
+  });// end function
 </script>

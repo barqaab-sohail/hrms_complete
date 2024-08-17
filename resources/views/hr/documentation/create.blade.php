@@ -219,6 +219,7 @@ $(function () {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
+        
         ajax:{url:"{{ route('documentation.create') }}", data: {
             hrEmployeeId: $("#hr_employee_id").val()
         }},

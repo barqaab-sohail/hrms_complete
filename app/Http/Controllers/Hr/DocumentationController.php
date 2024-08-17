@@ -77,6 +77,8 @@ class DocumentationController extends Controller
  
     }
 
+    
+
     public function store(DocumentationStore $request){
 
         $input = $request->only('hr_document_name_id', 'description', 'document','document_id','hr_employee_id');
