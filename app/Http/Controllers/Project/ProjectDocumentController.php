@@ -20,29 +20,9 @@ class ProjectDocumentController extends Controller
 {
 
 
-    public function show(Request $request, $id)
-    {
-        $prFolderNames = PrFolderName::all();
-        $documentIds = PrDocument::where('pr_detail_id', $id)->get();
-        $employees = HrEmployee::where('hr_status_id', 1)->get();
-        if ($request->ajax()) {
-            $view = view('project.document.create', compact('prFolderNames', 'documentIds', 'employees'))->render();
-            return response()->json($view);
-        } else {
-            return back()->withError('Please contact to administrator, SSE_JS');
-        }
-            //->where('pr_folder_name_id', $id)
-       // $Ids = $documentIds->pluck('id')->toArray();
-        
-    }
-
-    public function create(Request $request){
-
-        if ($request->ajax()) {
-       
-        $data = PrDocument::where('pr_detail_id', $request->prDetailId)->orderByRaw('ISNULL(document_date), document_date desc')->get();
-          //->latest()->get();
-          return  DataTables::of($data)
+    
+    public function documentDataTable($data){
+        return  DataTables::of($data)
                   ->addIndexColumn()
                   ->addColumn('document', function ($row){
                     if($row->extension!='pdf'){
@@ -69,8 +49,53 @@ class ProjectDocumentController extends Controller
               
                   ->rawColumns(['document','copy_link','Edit','Delete'])
                   ->make(true);
+
+    }
+    
+    
+    public function showFolder($folderId, $prDetailId)
+    {       
+        $data = PrDocument::where('pr_detail_id',$prDetailId)->where('pr_folder_name_id', $folderId)->orderByRaw('ISNULL(document_date), document_date desc')->get();
+        return $this->documentDataTable($data);     
+    }
+    
+    // public function show($id)
+    // {
+    //     $folderName = PrFolderName::find($id);
+    //     $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))
+    //         ->where('pr_folder_name_id', $id)->get();
+    //     $Ids = $documentIds->pluck('id')->toArray();
+    //     //For security checking
+    //     session()->put('pr_document_delete_ids', $Ids);
+
+    //     return view('project.document.list', compact('documentIds', 'folderName'));
+    // }
+    
+    public function show(Request $request, $id)
+    {
+        $prFolderNames = PrFolderName::all();
+        $documentIds = PrDocument::where('pr_detail_id', $id)->get();
+        if ($request->ajax()) {
+            $view = view('project.document.create', compact('prFolderNames', 'documentIds', 'id'))->render();
+            return response()->json($view);
+        } else {
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }
+            //->where('pr_folder_name_id', $id)
+       // $Ids = $documentIds->pluck('id')->toArray();
         
-      }
+    }
+
+    
+
+    public function create(Request $request){
+
+        if ($request->ajax()) {
+       
+        $data = PrDocument::where('pr_detail_id', $request->prDetailId)->orderByRaw('ISNULL(document_date), document_date desc')->get();
+          //->latest()->get();
+        return $this->documentDataTable($data);
+        }
  
     }
 
@@ -123,8 +148,8 @@ class ProjectDocumentController extends Controller
             //Document_id and No document - Update and no document
 
             
-           // Only document avaialble and pr_document_id is null, Create new record
-            if ($request->hasFile('document') && !$request->pr_document_id){
+           // Only document Avaiable
+            if ($request->hasFile('document')){
                 $extension = request()->document->getClientOriginalExtension();
 
                 $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
@@ -148,24 +173,41 @@ class ProjectDocumentController extends Controller
                 $input['size'] = $request->file('document')->getSize();
                 $input['path'] = $folderName;
                 $input['extension'] = $extension;
-                $input['pr_detail_id'] = session('pr_detail_id');
+                $input['pr_detail_id'] = $request->pr_detail_id;
 
-                $prDocument = PrDocument::create($input);
-                $input['pr_document_id'] = $prDocument->id;
+                //check create new data or update data
+                if($request->pr_document_id){
+                    //update record
+                    $prDocument = PrDocument::findOrFail($request->pr_document_id);
+                    $path = public_path('storage/' . $prDocument->path . $prDocument->file_name);
+                    if (File::exists($path)) {
+                        File::delete($path);
+                    }
+                    $prDocument->update($input);
+                    $input['pr_document_id'] = $request->pr_document_id;
+                }else{
+
+                    //create record
+                    $prDocument = PrDocument::create($input);
+                    $input['pr_document_id'] = $prDocument->id;
+
+                }
+               
                 if (strlen($input['content']) > 50 && strlen($input['content']) < 16777200) {
-                    PrDocumentContent::create($input);
+                    
+                    PrDocumentContent::updateOrCreate(
+                        ['pr_document_id' => $input['pr_document_id']],       //It is find and update 
+                        $input
+                    );
                 }
 
+            }else{
+
+                $prDocument = PrDocument::findOrFail($request->pr_document_id);
+                $prDocument->update($input);
+
             }
-            // No Document only update database content
-            else if($request->pr_document_id){
 
-
-            }
-           
-
-
-           
 
         });  //end transaction
 
@@ -271,130 +313,122 @@ class ProjectDocumentController extends Controller
     // }
 
 
-    public function update(Request $request, $id)
-    {
-        if ($id != session('pr_document_edit_id')) {
-            return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
+    // public function update(Request $request, $id)
+    // {
+    //     if ($id != session('pr_document_edit_id')) {
+    //         return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
+    //     }
 
-        $input = $request->all();
+    //     $input = $request->all();
 
-        if ($request->filled('document_date')) {
-            $input['document_date'] = \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
-        }
-
-
-
-        $prDocument = PrDocument::findOrFail($id);
-
-        DB::transaction(function () use ($request, $input, $id, $prDocument) {
-            //If document attached then first delete existing file and then new file save
-            if ($request->hasFile('document')) {
-
-                //Delete Existing Document
-                $path = public_path('storage/' . $prDocument->path . $prDocument->file_name);
-                if (File::exists($path)) {
-                    File::delete($path);
-                }
-
-                //Now save new Document
-                $extension = request()->document->getClientOriginalExtension();
-                $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
-                $folderName = "project/" . session('pr_detail_id') . "/";
-                //store file
-                $request->file('document')->storeAs('public/' . $folderName, $fileName);
-
-                $file_path = storage_path('app/public/' . $folderName . $fileName);
-
-                $input['content'] = '';
-
-                if (($extension == 'doc') || ($extension == 'docx')) {
-                    $text = new DocxConversion($file_path);
-                    $input['content'] = mb_strtolower($text->convertToText());
-                } else if ($extension == 'pdf') {
-                    $reader = new \Asika\Pdf2text;
-                    $input['content'] = mb_strtolower($reader->decode($file_path));
-                }
-
-                $input['file_name'] = $fileName;
-                $input['size'] = $request->file('document')->getSize();
-                $input['path'] = $folderName;
-                $input['extension'] = $extension;
-                $input['pr_detail_id'] = session('pr_detail_id');
-
-
-                //update project document content  
-                if (strlen($input['content']) > 50 && strlen($input['content']) < 16777200) {
-                    PrDocumentContent::updateOrCreate(
-                        ['pr_document_id' => $id],       //It is find and update 
-                        $input
-                    );
-                }
-            }
-
-            // Now update remaining inputs in pr_document
-            $prDocument->update($input);
+    //     if ($request->filled('document_date')) {
+    //         $input['document_date'] = \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
+    //     }
 
 
 
+    //     $prDocument = PrDocument::findOrFail($id);
 
-            //if any employee removing from input than delete also in Hr Documentation
-            $hrDocumentationIds = HrDocumentationProject::where('pr_document_id', $id)->get()->pluck('hr_documentation_id')->toArray();
+    //     DB::transaction(function () use ($request, $input, $id, $prDocument) {
+    //         //If document attached then first delete existing file and then new file save
+    //         if ($request->hasFile('document')) {
 
-            $existingHrEmployeeIds = HrDocumentation::wherein('id', $hrDocumentationIds)->get()->pluck('hr_employee_id')->toArray();
-            $existingHrEmployeeIds = collect($existingHrEmployeeIds);
+    //             //Delete Existing Document
+    //             $path = public_path('storage/' . $prDocument->path . $prDocument->file_name);
+    //             if (File::exists($path)) {
+    //                 File::delete($path);
+    //             }
+
+    //             //Now save new Document
+    //             $extension = request()->document->getClientOriginalExtension();
+    //             $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
+    //             $folderName = "project/" . session('pr_detail_id') . "/";
+    //             //store file
+    //             $request->file('document')->storeAs('public/' . $folderName, $fileName);
+
+    //             $file_path = storage_path('app/public/' . $folderName . $fileName);
+
+    //             $input['content'] = '';
+
+    //             if (($extension == 'doc') || ($extension == 'docx')) {
+    //                 $text = new DocxConversion($file_path);
+    //                 $input['content'] = mb_strtolower($text->convertToText());
+    //             } else if ($extension == 'pdf') {
+    //                 $reader = new \Asika\Pdf2text;
+    //                 $input['content'] = mb_strtolower($reader->decode($file_path));
+    //             }
+
+    //             $input['file_name'] = $fileName;
+    //             $input['size'] = $request->file('document')->getSize();
+    //             $input['path'] = $folderName;
+    //             $input['extension'] = $extension;
+    //             $input['pr_detail_id'] = session('pr_detail_id');
 
 
-            if ($request->filled("hr_employee_id.0")) {
-                $employeeIds = $input['hr_employee_id'];
+    //             //update project document content  
+    //             if (strlen($input['content']) > 50 && strlen($input['content']) < 16777200) {
+    //                 PrDocumentContent::updateOrCreate(
+    //                     ['pr_document_id' => $id],       //It is find and update 
+    //                     $input
+    //                 );
+    //             }
+    //         }
 
-                foreach ($employeeIds as $employeeId) {
-                    $key = $existingHrEmployeeIds->search($employeeId);
-                    $input['hr_employee_id'] = $employeeId;
+    //         // Now update remaining inputs in pr_document
+    //         $prDocument->update($input);
 
-                    //(if) update (else) create (afer condition) remainig delete 
-                    if ($existingHrEmployeeIds->contains($employeeId)) {
-                        HrDocumentation::wherein('id', $hrDocumentationIds)->where('hr_employee_id', $employeeId)->first()->update($input);
-                        $existingHrEmployeeIds->pull($key);
-                    } else {
 
-                        $input['file_name'] = $prDocument->file_name;
-                        $input['size'] = $prDocument->size;
-                        $input['path'] = $prDocument->path;
-                        $input['extension'] = $prDocument->extension;
-                        $input['pr_document_id'] = $id;
-                        $input['content'] = $prDocument->prDocumentContent->content;
-                        if (strlen($prDocument->prDocumentContent->content) > 65000) {
-                            $input['content'] = '';
-                        }
-                        $hrDocumentation = HrDocumentation::create($input);
-                        $input['hr_documentation_id'] = $hrDocumentation->id;
-                        HrDocumentationProject::create($input);
-                    }
-                }
 
-                //remaining delete here
-                HrDocumentation::wherein('id', $hrDocumentationIds)->wherein('hr_employee_id', $existingHrEmployeeIds)->delete();
-            } else {
-                // hr_employee_id not fill then above line not execute so following line execute for delete HrDocuments
-                HrDocumentation::wherein('id', $hrDocumentationIds)->delete();
-            }
-        });  //end transaction
 
-        return response()->json(['status' => 'OK', 'message' => "Data Successfully Saved"]);
-    }
+    //         //if any employee removing from input than delete also in Hr Documentation
+    //         $hrDocumentationIds = HrDocumentationProject::where('pr_document_id', $id)->get()->pluck('hr_documentation_id')->toArray();
+
+    //         $existingHrEmployeeIds = HrDocumentation::wherein('id', $hrDocumentationIds)->get()->pluck('hr_employee_id')->toArray();
+    //         $existingHrEmployeeIds = collect($existingHrEmployeeIds);
+
+
+    //         if ($request->filled("hr_employee_id.0")) {
+    //             $employeeIds = $input['hr_employee_id'];
+
+    //             foreach ($employeeIds as $employeeId) {
+    //                 $key = $existingHrEmployeeIds->search($employeeId);
+    //                 $input['hr_employee_id'] = $employeeId;
+
+    //                 //(if) update (else) create (afer condition) remainig delete 
+    //                 if ($existingHrEmployeeIds->contains($employeeId)) {
+    //                     HrDocumentation::wherein('id', $hrDocumentationIds)->where('hr_employee_id', $employeeId)->first()->update($input);
+    //                     $existingHrEmployeeIds->pull($key);
+    //                 } else {
+
+    //                     $input['file_name'] = $prDocument->file_name;
+    //                     $input['size'] = $prDocument->size;
+    //                     $input['path'] = $prDocument->path;
+    //                     $input['extension'] = $prDocument->extension;
+    //                     $input['pr_document_id'] = $id;
+    //                     $input['content'] = $prDocument->prDocumentContent->content;
+    //                     if (strlen($prDocument->prDocumentContent->content) > 65000) {
+    //                         $input['content'] = '';
+    //                     }
+    //                     $hrDocumentation = HrDocumentation::create($input);
+    //                     $input['hr_documentation_id'] = $hrDocumentation->id;
+    //                     HrDocumentationProject::create($input);
+    //                 }
+    //             }
+
+    //             //remaining delete here
+    //             HrDocumentation::wherein('id', $hrDocumentationIds)->wherein('hr_employee_id', $existingHrEmployeeIds)->delete();
+    //         } else {
+    //             // hr_employee_id not fill then above line not execute so following line execute for delete HrDocuments
+    //             HrDocumentation::wherein('id', $hrDocumentationIds)->delete();
+    //         }
+    //     });  //end transaction
+
+    //     return response()->json(['status' => 'OK', 'message' => "Data Successfully Saved"]);
+    // }
 
 
     public function destroy($id)
     {
-
-        $documentIds = PrDocument::where('pr_detail_id', session('pr_detail_id'))->get();
-        $Ids = $documentIds->pluck('id')->toArray();
-
-        if (!in_array($id, $Ids)) {
-            return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
-
 
         DB::transaction(function () use ($id) {
 

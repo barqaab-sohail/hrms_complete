@@ -197,6 +197,7 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
     Route::resource('/projectPartner', 'ProjectPartnerController');
 
     Route::get('/projectDocument/refreshTable', 'ProjectDocumentController@refreshTable')->name('projectDocument.table');
+    Route::get('/projectDocument/projectFolder/{folderId}/{prDetailId}', 'ProjectDocumentController@showFolder')->name('projectDocument.showFolder');
     Route::get('/projectDocument/reference', 'ProjectDocumentController@reference')->name('projectDocument.reference');
 
     Route::resource('/projectDocument', 'ProjectDocumentController');

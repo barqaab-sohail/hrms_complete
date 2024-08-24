@@ -49,13 +49,17 @@ class DocumentStore extends FormRequest
      */
     public function rules()
     {
-        return [
-            'document' => 'required|file|max:30000|mimes:doc,docx,xls,xlsx,jpeg,jpg,png,pdf',
+        $rules = [
+           
             'description' => 'required',
             //'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
-
-
         ];
+
+        if (!request()->has('pr_document_id')) {
+            $rules += [ 'document' => 'required|file|max:30000|mimes:doc,docx,xls,xlsx,jpeg,jpg,png,pdf',];
+        }
+
+        return $rules;
     }
 
     public function messages()

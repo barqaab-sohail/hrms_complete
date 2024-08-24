@@ -58,7 +58,7 @@
                         <div class="col-md-12">
 
                             <label class="control-label text-right">Document Description</label>
-                            <input type="text" name="description" id="description"  value="{{ old('description') }}" class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Document Detail">
+                            <input type="text" name="description" id="forward_slash"  value="{{ old('description') }}" class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Document Detail">
 
                         </div>
                     </div>
@@ -66,34 +66,6 @@
 
             </div>
             <!--/row-->
-
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group row">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="employee_file">
-                            <label class="form-check-label" for="employee_file">
-                                Also Save in Employee File
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-9 employeeName">
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <label class="control-label text-right">Employee Name</label>
-
-                            <select name="hr_employee_id[]" id="hr_employee_id" multiple="multiple" class="form-control selectTwo">
-                                <option value=""></option>
-                                @foreach($employees as $employee)
-                                <option value="{{$employee->id}}">{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employee_no}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
 
             <!--/row-->
             <div class="row">
@@ -127,7 +99,6 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9">
-
                             <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save</button>
                             <hr>
                             <br>
@@ -139,12 +110,12 @@
     </form>
 
 
-    <!-- <div class="row">
+    <div class="row">
         @foreach($prFolderNames as $prFolderName)
         <div class="col-md-3 ">
             <div class="form-group row">
                 <div class="col-md-12">
-                    <a id="documentList{{$prFolderName->id}}" href="{{route('projectDocument.show',$prFolderName->id)}}" data-toggle="tooltip" data-original-title="Edit">
+                    <a id="documentList{{$prFolderName->id}}" href="{{route('projectDocument.showFolder',[$prFolderName->id, $id])}}" data-toggle="tooltip" data-original-title="Edit">
                         <i class="fa fa-folder fa-3x" style="color:#cfca3e;" aria-hidden="true"></i>
                         <p style="color:black;">{{$prFolderName->name}}</p>
                     </a>
@@ -152,7 +123,7 @@
             </div>
         </div>
         @endforeach
-    </div> -->
+    </div>
        
     <table class="table table-bordered data-table" width=100%>
             <thead>
@@ -190,21 +161,7 @@
         // });
 
 
-        // $('a[id^=documentList]').click(function(e) {
-        //     $('#hideDiv').hide();
-        //     e.preventDefault();
-        //     $('a[id^=documentList]').not(this).find('i').attr('class', 'fa fa-folder fa-3x')
-
-        //     var url = $(this).attr('href');
-        //     var $el = $(this).find("i").toggleClass('fa-folder-open');
-        //     if ($el.hasClass('fa-folder-open')) {
-
-        //         refreshTable(url);
-        //     } else {
-        //         $('#myDataDiv').remove();
-        //     }
-
-        // });
+        
 
 
         //refreshTable("{{route('projectDocument.table')}}");
@@ -317,21 +274,16 @@
 
     }); //end document ready
 
-//start function
-$(function () {
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-    });
-    var table = $('.data-table').DataTable({
+//Create Datatabel Function
+function createDatatable(url){
+    return $('.data-table').DataTable({
         processing: true,
         serverSide: true,
         lengthMenu: [
                     [10, 25, 50, 100, -1],
                     [10, 25, 50, 100, 'All'],
         ],
-        ajax:{url:"{{ route('projectDocument.create') }}", data: {
+        ajax:{url:url, data: {
             prDetailId: $("#pr_detail_id").val()
         }},
         columns: [
@@ -362,6 +314,36 @@ $(function () {
         order: [[ 1, "desc" ]]
     });
 
+}
+
+//start function
+$(function () {
+
+    $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+
+    var table = createDatatable ("{{ route('projectDocument.create') }}");
+
+    $('a[id^=documentList]').click(function(e) {
+            $('#hideDiv').hide();
+            e.preventDefault();
+            $('a[id^=documentList]').not(this).find('i').attr('class', 'fa fa-folder fa-3x')
+
+            var url = $(this).attr('href');
+            var $el = $(this).find("i").toggleClass('fa-folder-open');
+            if ($el.hasClass('fa-folder-open')) {
+               table.destroy();
+               table = createDatatable (url);
+            } else {
+               table.destroy();
+               table = createDatatable ("{{ route('projectDocument.create') }}");
+            }
+    });
+
+
     $('#hideButton').click(function(){
             $('#pdf').attr('src','').hide();
             $('#h6').html("Click On Image to Add Pdf Document<span class='text_requried'>*</span>");
@@ -369,7 +351,7 @@ $(function () {
             $('#formDocument').trigger("reset");
             $('#pr_document_id').val('');
             $('#view').attr('data-validation','required');
-            $('#hr_document_name_id').trigger('change');
+            $('#pr_folder_name_id').trigger('change');
     });
 
     $('body').unbind().on('click', '.editDocument', function () {
@@ -381,6 +363,8 @@ $(function () {
           $('#pr_document_id').val(data.id);
           $('#document_date').val(data.document_date);
           $('#forward_slash').val(data.description);
+          $('#reference_no').val(data.reference_no);
+          $('#pr_folder_name_id').val(data.pr_folder_name_id).trigger('change');
           if(data.extension=='pdf'){
             $("#pdf").show();
             $('#pdf').attr('src',data.full_path);
