@@ -191,6 +191,7 @@
                         <li><a class="{{Request::is('hrms/misc/hrDesignation')?'active':''}}" href="{{route('hrDesignation.index')}}">List of Designations</a></li>
                         <li><a class="{{Request::is('hrms/misc/client')?'active':''}}" href="{{route('client.index')}}">List of Clients</a></li>
                         <li><a class="{{Request::is('hrms/misc/partner')?'active':''}}" href="{{route('partner.index')}}">List of Partners</a></li>
+                        <li><a class="{{Request::is('hrms/misc/allowances')?'active':''}}" href="{{route('allowanceName.index')}}">List of Allowances</a></li>
                         <li><a class="{{Request::is('hrms/misc/directCostDescription')?'active':''}}" href="{{route('directCostDescription.index')}}"> Direct Cost Description</a></li>
                         @endcan
                     </ul>

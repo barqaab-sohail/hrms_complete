@@ -317,6 +317,7 @@ Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth', 'XssSanitizer'],
     Route::resource('/hrDesignation', 'DesignationController');
     Route::resource('/client', 'ClientController');
     Route::resource('/partner', 'PartnerController');
+    Route::resource('/allowanceName', 'AllowanceNameController');
     Route::resource('/directCostDescription', 'DirectCostDescriptionController');
 });
 

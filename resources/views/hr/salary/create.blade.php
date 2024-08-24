@@ -41,7 +41,19 @@
             <br>
             <i class="fas fa-trash-alt text_requried"></i>
           </div>
-
+          <div class="form-group">
+            <label class="control-label text-right">Allowance Name<span class="text_requried">*</span></label>
+            <select id="hr_allowance_name_id" name="hr_allowance_name_id" class="form-control selectTwo">
+                                <option value=""></option>
+                                @foreach($allowanceNames as $allowance)
+                                <option value="{{$allowance->id}}" {{(old("hr_allowance_name_id")==$allowance->id? "selected" : "")}}>{{$allowance->name}}</option>
+                                @endforeach
+                            </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label text-right">Allowance Amount<span class="text_requried">*</span></label><br>
+            <input type="text" name="amount" id="amount" value="{{old('amount')}}" class="form-control" data-validation="required">
+          </div>
           <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn" value="create">Save changes
             </button>
@@ -56,14 +68,14 @@
   $(document).ready(function() {
 
     //only number value entered
-    $('#hr_salary').on('change, keyup', function() {
+    $('#hr_salary, #amount').on('change, keyup', function() {
       var currentInput = $(this).val();
       var fixedInput = currentInput.replace(/[A-Za-z!@#$%^&*()]/g, '');
       $(this).val(fixedInput);
     });
 
     //Enter Comma after three digit
-    $('#hr_salary').keyup(function(event) {
+    $('#hr_salary, #amount').keyup(function(event) {
 
       // skip for arrow keys
       if (event.which >= 37 && event.which <= 40) return;
@@ -119,6 +131,8 @@
         $('#json_message_modal').html('');
         $('#saveBtn').val("create-Salary");
         $('#employee_salary_id').val('');
+        $('#hr_allowance_name_id').val('').trigger('change');
+    
         $('#salaryForm').trigger("reset");
         $('#hr_salary').val('');
         $('#modelHeading').html("Create New Salary");

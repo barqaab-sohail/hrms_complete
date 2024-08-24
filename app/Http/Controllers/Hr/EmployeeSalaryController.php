@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrSalary;
 use App\Models\Hr\EmployeeSalary;
+use App\Models\Hr\HrAllowanceName;
+use App\Models\Hr\HrAllowance;
 use DB;
 use DataTables;
 use App\Imports\EmployeeSalaryImport;
@@ -18,8 +20,8 @@ class EmployeeSalaryController extends Controller
         $hrSalaries = HrSalary::all();
         
         $employeeSalaries = EmployeeSalary::where('hr_employee_id',$id)->get();
-
-        $view =  view('hr.salary.create', compact('hrSalaries','employeeSalaries','id'))->render();
+        $allowanceNames = HrAllowanceName::all();
+        $view =  view('hr.salary.create', compact('hrSalaries','employeeSalaries','allowanceNames','id'))->render();
         return response()->json($view);
 
     }
@@ -70,6 +72,7 @@ class EmployeeSalaryController extends Controller
         }
 
          $input ['hr_salary']= intval(str_replace( ',', '', $request->hr_salary));
+         $input ['amount']= intval(str_replace( ',', '', $request->hr_salary));
 
          DB::transaction(function () use ($input) {  
         	
@@ -78,14 +81,22 @@ class EmployeeSalaryController extends Controller
            	 	$hrSalary = HrSalary::create(['total_salary'=>$input ['hr_salary']]);
            	 }
 
-            EmployeeSalary::updateOrCreate(['id' => $input['employee_salary_id']],
+            $employeeSalary = EmployeeSalary::updateOrCreate(['id' => $input['employee_salary_id']],
                 ['effective_date'=> $input['effective_date'],
                 'hr_salary_id'=> $hrSalary->id,
                 'hr_employee_id'=> $input['hr_employee_id']]); 
+            
+            $input ['employee_salary_id']=$employeeSalary->id;
+            if ($input['hr_allowance_name_id']){
+                HrAllowance::updateOrCreate(
+                    ['id' => $employeeSalary->id ?? ''],
+                    $input
+                );
+            }
      
         }); // end transcation      
        
-       return response()->json(['success'=>'Data saved successfully.']);
+       return response()->json(['success'=> "Data saved successfully."]);
 
     }
 
