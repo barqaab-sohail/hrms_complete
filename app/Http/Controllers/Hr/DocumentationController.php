@@ -128,7 +128,10 @@ class DocumentationController extends Controller
                 $hrDocumentNameId = $request->input("hr_document_name_id");
                 //hr_employee_id is add due to validtaion before enter into database
                 $hrDocumentation->hrDocumentName()->attach($hrDocumentNameId, ['hr_employee_id' => $input['hr_employee_id']]);
+            }else{
+                $hrDocumentation->hrDocumentName()->detach();
             }
+           
 
             // check if document is related to promotion update also promotion
             $hrPromotion = HrPromotion::where('hr_documentation_id', $input['document_id'])->first();

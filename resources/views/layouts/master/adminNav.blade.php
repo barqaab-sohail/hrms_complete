@@ -246,6 +246,7 @@
                         <li><a class="{{Request::is('hrms/admin/lastLogin')?'active':''}}" href="{{route('lastLogin.detail')}}">Last Login Detail</a></li>
                         <li><a class="{{Request::is('hrms/admin/permission/employeePermission')?'active':''}}" href="{{route('permission.search')}}">Emplolyee Permission</a></li>
                         <li><a class="{{Request::is('hrms/admin/permission')?'active':''}}" href="{{route('permission.index')}}">Permissions</a></li>
+                        <li><a class="{{Request::is('hrms/admin/userList')?'active':''}}" href="{{route('permission.userList')}}">User List</a></li>
                         <li><a class="{{Request::is('hrms/admin/audit/search')?'active':''}}" href="{{route('audit.search')}}">Search User Log</a></li>
                         <li><a class="{{Request::is('hrms/admin/addUser')?'active':''}}" href="{{route('addUser.index')}}">Users</a></li>
                         <li><a class="{{Request::is('hrms/admin/misUser')?'active':''}}" href="{{route('misUser.index')}}">MIS User Rights</a></li>
