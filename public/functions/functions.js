@@ -102,7 +102,7 @@ function dateInDayMonthYear(date) {
     );
 }
 
-function formFunctions() {
+function formFunctions(ajaxValue=true) {
     $(".hideDiv").hide();
 
     //get Date from Database and set as "Saturday, 24-August-2019"
@@ -256,7 +256,9 @@ function formFunctions() {
     });
 
     selectTwo();
-    fromPreventDefault();
+    if(ajaxValue==true){
+        fromPreventDefault();
+    }
 
     $.validate({
         validateHiddenInputs: true,

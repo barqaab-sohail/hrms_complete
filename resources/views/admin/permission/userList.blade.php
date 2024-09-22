@@ -15,7 +15,9 @@
     <div class="col-lg-12">
 
         <div class="card card-outline-info">
+            
             <div class="d-flex justify-content-end" style="margin-top:20px; margin-right:20px;">
+                <button type="button" id="hideDeleteButton" class="btn btn-danger float-right"  style="margin-right:100px;">Delete All Permissions</button>
                 <button type="button" id="hideButton" class="btn btn-success float-right">Add Permission</button>
             </div>
             <div class="row">
@@ -33,7 +35,7 @@
 
                                         <div class="col-md-12">
                                             <label class="control-label text-right">Employee Name<span class="text_requried">*</span></label>
-                                            <select id="hr_employee_id" name="hr_employee_id" class="form-control selectTwo" data-validation="required">
+                                            <select  name="hr_employee_id" class="form-control selectTwo" data-validation="required">
                                                 <option value=""></option>
                                                 @foreach($employees as $employee)
                                                 <option value="{{$employee->id}}" {{(old("hr_employee_id")==$employee->id? "selected" : "")}}>{{$employee->full_name}}, {{$employee->designation}}</option>
@@ -47,10 +49,10 @@
                                     <div class="form-group row">
                                         <div class="col-md-12">
                                             <label class="control-label text-right">Permission</label><br>
-                                            <select id="permission_id" name="permission_id" class="form-control selectTwo" data-validation="required">
+                                            <select id="permission_name" name="permission_name" class="form-control selectTwo" data-validation="required">
                                                 <option value=""></option>
                                                 @foreach($permissions as $permission)
-                                                <option value="{{$permission->id}}" {{(old("permission_id")==$permission->id? "selected" : "")}}>{{$permission->name}}</option>
+                                                <option value="{{$permission->name}}" {{(old("permission_name")==$permission->name? "selected" : "")}}>{{$permission->name}}</option>
                                                 @endforeach
                                             </select>
 
@@ -68,6 +70,46 @@
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
                                             <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save Permission</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                    <hr>
+                    <!-- Delete Permission Form -->
+                    <form method="post" action="{{route('permission.userAllPermissionDelete')}}" class="form-horizontal form-prevent-multiple-submits" id="formDeleteAllPermission" enctype="multipart/form-data">
+                        {{csrf_field()}}
+                        @method('DELETE')
+                        <div class="form-body">
+                            <h3 class="box-title" id="formHeading">Delete All Permissions</h3>
+                            <hr class="m-t-0 m-b-40">
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group row">
+
+                                        <div class="col-md-12">
+                                            <label class="control-label text-right">Employee Name<span class="text_requried">*</span></label>
+                                            <select  name="hr_employee_id" class="form-control selectTwo" data-validation="required">
+                                                <option value=""></option>
+                                                @foreach($employees as $employee)
+                                                <option value="{{$employee->id}}" {{(old("hr_employee_id")==$employee->id? "selected" : "")}}>{{$employee->full_name}}, {{$employee->designation}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--/End Row-->
+                        </div> <!--/End Form Boday-->
+
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button type="submit" class="btn btn-danger btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Delete All Permission</button>
                                         </div>
                                     </div>
                                 </div>
@@ -93,8 +135,8 @@
                             <tbody>
                                 @foreach($modelsHasPermissions as $modelHasPermission)
                                 <tr>
-                                    <td width="50%">{{$modelHasPermission->user->hrEmployee->first_name}} {{$modelHasPermission->user->hrEmployee->last_name}}</td>
-                                    <td width="15%">{{$modelHasPermission->user->hrEmployee->designation}}</td>
+                                    <td width="50%">{{$modelHasPermission->user?->hrEmployee->first_name}} {{$modelHasPermission->user?->hrEmployee->last_name}}</td>
+                                    <td width="15%">{{$modelHasPermission->user?->hrEmployee->designation}}</td>
                                     <td width="30%">{{$modelHasPermission->permission->name}}</td>
                                     <td width="5%">
                                         <form action="{{route('userPermission.destroy',[$modelHasPermission->permission->name, $modelHasPermission->model_id])}}" method="POST">
@@ -119,11 +161,18 @@
     $(document).ready(function() {
 
 
-        formFunctions();
-        $('#formPermission').hide();
+        formFunctions(false);
+        $('#formPermission').hide();        
         $('#hideButton').click(function() {
             $('#formPermission').trigger("reset");
             $('#formPermission').toggle();
+        });
+
+
+        $('#formDeleteAllPermission').hide();
+        $('#hideDeleteButton').click(function() {
+            $('#formDeleteAllPermission').trigger("reset");
+            $('#formDeleteAllPermission').toggle();
         });
 
 

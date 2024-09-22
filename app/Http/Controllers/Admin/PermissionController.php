@@ -96,8 +96,34 @@ class PermissionController extends Controller
 
     public function addPermission(Request $request)
     {
+        $employee = HrEmployee::find($request->hr_employee_id);
+        $userAllPermissions = $employee->user->getPermissionNames()->toArray();
+        if (in_array($request->permission_name,  $userAllPermissions)) {
+            return redirect()->back()->withError('Permission Already Taken');
+        }else
+        {
+            $employee->user->givePermissionTo($request->permission_name);
+            return redirect()->back()->with('message', 'Employee Permission Successfully Added');
 
-        return 'ok';
-        return redirect()->back()->with('message', 'Employee Permission Successfully Added');
+        }
+
+       // return 'ok';
+        
+    }
+
+    public function userAllPermissionDelete(Request $request){
+
+        $employee = HrEmployee::find($request->hr_employee_id);
+        $userAllPermissions = $employee->user->getPermissionNames()->toArray();
+        if($userAllPermissions){
+            foreach ($userAllPermissions as $userPermission){
+
+                $employee->user->revokePermissionTo($userPermission);
+            }
+            
+            return redirect()->back()->with('message', "$employee->full_name  All Permissions Removed Successfully");
+        }else{
+            return redirect()->back()->with('message', "$employee->full_name  have currently no permission");
+        }
     }
 }
