@@ -41,18 +41,22 @@
             <br>
             <i class="fas fa-trash-alt text_requried"></i>
           </div>
-          <div class="form-group">
-            <label class="control-label text-right">Allowance Name<span class="text_requried">*</span></label>
-            <select id="hr_allowance_name_id" name="hr_allowance_name_id" class="form-control selectTwo">
-                                <option value=""></option>
-                                @foreach($allowanceNames as $allowance)
-                                <option value="{{$allowance->id}}" {{(old("hr_allowance_name_id")==$allowance->id? "selected" : "")}}>{{$allowance->name}}</option>
-                                @endforeach
-                            </select>
-          </div>
-          <div class="form-group">
-            <label class="control-label text-right">Allowance Amount<span class="text_requried">*</span></label><br>
-            <input type="text" name="amount" id="amount" value="{{old('amount')}}" class="form-control" data-validation="required">
+          
+          <div class="allowance" id="allowance_1">
+          <button type="button" name="add" id="add_allowance" class="btn btn-success add">+</button>
+            <div class="form-group">
+              <label class="control-label text-right">Allowance Name<span class="text_requried">*</span></label>
+              <select  name="hr_allowance_name_id[]" class="form-control selectTwo">
+                                  <option value=""></option>
+                                  @foreach($allowanceNames as $allowance)
+                                  <option value="{{$allowance->id}}" {{(old("hr_allowance_name_id")==$allowance->id? "selected" : "")}}>{{$allowance->name}}</option>
+                                  @endforeach
+                              </select>
+            </div>
+            <div class="form-group">
+              <label class="control-label text-right">Allowance Amount<span class="text_requried">*</span></label><br>
+              <input type="text" name="amount[]"  value="{{old('amount')}}" class="form-control" data-validation="required">
+            </div>
           </div>
           <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn" value="create">Save changes
@@ -66,6 +70,38 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
+
+  //Dynamic add membership
+  // Add new element
+    $("#add_allowance").click(function() {
+
+    // Finding total number of elements added
+    var total_element = $(".allowance").length;
+
+    // last <div> with element class id
+    var lastid = $(".allowance:last").attr("id");
+    var split_id = lastid.split("_");
+    var nextindex = Number(split_id[1]) + 1;
+    var max = 5;
+    // Check total number elements
+    if (total_element < max) {
+      //Clone specialization div and copy
+      $('.allowance').find('select').chosen('destroy');
+      var $clone = $("#allowance_1").clone();
+      $clone.prop('id', 'allowance_' + nextindex).find('input:text').val('');
+      $clone.find("#add_allowance").html('X').prop("class", "btn btn-danger remove remove_allowance");
+      $clone.find('.remove_div').remove();
+      $clone.insertAfter("div.allowance:last");
+      $('.allowance').find('select').chosen();
+    }
+
+    });
+    // Remove element
+    $(document).on("click", '.remove_allowance', function() {
+    $(this).closest(".allowance").remove();
+
+    });
+
 
     //only number value entered
     $('#hr_salary, #amount').on('change, keyup', function() {
