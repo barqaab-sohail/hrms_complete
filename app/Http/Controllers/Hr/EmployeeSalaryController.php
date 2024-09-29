@@ -66,6 +66,7 @@ class EmployeeSalaryController extends Controller
     public function store(Request $request)
     {
 
+       
         $input = $request->all();
         if ($request->filled('effective_date')) {
             $input['effective_date'] = \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
@@ -95,7 +96,7 @@ class EmployeeSalaryController extends Controller
 
 
             //if Created Salary
-            if (false) {
+            if ($request->filled('hr_allowance_name_id.0')) {
                 foreach ($request->input('hr_allowance_name_id') as $key => $hrAllowanceNameId) {
                     HrAllowance::create(
                         [

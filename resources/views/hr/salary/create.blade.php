@@ -46,10 +46,10 @@
             <button type="button" name="add" class="btn btn-success add_allowance">+</button>
             <div class="form-group">
               <label class="control-label text-right">Allowance Name</label>
-              <select name="hr_allowance_name_id[]" class="form-control">
+              <select name="hr_allowance_name_id[]" id="hr_allowance_name_id_1" class="form-control hr_allowance_name">
                 <option value=""></option>
                 @foreach($allowanceNames as $allowance)
-                <option value="{{$allowance->id}}" {{(old("hr_allowance_name_id")==$allowance->id? "selected" : "")}}>{{$allowance->name}}</option>
+                <option value="{{$allowance->id}}" {{(old("hr_allowance_name_id.0")==$allowance->id? "selected" : "")}}>{{$allowance->name}}</option>
                 @endforeach
               </select>
             </div>
@@ -85,7 +85,7 @@
       var max = 5;
       // Check total number elements
       if (total_element < max) {
-        //Clone specialization div and copy
+        //Clone specialization div and copy hr_allowance_name_id_1
         $('.allowance').find('select').chosen('destroy');
         var $clone = $("#allowance_1").clone();
         $clone.prop('id', 'allowance_' + nextindex).find('input:text').val('');
@@ -168,13 +168,17 @@
       });
 
       $('#createNewSalary').click(function() {
+       // $("select").prepend("<option value='' >&nbsp;</option>");
         $('select').chosen({
-          width: "100%"
+          width: "100%",
+          allow_single_deselect: true
         });
+        $('.search-choice-close').click();
+        // $("select").val('').trigger('change');
         $('#json_message_modal').html('');
         $('#saveBtn').val("create-Salary");
         $('#employee_salary_id').val('');
-        $('#hr_allowance_name_id').val('').trigger('change');
+        $('#hr_allowance_name_id_1').val('').trigger('chosen:updated');
 
         $('#salaryForm').trigger("reset");
         $('#hr_salary').val('');
@@ -243,7 +247,7 @@
               hrEmployeeId: $("#hr_employee_id").val()
             },
             success: function(data) {
-              consoel.log('data');
+              console.log('data');
               table.draw();
               clearMessage();
               if (data.error) {
@@ -252,7 +256,7 @@
 
             },
             error: function(data) {
-              consoel.log('error...');
+              console.log('error...');
             }
           });
         }
