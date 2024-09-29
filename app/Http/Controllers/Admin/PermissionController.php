@@ -82,9 +82,10 @@ class PermissionController extends Controller
     public function userList()
     {
         $modelsHasPermissions = ModelHasPermission::with('user.hrEmployee', 'permission')->get();
+        $distintModelPermission = ModelHasPermission::with('user.hrEmployee', 'permission')->groupBy('model_id')->get();
         $employees = HrEmployee::with('user')->get();
         $permissions = Permission::all();
-        return view('admin.permission.userList', compact('modelsHasPermissions', 'employees', 'permissions'));
+        return view('admin.permission.userList', compact('modelsHasPermissions', 'employees', 'permissions','distintModelPermission'));
     }
 
     public function userPermissionDestroy($permissionName, $userId)

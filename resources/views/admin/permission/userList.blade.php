@@ -119,11 +119,36 @@
                     </form>
 
                     <hr>
+                    <h2 class="card-title">List of Users With Permissions</h2>
+
+                    <div class="table-responsive m-t-40">
+
+                        <table id="myTable1" class="table table-bordered table-striped" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th width="20%">User Name</th>
+                                    <th width="10%">Designation</th>
+                                    <th width="70%">Permissions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($distintModelPermission as $modelHasPermission)
+                                <tr>
+                                    <td width="20%">{{$modelHasPermission->user?->hrEmployee->first_name}} {{$modelHasPermission->user?->hrEmployee->last_name}}</td>
+                                    <td width="10%">{{$modelHasPermission->user?->hrEmployee->designation}}</td>
+                                    <td width="70%">{{implode(", ",$modelHasPermission->user->getPermissionNames()->toArray())}}</td>
+                                </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr>
                     <h2 class="card-title">List of Users</h2>
 
                     <div class="table-responsive m-t-40">
 
-                        <table id="myTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
+                        <table id="myTable2" class="table table-bordered table-striped" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th width="30%">User Name</th>
@@ -135,9 +160,9 @@
                             <tbody>
                                 @foreach($modelsHasPermissions as $modelHasPermission)
                                 <tr>
-                                    <td width="50%">{{$modelHasPermission->user?->hrEmployee->first_name}} {{$modelHasPermission->user?->hrEmployee->last_name}}</td>
+                                    <td width="30%">{{$modelHasPermission->user?->hrEmployee->first_name}} {{$modelHasPermission->user?->hrEmployee->last_name}}</td>
                                     <td width="15%">{{$modelHasPermission->user?->hrEmployee->designation}}</td>
-                                    <td width="30%">{{$modelHasPermission->permission->name}}</td>
+                                    <td width="50%">{{$modelHasPermission->permission->name}}</td>
                                     <td width="5%">
                                         <form action="{{route('userPermission.destroy',[$modelHasPermission->permission->name, $modelHasPermission->model_id])}}" method="POST">
                                             @method('DELETE')
@@ -181,7 +206,46 @@
 
 
 
-        $('#myTable').DataTable({
+        $('#myTable1').DataTable({
+            stateSave: false,
+            "order": [
+                [1, "asc"]
+            ],
+            "columnDefs": [{
+                    "width": "70%",
+                    "targets": 0,
+                },
+                {
+                    "targets": [-1, -2],
+                    "className": "dt-center"
+                }
+
+            ],
+
+            dom: 'Blfrtip',
+            buttons: [
+
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1]
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [0, 1]
+                    }
+                }, {
+                    extend: 'csvHtml5',
+                    exportOptions: {
+                        columns: [0, 1]
+                    }
+                },
+            ]
+        });
+
+        $('#myTable2').DataTable({
             stateSave: false,
             "order": [
                 [1, "asc"]

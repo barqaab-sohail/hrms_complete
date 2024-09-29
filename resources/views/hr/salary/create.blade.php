@@ -41,21 +41,21 @@
             <br>
             <i class="fas fa-trash-alt text_requried"></i>
           </div>
-          
+
           <div class="allowance" id="allowance_1">
-          <button type="button" name="add" id="add_allowance" class="btn btn-success add">+</button>
+            <button type="button" name="add" class="btn btn-success add_allowance">+</button>
             <div class="form-group">
-              <label class="control-label text-right">Allowance Name<span class="text_requried">*</span></label>
-              <select  name="hr_allowance_name_id[]" class="form-control selectTwo">
-                                  <option value=""></option>
-                                  @foreach($allowanceNames as $allowance)
-                                  <option value="{{$allowance->id}}" {{(old("hr_allowance_name_id")==$allowance->id? "selected" : "")}}>{{$allowance->name}}</option>
-                                  @endforeach
-                              </select>
+              <label class="control-label text-right">Allowance Name</label>
+              <select name="hr_allowance_name_id[]" class="form-control">
+                <option value=""></option>
+                @foreach($allowanceNames as $allowance)
+                <option value="{{$allowance->id}}" {{(old("hr_allowance_name_id")==$allowance->id? "selected" : "")}}>{{$allowance->name}}</option>
+                @endforeach
+              </select>
             </div>
             <div class="form-group">
-              <label class="control-label text-right">Allowance Amount<span class="text_requried">*</span></label><br>
-              <input type="text" name="amount[]"  value="{{old('amount')}}" class="form-control" data-validation="required">
+              <label class="control-label text-right">Allowance Amount</label><br>
+              <input type="text" name="amount[]" value="{{old('amount')}}" class="form-control">
             </div>
           </div>
           <div class="col-sm-offset-2 col-sm-10">
@@ -71,34 +71,35 @@
 <script type="text/javascript">
   $(document).ready(function() {
 
-  //Dynamic add membership
-  // Add new element
-    $("#add_allowance").click(function() {
+    //Dynamic add membership
+    // Add new element
+    $(".add_allowance").click(function() {
 
-    // Finding total number of elements added
-    var total_element = $(".allowance").length;
+      // Finding total number of elements added
+      var total_element = $(".allowance").length;
 
-    // last <div> with element class id
-    var lastid = $(".allowance:last").attr("id");
-    var split_id = lastid.split("_");
-    var nextindex = Number(split_id[1]) + 1;
-    var max = 5;
-    // Check total number elements
-    if (total_element < max) {
-      //Clone specialization div and copy
-      $('.allowance').find('select').chosen('destroy');
-      var $clone = $("#allowance_1").clone();
-      $clone.prop('id', 'allowance_' + nextindex).find('input:text').val('');
-      $clone.find("#add_allowance").html('X').prop("class", "btn btn-danger remove remove_allowance");
-      $clone.find('.remove_div').remove();
-      $clone.insertAfter("div.allowance:last");
-      $('.allowance').find('select').chosen();
-    }
+      // last <div> with element class id
+      var lastid = $(".allowance:last").attr("id");
+      var split_id = lastid.split("_");
+      var nextindex = Number(split_id[1]) + 1;
+      var max = 5;
+      // Check total number elements
+      if (total_element < max) {
+        //Clone specialization div and copy
+        $('.allowance').find('select').chosen('destroy');
+        var $clone = $("#allowance_1").clone();
+        $clone.prop('id', 'allowance_' + nextindex).find('input:text').val('');
+        $clone.find(".add_allowance").html('X').prop("class", "btn btn-danger remove remove_allowance");
+        $clone.find('.remove_div').remove();
+        $clone.insertAfter("div.allowance:last");
+        $('.allowance').find('select').chosen();
+
+      }
 
     });
     // Remove element
     $(document).on("click", '.remove_allowance', function() {
-    $(this).closest(".allowance").remove();
+      $(this).closest(".allowance").remove();
 
     });
 
@@ -133,9 +134,12 @@
       var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: {url:"{{ route('employeeSalary.create') }}",
-        data:{hrEmployeeId: $("#hr_employee_id").val()
-        }},
+        ajax: {
+          url: "{{ route('employeeSalary.create') }}",
+          data: {
+            hrEmployeeId: $("#hr_employee_id").val()
+          }
+        },
         columns: [{
             data: "totalSalary",
             name: 'hr_salary'
@@ -164,11 +168,14 @@
       });
 
       $('#createNewSalary').click(function() {
+        $('select').chosen({
+          width: "100%"
+        });
         $('#json_message_modal').html('');
         $('#saveBtn').val("create-Salary");
         $('#employee_salary_id').val('');
         $('#hr_allowance_name_id').val('').trigger('change');
-    
+
         $('#salaryForm').trigger("reset");
         $('#hr_salary').val('');
         $('#modelHeading').html("Create New Salary");
@@ -179,6 +186,7 @@
 
         $('#json_message_modal').html('');
         $.get("{{ url('hrms/employeeSalary') }}" + '/' + employee_salary_id + '/edit', function(data) {
+          console.log(data);
           $('#modelHeading').html("Edit Salary");
           $('#saveBtn').val("edit-Salary");
           $('#ajaxModel').modal('show');
@@ -231,8 +239,11 @@
           $.ajax({
             type: "DELETE",
             url: "{{ route('employeeSalary.store') }}" + '/' + employee_salary_id,
-            data: {hrEmployeeId: $("#hr_employee_id").val()},
+            data: {
+              hrEmployeeId: $("#hr_employee_id").val()
+            },
             success: function(data) {
+              consoel.log('data');
               table.draw();
               clearMessage();
               if (data.error) {
@@ -241,7 +252,7 @@
 
             },
             error: function(data) {
-
+              consoel.log('error...');
             }
           });
         }
