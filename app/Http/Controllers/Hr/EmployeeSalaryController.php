@@ -98,7 +98,8 @@ class EmployeeSalaryController extends Controller
             //if Created Salary
             if ($request->filled('hr_allowance_name_id.0')) {
                 foreach ($request->input('hr_allowance_name_id') as $key => $hrAllowanceNameId) {
-                    HrAllowance::create(
+                    HrAllowance::updateOrCreate(
+                        ['id' => $input['hr_allowance_id']],
                         [
                             'employee_salary_id' =>  $employeeSalary->id,
                             'hr_allowance_name_id' => $hrAllowanceNameId,

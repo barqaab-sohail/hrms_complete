@@ -45,6 +45,7 @@
           <div class="allowance" id="allowance_1">
             <button type="button" name="add" class="btn btn-success add_allowance">+</button>
             <div class="form-group">
+              <input type="hidden" name="hr_allowance_id" id="hr_allowance_id_1" class="hr_allowance_id">
               <label class="control-label text-right">Allowance Name</label>
               <select name="hr_allowance_name_id[]" id="hr_allowance_name_id_1" class="form-control hr_allowance_name">
                 <option value=""></option>
@@ -55,7 +56,7 @@
             </div>
             <div class="form-group">
               <label class="control-label text-right">Allowance Amount</label><br>
-              <input type="text" name="amount[]" value="{{old('amount')}}" class="form-control">
+              <input type="text" name="amount[]" id="amount_1" value="{{old('amount')}}" class="form-control hr_allowance_amount">
             </div>
           </div>
           <div class="col-sm-offset-2 col-sm-10">
@@ -89,6 +90,9 @@
         $('.allowance').find('select').chosen('destroy');
         var $clone = $("#allowance_1").clone();
         $clone.prop('id', 'allowance_' + nextindex).find('input:text').val('');
+        $clone.find(".hr_allowance_name").prop('id', 'hr_allowance_name_id_' + nextindex);
+        $clone.find(".hr_allowance_id").prop('id', 'hr_allowance_id_' + nextindex);
+        $clone.find(".hr_allowance_amount").prop('id', 'amount_' + nextindex).find('input:text').val('');;
         $clone.find(".add_allowance").html('X').prop("class", "btn btn-danger remove remove_allowance");
         $clone.find('.remove_div').remove();
         $clone.insertAfter("div.allowance:last");
@@ -168,18 +172,17 @@
       });
 
       $('#createNewSalary').click(function() {
-       // $("select").prepend("<option value='' >&nbsp;</option>");
+        // $("select").prepend("<option value='' >&nbsp;</option>");
         $('select').chosen({
           width: "100%",
           allow_single_deselect: true
         });
-        $('.search-choice-close').click();
+        $('.remove_allowance').click();
         // $("select").val('').trigger('change');
         $('#json_message_modal').html('');
         $('#saveBtn').val("create-Salary");
         $('#employee_salary_id').val('');
         $('#hr_allowance_name_id_1').val('').trigger('chosen:updated');
-
         $('#salaryForm').trigger("reset");
         $('#hr_salary').val('');
         $('#modelHeading').html("Create New Salary");
@@ -190,7 +193,25 @@
 
         $('#json_message_modal').html('');
         $.get("{{ url('hrms/employeeSalary') }}" + '/' + employee_salary_id + '/edit', function(data) {
-          console.log(data);
+        $('.remove_allowance').click();
+        $('#salaryForm').trigger("reset");
+        $('#hr_allowance_name_id_1').val('').trigger('chosen:updated');
+        $('#hr_salary').val('');
+          console.log(data.hr_allowance);
+          $.each(data.hr_allowance,
+            function(key, value) {
+              console.log('key...'+key);
+              if (key != 0) {
+                $(".add_allowance").click();
+              }
+                $('#hr_allowance_name_id_' + (key + 1)).val(value.hr_allowance_name_id);
+                $('#hr_allowance_id_' + (key + 1)).val(value.id);
+                $('#amount_' + (key + 1)).val(value.amount);
+            });
+          $('.allowance').find('select').chosen('destroy');
+          $('.allowance').find('select').chosen({
+                width: "100%"
+          });
           $('#modelHeading').html("Edit Salary");
           $('#saveBtn').val("edit-Salary");
           $('#ajaxModel').modal('show');

@@ -103,6 +103,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::post('/employeeSalaryImport', 'EmployeeSalaryController@import')->name('employeeSalaryImport');
     Route::resource('/employeeSalary', 'EmployeeSalaryController');
     Route::resource('/employeeContract', 'EmployeeContractController');
+    Route::resource('/employeeCompany', 'EmployeeCompanyController');
 
     Route::get('/promotion/refreshTable', 'PromotionController@refreshTable')->name('promotion.table');
     Route::resource('/promotion', 'PromotionController');

@@ -51,6 +51,7 @@
 
             @can('hr edit salary')
             <a type="submit" role="button" style="color:white" id="addSalary" href="{{route('employeeSalary.show',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/employeeSalary/show')?'style=background-color:#737373':''}}>Salary</a>
+            <a type="submit" role="button" style="color:white" id="addSalary" href="{{route('employeeCompany.show',$id)}}" class="dropdown-item btn btn-success " {{Request::is('hrms/employeeCompany/show')?'style=background-color:#737373':''}}>Company</a>
             @endcan
 
             @can('Super Admin')
