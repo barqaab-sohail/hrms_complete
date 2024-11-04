@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrEmployeeCompany;
+use App\Http\Requests\Hr\EmployeeCompanyStore;
 use App\Models\Common\Partner;
 use DB;
 use DataTables;
@@ -57,6 +58,14 @@ class EmployeeCompanyController extends Controller
 
                     return $row->hrEmployee->full_name;
                 })
+                ->editColumn('status', function ($row) {
+
+                    if($row->status=='1'){
+                        return 'Active';
+                    }else{
+                        return 'Inactive';
+                    }
+                                    })
                 ->editColumn('partner_id', function ($row) {
 
                     return $row->partner->name;
@@ -70,7 +79,7 @@ class EmployeeCompanyController extends Controller
         return response()->json($view);
     }
 
-    public function store(Request $request)
+    public function store(EmployeeCompanyStore $request)
     {
 
         $input = $request->all();

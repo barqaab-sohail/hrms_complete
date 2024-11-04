@@ -11,6 +11,7 @@ class HrEmployeeCompany extends Model implements Auditable
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
     protected $fillable = ['hr_employee_id', 'partner_id', 'effective_date', 'end_date', 'status'];
+    
 
     public function partner()
     {

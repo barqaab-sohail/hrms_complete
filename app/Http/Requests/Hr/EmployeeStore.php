@@ -24,12 +24,12 @@ class EmployeeStore extends FormRequest
     public function rules()
     {
 
-        return [
+       
+       $rules=  [
             'first_name' => 'required',
             'last_name' => 'required',
             'father_name' => 'required_if:husband_name,null',
             'husband_name' => 'required_if:father_name,null',
-            'cnic' => 'required|min:15|max:15|unique:hr_employees,cnic,' . $this->hr_employee_id,
             'date_of_birth' => 'required|date|before:18 years ago',
             'cnic_expiry' => 'required|date',
             'gender_id' => 'required',
@@ -37,6 +37,14 @@ class EmployeeStore extends FormRequest
             'religion_id' => 'required',
             'employee_no' => 'digits:7|unique:hr_employees,employee_no,' . $this->hr_employee_id,
         ];
+        
+        if ($this->disable_cnic_validation) {
+            $rules += [ 'cnic' => 'required|unique:hr_employees,cnic,' . $this->hr_employee_id,];
+        }else{
+             $rules += [ 'cnic' => 'required|min:15|max:15|unique:hr_employees,cnic,' . $this->hr_employee_id,];
+        }
+        
+        return $rules;
     }
 
     public function messages()
