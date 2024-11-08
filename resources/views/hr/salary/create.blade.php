@@ -193,24 +193,24 @@
 
         $('#json_message_modal').html('');
         $.get("{{ url('hrms/employeeSalary') }}" + '/' + employee_salary_id + '/edit', function(data) {
-        $('.remove_allowance').click();
-        $('#salaryForm').trigger("reset");
-        $('#hr_allowance_name_id_1').val('').trigger('chosen:updated');
-        $('#hr_salary').val('');
-          console.log(data.hr_allowance);
+          $('.remove_allowance').click();
+          $('#salaryForm').trigger("reset");
+          $('#hr_allowance_name_id_1').val('').trigger('chosen:updated');
+          $('#hr_salary').val('');
           $.each(data.hr_allowance,
             function(key, value) {
-              console.log('key...'+key);
               if (key != 0) {
                 $(".add_allowance").click();
               }
-                $('#hr_allowance_name_id_' + (key + 1)).val(value.hr_allowance_name_id);
-                $('#hr_allowance_id_' + (key + 1)).val(value.id);
-                $('#amount_' + (key + 1)).val(value.amount);
+              $('#hr_allowance_name_id_' + (key + 1)).val(value.hr_allowance_name_id);
+              $('#hr_allowance_id_' + (key + 1)).val(value.id);
+              $('#amount_' + (key + 1)).val(value.amount);
             });
-          $('.allowance').find('select').chosen('destroy');
-          $('.allowance').find('select').chosen({
-                width: "100%"
+
+          $('.hr_allowance_name').chosen('destroy');
+          $('.hr_allowance_name').chosen({
+            width: "100%",
+            allow_single_deselect: true
           });
           $('#modelHeading').html("Edit Salary");
           $('#saveBtn').val("edit-Salary");

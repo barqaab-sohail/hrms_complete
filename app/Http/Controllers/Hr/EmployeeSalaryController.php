@@ -66,7 +66,7 @@ class EmployeeSalaryController extends Controller
     public function store(Request $request)
     {
 
-       
+
         $input = $request->all();
         if ($request->filled('effective_date')) {
             $input['effective_date'] = \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
@@ -95,17 +95,35 @@ class EmployeeSalaryController extends Controller
 
 
 
-            //if Created Salary
+            //if Created Salary Allowance
             if ($request->filled('hr_allowance_name_id.0')) {
-                foreach ($request->input('hr_allowance_name_id') as $key => $hrAllowanceNameId) {
+                foreach ($input['hr_allowance_name_id'] as $key => $hrAllowanceNameId) {
+
                     HrAllowance::updateOrCreate(
-                        ['id' => $input['hr_allowance_id']],
+                        ['hr_allowance_name_id' => $hrAllowanceNameId, 'employee_salary_id' => $employeeSalary->id],
                         [
                             'employee_salary_id' =>  $employeeSalary->id,
                             'hr_allowance_name_id' => $hrAllowanceNameId,
                             'amount' => $request->input("amount.$key"),
                         ]
                     );
+                }
+            }
+
+            // Delete after updated if excess hrallowances 
+            $hrAllowances = HrAllowance::where('employee_Salary_id', $employeeSalary->id)->whereNotIn('hr_allowance_name_id', $input['hr_allowance_name_id'])->get();
+            if ($hrAllowances) {
+                foreach ($hrAllowances as $hrAllowance) {
+                    $hrAllowance->delete();
+                }
+            }
+            // if edit and remove all hr allowances
+            if (!$request->filled('hr_allowance_name_id.0')) {
+                $hrAllowances = HrAllowance::where('employee_Salary_id', $employeeSalary->id)->get();
+                if ($hrAllowances) {
+                    foreach ($hrAllowances as $hrAllowance) {
+                        $hrAllowance->delete();
+                    }
                 }
             }
         }); // end transcation      

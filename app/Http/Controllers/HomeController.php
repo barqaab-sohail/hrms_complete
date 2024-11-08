@@ -118,7 +118,7 @@ class HomeController extends Controller
         // Following function restrict maximum 5 request in 1 minute
         $executed = RateLimiter::attempt(
             'send-message:',
-            $perMinute = 5,
+            $perMinute = 10,
             function () {
                 // Send message...
             }

@@ -10,4 +10,12 @@ class HrSalary extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     protected $fillable = ['total_salary'];
+
+
+    protected function totalSalary(): Attribute
+    {
+        return Attribute::make(
+            get: fn (int $value) => 12345,
+        );
+    }
 }
