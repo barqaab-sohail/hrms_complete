@@ -20,7 +20,7 @@ class EmployeeSalaryController extends Controller
 
         $hrSalaries = HrSalary::all();
 
-        $employeeSalaries = EmployeeSalary::where('hr_employee_id', $id)->get();
+        $employeeSalaries = EmployeeSalary::with('hrAllowances')->where('hr_employee_id', $id)->get();
         $allowanceNames = HrAllowanceName::all();
         $view =  view('hr.salary.create', compact('hrSalaries', 'employeeSalaries', 'allowanceNames', 'id'))->render();
         return response()->json($view);
@@ -31,9 +31,23 @@ class EmployeeSalaryController extends Controller
 
         if ($request->ajax()) {
             $data = EmployeeSalary::where('hr_employee_id', $request->hrEmployeeId)->latest()->get();
+            $allowanceNames = HrAllowanceName::all();
+            $table= DataTables::of($data);
+     
+             foreach($allowanceNames as $allowance){
+                $table->addColumn($allowance->name, function ($row) use ($allowance) {       
+                    $hrAllowance = HrAllowance::where('employee_salary_id', $row->id)->where('hr_allowance_name_id',$allowance->id)->first();
+                    //return response()->json($hrAllowance);
+                    if($hrAllowance){
+                        return  addComma($hrAllowance->amount);
+                    }else{
+                        return '';
+                    }
+                    
+                });
+            }
 
-            return DataTables::of($data)
-                ->addIndexColumn()
+            return $table->addIndexColumn()
                 ->addColumn('Edit', function ($row) {
 
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editSalary">Edit</a>';
@@ -47,11 +61,15 @@ class EmployeeSalaryController extends Controller
 
                     return $btn;
                 })
-                ->addColumn('totalSalary', function ($row) {
+                ->addColumn('salary', function ($row) {
 
                     return addComma($row->hrSalary->total_salary);
                 })
-                ->rawColumns(['Edit', 'Delete', 'totalSalary'])
+                ->addColumn('gross_salary', function ($row) {
+
+                    return addComma($row->gross_salary);
+                })
+                ->rawColumns(['Edit', 'Delete', ])
                 ->make(true);
         }
 
@@ -65,8 +83,6 @@ class EmployeeSalaryController extends Controller
 
     public function store(Request $request)
     {
-
-
         $input = $request->all();
         if ($request->filled('effective_date')) {
             $input['effective_date'] = \Carbon\Carbon::parse($request->effective_date)->format('Y-m-d');
@@ -133,7 +149,7 @@ class EmployeeSalaryController extends Controller
 
     public function edit($id)
     {
-        $employeeSalary = EmployeeSalary::with('hrSalary', 'hrAllowance')->find($id);
+        $employeeSalary = EmployeeSalary::with('hrSalary', 'hrAllowances')->find($id);
 
         return response()->json($employeeSalary);
     }
