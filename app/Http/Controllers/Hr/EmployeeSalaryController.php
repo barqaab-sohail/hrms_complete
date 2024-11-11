@@ -11,6 +11,7 @@ use App\Models\Hr\HrAllowance;
 use DB;
 use DataTables;
 use App\Imports\EmployeeSalaryImport;
+use App\Http\Requests\Hr\EmployeeSalaryStore;
 
 class EmployeeSalaryController extends Controller
 {
@@ -81,7 +82,7 @@ class EmployeeSalaryController extends Controller
         return response()->json($view);
     }
 
-    public function store(Request $request)
+    public function store(EmployeeSalaryStore $request)
     {
         $input = $request->all();
         if ($request->filled('effective_date')) {
