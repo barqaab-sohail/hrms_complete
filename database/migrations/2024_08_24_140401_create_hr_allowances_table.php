@@ -18,7 +18,6 @@ return new class extends Migration
             $table->bigInteger('employee_salary_id')->unsigned();
             $table->integer('amount')->unsigned();
             $table->timestamps();
-            $table->foreign('hr_allowance_name_id')->references('id')->on('hr_allowance_names')->onDelete('cascade');
             $table->foreign('employee_salary_id')->references('id')->on('employee_salaries')->onDelete('cascade');
         });
     }
