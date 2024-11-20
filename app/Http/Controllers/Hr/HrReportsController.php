@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Common\Education;
+use DataTables;
 use DB;
 
 class HrReportsController extends Controller
@@ -38,6 +39,71 @@ class HrReportsController extends Controller
 
         return view('hr.reports.missingDocumentList', compact('employees'));
     }
+
+        
+    public function mmissingDocuments(Request $request){
+
+        if ($request->ajax()) {
+            $data= HrEmployee::where('hr_status_id', 1)->with('employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
+            return  DataTables::of($data)
+                ->addIndexColumn()  
+
+                
+                
+                ->addColumn('division', function($row){
+                    return $row->employeeCurrentDepartment->name??'';
+                })
+                ->addColumn('front_cnic', function($row){
+                    return $row->cnicFront->first()?'':'Missing';
+                })
+                ->addColumn('picture', function($row){
+                    return $row->signedAppointmentLetter?'':'Missing';
+                })
+                ->addColumn('signed_appointment_letter', function($row){
+                    return $row->appointmentLetter->first()?'':'Missing';
+                })
+                ->addColumn('appointment_letter', function($row){
+                    return $row->cnicFront->first()?'':'Missing';
+                })
+                ->addColumn('Hr_Form', function($row){
+                    return $row->hrForm->first()?'':'Missing';
+                })
+                ->addColumn('joining_report', function($row){
+                    return $row->joiningReport->first()?'':'Missing';
+                })
+                ->addColumn('engineer_degree', function($row){
+                    return $row->engineeringDegree->first()?'':'Missing';
+                })
+                ->addColumn('education_documents', function($row){
+                    return $row->educationalDocuments->first()?'':'Missing';
+                })
+                ->addColumn('mobile', function($row){
+                    return $row->hrContactMobile->mobile??'';
+                })
+
+                    ->addColumn('Edit', function($row){
+                    
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editExperience">Edit</a>';
+                                            
+                            return $btn;
+                    })
+                    ->addColumn('Delete', function($row){                
+                        
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteExperience">Delete</a>';
+                                
+                            return $btn;
+                    })
+                
+                    ->rawColumns(['Edit','Delete'])
+                    ->make(true);
+        }
+
+        return view('hr.reports.missingDocuments');
+        
+        
+    }
+
+    
 
     public function searchEmployee()
     {
