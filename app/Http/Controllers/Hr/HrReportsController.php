@@ -44,7 +44,33 @@ class HrReportsController extends Controller
     public function mmissingDocuments(Request $request){
 
         if ($request->ajax()) {
-            $data= HrEmployee::where('hr_status_id', 1)->with('employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
+            $data= HrEmployee::where('hr_status_id', 1)->with('hrMembership','employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
+            
+            foreach ($data as $key=>$employee){
+              
+                $frontCNIC = $employee->cnicFront->first()?'':'Missing';
+               $signedAppointmentLetter = $employee->signedAppointmentLetter?'':'Missing';
+               $appointmentLetter = $employee->appointmentLetter->first()?'':'Missing';
+               $hrForm = $employee->hrForm->first()?'':'Missing';
+               $joiningReport= $employee->joiningReport->first()?'':'Missing';
+               $educationalDocuments = $employee->educationalDocuments->first()?'':'Missing';
+
+               if($employee->designation =='Utility Person' || $employee->designation =='Driver'){
+                $educationalDocuments = 'Not Required';
+               }
+
+
+                if($employee->hrMembership->expiry??''){
+                $engineeringDegree = $employee->engineeringDegree->first()?'':'Missing';
+                }else{
+                    $engineeringDegree = 'Not Required';
+                }
+
+                if( $frontCNIC  != 'Missing' && $signedAppointmentLetter != 'Missing' &&  $appointmentLetter != 'Missing' &&  $hrForm != 'Missing' &&  $joiningReport != 'Missing' &&  $educationalDocuments != 'Missing' && $engineeringDegree != 'Missing'){
+                    $data->forget($key);
+                }
+            }
+            
             return  DataTables::of($data)
                 ->addIndexColumn()  
 
@@ -57,13 +83,13 @@ class HrReportsController extends Controller
                     return $row->cnicFront->first()?'':'Missing';
                 })
                 ->addColumn('picture', function($row){
-                    return $row->signedAppointmentLetter?'':'Missing';
+                    return $row->picture?'':'Missing';
                 })
                 ->addColumn('signed_appointment_letter', function($row){
-                    return $row->appointmentLetter->first()?'':'Missing';
+                    return $row->signedAppointmentLetter?->first()?'':'Missing';
                 })
                 ->addColumn('appointment_letter', function($row){
-                    return $row->cnicFront->first()?'':'Missing';
+                    return $row->appointmentLetter?->first()?'':'Missing';
                 })
                 ->addColumn('Hr_Form', function($row){
                     return $row->hrForm->first()?'':'Missing';
@@ -72,7 +98,11 @@ class HrReportsController extends Controller
                     return $row->joiningReport->first()?'':'Missing';
                 })
                 ->addColumn('engineer_degree', function($row){
+                    if($row->hrMembership->expiry??''){
                     return $row->engineeringDegree->first()?'':'Missing';
+                    }else{
+                        return '';
+                    }
                 })
                 ->addColumn('education_documents', function($row){
                     return $row->educationalDocuments->first()?'':'Missing';

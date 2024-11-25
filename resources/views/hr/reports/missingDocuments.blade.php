@@ -138,6 +138,8 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         fixedHeader: true,
+        dom: 'Blfrtip',
+        buttons: ['copy', 'excel', 'pdf'],
         scrollY: "300px",
         scrollX: true,
 
