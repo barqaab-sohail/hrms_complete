@@ -127,6 +127,13 @@ class LeaveController extends Controller
 
         $input = $request->all();
 
+        if ($request->filled('from')) {
+            $input['from'] = \Carbon\Carbon::parse($request->from)->format('Y-m-d');
+        }
+        if ($request->filled('to')) {
+            $input['to'] = \Carbon\Carbon::parse($request->to)->format('Y-m-d');
+        }
+       
         DB::transaction(function () use ($input, $request) {
 
             $leaveId = Leave::create($input);
@@ -183,6 +190,13 @@ class LeaveController extends Controller
         }
 
         $input = $request->all();
+
+        if ($request->filled('from')) {
+            $input['from'] = \Carbon\Carbon::parse($request->from)->format('Y-m-d');
+        }
+        if ($request->filled('to')) {
+            $input['to'] = \Carbon\Carbon::parse($request->to)->format('Y-m-d');
+        }
 
         DB::transaction(function () use ($input, $request, $id) {
 
