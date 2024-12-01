@@ -40,6 +40,17 @@ class HrReportsController extends Controller
         return view('hr.reports.missingDocumentList', compact('employees'));
     }
 
+    public function examptEducationDocuments($designation){
+
+        $designations=['Utility Person', 'Driver'];
+
+        if (in_array($designation, $designations, true)) {
+            return true;
+        }else{
+            return false;
+        }
+
+    }
         
     public function mmissingDocuments(Request $request){
 
@@ -48,14 +59,16 @@ class HrReportsController extends Controller
             
             foreach ($data as $key=>$employee){
               
-                $frontCNIC = $employee->cnicFront->first()?'':'Missing';
+               $frontCNIC = $employee->cnicFront->first()?'':'Missing';
                $signedAppointmentLetter = $employee->signedAppointmentLetter?'':'Missing';
                $appointmentLetter = $employee->appointmentLetter->first()?'':'Missing';
                $hrForm = $employee->hrForm->first()?'':'Missing';
                $joiningReport= $employee->joiningReport->first()?'':'Missing';
                $educationalDocuments = $employee->educationalDocuments->first()?'':'Missing';
 
-               if($employee->designation =='Utility Person' || $employee->designation =='Driver'){
+
+               
+               if($this->examptEducationDocuments($employee->designation)){
                 $educationalDocuments = 'Not Required';
                }
 
