@@ -5,6 +5,7 @@ namespace App\Http\Controllers\HR;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\HrDesignation;
 use App\Models\Common\Education;
 use DataTables;
 use DB;
@@ -42,7 +43,15 @@ class HrReportsController extends Controller
 
     public function examptEducationDocuments($designation){
 
-        $designations=['Utility Person', 'Driver'];
+        $designations=["Kitchen Helper", "Security Guard", "Office Helper", "Utility Person", "Record Keeper", "Driver", "Electrician", "Sanitary Worker Part Time", "Cook", "Sanitary Worker", "Naib Qasid", "ChowkidarWatchman", "Line Foreman", "Patwari", "Khalasi", "Sweeper Sanitary Worker", "Driver Cum Utility Person Part Time", "Part Time Gardner", "Sweeper", "Office Boy Cum Mali", "Recovery Officer", "Utility Person Part Time", "Field Helper", "Sweeper (Part Time)", "Chakbandi Coordinator", "Hastel Attended", "Office Helper", "Sanitary Worker Part Time"];
+
+        // $hrDesignation = HrDesignation::where('name',$designation)->first();
+
+        // if($hrDesignation->level>11){
+        //     return true;
+        // }else{
+        //     return false;
+        // }
 
         if (in_array($designation, $designations, true)) {
             return true;
