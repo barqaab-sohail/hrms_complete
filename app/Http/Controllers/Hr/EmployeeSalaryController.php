@@ -27,12 +27,36 @@ class EmployeeSalaryController extends Controller
         return response()->json($view);
     }
 
+    public function getEmployeeAllowanceName($employeeId){
+        $employeeSalaries = EmployeeSalary::where('hr_employee_id', $employeeId)->get();
+        $ids = [];
+        foreach($employeeSalaries as $employeeSalary){
+            $hrAllowanceNameId = $employeeSalary->hrAllowances->hr_allowance_name_id??'';
+           
+            if (!in_array($hrAllowanceNameId, $ids, true)) {
+                array_push($ids, $hrAllowanceNameId);
+            }	
+        }
+        return  HrAllowanceName::whereIn('id',$ids)->get();
+
+    }
+
     public function create(Request $request)
     {
 
         if ($request->ajax()) {
             $data = EmployeeSalary::where('hr_employee_id', $request->hrEmployeeId)->latest()->get();
-            $allowanceNames = HrAllowanceName::all();
+            $ids = [];
+            foreach($data as $employeeSalary){
+                $hrAllowanceNameId = $employeeSalary->hrAllowances->hr_allowance_name_id??'';
+               
+                if (!in_array($hrAllowanceNameId, $ids, true)) {
+                    array_push($ids, $hrAllowanceNameId);
+                }	
+            }
+
+            $allowanceNames = $this->getEmployeeAllowanceName($request->hrEmployeeId);
+            
             $table= DataTables::of($data);
      
              foreach($allowanceNames as $allowance){
