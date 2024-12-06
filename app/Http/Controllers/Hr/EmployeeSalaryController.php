@@ -20,22 +20,26 @@ class EmployeeSalaryController extends Controller
     {
 
         $hrSalaries = HrSalary::all();
-
+        $selectedAllowances = $this->getEmployeeAllowanceName($id);
         $employeeSalaries = EmployeeSalary::with('hrAllowances')->where('hr_employee_id', $id)->get();
         $allowanceNames = HrAllowanceName::all();
-        $view =  view('hr.salary.create', compact('hrSalaries', 'employeeSalaries', 'allowanceNames', 'id'))->render();
+        $view =  view('hr.salary.create', compact('hrSalaries', 'employeeSalaries', 'allowanceNames', 'selectedAllowances', 'id',))->render();
         return response()->json($view);
     }
 
     public function getEmployeeAllowanceName($employeeId){
-        $employeeSalaries = EmployeeSalary::where('hr_employee_id', $employeeId)->get();
+        $employeeSalaries = EmployeeSalary::with('hrAllowances')->where('hr_employee_id', $employeeId)->get();
         $ids = [];
         foreach($employeeSalaries as $employeeSalary){
-            $hrAllowanceNameId = $employeeSalary->hrAllowances->hr_allowance_name_id??'';
+            $employeeSalary->hrAllowances;
            
-            if (!in_array($hrAllowanceNameId, $ids, true)) {
-                array_push($ids, $hrAllowanceNameId);
-            }	
+           foreach($employeeSalary->hrAllowances as $hrAllowance){
+            $hrAllowanceNameId = $hrAllowance->hr_allowance_name_id??'';
+           
+                if (!in_array($hrAllowanceNameId, $ids, true)) {
+                    array_push($ids, $hrAllowanceNameId);
+                }	
+            }
         }
         return  HrAllowanceName::whereIn('id',$ids)->get();
 
