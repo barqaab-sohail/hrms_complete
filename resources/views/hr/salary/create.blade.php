@@ -9,7 +9,7 @@
                 <th>Salary</th>
                 <th>Gross Salary</th>
                 <th>Effective Date</th>
-                @foreach($selectedAllowances as $allowanceName)
+                @foreach($allowanceNames as $allowanceName)
                 <th>{{$allowanceName->name}}</th>
                 @endforeach
                 <th>Edit</th>
@@ -174,7 +174,7 @@ $(document).ready(function() {
                     data: 'effective_date',
                     name: 'effective_date'
                 },
-                @foreach($selectedAllowances as $allowanceName) {
+                @foreach($allowanceNames as $allowanceName) {
                     data: '{{$allowanceName->name}}',
                     name: '{{$allowanceName->name}}'
                 },
