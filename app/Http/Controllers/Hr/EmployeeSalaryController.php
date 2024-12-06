@@ -46,15 +46,7 @@ class EmployeeSalaryController extends Controller
 
         if ($request->ajax()) {
             $data = EmployeeSalary::where('hr_employee_id', $request->hrEmployeeId)->latest()->get();
-            $ids = [];
-            foreach($data as $employeeSalary){
-                $hrAllowanceNameId = $employeeSalary->hrAllowances->hr_allowance_name_id??'';
-               
-                if (!in_array($hrAllowanceNameId, $ids, true)) {
-                    array_push($ids, $hrAllowanceNameId);
-                }	
-            }
-
+            
             $allowanceNames = $this->getEmployeeAllowanceName($request->hrEmployeeId);
             
             $table= DataTables::of($data);
