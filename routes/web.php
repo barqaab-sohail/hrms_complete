@@ -27,7 +27,6 @@ use App\User;
 // });
 Route::get('/verifyCard', 'HomeController@employee');
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');
-Route::get('/public/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer');
 Route::get('/cardVerificationResult/{employeeId?}', 'HomeController@employeeId')->middleware('XssSanitizer')->name('employee.verification');
 Route::get('/assestVerificationResult/{assetCode}', 'Asset\AssetController@verification')->middleware('XssSanitizer')->name('asset.verification');
 
