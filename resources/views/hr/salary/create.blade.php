@@ -9,7 +9,7 @@
                 <th>Salary</th>
                 <th>Gross Salary</th>
                 <th>Effective Date</th>
-                @foreach($allowanceNames as $allowanceName)
+                @foreach($selectAllowances as $allowanceName)
                 <th>{{$allowanceName->name}}</th>
                 @endforeach
                 <th>Edit</th>
@@ -153,6 +153,19 @@ $(document).ready(function() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        var allowances = [1, 3];
+        var data = <?php  echo json_encode($allowanceNames);?>;
+        var test = $.map(data, function(element, index) {
+
+            if (jQuery.inArray(element.id, allowances) != -1) {
+                return element.name;
+            };
+
+        })
+
+
+        console.log(test);
+
         var table = $('.data-table').DataTable({
             processing: true,
             serverSide: true,
@@ -160,8 +173,27 @@ $(document).ready(function() {
                 url: "{{ route('employeeSalary.create') }}",
                 data: {
                     hrEmployeeId: $("#hr_employee_id").val()
+                },
+                "dataSrc": function(json) {
+                    $.each(json.data, function(index, value) {
+                        $.each(value.hr_allowances, function(index, value) {
+                            var checkValue = allowances.indexOf(
+                                value
+                                .hr_allowance_name_id);
+                            if (checkValue == -1) {
+                                allowances.push(value
+                                    .hr_allowance_name_id);
+                            }
+
+                            //console.log(value);
+                            console.log(allowances);
+                        });
+                    });
+                    //console.log(json.data);
+                    return json.data;
                 }
             },
+
             columns: [{
                     data: "salary",
                     name: 'salary'
@@ -174,9 +206,11 @@ $(document).ready(function() {
                     data: 'effective_date',
                     name: 'effective_date'
                 },
-                @foreach($allowanceNames as $allowanceName) {
+                @foreach($selectAllowances as $allowanceName) {
+
                     data: '{{$allowanceName->name}}',
                     name: '{{$allowanceName->name}}'
+
                 },
                 @endforeach
 

@@ -20,10 +20,10 @@ class EmployeeSalaryController extends Controller
     {
 
         $hrSalaries = HrSalary::all();
-
+        $selectAllowances =$this->getEmployeeAllowanceName($id);
         $employeeSalaries = EmployeeSalary::with('hrAllowances')->where('hr_employee_id', $id)->get();
         $allowanceNames = HrAllowanceName::all();
-        $view =  view('hr.salary.create', compact('hrSalaries', 'employeeSalaries', 'allowanceNames', 'id'))->render();
+        $view =  view('hr.salary.create', compact('hrSalaries', 'employeeSalaries', 'allowanceNames', 'selectAllowances','id'))->render();
         return response()->json($view);
     }
 
@@ -51,7 +51,8 @@ class EmployeeSalaryController extends Controller
         if ($request->ajax()) {
             $data = EmployeeSalary::where('hr_employee_id', $request->hrEmployeeId)->latest()->get();
             
-            $allowanceNames = HrAllowanceName::all();
+            $allowanceNames = $this->getEmployeeAllowanceName($request->hrEmployeeId);
+            //HrAllowanceName::all();
             
             $table= DataTables::of($data);
      
