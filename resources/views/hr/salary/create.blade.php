@@ -3,14 +3,14 @@
     <button type="button" class="btn btn-success float-right" id="createNewSalary" data-toggle="modal">Add New
         Salary</button>
     <br>
-    <table class="table table-striped data-table">
+    <table class="table table-striped data-table" id="dataTable">
         <thead>
             <tr>
                 <th>Salary</th>
                 <th>Gross Salary</th>
                 <th>Effective Date</th>
                 @foreach($selectAllowances as $allowanceName)
-                <th>{{$allowanceName->name}}</th>
+                <th class="hideClass" id="{{$allowanceName->name}}">{{$allowanceName->name}}</th>
                 @endforeach
                 <th>Edit</th>
                 <th>Delete</th>
@@ -87,7 +87,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-
+    $(".hideClass").hide();
     //Dynamic add membership
     // Add new element
     $(".add_allowance").click(function() {
@@ -164,7 +164,7 @@ $(document).ready(function() {
         })
 
 
-        console.log(test);
+        //console.log(test);
 
         var table = $('.data-table').DataTable({
             processing: true,
@@ -175,6 +175,12 @@ $(document).ready(function() {
                     hrEmployeeId: $("#hr_employee_id").val()
                 },
                 "dataSrc": function(json) {
+
+                    //   console.log(json.allowanceNames);
+                    $.each(json.allowanceNames, function(index, value){
+                        $("#"+value.name).show();
+                       // $("#dataTable").find("th:eq(3)").append("<th class='dynamicAdd'>"+ value.name+"</th>");
+                    });
                     $.each(json.data, function(index, value) {
                         $.each(value.hr_allowances, function(index, value) {
                             var checkValue = allowances.indexOf(
@@ -186,7 +192,7 @@ $(document).ready(function() {
                             }
 
                             //console.log(value);
-                            console.log(allowances);
+                           // console.log(allowances);
                         });
                     });
                     //console.log(json.data);

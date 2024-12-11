@@ -54,7 +54,7 @@ class EmployeeSalaryController extends Controller
             $allowanceNames = $this->getEmployeeAllowanceName($request->hrEmployeeId);
             //HrAllowanceName::all();
             
-            $table= DataTables::of($data);
+            $table= DataTables::of($data)->with(['allowanceNames'=>$allowanceNames]);
      
              foreach($allowanceNames as $allowance){
                 $table->addColumn($allowance->name, function ($row) use ($allowance) {       
