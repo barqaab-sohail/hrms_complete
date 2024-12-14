@@ -9,7 +9,7 @@
                 <th>Salary</th>
                 <th>Gross Salary</th>
                 <th>Effective Date</th>
-                @foreach($selectAllowances as $allowanceName)
+                @foreach($allowanceNames as $allowanceName)
                 <th class="hideClass" id="{{$allowanceName->name}}">{{$allowanceName->name}}</th>
                 @endforeach
                 <th>Edit</th>
@@ -87,7 +87,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $(".hideClass").hide();
+
     //Dynamic add membership
     // Add new element
     $(".add_allowance").click(function() {
@@ -147,6 +147,27 @@ $(document).ready(function() {
         });
     });
 
+
+    function hideEmptyCols(table1) {
+        //count # of columns
+        var numCols = $("th", table1).length;
+        for (var i = 1; i <= numCols; i++) {
+            var empty = true;
+            //grab all the <td>'s of the column at i
+            $("td:nth-child(" + i + ")", table1).each(function(index, el) {
+                //check if the <span> of this <td> is empty
+                if ($("span", el).text() != "") {
+                    empty = false;
+                    return false; //break out of each() early
+                }
+            });
+            if (empty) {
+                $("td:nth-child(" + i + ")", table1).hide(); //hide <td>'s
+                $("th:nth-child(" + i + ")", table1).hide(); //hide header <th>
+            }
+        }
+    }
+
     $(function() {
         $.ajaxSetup({
             headers: {
@@ -175,31 +196,64 @@ $(document).ready(function() {
                     hrEmployeeId: $("#hr_employee_id").val()
                 },
                 "dataSrc": function(json) {
-
+                    //$(".hideClass").hide();
                     //   console.log(json.allowanceNames);
-                    $.each(json.allowanceNames, function(index, value){
-                        $("#"+value.name).show();
-                       // $("#dataTable").find("th:eq(3)").append("<th class='dynamicAdd'>"+ value.name+"</th>");
-                    });
-                    $.each(json.data, function(index, value) {
-                        $.each(value.hr_allowances, function(index, value) {
-                            var checkValue = allowances.indexOf(
-                                value
-                                .hr_allowance_name_id);
-                            if (checkValue == -1) {
-                                allowances.push(value
-                                    .hr_allowance_name_id);
-                            }
+                    // $.each(json.allowanceNames, function(index, value) {
+                    //     //    $("[id='" + value.name + "']").show();
+                    //     console.log(value);
+                    //     // $("#dataTable").find("th:eq(3)").append("<th class='dynamicAdd'>"+ value.name+"</th>");
+                    // });
+                    // $.each(json.data, function(index, value) {
+                    //     $.each(value.hr_allowances, function(index, value) {
 
-                            //console.log(value);
-                           // console.log(allowances);
-                        });
-                    });
+                    //         var getAllowanceName = $.map(json
+                    //             .allowanceNames,
+                    //             function(
+                    //                 element,
+                    //                 index) {
+                    //                 if (element.id == value
+                    //                     .hr_allowance_name_id) {
+                    //                     return element.name;
+                    //                 };
+
+                    //             })
+                    //         $("[id='" + getAllowanceName + "']").show();
+                    //         console.log(getAllowanceName);
+                    //         // var checkValue = allowances.indexOf(
+                    //         //     value
+                    //         //     .hr_allowance_name_id);
+                    //         // if (checkValue == -1) {
+                    //         //     allowances.push(value
+                    //         //         .hr_allowance_name_id);
+                    //         // }
+
+                    //         //console.log(value);
+                    //         // console.log(allowances);
+                    //     });
+                    // });
                     //console.log(json.data);
                     return json.data;
                 }
             },
+            drawCallback: function() {
 
+                $('#dataTable th').each(function(i) {
+                    var remove = 0;
+                    var tds = $(this).parents('table').find(
+                        'tr td:nth-child(' + (i + 1) + ')')
+                    tds.each(function(j) {
+                        if (this.innerHTML == '') remove++;
+                    });
+
+                    if (remove == ($('#dataTable tr').length - 1)) {
+                        $(this).hide();
+                        tds.hide();
+                    } else {
+                        $(this).show();
+                        tds.show();
+                    }
+                });
+            },
             columns: [{
                     data: "salary",
                     name: 'salary'
@@ -212,7 +266,7 @@ $(document).ready(function() {
                     data: 'effective_date',
                     name: 'effective_date'
                 },
-                @foreach($selectAllowances as $allowanceName) {
+                @foreach($allowanceNames as $allowanceName) {
 
                     data: '{{$allowanceName->name}}',
                     name: '{{$allowanceName->name}}'
@@ -239,6 +293,7 @@ $(document).ready(function() {
             ],
 
         });
+
 
         $('#createNewSalary').click(function() {
             // $("select").prepend("<option value='' >&nbsp;</option>");
