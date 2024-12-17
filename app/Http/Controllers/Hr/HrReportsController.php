@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDesignation;
 use App\Models\Common\Education;
+use App\Models\Hr\HrEmployeeCompany;
 use DataTables;
 use DB;
 
@@ -63,8 +64,11 @@ class HrReportsController extends Controller
         
     public function mmissingDocuments(Request $request){
 
+        $otherCompanyEmployeeIds = HrEmployeeCompany::where('partner_id', '!=',1)->pluck('hr_employee_id')->toArray();
+        
+
         if ($request->ajax()) {
-            $data= HrEmployee::where('hr_status_id', 1)->with('hrMembership','employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
+            $data= HrEmployee::where('hr_status_id', 1)->whereNotIn('id',$otherCompanyEmployeeIds)->with('hrMembership','employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
             
             foreach ($data as $key=>$employee){
               
