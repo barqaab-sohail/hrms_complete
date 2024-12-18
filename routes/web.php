@@ -5,6 +5,7 @@ use App\Http\Controllers\Project\ProjectLedgerActivityController;
 use App\Models\Hr\HrExperience;
 use App\Models\Hr\HrEmployee;
 use App\User;
+use App\Http\Controllers\MediaController;
 
 
 /*
@@ -25,6 +26,16 @@ use App\User;
 //     $data = $user->getAllPermissions();
 //     return  $data;
 // });
+
+
+
+
+
+
+
+Route::get('/media', [MediaController::class,'create']);
+Route::post('/media', [MediaController::class,'uploadMedia'])->name('media.upload');
+
 
 Route::get('/employeeAllowances/{id}', 'Hr\EmployeeSalaryController@getEmployeeAllowanceName');
 Route::get('/verifyCard', 'HomeController@employee');
