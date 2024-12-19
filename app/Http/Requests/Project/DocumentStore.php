@@ -49,14 +49,20 @@ class DocumentStore extends FormRequest
      */
     public function rules()
     {
+        $sizeInMB = 30000;
+        
+        if($this->size){
+            $sizeInMB = (int) $this->size / 1024;
+        }
+
         $rules = [
            
             'description' => 'required',
             //'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
         ];
 
-        if (!request()->has('pr_document_id')) {
-            $rules += [ 'document' => 'required|file|max:30000|mimes:doc,docx,xls,xlsx,jpeg,jpg,png,pdf',];
+        if (request()->has('document')) {
+            $rules += [ 'document' => "required|file|max:$sizeInMB|mimes:doc,docx,xls,xlsx,jpeg,jpg,png,pdf",];
         }
 
         return $rules;

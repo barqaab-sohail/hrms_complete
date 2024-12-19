@@ -31,9 +31,9 @@
 
         <div id="upload-container" class="text-center">
 
-            <button id="browseFile" class="btn btn-primary">Upload File</button>
-
+            <button id="browseFile" class="btn btn-primary">Upload File</button> <br> <br>
         </div>
+      
 
         <div style="display: none" class="progress mt-3 w-25 mx-auto" style="height: 25px">
 
@@ -64,14 +64,16 @@
 
 
     <script>
+
+       
+       
+       
     let resumable = new Resumable({
 
-        target: "{{ route('media.upload') }}",
+        target: "{{ route('tempFileUpload.upload') }}",
 
         query: {
-
-            _token: '{{ csrf_token() }}'
-
+            _token: '{{ csrf_token() }}',
         },
 
         chunkSize: 10 * 1024 * 1024, // 10MB chunks
@@ -107,6 +109,8 @@
         $('#final_success').removeClass('d-none');
 
         $('#final_success').show();
+        console.log(response);
+        console.log($("#description").val());
 
         hideProgress();
 

@@ -5,7 +5,7 @@ use App\Http\Controllers\Project\ProjectLedgerActivityController;
 use App\Models\Hr\HrExperience;
 use App\Models\Hr\HrEmployee;
 use App\User;
-use App\Http\Controllers\MediaController;
+use App\Http\Controllers\Admin\TempFileUploadController;
 
 
 /*
@@ -33,8 +33,7 @@ use App\Http\Controllers\MediaController;
 
 
 
-Route::get('/media', [MediaController::class,'create']);
-Route::post('/media', [MediaController::class,'uploadMedia'])->name('media.upload');
+
 
 
 Route::get('/employeeAllowances/{id}', 'Hr\EmployeeSalaryController@getEmployeeAllowanceName');
@@ -334,6 +333,10 @@ Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth', 'XssSanitizer'],
     Route::resource('/partner', 'PartnerController');
     Route::resource('/allowanceName', 'AllowanceNameController');
     Route::resource('/directCostDescription', 'DirectCostDescriptionController');
+    
+    Route::get('/tempfileupload', [TempFileUploadController::class,'create'])->name('tempFileUpload.create');
+    Route::post('/tempFileUpload', [TempFileUploadController::class,'uploadMedia'])->name('tempFileUpload.upload');
+    Route::delete('/tempFileUpload', [TempFileUploadController::class,'destroy'])->name('tempFileUpload.store');
 });
 
 

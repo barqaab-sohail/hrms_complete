@@ -194,6 +194,9 @@
                         <li><a class="{{Request::is('hrms/misc/allowances')?'active':''}}" href="{{route('allowanceName.index')}}">List of Allowances</a></li>
                         <li><a class="{{Request::is('hrms/misc/directCostDescription')?'active':''}}" href="{{route('directCostDescription.index')}}"> Direct Cost Description</a></li>
                         @endcan
+                        @can('temp file upload')
+                        <li><a class="{{Request::is('hrms/misc/tempfileupload')?'active':''}}" href="{{route('tempFileUpload.create')}}"> Temp File Upload</a></li>
+                        @endcan
                     </ul>
                 </li>
                 <!-- End Misc -->

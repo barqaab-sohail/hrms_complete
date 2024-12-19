@@ -63,7 +63,17 @@
                         </div>
                     </div>
                 </div>
+                @can('large file upload')
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Upload File Size</label>
+                            <input type="number" name="size" id="size"  value="{{ old('size') }}" class="form-control" placeholder="38,400,000 Size in Bytes">
 
+                        </div>
+                    </div>
+                </div>
+                @endcan
             </div>
             <!--/row-->
 
@@ -191,9 +201,12 @@
             var fileType = this.files[0].type;
             var fileSize = this.files[0].size;
             //var fileType = fileName.split('.').pop();
-
+            var size = $("#size").val();
+            if(size == ''){
+                size = 38400000;
+            }
             //Restrict File Size Less Than 30MB
-            if (fileSize > 38400000) {
+            if (fileSize > size) {
                 alert('File Size is bigger than 30MB');
                 $(this).val('');
             } else {
@@ -358,7 +371,11 @@ $(function () {
       var pr_document_id = $(this).data('id');
         
       $.get("{{ url('hrms/project/projectDocument') }}" +'/' + pr_document_id +'/edit', function (data) {
-          $('#formDocument').show(); 
+        $('#formDocument').toggle();
+            $('#formDocument').trigger("reset"); 
+        
+        $('#formDocument').show(); 
+         
           $('#formHeading').html("Edit Document");
           $('#pr_document_id').val(data.id);
           $('#document_date').val(data.document_date);

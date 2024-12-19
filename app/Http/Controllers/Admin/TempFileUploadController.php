@@ -1,16 +1,36 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Hr\HrAllowanceName;
+use DataTables;
+use DB;
 
-class MediaController extends Controller
+class TempFileUploadController extends Controller
 {
-    public function create()
-
+    
+    public function create(Request $request)
     {
+        if($request->ajax()){
+	    	$data = HrAllowanceName::all();
+	    	return DataTables::of($data)	
+	            
+	            ->addColumn('Delete', function($data){
+	                  
+	                $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteAllowanceName">Delete</a>';
+	                return $button;
+	            })
+	            ->rawColumns(['Edit','Delete'])
+	            ->make(true);
+	    }
+        
+    	return view ('admin.tempFileUpload.list');
+       
 
-        return view('media');
+       
+        // return view('media');
 
     }
 
@@ -67,5 +87,15 @@ class MediaController extends Controller
 
         fclose($output);
 
+    }
+
+    public function destroy($id)
+    {
+        DB::transaction(function () use ($id) {  
+            HrAllowanceName::findOrFail($id)->delete();   
+        }); // end transcation
+
+        return response()->json(['success'=>'data  delete successfully.']);
+   
     }
 }
