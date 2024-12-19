@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrAllowanceName;
+use App\Models\Admin\TempUploadFile;
 use DataTables;
 use DB;
 
@@ -14,7 +15,7 @@ class TempFileUploadController extends Controller
     public function create(Request $request)
     {
         if($request->ajax()){
-	    	$data = HrAllowanceName::all();
+	    	$data = TempUploadFile::all();
 	    	return DataTables::of($data)	
 	            
 	            ->addColumn('Delete', function($data){
@@ -34,7 +35,7 @@ class TempFileUploadController extends Controller
 
     }
 
-    public function uploadMedia(Request $request)
+    public function store(Request $request)
 
     {
 
@@ -46,6 +47,7 @@ class TempFileUploadController extends Controller
         $totalChunks = $request->input('resumableTotalChunks');
 
         $fileName = str_replace(' ', '', $request->input('resumableFilename'));
+        $path = storage_path('app/uploads/' . $fileName);
 
         $filePath = storage_path('app/uploads/' . $fileName . '.part');
 
@@ -54,11 +56,12 @@ class TempFileUploadController extends Controller
         $file->move(storage_path('app/uploads'), $fileName . '.part' . $chunkNumber);
 
         if ($chunkNumber == $totalChunks) {
-
             $this->mergeChunks($fileName, $totalChunks);
-
+            
         }
-
+        
+        
+        
         return response()->json(['message' =>  'File Sucessfully Uploaded']);
 
     }
@@ -87,12 +90,26 @@ class TempFileUploadController extends Controller
 
         fclose($output);
 
+        $size = filesize($filePath);
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+        TempUploadFile::create([
+            'file_name'=>$fileName,
+            'path'=>$filePath,
+            'size'=>$size,
+            'extension'=>$extension
+        ]);
+
     }
 
     public function destroy($id)
     {
         DB::transaction(function () use ($id) {  
-            HrAllowanceName::findOrFail($id)->delete();   
+            $tempUploadFile = TempUploadFile::findOrFail($id);   
+            if (File::exists($tempUploadFile->path)) {
+                File::delete($tempUploadFile->path);
+            }
+            $tempUploadFile->forceDelete();
+
         }); // end transcation
 
         return response()->json(['success'=>'data  delete successfully.']);

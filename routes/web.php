@@ -5,7 +5,7 @@ use App\Http\Controllers\Project\ProjectLedgerActivityController;
 use App\Models\Hr\HrExperience;
 use App\Models\Hr\HrEmployee;
 use App\User;
-use App\Http\Controllers\Admin\TempFileUploadController;
+
 
 
 /*
@@ -334,9 +334,6 @@ Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth', 'XssSanitizer'],
     Route::resource('/allowanceName', 'AllowanceNameController');
     Route::resource('/directCostDescription', 'DirectCostDescriptionController');
     
-    Route::get('/tempfileupload', [TempFileUploadController::class,'create'])->name('tempFileUpload.create');
-    Route::post('/tempFileUpload', [TempFileUploadController::class,'uploadMedia'])->name('tempFileUpload.upload');
-    Route::delete('/tempFileUpload', [TempFileUploadController::class,'destroy'])->name('tempFileUpload.store');
 });
 
 
@@ -360,6 +357,7 @@ Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth', 'XssSanitizer']
     Route::get('/audit/search', 'AuditController@search')->name('audit.search');
     Route::get('/result', 'AuditController@result')->name('audit.result');
     Route::resource('/addUser', 'UserController');
+    Route::resource('/tempfileupload', 'TempFileUploadController');
 });
 
 //Invoice Routes
