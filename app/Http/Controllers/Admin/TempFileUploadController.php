@@ -21,9 +21,9 @@ class TempFileUploadController extends Controller
 
                     return round($data->size / (1024*1024),3) .' MB';
                 })
-                ->editColumn('path', function ($row){
-                    return '<a class="copyLink" link="'.$row->path.'" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
-                })   
+                 ->addColumn('path', function ($row){
+                    return '<a class="copyLink" link="'.$row->full_path.'" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+                  })   
 	            ->addColumn('Delete', function($data){
 	                  
 	                $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteAllowanceName">Delete</a>';
@@ -53,13 +53,13 @@ class TempFileUploadController extends Controller
         $totalChunks = $request->input('resumableTotalChunks');
 
         $fileName = str_replace(' ', '', $request->input('resumableFilename'));
-        $path = storage_path('app/uploads/' . $fileName);
+        $path = storage_path('app/public/uploads/' . $fileName);
 
-        $filePath = storage_path('app/uploads/' . $fileName . '.part');
+        $filePath = storage_path('app/public/uploads/' . $fileName . '.part');
 
         // Move the uploaded chunk to the temporary directory
 
-        $file->move(storage_path('app/uploads'), $fileName . '.part' . $chunkNumber);
+        $file->move(storage_path('app/public/uploads'), $fileName . '.part' . $chunkNumber);
 
         if ($chunkNumber == $totalChunks) {
             $this->mergeChunks($fileName, $totalChunks);
@@ -76,13 +76,14 @@ class TempFileUploadController extends Controller
 
     {
 
-        $filePath = storage_path('app/uploads/' . $fileName);
+        $filePath =  public_path('storage/uploads/'.$fileName);
+        //storage_path('app/uploads/' . $fileName);
 
         $output = fopen($filePath, 'wb');
 
         for ($i = 1; $i <= $totalChunks; $i++) {
 
-            $chunkPath = storage_path('app/uploads/' . $fileName . '.part' . $i);
+            $chunkPath = public_path('storage/uploads/' . $fileName . '.part' . $i);
 
             $chunkFile = fopen($chunkPath, 'rb');
 
@@ -100,7 +101,7 @@ class TempFileUploadController extends Controller
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
         TempUploadFile::create([
             'file_name'=>$fileName,
-            'path'=>$filePath,
+            'path'=>'uploads/',
             'size'=>$size,
             'extension'=>$extension
         ]);
@@ -111,8 +112,9 @@ class TempFileUploadController extends Controller
     {
         DB::transaction(function () use ($id) {  
             $tempUploadFile = TempUploadFile::findOrFail($id);   
-            if (File::exists($tempUploadFile->path)) {
-                File::delete($tempUploadFile->path);
+            $path = public_path('storage/' . $tempUploadFile->path . $tempUploadFile->file_name);
+            if (File::exists($path)) {
+                File::delete($path);
             }
             $tempUploadFile->forceDelete();
 
