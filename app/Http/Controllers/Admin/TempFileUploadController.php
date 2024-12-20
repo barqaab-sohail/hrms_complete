@@ -17,13 +17,19 @@ class TempFileUploadController extends Controller
         if($request->ajax()){
 	    	$data = TempUploadFile::all();
 	    	return DataTables::of($data)	
-	            
+                ->editColumn('size', function($data){
+
+                    return round($data->size / (1024*1024),3) .' MB';
+                })
+                ->editColumn('path', function ($row){
+                    return '<a class="copyLink" link="'.$row->path.'" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+                })   
 	            ->addColumn('Delete', function($data){
 	                  
 	                $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteAllowanceName">Delete</a>';
 	                return $button;
 	            })
-	            ->rawColumns(['Edit','Delete'])
+	            ->rawColumns(['path','Delete'])
 	            ->make(true);
 	    }
         

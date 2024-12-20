@@ -37,6 +37,7 @@
             <tr>
                 <th>File Name</th>
                 <th>Size</th>
+                <th>Copy Link</th>
                 <th>Delete</th>
             </tr>
         </thead>
@@ -47,8 +48,11 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+        
+
 
     $(function() {
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -67,6 +71,10 @@ $(document).ready(function() {
                     name: 'size'
                 },
                 {
+                    data: "path",
+                    name: 'path'
+                },
+                {
                     data: 'Delete',
                     name: 'Delete',
                     orderable: false,
@@ -74,6 +82,21 @@ $(document).ready(function() {
                 },
 
             ],
+            "drawCallback": function(settings) {
+                $('.copyLink').click(function() {
+                console.log('click.....');
+                    var text = $(this).attr('link').replace(" ", "%20");
+                navigator.clipboard.writeText(text);
+
+                alert('Link Copied');
+                });
+
+                $('.copyLink').hover(function() {
+                    $(this).css('cursor', 'pointer').attr('title', 'Click for Copy Link');
+                }, function() {
+                    $(this).css('cursor', 'auto');
+                });
+            },
         });
 
 
