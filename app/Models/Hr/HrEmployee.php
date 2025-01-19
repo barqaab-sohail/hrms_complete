@@ -67,7 +67,7 @@ class HrEmployee extends Model implements Auditable
     }
 
 
-    
+
 
 
     public function employeeManager()
@@ -626,9 +626,7 @@ class HrEmployee extends Model implements Auditable
         );
     }
 
-    public function subs($employeeId)
-    {
-    }
+    public function subs($employeeId) {}
 
 
 

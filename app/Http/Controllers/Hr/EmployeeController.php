@@ -291,7 +291,7 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
 
-        HrEmployee::findOrFail($id)->delete();
+      //  HrEmployee::findOrFail($id)->delete();
 
         return back()->with('message', 'Data Successfully Deleted');
         //return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Deleted']);
@@ -382,7 +382,26 @@ class EmployeeController extends Controller
             //this variable used only for goting to else part of result blade.
             $documents = true;
             return view('hr.employee.search.result', compact('result', 'documents'));
-        } else {
+        } 
+        
+        elseif($request->filled('education_year')){
+            
+            $documents = false;
+            $year = $data['education_year'];
+
+            
+            $employeeIds =  DB::table('hr_employees')
+            ->join('hr_educations', 'hr_employees.id', '=', 'hr_educations.hr_employee_id')
+            ->join('educations', 'educations.id', '=', 'hr_educations.education_id')
+            ->where('educations.level', '>=', $year)->select('hr_employees.*')->distinct('hr_employees.employee_no')->whereIn('hr_employees.hr_status_id', [1, 2, 3, 4, 5, 6, 7])->pluck('id')->toArray();
+
+            $result = HrEmployee::whereIn('id', $employeeIds)->get();
+    
+            return view('hr.employee.search.result', compact('result', 'documents'));
+
+        }
+        
+        else {
 
             $documents = false;
             $result = HrEmployee::whereIn('hr_status_id', [1, 2, 3, 4, 5, 6, 7])
