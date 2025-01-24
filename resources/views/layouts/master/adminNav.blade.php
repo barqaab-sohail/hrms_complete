@@ -171,6 +171,22 @@
 
                 <!-- End Asset -->
 
+                <!-- Photocopy -->
+
+                <li class="{{Request::is('hrms/photocopy*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark"
+                        href="#" aria-expanded="false"><i class="mdi mdi-bank"></i><span
+                            class="hide-menu">Photocopy</span></a>
+                    <ul aria-expanded="false" class="collapse">
+
+                        @canany(['photocopy record'])
+                        <li><a class="{{Request::is('hrms/photocopy')?'active':''}}" href="{{route('photocopy.index')}}">List of
+                                Photocopy Machines</a></li>
+                        @endcanany
+                    </ul>
+                </li>
+
+                <!-- End Photocopy -->
+
                 <!-- Leave -->
                 <li class="{{Request::is('hrms/*leave*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark"
                         href="#" aria-expanded="false"><i class="fa fa-calendar-alt" aria-hidden="true"></i><span

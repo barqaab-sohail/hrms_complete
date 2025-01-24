@@ -284,6 +284,11 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
 });
 
+//Photocopy Routes
+
+Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Photocopy'], function () {
+    Route::get('/photocopy', 'PhotocopyController@index')->name('photocopy.index');
+});
 
 //Leave Routes
 Route::get('/onlineLeave', 'Leave\LeaveController@onlineLeave');
