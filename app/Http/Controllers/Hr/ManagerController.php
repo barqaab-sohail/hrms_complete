@@ -12,11 +12,17 @@ use DataTables;
 class ManagerController extends Controller
 {
 
-    public function index() {
+    public function show($id) {
     	
-       	$employees = HrEmployee::all();
+       	$employees = DB::table('hr_employees')
+           ->join('employee_designations','hr_employees.id', '=', 'employee_designations.hr_employee_id')
+           ->join('hr_designations', function($join){
+               $join->on('hr_designations.id', '=', 'employee_designations.hr_designation_id')
+               ->where('hr_designations.level','<',7);
+           }) 
+           ->select('hr_employees.id','hr_employees.first_name','hr_employees.last_name','hr_employees.employee_no','hr_designations.name as designation')->groupBy('employee_designations.hr_employee_id')->orderBy('employee_designations.effective_date','DESC')->get();
         
-       	$managers = EmployeeManager::where('hr_employee_id',session('hr_employee_id'))->get();
+       	$managers = EmployeeManager::where('hr_employee_id',$id)->get();
         //dd($managers->hodDesignation->name);
         $view =  view('hr.manager.create', compact('employees','managers'))->with('hodDesignation','hrDesignation')->render();
         return response()->json($view);
@@ -26,7 +32,7 @@ class ManagerController extends Controller
     public function create(Request $request) {
 
         if ($request->ajax()) {
-            $data = EmployeeManager::where('hr_employee_id',session('hr_employee_id'))->latest()->with('hrEmployee','hodDesignation')->get();
+            $data = EmployeeManager::where('hr_employee_id',$request->hrEmployeeId)->latest()->with('hrEmployee','hodDesignation')->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
@@ -53,7 +59,7 @@ class ManagerController extends Controller
         }
 
         $employees = HrEmployee::where('hr_status_id',1)->get();
-        $managers = EmployeeManager::where('hr_employee_id',session('hr_employee_id'))->get();
+        $managers = EmployeeManager::where('hr_employee_id',$request->hrEmployeeId)->get();
         
         $view =  view('hr.manager.create', compact('employees','managers'))->render();
         return response()->json($view);
@@ -93,9 +99,9 @@ class ManagerController extends Controller
     }
 
     
-    public function destroy ($id){
+    public function destroy (Request $request, $id){
 
-        $employeeManager = EmployeeManager::where('hr_employee_id',session('hr_employee_id'))->first();
+        $employeeManager = EmployeeManager::where('hr_employee_id',$request->hrEmployeeId)->first();
 
         if($employeeManager->id==$id)
         {
@@ -105,7 +111,7 @@ class ManagerController extends Controller
     	DB::transaction(function () use ($id) {  
     		EmployeeManager::find($id)->delete();  		   	
     	}); // end transcation 
-        return response()->json(['success'=>'data  delete successfully.']);
+        return response()->json(['message'=>'data  delete successfully.']);
 
     }
 

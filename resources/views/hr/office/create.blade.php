@@ -27,7 +27,7 @@
                 <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
                 <form id="officeForm" name="officeForm" action="{{route('employeeOffice.store')}}" class="form-horizontal">
                     <input type="hidden" name="employee_office_id" id="employee_office_id">
-                    <input type="hidden" name="hr_employee_id" id="hr_employee_id" value="{{session('hr_employee_id')}}">
+                    <input type="hidden" name="hr_employee_id" id="hr_employee_id" value="{{$id}}">
                     <div class="form-group">
                         <label class="control-label text-right">Office<span class="text_requried">*</span></label><br>
                         <select name="office_id" id="office_id" class="form-control selectTwo" data-validation="required">
@@ -68,7 +68,9 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('employeeOffice.create') }}",
+                ajax: {url:"{{ route('employeeOffice.create') }}",
+                data: {hrEmployeeId: $("#hr_employee_id").val()
+                }},
                 columns: [{
                         data: "office_id",
                         name: 'office_id'
@@ -136,6 +138,7 @@
                         $('#officeForm').trigger("reset");
                         $('#ajaxModel').modal('hide');
                         table.draw();
+                        clearMessage();
 
                     },
                     error: function(data) {
@@ -159,8 +162,10 @@
                     $.ajax({
                         type: "DELETE",
                         url: "{{ route('employeeOffice.store') }}" + '/' + employee_office_id,
+                        data: {hrEmployeeId: $("#hr_employee_id").val()},
                         success: function(data) {
                             table.draw();
+                            clearMessage();
                             if (data.error) {
                                 $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + data.error + '</strong></div>');
                             }

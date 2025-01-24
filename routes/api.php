@@ -1,11 +1,16 @@
 <?php
 
+use App\Http\Controllers\MIS\Asset\AssetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\User;
 use App\Models\MisUser;
 use App\Http\Controllers\MIS\Project\ProjectLedgerActivityController;
 use App\Http\Controllers\MIS\LoginController;
+use App\Http\Controllers\MIS\Project\ProjectController;
+use App\Http\Controllers\MIS\ChartController;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Hr\CardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +28,16 @@ use App\Http\Controllers\MIS\LoginController;
 // });
 
 
+// Start Temp Routing
+
+
+
+// End Temp Routing
+
+
+//Projects Routes
+Route::get('/card/{id}', [CardController::class, 'getEmployeePicture']);
+Route::get('/charts', [ChartController::class, 'index']);
 Route::post('/user', 'Mobile\EmployeeController@user');
 Route::post('/user/login', 'Android\Auth\UserController@login');
 //Route::post('/mis/login', 'MIS\LoginController@login');
@@ -36,7 +51,13 @@ Route::get('/proejctSummaryMM/{id}', 'MIS\Project\ProjectController@proejctSumma
 
 
 // DashBoard / MIS API
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::middleware("auth:sanctum")->group(function () {
+
+    Route::get('/cacheClear', function () {
+        Artisan::call('cache:clear');
+        return 'ok';
+    });
+
     //Projects Routes
     Route::post('/mis/logout', 'MIS\LoginController@logout');
     Route::get('/invoiceData', 'Dashboard\DashboardController@invoiceData');
@@ -48,19 +69,24 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/currentMonthInvoices', 'Dashboard\DashboardController@currentMonthInvoices');
     Route::get('/lastMonthInvoices', 'Dashboard\DashboardController@lastMonthInvoices');
     Route::get('/totalBudgetExpenditure/{id}', 'Dashboard\DashboardController@totalBudgetExpenditure');
-
+    Route::get('/projects/{status?}/{division?}', [ProjectController::class, 'projects']);
+    Route::get('/project/{id}', [ProjectController::class, 'projectDetail']);
+    Route::get('/projectDocuments/{id}', 'MIS\Project\ProjectController@projectDocuments');
 
 
     //HR Routes
-    Route::get('/employees', 'MIS\Hr\EmployeeController@index');
+    Route::get('/employees/{cacheStatus?}', 'MIS\Hr\EmployeeController@index');
     Route::get('/employeeDocuments/{id}', 'MIS\Hr\EmployeeDocumentController@show');
+    Route::get('/employeeList', 'MIS\Hr\EmployeeController@index');
+    Route::get('/employee/{id}', 'MIS\Hr\EmployeeController@employee');
 
 
     //Assets Routes
     Route::get('/assets', 'MIS\Asset\AssetController@index');
-
-    //Projects Routes
-    Route::get('/projectDocuments/{id}', 'MIS\Project\ProjectController@projectDocuments');
+    Route::get('/assetSubClasses', [AssetController::class, 'assetSubClasses']);
+    Route::get('/asset/{assetId}', 'MIS\Asset\AssetController@asset');
+    Route::get('/subclass/{subClassId}', [AssetController::class, 'subClassList']);
+    
 
 
     Route::get('/manMonthProjectsStatus', 'MIS\Project\ProjectController@manMonthProjectsStatus');

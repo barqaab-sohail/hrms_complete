@@ -83,7 +83,8 @@ $(document).ready(function() {
 
   	submitForm(this, url);
   	resetForm();
-  	 refreshTable("{{route('contact.table')}}",300);
+	
+  	refreshTable("{{route('contact.table')}}"+'/'+$("#id").val(),300);
   	 
     });
 

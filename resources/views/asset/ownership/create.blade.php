@@ -115,7 +115,9 @@ $(function () {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('asOwnership.create') }}",
+        ajax:{url:"{{ route('asOwnership.create') }}", data: {
+            assetId: $("#id").val()
+        }},
         columns: [
             
             {data: "ownership", name: 'ownership'},
@@ -156,7 +158,7 @@ $(function () {
       $("#formOwnership").submit(function(e) {
         e.preventDefault();
         var formData = new FormData(this);
-
+        formData.append("asset_id", $("#id").val());
         $.ajax({
           data: formData,
           url: "{{ route('asOwnership.store') }}",

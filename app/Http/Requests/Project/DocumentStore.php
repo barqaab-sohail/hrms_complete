@@ -49,13 +49,23 @@ class DocumentStore extends FormRequest
      */
     public function rules()
     {
-        return [
-            'document' => 'required|file|max:30000|mimes:doc,docx,xls,xlsx,jpeg,jpg,png,pdf',
+        $sizeInMB = 30000;
+        
+        if($this->size){
+            $sizeInMB = (int) $this->size / 1024;
+        }
+
+        $rules = [
+           
             'description' => 'required',
             //'description'=>'not_in:picture,Picture,PICTURE,Appointment Letter,Cnic Back,Cnic Front, Hr Form',
-
-
         ];
+
+        if (request()->has('document')) {
+            $rules += [ 'document' => "required|file|max:$sizeInMB|mimes:doc,docx,xls,xlsx,jpeg,jpg,png,pdf",];
+        }
+
+        return $rules;
     }
 
     public function messages()
@@ -63,9 +73,6 @@ class DocumentStore extends FormRequest
 
         return [
             'document.mimes' => ' Only doc, docx, xls, xlsx, jpeg, jpg, png, pdf type attachment allowed',
-
-
-
         ];
     }
 }

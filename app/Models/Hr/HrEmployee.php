@@ -4,6 +4,8 @@ namespace App\Models\Hr;
 
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Hr\EmployeeSalary;
+use App\Models\Hr\HrDocumentation;
 use DB;
 
 
@@ -15,13 +17,31 @@ class HrEmployee extends Model implements Auditable
 
     protected $fillable = ['first_name', 'last_name', 'father_name', 'cnic', 'cnic_expiry', 'date_of_birth', 'employee_no', 'user_id', 'gender_id', 'hr_status_id', 'marital_status_id', 'religion_id', 'domicile_id'];
 
-    protected $appends = ['full_name', 'designation', 'project', 'joining_date'];
+    protected $appends = ['full_name', 'designation', 'project', 'joining_date', 'current_salary', 'picture'];
 
     function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;
     }
 
+    function getCurrentSalaryAttribute()
+    {
+        $hrSalary = $this->employeeCurrentSalary ?? '';
+        if ($hrSalary) {
+            $data = EmployeeSalary::where('hr_employee_id', $this->id)->where('hr_salary_id', $hrSalary->id)->first();
+            return ['effective_date' => \Carbon\Carbon::parse($data->effective_date)->format('M d, Y'), 'salary' => number_format($hrSalary->total_salary)];
+        }
+        return null;
+    }
+    function getPictureAttribute()
+    {
+        $defaultPicture = asset('Massets/images/default.png');
+        $picture = HrDocumentation::where('hr_employee_id', $this->id)->where('description', 'picture')->first();
+        if ($picture) {
+            return asset('/storage/' . $picture->path . $picture?->file_name);
+        }
+        return $defaultPicture;
+    }
     function getDesignationAttribute()
     {
         return $this->employeeCurrentDesignation->name ?? '';
@@ -47,9 +67,17 @@ class HrEmployee extends Model implements Auditable
     }
 
 
+
+
+
     public function employeeManager()
     {
         return $this->hasMany('App\Models\Hr\EmployeeManager', 'hr_manager_id');
+    }
+
+    public function hrExperiences()
+    {
+        return $this->hasMany('App\Models\Hr\HrExperience')->select('organization', 'hr_employee_id', 'from', 'to', 'job_title')->orderBy('to', 'ASC');
     }
 
 
@@ -294,9 +322,10 @@ class HrEmployee extends Model implements Auditable
         return $this->hasMany('App\Models\Hr\HrContact');
     }
 
+
     public function hrDocumentations()
     {
-        return $this->hasMany('App\Models\Hr\HrDocumentation');
+        return $this->hasMany('App\Models\Hr\HrDocumentation')->select('description', 'hr_employee_id', 'extension', 'path', 'file_name', 'document_date', 'size');
     }
 
     public function hrContactPermanent()
@@ -597,9 +626,7 @@ class HrEmployee extends Model implements Auditable
         );
     }
 
-    public function subs($employeeId)
-    {
-    }
+    public function subs($employeeId) {}
 
 
 
@@ -607,6 +634,8 @@ class HrEmployee extends Model implements Auditable
     {
         return $this->hasOne('App\Models\Hr\HrDocumentation')->where('description', '=', 'Picture');
     }
+
+
 
     public function employeePicture()
     {
@@ -634,5 +663,11 @@ class HrEmployee extends Model implements Auditable
             'id',
             'hr_salary_id'                             //Forein Key in Immediate Model of Final Model
         )->orderBy('employee_salaries.effective_date', 'desc');
+    }
+
+
+    public function salayEffectiveDate()
+    {
+        return $this->hasOne('App\Models\Hr\EmployeeSalary')->orderBy('effective_date', 'desc');
     }
 }

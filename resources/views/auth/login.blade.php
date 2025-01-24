@@ -8,8 +8,8 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
-                     @include('layouts.auth.message')
-                
+                    @include('layouts.auth.message')
+
                     <form method="POST" action="{{ route('login') }}" class="form-prevent-multiple-submits">
                         @csrf
 
@@ -20,9 +20,9 @@
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                                 @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -35,9 +35,9 @@
                                 <p id="text" style="display:none;color:red">Caps lock is ON.</p>
 
                                 @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -61,9 +61,9 @@
                                 </button>
 
                                 @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
+                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    {{ __('Forgot Your Password?') }}
+                                </a>
                                 @endif
                             </div>
                         </div>
@@ -75,4 +75,3 @@
 </div>
 
 @endsection
-

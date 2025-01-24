@@ -6,11 +6,62 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDocumentation;
+use Illuminate\Support\Facades\Cache;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function employee($id)
     {
+
+        $data =  HrEmployee::with('hrContactMobile', 'hrBloodGroup', 'hrDocumentations', 'hrEducation', 'hrEmergency', 'hrExperiences', 'hrContactEmail', 'hrContactPermanent')->find($id);
+
+
+        foreach ($data->hrEducation as $education) {
+            $educations[] = array(
+                'institute' => $education->institute,
+                'degree' => $education->education->degree_name ?? '',
+                'from' => $education->from ?? '',
+                'to' => $education->to ?? ''
+            );
+        }
+
+        $employee = [
+            'full_name' => $data->full_name ?? '',
+            'father_name' => $data->father_name ?? '',
+            'designation' => $data->designation ?? '',
+            'picture' => $data->picture ?? '',
+            'cnic' => $data->cnic ?? '',
+            'joining_date' => $data->joining_date ? \Carbon\Carbon::parse($data->joining_date)->format('M d, Y') : '',
+            'date_of_birth' => $data->date_of_birth ? \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y') : '',
+            'project' => $data->project ?? '',
+            'hr_status_id' => $data->hr_status_id ?? '',
+            'current_salary' => $data->current_salary['salary'] ? $data->current_salary['salary'] : '',
+            'salary_effective_date' => $data->current_salary['effective_date'] ? $data->current_salary['effective_date'] : '',
+            'hr_blood_group' => $data->hrBloodGroup->name ?? '',
+            'mobile' => $data->hrContactMobile->mobile ?? '',
+            'emgergencyContactName' => $data->hrEmergency?->name ?? '',
+            'emgergencyContactRelaction' => $data->hrEmergency?->relation ?? '',
+            'emgergencyContact' => $data->hrEmergency?->mobile ?? '',
+            'email' => $data->hrContactEmail->email ?? '',
+            'address' => $data->hrContactPermanent->complete_address ?? '',
+            'experiences' => $data->hrExperiences ?? '',
+            'educations' =>  $educations ?? '',
+            'documents' => $data->hrDocumentations ?? '',
+
+
+
+        ];
+
+        return response()->json($employee);
+    }
+    public function index(bool $cacheStatus = true)
+    {
+
+        if (Cache::has('employeeList') && $cacheStatus) {
+            $data = Cache::get('employeeList');
+            return response()->json($data);
+        }
+
 
         $data = HrEmployee::with('employeeDesignation', 'picture', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
         //first sort with respect to Designation
@@ -38,14 +89,14 @@ class EmployeeController extends Controller
             return $pos_a - $pos_b;
         });
 
-        $defaultPicture = asset('Massets/images/default.png');
+        //$defaultPicture = asset('Massets/images/default.png');
         foreach ($data as $employee) {
             // $picture = HrDocumentation::where('hr_employee_id', $employee->id)->where('description', 'Picture')->first();
-            if ($employee->picture) {
-                $picture = asset('storage/' . $employee->picture->path . $employee->picture->file_name);
-            } else {
-                $picture = $defaultPicture;
-            }
+            // if ($employee->picture) {
+            //     $picture = asset('storage/' . $employee->picture->path . $employee->picture->file_name);
+            // } else {
+            //     $picture = $defaultPicture;
+            // }
 
             $employees[] =  array(
                 "id" => $employee->id ?? '',
@@ -57,12 +108,13 @@ class EmployeeController extends Controller
                 "designation" => $employee->designation ?? '',
                 "blood_group" => $employee->hrBloodGroup->name ?? '',
                 "age" => \Carbon\Carbon::parse($employee->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days'),
-                "picture" => $picture,
+                "picture" => $employee->picture,
                 "mobile" => $employee->hrContactMobile->mobile ?? '',
+                "salary" => $employee->currentSalary ?? '',
                 "status" => $employee->hr_status_id ?? ''
             );
         }
-
+        Cache::put('employeeList', $employees, now()->addHour(2));
         return response()->json($employees);
     }
 }

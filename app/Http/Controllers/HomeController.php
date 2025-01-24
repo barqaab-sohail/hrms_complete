@@ -42,7 +42,7 @@ class HomeController extends Controller
     {
         // $allRoutes = Route::getRoutes();
         // dd($allRoutes);
-
+        $educations =  educationChart();
         $countBelowForty = ageChart()['countBelowForty'];
         $countBelowFifty = ageChart()['countBelowFifty'];
         $countBelowSixty = ageChart()['countBelowSixty'];
@@ -70,7 +70,7 @@ class HomeController extends Controller
         // // // }
         // dd ($results);
 
-        return view('dashboard.dashboard', compact('countBelowForty', 'countBelowFifty', 'countBelowSixty', 'countBelowSeventy', 'countAboveSeventy', 'categoryA', 'categoryB', 'categoryC', 'allEmployees', 'pecRegisteredEngineers', 'associatedEngineers', 'finance', 'power', 'water'));
+        return view('dashboard.dashboard', compact('countBelowForty', 'countBelowFifty', 'countBelowSixty', 'countBelowSeventy', 'countAboveSeventy', 'categoryA', 'categoryB', 'categoryC', 'allEmployees', 'pecRegisteredEngineers', 'associatedEngineers', 'finance', 'power', 'water', 'educations'));
     }
 
 
@@ -118,7 +118,7 @@ class HomeController extends Controller
         // Following function restrict maximum 5 request in 1 minute
         $executed = RateLimiter::attempt(
             'send-message:',
-            $perMinute = 5,
+            $perMinute = 10,
             function () {
                 // Send message...
             }

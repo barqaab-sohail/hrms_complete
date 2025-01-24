@@ -56,13 +56,13 @@ class BankController extends Controller
         return view('common.bank.list', compact('employeeBanks', 'banks', 'employees'));
     }
 
-    public function index()
+    public function show($id)
     {
 
-        $employeeBanks = EmployeeBank::where('hr_employee_id', session('hr_employee_id'))->get();
+        $employeeBanks = EmployeeBank::where('hr_employee_id', $id)->get();
         $banks = Bank::all();
 
-        $view =  view('hr.bank.create', compact('employeeBanks', 'banks'))->render();
+        $view =  view('hr.bank.create', compact('employeeBanks', 'banks','id'))->render();
         return response()->json($view);
     }
 
@@ -70,7 +70,7 @@ class BankController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = EmployeeBank::where('hr_employee_id', session('hr_employee_id'))->latest()->get();
+            $data = EmployeeBank::where('hr_employee_id', $request->hrEmployeeId)->latest()->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -95,7 +95,7 @@ class BankController extends Controller
                 ->make(true);
         }
 
-        $employeeBanks = EmployeeBank::where('hr_employee_id', session('hr_employee_id'))->get();
+        $employeeBanks = EmployeeBank::where('hr_employee_id', $request->hrEmployeeId)->get();
         $banks = Bank::all();
 
         $view =  view('hr.bank.create', compact('employeeBanks', 'banks'))->render();

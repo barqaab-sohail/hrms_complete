@@ -45,6 +45,8 @@
                     <tr>
                         <th>Project No</th>
                         <th>Project Name</th>
+                        <th>Cost</th>
+                        <th>Division</th>
                         <th>Client Name</th>
                         <th>Commencement Date</th>
                         <th>Completion Date</th>
@@ -74,6 +76,12 @@
                     <tr>
                         <td>{{$project->project_no}}</td>
                         <td><a href="{{route('project.edit',$project->id)}}" style="color:grey">{{$project->name}}</a></td>
+                        <td>
+                            @if($project->prCost?->total_cost)
+                            {{number_format($project->prCost?->total_cost??'',0)}}
+                            @endif
+                        </td>
+                        <td>{{$project->prDivision->name??''}}</td>
                         <td>{{$project->client->name??''}}</td>
                         <td>{{$project->formatted_commencement_date}}</td>
                         <td>{{$project->formatted_contractual_completion_date}}</td>
@@ -120,24 +128,24 @@
             buttons: [{
                     extend: 'copyHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4]
+                        columns: [0, 1, 2, 3, 4,5,6,7,8]
                     }
                 },
                 {
                     extend: 'excelHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4]
+                        columns: [0, 1, 2, 3, 4,5,6,7,8]
                     }
                 },
                 {
                     extend: 'pdfHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4]
+                        columns: [0, 1, 2, 3, 4,5,6,7,8]
                     }
                 }, {
                     extend: 'csvHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4]
+                        columns: [0, 1, 2, 3, 4,5,6,7,8]
                     }
                 },
             ],

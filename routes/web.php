@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
+use App\Models\Hr\HrExperience;
+use App\Models\Hr\HrEmployee;
+use App\User;
+
 
 
 /*
@@ -16,17 +20,31 @@ use App\Http\Controllers\Project\ProjectLedgerActivityController;
 */
 
 // Route::get('/newDesign', function () {
-//     return statusLeaveEmployee()->count();
-// });
-Route::get('/verifyCard', 'HomeController@employee');
 
+//     $hrEmployee = HrEmployee::find(20);
+//     $user = User::where('id', $hrEmployee->user_id)->first();
+//     $data = $user->getAllPermissions();
+//     return  $data;
+// });
+
+
+
+
+
+
+
+
+
+
+Route::get('/employeeAllowances/{id}', 'Hr\EmployeeSalaryController@getEmployeeAllowanceName');
+Route::get('/verifyCard', 'HomeController@employee');
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');
 Route::get('/cardVerificationResult/{employeeId?}', 'HomeController@employeeId')->middleware('XssSanitizer')->name('employee.verification');
 Route::get('/assestVerificationResult/{assetCode}', 'Asset\AssetController@verification')->middleware('XssSanitizer')->name('asset.verification');
 
 Route::get('/dashboard', 'HomeController@index')->middleware('auth')->name('dashboard');
 //Route::get ('insert','Hr\EmployeeController@insert');
-Route::get('/test', 'TestController@test');
+Route::get('/test', 'Hr\EmployeeController@getEmployees');
 Auth::routes();
 
 // Route::group(['prefix' => 'code', 'middleware' => ['auth','XssSanitizer'], 'namespace'=>'Auth','name' =>'opt.'], function(){
@@ -73,6 +91,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
 
     Route::get('/employee/user/data/{id}', 'EmployeeController@userData')->name('user.data');
     Route::resource('/employee', 'EmployeeController');
+    Route::get('/employees/refresh', 'EmployeeController@refresh')->name('employees.refresh');
 
 
     //all Employee list including terminated/resigned/retired
@@ -84,7 +103,8 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/experience', 'ExperienceController');
     Route::resource('/salary', 'SalaryController', ['only' => ['store']]);
     Route::resource('/appointment', 'AppointmentController', ['only' => ['edit', 'update']]);
-    Route::get('/contact/refreshTable', 'ContactController@refreshTable')->name('contact.table');
+    Route::get('/getAppointmentData', 'AppointmentController@getData');
+    Route::get('/contact/refreshTable/{id?}', 'ContactController@refreshTable')->name('contact.table');
     Route::resource('/contact', 'ContactController');
     Route::resource('/emergency', 'EmergencyController');
     Route::resource('/nextToKin', 'NextToKinController');
@@ -95,6 +115,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::post('/employeeSalaryImport', 'EmployeeSalaryController@import')->name('employeeSalaryImport');
     Route::resource('/employeeSalary', 'EmployeeSalaryController');
     Route::resource('/employeeContract', 'EmployeeContractController');
+    Route::resource('/employeeCompany', 'EmployeeCompanyController');
 
     Route::get('/promotion/refreshTable', 'PromotionController@refreshTable')->name('promotion.table');
     Route::resource('/promotion', 'PromotionController');
@@ -103,7 +124,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/documentation/refreshTable', 'DocumentationController@refreshTable')->name('documentation.table');
     Route::resource('/documentation', 'DocumentationController');
     Route::get('/userLogin/refreshTable', 'UserLoginController@refreshTable')->name('userLogin.table');
-    Route::resource('/userLogin', 'UserLoginController', ['only' => ['edit', 'store', 'destroy']]);
+    Route::resource('/userLogin', 'UserLoginController', ['only' => ['show', 'store', 'destroy', 'create']]);
     Route::resource('/picture', 'PictureController', ['only' => ['edit', 'store']]);
     Route::resource('/additionalInformation', 'AdditionalInformationController', ['only' => ['edit', 'update']]);
     Route::resource('/designation', 'DesignationController', ['only' => ['store']]);
@@ -117,6 +138,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/hrReports/pictureList', 'HrReportsController@pictureList')->name('hrReports.pictureList');
     Route::get('/hrReports/cnicExpiryList', 'HrReportsController@cnicExpiryList')->name('hrReports.cnicExpiryList');
     Route::get('/hrReports/missingDocumentList', 'HrReportsController@missingDocumentList')->name('hrReports.missingDocumentList');
+    Route::get('/hrReports/missingDocuments', 'HrReportsController@mmissingDocuments')->name('missingDocuments.list');
     Route::get('/hrReports/searchEmployee', 'HrReportsController@searchEmployee')->name('hrReports.searchEmployee');
     Route::get('/hrReports/report_1', 'HrReportsController@report_1')->name('hrReports.report_1');
     Route::post('/hrReports/searchEmployeeResult', 'HrReportsController@searchEmployeeResult')->name('hrReports.searchEmployeeResult');
@@ -189,6 +211,7 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
     Route::resource('/projectPartner', 'ProjectPartnerController');
 
     Route::get('/projectDocument/refreshTable', 'ProjectDocumentController@refreshTable')->name('projectDocument.table');
+    Route::get('/projectDocument/projectFolder/{folderId}/{prDetailId}', 'ProjectDocumentController@showFolder')->name('projectDocument.showFolder');
     Route::get('/projectDocument/reference', 'ProjectDocumentController@reference')->name('projectDocument.reference');
 
     Route::resource('/projectDocument', 'ProjectDocumentController');
@@ -255,6 +278,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/asLocation', 'AsLocationController');
     Route::resource('/asOwnership', 'AsOwnershipController');
     Route::resource('/asMaintenance', 'AsMaintenanceController');
+    Route::resource('/asConsumable', 'AsConsumableController');
     Route::resource('/asCondition', 'AsConditionController');
     Route::get('/asset/sub_classes/{id?}', 'AssetController@getSubClasses');
     Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
@@ -264,7 +288,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
 //Leave Routes
 Route::get('/onlineLeave', 'Leave\LeaveController@onlineLeave');
 Route::post('/leaveEmployeeData', 'Leave\LeaveController@employeeData')->name('leave.employeeData');
-Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Leave'], function () {
+Route::group(['prefix' => 'hrms', 'middleware' => ['XssSanitizer'], 'namespace' => 'Leave'], function () {
     Route::resource('/leave', 'LeaveController', ['except' => ['show']]);
     Route::get('/leaveType/{id?}', 'LeaveController@leaveType')->name('leaveType');
     Route::resource('leaveStatus', 'LeaveStatusController');
@@ -307,7 +331,9 @@ Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth', 'XssSanitizer'],
     Route::resource('/hrDesignation', 'DesignationController');
     Route::resource('/client', 'ClientController');
     Route::resource('/partner', 'PartnerController');
+    Route::resource('/allowanceName', 'AllowanceNameController');
     Route::resource('/directCostDescription', 'DirectCostDescriptionController');
+    
 });
 
 
@@ -322,11 +348,16 @@ Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth', 'XssSanitizer']
     Route::get('/permission/employeePermission/result', 'PermissionController@result')->name('permission.result');
     Route::delete('/permission/employeePermission/{id}/{userId}', 'PermissionController@employeePermissionDestroy')->name('employeePermission.destroy');
     Route::resource('/misUser', 'MisUserController');
+    Route::get('/permission/userList', 'PermissionController@userList')->name('permission.userList');
+    Route::post('/permission/addPermission', 'PermissionController@addPermission')->name('permission.add');
+    Route::delete('/permission/userAllPermissionDelete', 'PermissionController@userAllPermissionDelete')->name('permission.userAllPermissionDelete');
+    Route::delete('/permission/userPermissionDestroy/{permissionName}/{userId}', 'PermissionController@userPermissionDestroy')->name('userPermission.destroy');
     Route::resource('/permission', 'PermissionController');
 
     Route::get('/audit/search', 'AuditController@search')->name('audit.search');
     Route::get('/result', 'AuditController@result')->name('audit.result');
     Route::resource('/addUser', 'UserController');
+    Route::resource('/tempfileupload', 'TempFileUploadController');
 });
 
 //Invoice Routes

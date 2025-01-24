@@ -20,14 +20,12 @@
                         <th>Last W/D</th>
                         <th>CNIC</th>
                         <th>Date of Joining</th>
-                        <th>Mobile</th>
-
-                        @can('hr view record')
-                        <th class="text-center" style="width:5%">Edit</th>
-                        @endcan
-
-                        @role('Super Admin')
+                        <th>Age</th>
+                        <th>Salary</th>
+                        <th>Effective Salary</th>
                         <th class="text-center" style="width:5%">Expiry</th>
+                        <th>Mobile</th>
+                        @role('Super Admin')
                         <th class="text-center" style="width:5%">Delete</th>
                         @endrole
                     </tr>
@@ -42,15 +40,27 @@
 
 <script>
     $(document).ready(function() {
-        $('#myTable').DataTable({
+        // $('#myTable').DataTable().ajax.reload();
+      
+    $('#myTable').DataTable({
             processing: true,
-            serverSide: false,
+            serverSide: true,
             dom: 'Blfrtip',
+            lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
+                ],
             buttons: [
-                'copy', 'excel', 'pdf'
+                'copy', 'excel', 'pdf',{
+                text: 'Refresh',
+                    action: function ( e, dt, node, config ) {
+                        //dt.ajax.reload();
+                    dt.ajax.url("{{ route('employees.refresh') }}").load();
+                    }
+                }
             ],
             "aaSorting": [],
-
+         
             ajax: {
                 url: "{{ route('employee.index') }}",
             },
@@ -93,20 +103,26 @@
                     name: 'joining_date'
                 },
                 {
-                    data: 'mobile',
-                    name: 'mobile'
+                    data: 'age',
+                    name: 'age'
                 },
-                @can('hr edit documentation') {
-                    data: 'edit',
-                    name: 'edit',
-                    orderable: false,
-                    searchable: false
+                {
+                    data: 'salary',
+                    name: 'salary'
                 },
-                @endcan
-                @role('Super Admin') {
+                {
+                    data: 'effective_date',
+                    name: 'effective_date'
+                },
+                {
                     data: 'expiry_date',
                     name: 'expiry_date'
                 },
+                {
+                    data: 'mobile',
+                    name: 'mobile'
+                },
+                @role('Super Admin') 
                 {
                     data: 'delete',
                     name: 'delete',
@@ -116,8 +132,6 @@
                 @endrole
             ]
         });
-
-
 
 
 

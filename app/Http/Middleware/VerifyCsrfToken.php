@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        'http://localhost/hrms/api/mis/login',
+        'http://localhost/hrms/api/employees'
     ];
 }

@@ -12,13 +12,10 @@ use DataTables;
 
 class EmployeeContractController extends Controller
 {
-    public function index()
+    public function show($id)
     {
-
-
-        $employeeContracts = EmployeeContract::where('hr_employee_id', session('hr_employee_id'))->get();
-
-        $view =  view('hr.contract.create', compact('employeeContracts'))->render();
+        $employeeContracts = EmployeeContract::where('hr_employee_id', $id)->get();
+        $view =  view('hr.contract.create', compact('employeeContracts','id'))->render();
         return response()->json($view);
     }
 
@@ -26,7 +23,7 @@ class EmployeeContractController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = EmployeeContract::where('hr_employee_id', session('hr_employee_id'))->latest()->get();
+            $data = EmployeeContract::where('hr_employee_id', $request->hrEmployeeId)->latest()->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -59,7 +56,7 @@ class EmployeeContractController extends Controller
                 ->make(true);
         }
 
-        $employeeContracts = EmployeeContract::where('hr_employee_id', session('hr_employee_id'))->get();
+        $employeeContracts = EmployeeContract::where('hr_employee_id',  $request->hrEmployeeId)->get();
 
         $view =  view('hr.contract.create', compact('employeeContracts'))->render();
         return response()->json($view);
@@ -81,12 +78,12 @@ class EmployeeContractController extends Controller
                 ]
             );
 
-            $employee = HrEmployee::find(session('hr_employee_id'));
+            $employee = HrEmployee::find($input['hr_employee_id']);
             $currentExpireDate = $employee->employeeAppointment->expiry_date ?? '';
             if (empty($currentExpireDate) || $input['to'] > $currentExpireDate) {
 
                 DB::table('employee_appointments')
-                    ->where('hr_employee_id', session('hr_employee_id'))
+                    ->where('hr_employee_id', $input['hr_employee_id'])
                     ->update(['expiry_date' => $input['to']]);
             }
         }); // end transcation      
@@ -101,7 +98,7 @@ class EmployeeContractController extends Controller
         return response()->json($data);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $employeeContract = EmployeeContract::find($id);
 
@@ -110,17 +107,17 @@ class EmployeeContractController extends Controller
         }); // end transcation 
 
         //after delete update Employee Appointment Expiry Date
-        $data = EmployeeContract::where('hr_employee_id', session('hr_employee_id'))->orderBy('to', 'desc')->first();
+        $data = EmployeeContract::where('hr_employee_id', $request->hrEmployeeId)->orderBy('to', 'desc')->first();
         if ($data && $data->to <= $employeeContract->to) {
             DB::table('employee_appointments')
-                ->where('hr_employee_id', session('hr_employee_id'))
+                ->where('hr_employee_id', $request->hrEmployeeId)
                 ->update(['expiry_date' => $data->to]);
         } else if (empty($data)) {
             DB::table('employee_appointments')
-                ->where('hr_employee_id', session('hr_employee_id'))
+                ->where('hr_employee_id', $request->hrEmployeeId)
                 ->update(['expiry_date' => null]);
         }
 
-        return response()->json(['success' => 'data  delete successfully.']);
+        return response()->json(['success' => 'Contract  delete successfully.']);
     }
 }

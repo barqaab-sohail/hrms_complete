@@ -96,7 +96,9 @@ $(function () {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('asCondition.create') }}",
+        ajax:{url:"{{ route('asCondition.create') }}", data: {
+            assetId: $("#id").val()
+        }},
         columns: [
             
             {data: "as_condition_type_id", name: 'as_condition_type_id'},
@@ -139,7 +141,7 @@ $(function () {
         }, 3000);
         e.preventDefault();
         var formData = new FormData(this);
-
+        formData.append("asset_id", $("#id").val());
         $.ajax({
           data: formData,
           url: "{{ route('asCondition.store') }}",

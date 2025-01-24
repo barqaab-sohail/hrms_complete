@@ -10,32 +10,75 @@ use App\Models\Hr\HrEmployee;
 use App\Models\Hr\HrDocumentation;
 use App\User;
 use App\Permission;
+use DataTables;
 use DB;
 
 class UserLoginController extends Controller
 {
-	public function edit(Request $request, $id)
-	{
 
-		$data = HrEmployee::find($id);
+	public function show(Request $request, $id){
+
+    	$data = HrEmployee::find($id);
 		$user = User::where('id', $data->user_id)->first();
 		$permissions = Permission::all();
-		$picture = HrDocumentation::where([['hr_employee_id', '=', session('hr_employee_id')], ['description', '=', 'picture']])->first();
+		$picture = HrDocumentation::where([['hr_employee_id', '=', $id], ['description', '=', 'picture']])->first();
+        if($request->ajax()){
+            return view('hr.login.create', compact('data', 'permissions', 'picture'));
+        }else{
+            return back()->withError('Please contact to administrator, SSE_JS');
+        }
+    }
 
-		if ($request->ajax()) {
-			$view = view('hr.login.create', compact('data', 'permissions', 'picture'))->render();
-			return response()->json($view);
-		} else {
-			return back()->withError('Please contact to administrator, SSE_JS');
+	public function create(Request $request){
+
+        if ($request->ajax()) {
+
+			$hrEmployee = HrEmployee::find($request->hrEmployeeId);
+			$user = User::where('id', $hrEmployee->user_id)->first();
+			if($user){
+			$data = $user->getAllPermissions();
+			return  DataTables::of($data)
+					->addIndexColumn()  
+					->addColumn('Delete', function($row){                
+						
+							$btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->name.'" data-original-title="Delete" class="btn btn-danger btn-sm deletePermission">Delete</a>';
+									
+							return $btn;
+					})
+				
+					->rawColumns(['Delete'])
+					->make(true);
+			
+			}else{
+				return [];
+			}
 		}
-	}
+ 
+  	}
+
+
+	// public function edit(Request $request, $id)
+	// {
+
+	// 	$data = HrEmployee::find($id);
+	// 	$user = User::where('id', $data->user_id)->first();
+	// 	$permissions = Permission::all();
+	// 	$picture = HrDocumentation::where([['hr_employee_id', '=', $id], ['description', '=', 'picture']])->first();
+
+	// 	if ($request->ajax()) {
+	// 		$view = view('hr.login.create', compact('data', 'permissions', 'picture'))->render();
+	// 		return response()->json($view);
+	// 	} else {
+	// 		return back()->withError('Please contact to administrator, SSE_JS');
+	// 	}
+	// }
 
 	public function store(Request $request)
 	{
 
 		DB::transaction(function () use ($request) {
 
-			$employee = HrEmployee::find(session('hr_employee_id'));
+			$employee = HrEmployee::find($request->hr_employee_id);
 			//Firs check Employee have user_id if yes than get user and give premission 
 			//Else create User detail and updated user_id in Employee Table then give permission 
 			if ($employee->user_id) {
@@ -44,7 +87,6 @@ class UserLoginController extends Controller
 					$user->update(['email' => $request->email]);
 				}
 			} else {
-
 				$user = User::create(['email' => $request->email, 'password' => Hash::make(Str::random(8))]);
 				$employee->update(['user_id' => $user->id]);
 			}
@@ -58,11 +100,11 @@ class UserLoginController extends Controller
 		return response()->json(['status' => 'OK', 'message' => "Permission Successfully Saved"]);
 	}
 
-	public function destroy($id)
+	public function destroy(Request $request, $perminationName)
 	{
-		$data = HrEmployee::find(session('hr_employee_id'));
+		$data = HrEmployee::find($request->hrEmployeeId);
 		$user = User::where('id', $data->user_id)->first();
-		$user->revokePermissionTo($id);
+		$user->revokePermissionTo($perminationName);
 		return response()->json(['status' => 'OK', 'message' => "Permission Successfully Deleted"]);
 	}
 

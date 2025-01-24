@@ -30,7 +30,7 @@ class ExperienceStore extends FormRequest
         'organization'=> 'required|max:90',
         'job_title'=> 'required|max:70',
         'from'=> 'required|max:4',
-        'to'=> 'required|max:4',
+        'to'=> 'required|max:7',
         'country_id'=> 'nullable|max:4',
         'activities'=> 'nullable|max:65535',
         

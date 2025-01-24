@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('as_consumables', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->id();
+            $table->bigInteger('asset_id')->unsigned();
+            $table->bigInteger('consumable_id')->unsigned();
+            $table->bigInteger('unit_id')->unsigned()->nullable();
+            $table->integer('consumable_cost');
+            $table->decimal('consumable_qty',5,2)->nullable();
+            $table->date('consumable_date');
+            $table->timestamps();
+            $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
+            $table->foreign('consumable_id')->references('id')->on('consumables');
+            $table->foreign('unit_id')->references('id')->on('units');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('as_consumables');
+    }
+};

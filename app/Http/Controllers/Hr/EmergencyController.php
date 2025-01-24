@@ -14,24 +14,20 @@ class EmergencyController extends Controller
 
     	$data = HrEmergency::where('hr_employee_id',$id)->first();
 
-
-    	return view ('hr.emergency.edit',compact('data'));
+    	return view ('hr.emergency.edit',compact('data','id'));
 
     }
 
     public function update(EmergencyStore $request, $id){
-        //ensure client end id is not changed
-        if($id != session('hr_employee_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
+       
         
     	$input = $request->all();
-        $input['hr_employee_id']=session('hr_employee_id');
+        $input['hr_employee_id']=$id;
 
         DB::transaction(function () use ($input) {  
             
         	HrEmergency::updateOrCreate(
-			         	['hr_employee_id' => session('hr_employee_id')],
+			         	['hr_employee_id' => $input['hr_employee_id']],
 			         	$input);
             
     	}); // end transcation

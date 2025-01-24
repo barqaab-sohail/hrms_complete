@@ -1,16 +1,17 @@
 <div style="margin-top:10px; margin-right: 10px;">
-    <button type="button" id="hideButton" class="btn btn-success float-right">Add Trasnfer/Posting</button>
+    <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Transfer/Posting</button>
 </div>
 
+
 <div class="card-body">
-    <form id="formPosting" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('posting.store')}}" enctype="multipart/form-data">
-        @csrf
-        <div class="form-body">
 
-            <h3 class="box-title">Add Trasnfer/Posting</h3>
-
+    <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formPosting" enctype="multipart/form-data">
+        {{csrf_field()}}
+          <div class="form-body">
+            
+            <h3 class="box-title" id="formHeading">Employee Transfer/Posting</h3>
             <hr class="m-t-0 m-b-40">
-
+            <input type="hidden" name="posting_id" id="posting_id"/>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group row">
@@ -49,7 +50,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Effective Date<span class="text_requried">*</span></label>
 
-                            <input type="text" name="effective_date" value="{{ old('effective_date') }}" class="form-control date_input" data-validation="required" readonly>
+                            <input type="text" name="effective_date" id="effective_date" value="{{ old('effective_date') }}" class="form-control date_input" data-validation="required" readonly>
 
                             <br>
                             @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan
@@ -173,57 +174,52 @@
                     <iframe id="pdf" src="" type="application/pdf" height="200" width="100%" />
                 </div>
             </div>
+              
+               
+            </div> <!--/End Form Boday-->
 
-
-        </div> <!--/End Form Boday-->
-
-        <hr>
-        @can('hr edit posting')
-        <div class="form-actions">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-offset-3 col-md-9">
-                            <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save Promotion</button>
+            <hr>
+            @can('hr edit posting')
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save Posting</button>        
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        @endcan
+            @endcan
     </form>
     @include('hr.appointment.salModal')
-</div> <!-- end card body -->
-<div class="row">
-    <div class="col-md-12 table-container">
-
+    <br>
+        <table class="table table-bordered data-table" width=100%>
+            <thead>
+            <tr>
+                <th>Description / Remarks</th>
+				<th>Effective Date</th>
+                <th>Trasnfer Order</th>
+                <th>Edit</th>
+                <th>Delete</th> 
+                <!-- <th colspan="2" class="text-center"style="width:10%"> Actions </th>  -->
+            </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
     </div>
-</div>
 
 
-<script>
-    $(document).ready(function() {
-        isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
+   
 
-        refreshTable("{{route('posting.table')}}");
-
-        $('#formPosting').hide();
-        $('#hideButton').click(function() {
-            $('#formPosting').toggle();
-            resetForm();
-        });
-        //submit function
-        $("#formPosting").submit(function(e) {
-            e.preventDefault();
-            var url = $(this).attr('action');
-
-            $('.fa-spinner').show();
-            submitForm(this, url, 1);
-            //refreshTable("{{route('posting.table')}}",1000);
-        });
-
-
-        $("#pdf").hide();
+        
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#formPosting').hide();   
+    $("#pdf").hide();
 
         $("#view").change(function() {
             var fileName = this.files[0].name;
@@ -286,6 +282,149 @@
             $("input[id='view']").click();
         });
 
-
+}); 
+      //start function
+$(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
     });
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax:{url:"{{ route('posting.create') }}", data: {
+            hrEmployeeId: $("#hr_employee_id").val()
+        }},
+        columns: [
+            {data: "remarks", name: 'remarks'},
+            {data: "effective_date", name: 'effective_date'},
+            {data: "document", name: 'document'},
+            {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
+            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
+
+        ],
+        "drawCallback": function(settings) {
+            if(this.api().rows().data().length>0){
+					$("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
+            }
+
+        },
+        order: [[ 1, "desc" ]]
+    });
+
+    $('#hideButton').click(function(){
+            $('#pdf').attr('src','').hide();
+            $('#h6').html("Click On Image to Add Pdf Document<span class='text_requried'>*</span>");
+            $('#formPosting').toggle();
+            $('#formPosting').trigger("reset");
+            $('#posting_id').val('');
+            $('#view').attr('data-validation','required');
+            $('#hr_designation_id').trigger('change');
+            $('#pr_detail_id').trigger('change');
+            $('#hr_salary_id').trigger('change');
+            $('#hr_manager_id').trigger('change');
+            $('#hr_department_id').trigger('change');
+            $('#office_id').trigger('change');
+        
+    });
+
+    $('body').unbind().on('click', '.editPosting', function () {
+      var posting_id = $(this).data('id');
+        
+      $.get("{{ url('hrms/posting') }}" +'/' + posting_id +'/edit', function (data) {
+          $('#formPosting').show(); 
+          $('#formHeading').html("Edit Posting");
+          $('#posting_id').val(data.id);
+          $('#hr_designation_id').val(data.hr_designation?.hr_designation_id).trigger('change');
+          $('#effective_date').val(data.effective_date);
+          $('#pr_detail_id').val(data.project?.pr_detail_id).trigger('change');
+          $('#hr_salary_id').val(data.hr_salary?.hr_salary_id).trigger('change');
+          $('#hr_manager_id').val(data.hr_manager?.hr_manager_id).trigger('change');
+          $('#office_id').val(data.office?.office_id).trigger('change');
+          $('#hr_department_id').val(data.hr_department?.hr_department_id).trigger('change');
+          $('#forward_slash').val(data.remarks);
+          if(data.hr_documentation.extension =='pdf'){
+            $("#pdf").show();
+            $('#pdf').attr('src',data.full_path);
+          }else{
+            $("#pdf").hide();
+            $('#pdf').attr('src','');
+          }
+          $('#view').removeAttr('data-validation');
+      })
+   });
+    
+      $("#formPosting").submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("hr_employee_id", $("#hr_employee_id").val());
+        $.ajax({
+          data: formData,
+          url: "{{ route('posting.store') }}",
+          type: "POST",
+          //dataType: 'json',
+           contentType: false,
+           cache: false,
+           processData: false,
+          success: function (data) {
+              if(data.error){
+                $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');
+              }else{
+              
+                $('#formPosting').trigger("reset");
+                $('#formPosting').toggle();
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');  
+
+                table.draw();
+                clearMessage();
+              }
+        
+          },
+          error: function (data) {
+              
+              var errorMassage = '';
+              $.each(data.responseJSON.errors, function (key, value){
+                errorMassage += value + '<br>';  
+                });
+                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
+    
+    $('body').on('click', '.deletePosting', function () {
+     
+        var posting_id = $(this).data("id");
+
+        var con = confirm("Are You sure want to delete !");
+        if(con){
+          $.ajax({
+            type: "DELETE",
+            url: "{{ route('posting.store') }}"+'/'+posting_id,
+            success: function (data) {
+                table.draw();
+                clearMessage();
+               
+                if($('#formPosting:visible').length != 0)
+                    {
+                        $('#formPosting').toggle();
+                    }
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
+                if(data.error){
+                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+                }
+  
+            },
+            error: function (data) {
+                
+            }
+          });
+        }
+    });
+  });// end function
+
+      
+            
 </script>

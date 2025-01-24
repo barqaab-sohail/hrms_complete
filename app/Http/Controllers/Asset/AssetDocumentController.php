@@ -27,7 +27,7 @@ class AssetDocumentController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = AsDocumentation::where('asset_id', session('asset_id'))->latest()->get();
+            $data = AsDocumentation::where('asset_id', $request->assetId)->latest()->get();
 
             return  DataTables::of($data)
                 ->addIndexColumn()
@@ -65,7 +65,7 @@ class AssetDocumentController extends Controller
 
     public function store(AsDocumentStore $request)
     {
-        $asset = Asset::where('id', session('asset_id'))->first();
+        $asset = Asset::where('id', $request->asset_id)->first();
 
         $input = $request->all();
 
@@ -85,7 +85,7 @@ class AssetDocumentController extends Controller
                 $attachment['path'] = $folderName;
                 $attachment['extension'] = $extension;
 
-                $attachment['asset_id'] = session('asset_id');
+                $attachment['asset_id'] =  $input['asset_id'];
                 $attachment['description'] = $input['description'];
 
                 $asDocumentation = AsDocumentation::where('id', request()->as_document_id)->first();

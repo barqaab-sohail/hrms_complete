@@ -154,8 +154,24 @@ function totalInvoicesAmount($projectId)
 {
 
     $invoicesId = Invoice::where('pr_detail_id', $projectId)->pluck('id')->toArray();
-    $totalInvoices = InvoiceCost::whereIn('invoice_id', $invoicesId)->sum('amount') + InvoiceCost::whereIn('invoice_id', $invoicesId)->sum('sales_tax');
-    return $totalInvoices;
+    if($invoicesId){
+        $totalInvoices = InvoiceCost::whereIn('invoice_id', $invoicesId)->sum('amount') + InvoiceCost::whereIn('invoice_id', $invoicesId)->sum('sales_tax');
+        return $totalInvoices;
+    }else{
+        return 0;
+    }
+}
+
+function totalInvoicesWithoutSalesTax($projectId)
+{
+
+    $invoicesId = Invoice::where('pr_detail_id', $projectId)->where('invoice_type_id', '!=', 3)->pluck('id')->toArray();
+    if($invoicesId){
+        $totalInvoices = InvoiceCost::whereIn('invoice_id', $invoicesId)->sum('amount');
+        return $totalInvoices;
+    }else{
+        return 0;
+    }
 }
 
 function pendingInvoicesAmount($projectId)

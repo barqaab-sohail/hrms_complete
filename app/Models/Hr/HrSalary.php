@@ -10,4 +10,7 @@ class HrSalary extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     protected $fillable = ['total_salary'];
+    
+
+    
 }

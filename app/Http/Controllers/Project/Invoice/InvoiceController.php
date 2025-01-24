@@ -37,7 +37,7 @@ class InvoiceController extends Controller
     {
         $invoiceTypes = InvoiceType::all();
         $invoiceIds = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', '!=', 3)->pluck('id')->toArray();
-        $totalInvoices = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount') + InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('sales_tax');
+        $totalInvoices = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount');
         $projectCost = PrCost::where('pr_detail_id', session('pr_detail_id'))->first();
         $projectTotalCost = $projectCost->total_cost ?? '0';
         $balanceCost = $projectTotalCost - $totalInvoices;

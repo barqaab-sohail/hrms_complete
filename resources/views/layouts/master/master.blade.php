@@ -43,7 +43,7 @@
     @if(Config::get('app.url')==='http://localhost/hrms/public/')
     <link href="{{asset('Massets/css/colors/megna.css') }}" id="theme" rel="stylesheet">
     @else
-    <link href="{{asset('Massets/css/colors/green.css') }}" id="theme" rel="stylesheet">
+    <link href="{{asset('Massets/css/colors/blue.css') }}" id="theme" rel="stylesheet">
     @endif
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

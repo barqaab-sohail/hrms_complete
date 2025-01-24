@@ -30,7 +30,7 @@ class AsLocationController extends Controller
 
     	if ($request->ajax()) {
 
-            $data= AsLocation::where('asset_id',session('asset_id'))
+            $data= AsLocation::where('asset_id',$request->assetId)
                         ->latest()->get();
            
 
@@ -106,7 +106,7 @@ class AsLocationController extends Controller
                     ['date'=> $input['date'],
                     'office_id'=> $input['office_id'],
                      'hr_employee_id'=> $input['hr_employee_id'],
-                    'asset_id'=> session('asset_id')]); 
+                    'asset_id'=> $input['asset_id']]); 
 
         }); // end transcation      
        return response()->json(['success'=>"Data saved successfully."]);

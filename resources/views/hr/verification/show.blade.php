@@ -27,7 +27,7 @@
         <div class="card mx-auto col-md-12 col-10 mt-5">
             @if($data)
             @if($data->picture)
-            <img class='mx-auto img-thumbnail' src="{{asset('storage/'.$data->picture->path.$data->picture->file_name)}}" width="150" height="auto" />
+            <img class='mx-auto img-thumbnail' src="{{$data->picture}}" width="150" height="auto" />
             @else
             <img class='mx-auto img-thumbnail' src="{{asset('Massets/images/default.png')}}" width="150" height="auto" />
             @endif
@@ -36,9 +36,22 @@
                     <h5 class="card-title font-weight-bold" id="emp_name">Name: {{$data->full_name??''}}</h5>
                     <h5 class="card-title font-weight-bold" id="emp_des">Designation: {{$data->designation??''}}</h5>
                     <h5 class="card-title font-weight-bold" id="emp_des">Employee No: {{$data->employee_no??''}}</h5>
-                    <h5 class="card-title font-weight-bold" id="emp_des">CNIC: {{$data->cnic??''}}</h5>
-                    <h5 class="card-title font-weight-bold" id="emp_des">Emergency No: {{$data->hrEmergency->mobile??''}}</h5>
-                    <h5 class="card-title font-weight-bold" id="emp_status">{{$data->hr_status_id == 'Active'?'Current Status: Working':'Current Status: Not Working'}}</h5>
+                    @php
+                    $identification = '';
+                    if(strlen($data->cnic)>14){
+                    $identification ='CNIC';
+                    }else{
+                    $identification ='Passport';
+                    }
+
+                    @endphp
+                    <h5 class="card-title font-weight-bold" id="emp_des">{{$identification}}: {{$data->cnic??''}}</h5>
+                    <h5 class="card-title font-weight-bold" id="emp_des">Emergency No:
+                        {{$data->hrEmergency->mobile??''}}
+                    </h5>
+                    <h5 class="card-title font-weight-bold" id="emp_status">
+                        {{$data->hr_status_id == 'Active'?'Current Status: Active':'Current Status: Inactive'}}
+                    </h5>
                     <br>
 
 

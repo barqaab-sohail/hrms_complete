@@ -13,6 +13,7 @@ use App\Models\Hr\HrContactMobile;
 use App\Models\Hr\HrContactLandline;
 use App\Models\Hr\HrContactEmail;
 use App\Http\Requests\Hr\ContactStore;
+use DataTables;
 use DB;
 
 class ContactController extends Controller
@@ -23,15 +24,15 @@ class ContactController extends Controller
     }
 
 
-    public function create(Request $request){
+    public function show(Request $request, $id){
 
     	$countries = Country::all();
     	$hrContactTypes = HrContactType::all();
 
-    	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
+    	$hrContacts =  HrContact::where('hr_employee_id', $id)->get();
 
         if($request->ajax()){
-            return view('hr.contact.create', compact('countries','hrContactTypes','hrContacts'));
+            return view('hr.contact.create', compact('countries','hrContactTypes','hrContacts','id'));
         }else{
             return back()->withError('Please contact to administrator, SSE_JS');
         }
@@ -39,86 +40,197 @@ class ContactController extends Controller
 
 
     public function store (ContactStore $request){
-    	$input = $request->all();
-    	$input['hr_employee_id']=session('hr_employee_id');
 
-    	DB::transaction(function () use ($input, $request) {  
-    		$hrContact = HrContact::create($input);
-
-    		$input['hr_contact_id']=$hrContact->id;
-    		HrContactMobile::create($input);
-
-    		if($request->filled('landline')){
-            	HrContactLandline::create($input);
+        $input = $request->all();
+   
+        DB::transaction(function () use ($input) {  
+            
+            $hrContact = HrContact::updateOrCreate(['id' => $input['contact_id']],
+                    
+                    [
+                    'hr_contact_type_id'=> $input['hr_contact_type_id'],
+                    'house'=> $input['house'],
+                    'street'=> $input['street'],
+                    'town'=> $input['town'],
+                    'tehsil'=> $input['tehsil'],
+                    'city_id'=> $input['city_id'],
+                    'state_id'=> $input['state_id'],
+                    'country_id'=> $input['country_id'],
+                    'hr_employee_id'=> $input['hr_employee_id'],
+                   ]); 
+            
+            if ($input['email']) {
+            HrContactEmail::updateOrCreate(['hr_contact_id'=>$hrContact->id],
+                    [
+                        'contact_id'=> $hrContact->id,
+                        'email'=> $input['email'],
+                    ]);
             }
+            
+            if ($input['mobile']) {
+             HrContactMobile::updateOrCreate(['hr_contact_id'=>$hrContact->id],
+                    [   
+                        'contact_id'=> $hrContact->id,
+                        'mobile'=> $input['mobile'],
+                    ]);
+            }
+            
+            if ($input['landline']) {
+            HrContactLandline::updateOrCreate(['hr_contact_id'=>$hrContact->id],
+                    [
+                        'contact_id'=> $hrContact->id,
+                        'landline'=> $input['landline'],
+                    ]);
+            }
+        }); // end transcation      
+       return response()->json(['success'=>"Contact saved successfully."]);
+   
+    }
+
+
+
+
+
+    // public function store (ContactStore $request){
+    // 	$input = $request->all();
+    // 	DB::transaction(function () use ($input, $request) {  
+    // 		$hrContact = HrContact::create($input);
+
+    // 		$input['hr_contact_id']=$hrContact->id;
+    // 		HrContactMobile::create($input);
+
+    // 		if($request->filled('landline')){
+    //         	HrContactLandline::create($input);
+    //         }
     		
-            if($request->filled('email')){
-    			HrContactEmail::create($input);
-    		}
+    //         if($request->filled('email')){
+    // 			HrContactEmail::create($input);
+    // 		}
 
 
-    	}); // end transcation
+    // 	}); // end transcation
 
-    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
+    // 	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Saved"]);
 
+    // }
+
+    public function create(Request $request){
+
+          if ($request->ajax()) {
+            $data= HrContact::where('hr_employee_id', $request->hrEmployeeId)
+            ->latest()->get();
+            return  DataTables::of($data)
+                    ->addIndexColumn()  
+                    ->editColumn('contact_type_id', function($row){                
+                           
+                      return $row->hrContactType->name;
+                          
+                   })
+                   ->addColumn('address', function($row){                
+                           
+                       return $row->complete_address;
+                           
+                    })
+                    ->addColumn('mobile', function($row){                
+                           
+                        return $row->mobile?->mobile;
+                            
+                     })
+                     ->addColumn('email', function($row){                
+                           
+                        return $row->email?->email;
+                            
+                     })
+                    ->addColumn('Edit', function($row){
+                       
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editContact">Edit</a>';
+                                             
+                            return $btn;
+                    })
+                    ->addColumn('Delete', function($row){                
+                        
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteContact">Delete</a>';
+                                  
+                            return $btn;
+                    })
+                
+                    ->rawColumns(['Edit','Delete'])
+                    ->make(true);
+          
+        }
+   
     }
 
+    
 
-    public function edit (Request $request, $id){
-        //For security checking
-        session()->put('contact_edit_id', $id);
-
-    	$data = HrContact::find($id);
-    	$hrContactTypes = HrContactType::all();
-    	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
-    	$countries = country::all();
-		$states = state::where('country_id', $data->country_id)->get();
-		$cities = city::where('state_id', $data->state_id)->get();
-
-        if($request->ajax()){
-            return view('hr.contact.edit', compact('countries','hrContactTypes','hrContacts','data','states','cities'));
-        }else{
-            return back()->withError('Please contact to administrator, SSE_JS');
-        }
-
+    public function edit($id)
+    {
+        $contact = HrContact::with('email','mobile','landline')->find($id);
+        return response()->json($contact);
     }
 
-    public function update (ContactStore $request, $id){
-        //ensure client end id is not changed
-        if($id != session('contact_edit_id')){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
+    // public function edit (Request $request, $id){
+    //     //For security checking
+    //     session()->put('contact_edit_id', $id);
 
-    	$input = $request->all();
-    	DB::transaction(function () use ($input, $request, $id) {  
+    // 	$data = HrContact::find($id);
+    // 	$hrContactTypes = HrContactType::all();
+    // 	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
+    // 	$countries = country::all();
+	// 	$states = state::where('country_id', $data->country_id)->get();
+	// 	$cities = city::where('state_id', $data->state_id)->get();
 
-    		$hrContact = HrContact::findOrFail($id)->update($input);
-    					HrContactMobile::where('hr_contact_id',$id)->first()->update($input);
-    					if($request->filled('landline')){
-    					HrContactLandline::updateOrCreate(['hr_contact_id'=>$id],$input);
-    					}
-    					if($request->filled('email')){
-    					HrContactEmail::updateOrCreate(['hr_contact_id'=>$id],$input);
-    					}
+    //     if($request->ajax()){
+    //         return view('hr.contact.edit', compact('countries','hrContactTypes','hrContacts','data','states','cities'));
+    //     }else{
+    //         return back()->withError('Please contact to administrator, SSE_JS');
+    //     }
 
-    	}); // end transcation
-    	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
-    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated", 'dataTable'=>$hrContacts]);
-    }
+    // }
+
+    // public function update (ContactStore $request, $id){
+    //     //ensure client end id is not changed
+    //     if($id != session('contact_edit_id')){
+    //         return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+    //     }
+
+    // 	$input = $request->all();
+    // 	DB::transaction(function () use ($input, $request, $id) {  
+
+    // 		$hrContact = HrContact::findOrFail($id)->update($input);
+    // 					HrContactMobile::where('hr_contact_id',$id)->first()->update($input);
+    // 					if($request->filled('landline')){
+    // 					HrContactLandline::updateOrCreate(['hr_contact_id'=>$id],$input);
+    // 					}
+    // 					if($request->filled('email')){
+    // 					HrContactEmail::updateOrCreate(['hr_contact_id'=>$id],$input);
+    // 					}
+
+    // 	}); // end transcation
+    // 	$hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
+    // 	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Updated", 'dataTable'=>$hrContacts]);
+    // }
 
 
-    public function destroy(Request $request, $id){
-        if(!in_array($id, session('contact_delete_ids'))){
-            return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
+    // public function destroy(Request $request, $id){
+    //     if(!in_array($id, session('contact_delete_ids'))){
+    //         return response()->json(['status'=> 'Not OK', 'message' => "Security Breach. No Data Change "]);
+    //     }
     	
-    	HrContact::findOrFail($id)->delete(); 
+    // 	HrContact::findOrFail($id)->delete(); 
 
-    	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
+    // 	return response()->json(['status'=> 'OK', 'message' => "Data Successfully Deleted"]);
+    // }
+
+    public function destroy ($id){
+        DB::transaction(function () use ($id) {  
+            HrContact::find($id)->delete(); 
+        }); // end transcation 
+        return response()->json(['success'=>"Contact  delete successfully."]);
     }
 
-    public function refreshTable(){
-        $hrContacts =  HrContact::where('hr_employee_id', session('hr_employee_id'))->get();
+    public function refreshTable($id){
+        $hrContacts =  HrContact::where('hr_employee_id', $id)->get();
         $contactIds = $hrContacts->pluck('id')->toArray();
         //For security checking
         session()->put('contact_delete_ids', $contactIds);

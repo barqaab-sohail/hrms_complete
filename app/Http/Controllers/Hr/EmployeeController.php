@@ -30,52 +30,121 @@ use PDF;
 class EmployeeController extends Controller
 {
 
-    public static function getAllEmployee()
+    public function getEmployees()
     {
 
+        // cache data 
 
-        return $value = Cache::remember('employees', 3, function () {
-
-
-            $data = HrEmployee::select(['id',  'first_name', 'last_name', 'cnic', 'date_of_birth', 'hr_status_id', 'employee_no'])->with([
-                'employeeCurrentDesignation:name', 'employeeCurrentProject:name', 'employeeCurrentOffice:name', 'hrContactMobile:mobile', 'employeeAppointment', 'hrExit'
-            ])->get();
-
-            // //first sort with respect to Designation
-            // $designations = employeeDesignationArray();
-            // $data = $data->sort(function ($a, $b) use ($designations) {
-            //     $pos_a = array_search($a->employeeCurrentDesignation->name ?? '', $designations);
-            //     $pos_b = array_search($b->employeeCurrentDesignation->name ?? '', $designations);
-            //     return  $pos_a !== false ? $pos_a - $pos_b : 999999;
-            // });
-
-            // $data = $data->sort(function ($a, $b) use ($employeeNos) {
-            //     $pos_a = array_search($a->employee_no, $employeeNos);
-            //     $pos_b = array_search($b->employee_no, $employeeNos);
-            //     return  $pos_a !== false || $pos_b !== false ? $pos_a - $pos_b : 999999;
-            // });
-
-            $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
-            $second = range(1000001, 1001999);
-            $employeeNos = array_merge($first,  $second);
-
-            $data =  $data->sortBy(function ($model) use ($employeeNos) {
-                return array_search($model->employee_no, $employeeNos);
-            });
-
-
-            //second sort with respect to Hr Status
-            $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'ManMonth Ended', 'Death');
-
-            $data = $data->sort(function ($a, $b) use ($hrStatuses) {
-                $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
-                $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
-                return $pos_a - $pos_b;
-            });
-
-
+        if (Cache::has('employees')) {
+            $data = Cache::get('employees');
             return $data;
+        }
+
+        $data = HrEmployee::with('employeeCurrentProject','employeeCurrentDesignation', 'employeeCurrentOffice','hrExit', 'employeeAppointment', 'hrContactMobile','hrBloodGroup','employeeCurrentSalary','salayEffectiveDate')->get();
+       
+        $data = $this->employeeSortData($data);
+        
+        foreach ($data as $employee) {
+           
+            $lastWorkingDate='';
+            if ($employee->hr_status_id == "Active") {
+                $lastWorkingDate='';
+            } else {
+                $lastWorkingDate = $employee->last_working_date ?? '';
+            }
+
+            $delete='';
+            if (Auth::user()->hasPermissionTo('hr delete record')||Auth::user()->hasRole('Super Admin')) {
+                 $delete = '<form  id="formDeleteContact' . $employee->id . '"  action="' . route('employee.destroy', $employee->id) . '" method="POST">' . method_field('DELETE') . csrf_field() . '
+                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
+                                 </form>';
+            }
+
+            $project = $employee->employeeCurrentProject->name??'';
+
+            if ( $project == 'overhead') {
+                $project = $employee->employeeCurrentOffice?->name ?? '';
+            }
+
+            $fullName ='';
+            if (Auth::user()->can('hr edit record') || Auth::user()->can('hr view record')) {
+                        $fullName = '<a href="' . route('employee.edit', $employee->id) . '" style="color:grey">' . $employee->full_name . '</a>';
+                    } else {
+                        $fullName = $employee->full_name;
+            }
+
+            $effectiveDate='';
+            $salary='';
+            if($employee->employeeCurrentSalary){
+                $salary=  number_format($employee->employeeCurrentSalary->total_salary);
+                $effectiveDate= \Carbon\Carbon::parse($employee->salayEffectiveDate->effective_date)->format('M d, Y');
+            }
+            
+            $employees[] =  array(
+                "id" => $employee->id ?? '',
+                "employee_no" => $employee->employee_no ?? '',
+                "full_name" =>  $fullName,
+                "date_of_birth" => \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y') ?? '',
+                "joining_date" => \Carbon\Carbon::parse($employee->employeeAppointment->joining_date ?? '')->format('M d, Y') ?? '',
+                "cnic" => $employee->cnic ?? '',
+                "designation" => $employee->designation ?? '',
+                "blood_group" => $employee->hrBloodGroup->name ?? '',
+                "age" => \Carbon\Carbon::parse($employee->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days'),
+                "mobile" => $employee->hrContactMobile->mobile ?? '',
+                "salary" => $salary,
+                'effective_date'=> $effectiveDate,
+                "project" =>  $project,
+                "delete" =>  $delete,
+                "last_working_date" =>  $lastWorkingDate,
+                "expiry_date" =>   $employee->employeeAppointment->expiry_date ?? '',
+                "hr_status_id" => $employee->hr_status_id ?? ''
+            );
+        }
+            Cache::put('employees', $employees, now()->addHour(12));
+        return $employees;
+    }
+
+    public function refresh(){
+        \Artisan::call('cache:clear');
+        $value = $this->getEmployees();
+        $value = collect($value);
+        return DataTables::of($value)->rawColumns(['full_name','project','delete'])->toJson();
+
+    }
+
+    public function index(Request $request)
+    {
+      
+        if ($request->ajax()) {
+
+            $value = $this->getEmployees();
+            $value = collect($value);
+            return DataTables::of($value)->rawColumns(['full_name','delete'])->toJson();             
+        }
+
+        return view('hr.employee.listDataTable');
+    }
+
+    public function employeeSortData($employees){
+        $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
+        $second = range(1000001, 1099999);
+        $employeeNos = array_merge($first,  $second);
+
+        $employees =  $employees->sortBy(function ($model) use ($employeeNos) {
+            return array_search($model->employee_no, $employeeNos);
         });
+
+        //   // second sort with respect to Hr Status
+        $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'ManMonth Ended', 'Death');
+
+        $employees = $employees->sort(function ($a, $b) use ($hrStatuses) {
+            $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
+            $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
+            return $pos_a - $pos_b;
+        });
+
+        return $employees;
+
     }
 
     public function create()
@@ -137,103 +206,11 @@ class EmployeeController extends Controller
         return response()->json(['url' => route("employee.edit", $employee), 'message' => 'Data Successfully Saved']);
     }
 
-    public function index(Request $request)
-    {
-
-        if ($request->ajax()) {
-
-            $value = $this->getAllEmployee();
-            //$value = HrEmployee::with('employeeCurrentDesignation', 'employeeCurrentProject', 'employeeCurrentOffice', 'hrContactMobile:mobile')->get();
-            //$first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
-            //$value = HrEmployee::whereIn('employee_no', $first)->with('employeeCurrentDesignation', 'employeeCurrentProject', 'employeeCurrentOffice', 'hrContactMobile:mobile')->get();
-            //$value = HrEmployee::where('hr_status_id', 2)->with('employeeCurrentDesignation', 'employeeCurrentProject', 'employeeCurrentOffice', 'hrContactMobile:mobile')->get();
-
-            return DataTables::of($value)
-
-                ->addColumn('full_name', function ($data) {
-
-                    if (Auth::user()->can('hr edit record') || Auth::user()->can('hr view record')) {
-                        $fullName = '<a href="' . route('employee.edit', $data->id) . '" style="color:grey">' . $data->full_name . '</a>';
-                        return $fullName;
-                    } else {
-                        return $data->full_name;
-                    }
-                })
-                ->addColumn('designation', function ($data) {
-                    return $data->employeeCurrentDesignation->name ?? '';
-                })
-
-                ->addColumn('project', function ($data) {
-
-                    $project = isset($data->employeeCurrentProject->name) ? $data->employeeCurrentProject->name : '';
-                    if ($project == '') {
-                        return '';
-                    } else if ($project == 'overhead') {
-                        return $data->employeeCurrentOffice->name ?? '';
-                    } else {
-
-                        if (Auth::user()->hasPermissionTo('hr edit documentation')) {
-                            $link = '<a href="' . route('project.edit', $data->employeeCurrentProject->id ?? '') . '" style="color:grey">' . $data->employeeCurrentProject->name ?? '' . '</a>';
-                            return $link;
-                        } else {
-                            return $data->employeeCurrentProject->name ?? '';
-                        }
-                    }
-                })
-                ->addColumn('date_of_birth', function ($data) {
-                    return \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y');
-                })
-                ->addColumn('mobile', function ($data) {
-                    return $data->hrContactMobile->mobile ?? '';
-                })
-                ->addcolumn('last_working_date', function ($data) {
-                    if ($data->hr_status_id == "Active") {
-                        return '';
-                    } else {
-                        return $data->last_working_date ?? '';
-                    }
-                })
-                ->addcolumn('expiry_date', function ($data) {
-
-                    $date = $data->employeeAppointment->expiry_date ?? '';
-                    if ($date) {
-                        $date =  \Carbon\Carbon::parse($date)->format('M d, Y');
-                    }
-                    return $date;
-                })
-                ->addColumn('edit', function ($data) {
-
-                    if (Auth::user()->hasPermissionTo('hr edit documentation')) {
-
-                        $button = '<a class="btn btn-success btn-sm" href="' . route('employee.edit', $data->id) . '"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
-
-                        return $button;
-                    }
-                })
-                ->addColumn('delete', function ($data) {
-                    $button = '<form  id="formDeleteContact' . $data->id . '"  action="' . route('employee.destroy', $data->id) . '" method="POST">' . method_field('DELETE') . csrf_field() . '
-                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
-                                 </form>';
-                    return $button;
-                })
-
-                ->rawColumns(['full_name', 'designation', 'project', 'last_working_date', 'date_of_birth', 'date_of_joining', 'mobile', 'edit', 'delete'])
-                ->make(true);
-        }
-
-        return view('hr.employee.listDataTable');
-    }
-
+    
     public function activeEmployeesList()
     {
-        // $employees = HrEmployee::chunk(50, function ($employees) {
-        //     foreach ($employees as $employee) {
-        //         echo $employee->full_name . '</br>';
-        //     }
-        // });
-        // dd('test');
+       
         $employees = HrEmployee::where('hr_status_id', 1)->with('employeeCurrentDesignation', 'employeeCurrentProject', 'signedAppointmentLetter', 'employeeCategory', 'hod', 'hrContactMobile', 'employeeAppointment')->get();
-
 
         return view('hr.employee.activeEmployeesList', compact('employees'));
     }
@@ -256,7 +233,7 @@ class EmployeeController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $users = [1, 14, 17, 20, 21, 25];
+        $users = [1, 14, 17, 20, 21, 25, 64];
         if (in_array($id, managementEmployeeIds()) && !in_array(auth()->user()->id, $users)) {
             abort(403, 'Your are not authorized');
         }
@@ -264,13 +241,13 @@ class EmployeeController extends Controller
         $genders = Gender::all();
         $maritalStatuses = MaritalStatus::all();
         $religions = Religion::all();
-        $data = HrEmployee::find($id);
+        $data = HrEmployee::with('hrEmployeeHusband')->find($id);
         session()->put('hr_employee_id', $data->id);
 
         if ($request->ajax()) {
-            return view('hr.employee.ajax', compact('genders', 'maritalStatuses', 'religions', 'data'));
+            return view('hr.employee.ajax', compact('genders', 'maritalStatuses', 'religions', 'data','id'));
         } else {
-            return view('hr.employee.edit', compact('genders', 'maritalStatuses', 'religions', 'data'));
+            return view('hr.employee.edit', compact('genders', 'maritalStatuses', 'religions', 'data','id'));
         }
     }
 
@@ -278,10 +255,11 @@ class EmployeeController extends Controller
     public function update(EmployeeStore $request, $id)
     {
 
-        //ensure client end is is not changed
-        if ($id != session('hr_employee_id')) {
-            return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
-        }
+       
+        // //ensure client end is is not changed
+        // if ($id != session('hr_employee_id')) {
+        //     return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
+        // }
 
         $input = $request->all();
         if ($request->filled('date_of_birth')) {
@@ -293,7 +271,7 @@ class EmployeeController extends Controller
 
         $oldData = HrEmployee::find($id);
 
-        DB::transaction(function () use ($input, $id, &$newData) {
+        DB::transaction(function () use ($input, $id ) {
             HrEmployee::findOrFail($id)->update($input);
 
             if ($input['husband_name']) {
@@ -302,19 +280,8 @@ class EmployeeController extends Controller
                 HrEmployeeHusband::where('hr_employee_id', $id)->delete();
             }
         }); // end transcation
-        $newData = HrEmployee::find($id);
-        //Any Editin Email to Administrator
-        // $user = User::where('email', 'sohail.afzal@barqaab.com')->first();
-        // if($user){
-        //     $data = $newData->compareTo($oldData);
-        //     if($data->count()>0){
-        //         $user->notify(New UpdateRecordNotification($data, $oldData));
-        //     }
-        // }
-
+       
         if ($request->ajax()) {
-            //remove cache
-            Cache::forget('employees');
             return response()->json(['status' => 'OK', 'message' => "Data Successfully Updated"]);
         } else {
             return back()->with('message', 'Data Successfully Updated');
@@ -324,7 +291,7 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
 
-        HrEmployee::findOrFail($id)->delete();
+      //  HrEmployee::findOrFail($id)->delete();
 
         return back()->with('message', 'Data Successfully Deleted');
         //return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Deleted']);
@@ -415,7 +382,26 @@ class EmployeeController extends Controller
             //this variable used only for goting to else part of result blade.
             $documents = true;
             return view('hr.employee.search.result', compact('result', 'documents'));
-        } else {
+        } 
+        
+        elseif($request->filled('education_year')){
+            
+            $documents = false;
+            $year = $data['education_year'];
+
+            
+            $employeeIds =  DB::table('hr_employees')
+            ->join('hr_educations', 'hr_employees.id', '=', 'hr_educations.hr_employee_id')
+            ->join('educations', 'educations.id', '=', 'hr_educations.education_id')
+            ->where('educations.level', '>=', $year)->select('hr_employees.*')->distinct('hr_employees.employee_no')->whereIn('hr_employees.hr_status_id', [1, 2, 3, 4, 5, 6, 7])->pluck('id')->toArray();
+
+            $result = HrEmployee::whereIn('id', $employeeIds)->get();
+    
+            return view('hr.employee.search.result', compact('result', 'documents'));
+
+        }
+        
+        else {
 
             $documents = false;
             $result = HrEmployee::whereIn('hr_status_id', [1, 2, 3, 4, 5, 6, 7])

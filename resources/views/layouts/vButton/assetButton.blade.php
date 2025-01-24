@@ -13,6 +13,7 @@
             <a type="submit" role="button" id="addDocument" style="color:white" href="{{route('asDocument.index')}}" class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asDocument')?'style=background-color:#737373':''}}>Documents</a>
             <a type="submit" role="button" id="addMaintenance" style="color:white" href="{{route('asMaintenance.index')}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asMaintenance')?'style=background-color:#737373':''}}>Maintenance</a>
             <a type="submit" role="button" id="addCondition" style="color:white" href="{{route('asCondition.index')}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asCondition')?'style=background-color:#737373':''}}>Condition</a>
+            <a type="submit" role="button" id="addConsumable" style="color:white" href="{{route('asConsumable.index')}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asConsumable')?'style=background-color:#737373':''}}>Consumable</a>
             <br>
             
            

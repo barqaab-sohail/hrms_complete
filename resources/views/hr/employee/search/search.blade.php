@@ -149,6 +149,20 @@
 							</div>
 						</div>
 					</div>
+					<div class="col-md-3">
+						<!--/span 5-1 -->
+						<div class="form-group row">
+							<div class="col-md-12 required">
+								<label class="control-label text-right">Year of Education</label><br>
+								<select name="education_year" id="education_year" class="form-control searchSelect">
+									<option value=""></option>
+									@for($i=10;$i<21;$i+=2)
+									<option value="{{$i}}" {{(old("education_year")==$i? "selected" : "")}}>{{$i}}</option>
+									@endfor
+								</select>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 

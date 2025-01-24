@@ -1,20 +1,22 @@
+<div style="margin-top:10px; margin-right: 10px;">
+    <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Contact</button>
+</div>
 
-    <div style="margin-top:10px; margin-right: 10px;">
-        <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Contact</button>
-    </div>
-         
-    <div class="card-body">
-        <form id= "formContact" method="post" class="form-horizontal form-prevent-multiple-submits" action="{{route('contact.store')}}" enctype="multipart/form-data">
-        @csrf
-            <div class="form-body">
-                    
-                <h3 class="box-title">Contact Detail</h3>
-                
-                <hr class="m-t-0 m-b-40">
 
-                <div class="row">
+<div class="card-body">
+
+    <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formContact" enctype="multipart/form-data">
+        {{csrf_field()}}
+          <div class="form-body">
+            
+            <h3 class="box-title" id="formHeading">Employee Contact</h3>
+            <hr class="m-t-0 m-b-40">
+              <input type="hidden" name="contact_id" id="contact_id"/>
+              
+              <div class="row">
                     <div class="col-md-2">
                         <div class="form-group row">
+                     
                             <div class="col-md-12">
                                	<label class="control-label text-right">Contact Type<span class="text_requried">*</span></label>
                                  <select  id="hr_contact_type_id"   name="hr_contact_type_id"  class="form-control selectTwo" data-validation="required">
@@ -33,7 +35,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">House No.</label><br>
 
-                                <input type="text"  name="house" value="{{ old('house') }}"  class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter House No">
+                                <input type="text"  name="house"  id="house" value="{{ old('house') }}"  class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter House No">
                             </div>
                         </div>
                     </div>
@@ -43,7 +45,7 @@
                             <div class="col-md-12">
                                	<label class="control-label text-right">Street No/Society</label>
                                 
-                                <input type="text" name="street" value="{{ old('street') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Street No and Society">
+                                <input type="text" name="street" id="street" value="{{ old('street') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Street No and Society">
 
                             </div>
                         </div>
@@ -53,7 +55,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                <label class="control-label text-right">Town/Village</label>
-                               <input type="text" name="town" value="{{ old('town') }}" class="form-control" data-validation=" required length"  data-validation-length="max190" placeholder="Enter Town or Village">
+                               <input type="text" name="town" id="town" value="{{ old('town') }}" class="form-control" data-validation=" required length"  data-validation-length="max190" placeholder="Enter Town or Village">
 
                             </div>
                         </div>
@@ -65,7 +67,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                               <label class="control-label text-right">Tehsil</span></label> 
-                              <input type="text" name="tehsil" value="{{ old('tehsil') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Tehsil">
+                              <input type="text" name="tehsil" id="tehsil" value="{{ old('tehsil') }}" class="form-control" data-validation="length"  data-validation-length="max190" placeholder="Enter Tehsil">
                                 
                                
                             </div>
@@ -125,7 +127,7 @@
                             <div class="col-md-12">
                                 <label class="control-label text-right">Landline No.</label>
                                 
-                               <input type="text" name="landline" value="{{ old('landline') }}"  data-validation="length"  data-validation-length="max15" class="form-control" placeholder="0092-42-00000000">
+                               <input type="text" name="landline" id="landline" value="{{ old('landline') }}"  data-validation="length"  data-validation-length="max15" class="form-control" placeholder="0092-42-00000000">
                                 
                             </div>
                         </div>
@@ -136,7 +138,7 @@
                             <div class="col-md-12">
                               <label class="control-label text-right">Email</label>
                                 
-                              <input type="email" name="email" value="{{ old('emal') }}" data-validation="length"  data-validation-length="max50" class="form-control" placeholder="Enter Email Address">
+                              <input type="email" name="email" id="email"  value="{{ old('emal') }}" data-validation="length"  data-validation-length="max50" class="form-control" placeholder="Enter Email Address">
                                 
                             </div>
                         </div>
@@ -159,37 +161,35 @@
                 </div>
             </div>
             @endcan
-        </form>
+    </form>
+
+    <br>
+        <table class="table table-bordered data-table" width=100%>
+            <thead>
+            <tr>
+                <th>Contact Type</th>
+                <th>Address</th> 
+                <th>Mobile</th> 
+                <th>Email</th>
+                <th>Edit</th>
+                <th>Delete</th> 
+                <!-- <th colspan="2" class="text-center"style="width:10%"> Actions </th>  -->
+            </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
+
+
+   
 
         
-	</div> <!-- end card body -->    
-    <div class="row">
-      <div class="col-md-12 table-container">
-
-      </div>
-    </div>
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
-    
-    refreshTable("{{route('contact.table')}}",300);
-    isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
-     
-    $('#formContact').hide();
-    $('#hideButton').click(function(){
-        $('#formContact').toggle();
-        resetForm();
-    });
-
-      //submit function
-      $("#formContact").submit(function(e) { 
-      e.preventDefault();
-      var url = $(this).attr('action');
-            $('.fa-spinner').show(); 
-      submitForm(this, url,1);
-      refreshTable("{{route('contact.table')}}");
-    });
-
-
+    // formFunctions();
+    $('#formContact').hide();   
     $('#country').change(function(){
       var cid = $(this).val();
         if(cid){
@@ -244,6 +244,139 @@ $(document).ready(function(){
         }
 
     });
-});
-</script>
+       
+}); 
+      //start function
+$(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax:{url:"{{ route('contact.create') }}", data: {
+            hrEmployeeId: $("#hr_employee_id").val()
+        }},
+        columns: [
+            {data: "contact_type_id", name: 'contact_type_id'},
+            {data: "address", name: 'address'},
+            {data: "mobile", name: 'mobile'},
+            {data: "email", name: 'email'},
+            {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
+            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
 
+        ],
+        order: [[ 1, "desc" ]]
+    });
+
+    $('#hideButton').click(function(){
+          
+            $('#formContact').toggle();
+            $('#formContact').trigger("reset");
+            $('#contact_id').val('');
+            $('#hr_contact_type_id').trigger('change');
+            $('#city').trigger('change');
+            $('#state').trigger('change');
+            $('#country').trigger('change');
+    });
+
+    $('body').unbind().on('click', '.editContact', function () {
+
+
+      var contact_id = $(this).data('id');
+        
+      $.get("{{ url('hrms/contact') }}" +'/' + contact_id +'/edit', function (data) {
+          $('#formContact').show(); 
+          $('#formHeading').html("Edit Contact");
+          $('#contact_id').val(data.id);
+          $('#hr_contact_type_id').val(data.hr_contact_type_id).trigger('change');
+          $('#country').val(data.country_id).trigger('change');
+          $('#house').val(data.house);
+          $('#street').val(data.street);
+          $('#town').val(data.town);
+          $('#tehsil').val(data.tehsil);
+          $('#mobile').val(data.mobile?.mobile);
+          $('#landline').val(data.landline?.landline);
+          $('#email').val(data.email?.email);
+            setTimeout(function() { 
+            $('#state').val(data.state_id).trigger('change');
+            }, 1000);
+            setTimeout(function() { 
+                $('#city').val(data.city_id).trigger('change');
+            }, 2000);
+         
+      })
+   });
+    
+      $("#formContact").submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("hr_employee_id", $("#hr_employee_id").val());
+        console.log(this);
+        $.ajax({
+          data: formData,
+          url: "{{ route('contact.store') }}",
+          type: "POST",
+          //dataType: 'json',
+           contentType: false,
+           cache: false,
+           processData: false,
+          success: function (data) {
+              if(data.error){
+                $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');
+              }else{
+
+                $('#formContact').trigger("reset");
+                $('#formContact').toggle();
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');  
+
+                table.draw();
+                clearMessage();
+              }
+        
+          },
+          error: function (data) {
+              
+              var errorMassage = '';
+              $.each(data.responseJSON.errors, function (key, value){
+                errorMassage += value + '<br>';  
+                });
+                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
+    
+    $('body').on('click', '.deleteContact', function () {
+     
+        var contact_id = $(this).data("id");
+
+        var con = confirm("Are You sure want to delete !");
+        if(con){
+          $.ajax({
+            type: "DELETE",
+            url: "{{ route('contact.store') }}"+'/'+contact_id,
+            success: function (data) {
+                table.draw();
+                clearMessage();
+                $('#formContact').toggle();
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.success+'</strong></div>');
+                if(data.error){
+                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+                }
+  
+            },
+            error: function (data) {
+                
+            }
+          });
+        }
+    });
+  });// end function
+
+      
+            
+</script>

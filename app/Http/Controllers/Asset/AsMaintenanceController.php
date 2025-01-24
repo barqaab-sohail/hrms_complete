@@ -21,7 +21,7 @@ class AsMaintenanceController extends Controller
 
     	if ($request->ajax()) {
 
-            $data= AsMaintenance::where('asset_id',session('asset_id'))
+            $data= AsMaintenance::where('asset_id',$request->assetId)
                         ->latest()->get();
            
 
@@ -33,6 +33,11 @@ class AsMaintenanceController extends Controller
                                              
                             return $btn;
                     })
+                    ->editColumn('maintenance_date', function($row){                
+                        
+                        return \Carbon\Carbon::parse($row->maintenance_date)->format('M d, Y');
+                            
+                     })
                     ->addColumn('Delete', function($row){                
                         
                            $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMaintenance">Delete</a>';
@@ -41,27 +46,7 @@ class AsMaintenanceController extends Controller
                             return $btn;
                     })
                 
-                    ->addColumn('maintenance_detail', function($row){                
-                        
-                        $btn = $row->maintenance_detail;
-                                                
-                        return $btn;  
-                           
-                    })
-                    ->addColumn('maintenance_cost', function($row){                
-                        
-                        $btn = number_format($row->maintenance_cost);
-                                                
-                        return $btn;  
-                           
-                    })
-                    ->addColumn('maintenance_date', function($row){                
-                       
-                        $btn = $row->maintenance_date;
-                        
-                        return $btn;          
-                    })
-                    ->rawColumns(['Edit','Delete','maintenance_detail','maintenance_cost','maintenance_date'])
+                    ->rawColumns(['Edit','Delete'])
                     ->make(true);
           
         }
@@ -90,7 +75,7 @@ class AsMaintenanceController extends Controller
                     ['maintenance_detail'=> $input['maintenance_detail'],
                     'maintenance_cost'=> $input['maintenance_cost'],
                     'maintenance_date'=> $input['maintenance_date'],
-                    'asset_id'=> session('asset_id')]); 
+                    'asset_id'=> $input['asset_id']]); 
 
         }); // end transcation      
        return response()->json(['success'=>"Data saved successfully."]);

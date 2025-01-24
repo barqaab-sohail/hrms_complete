@@ -19,6 +19,7 @@
 	<div class="col-lg-12 reducedCol">
 		<div class="card card-outline-info">
 			<div class="row">
+			<input hidden value="{{$data->id}}" name="pr_detail_id" id="pr_detail_id"/>
 				<!-- <div class="col-lg-2">
 					style="display:none;"
 				</div>

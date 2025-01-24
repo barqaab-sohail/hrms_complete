@@ -122,11 +122,18 @@ class LeaveController extends Controller
         return response()->json($states);
     }
 
-    public function store(LeaveStore $request)
+    public function store(Request $request)
     {
 
         $input = $request->all();
 
+        if ($request->filled('from')) {
+            $input['from'] = \Carbon\Carbon::parse($request->from)->format('Y-m-d');
+        }
+        if ($request->filled('to')) {
+            $input['to'] = \Carbon\Carbon::parse($request->to)->format('Y-m-d');
+        }
+       
         DB::transaction(function () use ($input, $request) {
 
             $leaveId = Leave::create($input);
@@ -183,6 +190,13 @@ class LeaveController extends Controller
         }
 
         $input = $request->all();
+
+        if ($request->filled('from')) {
+            $input['from'] = \Carbon\Carbon::parse($request->from)->format('Y-m-d');
+        }
+        if ($request->filled('to')) {
+            $input['to'] = \Carbon\Carbon::parse($request->to)->format('Y-m-d');
+        }
 
         DB::transaction(function () use ($input, $request, $id) {
 
@@ -277,32 +291,32 @@ class LeaveController extends Controller
 
 
         if ($request->filled('employee') && $request->filled('from') && $request->filled('to')) {
-            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('from', ">=", $input['from'])->whereDate('to', "<=", $input['to'])->get();
+            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('from', ">=", $input['from'])->whereDate('to', "<=", $input['to'])->orderBy('from','DESC')->get();
             $leaveBalance = false;
             return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('from') && $request->filled('to')) {
-            $result = Leave::whereDate('from', ">=", $input['from'])->whereDate('to', "<=", $input['to'])->get();
+            $result = Leave::whereDate('from', ">=", $input['from'])->whereDate('to', "<=", $input['to'])->orderBy('from','DESC')->get();
             $leaveBalance = false;
             $title = 'Leave Detail from ' . $request->from . ' to ' . $request->to;
             return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('employee') && $request->filled('from')) {
-            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('from', "=", $input['from'])->get();
+            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('from', "=", $input['from'])->orderBy('from','DESC')->get();
             $leaveBalance = false;
             return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('employee') && $request->filled('to')) {
-            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('to', "=", $input['to'])->get();
+            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('to', "=", $input['to'])->orderBy('from','DESC')->get();
             $leaveBalance = false;
             return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('employee')) {
-            $result = Leave::where('hr_employee_id', $request->employee)->get();
+            $result = Leave::where('hr_employee_id', $request->employee)->orderBy('from','DESC')->get();
             $leaveBalance = false;
             $employee = HrEmployee::find($request->employee);
             $title = $employee->full_name . ' - ' . $employee->designation . ' - Leave Detail';

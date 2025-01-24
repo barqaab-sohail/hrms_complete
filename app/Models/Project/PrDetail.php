@@ -14,6 +14,10 @@ class PrDetail extends Model implements Auditable
     protected $fillable = ['name', 'client_id', 'commencement_date', 'contractual_completion_date', 'actual_completion_date', 'sub_projects', 'pr_status_id', 'pr_role_id', 'contract_type_id', 'pr_division_id', 'project_no', 'share'];
 
 
+    public function getCommencementDateAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('M d, Y');
+    }
     // //default value of pr_status_id=1
     // protected $attributes = [
     //     'pr_status_id' => 1 //default value of pr_status_id is 1 
@@ -40,9 +44,24 @@ class PrDetail extends Model implements Auditable
         return $this->belongsTo('App\Models\Common\Client');
     }
 
+    public function prDivision()
+    {
+        return $this->hasOne('App\Models\Project\PrDivision', 'id', 'pr_division_id');
+    }
+
+    public function contractType()
+    {
+        return $this->hasOne('App\Models\Common\ContractType', 'id', 'contract_type_id');
+    }
+
     public function prCost()
     {
         return $this->hasOne('App\Models\Project\Cost\PrCost');
+    }
+
+    public function prStatus()
+    {
+        return $this->hasOne('App\Models\Project\PrStatus', 'id', 'pr_status_id');
     }
 
     public function prCustomerNo()
@@ -110,8 +129,35 @@ class PrDetail extends Model implements Auditable
         return $this->hasOne('App\Models\Project\PrMonthlyExpense')->orderby('month', 'desc');
     }
 
+    public function expenses()
+    {
+        return $this->hasMany('App\Models\Project\PrMonthlyExpense');
+    }
+
     public function latestPaymentMonth()
     {
         return $this->hasOne('App\Models\Project\Payment\PaymentReceive')->orderby('payment_date', 'desc');
+    }
+
+    public function totalInvoices()
+    {
+        return $this->hasManyThrough(
+            'App\Models\Project\Invoice\InvoiceCost',
+            'App\Models\Project\Invoice\Invoice',
+            'pr_detail_id',
+            'invoice_id',
+            'id',
+            'id'
+        );
+    }
+
+    public function ledgerActivity()
+    {
+        return $this->hasMany('App\Models\Project\LedgerActivity')->orderby('voucher_date', 'desc');
+    }
+
+    public function prDocuments()
+    {
+        return $this->hasMany('App\Models\Project\PrDocument')->select('description', 'pr_detail_id', 'reference_no', 'extension', 'path', 'file_name', 'document_date', 'size');;
     }
 }

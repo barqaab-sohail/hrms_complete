@@ -146,7 +146,6 @@
 				cache: false,
 				processData: false,
 				success: function(data) {
-
 					$('div.table-container').html(data);
 					$('.fa-spinner').hide();
 

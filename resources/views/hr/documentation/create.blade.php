@@ -1,8 +1,6 @@
-@can('hr edit record')
 <div style="margin-top:10px; margin-right: 10px;">
-    <button type="button" id="hideButton" class="btn btn-success float-right">Add Document</button>
+    <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Document</button>
 </div>
-@endcan
 
 
 <div class="card-body">
@@ -10,16 +8,17 @@
     <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formDocument" enctype="multipart/form-data">
         {{csrf_field()}}
         <div class="form-body">
-
-            <h3 class="box-title">Document</h3>
+            
+            <h3 class="box-title" id="formHeading">Employee Document</h3>
             <hr class="m-t-0 m-b-40">
+            <input type="hidden" name="document_id" id="document_id"/>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label class="control-label text-right">Document Name<span class="text_requried">*</span></label>
 
-                            <select name="hr_document_name_id" id="document_name" data-validation="required" class="form-control selectTwo">
+                            <select name="hr_document_name_id" id="hr_document_name_id" data-validation="required" class="form-control selectTwo">
                                 <option value=""></option>
                                 <option value="Other">Other</option>
                                 @foreach($documentNames as $documentName)
@@ -37,7 +36,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Date<span class="text_requried">*</span></label>
 
-                            <input type="text" name="document_date" value="{{ old('document_date') }}" class="form-control date_input" readonly placeholder="Enter Document Detail" data-validation="required">
+                            <input type="text" name="document_date" id="document_date" value="{{ old('document_date') }}" class="form-control date_input" readonly placeholder="Enter Document Detail" data-validation="required">
                             <br>
                             @can('hr edit record')<i class="fas fa-trash-alt text_requried"></i>@endcan
 
@@ -65,9 +64,6 @@
                 <div class="col-md-1">
                 </div>
                 <div class="col-md-3">
-
-
-
                     <div class="form-group row">
                         <center>
                             <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src" id="wizardPicturePreview" title="" width="150">
@@ -86,77 +82,67 @@
 
                 </div>
 
-            </div>
+            </div>    
+              
+               
+        </div> <!--/End Form Boday-->
 
-
-        </div>
-        <hr>
-        <div class="form-actions">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-offset-3 col-md-9">
-
-                            <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save</button>
-
+            <hr>
+            @can('hr edit posting')
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save Document</button>        
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            @endcan
     </form>
 
-    <div class="col-md-12 table-container">
+    <br>
+        <table class="table table-bordered data-table" width=100%>
+            <thead>
+            <tr>
+                <th>Document Name</th>
+                @can('hr document date')
+                <th>Date</th>
+                @endcan
+                <th>View</th>
+                <th>Copy Link</th>
+                @can('hr edit documentation')
+                <th>Edit</th>
+                @endcan
+                @can('hr delete documentation')
+                <th>Delete</th> 
+                @endcan
+                <!-- <th colspan="2" class="text-center"style="width:10%"> Actions </th>  -->
+            </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
     </div>
 
-</div>
 
-<script>
-    $(document).ready(function() {
-        isUserData(window.location.href, "{{URL::to('/hrms/employee/user/data')}}");
+   
 
-        refreshTable("{{route('documentation.table')}}");
-
-        $('#formDocument').hide();
-        $('#hideButton').click(function() {
-            if ($(this).text() == "Add Document") {
-                $(this).text("Hide Document")
-            } else {
-                $(this).text("Add Document")
-            }
-            $('#formDocument').toggle();
-            resetForm();
-            $("#wizardPicturePreview").attr("src", "{{asset('Massets/images/document.png')}}");
-        });
+        
+<script type="text/javascript">
 
 
-        $("form").submit(function(e) {
-            e.preventDefault();
-        });
-        $("#document_name").change(function() {
-            var other = $('#document_name').val();
-            if (other == 'Other') {
-                $('.hideDiv').show();
-                $('#forward_slash').attr('data-validation', 'required');
-            } else {
-                $('.hideDiv').hide();
-                $('#forward_slash').removeAttr('data-validation').val('');
-            }
-        });
-        //submit function
-        $("#formDocument").submit(function(e) {
-            e.preventDefault();
-            var url = "{{route('documentation.store')}}";
-            $('.fa-spinner').show();
-            submitForm(this, url);
-            resetForm();
-            $('#wizardPicturePreview').attr('src', "{{asset('Massets/images/document.png')}}").attr('width', '150');
-            $('#pdf').attr('src', '');
-            $('#h6').text('Click On Image to Add Document');
-            refreshTable("{{route('documentation.table')}}", 1500);
-        });
-        $("#pdf").hide();
-        // Prepare the preview for profile picture
+$(document).ready(function(){
+   
+
+
+    $('#formDocument').hide();   
+    $("#pdf").hide();
+   
+
         $("#view").change(function() {
             var fileName = this.files[0].name;
             var fileType = this.files[0].type;
@@ -185,8 +171,8 @@
             }
 
         });
-    }); //end document ready
-    function readURL(input) {
+
+        function readURL(input) {
         var fileName = input.files[0].name;
         var fileType = input.files[0].type;
         //var fileType = fileName.split('.').pop();
@@ -221,4 +207,187 @@
     $("#wizardPicturePreview").click(function() {
         $("input[id='view']").click();
     });
+
+}); 
+      //start function
+$(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        
+        ajax:{url:"{{ route('documentation.create') }}", data: {
+            hrEmployeeId: $("#hr_employee_id").val()
+        }},
+        columns: [
+            {data: "description", name: 'description'},
+            @can('hr document date')
+            {data: "document_date", name: 'document_date'},
+            @endcan
+            {data: "document", name: 'document'},
+            {data: "copy_link", name: 'copy_link'},
+            @can('hr edit documentation')
+            {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
+            @endcan
+            @can('hr delete documentation')
+            {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
+            @endcan
+          
+
+        ],
+        "drawCallback": function(settings) {
+            
+            if(this.api().rows().data().length>0){
+			    $("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
+            }
+            
+            
+            $('.copyLink').click(function() {
+			var text = $(this).attr('link').replace(" ", "%20");
+			navigator.clipboard.writeText(text);
+			alert('Link Copied');
+            });
+
+            $('.copyLink').hover(function() {
+                $(this).css('cursor', 'pointer').attr('title', 'Click for Copy Link');
+            }, function() {
+                $(this).css('cursor', 'auto');
+            });
+
+            $("#hr_document_name_id").change(function() {
+                var other = $('#hr_document_name_id').val();
+                if (other == 'Other') {
+                    $('.hideDiv').show();
+                    $('#forward_slash').attr('data-validation', 'required');
+                } else {
+                    $('.hideDiv').hide();
+                    $('#forward_slash').removeAttr('data-validation').val('');
+                }
+            });
+
+        },
+        order: [[ 1, "desc" ]]
+    });
+
+    $('#hideButton').click(function(){
+            $('#pdf').attr('src','').hide();
+            $('#h6').html("Click On Image to Add Pdf Document<span class='text_requried'>*</span>");
+            $('#formDocument').toggle();
+            $('#formDocument').trigger("reset");
+            $('#document_id').val('');
+            $('#view').attr('data-validation','required');
+            $('#hr_document_name_id').trigger('change');
+    });
+
+    $('body').unbind().on('click', '.editDocument', function () {
+      var document_id = $(this).data('id');
+        
+      $.get("{{ url('hrms/documentation') }}" +'/' + document_id +'/edit', function (data) {
+          $('#formDocument').show(); 
+          $('#formHeading').html("Edit Document");
+          $('#document_id').val(data.id);
+          if(data.hr_document_name?.[0]){
+          $('#hr_document_name_id').val(data.hr_document_name?.[0].pivot.hr_document_name_id).trigger('change');
+          }else{
+            $('#hr_document_name_id').val('Other').trigger('change');
+          }
+          $('#document_date').val(data.document_date);
+          $('#forward_slash').val(data.description);
+          if(data.extension=='pdf'){
+            $("#pdf").show();
+            $('#pdf').attr('src',data.full_path);
+            $('#wizardPicturePreview').attr('src',"{{asset('Massets/images/document.png')}}");
+          }else{
+            $('#wizardPicturePreview').attr('src',data.full_path);
+            $("#pdf").hide();
+            $('#pdf').attr('src','');
+          }
+          
+          
+          
+          $('#view').removeAttr('data-validation');
+
+      })
+   });
+    
+      $("#formDocument").submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("hr_employee_id", $("#hr_employee_id").val());
+        $.ajax({
+          data: formData,
+          url: "{{ route('documentation.store') }}",
+          type: "POST",
+          //dataType: 'json',
+           contentType: false,
+           cache: false,
+           processData: false,
+          success: function (data) {
+              if(data.error){
+                $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');
+              }else{
+              
+                $('#formDocument').trigger("reset");
+                $('#formDocument').toggle();
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');  
+
+                table.draw();
+                clearMessage();
+              }
+        
+          },
+          error: function (data) {
+              
+              var errorMassage = '';
+              $.each(data.responseJSON.errors, function (key, value){
+                errorMassage += value + '<br>';  
+                });
+                 $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
+
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
+    
+    $('body').on('click', '.deleteDocument', function () {
+     
+        var document_id = $(this).data("id");
+
+        var con = confirm("Are You sure want to delete !");
+        if(con){
+          $.ajax({
+            type: "DELETE",
+            url: "{{ route('documentation.store') }}"+'/'+document_id,
+            success: function (data) {
+                table.draw();
+                clearMessage();
+                if($('#formDocument:visible').length != 0)
+                    {
+                        $('#formDocument').toggle();
+                    }
+                
+                if(data.status=="Not OK"){
+                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');    
+                }else{
+                $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.message+'</strong></div>');
+                }
+                if(data.error){
+                  $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+data.error+'</strong></div>');    
+                }
+  
+            },
+            error: function (data) {
+                
+            }
+          });
+        }
+    });
+  });// end function
+
+      
+            
 </script>

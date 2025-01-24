@@ -29,7 +29,7 @@
                 <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
                 <form id="contractForm" name="contractForm" action="{{route('employeeContract.store')}}" class="form-horizontal">
                     <input type="hidden" name="employee_contract_id" id="employee_contract_id">
-                    <input type="hidden" name="hr_employee_id" id="hr_employee_id" value="{{session('hr_employee_id')}}">
+                    <input type="hidden" name="hr_employee_id" id="hr_employee_id" value="{{$id}}">
 
                     <div class="form-group row">
                         <div class="col-md-12">
@@ -90,7 +90,8 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('employeeContract.create') }}",
+                ajax: {url:"{{ route('employeeContract.create') }}",
+                data:{ hrEmployeeId: $("#hr_employee_id").val()}},
                 columns: [{
                         data: "hr_employee_id",
                         name: 'hr_employee_id'
@@ -160,6 +161,7 @@
                         $('#contractForm').trigger("reset");
                         $('#ajaxModel').modal('hide');
                         table.draw();
+                        clearMessage();
                     },
                     error: function(data) {
                         $('.btn-prevent-multiple-submits').removeAttr('disabled');
@@ -182,8 +184,10 @@
                     $.ajax({
                         type: "DELETE",
                         url: "{{ route('employeeContract.store') }}" + '/' + employee_contract_id,
+                        data:{ hrEmployeeId: $("#hr_employee_id").val()},
                         success: function(data) {
                             table.draw();
+                            clearMessage();
                             if (data.error) {
                                 $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + data.error + '</strong></div>');
                             }
