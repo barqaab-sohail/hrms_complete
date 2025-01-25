@@ -286,7 +286,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
 
 //Photocopy Routes
 
-Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Photocopy'], function () {
+Route::group(['middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Photocopy'], function () {
     Route::get('/photocopy', 'PhotocopyController@index')->name('photocopy.index');
 });
 

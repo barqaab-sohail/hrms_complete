@@ -9,25 +9,18 @@
         
 
         <h4 class="card-title">List of Photocopies</h4>
-        <livewire:photocopy.Index/>
-
+        <livewire:photocopy.Create/>
+      
         <div class="table-responsive m-t-40">
             <table id="myTable" class="table table-bordered table-striped" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Project No</th>
-                        <th>Project Name</th>
-                        <th>Cost</th>
-                        <th>Division</th>
-                        <th>Client Name</th>
-                        <th>Commencement Date</th>
-                        <th>Completion Date</th>
-                        <th>Status</th>
-                        <th>JV/Independent</th>
+                        <th>Photocopy Model</th>
+                        <th>Date</th>
+                        <th>Remarks</th>
+                        <th>Count</th>
                         <th class="text-center" style="width:5%">Edit</th>
-                        @role('Super Admin')
                         <th class="text-center" style="width:5%">Delete</th>
-                        @endrole
                     </tr>
                 </thead>
                 <tbody>
