@@ -66,7 +66,7 @@ class ManagerController extends Controller
 
     }
 
-    public function store (Request $request){
+    public function store (Request $request) {
 
     	$input = $request->all();
     	if($request->filled('effective_date')){
