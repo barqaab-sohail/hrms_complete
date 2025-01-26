@@ -16,7 +16,6 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^4.5",
-        "livewire/livewire": "^3.5",
         "maatwebsite/excel": "^3.1",
         "milon/barcode": "^11.0",
         "owen-it/laravel-auditing": "^13.6",
