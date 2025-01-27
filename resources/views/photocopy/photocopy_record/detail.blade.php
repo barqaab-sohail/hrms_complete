@@ -66,7 +66,7 @@
 <div class="card">
 	<div class="card-body">
 		<button type="button" class="btn btn-success float-right" id="createRecordy" data-toggle="modal">Add Record</button>
-		<h4 class="card-title" style="color:black">List of Photocopy Records</h4>
+		<h2 class="card-title" style="color:black">{{$photocopy->name}} Records</h2>
 		<div class="table-responsive m-t-40">
 			<table id="myTable" class="table table-bordered table-striped">
 				<thead>

@@ -63,15 +63,17 @@ class PhotocopyRecordController extends Controller
 
     public function store (Request $request) {
 
+        if ($request->filled('date')) {
+            $request['date'] = \Carbon\Carbon::parse($request->date)->format('Y-m-d');
+        }
+
         $validated = $request->validate([
-            'date' => "required|date|".Rule::unique('photocopy_records')->ignore($request['record_id']), 
+            'date' => "required|date|".Rule::unique('photocopy_records')->where('photocopy_id',$request['photocopy_id'])->ignore($request['record_id']), 
             'count'=>'required',
             'photocopy_id'=>'required'
         ]);
        
-        if ($request->filled('date')) {
-            $request['date'] = \Carbon\Carbon::parse($request->date)->format('Y-m-d');
-        }
+        
 
 
          DB::transaction(function () use ($request) {  

@@ -18,9 +18,9 @@
                 <tbody>
                     @foreach($photocopies as $photocopy)
                     <tr>
-                        <td>{{$photocopy->name}}</td>
+                        <td><a href="{{route('photocopy_record.show',$photocopy->id)}}" title="Detail" style="color:black;">{{$photocopy->name}}</a></td>
                         <td class="text-center">
-                            <a class="btn btn-success btn-sm" href="{{route('photocopy_record.show',$photocopy->id)}}" title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
+                            <a class="btn btn-success btn-sm" href="{{route('photocopy_record.show',$photocopy->id)}}" title="Detail"><i class="fas fa-pencil-alt text-white "></i></a>
                         </td>
                     </tr>
                     @endforeach
