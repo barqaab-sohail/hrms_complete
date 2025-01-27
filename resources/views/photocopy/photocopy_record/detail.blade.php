@@ -27,8 +27,8 @@
 						</div>
                         <div class="col-md-2">
 							<div class="form-group">
-								<label class="control-label text-right">Total Copies</label>
-								<input type="number" name="count" id="count" value="{{ old('count') }}" class="form-control" >
+								<label class="control-label text-right">Reading</label>
+								<input type="number" name="reading" id="reading" value="{{ old('reading') }}" class="form-control" >
                             </div>
 						</div>
                         <div class="col-md-7">
@@ -72,8 +72,9 @@
 				<thead>
 					<tr>
 						<th style="width:10%">Date</th>
-                        <th style="width:10%">total Copies</th>
-                        <th style="width:70%">Remarks</th>
+                        <th style="width:10%">Reading</th>
+                        <th style="width:60%">Remarks</th>
+						<th style="width:10%">Total Copies</th>
 						<th style="width:5%">Edit</th>
 						@role('Super Admin')
 						<th style="width:5%">Delete</th>
@@ -102,24 +103,24 @@
                 buttons: [{
                         extend: 'copyHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2]
+                            columns: [0, 1, 2,3]
                         }
                     },
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2]
+                            columns: [0, 1, 2,3]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2]
+                            columns: [0, 1, 2,3]
                         }
                     }, {
                         extend: 'csvHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2]
+                            columns: [0, 1, 2,3]
                         }
                     },
                 ],
@@ -131,13 +132,17 @@
 						name: 'date'
 					},
                     {
-						data: 'count',
-						name: 'count'
+						data: 'reading',
+						name: 'reading'
 					},
 
                     {
 						data: 'remarks',
 						name: 'remarks'
+					},
+					{
+						data: 'copies',
+						name: 'copies'
 					},
 
 					{
@@ -205,7 +210,7 @@
                     $('#ajaxModel').modal('show');
                     $('#record_id').val(data.id);
                     $('#date').val(data.date); 
-                    $('#count').val(data.count); 
+                    $('#reading').val(data.reading); 
                     $('#remarks').val(data.remarks); 
                 })
             });

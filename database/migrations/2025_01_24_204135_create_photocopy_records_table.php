@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('photocopy_id')->unsigned();
             $table->date('date');
-            $table->integer('count');
+            $table->integer('reading');
             $table->integer('remarks')->nullable();
             $table->timestamps();
             $table->foreign('photocopy_id')->references('id')->on('photocopies')->onDelete('cascade');

@@ -9,7 +9,7 @@ class PhotocopyRecord extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     
-    protected $fillable = ['photocopy_id', 'remarks','date','count'];
+    protected $fillable = ['photocopy_id', 'remarks','date','reading'];
 
     public function photocopy(){
         return $this->belongsTo('App\Models\Photocopy\Photocopy');

@@ -30,12 +30,21 @@ class PhotocopyRecordController extends Controller
     public function show(Request $request, $id) {
 
         $photocopy = Photocopy::find($id);
-        $photocopyRecords = PhotocopyRecord::where('photocopy_id',$photocopy->id)->get();
+        $photocopyRecords = PhotocopyRecord::where('photocopy_id',$photocopy->id)->orderBy('date','DESC')->get();
 
         if ($request->ajax()) {
             
             return DataTables::of($photocopyRecords)
                     ->addIndexColumn()
+                    ->addColumn('copies', function($row){
+                  
+                        $perviousData = PhotocopyRecord::where('date','<', $row->date)->where('photocopy_id',$row->photocopy_id)->orderBy('date','DESC')->first();
+                        if($perviousData){
+                            return $row->reading - $perviousData->reading;
+                        }else{
+                            return 0;
+                        }
+                    })
                     ->addColumn('Edit', function($row){
    
                            $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editRecord">Edit</a>';
@@ -67,9 +76,10 @@ class PhotocopyRecordController extends Controller
             $request['date'] = \Carbon\Carbon::parse($request->date)->format('Y-m-d');
         }
 
+        $maxRecord = PhotocopyRecord::where('photocopy_id', $request['photocopy_id'])->where('date','<',$request['date'])->max('reading');
         $validated = $request->validate([
             'date' => "required|date|".Rule::unique('photocopy_records')->where('photocopy_id',$request['photocopy_id'])->ignore($request['record_id']), 
-            'count'=>'required',
+            'reading'=>"required|gt:$maxRecord",
             'photocopy_id'=>'required'
         ]);
        
@@ -79,7 +89,7 @@ class PhotocopyRecordController extends Controller
          DB::transaction(function () use ($request) {  
             PhotocopyRecord::updateOrCreate(['id' => $request['record_id']],
                 ['date'=> $request['date'],
-                'count'=> $request['count'],
+                'reading'=> $request['reading'],
                 'remarks'=> $request['remarks'],
                 'photocopy_id'=> $request['photocopy_id'],
                 ]); 
