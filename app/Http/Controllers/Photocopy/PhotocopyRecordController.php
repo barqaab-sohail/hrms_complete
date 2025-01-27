@@ -77,6 +77,9 @@ class PhotocopyRecordController extends Controller
         }
 
         $maxRecord = PhotocopyRecord::where('photocopy_id', $request['photocopy_id'])->where('date','<',$request['date'])->max('reading');
+        if(!$maxRecord){
+            $maxRecord=0;
+        }
         $validated = $request->validate([
             'date' => "required|date|".Rule::unique('photocopy_records')->where('photocopy_id',$request['photocopy_id'])->ignore($request['record_id']), 
             'reading'=>"required|gt:$maxRecord",
