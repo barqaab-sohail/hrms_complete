@@ -174,7 +174,7 @@
                 <!-- Photocopy -->
                 @canany(['photocopy record'])
                 <li class="{{Request::is('photocopy*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark"
-                        href="#" aria-expanded="false"><i class="mdi mdi-bank"></i><span
+                        href="#" aria-expanded="false"><i class="mdi mdi-printer"></i><span
                             class="hide-menu">Photocopy</span></a>
                     <ul aria-expanded="false" class="collapse">
                         @can('Super Admin')        
