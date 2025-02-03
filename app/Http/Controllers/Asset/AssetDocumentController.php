@@ -31,7 +31,14 @@ class AssetDocumentController extends Controller
 
             return  DataTables::of($data)
                 ->addIndexColumn()
-
+                ->editColumn('document_date', function($row){
+                    if($row->document_date){
+                    return \Carbon\Carbon::parse($row->document_date)->format('M d, Y');
+                    }
+                    else{
+                        return '';
+                    }
+                })
                 ->addColumn('Edit', function ($row) {
 
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editDocument">Edit</a>';
@@ -67,7 +74,12 @@ class AssetDocumentController extends Controller
     {
         $asset = Asset::where('id', $request->asset_id)->first();
 
+
         $input = $request->all();
+
+        if ($request->filled('document_date')) {
+            $input['document_date'] = \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
+        }
 
         DB::transaction(function () use ($input, $request, $asset) {
 

@@ -22,6 +22,26 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Date</label>
+                            <input type="text" name="document_date" id="document_date" value="{{ old('document_date') }}" class="form-control date_input" readonly >
+                            <br>
+                            <i class="fas fa-trash-alt text_requried"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label text-right">Reference No</label>
+                            <input type="text" id="reference_no" name="reference_no" value="{{ old('reference_no') }}" class="form-control exempted"  placeholder="Enter Document Detail">
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!--/row-->
@@ -77,6 +97,8 @@
         <thead>
             <tr>
                 <th>Description</th>
+                <th>Reference No.</th>
+                <th>Document Date</th>
                 <th>View</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -152,6 +174,14 @@
                     name: 'description'
                 },
                 {
+                    data: "reference_no",
+                    name: 'reference_no'
+                },
+                {
+                    data: "document_date",
+                    name: 'document_date'
+                },
+                {
                     data: "document",
                     name: 'document'
                 },
@@ -194,6 +224,8 @@
                 var file_name = `{{asset('storage/')}}${file_path}`;
                 $('#formHeading').html("Edit Document");
                 $('#description').val(data.description);
+                $('#document_date').val(data.document_date);
+                $('#reference_no').val(data.reference_no);
                 $('#as_document_id').val(data.id);
                 if (file_extension == 'pdf') {
                     $("#pdf").show();

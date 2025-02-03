@@ -63,6 +63,12 @@
 	}
 </style>
 <!-- End Modal -->
+
+<div class="row">
+    <div class="col-lg-2">
+		@include('layouts.vButton.photocopyButton')
+    </div>
+</div>
 <div class="card">
 	<div class="card-body">
 		<button type="button" class="btn btn-success float-right" id="createRecordy" data-toggle="modal">Add Record</button>
