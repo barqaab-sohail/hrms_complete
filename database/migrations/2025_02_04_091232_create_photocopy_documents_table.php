@@ -11,16 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('photocopy_records', function (Blueprint $table) {
+        Schema::create('photocopy_documents', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->id();
             $table->bigInteger('photocopy_id')->unsigned();
-            $table->date('date');
-            $table->integer('reading');
-            $table->string('remarks')->nullable();
+            $table->string('reference_no')->nullable();
+            $table->string('description');
+            $table->date('document_date');
+            $table->string('file_name');
+            $table->string('extension');
+            $table->string('path');
+            $table->string('size', 20);
             $table->timestamps();
             $table->foreign('photocopy_id')->references('id')->on('photocopies')->onDelete('cascade');
-
         });
     }
 
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('photocopy_records');
+        Schema::dropIfExists('photocopy_documents');
     }
 };

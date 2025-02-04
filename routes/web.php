@@ -290,6 +290,7 @@ Route::group(['middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Photocop
     Route::resource('/photocopy', 'PhotocopyController');
     Route::get('/photocopy_list', 'PhotocopyRecordController@list')->name('photocopy.list');
     Route::resource('/photocopy_record', 'PhotocopyRecordController');
+    Route::resource('/photocopy_documents', 'PhotocopyDocumentsController');
 });
 
 //Leave Routes
@@ -340,7 +341,6 @@ Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth', 'XssSanitizer'],
     Route::resource('/partner', 'PartnerController');
     Route::resource('/allowanceName', 'AllowanceNameController');
     Route::resource('/directCostDescription', 'DirectCostDescriptionController');
-    
 });
 
 

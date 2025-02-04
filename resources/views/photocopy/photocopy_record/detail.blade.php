@@ -16,26 +16,26 @@
 				<div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
 				<form id="recordForm" name="recordForm" action="{{route('photocopy_record.store')}}" class="form-horizontal">
 					<input type="hidden" name="record_id" id="record_id">
-                    <input type="hidden" name="photocopy_id" value="{{$photocopy->id}}">
+					<input type="hidden" name="photocopy_id" value="{{$photocopy->id}}">
 					<div class="row">
 						<div class="col-md-3">
 							<div class="form-group">
 								<label class="control-label text-right">Date</label>
-                                <input type="text" id="date" name="date" value="{{ old('date') }}" class="form-control date_input" data-validation="required" readonly>
-								
-                            </div>
+								<input type="text" id="date" name="date" value="{{ old('date') }}" class="form-control date_input" data-validation="required" readonly>
+
+							</div>
 						</div>
-                        <div class="col-md-2">
+						<div class="col-md-2">
 							<div class="form-group">
 								<label class="control-label text-right">Reading</label>
-								<input type="number" name="reading" id="reading" value="{{ old('reading') }}" class="form-control" >
-                            </div>
+								<input type="number" name="reading" id="reading" value="{{ old('reading') }}" class="form-control">
+							</div>
 						</div>
-                        <div class="col-md-7">
+						<div class="col-md-7">
 							<div class="form-group">
 								<label class="control-label text-right">Remarks</label>
-								<input type="text" name="remarks" id="remarks" value="{{ old('remarks') }}" class="form-control" >
-                            </div>
+								<input type="text" name="remarks" id="remarks" value="{{ old('remarks') }}" class="form-control">
+							</div>
 						</div>
 					</div>
 
@@ -65,32 +65,38 @@
 <!-- End Modal -->
 
 <div class="row">
-    <div class="col-lg-2">
+	<div class="col-lg-2">
 		@include('layouts.vButton.photocopyButton')
-    </div>
+	</div>
 </div>
-<div class="card">
-	<div class="card-body">
-		<button type="button" class="btn btn-success float-right" id="createRecordy" data-toggle="modal">Add Record</button>
-		<h2 class="card-title" style="color:black">{{$photocopy->name}} Records</h2>
-		<div class="table-responsive m-t-40">
-			<table id="myTable" class="table table-bordered table-striped">
-				<thead>
-					<tr>
-						<th style="width:10%">Date</th>
-                        <th style="width:10%">Reading</th>
-                        <th style="width:60%">Remarks</th>
-						<th style="width:10%">Total Copies</th>
-						<th style="width:5%">Edit</th>
-						@role('Super Admin')
-						<th style="width:5%">Delete</th>
-						@endrole
-					</tr>
-				</thead>
-			</table>
+
+<div class="row justify-content-end">
+	<div class="col-lg-12 reducedCol">
+		<div class="card">
+			<div class="card-body">
+				<button type="button" class="btn btn-success float-right" id="createRecordy" data-toggle="modal">Add Record</button>
+				<h2 class="card-title" style="color:black">{{$photocopy->name}} Records</h2>
+				<div class="table-responsive m-t-40">
+					<table id="myTable" class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width:10%">Date</th>
+								<th style="width:10%">Reading</th>
+								<th style="width:60%">Remarks</th>
+								<th style="width:10%">Total Copies</th>
+								<th style="width:5%">Edit</th>
+								@role('Super Admin')
+								<th style="width:5%">Delete</th>
+								@endrole
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
+
 <script>
 	$(document).ready(function() {
 
@@ -105,44 +111,44 @@
 				processing: true,
 				serverSide: true,
 				"aaSorting": [],
-                dom: 'Blfrtip',
-                buttons: [{
-                        extend: 'copyHtml5',
-                        exportOptions: {
-                            columns: [0, 1, 2,3]
-                        }
-                    },
-                    {
-                        extend: 'excelHtml5',
-                        exportOptions: {
-                            columns: [0, 1, 2,3]
-                        }
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        exportOptions: {
-                            columns: [0, 1, 2,3]
-                        }
-                    }, {
-                        extend: 'csvHtml5',
-                        exportOptions: {
-                            columns: [0, 1, 2,3]
-                        }
-                    },
-                ],
+				dom: 'Blfrtip',
+				buttons: [{
+						extend: 'copyHtml5',
+						exportOptions: {
+							columns: [0, 1, 2, 3]
+						}
+					},
+					{
+						extend: 'excelHtml5',
+						exportOptions: {
+							columns: [0, 1, 2, 3]
+						}
+					},
+					{
+						extend: 'pdfHtml5',
+						exportOptions: {
+							columns: [0, 1, 2, 3]
+						}
+					}, {
+						extend: 'csvHtml5',
+						exportOptions: {
+							columns: [0, 1, 2, 3]
+						}
+					},
+				],
 				ajax: {
-					url: "{{ route('photocopy_record.show', $photocopy->id) }}" ,
+					url: "{{ route('photocopy_record.show', $photocopy->id) }}",
 				},
 				columns: [{
 						data: 'date',
 						name: 'date'
 					},
-                    {
+					{
 						data: 'reading',
 						name: 'reading'
 					},
 
-                    {
+					{
 						data: 'remarks',
 						name: 'remarks'
 					},
@@ -170,9 +176,9 @@
 			$('#createRecordy').click(function(e) {
 				$('#json_message_modal').html('');
 				$('#recordForm').trigger("reset");
-	
+
 				$('#ajaxModel').modal('show');
-				
+
 			});
 
 			$('#saveBtn').unbind().click(function(e) {
@@ -205,21 +211,21 @@
 					}
 				});
 			});
-            $('body').unbind().on('click', '.editRecord', function () {
-                var record_id = $(this).data('id');
+			$('body').unbind().on('click', '.editRecord', function() {
+				var record_id = $(this).data('id');
 
-                $('#json_message_modal').html('');
-                $.get("{{ url('photocopy_record') }}" +'/' + record_id +'/edit', function (data) {
-                    console.log(data);
-                    $('#modelHeading').html("Edit Photocopy");
-                    $('#saveBtn').val("edit-Photocopy");
-                    $('#ajaxModel').modal('show');
-                    $('#record_id').val(data.id);
-                    $('#date').val(data.date); 
-                    $('#reading').val(data.reading); 
-                    $('#remarks').val(data.remarks); 
-                })
-            });
+				$('#json_message_modal').html('');
+				$.get("{{ url('photocopy_record') }}" + '/' + record_id + '/edit', function(data) {
+					console.log(data);
+					$('#modelHeading').html("Edit Photocopy");
+					$('#saveBtn').val("edit-Photocopy");
+					$('#ajaxModel').modal('show');
+					$('#record_id').val(data.id);
+					$('#date').val(data.date);
+					$('#reading').val(data.reading);
+					$('#remarks').val(data.remarks);
+				})
+			});
 
 			$('body').on('click', '.deleteRecord', function() {
 				var record_id = $(this).data("id");
@@ -242,6 +248,7 @@
 				}
 			});
 		}); // end function
+
 
 	}); //End document ready function
 </script>

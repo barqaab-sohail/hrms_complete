@@ -12,13 +12,13 @@ use App\Models\Photocopy\PhotocopyRecord;
 
 class PhotocopyRecordController extends Controller
 {
-    
-    public function list(){
+
+    public function list()
+    {
 
         $photocopies = Photocopy::all();
 
         return view('photocopy.photocopy_record.list', compact('photocopies'));
-        
     }
 
     // public function edit($id){
@@ -27,78 +27,83 @@ class PhotocopyRecordController extends Controller
     //     return view ('photocopy.phtocopy_record.detail', compact('photocopy','photocopyRecords'));
     // }
 
-    public function show(Request $request, $id) {
+
+    public function show(Request $request, $id)
+    {
 
         $photocopy = Photocopy::find($id);
-        $photocopyRecords = PhotocopyRecord::where('photocopy_id',$photocopy->id)->orderBy('date','DESC')->get();
+        $photocopyRecords = PhotocopyRecord::where('photocopy_id', $photocopy->id)->orderBy('date', 'DESC')->get();
 
         if ($request->ajax()) {
-            
-            return DataTables::of($photocopyRecords)
-                    ->addIndexColumn()
-                    ->addColumn('copies', function($row){
-                  
-                        $perviousData = PhotocopyRecord::where('date','<', $row->date)->where('photocopy_id',$row->photocopy_id)->orderBy('date','DESC')->first();
-                        if($perviousData){
-                            return $row->reading - $perviousData->reading;
-                        }else{
-                            return 0;
-                        }
-                    })
-                    ->addColumn('Edit', function($row){
-   
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editRecord">Edit</a>';
-                                                     
-                            return $btn;
-                    })
-                    ->addColumn('Delete', function($row){                
-                      
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteRecord">Delete</a>';
-                            
-                           
-                            return $btn;
-                    })
-                    ->editColumn('date', function ($row){
 
-                        return \Carbon\Carbon::parse($row->date)->format('M d, Y');
-                    })
-                    ->rawColumns(['Edit','Delete'])
-                    ->make(true);
+            return DataTables::of($photocopyRecords)
+                ->addIndexColumn()
+                ->addColumn('copies', function ($row) {
+
+                    $perviousData = PhotocopyRecord::where('date', '<', $row->date)->where('photocopy_id', $row->photocopy_id)->orderBy('date', 'DESC')->first();
+                    if ($perviousData) {
+                        return $row->reading - $perviousData->reading;
+                    } else {
+                        return 0;
+                    }
+                })
+                ->addColumn('Edit', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editRecord">Edit</a>';
+
+                    return $btn;
+                })
+                ->addColumn('Delete', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteRecord">Delete</a>';
+
+
+                    return $btn;
+                })
+                ->editColumn('date', function ($row) {
+
+                    return \Carbon\Carbon::parse($row->date)->format('M d, Y');
+                })
+                ->rawColumns(['Edit', 'Delete'])
+                ->make(true);
         }
 
-        return view ('photocopy.photocopy_record.detail', compact('photocopy','photocopyRecords'));
-        
+        return view('photocopy.photocopy_record.detail', compact('photocopy', 'photocopyRecords'));
     }
 
-    public function store (Request $request) {
+    public function store(Request $request)
+    {
 
         if ($request->filled('date')) {
             $request['date'] = \Carbon\Carbon::parse($request->date)->format('Y-m-d');
         }
 
-        $maxRecord = PhotocopyRecord::where('photocopy_id', $request['photocopy_id'])->where('date','<',$request['date'])->max('reading');
-        if(!$maxRecord){
-            $maxRecord=0;
+        $maxRecord = PhotocopyRecord::where('photocopy_id', $request['photocopy_id'])->where('date', '<', $request['date'])->max('reading');
+        if (!$maxRecord) {
+            $maxRecord = 0;
         }
         $validated = $request->validate([
-            'date' => "required|date|".Rule::unique('photocopy_records')->where('photocopy_id',$request['photocopy_id'])->ignore($request['record_id']), 
-            'reading'=>"required|gt:$maxRecord",
-            'photocopy_id'=>'required'
+            'date' => "required|date|" . Rule::unique('photocopy_records')->where('photocopy_id', $request['photocopy_id'])->ignore($request['record_id']),
+            'reading' => "required|gt:$maxRecord",
+            'photocopy_id' => 'required',
+            'remarks' => 'nullable|max:191'
         ]);
-       
-        
 
 
-         DB::transaction(function () use ($request) {  
-            PhotocopyRecord::updateOrCreate(['id' => $request['record_id']],
-                ['date'=> $request['date'],
-                'reading'=> $request['reading'],
-                'remarks'=> $request['remarks'],
-                'photocopy_id'=> $request['photocopy_id'],
-                ]); 
+
+
+        DB::transaction(function () use ($request) {
+            PhotocopyRecord::updateOrCreate(
+                ['id' => $request['record_id']],
+                [
+                    'date' => $request['date'],
+                    'reading' => $request['reading'],
+                    'remarks' => $request['remarks'],
+                    'photocopy_id' => $request['photocopy_id'],
+                ]
+            );
         }); // end transcation      
-       return response()->json(['success'=>'Data saved successfully.']);
-
+        return response()->json(['success' => 'Data saved successfully.']);
     }
 
     public function edit($id)
@@ -107,13 +112,13 @@ class PhotocopyRecordController extends Controller
         return response()->json($photocopyRecord);
     }
 
-    
-    public function destroy ($id){
 
-    	DB::transaction(function () use ($id) {  
-    		PhotocopyRecord::find($id)->delete();  		   	
-    	}); // end transcation 
-        return response()->json(['message'=>'data  delete successfully.']);
+    public function destroy($id)
+    {
 
+        DB::transaction(function () use ($id) {
+            PhotocopyRecord::find($id)->delete();
+        }); // end transcation 
+        return response()->json(['message' => 'data  delete successfully.']);
     }
 }
