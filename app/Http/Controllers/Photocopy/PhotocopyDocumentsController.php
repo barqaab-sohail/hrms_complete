@@ -78,6 +78,7 @@ class PhotocopyDocumentsController extends Controller
         DB::transaction(function () use ($input, $request, $photocopy) {
 
             $attachment['document_date'] = $input['document_date'];
+            $attachment['reference_no'] = $input['reference_no'];
             //add image
             if ($request->hasFile('document')) {
                 $extension = request()->document->getClientOriginalExtension();

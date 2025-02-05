@@ -189,7 +189,26 @@
                     </ul>
                 </li>
                 @endcanany
-                <!-- End Photocopy -->
+                <!-- End folder -->
+
+                <!-- Folder -->
+                @canany(['folder record'])
+                <li class="{{Request::is('folder*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark"
+                        href="#" aria-expanded="false"><i class="mdi mdi-folder"></i><span
+                            class="hide-menu">Folders</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        @can('Super Admin')        
+                        <li><a class="{{Request::is('folder/create')?'active':''}}" href="{{route('folder.create')}}">Add
+                                Folder</a></li>
+                        @endcan
+                        
+                        <li><a class="{{Request::is('folder_list')?'active':''}}" href="{{route('folder.list')}}">List of 
+                        Folders</a></li>
+                        
+                    </ul>
+                </li>
+                @endcanany
+                <!-- End Folder -->
 
                 <!-- Leave -->
                 <li class="{{Request::is('hrms/*leave*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark"

@@ -1,41 +1,36 @@
 <?php
 
-namespace App\Http\Controllers\Asset;
+namespace App\Http\Controllers\Folder;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
-use App\Models\Asset\AsDocumentation;
-use App\Models\Asset\Asset;
-use App\Http\Requests\Asset\AsDocumentStore;
+use Illuminate\Support\Facades\File;
+use App\Models\Folder\FolderDocument;
+use App\Models\Folder\Folder;
+use App\Http\Requests\Folder\FolderDocumentStore;
 use DataTables;
 use DB;
-use Storage;
 
-class AssetDocumentController extends Controller
+
+class FolderDocumentsController extends Controller
 {
-
-
-    public function index()
+    public function show($id)
     {
-
-        $view =  view('asset.document.create')->render();
-        return response()->json($view);
+        $folder = Folder::find($id);
+        return view('folder.document.create', compact('folder'));
     }
 
     public function create(Request $request)
     {
-
         if ($request->ajax()) {
-            $data = AsDocumentation::where('asset_id', $request->assetId)->latest()->get();
+            $data = FolderDocument::where('folder_id', $request->folderId)->latest()->get();
 
             return  DataTables::of($data)
                 ->addIndexColumn()
-                ->editColumn('document_date', function($row){
-                    if($row->document_date){
-                    return \Carbon\Carbon::parse($row->document_date)->format('M d, Y');
-                    }
-                    else{
+                ->editColumn('document_date', function ($row) {
+                    if ($row->document_date) {
+                        return \Carbon\Carbon::parse($row->document_date)->format('M d, Y');
+                    } else {
                         return '';
                     }
                 })
@@ -66,14 +61,13 @@ class AssetDocumentController extends Controller
                 ->make(true);
         }
 
-        $view =  view('asset.document.create')->render();
+        $view =  view('folder.document.create')->render();
         return response()->json($view);
     }
 
-    public function store(AsDocumentStore $request)
+    public function store(FolderDocumentStore $request)
     {
-        $asset = Asset::where('id', $request->asset_id)->first();
-
+        $folder = Folder::find($request->folder_id);
 
         $input = $request->all();
 
@@ -81,7 +75,7 @@ class AssetDocumentController extends Controller
             $input['document_date'] = \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
         }
 
-        DB::transaction(function () use ($input, $request, $asset) {
+        DB::transaction(function () use ($input, $request, $folder) {
 
             $attachment['document_date'] = $input['document_date'];
             $attachment['reference_no'] = $input['reference_no'];
@@ -89,7 +83,7 @@ class AssetDocumentController extends Controller
             if ($request->hasFile('document')) {
                 $extension = request()->document->getClientOriginalExtension();
                 $fileName = time() . '.' . $extension;
-                $folderName = "asset/" . $asset->id . "/";
+                $folderName = "folder/" . $folder->id . "/";
                 //store file
                 $request->file('document')->storeAs('public/' . $folderName, $fileName);
 
@@ -99,26 +93,27 @@ class AssetDocumentController extends Controller
                 $attachment['path'] = $folderName;
                 $attachment['extension'] = $extension;
 
-                $attachment['asset_id'] =  $input['asset_id'];
+                $attachment['folder_id'] =  $input['folder_id'];
                 $attachment['description'] = $input['description'];
+                
 
-                $asDocumentation = AsDocumentation::where('id', request()->as_document_id)->first();
+                $folderDocument = FolderDocument::where('id', request()->folder_document_id)->first();
 
-                if ($asDocumentation) {
-                    $oldDocumentPath =  $asDocumentation->path . $asDocumentation->file_name;
-                    AsDocumentation::findOrFail($asDocumentation->id)->update($attachment);
+                if ($folderDocument) {
+                    $oldDocumentPath =  $folderDocument->path . $folderDocument->file_name;
+                    FolderDocument::findOrFail($folderDocument->id)->update($attachment);
 
                     if (File::exists(public_path('storage/' . $oldDocumentPath))) {
                         File::delete(public_path('storage/' . $oldDocumentPath));
                     }
                 } else {
-                    AsDocumentation::create($attachment);
+                    FolderDocument::create($attachment);
                 }
             }
 
-            if ($input['as_document_id']) {
+            if ($input['folder_document_id']) {
 
-                AsDocumentation::findOrFail($input['as_document_id'])->update($input);
+                FolderDocument::findOrFail($input['folder_document_id'])->update($input);
             }
         }); // end transcation     
 
@@ -127,24 +122,19 @@ class AssetDocumentController extends Controller
 
     public function edit($id)
     {
-        $document = AsDocumentation::find($id);
+        $document = FolderDocument::find($id);
         return response()->json($document);
     }
 
     public function destroy($id)
     {
-        $documentImage = AsDocumentation::where('id', $id)->first();
-        if (AsDocumentation::where('asset_id', session('asset_id'))->count() < 2 || strtolower($documentImage->description) == 'image') {
-            return response()->json(['error' => 'You cannot delete asset image']);
-        }
-
         DB::transaction(function () use ($id) {
-            $asDocumentation = AsDocumentation::where('id', $id)->first();
-            $asDocumentPath =  $asDocumentation->path . $asDocumentation->file_name;
-            $asDocumentation->delete();
+            $folderDocument = FolderDocument::where('id', $id)->first();
+            $documentPath =  $folderDocument->path . $folderDocument->file_name;
+            $folderDocument->delete();
 
-            if (File::exists(public_path('storage/' . $asDocumentPath))) {
-                File::delete(public_path('storage/' . $asDocumentPath));
+            if (File::exists(public_path('storage/' . $documentPath))) {
+                File::delete(public_path('storage/' . $documentPath));
             }
         }); // end transcation 
         return response()->json(['success' => 'data  delete successfully.']);

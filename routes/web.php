@@ -293,6 +293,14 @@ Route::group(['middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Photocop
     Route::resource('/photocopy_documents', 'PhotocopyDocumentsController');
 });
 
+//Folders Routes
+
+Route::group(['middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Folder'], function () {
+    Route::resource('/folder', 'FolderController');
+    Route::get('/folder_list', 'FolderController@list')->name('folder.list');
+    Route::resource('/folder_documents', 'FolderDocumentsController');
+});
+
 //Leave Routes
 Route::get('/onlineLeave', 'Leave\LeaveController@onlineLeave');
 Route::post('/leaveEmployeeData', 'Leave\LeaveController@employeeData')->name('leave.employeeData');
