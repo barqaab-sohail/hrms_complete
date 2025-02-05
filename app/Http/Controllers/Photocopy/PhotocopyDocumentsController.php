@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Photocopy;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use App\Models\Photocopy\PhotocopyDocument;
 use App\Models\Photocopy\Photocopy;
 use App\Http\Requests\Photocopy\PhotocopyDocumentStore;
@@ -66,8 +67,7 @@ class PhotocopyDocumentsController extends Controller
 
     public function store(PhotocopyDocumentStore $request)
     {
-        $photocopy = PhotocopyDocument::where('id', $request->photocopy_id)->first();
-
+        $photocopy = Photocopy::find($request->photocopy_id);
 
         $input = $request->all();
 
@@ -77,6 +77,7 @@ class PhotocopyDocumentsController extends Controller
 
         DB::transaction(function () use ($input, $request, $photocopy) {
 
+            $attachment['document_date'] = $input['document_date'];
             //add image
             if ($request->hasFile('document')) {
                 $extension = request()->document->getClientOriginalExtension();
@@ -93,6 +94,7 @@ class PhotocopyDocumentsController extends Controller
 
                 $attachment['photocopy_id'] =  $input['photocopy_id'];
                 $attachment['description'] = $input['description'];
+                
 
                 $photocopyDocument = PhotocopyDocument::where('id', request()->photocopy_document_id)->first();
 

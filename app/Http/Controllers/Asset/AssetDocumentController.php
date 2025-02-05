@@ -83,6 +83,7 @@ class AssetDocumentController extends Controller
 
         DB::transaction(function () use ($input, $request, $asset) {
 
+            $attachment['document_date'] = $input['document_date'];
             //add image
             if ($request->hasFile('document')) {
                 $extension = request()->document->getClientOriginalExtension();

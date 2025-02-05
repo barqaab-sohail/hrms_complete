@@ -8,11 +8,9 @@
     <button type="button" id="hideButton" class="btn btn-success float-right">Add Document</button>
 </div>
 
-<div class="row">
-    <div class="col-lg-2">
-        @include('layouts.vButton.photocopyButton')
-    </div>
-</div>
+
+   @include('layouts.vButton.photocopyButton')
+
 
 <div class="row justify-content-end">
     <div class="col-lg-12 reducedCol">
@@ -30,9 +28,10 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group row">
-                                    <div class="col-md-12">
+                                   <div class="col-md-12">
                                         <label class="control-label text-right">Document Description</label>
                                         <input type="hidden" name="photocopy_document_id" id="photocopy_document_id">
+                                        <input type="hidden" name="photocopy_id" id="photocopy_id">
 
                                         <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control exempted" data-validation="required" placeholder="Enter Document Detail">
                                     </div>
@@ -133,8 +132,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
-        // formFunctions();
-
+         formFunctions();
         $('#formDocument').hide();
 
         $("#pdf").hide();
@@ -187,7 +185,7 @@
             ajax: {
                 url: "{{ route('photocopy_documents.create') }}",
                 data: {
-                    photocopyId: $("#id").val()
+                    photocopyId: "{{$photocopy->id}}"
                 }
             },
             columns: [{
@@ -226,9 +224,12 @@
         });
 
         $('#hideButton').click(function() {
+            var photocopyId = "{{$photocopy->id}}";
+            $(".fa-spin").hide();
             $('#formDocument').toggle();
             $('#formDocument').trigger("reset");
             $('#photocopy_document_id').val('');
+            $('#photocopy_id').val(photocopyId);
             $("#formDocument").attr("method", "POST");
             $("#pdf").hide();
             document.getElementById("wizardPicturePreview").src = "{{asset('Massets/images/document.png')}}";
@@ -269,7 +270,6 @@
 
             e.preventDefault();
             var formData = new FormData(this);
-            formData.append("photocopy_id", $("#id").val());
             $.ajax({
                 data: formData,
                 url: "{{ route('photocopy_documents.store') }}",
