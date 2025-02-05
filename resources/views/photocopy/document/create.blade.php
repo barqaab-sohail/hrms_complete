@@ -107,7 +107,8 @@
                     </div>
                 </form>
 
-                <br>
+                
+                <h2 class="card-title" style="color:black">{{$photocopy->name}} Documents</h2>
                 <table class="table table-bordered data-table" width=100%>
                     <thead>
                         <tr>
