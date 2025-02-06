@@ -47,8 +47,10 @@
                         </ul>
                     </div>
                 </li>
-
-                <!-- Notification -->
+                <!-- End Message -->
+                @endcan
+                @can('alert')
+                <!-- Alert -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell"></i><span class="badge badge-pill badge-danger">{{appointmentExpiryTotal() + cnicExpiryTotal() + drivingLicenceExpiryTotal() + pecCardExpiryTotal() + statusLeaveEmployee()->count()}}</span>
@@ -75,6 +77,7 @@
                         </ul>
                     </div>
                 </li>
+                <!-- End Alert -->
                 @endcan
                 <!-- Employee Picture -->
                 <li class="nav-item dropdown">
