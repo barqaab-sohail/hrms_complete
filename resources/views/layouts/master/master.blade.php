@@ -69,6 +69,7 @@
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
     <!-- end - This is for datatabe Fixed Columns only -->
+    @livewireStyles
 </head>
 @include('layouts.master.adminScripts')
 <style>
@@ -124,6 +125,7 @@
     <div style="text-align:center">
         <p>HRMS 11.10 - Developed by: BARQAAB IT</p>
     </div>
+    @livewireScripts
 </body>
 
 </html>

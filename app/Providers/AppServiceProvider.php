@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Route;
+use Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,10 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        
     }
 
-    
+
 
     /**
      * Bootstrap any application services.
@@ -28,6 +28,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
- 
+
+        Livewire::setUpdateRoute(function ($handle) {
+            return Route::post('/hrms11/livewire/update', $handle);
+        });
     }
 }

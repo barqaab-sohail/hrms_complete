@@ -27,6 +27,7 @@ class AssetController extends Controller
     public function index(Request $request)
     {
 
+        // authorize only user who add the Asset
         $assets = Asset::join('audits', 'audits.auditable_id', 'assets.id')->select('assets.*', 'audits.user_id', 'audits.auditable_id', 'audits.auditable_type')->where('auditable_type', 'App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->with('asCurrentLocation', 'asCurrentAllocation', 'asDocumentation')->get();
         if ($request->ajax()) {
 
