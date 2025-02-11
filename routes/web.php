@@ -5,6 +5,8 @@ use App\Http\Controllers\Project\ProjectLedgerActivityController;
 use App\Models\Hr\HrExperience;
 use App\Models\Hr\HrEmployee;
 use App\User;
+use App\Livewire\Asset\ListAsset;
+use App\Livewire\Asset\CreateAsset;
 
 
 
@@ -272,7 +274,6 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/employee/asset/search/result', 'AssetController@result')->name('asset.result');
     Route::resource('/asset', 'AssetController');
 
-
     Route::resource('/asDocument', 'AssetDocumentController');
     Route::resource('/asPurchase', 'AsPurchaseController');
     Route::resource('/asLocation', 'AsLocationController');
@@ -283,6 +284,10 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/asset/sub_classes/{id?}', 'AssetController@getSubClasses');
     Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
 });
+
+
+
+//Route::get('/asset_livewire', ListAsset::class);
 
 //Photocopy Routes
 

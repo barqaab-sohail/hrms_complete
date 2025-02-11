@@ -29,8 +29,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-        Livewire::setUpdateRoute(function ($handle) {
-            return Route::post('/hrms11/livewire/update', $handle);
-        });
+        // Livewire::setUpdateRoute(function ($handle) {
+        //     return Route::post('/hrms11/livewire/update', $handle);
+        // });
     }
 }
