@@ -40,59 +40,63 @@ class EmployeeController extends Controller
             return $data;
         }
 
-        $data = HrEmployee::with('employeeCurrentProject','employeeCurrentDesignation', 'employeeCurrentOffice','hrExit', 'employeeAppointment', 'hrContactMobile','hrBloodGroup','employeeCurrentSalary','salayEffectiveDate')->get();
-       
+        $data = HrEmployee::with('employeeCurrentProject', 'employeeCurrentDesignation', 'employeeCurrentOffice', 'hrExit', 'employeeAppointment', 'hrContactMobile', 'hrBloodGroup', 'employeeCurrentSalary', 'salayEffectiveDate')->get();
+
         $data = $this->employeeSortData($data);
-        
+
         foreach ($data as $employee) {
-           
-            $lastWorkingDate='';
+
+            $lastWorkingDate = '';
             if ($employee->hr_status_id == "Active") {
-                $lastWorkingDate='';
+                $lastWorkingDate = '';
             } else {
                 $lastWorkingDate = $employee->last_working_date ?? '';
             }
 
-            $delete='';
-            if (Auth::user()->hasPermissionTo('hr delete record')||Auth::user()->hasRole('Super Admin')) {
-                 $delete = '<form  id="formDeleteContact' . $employee->id . '"  action="' . route('employee.destroy', $employee->id) . '" method="POST">' . method_field('DELETE') . csrf_field() . '
+            $delete = '';
+            if (Auth::user()->hasPermissionTo('hr delete record') || Auth::user()->hasRole('Super Admin')) {
+                $delete = '<form  id="formDeleteContact' . $employee->id . '"  action="' . route('employee.destroy', $employee->id) . '" method="POST">' . method_field('DELETE') . csrf_field() . '
                                  <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete"> <i class="fas fa-trash-alt"></i></button>
                                  </form>';
             }
 
-            $project = $employee->employeeCurrentProject->name??'';
+            $project = $employee->employeeCurrentProject->name ?? '';
 
-            if ( $project == 'overhead') {
+            if ($project == 'overhead') {
                 $project = $employee->employeeCurrentOffice?->name ?? '';
             }
 
-            $fullName ='';
+            $fullName = '';
             if (Auth::user()->can('hr edit record') || Auth::user()->can('hr view record')) {
-                        $fullName = '<a href="' . route('employee.edit', $employee->id) . '" style="color:grey">' . $employee->full_name . '</a>';
-                    } else {
-                        $fullName = $employee->full_name;
+                $fullName = '<a href="' . route('employee.edit', $employee->id) . '" style="color:grey">' . $employee->full_name . '</a>';
+            } else {
+                $fullName = $employee->full_name;
             }
 
-            $effectiveDate='';
-            $salary='';
-            if($employee->employeeCurrentSalary){
-                $salary=  number_format($employee->employeeCurrentSalary->total_salary);
-                $effectiveDate= \Carbon\Carbon::parse($employee->salayEffectiveDate->effective_date)->format('M d, Y');
+            $effectiveDate = '';
+            $salary = '';
+            if ($employee->employeeCurrentSalary) {
+                $salary =  number_format($employee->employeeCurrentSalary->total_salary);
+                $effectiveDate = \Carbon\Carbon::parse($employee->salayEffectiveDate->effective_date)->format('M d, Y');
             }
-            
+            $joiningDate = '';
+            if ($employee->employeeAppointment?->joining_date) {
+                $joiningDate = \Carbon\Carbon::parse($employee->employeeAppointment->joining_date)->format('M d, Y');
+            }
+
             $employees[] =  array(
                 "id" => $employee->id ?? '',
                 "employee_no" => $employee->employee_no ?? '',
                 "full_name" =>  $fullName,
                 "date_of_birth" => \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y') ?? '',
-                "joining_date" => \Carbon\Carbon::parse($employee->employeeAppointment->joining_date ?? '')->format('M d, Y') ?? '',
+                "joining_date" =>   $joiningDate,
                 "cnic" => $employee->cnic ?? '',
                 "designation" => $employee->designation ?? '',
                 "blood_group" => $employee->hrBloodGroup->name ?? '',
                 "age" => \Carbon\Carbon::parse($employee->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days'),
                 "mobile" => $employee->hrContactMobile->mobile ?? '',
                 "salary" => $salary,
-                'effective_date'=> $effectiveDate,
+                'effective_date' => $effectiveDate,
                 "project" =>  $project,
                 "delete" =>  $delete,
                 "last_working_date" =>  $lastWorkingDate,
@@ -100,32 +104,33 @@ class EmployeeController extends Controller
                 "hr_status_id" => $employee->hr_status_id ?? ''
             );
         }
-            Cache::put('employees', $employees, now()->addHour(12));
+        Cache::put('employees', $employees, now()->addHour(12));
         return $employees;
     }
 
-    public function refresh(){
+    public function refresh()
+    {
         \Artisan::call('cache:clear');
         $value = $this->getEmployees();
         $value = collect($value);
-        return DataTables::of($value)->rawColumns(['full_name','project','delete'])->toJson();
-
+        return DataTables::of($value)->rawColumns(['full_name', 'project', 'delete'])->toJson();
     }
 
     public function index(Request $request)
     {
-      
+
         if ($request->ajax()) {
 
             $value = $this->getEmployees();
             $value = collect($value);
-            return DataTables::of($value)->rawColumns(['full_name','delete'])->toJson();             
+            return DataTables::of($value)->rawColumns(['full_name', 'delete'])->toJson();
         }
 
         return view('hr.employee.listDataTable');
     }
 
-    public function employeeSortData($employees){
+    public function employeeSortData($employees)
+    {
         $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
         $second = range(1000001, 1099999);
         $employeeNos = array_merge($first,  $second);
@@ -144,7 +149,6 @@ class EmployeeController extends Controller
         });
 
         return $employees;
-
     }
 
     public function create()
@@ -206,10 +210,10 @@ class EmployeeController extends Controller
         return response()->json(['url' => route("employee.edit", $employee), 'message' => 'Data Successfully Saved']);
     }
 
-    
+
     public function activeEmployeesList()
     {
-       
+
         $employees = HrEmployee::where('hr_status_id', 1)->with('employeeCurrentDesignation', 'employeeCurrentProject', 'signedAppointmentLetter', 'employeeCategory', 'hod', 'hrContactMobile', 'employeeAppointment')->get();
 
         return view('hr.employee.activeEmployeesList', compact('employees'));
@@ -245,9 +249,9 @@ class EmployeeController extends Controller
         session()->put('hr_employee_id', $data->id);
 
         if ($request->ajax()) {
-            return view('hr.employee.ajax', compact('genders', 'maritalStatuses', 'religions', 'data','id'));
+            return view('hr.employee.ajax', compact('genders', 'maritalStatuses', 'religions', 'data', 'id'));
         } else {
-            return view('hr.employee.edit', compact('genders', 'maritalStatuses', 'religions', 'data','id'));
+            return view('hr.employee.edit', compact('genders', 'maritalStatuses', 'religions', 'data', 'id'));
         }
     }
 
@@ -255,7 +259,7 @@ class EmployeeController extends Controller
     public function update(EmployeeStore $request, $id)
     {
 
-       
+
         // //ensure client end is is not changed
         // if ($id != session('hr_employee_id')) {
         //     return response()->json(['status' => 'Not OK', 'message' => "Security Breach. No Data Change "]);
@@ -271,7 +275,7 @@ class EmployeeController extends Controller
 
         $oldData = HrEmployee::find($id);
 
-        DB::transaction(function () use ($input, $id ) {
+        DB::transaction(function () use ($input, $id) {
             HrEmployee::findOrFail($id)->update($input);
 
             if ($input['husband_name']) {
@@ -280,7 +284,7 @@ class EmployeeController extends Controller
                 HrEmployeeHusband::where('hr_employee_id', $id)->delete();
             }
         }); // end transcation
-       
+
         if ($request->ajax()) {
             return response()->json(['status' => 'OK', 'message' => "Data Successfully Updated"]);
         } else {
@@ -291,7 +295,7 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
 
-      //  HrEmployee::findOrFail($id)->delete();
+        //  HrEmployee::findOrFail($id)->delete();
 
         return back()->with('message', 'Data Successfully Deleted');
         //return response()->json(['status'=> 'OK', 'message' => 'Data Successfully Deleted']);
@@ -382,26 +386,21 @@ class EmployeeController extends Controller
             //this variable used only for goting to else part of result blade.
             $documents = true;
             return view('hr.employee.search.result', compact('result', 'documents'));
-        } 
-        
-        elseif($request->filled('education_year')){
-            
+        } elseif ($request->filled('education_year')) {
+
             $documents = false;
             $year = $data['education_year'];
 
-            
+
             $employeeIds =  DB::table('hr_employees')
-            ->join('hr_educations', 'hr_employees.id', '=', 'hr_educations.hr_employee_id')
-            ->join('educations', 'educations.id', '=', 'hr_educations.education_id')
-            ->where('educations.level', '>=', $year)->select('hr_employees.*')->distinct('hr_employees.employee_no')->whereIn('hr_employees.hr_status_id', [1, 2, 3, 4, 5, 6, 7])->pluck('id')->toArray();
+                ->join('hr_educations', 'hr_employees.id', '=', 'hr_educations.hr_employee_id')
+                ->join('educations', 'educations.id', '=', 'hr_educations.education_id')
+                ->where('educations.level', '>=', $year)->select('hr_employees.*')->distinct('hr_employees.employee_no')->whereIn('hr_employees.hr_status_id', [1, 2, 3, 4, 5, 6, 7])->pluck('id')->toArray();
 
             $result = HrEmployee::whereIn('id', $employeeIds)->get();
-    
-            return view('hr.employee.search.result', compact('result', 'documents'));
 
-        }
-        
-        else {
+            return view('hr.employee.search.result', compact('result', 'documents'));
+        } else {
 
             $documents = false;
             $result = HrEmployee::whereIn('hr_status_id', [1, 2, 3, 4, 5, 6, 7])
