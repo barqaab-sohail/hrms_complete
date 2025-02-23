@@ -42,7 +42,9 @@ class PhotocopyRecordController extends Controller
 
                     $perviousData = PhotocopyRecord::where('date', '<', $row->date)->where('photocopy_id', $row->photocopy_id)->orderBy('date', 'DESC')->first();
                     if ($perviousData) {
-                        return $row->reading - $perviousData->reading;
+                        $blackCopies =  $row->reading - $perviousData->reading;
+                        $colorCopies = $row->color_reading - $perviousData->color_reading;
+                        return $blackCopies + $colorCopies;
                     } else {
                         return 0;
                     }
@@ -82,9 +84,19 @@ class PhotocopyRecordController extends Controller
         if (!$maxRecord) {
             $maxRecord = 0;
         }
+        $maxColorRecord = PhotocopyRecord::where('photocopy_id', $request['photocopy_id'])->where('date', '<', $request['date'])->max('color_reading');
+        if (!$maxColorRecord) {
+            $maxColorRecord = 0;
+        }
+        $colorReading = 'nullable';
+        $photocopy = Photocopy::find($request['photocopy_id']);
+        if ($photocopy->type == "Color") {
+            $colorReading = 'required';
+        }
         $validated = $request->validate([
             'date' => "required|date|" . Rule::unique('photocopy_records')->where('photocopy_id', $request['photocopy_id'])->ignore($request['record_id']),
-            'reading' => "required|gt:$maxRecord",
+            'reading' => "required|gte:$maxRecord",
+            'color_reading' => "$colorReading|gte:$maxColorRecord",
             'photocopy_id' => 'required',
             'remarks' => 'nullable|max:191'
         ]);
@@ -98,6 +110,7 @@ class PhotocopyRecordController extends Controller
                 [
                     'date' => $request['date'],
                     'reading' => $request['reading'],
+                    'color_reading' => $request['color_reading'],
                     'remarks' => $request['remarks'],
                     'photocopy_id' => $request['photocopy_id'],
                 ]
