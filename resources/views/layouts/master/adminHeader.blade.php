@@ -88,7 +88,7 @@
 
                     <div class="dropdown-menu dropdown-menu-right scale-up">
                         <ul class="dropdown-user">
-                            <li><a id="logout" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title=""><i class="fa fa-power-off"></i> Logout</a></li>
+                            <li><a id="logout" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title=""><i class="fa fa-power-off"></i> Logoutt</a></li>
                         </ul>
                         <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none;">{{ csrf_field() }}</form>
 
