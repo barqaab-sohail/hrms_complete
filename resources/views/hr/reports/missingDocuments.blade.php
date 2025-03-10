@@ -28,9 +28,10 @@
                         <th class="text-left bg-primary text-white">Engineering Degree</th>
                         <th class="text-left bg-primary text-white">Educational Documents</th>
                         <th class="text-left bg-primary text-white">Mobile</th>
-
+                        @can('hr edit record')
                         <th style="width:5%">Edit</th>
                         <th style="width:5%">Delete</th>
+                        @endcan
 
 
                     </tr>
@@ -46,116 +47,116 @@
 @stop
 @push('scripts')
 <script type="text/javascript">
-$(document).ready(function() {
+    $(document).ready(function() {
 
-    $('.data-table').DataTable({
+        $('.data-table').DataTable({
 
-        ajax: {
-            url: "{{ route('missingDocuments.list') }}",
-        },
-        columns: [{
-                data: "employee_no",
-                name: 'employee_no'
+            ajax: {
+                url: "{{ route('missingDocuments.list') }}",
             },
-            {
-                data: "full_name",
-                name: 'full_name'
-            },
-            {
-                data: "designation",
-                name: 'designation'
-            },
-            {
-                data: "division",
-                name: 'division'
-            },
+            columns: [{
+                    data: "employee_no",
+                    name: 'employee_no'
+                },
+                {
+                    data: "full_name",
+                    name: 'full_name'
+                },
+                {
+                    data: "designation",
+                    name: 'designation'
+                },
+                {
+                    data: "division",
+                    name: 'division'
+                },
 
-            {
-                data: "project",
-                name: 'project'
-            },
+                {
+                    data: "project",
+                    name: 'project'
+                },
 
-            {
-                data: "front_cnic",
-                name: 'front_cnic'
-            },
+                {
+                    data: "front_cnic",
+                    name: 'front_cnic'
+                },
 
-            {
-                data: "picture",
-                name: 'picture'
-            },
+                {
+                    data: "picture",
+                    name: 'picture'
+                },
 
-            {
-                data: "signed_appointment_letter",
-                name: 'signed_appointment_letter'
-            },
+                {
+                    data: "signed_appointment_letter",
+                    name: 'signed_appointment_letter'
+                },
 
-            {
-                data: "appointment_letter",
-                name: 'appointment_letter'
-            },
+                {
+                    data: "appointment_letter",
+                    name: 'appointment_letter'
+                },
 
-            {
-                data: "Hr_Form",
-                name: 'Hr_Form'
-            },
+                {
+                    data: "Hr_Form",
+                    name: 'Hr_Form'
+                },
 
-            {
-                data: "joining_report",
-                name: 'joining_report'
-            },
+                {
+                    data: "joining_report",
+                    name: 'joining_report'
+                },
 
-            {
-                data: "engineer_degree",
-                name: 'engineer_degree'
-            },
+                {
+                    data: "engineer_degree",
+                    name: 'engineer_degree'
+                },
 
 
-            {
-                data: "education_documents",
-                name: 'education_documents'
-            },
+                {
+                    data: "education_documents",
+                    name: 'education_documents'
+                },
 
-            {
-                data: "mobile",
-                name: 'mobile'
-            },
+                {
+                    data: "mobile",
+                    name: 'mobile'
+                },
+                @can('Super Admin') {
+                    data: 'Edit',
+                    name: 'Edit',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'Delete',
+                    name: 'Delete',
+                    orderable: false,
+                    searchable: false
+                }
+                @endcan
 
-            {
-                data: 'Edit',
-                name: 'Edit',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'Delete',
-                name: 'Delete',
-                orderable: false,
-                searchable: false
-            },
+            ],
+            processing: true,
+            serverSide: true,
+            fixedHeader: true,
+            dom: 'Blfrtip',
+            buttons: ['copy', 'excel', 'pdf'],
+            scrollY: "300px",
+            scrollX: true,
 
-        ],
-        processing: true,
-        serverSide: true,
-        fixedHeader: true,
-        dom: 'Blfrtip',
-        buttons: ['copy', 'excel', 'pdf'],
-        scrollY: "300px",
-        scrollX: true,
+            aLengthMenu: [
+                [25, 50, 100, 200, -1],
+                [25, 50, 100, 200, "All"]
+            ],
 
-        aLengthMenu: [
-            [25, 50, 100, 200, -1],
-            [25, 50, 100, 200, "All"]
-        ],
-
-        columnDefs: [{
-            targets: 4,
-            render: function(data, type, row) {
-                return type === 'display' && data.length > 30 ? data.substr(0, 30) + '…' :
-                    data;
-            }
-        }],
+            columnDefs: [{
+                targets: 4,
+                render: function(data, type, row) {
+                    return type === 'display' && data.length > 30 ? data.substr(0, 30) + '…' :
+                        data;
+                }
+            }],
+        });
     });
-});
 </script>
 @endpush
