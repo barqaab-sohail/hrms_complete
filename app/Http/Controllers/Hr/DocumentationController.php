@@ -17,71 +17,72 @@ use DB;
 
 class DocumentationController extends Controller
 {
-    
-    
-    public function show(Request $request, $id){
+
+
+    public function show(Request $request, $id)
+    {
 
         $documentNames = HrDocumentName::all();
 
-        if($request->ajax()){
-            return  view('hr.documentation.create', compact('documentNames','id'));
-        }else{
+        if ($request->ajax()) {
+            return  view('hr.documentation.create', compact('documentNames', 'id'));
+        } else {
             return back()->withError('Please contact to administrator, SSE_JS');
         }
     }
-    
-    public function create(Request $request){
+
+    public function create(Request $request)
+    {
         if ($request->ajax()) {
-        //  $data= HrDocumentation::where('hr_employee_id', $request->hrEmployeeId)
-        $documentIds = HrDocumentation::where('hr_employee_id', $request->hrEmployeeId)->orderByRaw('ISNULL(document_date), document_date desc')->get();
+            //  $data= HrDocumentation::where('hr_employee_id', $request->hrEmployeeId)
+            $documentIds = HrDocumentation::where('hr_employee_id', $request->hrEmployeeId)->orderByRaw('ISNULL(document_date), document_date desc')->get();
 
-        $order = array('Joining Report', 'Appointment Letter', 'HR Form', 'CNIC Front', 'CNIC Back', 'Original CV', 'BARQAAB CV', 'Engineering Degree MSc', 'Engineering Degree BSc', 'Educational Documents', 'Experience Certificates', 'PEC Letter', 'PEC Front', 'PEC Back', 'Pec Letter', 'Picture', 'Driving License Front', 'Driving License Back', 'Application', 'Domicile');
+            $order = array('Joining Report', 'Appointment Letter', 'HR Form', 'CNIC Front', 'CNIC Back', 'Original CV', 'BARQAAB CV', 'Engineering Degree MSc', 'Engineering Degree BSc', 'Educational Documents', 'Experience Certificates', 'PEC Letter', 'PEC Front', 'PEC Back', 'Pec Letter', 'Picture', 'Driving License Front', 'Driving License Back', 'Application', 'Domicile');
 
-        $documentIds = $documentIds->sort(function ($a, $b) use ($order) {
-            $pos_a = array_search($a->description, $order);
-            $pos_b = array_search($b->description, $order);
-            return $pos_a - $pos_b;
-        });
+            $documentIds = $documentIds->sort(function ($a, $b) use ($order) {
+                $pos_a = array_search($a->description, $order);
+                $pos_b = array_search($b->description, $order);
+                return $pos_a - $pos_b;
+            });
 
-        $data = $documentIds->sortByDesc('document_date');
-          //->latest()->get();
-          return  DataTables::of($data)
-                  ->addIndexColumn()
-                  ->addColumn('document', function ($row){
-                    if($row->extension!='pdf'){
-                        return '<img id="ViewIMG" src="'.$row->full_path.'" href="'.$row->full_path.'" width="30/" style="cursor: pointer;">';
-                    }else{
-                        return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="'.$row->full_path.'" width="30/" style="cursor: pointer;">';
+            $data = $documentIds->sortByDesc('document_date');
+            //->latest()->get();
+            return  DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('document', function ($row) {
+                    if ($row->extension != 'pdf') {
+                        return '<img id="ViewIMG" src="' . $row->full_path . '" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
+                    } else {
+                        return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
                     }
-                  })
-                  ->addColumn('copy_link', function ($row){
-                    return '<a class="copyLink" link="'.$row->full_path.'" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
-                  })   
-                 ->addColumn('Edit', function($row){
-                     
-                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editDocument">Edit</a>';
-                                           
-                          return $btn;
-                  })
-                  ->addColumn('Delete', function($row){                
-                      
-                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
-                                
-                          return $btn;
-                  })
-              
-                  ->rawColumns(['document','copy_link','Edit','Delete'])
-                  ->make(true);
-        
-      }
- 
+                })
+                ->addColumn('copy_link', function ($row) {
+                    return '<a class="copyLink" link="' . $row->full_path . '" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+                })
+                ->addColumn('Edit', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editDocument">Edit</a>';
+
+                    return $btn;
+                })
+                ->addColumn('Delete', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
+
+                    return $btn;
+                })
+
+                ->rawColumns(['document', 'copy_link', 'Edit', 'Delete'])
+                ->make(true);
+        }
     }
 
-    
 
-    public function store(DocumentationStore $request){
 
-        $input = $request->only('hr_document_name_id', 'description', 'document','document_id','hr_employee_id');
+    public function store(DocumentationStore $request)
+    {
+
+        $input = $request->only('hr_document_name_id', 'description', 'document', 'document_id', 'hr_employee_id');
 
         if ($request->filled('document_date')) {
             $input['document_date'] = \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
@@ -97,10 +98,21 @@ class DocumentationController extends Controller
 
         DB::transaction(function () use ($request, $input, $employeeName) {
 
-            if ($request->hasFile('document')){
+            if ($request->hasFile('document')) {
+
+                $vriableName = time();
+                if ($request->filled('custom_name')) {
+                    $vriableName = $request->custom_name;
+                }
+
                 $extension = request()->document->getClientOriginalExtension();
 
-                $fileName = $input['hr_employee_id'] . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
+                $fileName = $input['hr_employee_id'] . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . $vriableName . '.' . $extension;
+
+                if (HrDocumentation::where('file_name', $fileName)->first()) {
+                    $fileName = $input['hr_employee_id'] . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . $vriableName . time() . '.' . $extension;
+                }
+
                 $folderName = "hr/documentation/" . $input['hr_employee_id'] . '-' . $employeeName . "/";
                 //store file
                 $request->file('document')->storeAs('public/' . $folderName, $fileName);
@@ -113,7 +125,7 @@ class DocumentationController extends Controller
                     $reader = new \Asika\Pdf2text;
                     $input['content'] = mb_strtolower($reader->decode($file_path));
                 }
-            
+
                 $input['file_name'] = $fileName;
                 $input['size'] = $request->file('document')->getSize();
                 $input['path'] = $folderName;
@@ -122,16 +134,16 @@ class DocumentationController extends Controller
             $input['hr_employee_id'] = $request->hr_employee_id;
 
 
-            $hrDocumentation = HrDocumentation::updateOrCreate(['id'=>$input['document_id']],$input);
+            $hrDocumentation = HrDocumentation::updateOrCreate(['id' => $input['document_id']], $input);
 
             if ($request->hr_document_name_id != 'Other') {
                 $hrDocumentNameId = $request->input("hr_document_name_id");
                 //hr_employee_id is add due to validtaion before enter into database
                 $hrDocumentation->hrDocumentName()->attach($hrDocumentNameId, ['hr_employee_id' => $input['hr_employee_id']]);
-            }else{
+            } else {
                 $hrDocumentation->hrDocumentName()->detach();
             }
-           
+
 
             // check if document is related to promotion update also promotion
             $hrPromotion = HrPromotion::where('hr_documentation_id', $input['document_id'])->first();
@@ -140,7 +152,7 @@ class DocumentationController extends Controller
                 $input['effective_date'] =  $input['document_date'];
                 HrPromotion::findOrFail($hrPromotion->id)->update($input);
             }
-            
+
             // check if document is related to posting update also posting
             $hrPosting = HrPosting::where('hr_documentation_id', $input['document_id'])->first();
             if ($hrPosting) {
@@ -148,12 +160,10 @@ class DocumentationController extends Controller
                 $input['effective_date'] =  $input['document_date'];
                 HrPosting::findOrFail($hrPosting->id)->update($input);
             }
-            
-
         });  //end transaction
 
-        
-        return response()->json(['status'=> 'OK', 'message' => "Document Successfully Saved"]);
+
+        return response()->json(['status' => 'OK', 'message' => "Document Successfully Saved"]);
     }
 
 
@@ -163,7 +173,7 @@ class DocumentationController extends Controller
         $hrDocumentation = HrDocumentation::with('hrDocumentName')->find($id);
         return response()->json($hrDocumentation);
     }
-    
+
 
     public function destroy($id)
     {
@@ -191,7 +201,7 @@ class DocumentationController extends Controller
 
 
 
-    
+
     // public function create(Request $request)
     // {
 
@@ -386,59 +396,59 @@ class DocumentationController extends Controller
     //         }
     //     });  //end transaction
 
-        // $data = HrDocumentation::find($id);
-        // $input = $request->only('hr_document_name_id','description','document');
+    // $data = HrDocumentation::find($id);
+    // $input = $request->only('hr_document_name_id','description','document');
 
-        //     if ($request->filled('description')) {
+    //     if ($request->filled('description')) {
 
-        //     }else{
-        //         $input['description']= HrDocumentName::find($input['hr_document_name_id'])->name;
-        //     }
+    //     }else{
+    //         $input['description']= HrDocumentName::find($input['hr_document_name_id'])->name;
+    //     }
 
-        //     $employee = HrEmployee::find(session('hr_employee_id'));
-        //     $employeeFullName = strtolower($employee->first_name) .'_'.strtolower($employee->last_name);
-
-
-
-        // DB::transaction(function () use ($request, $input, $employeeFullName, $data, $id, &$hrDocumentNameId) { 
+    //     $employee = HrEmployee::find(session('hr_employee_id'));
+    //     $employeeFullName = strtolower($employee->first_name) .'_'.strtolower($employee->last_name);
 
 
-        //     if ($request->hasFile('document')){
-        //         $extension = request()->document->getClientOriginalExtension();
-        //         $fileName =session('hr_employee_id').'-'.$input['description'].'-'. time().'.'.$extension;
-        //         $folderName = $data->path;
-        //         //store file
-        //         $request->file('document')->storeAs('public/'.$folderName,$fileName);
 
-        //         $file_path = storage_path('app/public/'.$folderName.$fileName);
-
-        //         $input['content']='';
-
-        //             if ($extension =='pdf'){
-        //                 $reader = new \Asika\Pdf2text;
-        //                 $input['content'] = mb_strtolower($reader->decode($file_path));
-        //             }
-
-        //         $input['file_name']=$fileName;
-        //         $input['size']=$request->file('document')->getSize();
-        //         //$input['path']=$folderName;
-        //         $input['extension']=$extension;
-        //         $input['hr_employee_id']=session('hr_employee_id');
-
-        //         HrDocumentation::findOrFail($id)->update($input);
-        //     }else{
-
-        //         HrDocumentation::findOrFail($id)->update(['description'=>$input['description']]);
-        //         if($request->hr_document_name_id!='Other'){
-        //         $hrDocumentNameId = $request->input("hr_document_name_id");
-
-        //         //hr_employee_id is add due to validtaion before enter into database
-        //         $data->hrDocumentName()->updateExistingPivot($hrDocumentNameId, ['hr_employee_id'=>session('hr_employee_id')]);   
-        //         }
-        //     }
+    // DB::transaction(function () use ($request, $input, $employeeFullName, $data, $id, &$hrDocumentNameId) { 
 
 
-        // });  //end transaction
+    //     if ($request->hasFile('document')){
+    //         $extension = request()->document->getClientOriginalExtension();
+    //         $fileName =session('hr_employee_id').'-'.$input['description'].'-'. time().'.'.$extension;
+    //         $folderName = $data->path;
+    //         //store file
+    //         $request->file('document')->storeAs('public/'.$folderName,$fileName);
+
+    //         $file_path = storage_path('app/public/'.$folderName.$fileName);
+
+    //         $input['content']='';
+
+    //             if ($extension =='pdf'){
+    //                 $reader = new \Asika\Pdf2text;
+    //                 $input['content'] = mb_strtolower($reader->decode($file_path));
+    //             }
+
+    //         $input['file_name']=$fileName;
+    //         $input['size']=$request->file('document')->getSize();
+    //         //$input['path']=$folderName;
+    //         $input['extension']=$extension;
+    //         $input['hr_employee_id']=session('hr_employee_id');
+
+    //         HrDocumentation::findOrFail($id)->update($input);
+    //     }else{
+
+    //         HrDocumentation::findOrFail($id)->update(['description'=>$input['description']]);
+    //         if($request->hr_document_name_id!='Other'){
+    //         $hrDocumentNameId = $request->input("hr_document_name_id");
+
+    //         //hr_employee_id is add due to validtaion before enter into database
+    //         $data->hrDocumentName()->updateExistingPivot($hrDocumentNameId, ['hr_employee_id'=>session('hr_employee_id')]);   
+    //         }
+    //     }
+
+
+    // });  //end transaction
 
     //     return response()->json(['status' => 'OK', 'message' => "Data Successfully Updated"]);
     // }
