@@ -141,7 +141,6 @@
             fixedHeader: true,
             dom: 'Blfrtip',
             buttons: ['copy', 'excel', 'pdf'],
-            scrollY: "300px",
             scrollX: true,
 
             aLengthMenu: [
