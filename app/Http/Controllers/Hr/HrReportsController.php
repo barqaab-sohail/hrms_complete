@@ -80,9 +80,14 @@ class HrReportsController extends Controller
                 $joiningReport = $employee->joiningReport->first() ? '' : 'Missing';
                 $educationalDocuments = $employee->educationalDocuments->first() ? '' : 'Missing';
 
+                $picture = '';
+                if (str_contains($employee->picture, 'Massets/images/default.png')) { 
+                    $picture = 'Missing';
+                }else{
+                 $picture = '';
+                }
 
-
-                if ($this->examptEducationDocuments($employee->designation)) {
+          if ($this->examptEducationDocuments($employee->designation)) {
                     $educationalDocuments = 'Not Required';
                 }
 
@@ -93,7 +98,7 @@ class HrReportsController extends Controller
                     $engineeringDegree = 'Not Required';
                 }
 
-                if ($frontCNIC  != 'Missing' && $signedAppointmentLetter != 'Missing' &&  $appointmentLetter != 'Missing' &&  $hrForm != 'Missing' &&  $joiningReport != 'Missing' &&  $educationalDocuments != 'Missing' && $engineeringDegree != 'Missing') {
+                if ($frontCNIC  != 'Missing' && $signedAppointmentLetter != 'Missing' &&  $appointmentLetter != 'Missing' &&  $hrForm != 'Missing' &&  $joiningReport != 'Missing' &&  $educationalDocuments != 'Missing' && $engineeringDegree != 'Missing' && $picture != 'Missing') {
                     $data->forget($key);
                 }
             }
@@ -110,7 +115,12 @@ class HrReportsController extends Controller
                     return $row->cnicFront->first() ? '' : 'Missing';
                 })
                 ->addColumn('picture', function ($row) {
-                    return $row->picture ? '' : 'Missing';
+
+                    if (str_contains($row->picture, 'Massets/images/default.png')) { 
+                        return 'Missing';
+                    }else{
+                        return '';
+                    }
                 })
                 ->addColumn('signed_appointment_letter', function ($row) {
                     return $row->signedAppointmentLetter?->first() ? '' : 'Missing';
