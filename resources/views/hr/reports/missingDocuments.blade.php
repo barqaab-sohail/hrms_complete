@@ -28,12 +28,7 @@
                         <th class="text-left bg-primary text-white">Engineering Degree</th>
                         <th class="text-left bg-primary text-white">Educational Documents</th>
                         <th class="text-left bg-primary text-white">Mobile</th>
-                        @can('hr edit record')
-                        <th style="width:5%">Edit</th>
-                        <th style="width:5%">Delete</th>
-                        @endcan
-
-
+                       
                     </tr>
                 </thead>
                 <tbody>
@@ -120,20 +115,7 @@
                 {
                     data: "mobile",
                     name: 'mobile'
-                },
-                @can('Super Admin') {
-                    data: 'Edit',
-                    name: 'Edit',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'Delete',
-                    name: 'Delete',
-                    orderable: false,
-                    searchable: false
                 }
-                @endcan
 
             ],
             processing: true,
