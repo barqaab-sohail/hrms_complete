@@ -39,7 +39,7 @@ class ActiveUserController extends Controller
 			return DataTables::of($data)
 
 				->addColumn('full_name', function ($data) {
-					return $data->hrEmployee->full_name ?? '';
+					return $data->hrEmployee->first_name ?? '' . '' . $data->hrEmployee->last_name ?? '';
 				})
 				->addColumn('cnic', function ($data) {
 					return $data->hrEmployee->cnic ?? '';

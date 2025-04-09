@@ -69,7 +69,7 @@ class HrReportsController extends Controller
 
 
         if ($request->ajax()) {
-            $data = HrEmployee::where('hr_status_id', 1)->whereNotIn('id', $otherCompanyEmployeeIds)->with('hrMembership', 'employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
+            $data = HrEmployee::where('hr_status_id', 1)->whereNotIn('id', $otherCompanyEmployeeIds)->with('hrMembership', 'employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'signedAppointmentLetter', 'employeeCurrentDesignation')->get();
 
             foreach ($data as $key => $employee) {
 
@@ -81,13 +81,13 @@ class HrReportsController extends Controller
                 $educationalDocuments = $employee->educationalDocuments->first() ? '' : 'Missing';
 
                 $picture = '';
-                if (str_contains($employee->picture, 'Massets/images/default.png')) { 
+                if (str_contains($employee->picture, 'Massets/images/default.png')) {
                     $picture = 'Missing';
-                }else{
-                 $picture = '';
+                } else {
+                    $picture = '';
                 }
 
-          if ($this->examptEducationDocuments($employee->designation)) {
+                if ($this->examptEducationDocuments($employee->employeeCurrentDesignation?->name)) {
                     $educationalDocuments = 'Not Required';
                 }
 
@@ -107,7 +107,12 @@ class HrReportsController extends Controller
                 ->addIndexColumn()
 
 
-
+                ->addColumn('full_name', function ($row) {
+                    return $row->first_name . ' ' . $row->last_name;
+                })
+                ->addColumn('designation', function ($row) {
+                    return $row->employeeCurrentDesignation?->name;
+                })
                 ->addColumn('division', function ($row) {
                     return $row->employeeCurrentDepartment->name ?? '';
                 })
@@ -116,9 +121,9 @@ class HrReportsController extends Controller
                 })
                 ->addColumn('picture', function ($row) {
 
-                    if (str_contains($row->picture, 'Massets/images/default.png')) { 
+                    if (str_contains($row->picture, 'Massets/images/default.png')) {
                         return 'Missing';
-                    }else{
+                    } else {
                         return '';
                     }
                 })

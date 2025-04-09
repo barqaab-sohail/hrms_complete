@@ -294,9 +294,9 @@ class AssetController extends Controller
 
     public function search()
     {
-        $offices = Office::all();
-        $classes = AsClass::all();
-        $employees = HrEmployee::all();
+        $offices = Office::select('id', 'name')->get();
+        $classes = AsClass::select('id', 'name')->get();
+        $employees = HrEmployee::select('id', 'first_name', 'last_name')->with('employeeCurrentDesignation')->get();
         return view('asset.search.search', compact('offices', 'classes', 'employees'));
     }
 
