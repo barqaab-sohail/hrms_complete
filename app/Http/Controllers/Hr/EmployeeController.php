@@ -326,7 +326,7 @@ class EmployeeController extends Controller
         session()->put('hr_employee_id', $data->id);
 
 
-        return view('hr.employee.edit', compact('genders', 'maritalStatuses', 'religions', 'data'));
+        return view('hr.employee.edit', compact('genders', 'maritalStatuses', 'religions', 'data', 'id'));
     }
 
     public function search()
