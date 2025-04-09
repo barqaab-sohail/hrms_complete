@@ -314,7 +314,7 @@ class AssetController extends Controller
                 return $query->where('hr_employee_id', '=', $data['hr_employee_id']);
             })
             ->select('assets.*')
-            //->distinct('assets.id')
+            ->groupBy('assets.id') // Add this line
             ->get();
         return view('asset.search.result', compact('result'));
     }

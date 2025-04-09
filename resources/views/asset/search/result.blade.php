@@ -33,7 +33,7 @@
                             {{$asset->asCurrentLocation->name??''}}
                         </td>
                         <td>
-                           
+
                             @if(file_exists(public_path('storage/'.$asset->asPicture->path.$asset->asPicture->file_name)))
                             @php
                             $arrContextOptions=array(
@@ -66,32 +66,31 @@
 <hr>
 
 <script>
-  
     $(document).ready(function() {
         //function view from list table
         $(document).on('click', '.ViewIMG', function() {
             $(this).EZView();
         });
-      
+
         $('#myDataTable').DataTable({
             stateSave: false,
             dom: 'Blfrtip',
             buttons: [{
                     extend: 'copyHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3]
+                        columns: [0, 1, 2, 3, 4]
                     }
                 },
                 {
                     extend: 'excelHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3]
+                        columns: [0, 1, 2, 3, 4]
                     }
                 },
                 {
                     extend: 'pdfHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3]
+                        columns: [0, 1, 2, 3, 4]
                     },
                     customize: function(doc) {
                         //find paths of all images, already in base64 format
