@@ -303,14 +303,26 @@ class AssetController extends Controller
     public function result(Request $request)
     {
         $data = $request->all();
-        $result = Asset::join('as_locations', function ($join) use ($data) {
-            $join->on('as_locations.asset_id', '=', 'assets.id')
-                ->where('as_locations.hr_employee_id', '=', $data['hr_employee_id'])
-                ->where('as_locations.date', '=', function ($query) {
-                    $query->selectRaw('MAX(date)')
-                        ->from('as_locations')
-                        ->whereColumn('asset_id', 'assets.id');
-                });
+        $result = Asset::when(isset($data['hr_employee_id']) && !empty($data['hr_employee_id']), function ($query) use ($data) {
+            $query->join('as_locations', function ($join) use ($data) {
+                $join->on('as_locations.asset_id', '=', 'assets.id')
+                    ->where('as_locations.hr_employee_id', '=', $data['hr_employee_id'])
+                    ->where('as_locations.date', '=', function ($query) {
+                        $query->selectRaw('MAX(date)')
+                            ->from('as_locations')
+                            ->whereColumn('asset_id', 'assets.id');
+                    });
+            });
+        }, function ($query) {
+            // If hr_employee_id is not provided, do a left join to get all assets
+            $query->leftJoin('as_locations', function ($join) {
+                $join->on('as_locations.asset_id', '=', 'assets.id')
+                    ->where('as_locations.date', '=', function ($query) {
+                        $query->selectRaw('MAX(date)')
+                            ->from('as_locations')
+                            ->whereColumn('asset_id', 'assets.id');
+                    });
+            });
         })
             ->when($request->has('as_sub_class_id'), function ($query) use ($data) {
                 return $query->where('as_sub_class_id', '=', $data['as_sub_class_id']);

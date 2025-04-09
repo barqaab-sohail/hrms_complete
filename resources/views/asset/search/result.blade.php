@@ -78,32 +78,48 @@
             buttons: [{
                     extend: 'copyHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4]
+                        columns: [0, 1, 2, 3]
                     }
                 },
                 {
                     extend: 'excelHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4]
+                        columns: [0, 1, 2, 3]
                     }
                 },
                 {
                     extend: 'pdfHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4]
+                        columns: [0, 1, 2, 3]
                     },
                     customize: function(doc) {
-                        //find paths of all images, already in base64 format
-                        var arr2 = $('.img-fluid').map(function() {
-                            return this.src;
-                        }).get();
-                        for (var i = 0, c = 1; i < arr2.length; i++, c++) {
-                            doc.content[1].table.body[c][3] = {
-                                image: arr2[i],
+                        // Remove the default created footer
+                        doc.content.splice(1, 0, {
+                            margin: [0, 0, 0, 12],
+                            alignment: 'center',
+                            // image: 'data:image/png;base64,...yourLogoBase64...',
+                            width: 100
+                        });
+
+                        // Process all rows (not just visible ones)
+                        var rows = [];
+                        $('#myDataTable').DataTable().rows({
+                            search: 'applied'
+                        }).every(function() {
+                            var row = this.data();
+                            var imgSrc = $(this.node()).find('img').attr('src');
+                            row[4] = {
+                                image: imgSrc,
                                 width: 50
-                            }
-                        }
+                            }; // Replace 4 with your image column index
+                            rows.push(row);
+                        });
+
+                        doc.content[2].table.body = rows;
                     },
+                    pageSize: 'A4',
+                    orientation: 'portrait',
+                    header: true
                 }, {
                     extend: 'csvHtml5',
                     exportOptions: {
