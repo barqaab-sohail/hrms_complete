@@ -6,7 +6,7 @@
 @section('content')
 <div class="card">
 	<div class="card-body">
-		<h4 class="card-title">Search Asset</h4>
+		<h4 class="card-title">Search Asset <button type="button" id="resetForm" class="btn btn-danger float-right">Reset Search</button></h4>
 		<hr>
 		<form id="assetSearch" method="get" class="form-horizontal form-prevent-multiple-submits" action="{{route('asset.result')}}" enctype="multipart/form-data">
 			{{csrf_field()}}
@@ -93,9 +93,39 @@
 
 <script>
 	$(document).ready(function() {
+		// Add this reset function
+		$('#resetForm').click(function() {
+			// Reset all select2 dropdowns
+			$('.searchSelect').val('').trigger('change');
+			$('#as_sub_class_id').val('').trigger('change');
+
+			// Clear any error messages
+			$('#json_message').html('');
+
+			// Remove any error highlighting
+			$('.form-group').removeClass('has-error');
+
+			// Clear the results table
+			$('div.table-container').html('');
+		});
+
 		$('.fa-spinner').hide();
 		$('select').select2();
 		formFunctions();
+
+
+		// Mutual exclusion between office and employee selection
+		$('#office_id').change(function() {
+			if ($(this).val()) {
+				$('#hr_employee_id').val('').trigger('change');
+			}
+		});
+
+		$('#hr_employee_id').change(function() {
+			if ($(this).val()) {
+				$('#office_id').val('').trigger('change');
+			}
+		});
 
 		//Add Sub_Class
 		$('#class_id').change(function() {
@@ -133,6 +163,26 @@
 		$("#assetSearch").submit(function(e) {
 
 			e.preventDefault();
+
+			// Get selected values
+			var classId = $('#class_id').val();
+			var subClassId = $('#as_sub_class_id').val();
+
+			// Validate if class is selected but sub-class isn't
+			if (classId && !subClassId) {
+				// Show error message
+				$('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Please select a Sub Class</strong></div>');
+				$('html,body').scrollTop(0);
+
+				// Highlight the sub-class field
+				$('#as_sub_class_id').closest('.form-group').addClass('has-error');
+				$('#as_sub_class_id').focus();
+
+				return false; // Prevent form submission
+			}
+
+
+
 			$('.fa-spinner').show();
 			var url = $(this).attr('action');
 

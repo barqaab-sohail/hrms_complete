@@ -201,6 +201,18 @@ class HrEmployee extends Model implements Auditable
         )->orderBy('employee_designations.effective_date', 'desc');
     }
 
+    public function employeeDesignations()
+    {
+        return $this->hasManyThrough(
+            'App\Models\Hr\HrDesignation', //Final Model HrDocumentName
+            'App\Models\Hr\EmployeeDesignation', //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',              //Forein Key in Immediate Model of This Model
+            'id',                          //Final Model Primary Key
+            'id',   //current model Primary Key of Final Model (it is called foreign key)
+            'hr_designation_id'
+        );
+    }
+
     public function employeeState()
     {
         return $this->hasManyThrough(

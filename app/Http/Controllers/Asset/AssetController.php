@@ -303,18 +303,23 @@ class AssetController extends Controller
     public function result(Request $request)
     {
         $data = $request->all();
-        $result = Asset::join('as_locations', 'as_locations.asset_id', '=', 'assets.id')
+        $result = Asset::join('as_locations', function ($join) use ($data) {
+            $join->on('as_locations.asset_id', '=', 'assets.id')
+                ->where('as_locations.hr_employee_id', '=', $data['hr_employee_id'])
+                ->where('as_locations.date', '=', function ($query) {
+                    $query->selectRaw('MAX(date)')
+                        ->from('as_locations')
+                        ->whereColumn('asset_id', 'assets.id');
+                });
+        })
             ->when($request->has('as_sub_class_id'), function ($query) use ($data) {
                 return $query->where('as_sub_class_id', '=', $data['as_sub_class_id']);
             })
             ->when($data['office_id'], function ($query) use ($data) {
                 return $query->where('office_id', '=', $data['office_id']);
             })
-            ->when($data['hr_employee_id'], function ($query) use ($data) {
-                return $query->where('hr_employee_id', '=', $data['hr_employee_id']);
-            })
             ->select('assets.*')
-            ->groupBy('assets.id') // Add this line
+            ->groupBy('assets.id')
             ->get();
         return view('asset.search.result', compact('result'));
     }

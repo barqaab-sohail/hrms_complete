@@ -6,7 +6,7 @@
 @section('content')
 <div class="card">
 	<div class="card-body">
-		<h4 class="card-title">Search</h4>
+		<h4 class="card-title">Search <button type="button" id="resetForm" class="btn btn-danger float-right">Reset Search</button></h4>
 		<hr>
 		<form id="employeeSearch" method="get" class="form-horizontal form-prevent-multiple-submits" action="{{route('employee.result')}}" enctype="multipart/form-data">
 			{{csrf_field()}}
@@ -157,8 +157,8 @@
 								<select name="education_year" id="education_year" class="form-control searchSelect">
 									<option value=""></option>
 									@for($i=10;$i<21;$i+=2)
-									<option value="{{$i}}" {{(old("education_year")==$i? "selected" : "")}}>{{$i}}</option>
-									@endfor
+										<option value="{{$i}}" {{(old("education_year")==$i? "selected" : "")}}>{{$i}}</option>
+										@endfor
 								</select>
 							</div>
 						</div>
@@ -198,6 +198,27 @@
 		$('.fa-spinner').hide();
 		$('select').select2();
 		formFunctions();
+
+		// Reset Form Button Functionality
+		$('#resetForm').click(function() {
+			// Reset all select2 dropdowns
+			$('.searchSelect').val('').trigger('change');
+
+			// Clear text input
+			$('#document_name').val('');
+
+			// Clear any error messages
+			$('#json_message').html('');
+
+			// Remove any error highlighting
+			$('.form-group').removeClass('has-error');
+
+			// Clear the results table
+			$('div.table-container').html('');
+
+			// Scroll to top
+			$('html,body').scrollTop(0);
+		});
 
 		// $('select').change(function(){	
 		// 	$(this).removeClass('searchSelect');

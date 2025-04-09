@@ -224,7 +224,7 @@ function currentActiveCategory($category)
 
     foreach ($allEmployees as $key => $employee) {
 
-        if ($category == $employee->employeeCurrentCategory->id) {
+        if ($category == $employee->employeeCurrentCategory?->id) {
             array_push($employees, $employee->id);
         }
     }
