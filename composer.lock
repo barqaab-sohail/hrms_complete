@@ -8540,16 +8540,16 @@
         },
         {
             "name": "yajra/laravel-datatables-export",
-            "version": "v12.0.0",
+            "version": "v12.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables-export.git",
-                "reference": "2f456790ffcda331d58c4f125103701d90034145"
+                "reference": "d947b5b1af9e21f735f7784ad535f2cfb4a5cd82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables-export/zipball/2f456790ffcda331d58c4f125103701d90034145",
-                "reference": "2f456790ffcda331d58c4f125103701d90034145",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables-export/zipball/d947b5b1af9e21f735f7784ad535f2cfb4a5cd82",
+                "reference": "d947b5b1af9e21f735f7784ad535f2cfb4a5cd82",
                 "shasum": ""
             },
             "require": {
@@ -8605,7 +8605,7 @@
             ],
             "support": {
                 "issues": "https://github.com/yajra/laravel-datatables-export/issues",
-                "source": "https://github.com/yajra/laravel-datatables-export/tree/v12.0.0"
+                "source": "https://github.com/yajra/laravel-datatables-export/tree/v12.0.1"
             },
             "funding": [
                 {
@@ -8613,7 +8613,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-26T07:48:58+00:00"
+            "time": "2025-04-09T08:12:39+00:00"
         },
         {
             "name": "yajra/laravel-datatables-fractal",

@@ -19,7 +19,7 @@ class UserController extends Controller
             $data = User::all();
             return DataTables::of($data)
                 ->addColumn('full_name', function ($data) {
-                    return $data->misEmployeeUser->full_name ??  $data->hrEmployee->full_name;
+                    return $data->hrEmployee->first_name . '' . $data->hrEmployee->last_name;
                 })
                 ->addColumn('edit', function ($row) {
 

@@ -223,7 +223,7 @@ class HrReportsController extends Controller
 
 
         if ($request->ajax()) {
-            $data = HrEmployee::where('hr_status_id', 1)->whereNotIn('id', $otherCompanyEmployeeIds)->with('hrMembership', 'employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
+            $data = HrEmployee::where('hr_status_id', 1)->whereNotIn('id', $otherCompanyEmployeeIds)->with('hrMembership', 'employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'signedAppointmentLetter', 'employeeCurrentDesignation')->get();
 
             foreach ($data as $key => $employee) {
 
@@ -240,8 +240,7 @@ class HrReportsController extends Controller
                 } else {
                     $picture = '';
                 }
-
-                if ($this->examptEducationDocuments($employee->designation)) {
+                if ($this->examptEducationDocuments($employee->employeeCurrentDesignation?->name)) {
                     $educationalDocuments = 'Not Required';
                 }
 
@@ -261,7 +260,12 @@ class HrReportsController extends Controller
                 ->addIndexColumn()
 
 
-
+                ->addColumn('full_name', function ($row) {
+                    return $row->first_name . ' ' . $row->last_name;
+                })
+                ->addColumn('designation', function ($row) {
+                    return $row->employeeCurrentDesignation?->name;
+                })
                 ->addColumn('division', function ($row) {
                     return $row->employeeCurrentDepartment->name ?? '';
                 })

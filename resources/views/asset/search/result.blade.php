@@ -27,8 +27,8 @@
                         <td>{{$asset->description}}</td>
                         <td>{{$asset->asOwnership->name??''}}</td>
                         <td>
-                            @isset($asset->asCurrentAllocation->full_name)
-                            {{$asset->asCurrentAllocation->full_name}} - {{$asset->asCurrentAllocation->designation}}
+                            @isset($asset->asCurrentAllocation->first_name)
+                            {{$asset->asCurrentAllocation?->first_name}} {{$asset->asCurrentAllocation?->last_name}} - {{$asset->asCurrentAllocation?->employeeCurrentDesignation?->name}}
                             @endisset
                             {{$asset->asCurrentLocation->name??''}}
                         </td>
@@ -78,19 +78,19 @@
             buttons: [{
                     extend: 'copyHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3]
+                        columns: [0, 1, 2, 3, 4]
                     }
                 },
                 {
                     extend: 'excelHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3]
+                        columns: [0, 1, 2, 3, 4]
                     }
                 },
                 {
                     extend: 'pdfHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2, 3]
+                        columns: [0, 1, 2, 3, 4]
                     },
                     customize: function(doc) {
                         //find paths of all images, already in base64 format
@@ -107,7 +107,7 @@
                 }, {
                     extend: 'csvHtml5',
                     exportOptions: {
-                        columns: [0, 1, 2]
+                        columns: [0, 1, 2, 3, 4]
                     }
                 },
             ],

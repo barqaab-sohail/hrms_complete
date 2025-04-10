@@ -15,9 +15,9 @@
     <div class="col-lg-12">
 
         <div class="card card-outline-info">
-            
+
             <div class="d-flex justify-content-end" style="margin-top:20px; margin-right:20px;">
-                <button type="button" id="hideDeleteButton" class="btn btn-danger float-right"  style="margin-right:100px;">Delete All Permissions</button>
+                <button type="button" id="hideDeleteButton" class="btn btn-danger float-right" style="margin-right:100px;">Delete All Permissions</button>
                 <button type="button" id="hideButton" class="btn btn-success float-right">Add Permission</button>
             </div>
             <div class="row">
@@ -35,10 +35,10 @@
 
                                         <div class="col-md-12">
                                             <label class="control-label text-right">Employee Name<span class="text_requried">*</span></label>
-                                            <select  name="hr_employee_id" class="form-control selectTwo" data-validation="required">
+                                            <select name="hr_employee_id" class="form-control selectTwo" data-validation="required">
                                                 <option value=""></option>
                                                 @foreach($employees as $employee)
-                                                <option value="{{$employee->id}}" {{(old("hr_employee_id")==$employee->id? "selected" : "")}}>{{$employee->full_name}}, {{$employee->designation}}</option>
+                                                <option value="{{$employee->id}}" {{(old("hr_employee_id")==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}}, {{$employee->employeeCurrentDesignation?->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -92,10 +92,10 @@
 
                                         <div class="col-md-12">
                                             <label class="control-label text-right">Employee Name<span class="text_requried">*</span></label>
-                                            <select  name="hr_employee_id" class="form-control selectTwo" data-validation="required">
+                                            <select name="hr_employee_id" class="form-control selectTwo" data-validation="required">
                                                 <option value=""></option>
                                                 @foreach($employees as $employee)
-                                                <option value="{{$employee->id}}" {{(old("hr_employee_id")==$employee->id? "selected" : "")}}>{{$employee->full_name}}, {{$employee->designation}}</option>
+                                                <option value="{{$employee->id}}" {{(old("hr_employee_id")==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}}, {{$employee->employeeCurrentDesignation?->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -187,7 +187,7 @@
 
 
         formFunctions(false);
-        $('#formPermission').hide();        
+        $('#formPermission').hide();
         $('#hideButton').click(function() {
             $('#formPermission').trigger("reset");
             $('#formPermission').toggle();
