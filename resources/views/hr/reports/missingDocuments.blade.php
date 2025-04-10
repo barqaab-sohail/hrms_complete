@@ -1,3 +1,4 @@
+text/x-generic missingDocuments.blade.php ( HTML document, UTF-8 Unicode text )
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
 @section('Heading')
@@ -28,7 +29,7 @@
                         <th class="text-left bg-primary text-white">Engineering Degree</th>
                         <th class="text-left bg-primary text-white">Educational Documents</th>
                         <th class="text-left bg-primary text-white">Mobile</th>
-                       
+
                     </tr>
                 </thead>
                 <tbody>
@@ -130,13 +131,13 @@
                 [25, 50, 100, 200, "All"]
             ],
 
-            columnDefs: [{
-                targets: 4,
-                render: function(data, type, row) {
-                    return type === 'display' && data.length > 30 ? data.substr(0, 30) + '…' :
-                        data;
-                }
-            }],
+            // columnDefs: [{
+            //     targets: 4,
+            //     render: function(data, type, row) {
+            //         return type === 'display' && data.length > 30 ? data.substr(0, 30) + '…' :
+            //             data;
+            //     }
+            // }],
         });
     });
 </script>

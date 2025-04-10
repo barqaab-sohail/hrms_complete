@@ -43,14 +43,10 @@ class HrEmployee extends Model implements Auditable
         return $defaultPicture;
     }
 
-    function picture()
+
+    public function picture()
     {
-        $defaultPicture = asset('Massets/images/default.png');
-        $picture = HrDocumentation::where('hr_employee_id', $this->id)->where('description', 'picture')->first();
-        if ($picture) {
-            return asset('/storage/' . $picture->path . $picture?->file_name);
-        }
-        return $defaultPicture;
+        return $this->hasOne('App\Models\Hr\HrDocumentation')->where('description', '=', 'Picture');
     }
 
     function getDesignationAttribute()
@@ -675,7 +671,7 @@ class HrEmployee extends Model implements Auditable
 
     public function employeePicture()
     {
-        $picture = HrDocumentation::where([['description', 'Picture'], ['hr_employee_id', session('hr_employee_id')]])->first();
+        $picture = HrDocumentation::where([['description', 'Picture'], ['hr_employee_id', $this->id]])->first();
         if ($picture) {
             $picturePath = $picture->path . $picture->file_name;
         } else {

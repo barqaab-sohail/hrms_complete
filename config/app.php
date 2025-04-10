@@ -30,6 +30,8 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+    'version' => env('APP_VERSION', '12.0'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -239,14 +241,14 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'DataTable'=> Yajra\DataTables\Facades\DataTables::class,
+        'DataTable' => Yajra\DataTables\Facades\DataTables::class,
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         //'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
-        'StripeSession'=>Stripe\Checkout\Session::class,
-        'Stripe'=>Stripe\Stripe::class,
+        'StripeSession' => Stripe\Checkout\Session::class,
+        'Stripe' => Stripe\Stripe::class,
 
     ],
 

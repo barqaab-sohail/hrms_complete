@@ -223,7 +223,7 @@ class HrReportsController extends Controller
 
 
         if ($request->ajax()) {
-            $data = HrEmployee::where('hr_status_id', 1)->whereNotIn('id', $otherCompanyEmployeeIds)->with('hrMembership', 'employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'signedAppointmentLetter', 'employeeCurrentDesignation')->get();
+            $data = HrEmployee::where('hr_status_id', 1)->whereNotIn('id', $otherCompanyEmployeeIds)->with('hrMembership', 'employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
 
             foreach ($data as $key => $employee) {
 
@@ -240,7 +240,8 @@ class HrReportsController extends Controller
                 } else {
                     $picture = '';
                 }
-                if ($this->examptEducationDocuments($employee->employeeCurrentDesignation?->name)) {
+
+                if ($this->examptEducationDocuments($employee->designation)) {
                     $educationalDocuments = 'Not Required';
                 }
 
@@ -261,10 +262,19 @@ class HrReportsController extends Controller
 
 
                 ->addColumn('full_name', function ($row) {
-                    return $row->first_name . ' ' . $row->last_name;
+                    return $row->first_name . '' .  $row->last_name;
                 })
                 ->addColumn('designation', function ($row) {
-                    return $row->employeeCurrentDesignation?->name;
+                    return $row->employeeCurrentDesignation->name ?? '';
+                })
+                ->addColumn('project', function ($row) {
+
+                    $project = $row->employeeCurrentProject->name ?? 'N/A';
+                    if ($project == 'overhead') {
+                        $project = $row->employeeCurrentOffice->name ?? 'N/A';
+                    }
+                    return $project = strlen($project) > 30 ? substr($project, 0, 30) . '...' : $project;
+                    //return $row->employeeCurrentProject->name ?? '';
                 })
                 ->addColumn('division', function ($row) {
                     return $row->employeeCurrentDepartment->name ?? '';
@@ -325,6 +335,7 @@ class HrReportsController extends Controller
 
         return view('hr.reports.missingDocuments');
     }
+
 
 
 

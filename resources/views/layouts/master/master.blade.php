@@ -123,7 +123,7 @@
 
     @yield('footer')
     <div style="text-align:center">
-        <p>HRMS 11.10 - Developed by: BARQAAB IT</p>
+        <p>HRMS {{ Config::get('app.version') }} - Developed by: BARQAAB IT</p>
     </div>
     @livewireScripts
 </body>
