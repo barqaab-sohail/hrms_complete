@@ -439,6 +439,19 @@ class HrEmployee extends Model implements Auditable
         return $this->hasOne('App\Models\Hr\HrMembership');
     }
 
+    public function membership()
+    {
+        return $this->hasOneThrough(
+            'App\Models\Common\Membership',                  //Final Model HrDocumentName
+            'App\Models\Hr\HrMembership',              //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                 //Forein Key in Immediate Model of This Model
+            'id',                                             //Final Model Primary Key
+            'id',
+            'membership_id'                             //Forein Key in Immediate Model of Final Model
+        );
+    }
+
+
 
     public function hrPassport()
     {

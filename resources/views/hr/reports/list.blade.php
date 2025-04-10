@@ -29,6 +29,11 @@
                         </td>
 
                     </tr>
+                    <tr>
+                        <td><a href="{{route('newmissingdocuments')}}" style="color:black">New Missing Document List</a>
+                        </td>
+
+                    </tr>
 
                     <tr>
                         <td><a href="{{route('hrReports.searchEmployee')}}" style="color:black">Search Employee</a></td>
@@ -49,49 +54,49 @@
 
 
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
 
 
 
-    $('#myTable').DataTable({
-        stateSave: false,
+        $('#myTable').DataTable({
+            stateSave: false,
 
-        dom: 'Blfrtip',
-        buttons: [{
-                extend: 'copyHtml5',
-                exportOptions: {
-                    columns: [0, 1]
-                }
-            },
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [0, 1]
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                exportOptions: {
-                    columns: [0, 1]
-                }
-            }, {
-                extend: 'csvHtml5',
-                exportOptions: {
-                    columns: [0, 1]
-                }
-            },
-        ],
-        scrollY: "300px",
-        scrollX: true,
-        scrollCollapse: true,
-        paging: false,
-        fixedColumns: {
-            leftColumns: 1,
-            rightColumns: 2
-        }
+            dom: 'Blfrtip',
+            buttons: [{
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [0, 1]
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1]
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [0, 1]
+                    }
+                }, {
+                    extend: 'csvHtml5',
+                    exportOptions: {
+                        columns: [0, 1]
+                    }
+                },
+            ],
+            scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            fixedColumns: {
+                leftColumns: 1,
+                rightColumns: 2
+            }
+        });
+
     });
-
-});
 </script>
 
 @stop

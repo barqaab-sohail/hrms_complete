@@ -2,17 +2,171 @@
 
 namespace App\Http\Controllers\HR;
 
-use App\Http\Controllers\Controller;
+use DB;
+use DataTables;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
-use App\Models\Hr\HrDesignation;
 use App\Models\Common\Education;
+use App\Models\Hr\HrDesignation;
+use App\Models\Hr\HrDocumentName;
+use App\Http\Controllers\Controller;
 use App\Models\Hr\HrEmployeeCompany;
-use DataTables;
-use DB;
+use App\Models\HrDocumentation;
 
 class HrReportsController extends Controller
 {
+
+
+
+    function getEmployeesWithMissingDocuments()
+    {
+
+
+
+        $requiredDocumentTitles = [
+            "CNIC Front",
+            "Picture",
+            "Signed Appointment Letter",
+            "HR Form",
+            "Joining Report",
+            "Educational Documents",
+        ];
+
+        $pecSpecificDocumentTitles = [
+            "PEC Front",
+            "Engineering Degree BSc",
+        ];
+
+        $excludedDesignations = [
+            "Kitchen Helper",
+            "Security Guard",
+            "Office Helper",
+            "Utility Person",
+            "Record Keeper",
+            "Driver",
+            "Electrician",
+            "Sanitary Worker Part Time",
+            "Cook",
+            "Sanitary Worker",
+            "Naib Qasid",
+            "ChowkidarWatchman",
+            "Line Foreman",
+            "Patwari",
+            "Khalasi",
+            "Sweeper Sanitary Worker",
+            "Driver Cum Utility Person Part Time",
+            "Part Time Gardner",
+            "Sweeper",
+            "Office Boy Cum Mali",
+            "Recovery Officer",
+            "Utility Person Part Time",
+            "Field Helper",
+            "Sweeper (Part Time)",
+            "Chakbandi Coordinator",
+            "Hastel Attended",
+            "Office Helper",
+            "Sanitary Worker Part Time",
+            "Utility Person Cook"
+        ];
+
+        // Fetch required + PEC document IDs
+        $allRequiredDocumentTitles = array_merge($requiredDocumentTitles, $pecSpecificDocumentTitles);
+
+        $allRequiredDocuments = HrDocumentName::whereIn('name', $allRequiredDocumentTitles)
+            ->get()
+            ->keyBy('name');
+
+        $missingData = [];
+
+        $otherCompanyEmployeeIds = HrEmployeeCompany::where('partner_id', '!=', 1)->pluck('hr_employee_id')->toArray();
+
+        $employees = HrEmployee::with(['employeeCurrentDesignation', 'membership', 'hrContactMobile', 'employeeCurrentDepartment', 'employeeCurrentProject'])->whereNotIn('id', $otherCompanyEmployeeIds)
+            ->where('hr_status_id', 1)
+            ->get();
+
+        foreach ($employees as $employee) {
+            $submittedDocumentIds = DB::table('hr_document_name_hr_documentation')
+                ->where('hr_employee_id', $employee->id)
+                ->pluck('hr_document_name_id')
+                ->toArray();
+
+            $missingDocs = [];
+
+            // Step 1: Check default required documents
+            foreach ($requiredDocumentTitles as $docTitle) {
+                if (
+                    $docTitle === "Educational Documents" &&
+                    in_array($employee->employeeCurrentDesignation->name ?? '', $excludedDesignations)
+                ) {
+                    continue;
+                }
+
+                $docId = $allRequiredDocuments[$docTitle]->id ?? null;
+
+                if ($docId && !in_array($docId, $submittedDocumentIds)) {
+                    $missingDocs[] = $docTitle;
+                }
+            }
+
+            // Step 2: Check PEC specific documents if applicable
+            if ($employee->membership?->name === "Pakistan Engineering Council") {
+                foreach ($pecSpecificDocumentTitles as $docTitle) {
+                    $docId = $allRequiredDocuments[$docTitle]->id ?? null;
+
+                    if ($docId && !in_array($docId, $submittedDocumentIds)) {
+                        $missingDocs[] = $docTitle;
+                    }
+                }
+            }
+
+            if (!empty($missingDocs)) {
+                $project = '';
+                if ($employee->employeeCurrentProject->name == 'overhead') {
+                    $project = $employee->employeeCurrentOffice->name;
+                } else {
+                    $project = $employee->employeeCurrentProject->name ?? 'N/A';
+                }
+                $missingData[] = [
+                    'employee_no' => $employee->employee_no,
+                    'employee_name' => $employee->first_name . ' ' . $employee->last_name ?? 'N/A',
+                    'designation' => $employee->employeeCurrentDesignation->name ?? 'N/A',
+                    'contact_number' => $employee->hrContactMobile->mobile ?? 'N/A',
+                    'division' => $employee->employeeCurrentDepartment->name ?? 'N/A',
+                    'project' => $project,
+                    'missing_documents' => $missingDocs,
+                ];
+            }
+        }
+
+        return $missingData;
+    }
+
+
+    public function missingDocumentsTable(Request $request)
+    {
+
+        $data = collect($this->getEmployeesWithMissingDocuments())->map(function ($item) {
+            $item['missing_documents'] = array_values($item['missing_documents']); // make sure it's array
+            return $item;
+        });
+
+        return DataTables::of($data)
+            ->addColumn('missing_documents', function ($row) {
+                return collect($row['missing_documents'])->map(function ($doc) use ($row) {
+                    return "$doc, </br>";
+                })->implode(' ');
+            })
+            ->rawColumns(['missing_documents'])
+            ->make(true);
+    }
+
+    public function missingDocumentsView()
+    {
+        return view('hr.employee.newMissingDocuments');
+    }
+
+
+
 
     public function list()
     {
@@ -81,13 +235,13 @@ class HrReportsController extends Controller
                 $educationalDocuments = $employee->educationalDocuments->first() ? '' : 'Missing';
 
                 $picture = '';
-                if (str_contains($employee->picture, 'Massets/images/default.png')) { 
+                if (str_contains($employee->picture, 'Massets/images/default.png')) {
                     $picture = 'Missing';
-                }else{
-                 $picture = '';
+                } else {
+                    $picture = '';
                 }
 
-          if ($this->examptEducationDocuments($employee->designation)) {
+                if ($this->examptEducationDocuments($employee->designation)) {
                     $educationalDocuments = 'Not Required';
                 }
 
@@ -116,9 +270,9 @@ class HrReportsController extends Controller
                 })
                 ->addColumn('picture', function ($row) {
 
-                    if (str_contains($row->picture, 'Massets/images/default.png')) { 
+                    if (str_contains($row->picture, 'Massets/images/default.png')) {
                         return 'Missing';
-                    }else{
+                    } else {
                         return '';
                     }
                 })

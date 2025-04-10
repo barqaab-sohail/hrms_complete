@@ -35,9 +35,6 @@ use App\Livewire\Asset\CreateAsset;
 
 
 
-
-
-
 Route::get('/employeeAllowances/{id}', 'Hr\EmployeeSalaryController@getEmployeeAllowanceName');
 Route::get('/verifyCard', 'HomeController@employee');
 Route::get('/verificationResult/{id?}', 'HomeController@result')->middleware('XssSanitizer')->name('verification');
@@ -140,6 +137,11 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/hrReports/pictureList', 'HrReportsController@pictureList')->name('hrReports.pictureList');
     Route::get('/hrReports/cnicExpiryList', 'HrReportsController@cnicExpiryList')->name('hrReports.cnicExpiryList');
     Route::get('/hrReports/missingDocumentList', 'HrReportsController@missingDocumentList')->name('hrReports.missingDocumentList');
+    // New Missing Documents Route
+    Route::get('/hrReports/newmissingdocuments', 'HrReportsController@missingDocumentsView')->name('newmissingdocuments');
+    Route::get('/hrReports/newmissingdocuments/data', 'HrReportsController@missingDocumentsTable')->name('hrReports.newmissingdocuments');
+
+    // End New Missing Documents Route
     Route::get('/hrReports/missingDocuments', 'HrReportsController@mmissingDocuments')->name('missingDocuments.list');
     Route::get('/hrReports/searchEmployee', 'HrReportsController@searchEmployee')->name('hrReports.searchEmployee');
     Route::get('/hrReports/report_1', 'HrReportsController@report_1')->name('hrReports.report_1');
