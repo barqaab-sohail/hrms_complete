@@ -38,7 +38,7 @@ class HrEmployee extends Model implements Auditable
         $defaultPicture = asset('Massets/images/default.png');
         $picture = HrDocumentation::where('hr_employee_id', $this->id)->where('description', 'picture')->first();
         if ($picture) {
-            return asset('/storage/' . $picture->path . $picture?->file_name);
+            return asset('/storage/' . $picture->path . $picture->file_name);
         }
         return $defaultPicture;
     }
