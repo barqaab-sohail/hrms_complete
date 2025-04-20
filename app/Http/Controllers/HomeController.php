@@ -43,25 +43,28 @@ class HomeController extends Controller
         // $allRoutes = Route::getRoutes();
         // dd($allRoutes);
         $educations =  educationChart();
-        $countBelowForty = ageChart()['countBelowForty'];
-        $countBelowFifty = ageChart()['countBelowFifty'];
-        $countBelowSixty = ageChart()['countBelowSixty'];
-        $countBelowSeventy = ageChart()['countBelowSeventy'];
-        $countAboveSeventy = ageChart()['countAboveSeventy'];
+        $ageChart = ageChart();
+        $countBelowForty = $ageChart['countBelowForty'];
+        $countBelowFifty = $ageChart['countBelowFifty'];
+        $countBelowSixty = $ageChart['countBelowSixty'];
+        $countBelowSeventy = $ageChart['countBelowSeventy'];
+        $countAboveSeventy = $ageChart['countAboveSeventy'];
 
 
+        $categoryChart = categoryChart();
+        $categoryA = $categoryChart['categoryA'];
+        $categoryB = $categoryChart['categoryB'];
+        $categoryC = $categoryChart['categoryC'];
 
-        $categoryA = categoryChart()['categoryA'];
-        $categoryB = categoryChart()['categoryB'];
-        $categoryC = categoryChart()['categoryC'];
+        $engineerChart = engineerChart();
+        $allEmployees = $engineerChart['allEmployees'];
+        $pecRegisteredEngineers = $engineerChart['pecRegisteredEngineers'];
+        $associatedEngineers = $engineerChart['associatedEngineers'];
 
-        $allEmployees = engineerChart()['allEmployees'];
-        $pecRegisteredEngineers = engineerChart()['pecRegisteredEngineers'];
-        $associatedEngineers = engineerChart()['associatedEngineers'];
-
-        $finance = departmentChart()['finance'];
-        $power = departmentChart()['power'];
-        $water = departmentChart()['water'];
+        $depatmentChart = departmentChart();
+        $finance = $depatmentChart['finance'];
+        $power = $depatmentChart['power'];
+        $water = $depatmentChart['water'];
 
 
         // $results = projectInvoiceRight(2);
