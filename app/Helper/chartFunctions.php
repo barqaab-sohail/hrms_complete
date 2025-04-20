@@ -240,6 +240,7 @@ function departmentChart()
 	});
 }
 
+// Followin new function 1 count extra
 // function departmentChart()
 // {
 // 	return Cache::remember('department_chart_data', now()->addHours(6), function () {
