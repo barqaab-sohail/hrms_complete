@@ -19,6 +19,7 @@ class HrEmployee extends Model implements Auditable
 
     //protected $appends = ['full_name', 'designation', 'project', 'joining_date', 'current_salary', 'picture'];
 
+
     function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;

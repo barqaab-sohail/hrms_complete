@@ -30,6 +30,28 @@ use PDF;
 class EmployeeController extends Controller
 {
 
+    public function employeeSortData($employees)
+    {
+        $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
+        $second = range(1000001, 1099999);
+        $employeeNos = array_merge($first,  $second);
+
+        $employees =  $employees->sortBy(function ($model) use ($employeeNos) {
+            return array_search($model->employee_no, $employeeNos);
+        });
+
+        //   // second sort with respect to Hr Status
+        $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'ManMonth Ended', 'Death');
+
+        $employees = $employees->sort(function ($a, $b) use ($hrStatuses) {
+            $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
+            $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
+            return $pos_a - $pos_b;
+        });
+
+        return $employees;
+    }
+
     public function getEmployees()
     {
 
@@ -42,7 +64,11 @@ class EmployeeController extends Controller
 
         $data = HrEmployee::with('employeeCurrentProject', 'employeeCurrentDesignation', 'employeeCurrentOffice', 'hrExit', 'employeeAppointment', 'hrContactMobile', 'hrBloodGroup', 'employeeCurrentSalary', 'salayEffectiveDate')->get();
 
+
+
         $data = $this->employeeSortData($data);
+
+        $transformedEmployees = [];
 
         foreach ($data as $employee) {
 
@@ -84,7 +110,7 @@ class EmployeeController extends Controller
                 $joiningDate = \Carbon\Carbon::parse($employee->employeeAppointment->joining_date)->format('M d, Y');
             }
 
-            $employees[] =  array(
+            $transformedEmployees[] =  array(
                 "id" => $employee->id ?? '',
                 "employee_no" => $employee->employee_no ?? '',
                 "full_name" =>  $fullName,
@@ -104,52 +130,133 @@ class EmployeeController extends Controller
                 "hr_status_id" => $employee->hr_status_id ?? ''
             );
         }
-        Cache::put('employees', $employees, now()->addHour(12));
-        return $employees;
+        Cache::put('employees', $transformedEmployees, now()->addHour(12));
+        return $transformedEmployees;
     }
 
     public function refresh()
     {
         \Artisan::call('cache:clear');
-        $value = $this->getEmployees();
+        $value = Cache::remember('employees', now()->addHours(12), function () {
+            return $this->getData();
+        });
         $value = collect($value);
         return DataTables::of($value)->rawColumns(['full_name', 'project', 'delete'])->toJson();
     }
 
+    public function getData()
+    {
+        $data = HrEmployee::with([
+            'employeeCurrentProject',
+            'employeeCurrentDesignation',
+            'employeeCurrentOffice',
+            'hrExit',
+            'employeeAppointment',
+            'hrContactMobile',
+            'hrBloodGroup',
+            'employeeCurrentSalary',
+            'salayEffectiveDate'
+        ])->get();
+
+        return $this->employeeSortData($data)
+            ->map(function ($employee) {
+                $lastWorkingDate = $employee->hr_status_id == "Active"
+                    ? ''
+                    : ($employee->last_working_date ?? '');
+
+                $delete = '';
+                if (Auth::user()->hasPermissionTo('hr delete record') || Auth::user()->hasRole('Super Admin')) {
+                    $delete = '<form id="formDeleteContact' . $employee->id . '" action="' . route('employee.destroy', $employee->id) . '" method="POST">'
+                        . method_field('DELETE') . csrf_field()
+                        . '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you Sure to Delete\')" href= data-toggle="tooltip" data-original-title="Delete">'
+                        . '<i class="fas fa-trash-alt"></i></button></form>';
+                }
+
+                $project = $employee->employeeCurrentProject->name ?? '';
+                $project = $project == 'overhead'
+                    ? ($employee->employeeCurrentOffice?->name ?? '')
+                    : $project;
+
+                $fullName = $employee->full_name;
+                if (Auth::user()->can('hr edit record') || Auth::user()->can('hr view record')) {
+                    $fullName = '<a href="' . route('employee.edit', $employee->id) . '" style="color:grey">' . $fullName . '</a>';
+                }
+
+                $salary = '';
+                $effectiveDate = '';
+                if ($employee->employeeCurrentSalary) {
+                    $salary = number_format($employee->employeeCurrentSalary->total_salary);
+                    $effectiveDate = \Carbon\Carbon::parse($employee->salayEffectiveDate->effective_date)->format('M d, Y');
+                }
+
+                $joiningDate = $employee->employeeAppointment?->joining_date
+                    ? \Carbon\Carbon::parse($employee->employeeAppointment->joining_date)->format('M d, Y')
+                    : '';
+
+                return [
+                    "id" => $employee->id ?? '',
+                    "employee_no" => $employee->employee_no ?? '',
+                    "full_name" => $fullName,
+                    "date_of_birth" => $employee->date_of_birth
+                        ? \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y')
+                        : '',
+                    "joining_date" => $joiningDate,
+                    "cnic" => $employee->cnic ?? '',
+                    "designation" => $employee->designation ?? '',
+                    "blood_group" => $employee->hrBloodGroup->name ?? '',
+                    "age" => $employee->date_of_birth
+                        ? \Carbon\Carbon::parse($employee->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days')
+                        : '',
+                    "mobile" => $employee->hrContactMobile->mobile ?? '',
+                    "salary" => $salary,
+                    'effective_date' => $effectiveDate,
+                    "project" => $project,
+                    "delete" => $delete,
+                    "last_working_date" => $lastWorkingDate,
+                    "expiry_date" => $employee->employeeAppointment->expiry_date ?? '',
+                    "hr_status_id" => $employee->hr_status_id ?? ''
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
     public function index(Request $request)
     {
-
         if ($request->ajax()) {
+            // Use cached data if available, otherwise fetch fresh data
+            $value = Cache::remember('employees', now()->addHours(12), function () {
+                return $this->getData();
+            });
 
-            $value = $this->getEmployees();
-            $value = collect($value);
-            return DataTables::of($value)->rawColumns(['full_name', 'delete'])->toJson();
+            // Calculate and log the size of $value
+            // $serializedValue = serialize($value);
+            // $sizeInBytes = mb_strlen($serializedValue, '8bit');
+            // \Log::info("Size of employees data: " . $sizeInBytes . " bytes");
+
+            return DataTables::of(collect($value))
+                ->rawColumns(['full_name', 'project', 'delete'])
+                ->toJson();
         }
 
         return view('hr.employee.listDataTable');
     }
 
-    public function employeeSortData($employees)
-    {
-        $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');
-        $second = range(1000001, 1099999);
-        $employeeNos = array_merge($first,  $second);
 
-        $employees =  $employees->sortBy(function ($model) use ($employeeNos) {
-            return array_search($model->employee_no, $employeeNos);
-        });
+    // public function index(Request $request)
+    // {
 
-        //   // second sort with respect to Hr Status
-        $hrStatuses = array('On Board', 'Resigned', 'Terminated', 'Retired', 'Long Leave', 'ManMonth Ended', 'Death');
+    //     if ($request->ajax()) {
 
-        $employees = $employees->sort(function ($a, $b) use ($hrStatuses) {
-            $pos_a = array_search($a->hr_status_id ?? '', $hrStatuses);
-            $pos_b = array_search($b->hr_status_id ?? '', $hrStatuses);
-            return $pos_a - $pos_b;
-        });
+    //         $value = $this->getEmployees();
+    //         $value = collect($value);
+    //         return DataTables::of($value)->rawColumns(['full_name', 'delete'])->toJson();
+    //     }
 
-        return $employees;
-    }
+    //     return view('hr.employee.listDataTable');
+    // }
+
+
 
     public function create()
     {
