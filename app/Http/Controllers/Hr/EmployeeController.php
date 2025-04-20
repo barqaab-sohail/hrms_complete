@@ -24,7 +24,7 @@ use DB;
 use App\Http\Requests\Hr\EmployeeStore;
 use DataTables;
 use App\User;
-use Cache;
+use Illuminate\Support\Facades\Cache;
 use PDF;
 
 class EmployeeController extends Controller
