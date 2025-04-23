@@ -61,7 +61,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Custom Name</label>
 
-                            <input type="text" id="custom_name" name="custom_name" value="{{ old('custom_name') }}" class="form-control exempted" data-validation="required" placeholder="Enter Document Detail">
+                            <input type="text" id="custom_name" name="custom_name" value="{{ old('custom_name') }}" class="form-control exempted" placeholder="Enter Document Detail">
                         </div>
                     </div>
                 </div>
