@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \App\Console\Commands\SendMissingDocumentsReport::class,
     ];
 
     /**
@@ -22,9 +22,11 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
+
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // $schedule->command('report:employee-documents-expiry')->weeklyOn(1, '6:00'); // Every Monday at 6:00 AM
+        $schedule->command('report:missing-documents')->weeklyOn(1, '06:00'); // Every Monday at 6:00 AM
     }
 
     /**
@@ -34,7 +36,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

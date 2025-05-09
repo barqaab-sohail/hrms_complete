@@ -7,6 +7,8 @@ use Illuminate\Console\Scheduling\Schedule;
 
 class Kernel extends HttpKernel
 {
+
+
     /**
      * The application's global HTTP middleware stack.
      *
@@ -76,10 +78,4 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'XssSanitizer' => \App\Http\Middleware\XssSanitizer::class,
     ];
-
-    protected function schedule(Schedule $schedule)
-    {
-        $schedule->command('report:employee-documents-expiry')->weeklyOn(1, '6:00'); // Every Monday at 6:00 AM
-        $schedule->command('report:missing-documents')->weeklyOn(1, '6:00');
-    }
 }

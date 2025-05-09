@@ -31,7 +31,7 @@ class RunEmployeeFaceDetection extends Command
     {
 
 
-        $employees = HrEmployee::with('picture')->where('id', 17)->get();
+        $employees = HrEmployee::with('picture')->where('hr_status_id', 1)->get();
 
         $lines = []; // Collect lines to write in a .txt file
 
