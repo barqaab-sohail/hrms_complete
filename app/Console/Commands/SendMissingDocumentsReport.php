@@ -18,9 +18,9 @@ class SendMissingDocumentsReport extends Command
 
     // List of recipients
     protected $recipients = [
-        'hr@barqaab.com',
-        'athar@barqaab.com',
-        'muhammadrasheed2009@gmail.com',
+        // 'hr@barqaab.com',
+        // 'athar@barqaab.com',
+        // 'muhammadrasheed2009@gmail.com',
         'sohail.afzal08@gmail.com',
         'sohail@barqaab.com'
     ];
@@ -143,18 +143,18 @@ class SendMissingDocumentsReport extends Command
 
             if (!empty($missingDocs)) {
                 $project = '';
-                if ($employee->employeeCurrentProject->name == 'overhead') {
-                    $project = $employee->employeeCurrentOffice->name;
+                if ($employee->employeeCurrentProject?->name == 'overhead') {
+                    $project = $employee->employeeCurrentOffice?->name;
                 } else {
-                    $project = $employee->employeeCurrentProject->name ?? 'N/A';
+                    $project = $employee->employeeCurrentProject?->name ?? 'N/A';
                 }
 
                 $missingData[] = [
                     'employee_no' => $employee->employee_no,
                     'employee_name' => $employee->first_name . ' ' . $employee->last_name ?? 'N/A',
                     'designation' => $employee->employeeCurrentDesignation->name ?? 'N/A',
-                    'joining_date' => $employee->employeeAppointment->joining_date
-                        ? \Carbon\Carbon::parse($employee->employeeAppointment->joining_date)->format('F d, Y')
+                    'joining_date' => $employee->employeeAppointment?->joining_date
+                        ? \Carbon\Carbon::parse($employee->employeeAppointment?->joining_date)->format('F d, Y')
                         : 'N/A',
                     'contact_number' => $employee->hrContactMobile->mobile ?? 'N/A',
                     'division' => $employee->employeeCurrentDepartment->name ?? 'N/A',

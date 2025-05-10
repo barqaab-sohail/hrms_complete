@@ -271,6 +271,9 @@
                                         <ul aria-expanded="false" class="collapse">
                                                 <li><a class="{{Request::is('hrms/selfServices/selfContact/create')?'active':''}}" href="{{route('selfContact.create')}}">Personal Contact</a></li>
                                                 <li><a class="{{Request::is('hrms/multiplePrints/print')?'active':''}}" href="{{route('multiplePrint.print')}}">CNIC Multiple Prints</a></li>
+                                                @can('personal documents')
+                                                <li><a class="{{Request::is('hrms/personaldocuments/show')?'active':''}}" href="{{route('personaldocuments.index')}}">Personal Documents</a></li>
+                                                @endcan
 
                                         </ul>
                                 </li>
