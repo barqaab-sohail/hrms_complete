@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Submission\Security;
 use Illuminate\Support\Facades\File;
+use App\Models\Common\Bank;
+use App\Models\Common\Client;
+use App\Models\Common\Partner;
 use DB;
 use DataTables;
 
@@ -68,8 +71,11 @@ class SecurityController extends Controller
                 ->make(true);
         }
 
+        $banks = Bank::select('name', 'id')->get();
+        $clients = Client::select('name', 'id')->get();
+        $partners = Partner::select('name', 'id')->get();
 
-        return view('submission.security.create');
+        return view('submission.security.create', compact('banks', 'clients', 'partners'));
     }
 
     public function store(Request $request)

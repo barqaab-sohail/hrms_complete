@@ -28,11 +28,43 @@
                     {{csrf_field()}}
                     <div class="form-body">
 
-                        <h3 class="box-title">Document</h3>
+                        <h3 class="box-title">Security</h3>
                         <hr class="m-t-0 m-b-40">
-                        <input type="hidden" name="personal_document_id" id="personal_document_id" />
+                        <input type="hidden" name="security_id" id="security_id" />
 
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="type" class="control-label">Type<span class="text_requried">*</span></label>
+                                    <select name="type" id="type" class="form-control selectTwo" data-validation="required">
+                                        <option value="">Select Type</option>
+                                        <option value="bid_security" {{ old('type') == 'bid_security' ? 'selected' : '' }}>Bid Security</option>
+                                        <option value="performance_guarantee" {{ old('type') == 'performance_guarantee' ? 'selected' : '' }}>Performance Guarantee</option>
+                                    </select>
 
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+
+                                    <label for="bid_security_type" class="control-label">Bid Security Type</label>
+                                    <select name="bid_security_type" id="bid_security_type" class="form-control selectTwo">
+                                        <option value="">Select Bid Security Type</option>
+                                        <option value="pay_order_cdr" {{ old('bid_security_type') == 'pay_order_cdr' ? 'selected' : '' }}>Pay Order/CDR</option>
+                                        <option value="bank_guarantee" {{ old('bid_security_type') == 'bank_guarantee' ? 'selected' : '' }}>Bank Guarantee</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label text-right">Security In Favor</label>
+                                    <input type="text" name="favor_of" id="forward_slash" value="{{ old('favor_of') }}" class="form-control" data-validation="required length" data-validation-length="max190" placeholder="Enter Security in favour of">
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group row">
@@ -297,22 +329,22 @@
             $('#h6').html("Click On Image to Add Pdf Document<span class='text_requried'>*</span>");
             $('#formDocument').toggle();
             $('#formDocument').trigger("reset");
-            $('#personal_document_id').val('');
+            $('#security_id').val('');
             $('#view').attr('data-validation', 'required');
             $('#pr_folder_name_id').trigger('change');
         });
 
         $('body').unbind().on('click', '.editDocument', function() {
-            var personal_document_id = $(this).data('id');
+            var security_id = $(this).data('id');
 
-            $.get("{{ url('hrms/securities') }}" + '/' + personal_document_id + '/edit', function(data) {
+            $.get("{{ url('hrms/securities') }}" + '/' + security_id + '/edit', function(data) {
                 $('#formDocument').toggle();
                 $('#formDocument').trigger("reset");
 
                 $('#formDocument').show();
 
                 $('#formHeading').html("Edit Document");
-                $('#personal_document_id').val(data.id);
+                $('#security_id').val(data.id);
                 $('#document_date').val(data.document_date);
                 $('#forward_slash').val(data.description);
                 if (data.extension == 'pdf') {
@@ -371,13 +403,13 @@
 
         $('body').on('click', '.deleteDocument', function() {
 
-            var personal_document_id = $(this).data("id");
+            var security_id = $(this).data("id");
 
             var con = confirm("Are You sure want to delete !");
             if (con) {
                 $.ajax({
                     type: "DELETE",
-                    url: "{{ route('securities.store') }}" + '/' + personal_document_id,
+                    url: "{{ route('securities.store') }}" + '/' + security_id,
                     success: function(data) {
                         table.draw();
                         clearMessage();
