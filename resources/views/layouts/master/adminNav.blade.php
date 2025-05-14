@@ -212,6 +212,7 @@
                                                 @canany(['sub edit record', 'sub view record'])
                                                 <li><a class="{{Request::is('hrms/submission')?'active':''}}" href="{{route('submission.index')}}">List of Submissions</a></li>
                                                 <li><a class="{{Request::is('hrms/submission/search')?'active':''}}" href="{{route('submission.search')}}">Search & Reports</a></li>
+                                                <li><a class="{{Request::is('hrms/securities/index')?'active':''}}" href="{{route('securities.index')}}">Securities</a></li>
                                                 @endcanany
 
                                         </ul>

@@ -338,6 +338,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/submissionPosition', 'SubPositionController');
     Route::resource('/submissionCompetitor', 'SubCompetitorController');
     Route::resource('/submissionDocument', 'SubDocumentController');
+    Route::resource('/securities', 'SecurityController');
     // Route::get('/submissionDocument/refreshTable', 'SubmissionDocumentController@refreshTable')->name('submissionDocument.table');
 
 });
