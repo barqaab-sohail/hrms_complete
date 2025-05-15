@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Submission;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Submission\Security;
-use Illuminate\Support\Facades\File;
-use App\Models\Common\Bank;
-use App\Models\Common\Client;
-use App\Models\Common\Partner;
 use DB;
 use DataTables;
+use App\Models\Common\Bank;
+use Illuminate\Http\Request;
+use App\Models\Common\Client;
+use App\Models\Common\Partner;
+use App\Models\Submission\Security;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class SecurityController extends Controller
 {
@@ -41,23 +42,52 @@ class SecurityController extends Controller
                 ->editColumn('client_id', function ($data) {
                     return $data->client->name ?? '';
                 })
+                ->editColumn('status', function ($data) {
+                    $status = $data->status;
+                    $color = '';
+
+                    if ($status == 'active') {
+                        $color = 'success'; // Bootstrap green
+                        $status = 'Active';
+                    } elseif ($status == 'expired') {
+                        $color = 'danger';  // Bootstrap red
+                        $status = 'Expired';
+                    } else {
+                        $color = 'secondary'; // Default color
+                        $status = ucfirst($status);
+                    }
+
+                    return '<span class="badge badge-' . $color . '">' . $status . '</span>';
+                })
                 ->editColumn('submitted_by', function ($data) {
                     return $data->submittedBy->name ?? '';
                 })
                 ->editColumn('bank_id', function ($data) {
                     return $data->bank->name ?? '';
                 })
+                // ->editColumn('document_path', function ($data) {
+
+                //     return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="' . $data->document_path . '" width="30/" style="cursor: pointer;">';
+                // })
                 ->editColumn('document_path', function ($data) {
-                    return '<a href="' . asset($data->document_path) . '" target="_blank">View Document</a>';
+                    if ($data->document_path) {
+                        $pdfUrl = asset('storage/' . $data->document_path);
+                        return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="' . $pdfUrl . '" width="30/" style="cursor: pointer;">';
+                    }
+                    return 'No Document';
                 })
 
                 ->addColumn('edit', function ($data) {
 
                     if (Auth::user()->hasPermissionTo('sub edit record')) {
 
-                        $button = '<a class="btn btn-success btn-sm" href="' . route('security.edit', $data->id) . '"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+                        if (Auth::user()->hasPermissionTo('sub edit record')) {
+                            $button = '<a class="btn btn-success btn-sm editSecurity" data-id="' . $data->id . '"><i class="fas fa-pencil-alt text-white "></i></a>';
+                            return $button;
+                        }
 
-                        return $button;
+                        // $button = '<a class="btn btn-success btn-sm" href="' . route('securities.edit', $data->id) . '"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+                        // return $button;
                     }
                 })
                 ->addColumn('delete', function ($data) {
@@ -66,8 +96,12 @@ class SecurityController extends Controller
                         return $button;
                     }
                 })
+                ->addColumn('copy_link', function ($data) {
+                    $pdfUrl = asset('storage/' . $data->document_path);
+                    return '<a class="copyLink" link="' . $pdfUrl . '" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+                })
 
-                ->rawColumns(['edit', 'delete'])
+                ->rawColumns(['edit', 'delete', 'copy_link', 'document_path', 'status'])
                 ->make(true);
         }
 
@@ -97,7 +131,7 @@ class SecurityController extends Controller
                 $extension = request()->document->getClientOriginalExtension();
 
                 $fileName =  time() . '.' . $extension;
-                $folderName = "security/"  . "/";
+                $folderName = "securities/";
                 //store file
                 $request->file('document')->storeAs('public/' . $folderName, $fileName);
 
