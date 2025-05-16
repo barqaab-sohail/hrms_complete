@@ -1,12 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Project\ProjectLedgerActivityController;
-use App\Models\Hr\HrExperience;
-use App\Models\Hr\HrEmployee;
 use App\User;
+use App\Models\Hr\HrEmployee;
+use App\Models\Hr\HrExperience;
 use App\Livewire\Asset\ListAsset;
 use App\Livewire\Asset\CreateAsset;
+use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\Project\ProjectLedgerActivityController;
 
 
 
@@ -66,6 +67,8 @@ Route::post('code/', 'Auth\RegisterController@store')->name('opt.store');
 //HR Routes
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Hr'], function () {
 
+    Route::get('/upload', 'StaffStatusController@showUploadForm')->name('checking.data');
+    Route::post('/process-files', 'StaffStatusController@processFiles')->name('process.files');
     Route::get('employee/card', 'CardController@create')->name('employee.card');
     Route::post('employee/card', 'CardController@index')->name('employeeCard.index');
     Route::get('employee/getEmployeePicture/{id}', 'CardController@getEmployeePicture')->name('employee.getEmployeePicture');
