@@ -7,6 +7,7 @@ use App\Livewire\Asset\ListAsset;
 use App\Livewire\Asset\CreateAsset;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Project\DocumentSearchController;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
 
 
@@ -262,6 +263,12 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
     Route::get('/projectProgressChart', 'Progress\ActivityController@chart')->name('projectProgress.chart');
     Route::resource('/project', 'ProjectController');
     Route::get('/projectCode/{divisionId}', 'ProjectController@projectCode');
+
+    // Search Documents
+    Route::get('/documents/search', [DocumentSearchController::class, 'search'])->name('documents.search');
+    Route::post('/documents/advanced-search', [DocumentSearchController::class, 'advancedSearch']);
+    Route::get('/documents', [DocumentSearchController::class, 'index'])->name('documents.index');
+    Route::get('/documents/download/{id}', [DocumentSearchController::class, 'download'])->name('documents.download');
 });
 
 // MIS Dashboard Progress Check

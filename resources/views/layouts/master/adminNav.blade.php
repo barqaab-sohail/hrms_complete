@@ -126,6 +126,7 @@
 
                                                 @can('pr document search')
                                                 <li><a class="{{Request::is('hrms/project/search')?'active':''}}" href="{{route('project.search')}}">Search Documentation</a></li>
+                                                <li><a class="{{Request::is('hrms/project/documents')?'active':''}}" href="{{route('documents.index')}}">Search Document Content</a></li>
                                                 @endcan
 
                                                 @can('Super Admin')
