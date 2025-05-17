@@ -281,6 +281,18 @@
             });
         });
 
+
+        (function() {
+            $("#formDocument").on("submit", function() {
+                $(".btn-prevent-multiple-submits").attr("disabled", "ture");
+                $(".fa-spinner").show();
+                //submit enalbe after 3 second
+                // setTimeout(function() {
+                //     $(".btn-prevent-multiple-submits").removeAttr("disabled");
+                // }, 3000);
+            });
+        })();
+
         formFunctions();
 
         $('#formDocument').hide();
@@ -302,23 +314,25 @@
                 $(this).val('');
             } else {
                 //Restrict File Type
-                if ((fileType == 'application/msword') || (fileType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
-                    $("#pdf").hide();
-                    document.getElementById("h6").innerHTML = "MS Word Document is Attached";
-                } else if ((fileType == 'image/jpeg') || (fileType == 'image/png')) {
-                    $("#pdf").hide();
-                    readURL(this);
-                    document.getElementById("h6").innerHTML = "Image is Attached";
-                } else if (fileType == 'application/pdf') {
+                if (fileType == 'application/pdf') {
                     readURL(this); // for Default Image
                     document.getElementById("h6").innerHTML = "PDF Document is Attached";
                     document.getElementById("pdf").src = "{{asset('Massets/images/document.png')}}";
                     $("#pdf").show();
-                } else if (fileType == 'application/vnd.ms-excel' || fileType == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-                    $("#pdf").hide();
-                    document.getElementById("h6").innerHTML = "MS Excel Document is Attached";
-                } else {
-                    alert('Only Doc, Docx, Xls, Xlsx, PDF Allowed');
+                }
+                // else if ((fileType == 'application/msword') || (fileType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+                //     $("#pdf").hide();
+                //     document.getElementById("h6").innerHTML = "MS Word Document is Attached";
+                // } else if ((fileType == 'image/jpeg') || (fileType == 'image/png')) {
+                //     $("#pdf").hide();
+                //     readURL(this);
+                //     document.getElementById("h6").innerHTML = "Image is Attached";
+                // } else if (fileType == 'application/vnd.ms-excel' || fileType == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                //     $("#pdf").hide();
+                //     document.getElementById("h6").innerHTML = "MS Excel Document is Attached";
+                // } 
+                else {
+                    alert('Only PDF Allowed');
                     $(this).val('');
                 }
             }
@@ -547,6 +561,8 @@
 
                         table.draw();
                         clearMessage();
+                        $(".btn-prevent-multiple-submits").removeAttr("disabled");
+                        $(".fa-spinner").hide();
                     }
 
                 },
@@ -559,6 +575,7 @@
                     $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + errorMassage + '</strong></div>');
 
                     $('#saveBtn').html('Save Changes');
+                    $(".fa-spinner").hide();
                 }
             });
         });

@@ -12,6 +12,7 @@ use App\Models\Submission\Security;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use App\Http\Requests\Submission\SecurityStore;
 
 class SecurityController extends Controller
 {
@@ -112,7 +113,7 @@ class SecurityController extends Controller
         return view('submission.security.create', compact('banks', 'clients', 'partners'));
     }
 
-    public function store(Request $request)
+    public function store(SecurityStore $request)
     {
 
         $input = $request->all();
