@@ -22,8 +22,8 @@
                 <button type="button" id="hideButton" class="btn btn-success float-right">Add Secuirty</button>
             </div>
             @endcan
-            <div class="card-body">
 
+            <div class="card-body">
                 <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formDocument" enctype="multipart/form-data">
                     {{csrf_field()}}
                     <div class="form-body">
@@ -213,7 +213,19 @@
                     </div>
                 </form>
 
+                <div class=" d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <!-- Excel Export Button -->
+                        <a href="{{ route('securities.export.excel') }}" class="btn btn-success">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </a>
 
+                        <!-- PDF Export Button -->
+                        <a href="{{ route('securities.export.pdf') }}" class="btn btn-danger ml-2">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </a>
+                    </div>
+                </div>
                 <table class="table table-bordered data-table" width=100%>
                     <thead>
                         <tr>

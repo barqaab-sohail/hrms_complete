@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\Submission\SecurityStore;
 
+
 class SecurityController extends Controller
 {
     public function index(Request $request)
@@ -191,5 +192,14 @@ class SecurityController extends Controller
 
 
         return response()->json(['status' => 'OK', 'message' => "Data Successfully Deleted"]);
+    }
+    public function exportExcel()
+    {
+        return Security::exportToExcel();
+    }
+
+    public function exportPdf()
+    {
+        return Security::exportToPDF();
     }
 }

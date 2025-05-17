@@ -342,6 +342,8 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/submissionCompetitor', 'SubCompetitorController');
     Route::resource('/submissionDocument', 'SubDocumentController');
     Route::resource('/securities', 'SecurityController');
+    Route::get('/securities/export/excel', 'SecurityController@exportExcel')->name('securities.export.excel');
+    Route::get('/securities/export/pdf', 'SecurityController@exportPdf')->name('securities.export.pdf');
     // Route::get('/submissionDocument/refreshTable', 'SubmissionDocumentController@refreshTable')->name('submissionDocument.table');
 
 });
