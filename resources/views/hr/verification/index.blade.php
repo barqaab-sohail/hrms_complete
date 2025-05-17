@@ -232,11 +232,12 @@
         cache: false,
         processData: false,
         success: function(data) {
+          console.log(data.data);
           if (data.data) {
             $('.card').show();
             $(".img-thumbnail").show();
-            $('#emp_name').text('Name: ' + data.data.full_name);
-            $('#emp_des').html(' Designation: ' + data.data.designation);
+            $('#emp_name').text('Name: ' + data.data.first_name + ' ' + data.data.last_name);
+            $('#emp_des').html(' Designation: ' + data.data.employee_current_designation.name);
             if (data.data.hr_status_id == 'Active') {
               $('#emp_status').text('Current Status: Working');
             } else {
@@ -247,12 +248,12 @@
             } else {
               $('#emp_expiry').html(' Contract Expiry: ' + dateInDayMonthYear(data.data.employee_appointment?.expiry_date));
             }
-          
+
             if (data.data.picture) {
               var image = data.data.picture.path + data.data.picture.file_name;
               var imageurl = "{{asset('storage/:id')}}".replace(':id', image);
               $(".img-thumbnail").attr('src', imageurl);
-            }else{
+            } else {
               $(".img-thumbnail").attr('src', "{{asset('Massets/images/default.png')}}");
             }
 

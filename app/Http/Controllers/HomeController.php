@@ -99,14 +99,14 @@ class HomeController extends Controller
 
 
         if (strlen($id) > 7) {
-            $data = HrEmployee::with('picture', 'employeeAppointment')->where('cnic', $id)->first();
+            $data = HrEmployee::with('picture', 'employeeAppointment', 'employeeCurrentDesignation')->where('cnic', $id)->first();
             if ($data) {
                 return response()->json(['data' => $data]);
             } else {
                 return response()->json(['error' => 'Not Data Found']);
             }
         } else {
-            $data = HrEmployee::with('picture', 'employeeAppointment')->where('employee_no', $id)->first();
+            $data = HrEmployee::with('picture', 'employeeAppointment', 'employeeCurrentDesignation')->where('employee_no', $id)->first();
             if ($data) {
                 return response()->json(['data' => $data]);
             } else {
