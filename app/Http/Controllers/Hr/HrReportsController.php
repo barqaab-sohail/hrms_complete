@@ -4,14 +4,16 @@ namespace App\Http\Controllers\HR;
 
 use DB;
 use DataTables;
+use App\Models\Hr\HrStatus;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
+use App\Models\Hr\HrDepartment;
+use App\Models\HrDocumentation;
 use App\Models\Common\Education;
 use App\Models\Hr\HrDesignation;
 use App\Models\Hr\HrDocumentName;
 use App\Http\Controllers\Controller;
 use App\Models\Hr\HrEmployeeCompany;
-use App\Models\HrDocumentation;
 
 class HrReportsController extends Controller
 {
@@ -369,6 +371,80 @@ class HrReportsController extends Controller
         });
 
         return view('hr.reports.report_1', compact('employees'));
+    }
+
+    public function employee_list(Request $request)
+    {
+        $query = HrEmployee::with(
+                'degreeYearAbove16',
+                'degreeYearAbove16',
+                'degreeYearAbove12',
+                'degreeAbove12',
+                'hrDepartment',
+                'hrContactMobile',
+                'employeeAppointment',
+                'hrMembership',
+                'hrBloodGroup',
+                'hrContactLandline',
+                'hrContactEmail',
+                'hrEmergency',
+                'hrContactPermanent',
+                'hrContactPermanentCity',
+                'employeeCurrentDesignation',
+                'employeeAppointment',
+                'employeeCurrentSalary'
+            );
+
+        // Apply search filters if they exist
+        if ($request->has('employee_name') && $request->employee_name != '') {
+            $query->where(function ($q) use ($request) {
+                $q->where('first_name', 'like', '%' . $request->employee_name . '%')
+                    ->orWhere('last_name', 'like', '%' . $request->employee_name . '%');
+            });
+        }
+
+        if ($request->has('designation') && $request->designation != '') {
+            $query->whereHas('employeeCurrentDesignation', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->designation . '%');
+            });
+        }
+
+        if ($request->has('department') && $request->department != '') {
+            $query->whereHas('hrDepartment', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->department . '%');
+            });
+        }
+
+        if ($request->has('employee_no') && $request->employee_no != '') {
+            $query->where('employee_no', 'like', '%' . $request->employee_no . '%');
+        }
+
+        if ($request->has('status') && $request->status != '') {
+            $query->where('hr_status_id', $request->status);
+        }
+
+        // Add more filters as needed...
+
+        $employees = $query->get();
+
+        $designations = employeeDesignationArray();
+
+        $employees = $employees->sort(function ($a, $b) use ($designations) {
+            $pos_a = array_search($a->employeeCurrentDesignation->name ?? '', $designations);
+            $pos_b = array_search($b->employeeCurrentDesignation->name ?? '', $designations);
+            return $pos_a !== false ? $pos_a - $pos_b : 999999;
+        });
+
+        // For AJAX requests, return JSON
+        if ($request->ajax()) {
+            return view('hr.reports.partials.employee_table', compact('employees'))->render();
+        }
+
+        // Get lists for dropdowns
+        $departments = HrDepartment::pluck('name', 'id');
+        $statuses = HrStatus::pluck('name', 'id'); // Assuming you have a HrStatus model
+
+        return view('hr.reports.employee_list', compact('employees', 'departments', 'statuses'));
     }
 
     public function searchEmployeeResult(Request $request)

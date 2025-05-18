@@ -7,14 +7,14 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3">
+    <div class="col-md-6">
             <!-- Search Filters Panel -->
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Search Filters</h5>
+                    <h5 class="mb-0 text-white">Search Filters</h5>
                 </div>
                 <div class="card-body">
-                    <form id="searchForm" action="{{ route('documents.search') }}" method="GET">
+                    <form id="searchForm" action="{{ route('documents.index') }}" method="GET">
                         <!-- Basic Search -->
                         <div class="form-group mb-3">
                             <label for="searchTerm" class="form-label">Search Term</label>
@@ -48,7 +48,18 @@
                                         value="{{ request('date_to') }}">
                                 </div>
                             </div>
-
+                            <div class="form-group mb-6">
+                                <label for="project_name" class="form-label">Project Name</label>
+                                <select class="form-select select2" id="project_name" name="project_name">
+                                    <option value="">All Projects</option>
+                                    @foreach($projects as $project)
+                                        <option value="{{ $project->id }}" 
+                                            {{ request('project_name') == $project->id ? 'selected' : '' }}>
+                                            {{ $project->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="form-group mb-3">
                                 <label for="pr_folder_name_id" class="form-label">Folder</label>
                                 <select class="form-select" id="pr_folder_name_id" name="pr_folder_name_id">
@@ -78,8 +89,11 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row">
+        
 
-        <div class="col-md-9">
+        <div class="col-md-12">
             <!-- Search Results -->
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
@@ -98,69 +112,47 @@
                             <thead>
                                 <tr>
                                     <th>Reference No.</th>
+                                    <th>Project</th>
                                     <th>Document</th>
                                     <th>Description</th>
                                     <th>Date</th>
                                     <th>Size</th>
                                     <th>Folder</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($documents as $document)
-                                <tr>
-                                    <td>{{ $document->reference_no }}</td>
-                                    <td>
-                                        <a href="{{ $document->full_path }}" target="_blank" class="text-primary">
-                                            <i class="fas fa-file-{{ $document->extension == 'pdf' ? 'pdf' : 'word' }} me-2"></i>
-                                            {{ $document->file_name }}
-                                        </a>
-                                    </td>
-                                    <td>{{ Str::limit($document->description, 50) }}</td>
-                                    <td>{{ $document->document_date }}</td>
-                                    <td>{{ $document->size }} MB</td>
-                                    <td>
-                                        <span class="badge bg-secondary">
-                                            @isset($document->prFolderName)
-                                            {{ $document->prFolderName->name }}
-                                            @else
-                                            N/A
-                                            @endisset
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="{{ $document->full_path }}"
-                                                class="btn btn-outline-primary"
-                                                title="View"
-                                                target="_blank">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="#"
-                                                class="btn btn-outline-info view-content"
-                                                title="View Content"
-                                                data-content="{{ optional($document->prDocumentContent)->content ?? 'No content extracted' }}"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#contentModal">
-                                                <i class="fas fa-file-alt"></i>
-                                            </a>
-                                            <a href="{{ route('documents.download', $document->id) }}"
-                                                class="btn btn-outline-success"
-                                                title="Download">
-                                                <i class="fas fa-download"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
+                            @foreach($documents as $document)
+<tr>
+    <td>{{ $document->reference_no }}</td>
+    <td>{{ Str::limit($document->prDetail->name, 50) }}</td>
+    <td>
+    <a href="{{ $document->full_path }}" target="_blank" class="text-primary" title="{{ $document->file_name }}">
+        <i class="fas fa-file-{{ $document->extension == 'pdf' ? 'pdf' : 'word' }}"></i>
+    </a>
+</td>
+    </td>
+    <td>{{ Str::limit($document->description, 50) }}</td>
+    <td>{{ $document->document_date }}</td>
+    <td>{{ $document->size }} MB</td>
+    <td>
+        <span class="badge bg-secondary text-white">
+            @isset($document->prFolderName)
+                {{ $document->prFolderName->name }}
+            @else
+                N/A
+            @endisset
+        </span>
+    </td>
+</tr>
+@endforeach
                             </tbody>
                         </table>
                     </div>
 
                     <!-- Pagination -->
                     <div class="d-flex justify-content-center mt-3">
-                        {{ $documents->withQueryString()->links() }}
-                    </div>
+    {{ $documents->withQueryString()->links('pagination::bootstrap-4') }}
+</div>
                     @endif
                 </div>
             </div>
@@ -191,42 +183,56 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Toggle advanced filters
-        document.getElementById('toggleAdvanced').addEventListener('click', function() {
-            const filters = document.getElementById('advancedFilters');
-            filters.style.display = filters.style.display === 'none' ? 'block' : 'none';
-            this.textContent = filters.style.display === 'none' ?
-                '<i class="fas fa-cog me-1"></i> Advanced Filters' :
-                '<i class="fas fa-times me-1"></i> Hide Filters';
-        });
 
-        // Handle content preview modal
-        document.querySelectorAll('.view-content').forEach(button => {
-            button.addEventListener('click', function() {
-                const content = this.getAttribute('data-content');
-                document.getElementById('modalContent').innerHTML = content ?
-                    `<pre>${content}</pre>` :
-                    '<div class="text-muted">No content available</div>';
-            });
-        });
-
-        // Highlight search terms in results
-        @if(request('q'))
-        const searchTerm = '{{ request('
-        q ') }}';
-        const regex = new RegExp(searchTerm, 'gi');
-        const elements = document.querySelectorAll('td');
-
-        elements.forEach(el => {
-            const html = el.innerHTML.replace(
-                regex,
-                match => `<span class="bg-warning">${match}</span>`
-            );
-            el.innerHTML = html;
-        });
-        @endif
+$(document).ready(function() {
+        $('.select2').select2({
+        width: '100%',  // Make it full width of its container
+        dropdownAutoWidth: true, // Auto-adjust dropdown width
+        placeholder: "Select a project", // Optional placeholder
     });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+
+        
+    // Toggle advanced filters
+    document.getElementById('toggleAdvanced').addEventListener('click', function() {
+    const filters = document.getElementById('advancedFilters');
+    filters.style.display = filters.style.display === 'none' ? 'block' : 'none';
+    this.innerHTML = filters.style.display === 'none' ? 
+        '<i class="fas fa-cog me-1"></i> Advanced Filters' : 
+        '<i class="fas fa-times me-1"></i> Hide Filters';
+});
+
+    // Handle content preview modal
+    document.querySelectorAll('.view-content').forEach(button => {
+        button.addEventListener('click', function() {
+            const content = this.getAttribute('data-content');
+            document.getElementById('modalContent').innerHTML = content ?
+                `<pre>${content}</pre>` :
+                '<div class="text-muted">No content available</div>';
+        });
+    });
+
+    // Highlight search terms in results
+    @if(request('q'))
+    const searchTerm = '{{ request('q') }}';
+    const regex = new RegExp(searchTerm, 'gi');
+    const elements = document.querySelectorAll('td');
+
+    elements.forEach(el => {
+        const html = el.innerHTML.replace(
+            regex,
+            match => `<span class="bg-warning">${match}</span>`
+        );
+        el.innerHTML = html;
+    });
+    @endif
+
+    // Add this to your existing JavaScript
+    @if(request()->has('project_name'))
+    document.getElementById('project_name').value = '{{ request('project_name') }}';
+    @endif
+});
 </script>
 @endpush
 
@@ -246,6 +252,17 @@
         word-wrap: break-word;
         font-family: inherit;
         margin: 0;
+    }
+
+     /* Pagination styling */
+     .pagination {
+        --bs-pagination-padding-x: 0.75rem;
+        --bs-pagination-padding-y: 0.375rem;
+        --bs-pagination-font-size: 0.875rem;
+    }
+    .pagination .page-item:first-child .page-link,
+    .pagination .page-item:last-child .page-link {
+        font-size: 0.875rem;
     }
 </style>
 @endpush

@@ -36,4 +36,9 @@ class PrDocument extends Model implements Auditable
     {
         return $this->belongsTo('App\Models\Project\PrFolderName', 'pr_folder_name_id');
     }
+
+    public function prDetail()
+    {
+        return $this->belongsTo('App\Models\Project\PrDetail');
+    }
 }

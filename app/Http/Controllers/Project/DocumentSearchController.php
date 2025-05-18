@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Project;
 
 use Illuminate\Http\Request;
+use App\Models\Project\PrDetail;
 use App\Models\Project\PrDocument;
 use App\Http\Controllers\Controller;
 use App\Models\Project\PrFolderName;
@@ -42,24 +43,38 @@ class DocumentSearchController extends Controller
     }
 
 
+  
+
 
     public function index(Request $request)
-    {
-        $folders = PrFolderName::orderBy('name')->get();
+{
+    $folders = PrFolderName::orderBy('name')->get();
+    $projects = PrDetail::orderBy('name')->get(); // Add this line
+    // Get search results or all documents
+    $documents = $request->hasAny(['q', 'reference_no', 'description', 'date_from', 'date_to', 'pr_folder_name_id'])
+        ? $this->searchService->advancedSearch($request->all())
+        : PrDocument::with(['prDocumentContent', 'prFolderName','prDetail'])
+                   ->orderBy('document_date', 'desc')
+                   ->paginate(15);
 
-        if ($request->has('q') || $request->hasAny(['reference_no', 'description', 'date_from', 'date_to', 'pr_folder_name_id'])) {
-            $documents = $this->searchService->advancedSearch($request->all());
-        } else {
-            $documents = PrDocument::with(['prDocumentContent', 'prFolderName'])
-                ->orderBy('document_date', 'desc')
-                ->paginate(15);
-        }
-
-        return view('project.search.content_search', [
+    // Return JSON for API requests
+    if ($request->wantsJson()) {
+        return response()->json([
             'documents' => $documents,
-            'folders' => $folders
+            'folders' => $folders,
+            'projects' => $projects, // Add this line
+            'searchParams' => $request->all()
         ]);
     }
+
+    // Return Blade view for web requests
+    return view('project.search.content_search', [
+        'documents' => $documents,
+        'folders' => $folders,
+        'projects' => $projects, // Add this line
+        'searchParams' => $request->all()
+    ]);
+}
 
     public function download($id)
     {
