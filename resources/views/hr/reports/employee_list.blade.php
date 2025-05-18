@@ -11,7 +11,7 @@
         <h4 class="card-title">List of Employees</h4>
 
         <div class="table-responsive m-t-40">
-            <table id="myTable" class="table table-bordered table-striped" style="width:100%">
+            <table id="employees-table" class="table table-bordered table-striped" style="width:100%">
                 <thead>
                     <tr>
                         <th>Sr. No.</th>
@@ -34,105 +34,140 @@
                         <th>Type</th>
                         <th>Status</th>
                         <th>Blood Group</th>
-                        <th class="text-center" style="width:5%">Edit</th>
-
                     </tr>
                 </thead>
-
                 <tbody>
-                    @foreach($employees as $key=>$employee)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{$employee->first_name}} {{$employee->last_name}}</td>
-                        <td>{{$employee->employeeCurrentDesignation->name??''}}</td>
-                        <td>{{addComma($employee->employeeCurrentSalary->total_salary??'')}}</td>
-                        <td>{{$employee->father_name}}</td>
-                        <td>{{$employee->date_of_birth}}</td>
-                        <td>{{$employee->cnic}}</td>
-                        <td>{{date('d-M-Y', strtotime($employee->employeeAppointment->joining_date??''))}}</td>
-                        <td>{{$employee->hrDepartment->name??''}}</td>
-                        <td>
-                            @php
-                            $degrees = [];
-                            // Combine degree names and years
-                            foreach($employee->degreeAbove12 as $degree) {
-                            $year = $employee->degreeYearAbove12->firstWhere('education_id', $degree->id)->to ?? '';
-                            $degrees[] = $degree->degree_name . ($year ? ' ('.$year.')' : '');
-                            }
-                            echo implode(' + ', $degrees);
-                            @endphp
-                        </td>
-                        <td>{{$employee->hrMembership->membership_no??''}}</td>
-                        <td>{{$employee->hrMembership->expiry??''}}</td>
-                        <td>{{$employee->employee_no??''}}</td>
-                        <td>{{$employee->hrContactMobile->mobile??''}}</td>
-                        <td>{{$employee->hrContactLandline->landline??''}}</td>
-                        <td>{{$employee->hrContactEmail->email??''}}</td>
-                        <td>{{$employee->hrEmergency->mobile??''}}</td>
-                        <td>{{employeeType($employee->employeeAppointment->hr_employee_type_id??4)}}</td>
-                        <td>{{$employee->hr_status_id??''}}</td>
-                        <td>{{$employee->hrBloodGroup->name??''}}</td>
-                        <td class="text-center">
-                            <a class="btn btn-success btn-sm" href="{{route('employee.edit',$employee->id)}}" title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
-                        </td>
-
-
-                    </tr>
-                    @endforeach
+                    <!-- Data will be loaded via AJAX -->
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
+@stop
+
+@section('scripts')
 <script>
     $(document).ready(function() {
-        $('#myTable').DataTable({
-            stateSave: false,
-            "ordering": false,
-            dom: 'Blfrtip',
-            buttons: [{
-                    extend: 'copyHtml5',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-                    }
+        var table = $('#employees-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('hr.reports.employee_list') }}",
+                data: function(d) {
+                    // Add your search form data to the request
+                    d.employee_name = $('input[name=employee_name]').val();
+                    d.designation = $('select[name=designation]').val();
+                    d.department = $('select[name=department]').val();
+                    d.employee_no = $('input[name=employee_no]').val();
+                    d.status = $('select[name=status]').val();
+                }
+            },
+            columns: [{
+                    data: 'sr_no',
+                    name: 'sr_no'
                 },
                 {
-                    extend: 'excelHtml5',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-                        title: 'Employee Report - ' + new Date().toLocaleDateString()
-                    }
+                    data: 'employee_name',
+                    name: 'employee_name'
                 },
                 {
-                    extend: 'pdfHtml5',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-                        title: 'Employee Report - ' + new Date().toLocaleDateString()
-                    },
-                    customize: function(doc) {
-                        doc.defaultStyle.fontSize = 8;
-                        doc.styles.tableHeader.fontSize = 9;
-                        doc.pageMargins = [20, 40, 20, 40];
-                    }
+                    data: 'designation',
+                    name: 'designation'
                 },
                 {
-                    extend: 'csvHtml5',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-                    }
+                    data: 'current_salary',
+                    name: 'current_salary'
                 },
+                {
+                    data: 'father_name',
+                    name: 'father_name'
+                },
+                {
+                    data: 'date_of_birth',
+                    name: 'date_of_birth'
+                },
+                {
+                    data: 'cnic',
+                    name: 'cnic'
+                },
+                {
+                    data: 'joining_date',
+                    name: 'joining_date',
+
+                },
+                {
+                    data: 'department',
+                    name: 'department'
+                },
+                {
+                    data: 'education',
+                    name: 'education'
+                },
+                {
+                    data: 'pec_no',
+                    name: 'pec_no'
+                },
+                {
+                    data: 'expiry_date',
+                    name: 'expiry_date'
+                },
+                {
+                    data: 'employee_no',
+                    name: 'employee_no'
+                },
+                {
+                    data: 'mobile',
+                    name: 'mobile'
+                },
+                {
+                    data: 'landline',
+                    name: 'landline'
+                },
+                {
+                    data: 'email',
+                    name: 'email'
+                },
+                {
+                    data: 'emergency_number',
+                    name: 'emergency_number'
+                },
+                {
+                    data: 'type',
+                    name: 'type'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'blood_group',
+                    name: 'blood_group'
+                },
+
             ],
-            scrollY: "300px",
             scrollX: true,
-            scrollCollapse: true,
-            paging: false,
-            fixedColumns: {
-                leftColumns: 1,
-                rightColumns: 2
-            }
+            dom: 'Blfrtip',
+            buttons: [
+                'copy'
+            ],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ]
+        });
+
+        // Handle search form submission
+        $('#search-form').on('submit', function(e) {
+            e.preventDefault();
+            table.ajax.reload();
+        });
+
+        // Reset filters
+        $('#reset-filters').on('click', function() {
+            $('#search-form')[0].reset();
+            table.ajax.reload();
         });
     });
 </script>
-
 @stop

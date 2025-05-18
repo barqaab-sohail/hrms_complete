@@ -15,6 +15,7 @@ use App\Models\Hr\HrDocumentName;
 use App\Http\Controllers\Controller;
 use App\Models\Hr\HrEmployeeCompany;
 
+
 class HrReportsController extends Controller
 {
 
@@ -375,9 +376,8 @@ class HrReportsController extends Controller
 
     public function employee_list(Request $request)
     {
-        $query = HrEmployee::with(
-                'degreeYearAbove16',
-                'degreeYearAbove16',
+        if ($request->ajax()) {
+            $query = HrEmployee::with([
                 'degreeYearAbove12',
                 'degreeAbove12',
                 'hrDepartment',
@@ -388,64 +388,161 @@ class HrReportsController extends Controller
                 'hrContactLandline',
                 'hrContactEmail',
                 'hrEmergency',
-                'hrContactPermanent',
-                'hrContactPermanentCity',
                 'employeeCurrentDesignation',
-                'employeeAppointment',
                 'employeeCurrentSalary'
-            );
+            ]);
 
-        // Apply search filters if they exist
-        if ($request->has('employee_name') && $request->employee_name != '') {
-            $query->where(function ($q) use ($request) {
-                $q->where('first_name', 'like', '%' . $request->employee_name . '%')
-                    ->orWhere('last_name', 'like', '%' . $request->employee_name . '%');
-            });
+            // Apply filters
+            if ($request->has('employee_name') && $request->employee_name != '') {
+                $query->where(function ($q) use ($request) {
+                    $q->where('first_name', 'like', '%' . $request->employee_name . '%')
+                        ->orWhere('last_name', 'like', '%' . $request->employee_name . '%');
+                });
+            }
+
+            // Add other filters as needed...
+
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->addColumn('sr_no', function ($row) {
+                    static $i = 0;
+                    return ++$i;
+                })
+                ->addColumn('employee_name', function ($row) {
+                    return $row->first_name . ' ' . $row->last_name;
+                })
+                ->addColumn('designation', function ($row) {
+                    return $row->employeeCurrentDesignation->name ?? '';
+                })
+                ->addColumn('current_salary', function ($row) {
+                    return addComma($row->employeeCurrentSalary->total_salary ?? '');
+                })
+                ->addColumn('department', function ($row) {
+                    return $row->hrDepartment->name ?? '';
+                })
+                ->addColumn('joining_date', function ($row) {
+                    return date('d-M-Y', strtotime($row->employeeAppointment->joining_date ?? ''));
+                })
+                ->addColumn('education', function ($row) {
+                    $degrees = [];
+                    // Combine degree names and years
+                    foreach ($row->degreeAbove12 as $degree) {
+                        $year = $row->degreeYearAbove12->firstWhere('education_id', $degree->id)->to ?? '';
+                        $degrees[] = $degree->degree_name . ($year ? ' (' . $year . ')' : '');
+                    }
+                    return  implode(' + ', $degrees);
+                })
+                ->addColumn('pec_no', function ($row) {
+                    return $row->hrMembership->membership_no ?? '';
+                })
+                ->addColumn('expiry_date', function ($row) {
+                    return $row->hrMembership->expiry ?? '';
+                })
+                ->addColumn('mobile', function ($row) {
+                    return $row->hrContactMobile->mobile ?? '';
+                })
+                ->addColumn('landline', function ($row) {
+                    return $row->hrContactLandline->landline ?? '';
+                })
+                ->addColumn('email', function ($row) {
+                    return $row->hrContactEmail->email ?? '';
+                })
+                ->addColumn('emergency_number', function ($row) {
+                    return $row->hrEmergency->mobile ?? '';
+                })
+                ->addColumn('type', function ($row) {
+                    return employeeType($row->employeeAppointment->hr_employee_type_id ?? 4);
+                })
+                ->addColumn('status', function ($row) {
+                    return $row->hr_status_id ?? '';
+                })
+                ->addColumn('blood_group', function ($row) {
+                    return $row->hrBloodGroup->name ?? '';
+                })
+                ->make(true);
         }
-
-        if ($request->has('designation') && $request->designation != '') {
-            $query->whereHas('employeeCurrentDesignation', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->designation . '%');
-            });
-        }
-
-        if ($request->has('department') && $request->department != '') {
-            $query->whereHas('hrDepartment', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->department . '%');
-            });
-        }
-
-        if ($request->has('employee_no') && $request->employee_no != '') {
-            $query->where('employee_no', 'like', '%' . $request->employee_no . '%');
-        }
-
-        if ($request->has('status') && $request->status != '') {
-            $query->where('hr_status_id', $request->status);
-        }
-
-        // Add more filters as needed...
-
-        $employees = $query->get();
-
-        $designations = employeeDesignationArray();
-
-        $employees = $employees->sort(function ($a, $b) use ($designations) {
-            $pos_a = array_search($a->employeeCurrentDesignation->name ?? '', $designations);
-            $pos_b = array_search($b->employeeCurrentDesignation->name ?? '', $designations);
-            return $pos_a !== false ? $pos_a - $pos_b : 999999;
-        });
-
-        // For AJAX requests, return JSON
-        if ($request->ajax()) {
-            return view('hr.reports.partials.employee_table', compact('employees'))->render();
-        }
-
-        // Get lists for dropdowns
         $departments = HrDepartment::pluck('name', 'id');
-        $statuses = HrStatus::pluck('name', 'id'); // Assuming you have a HrStatus model
-
-        return view('hr.reports.employee_list', compact('employees', 'departments', 'statuses'));
+        $statuses = HrStatus::pluck('name', 'id');
+        $designations = employeeDesignationArray();
+        return view('hr.reports.employee_list', compact('departments', 'statuses', 'designations'));
     }
+
+    // public function employee_list(Request $request)
+    // {
+    //     $query = HrEmployee::with([
+    //         'degreeYearAbove16',
+    //         'degreeYearAbove12',
+    //         'degreeAbove12',
+    //         'hrDepartment',
+    //         'hrContactMobile',
+    //         'employeeAppointment',
+    //         'hrMembership',
+    //         'hrBloodGroup',
+    //         'hrContactLandline',
+    //         'hrContactEmail',
+    //         'hrEmergency',
+    //         'hrContactPermanent',
+    //         'hrContactPermanentCity',
+    //         'employeeCurrentDesignation',
+    //         'employeeCurrentSalary'
+    //     ]);
+
+    //     // Apply search filters
+    //     if ($request->has('employee_name') && $request->employee_name != '') {
+    //         $query->where(function ($q) use ($request) {
+    //             $q->where('first_name', 'like', '%' . $request->employee_name . '%')
+    //                 ->orWhere('last_name', 'like', '%' . $request->employee_name . '%');
+    //         });
+    //     }
+
+    //     if ($request->has('designation') && $request->designation != '') {
+    //         $query->whereHas('employeeCurrentDesignation', function ($q) use ($request) {
+    //             $q->where('name', 'like', '%' . $request->designation . '%');
+    //         });
+    //     }
+
+    //     if ($request->has('department') && $request->department != '') {
+    //         $query->whereHas('employeeCurrentDepartment', function ($q) use ($request) {
+    //             $q->where('hr_departments.id', $request->department);
+    //         });
+    //     }
+
+    //     if ($request->has('employee_no') && $request->employee_no != '') {
+    //         $query->where('employee_no', 'like', '%' . $request->employee_no . '%');
+    //     }
+
+    //     if ($request->has('status') && $request->status != '') {
+    //         $query->where('hr_status_id', $request->status);
+    //     }
+
+    //     // Get designation sorting array
+    //     $designations = employeeDesignationArray();
+
+
+    //     $allEmployees = $query->get();
+
+    //     // Sort the collection
+    //     $sortedEmployees = $allEmployees->sort(function ($a, $b) use ($designations) {
+    //         $pos_a = array_search($a->employeeCurrentDesignation->name ?? '', $designations);
+    //         $pos_b = array_search($b->employeeCurrentDesignation->name ?? '', $designations);
+    //         return $pos_a !== false ? $pos_a - $pos_b : 999999;
+    //     });
+
+    //     // Create paginator manually
+
+    //     $employees = $query->paginate(25);
+    //     // For AJAX requests
+    //     if ($request->ajax()) {
+    //         return view('hr.reports.partials.employee_table', compact('employees'))->render();
+    //     }
+
+    //     $departments = HrDepartment::pluck('name', 'id');
+    //     $statuses = HrStatus::pluck('name', 'id');
+
+    //     return view('hr.reports.employee_list', compact('employees', 'departments', 'statuses'));
+    // }
+
+
 
     public function searchEmployeeResult(Request $request)
     {
