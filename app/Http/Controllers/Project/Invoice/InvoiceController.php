@@ -39,9 +39,12 @@ class InvoiceController extends Controller
         $invoiceIds = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', '!=', 3)->pluck('id')->toArray();
         $totalInvoices = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount');
         $projectCost = PrCost::where('pr_detail_id', session('pr_detail_id'))->first();
-        $projectTotalCost = $projectCost->total_cost ?? '0';
+        $prDetail = PrDetail::where('id', session('pr_detail_id'))
+            ->withTotalCost()
+            ->firstOrFail();
+        $projectTotalCost = $prDetail->cost ?? '0';
         $balanceCost = $projectTotalCost - $totalInvoices;
-        $prDetail = PrDetail::find(session('pr_detail_id'));
+        //$prDetail = PrDetail::find(session('pr_detail_id'));
 
 
         $balanceCost = addComma($balanceCost);

@@ -59,6 +59,16 @@ class PrDetail extends Model implements Auditable
         return $this->hasOne('App\Models\Project\Cost\PrCost');
     }
 
+    public function scopeWithTotalCost($query)
+    {
+        return $query->withSum('prCosts as cost', 'total_cost');
+    }
+
+    public function prCosts()
+    {
+        return $this->hasMany('App\Models\Project\Cost\PrCost');
+    }
+
     public function prStatus()
     {
         return $this->hasOne('App\Models\Project\PrStatus', 'id', 'pr_status_id');

@@ -43,7 +43,7 @@
                                 Degree, Degree Year, DOJ, PEC, Employee No., Contact No.)</a></td>
                     </tr>
                     <tr>
-                        <td><a href="{{route('hr.reports.employee_list')}}" style="color:black">Employee List with Advance Search</a></td>
+                        <td><a href="{{route('hr.reports.employee_list')}}" style="color:black">Employee List (Full Details)</a></td>
                     </tr>
                     <tr>
                         <td><a href="{{route('hrReports.pictureList')}}" style="color:black">Employee Pictures</a></td>

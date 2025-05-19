@@ -59,6 +59,7 @@
                     d.employee_name = $('input[name=employee_name]').val();
                     d.designation = $('select[name=designation]').val();
                     d.department = $('select[name=department]').val();
+                    d.education = $('select[name=education]').val();
                     d.employee_no = $('input[name=employee_no]').val();
                     d.status = $('select[name=status]').val();
                 }

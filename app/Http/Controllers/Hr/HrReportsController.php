@@ -380,6 +380,7 @@ class HrReportsController extends Controller
             $query = HrEmployee::with([
                 'degreeYearAbove12',
                 'degreeAbove12',
+                'hrEducation',
                 'hrDepartment',
                 'hrContactMobile',
                 'employeeAppointment',
@@ -393,12 +394,41 @@ class HrReportsController extends Controller
             ]);
 
             // Apply filters
-            if ($request->has('employee_name') && $request->employee_name != '') {
-                $query->where(function ($q) use ($request) {
-                    $q->where('first_name', 'like', '%' . $request->employee_name . '%')
-                        ->orWhere('last_name', 'like', '%' . $request->employee_name . '%');
+            if ($request->filled('employee_name')) {
+                $name = $request->employee_name;
+                $query->where(function ($q) use ($name) {
+                    $q->where('first_name', 'like', "%{$name}%")
+                        ->orWhere('last_name', 'like', "%{$name}%")
+                        ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$name}%"]);
                 });
             }
+
+            if ($request->has('employee_no') && $request->employee_no != '') {
+                $query->where('employee_no', 'like', '%' . $request->employee_no . '%');
+            }
+
+            if ($request->has('status') && $request->status != '') {
+                $query->where('hr_status_id', $request->status);
+            }
+            if ($request->has('department') && $request->department != '') {
+                $query->whereHas('employeeCurrentDepartment', function ($q) use ($request) {
+                    $q->where('hr_departments.id', $request->department);
+                });
+            }
+            if ($request->has('designation') && $request->designation != '') {
+                $query->whereHas('employeeCurrentDesignation', function ($q) use ($request) {
+                    $q->where('hr_designations.id', $request->designation);
+                });
+            }
+
+            if ($request->has('education') && $request->education != '') {
+                $query->whereHas('hrEducation', function ($q) use ($request) {
+                    $q->where('hr_educations.education_id', $request->education);
+                });
+            }
+
+
+
 
             // Add other filters as needed...
 
@@ -463,8 +493,11 @@ class HrReportsController extends Controller
         }
         $departments = HrDepartment::pluck('name', 'id');
         $statuses = HrStatus::pluck('name', 'id');
-        $designations = employeeDesignationArray();
-        return view('hr.reports.employee_list', compact('departments', 'statuses', 'designations'));
+        $designations = HrDesignation::pluck('name', 'id');
+        $educations = Education::orderBy('id', 'asc')->pluck('degree_name', 'id');
+        // $designations = HrDesignation::pluck('name', 'id');
+        // $designations = employeeDesignationArray();
+        return view('hr.reports.employee_list', compact('departments', 'statuses', 'designations', 'educations'));
     }
 
     // public function employee_list(Request $request)

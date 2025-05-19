@@ -13,17 +13,32 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="designation">Designation</label>
-                        <input type="text" class="form-control" id="designation" name="designation"
-                            value="{{ request('designation') }}" placeholder="Search by designation">
+                        <select class="form-control select2" id="designation" name="designation">
+                            <option value="">All Designations</option>
+                            @foreach($designations as $id => $name)
+                            <option value="{{ $id }}" {{ request('designation') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="department">Department</label>
-                        <select class="form-control" id="department" name="department">
+                        <select class="form-control select2" id="department" name="department">
                             <option value="">All Departments</option>
                             @foreach($departments as $id => $name)
                             <option value="{{ $id }}" {{ request('department') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="department">Degree</label>
+                        <select class="form-control select2" id="education" name="education">
+                            <option value="">All Degrees</option>
+                            @foreach($educations as $id => $degree_name)
+                            <option value="{{ $id }}" {{ request('education') == $id ? 'selected' : '' }}>{{ $degree_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -40,7 +55,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="status">Status</label>
-                        <select class="form-control" id="status" name="status">
+                        <select class="form-control select2" id="status" name="status">
                             <option value="">All Statuses</option>
                             @foreach($statuses as $id => $name)
                             <option value="{{ $id }}" {{ request('status') == $id ? 'selected' : '' }}>{{ $name }}</option>
@@ -61,6 +76,13 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            width: '100%', // Make it full width of its container
+            dropdownAutoWidth: true, // Auto-adjust dropdown width
+        });
+    });
+
     function resetForm() {
         document.getElementById("searchForm").reset();
         window.location = "{{ route('hr.reports.employee_list') }}";
