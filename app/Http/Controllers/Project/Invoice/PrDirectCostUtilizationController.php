@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers\Project\Invoice;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Project\Invoice\DirectCostDetail;
-use App\Models\Project\Invoice\Invoice;
-use App\Models\Project\Invoice\PrDirectCostUtilization;
-use App\Http\Requests\Project\Invoice\DirectCostUtilizationStore;
 use DB;
 use DataTables;
+use Illuminate\Http\Request;
+use App\Models\Project\PrDetail;
+use App\Http\Controllers\Controller;
+use App\Models\Project\Invoice\Invoice;
+use App\Models\Project\Invoice\DirectCostDetail;
+use App\Models\Project\Invoice\PrDirectCostUtilization;
+use App\Http\Requests\Project\Invoice\DirectCostUtilizationStore;
 
 
 class PrDirectCostUtilizationController extends Controller
 {
-    public function index()
+    public function show($prDetailId)
     {
-        $directCostDetails = DirectCostDetail::where('pr_detail_id', session('pr_detail_id'))->get();
+        $directCostDetails = DirectCostDetail::where('pr_detail_id', $prDetailId)->get();
         // invoice_type_2 is Direct cost
-        $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', 2)->orderBy('invoice_no', 'desc')->get();
+        $invoices = Invoice::where('pr_detail_id', $prDetailId)->where('invoice_type_id', 2)->orderBy('invoice_no', 'desc')->get();
         $difference = $this->calculateDifferenceBetweenInvoiceUtilization($invoices);
-        $view =  view('project.direct_cost_utilization.create', compact('directCostDetails', 'invoices', 'difference'))->render();
+        $prDetail = PrDetail::find($prDetailId);
+        $view =  view('project.direct_cost_utilization.create', compact('directCostDetails', 'invoices', 'difference', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -48,12 +50,12 @@ class PrDirectCostUtilizationController extends Controller
         return $data;
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', 2)->orderBy('invoice_no', 'desc')->get();
+        $invoices = Invoice::where('pr_detail_id', $request->prDetailId)->where('invoice_type_id', 2)->orderBy('invoice_no', 'desc')->get();
         $difference = $this->calculateDifferenceBetweenInvoiceUtilization($invoices);
-        $data =  PrDirectCostUtilization::where('pr_detail_id', session('pr_detail_id'))->get();
-        $count = PrDirectCostUtilization::where('pr_detail_id', session('pr_detail_id'))->count();
+        $data =  PrDirectCostUtilization::where('pr_detail_id', $request->prDetailId)->get();
+        $count = PrDirectCostUtilization::where('pr_detail_id', $request->prDetailId)->count();
         return DataTables::of($data)
             ->editColumn('direct_cost_detail_id', function ($row) {
 
@@ -84,7 +86,7 @@ class PrDirectCostUtilizationController extends Controller
     public function store(DirectCostUtilizationStore $request)
     {
         $input = $request->all();
-        $input['pr_detail_id'] = session('pr_detail_id');
+
 
         DB::transaction(function () use ($input, $request) {
             $input =  PrDirectCostUtilization::updateOrCreate(
@@ -113,10 +115,9 @@ class PrDirectCostUtilizationController extends Controller
         return response()->json(['status' => 'OK', 'message' => 'Data Successfully Deleted']);
     }
 
-    public function exportViewDirectCost(Request $request)
+    public function exportViewDirectCost($prDetailId)
     {
 
-        $prDetailId = session('pr_detail_id');
         $months = PrDirectCostUtilization::where('pr_detail_id', $prDetailId)->select('month_year')->groupBy('month_year')->orderBy('month_year', 'asc')->pluck('month_year')->toArray();
         $directCostDetails = DirectCostDetail::where('pr_detail_id', $prDetailId)->get();
 

@@ -33,18 +33,19 @@ class InvoiceController extends Controller
         }
     }
 
-    public function index()
+    public function show($prDetailId)
     {
+
         $invoiceTypes = InvoiceType::all();
-        $invoiceIds = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', '!=', 3)->pluck('id')->toArray();
+        $invoiceIds = Invoice::where('pr_detail_id', $prDetailId)->where('invoice_type_id', '!=', 3)->pluck('id')->toArray();
         $totalInvoices = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount');
-        $projectCost = PrCost::where('pr_detail_id', session('pr_detail_id'))->first();
-        $prDetail = PrDetail::where('id', session('pr_detail_id'))
+        $projectCost = PrCost::where('pr_detail_id', $prDetailId)->first();
+        $prDetail = PrDetail::where('id', $prDetailId)
             ->withTotalCost()
             ->firstOrFail();
         $projectTotalCost = $prDetail->cost ?? '0';
         $balanceCost = $projectTotalCost - $totalInvoices;
-        //$prDetail = PrDetail::find(session('pr_detail_id'));
+        //$prDetail = PrDetail::find($prDetailId);
 
 
         $balanceCost = addComma($balanceCost);
@@ -57,11 +58,11 @@ class InvoiceController extends Controller
 
     public function create(Request $request)
     {
-        $data = Invoice::where('pr_detail_id', session('pr_detail_id'))->with('invoiceMonth')->latest()->get();
+        $data = Invoice::where('pr_detail_id', $request->prDetailId)->with('invoiceMonth')->latest()->get();
 
         if ($request->ajax()) {
-            $data = Invoice::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
-            $invoiceIds = Invoice::where('pr_detail_id', session('pr_detail_id'))->pluck('id')->toArray();
+            $data = Invoice::where('pr_detail_id', $request->prDetailId)->latest()->get();
+            $invoiceIds = Invoice::where('pr_detail_id', $request->prDetailId)->pluck('id')->toArray();
             $totalInvoice = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount');
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -135,8 +136,6 @@ class InvoiceController extends Controller
 
         $input = $request->all();
 
-        $input['pr_detail_id'] = session('pr_detail_id');
-
 
         if ($request->filled('invoice_date')) {
             $input['invoice_date'] = \Carbon\Carbon::parse($request->invoice_date)->format('Y-m-d');
@@ -195,7 +194,7 @@ class InvoiceController extends Controller
             if ($request->hasFile('document')) {
                 $extension = request()->document->getClientOriginalExtension();
                 $fileName = $input['invoice_no'] . '-' . time() . '.' . $extension;
-                $folderName = "project/" . session('pr_detail_id') . "/invoice/";
+                $folderName = "project/" . $request->pr_detail_id . "/invoice/";
                 //store file
                 $request->file('document')->storeAs('public/' . $folderName, $fileName);
                 $file_path = storage_path('app/public/' . $folderName . $fileName);

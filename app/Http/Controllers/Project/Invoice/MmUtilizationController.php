@@ -10,20 +10,22 @@ use App\Http\Requests\Project\Invoice\MmUtilizationStore;
 use App\Models\Project\Invoice\PrMmUtilization;
 use App\Models\Project\Invoice\Invoice;
 use App\Exports\Project\Invoice\UtilizationExport;
+use App\Models\Project\PrDetail;
 use Excel;
 use DB;
 use DataTables;
 
 class MmUtilizationController extends Controller
 {
-    public function index()
+    public function show($prDetailId)
     {
-        $positions = PrPosition::where('pr_detail_id', session('pr_detail_id'))->get();
+        $positions = PrPosition::where('pr_detail_id', $prDetailId)->get();
         $employees = HrEmployee::select('id', 'first_name', 'last_name', 'employee_no')->get();
         // invoice_type_1 is salary cost
-        $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', 1)->orderBy('invoice_no', 'desc')->get();
+        $invoices = Invoice::where('pr_detail_id', $prDetailId)->where('invoice_type_id', 1)->orderBy('invoice_no', 'desc')->get();
         $difference = $this->calculateDifferenceBetweenInvoiceUtilization($invoices);
-        $view =  view('project.mmUtilization.create', compact('positions', 'employees', 'invoices', 'difference'))->render();
+        $prDetail = PrDetail::find($prDetailId);
+        $view =  view('project.mmUtilization.create', compact('positions', 'employees', 'invoices', 'difference', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -51,12 +53,12 @@ class MmUtilizationController extends Controller
         return $data;
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->where('invoice_type_id', 1)->orderBy('invoice_no', 'desc')->get();
+        $invoices = Invoice::where('pr_detail_id', $request->prDetailId)->where('invoice_type_id', 1)->orderBy('invoice_no', 'desc')->get();
         $difference = $this->calculateDifferenceBetweenInvoiceUtilization($invoices);
-        $data =  PrMmUtilization::where('pr_detail_id', session('pr_detail_id'))->get();
-        $count = PrMmUtilization::where('pr_detail_id', session('pr_detail_id'))->count();
+        $data =  PrMmUtilization::where('pr_detail_id', $request->prDetailId)->get();
+        $count = PrMmUtilization::where('pr_detail_id', $request->prDetailId)->count();
         return DataTables::of($data)
             ->editColumn('hr_employee_id', function ($row) {
 
@@ -131,10 +133,10 @@ class MmUtilizationController extends Controller
     }
 
 
-    public function exportView(Request $request)
+    public function exportView($prDetailId)
     {
 
-        $prDetailId = session('pr_detail_id');
+
         $months = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('month_year')->groupBy('month_year')->orderBy('month_year', 'asc')->pluck('month_year')->toArray();
 
         $employeeIds = PrMmUtilization::where('pr_detail_id', $prDetailId)->select('hr_employee_id')->groupBy('hr_employee_id')->pluck('hr_employee_id')->toArray();

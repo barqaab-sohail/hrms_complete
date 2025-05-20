@@ -9,7 +9,7 @@
             </select>
         </div>
         <br>
-        <a id="report_button" type="button" href="{{url('hrms/project/exportViewDirectCost')}}" target="_blank" class="btn btn-danger float-left">View Report</a>
+        <a id="report_button" type="button" href="{{url('hrms/project/exportViewDirectCost/'.$prDetail->id)}}" target="_blank" class="btn btn-danger float-left">View Report</a>
         <thead>
             <tr>
                 <th>Description</th>
@@ -37,6 +37,7 @@
                 <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
                 <form id="utilizationForm" name="utilizationForm" class="form-horizontal">
                     <input type="hidden" name="utilization_id" id="utilization_id">
+                    <input type="hidden" name="pr_detail_id" id="pr_detail_id" value="{{$prDetail->id}}">
                     <div class="form-group">
                         <label class="control-label text-right">Direct Cost Description</label><br>
                         <select name="direct_cost_detail_id" id="direct_cost_detail_id" class="form-control selectTwo" data-validation="required">
@@ -141,10 +142,16 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            var prDetailId = "{{ $prDetail->id }}";
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('prDirectCostUtilization.create') }}",
+                ajax: {
+                    url:"{{ route('prDirectCostUtilization.create') }}",
+                    data: function(d) {
+                        d.prDetailId = prDetailId;
+                    }
+                },
                 drawCallback: function(data) {
                     if (data.json.count > 0) {
                         $("#report_button").show();

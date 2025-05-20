@@ -1,8 +1,11 @@
 <div class="card-body">
-    @if(isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id')))
-    <button type="button" class="btn btn-success float-right" id="createInvoice" data-toggle="modal">Add Invoice</button>
+    @if (isEditInvoice($prDetail->id) || isDeleteInvoice($prDetail->id))
+    <button type="button" class="btn btn-success float-right" id="createInvoice" data-toggle="modal">Add
+        Invoice</button>
     @endif
-    <h3>Total Project Cost = {{$projectTotalCost}} - Cost Utilized = {{$totalInvoices}} - Balance Budget = {{$balanceCost}}</h3>
+    <h3>Total Project Cost = {{ $projectTotalCost }} - Cost Utilized = {{ $totalInvoices }} - Balance Budget =
+        {{ $balanceCost }}
+    </h3>
     <br>
     <table class="table table-bordered data-table">
         <thead>
@@ -17,10 +20,10 @@
                 <th>Total Value</th>
                 <th>Payment Status</th>
                 <th>Document</th>
-                @if(isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id')))
+                @if (isEditInvoice($prDetail->id) || isDeleteInvoice($prDetail->id))
                 <th>Edit</th>
                 @endif
-                @if(isDeleteInvoice(session('pr_detail_id')))
+                @if (isDeleteInvoice($prDetail->id))
                 <th>Delete</th>
                 @endif
 
@@ -41,21 +44,27 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
             </div>
             <div class="modal-body">
-                <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
-                <form id="invoiceForm" name="invoiceForm" action="{{route('projectInvoice.store')}}" class="form-horizontal">
+                <div id="json_message_modal" align="left"><strong></strong><i hidden
+                        class="fas fa-times float-right"></i> </div>
+                <form id="invoiceForm" name="invoiceForm" action="{{ route('projectInvoice.store') }}"
+                    class="form-horizontal">
 
                     <input type="hidden" name="invoice_id" id="invoice_id">
+                    <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Invoice No.<span class="text_requried">*</span></label>
-                                <input type="text" name="invoice_no" id="invoice_no" value="{{old('invoice_no')}}" class="form-control exempted" data-validation="required">
+                                <input type="text" name="invoice_no" id="invoice_no" value="{{ old('invoice_no') }}"
+                                    class="form-control exempted" data-validation="required">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Invoice Date<span class="text_requried">*</span></label>
-                                <input type="text" name="invoice_date" id="invoice_date" value="{{ old('invoice_date') }}" class="form-control date_input" data-validation="required" readonly>
+                                <input type="text" name="invoice_date" id="invoice_date"
+                                    value="{{ old('invoice_date') }}" class="form-control date_input"
+                                    data-validation="required" readonly>
                                 <br>
                                 <i class="fas fa-trash-alt text_requried"></i>
                             </div>
@@ -63,18 +72,25 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Invoice Month</label>
-                                <input type="text" name="invoice_month" id="invoice_month" value="{{ old('invoice_month') }}" class="form-control date-picker" data-validation="required" readonly>
+                                <input type="text" name="invoice_month" id="invoice_month"
+                                    value="{{ old('invoice_month') }}" class="form-control date-picker"
+                                    data-validation="required" readonly>
                                 <br>
                                 <i class="fas fa-trash-alt text_requried"></i>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label text-right">Invoice Type<span class="text_requried">*</span></label>
-                                <select id="invoice_type_id" name="invoice_type_id" class="form-control selectTwo" data-validation="required">
+                                <label class="control-label text-right">Invoice Type<span
+                                        class="text_requried">*</span></label>
+                                <select id="invoice_type_id" name="invoice_type_id" class="form-control selectTwo"
+                                    data-validation="required">
                                     <option value=""></option>
-                                    @foreach($invoiceTypes as $invoiceType)
-                                    <option value="{{$invoiceType->id}}" {{(old("invoice_type_id")==$invoiceType->id? "selected" : "")}}>{{$invoiceType->name}}</option>
+                                    @foreach ($invoiceTypes as $invoiceType)
+                                    <option value="{{ $invoiceType->id }}"
+                                        {{ old('invoice_type_id') == $invoiceType->id ? 'selected' : '' }}>
+                                        {{ $invoiceType->name }}
+                                    </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -84,46 +100,54 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Reference</label>
-                                <textarea rows=3 cols=5 name="reference" id="reference" class="form-control">{{old('reference')}}</textarea>
+                                <textarea rows=3 cols=5 name="reference" id="reference" class="form-control">{{ old('reference') }}</textarea>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Description</label>
-                                <textarea rows=3 cols=5 type="text" name="description" id="description" class="form-control">{{old('description')}}</textarea>
+                                <textarea rows=3 cols=5 type="text" name="description" id="description" class="form-control">{{ old('description') }}</textarea>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Value Excluding Sales Tax<span class="text_requried">*</span></label>
-                                <input type="text" name="amount" id="amount" value="{{old('amount')}}" class="form-control prc_1" data-validation="required">
+                                <label class="control-label">Value Excluding Sales Tax<span
+                                        class="text_requried">*</span></label>
+                                <input type="text" name="amount" id="amount" value="{{ old('amount') }}"
+                                    class="form-control prc_1" data-validation="required">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Sales Tax<span class="text_requried">*</span></label>
-                                <input type="text" name="sales_tax" id="sales_tax" value="{{old('sales_tax')}}" class="form-control prc_1" data-validation="required">
+                                <input type="text" name="sales_tax" id="sales_tax"
+                                    value="{{ old('sales_tax') }}" class="form-control prc_1"
+                                    data-validation="required">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Total Value</label>
-                                <input type="text" name="total_value" id="total_value" value="{{old('total_value')}}" readonly class="form-control">
+                                <input type="text" name="total_value" id="total_value"
+                                    value="{{ old('total_value') }}" readonly class="form-control">
                             </div>
                         </div>
-                        @if($prDetail->contract_type_id==2)
+                        @if ($prDetail->contract_type_id == 2)
                         <div class="col-md-2 hideDev">
                             <div class="form-group">
-                                <label class="control-label">Total Overhead<span class="text_requried">*</span></label>
-                                <input type="text" name="overhead" id="overhead" value="{{old('overhead')}}" class="form-control">
+                                <label class="control-label">Total Overhead<span
+                                        class="text_requried">*</span></label>
+                                <input type="text" name="overhead" id="overhead"
+                                    value="{{ old('overhead') }}" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-2 hideDev">
                             <div class="form-group">
                                 <label class="control-label">Total Fee<span class="text_requried">*</span></label>
-                                <input type="text" name="fee" id="fee" value="{{old('fee')}}" class="form-control">
+                                <input type="text" name="fee" id="fee" value="{{ old('fee') }}"
+                                    class="form-control">
                             </div>
                         </div>
                         @endif
@@ -133,25 +157,31 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">remarks</label>
-                                <Input rows=3 cols=5 name="remarks" id="remarks" class="form-control" value="{{ old('remarks') }}" />
+                                <Input rows=3 cols=5 name="remarks" id="remarks" class="form-control"
+                                    value="{{ old('remarks') }}" />
                             </div>
                         </div>
                     </div>
                     <!--/row-->
                     <div class="row">
                         <div class="col-md-8 pdfView">
-                            <embed id="pdf" src="" type="application/pdf" height="300" width="100%" />
+                            <embed id="pdf" src="" type="application/pdf" height="300"
+                                width="100%" />
                         </div>
                         <div class="col-md-1">
                         </div>
                         <div class="col-md-3">
                             <div class="form-group row">
                                 <center>
-                                    <img src="{{asset('Massets/images/document.png')}}" class="img-round picture-container picture-src" id="wizardPicturePreview" title="" width="150">
+                                    <img src="{{ asset('Massets/images/document.png') }}"
+                                        class="img-round picture-container picture-src" id="wizardPicturePreview"
+                                        title="" width="150">
                                     </input>
-                                    <input type="file" name="document" id="view" data-validation="required" class="" hidden>
+                                    <input type="file" name="document" id="view" data-validation="required"
+                                        class="" hidden>
 
-                                    <h6 id="h6" class="card-title m-t-10">Click On Image to Add Document<span class="text_requried">*</span></h6>
+                                    <h6 id="h6" class="card-title m-t-10">Click On Image to Add Document<span
+                                            class="text_requried">*</span></h6>
 
                                 </center>
                             </div>
@@ -160,7 +190,8 @@
                     <!--end row-->
 
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn" value="create">Save changes
+                        <button type="submit" class="btn btn-success btn-prevent-multiple-submits" id="saveBtn"
+                            value="create">Save changes
                         </button>
                     </div>
                 </form>
@@ -194,7 +225,8 @@
                 showButtonPanel: true,
                 dateFormat: 'MM yy',
                 onClose: function(dateText, inst) {
-                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst
+                        .selectedMonth, 1));
                     if ($('.date-picker').val() != '') {
                         $('.date-picker').siblings('i').show();
                     } else {
@@ -250,6 +282,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            var prDetailId = "{{ $prDetail->id }}";
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -281,6 +314,9 @@
                 ],
                 ajax: {
                     url: "{{ route('projectInvoice.create') }}",
+                    data: function(d) {
+                        d.prDetailId = prDetailId;
+                    }
                 },
                 columns: [{
                         data: "invoice_no",
@@ -322,14 +358,14 @@
                         data: "invoice_document",
                         name: 'invoice_document'
                     },
-                    @if(isEditInvoice(session('pr_detail_id')) || isDeleteInvoice(session('pr_detail_id'))) {
+                    @if(isEditInvoice($prDetail->id) || isDeleteInvoice($prDetail->id)) {
                         data: 'Edit',
                         name: 'Edit',
                         orderable: false,
                         searchable: false
                     },
                     @endif
-                    @if(isDeleteInvoice(session('pr_detail_id'))) {
+                    @if(isDeleteInvoice($prDetail->id)) {
                         data: 'Delete',
                         name: 'Delete',
                         orderable: false,
@@ -371,42 +407,48 @@
             $('body').unbind().on('click', '.editInvoice', function() {
                 var invoice_id = $(this).data('id');
                 $('#json_message_modal').html('');
-                $.get("{{ url('hrms/project/projectInvoice') }}" + '/' + invoice_id + '/edit', function(data) {
-                    $('#modelHeading').html("Edit Invoice");
-                    $('#saveBtn').val("edit-Invoice");
-                    $('#invoice_id').val(data.id);
-                    $('#invoice_no').val(data.invoice_no);
-                    $('#remarks').val(data.remarks);
-                    $('#invoice_date').val(dateInDayMonthYear(data.invoice_date));
-                    $('#invoice_month').val(data.invoice_month);
+                $.get("{{ url('hrms/project/projectInvoice') }}" + '/' + invoice_id + '/edit',
+                    function(data) {
+                        $('#modelHeading').html("Edit Invoice");
+                        $('#saveBtn').val("edit-Invoice");
+                        $('#invoice_id').val(data.id);
+                        $('#invoice_no').val(data.invoice_no);
+                        $('#remarks').val(data.remarks);
+                        $('#invoice_date').val(dateInDayMonthYear(data.invoice_date));
+                        $('#invoice_month').val(data.invoice_month);
 
-                    $('#invoice_type_id').val(data.invoice_type_id);
-                    $('#invoice_type_id').trigger('change');
-                    $('#reference').val(data.reference);
-                    $('#description').val(data.description);
-                    var amount = data.amount?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
-                    $('#amount').val(amount);
-                    var salesTax = data.sales_tax?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
-                    $('#sales_tax').val(salesTax);
-                    var overhead = data.overhead?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
-                    $('#overhead').val(overhead);
-                    var fee = data.fee?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
-                    $('#fee').val(fee);
+                        $('#invoice_type_id').val(data.invoice_type_id);
+                        $('#invoice_type_id').trigger('change');
+                        $('#reference').val(data.reference);
+                        $('#description').val(data.description);
+                        var amount = data.amount?.toString().replace(
+                            /\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
+                        $('#amount').val(amount);
+                        var salesTax = data.sales_tax?.toString().replace(
+                            /\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
+                        $('#sales_tax').val(salesTax);
+                        var overhead = data.overhead?.toString().replace(
+                            /\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
+                        $('#overhead').val(overhead);
+                        var fee = data.fee?.toString().replace(/\B(?=(\d{3})+(?!\d))/g,
+                            ",") ?? '';
+                        $('#fee').val(fee);
 
 
 
-                    //+ convert string to number
-                    var totalValue = (+(data.amount) + +(data.sales_tax));
-                    totalValue = totalValue?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
-                    $('#total_value').val(totalValue);
-                    var path = data.path;
-                    var docUrl = "{{asset('storage/:path')}}".replace(':path', path);
-                    $("#pdf").show();
-                    document.getElementById("pdf").src = docUrl;
-                    //$('#pdf').trigger('change');
-                    $('#ajaxModel').modal('show');
+                        //+ convert string to number
+                        var totalValue = (+(data.amount) + +(data.sales_tax));
+                        totalValue = totalValue?.toString().replace(/\B(?=(\d{3})+(?!\d))/g,
+                            ",") ?? '';
+                        $('#total_value').val(totalValue);
+                        var path = data.path;
+                        var docUrl = "{{ asset('storage/:path') }}".replace(':path', path);
+                        $("#pdf").show();
+                        document.getElementById("pdf").src = docUrl;
+                        //$('#pdf').trigger('change');
+                        $('#ajaxModel').modal('show');
 
-                })
+                    })
             });
             $('#saveBtn').unbind().click(function(e) {
                 $(this).attr('disabled', 'ture');
@@ -431,7 +473,9 @@
 
                         $('#invoiceForm').trigger("reset");
                         $('#ajaxModel').modal('hide');
-                        $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + data.message + '</strong></div>');
+                        $('#json_message').html(
+                            '<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' +
+                            data.message + '</strong></div>');
                         table.draw();
 
                     },
@@ -441,7 +485,9 @@
                         $.each(data.responseJSON.errors, function(key, value) {
                             errorMassage += value + '<br>';
                         });
-                        $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + errorMassage + '</strong></div>');
+                        $('#json_message_modal').html(
+                            '<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' +
+                            errorMassage + '</strong></div>');
 
                         $('#saveBtn').html('Save Changes');
                     }
@@ -459,7 +505,9 @@
                         success: function(data) {
                             table.draw();
                             if (data.error) {
-                                $('#json_message').html('<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + data.error + '</strong></div>');
+                                $('#json_message').html(
+                                    '<div id="json_message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' +
+                                    data.error + '</strong></div>');
                             }
 
                         },
@@ -489,7 +537,7 @@
                 if (fileType == 'application/pdf') {
                     readURL(this); // for Default Image
                     document.getElementById("h6").innerHTML = "PDF Document is Attached";
-                    document.getElementById("pdf").src = "{{asset('Massets/images/document.png')}}";
+                    document.getElementById("pdf").src = "{{ asset('Massets/images/document.png') }}";
                     $("#pdf").show();
                 } else {
                     alert('Only PDF Allowed');
@@ -511,7 +559,8 @@
                     var reader = new FileReader();
 
                     reader.onload = function(e) {
-                        $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow').attr('width', '100%');
+                        $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow').attr('width',
+                            '100%');
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -526,7 +575,8 @@
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
-                document.getElementById("wizardPicturePreview").src = "{{asset('Massets/images/document.png')}}";
+                document.getElementById("wizardPicturePreview").src =
+                    "{{ asset('Massets/images/document.png') }}";
                 document.getElementById("h6").innerHTML = "PDF File is Attached";
                 $('#wizardPicturePreview').attr('width', '150');
             }
