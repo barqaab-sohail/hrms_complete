@@ -21,16 +21,17 @@ use DataTables;
 
 class ProjectMonthlyExpenseController extends Controller
 {
-    public function index()
+    public function show($prDetailId)
     {
 
-        $totalExpenses = addComma(PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->sum('salary_expense') + PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->sum('non_salary_expense') + PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->sum('non_reimbursable_salary') + PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->sum('non_reimbursable_expense'));
-        $totalReceived = addComma(PaymentReceive::where('pr_detail_id', session('pr_detail_id'))->sum('amount'));
-        //$invoiceIds = Invoice::where('pr_detail_id', session('pr_detail_id'))->pluck('id')->toArray();
-        $invoiceReceivedIds = PaymentReceive::where('pr_detail_id', session('pr_detail_id'))->pluck('invoice_id')->toArray();
-        $pendingInvoiceIds = Invoice::where('pr_detail_id', session('pr_detail_id'))->whereNotIn('id',  $invoiceReceivedIds)->pluck('id')->toArray();
+        $totalExpenses = addComma(PrMonthlyExpense::where('pr_detail_id', $prDetailId)->sum('salary_expense') + PrMonthlyExpense::where('pr_detail_id', $prDetailId)->sum('non_salary_expense') + PrMonthlyExpense::where('pr_detail_id', $prDetailId)->sum('non_reimbursable_salary') + PrMonthlyExpense::where('pr_detail_id', $prDetailId)->sum('non_reimbursable_expense'));
+        $totalReceived = addComma(PaymentReceive::where('pr_detail_id', $prDetailId)->sum('amount'));
+        //$invoiceIds = Invoice::where('pr_detail_id', $prDetailId)->pluck('id')->toArray();
+        $invoiceReceivedIds = PaymentReceive::where('pr_detail_id', $prDetailId)->pluck('invoice_id')->toArray();
+        $pendingInvoiceIds = Invoice::where('pr_detail_id', $prDetailId)->whereNotIn('id',  $invoiceReceivedIds)->pluck('id')->toArray();
         $pendingInvoicesWOSTax = addComma(InvoiceCost::whereIn('invoice_id', $pendingInvoiceIds)->sum('amount'));
-        $view =  view('project.expense.create', compact('totalExpenses', 'totalReceived', 'pendingInvoicesWOSTax'))->render();
+        $prDetail = PrDetail::find($prDetailId);
+        $view =  view('project.expense.create', compact('totalExpenses', 'totalReceived', 'pendingInvoicesWOSTax', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -38,7 +39,7 @@ class ProjectMonthlyExpenseController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->orderBy('month', 'DESC')->get();
+            $data = PrMonthlyExpense::where('pr_detail_id', $request->prDetailId)->orderBy('month', 'DESC')->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -122,10 +123,10 @@ class ProjectMonthlyExpenseController extends Controller
     }
 
 
-    public function importExpense()
+    public function importExpense($prDetailId)
     {
 
-        $prDetailId = session('pr_detail_id');
+
         $importRecord = 0;
         $updateRecord = 0;
         $years = calculateSyncYears($prDetailId);
@@ -142,7 +143,7 @@ class ProjectMonthlyExpenseController extends Controller
                     $date = \Carbon\Carbon::parse($data['months'][$key])->format('Y-m-d');
                     // return response()->json(['error' => 'Testing from start', 'date' => $date, 'year' => $year, 'projectNo' => $data['months'][$key]]);
                     // break;
-                    $prMonthlyExpense = PrMonthlyExpense::where('pr_detail_id', session('pr_detail_id'))->where('month', $date)->first();
+                    $prMonthlyExpense = PrMonthlyExpense::where('pr_detail_id', $prDetailId)->where('month', $date)->first();
                     if ($prMonthlyExpense) {
                         if ($prMonthlyExpense->salary_expense != $data['salaries'][$key] || $prMonthlyExpense->non_salary_expense != $data['expenses'][$key] || $prMonthlyExpense->non_reimbursable_salary != $data['nonRSalaries'][$key] || $prMonthlyExpense->non_reimbursable_expense != $data['nonRExpenses'][$key] || $prMonthlyExpense->revenue != $data['revenue'][$key]) {
                             ++$updateRecord;
@@ -161,7 +162,7 @@ class ProjectMonthlyExpenseController extends Controller
                         //check if all four values are null than not enter value
                         if (!($data['salaries'][$key] == null && $data['expenses'][$key] == null && $data['nonRSalaries'][$key] == null && $data['nonRExpenses'][$key] == null)) {
                             PrMonthlyExpense::create([
-                                'pr_detail_id' => session('pr_detail_id'),
+                                'pr_detail_id' => $prDetailId,
                                 'month' =>  $date,
                                 'salary_expense' => $data['salaries'][$key],
                                 'non_salary_expense' => $data['expenses'][$key],

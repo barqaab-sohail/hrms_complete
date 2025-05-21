@@ -8,17 +8,18 @@ use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Project\PrStaff;
 use App\Http\Requests\Project\PrStaffStore;
+use App\Models\Project\PrDetail;
 use DB;
 use DataTables;
 
 class ProjectStaffController extends Controller
 {
-    public function index()
+    public function show($prDetailId)
     {
 
         $hrEmployees = HrEmployee::all();
-
-        $view =  view('project.staff.create', compact('hrEmployees'))->render();
+        $prDetail = PrDetail::find($prDetailId);
+        $view =  view('project.staff.create', compact('hrEmployees', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -26,7 +27,7 @@ class ProjectStaffController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = PrStaff::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
+            $data = PrStaff::where('pr_detail_id', $request->prDetailId)->latest()->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -73,8 +74,6 @@ class ProjectStaffController extends Controller
     {
 
         $input = $request->all();
-
-        $input['pr_detail_id'] = session('pr_detail_id');
 
 
         DB::transaction(function () use ($input) {

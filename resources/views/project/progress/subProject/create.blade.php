@@ -28,6 +28,7 @@
                 <form id="subProjectForm" name="subProjectForm" class="form-horizontal">
 
                     <input type="hidden" name="pr_sub_project_id" id="pr_sub_project_id">
+                    <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
 
                     <div class="row">
                         <div class="col-md-6">
@@ -78,10 +79,16 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            var prDetailId = "{{ $prDetail->id }}";
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('subProject.create') }}",
+                ajax: {
+                    url:"{{ route('subProject.create') }}",
+                    data: function(d) {
+                        d.prDetailId = prDetailId;
+                    }
+            },
                 columns: [{
                         data: "name",
                         name: 'name'

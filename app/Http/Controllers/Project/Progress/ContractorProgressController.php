@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Project\Progress;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Project\Progress\PrActualVsSchedule;
-use App\Models\Project\Contractor\PrContractor;
-use App\Http\Requests\Project\Progress\ActualVsScheduleStore;
 use DB;
 use DataTables;
+use Illuminate\Http\Request;
+use App\Models\Project\PrDetail;
+use App\Http\Controllers\Controller;
+use App\Models\Project\Contractor\PrContractor;
+use App\Models\Project\Progress\PrActualVsSchedule;
+use App\Http\Requests\Project\Progress\ActualVsScheduleStore;
 
 class ContractorProgressController extends Controller
 {
-    public function index()
+    public function show($prDetailId)
     {
 
-        $prContractors = PrContractor::where('pr_detail_id', session('pr_detail_id'))->get();
-        $view =  view('project.progress.actualSchedule.create', compact('prContractors'))->render();
+        $prContractors = PrContractor::where('pr_detail_id', $prDetailId)->get();
+        $prDetail = PrDetail::find($prDetailId);
+        $view =  view('project.progress.actualSchedule.create', compact('prContractors', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -24,7 +26,7 @@ class ContractorProgressController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = PrActualVsSchedule::where('pr_detail_id', session('pr_detail_id'))->orderBy('month', 'asc')->get();
+            $data = PrActualVsSchedule::where('pr_detail_id', $request->prDetailId)->orderBy('month', 'asc')->get();
 
             return DataTables::of($data)
 
@@ -56,8 +58,6 @@ class ContractorProgressController extends Controller
     {
 
         $input = $request->all();
-        $input['pr_detail_id'] = session('pr_detail_id');
-
 
         DB::transaction(function () use ($input, $request) {
 

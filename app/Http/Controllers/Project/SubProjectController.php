@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
+use App\Models\Project\PrDetail;
 use Illuminate\Http\Request;
 use App\Models\Project\PrSubProject;
 use DB;
@@ -10,12 +11,13 @@ use DataTables;
 
 class SubProjectController extends Controller
 {
-    public function index()
+    public function show($prDetailId)
     {
 
-        $prSubProject = PrSubProject::where('pr_detail_id', session('pr_detail_id'))->get();
+        $prSubProject = PrSubProject::where('pr_detail_id', $prDetailId)->get();
+        $prDetail = PrDetail::find($prDetailId);
 
-        $view =  view('project.progress.subProject.create', compact('prSubProject'))->render();
+        $view =  view('project.progress.subProject.create', compact('prSubProject', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -23,7 +25,7 @@ class SubProjectController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = PrSubProject::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
+            $data = PrSubProject::where('pr_detail_id', $request->prDetailId)->latest()->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -49,7 +51,6 @@ class SubProjectController extends Controller
 
         $input = $request->all();
 
-        $input['pr_detail_id'] = session('pr_detail_id');
 
         DB::transaction(function () use ($input, $request) {
 

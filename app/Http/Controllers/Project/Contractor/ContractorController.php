@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Project\Contractor;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use App\Models\Project\Contractor\PrContractor;
-use App\Http\Requests\Project\Contractor\ContractorStore;
 use DB;
 use DataTables;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\Project\PrDetail;
+use App\Http\Controllers\Controller;
+use App\Models\Project\Contractor\PrContractor;
+use App\Http\Requests\Project\Contractor\ContractorStore;
 
 class ContractorController extends Controller
 {
-    public function index()
+    public function show($projectId)
     {
 
-        $prContractor = PrContractor::where('pr_detail_id', session('pr_detail_id'))->get();
-        $view =  view('project.contractor.create', compact('prContractor'))->render();
+        $prContractor = PrContractor::where('pr_detail_id', $projectId)->get();
+        $prDetail = PrDetail::find($projectId);
+        $view =  view('project.contractor.create', compact('prContractor', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -24,7 +26,7 @@ class ContractorController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = PrContractor::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
+            $data = PrContractor::where('pr_detail_id', $request->prDetailId)->latest()->get();
 
             return DataTables::of($data)
 
@@ -53,7 +55,6 @@ class ContractorController extends Controller
     {
 
         $input = $request->all();
-        $input['pr_detail_id'] = session('pr_detail_id');
 
 
         DB::transaction(function () use ($input, $request) {

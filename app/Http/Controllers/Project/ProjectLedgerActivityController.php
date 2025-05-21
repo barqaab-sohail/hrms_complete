@@ -11,17 +11,18 @@ use DataTables;
 
 class ProjectLedgerActivityController extends Controller
 {
-    public function index()
+    public function show($prDetailId)
     {
 
-        $view =  view('project.ledgerActivity.create')->render();
+        $prDetail = PrDetail::find($prDetailId);
+        $view =  view('project.ledgerActivity.create', compact('prDetail'))->render();
         return response()->json($view);
     }
 
     public function create(Request $request)
     {
         if ($request->ajax()) {
-            $data = LedgerActivity::where('pr_detail_id', session('pr_detail_id'))->get();
+            $data = LedgerActivity::where('pr_detail_id', $request->prDetailId)->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -45,13 +46,10 @@ class ProjectLedgerActivityController extends Controller
     }
 
 
-    public function importLedgerActivity($prDetailId = null)
+    public function importLedgerActivity($prDetailId)
     {
 
 
-        if ($prDetailId == null) {
-            $prDetailId = session('pr_detail_id');
-        }
         $prDetail = PrDetail::find($prDetailId);
         $customerNo = $prDetail->prCustomerNo->customer_no ?? '';
         $projectNo = $prDetail->project_no;

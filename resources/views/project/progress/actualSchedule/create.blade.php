@@ -10,6 +10,7 @@
                 <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
                 <form id="actualScheduleForm" name="actualScheduleForm" action="{{route('actualVsScheduledProgress.store')}}" class="form-horizontal">
                     <input type="hidden" name="actual_schedule_id" id="actual_schedule_id">
+                    <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -133,13 +134,16 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
+            var prDetailId = "{{ $prDetail->id }}";
             var table = $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
 
                 ajax: {
                     url: "{{ route('actualVsScheduledProgress.create') }}",
+                    data: function(d) {
+                        d.prDetailId = prDetailId;
+                    }
                 },
                 columns: [{
                         data: 'contract_name',

@@ -1,5 +1,5 @@
 <div class="card-body">
-  @if(projectPaymentRight(session('pr_detail_id'))==3 || projectPaymentRight(session('pr_detail_id'))==4)
+  @if(projectPaymentRight($pdDetail->id)==3 || projectPaymentRight($pdDetail->id)==4)
   <button type="button" class="btn btn-success float-right" id="createPayment" data-toggle="modal">Add Payment</button>
   @endif
   <h3>Total Invoice Raised = {{$totalInvoiceRaised}} - Invoice Received = {{$totalPaymentReceived}} - Pending Payments = {{$totalPendingPayment}}</h3>
@@ -20,10 +20,10 @@
         <th>Cheque Date</th>
         <th>Total Deduction</th>
         <th>Payment Status</th>
-        @if(projectPaymentRight(session('pr_detail_id'))==3 || projectPaymentRight(session('pr_detail_id'))==4)
+        @if(projectPaymentRight($pdDetail->id)==3 || projectPaymentRight($pdDetail->id)==4)
         <th>Edit</th>
         @endif
-        @if(projectPaymentRight(session('pr_detail_id'))==4)
+        @if(projectPaymentRight($pdDetail->id)==4)
         <th>Delete</th>
         @endif
       </tr>
@@ -46,6 +46,7 @@
         <form id="paymentForm" name="paymentForm" action="{{route('projectPayment.store')}}" class="form-horizontal">
 
           <input type="hidden" name="payment_id" id="payment_id">
+          <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
           <div class="row">
             <div class="col-md-3">
               <div class="form-group">
@@ -205,6 +206,7 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+      var prDetailId = "{{ $prDetail->id }}";
       var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
@@ -234,7 +236,12 @@
             }
           },
         ],
-        ajax: "{{ route('projectPayment.create') }}",
+        ajax: {
+          url:"{{ route('projectPayment.create') }}",
+          data: function(d) {
+            d.prDetailId = prDetailId;
+        }
+        },
         columns: [{
             data: "invoice_no",
             name: 'invoice_no'
@@ -283,14 +290,14 @@
             data: "payment_status",
             name: 'payment_status'
           },
-          @if(projectPaymentRight(session('pr_detail_id')) == 3 || projectPaymentRight(session('pr_detail_id')) == 4) {
+          @if(projectPaymentRight($prDetail->id) == 3 || projectPaymentRight($prDetail->id) == 4) {
             data: 'Edit',
             name: 'Edit',
             orderable: false,
             searchable: false
           },
           @endif
-          @if(projectPaymentRight(session('pr_detail_id')) == 4) {
+          @if(projectPaymentRight($prDetail->id) == 4) {
             data: 'Delete',
             name: 'Delete',
             orderable: false,

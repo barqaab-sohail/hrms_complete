@@ -2,27 +2,29 @@
 
 namespace App\Http\Controllers\Project;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Hr\HrDesignation;
-use App\Models\Hr\HrEmployee;
-use App\Models\Project\PrPosition;
-use App\Models\Project\PrPositionType;
-use App\Http\Requests\Project\PrPositionStore;
 use DB;
 use DataTables;
+use Illuminate\Http\Request;
+use App\Models\Hr\HrEmployee;
+use App\Models\Hr\HrDesignation;
+use App\Models\Project\PrDetail;
+use App\Models\Project\PrPosition;
+use App\Http\Controllers\Controller;
+use App\Models\Project\PrPositionType;
+use App\Http\Requests\Project\PrPositionStore;
 
 class ProjectPositionController extends Controller
 {
 
-    public function index()
+    public function show($prDetailId)
     {
 
         $positionTypes = PrPositionType::all();
-        $prPositions =  PrPosition::where('pr_detail_id', session('pr_detail_id'))->get();
+        $prPositions =  PrPosition::where('pr_detail_id', $prDetailId)->get();
         $hrDesignations = HrDesignation::all();
+        $prDetail = PrDetail::find($prDetailId);
         $employees = HrEmployee::select(['id', 'first_name', 'last_name', 'employee_no'])->with('employeeDesignation')->get();
-        $view =  view('project.position.create', compact('positionTypes', 'hrDesignations', 'employees'))->render();
+        $view =  view('project.position.create', compact('positionTypes', 'hrDesignations', 'employees', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -33,7 +35,7 @@ class ProjectPositionController extends Controller
 
         if ($request->ajax()) {
 
-            $data =  PrPosition::where('pr_detail_id', session('pr_detail_id'))->get();
+            $data =  PrPosition::where('pr_detail_id', $request->prDetailId)->get();
 
             return DataTables::of($data)
 
@@ -75,7 +77,6 @@ class ProjectPositionController extends Controller
     {
 
         $input = $request->all();
-        $input['pr_detail_id'] = session('pr_detail_id');
 
         DB::transaction(function () use ($input, $request) {
             $input =  PrPosition::updateOrCreate(

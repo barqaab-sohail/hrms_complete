@@ -1,5 +1,5 @@
 <!-- Model -->
-<div class="modal fade" id="ajaxModel" aria-hidden="true">
+<div class="modal fade" id="ajaxModel" aria-hidden="true">  
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,6 +10,7 @@
                 <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
                 <form id="delayReasonForm" name="delayReasonForm" action="{{route('delayReason.store')}}" class="form-horizontal">
                     <input type="hidden" name="delay_reason_id" id="delay_reason_id">
+                    <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -17,7 +18,7 @@
                                 <select id="pr_contractor_id" name="pr_contractor_id" class="form-control selectTwo" data-validation="required">
                                     <option value=""></option>
                                     @foreach($prContractors as $prContractor)
-                                    <option value="{{$prContractor->id}}" {{(old("pr_contractor_id")==$prContractor->id? "selected" : "")}}>{{$prContractor->contract_name}}</option>
+                                    <option value="{{$prContractor->id}}" {{(old("pr_contractor_id")==$prContractor->id? "selected" : "")}}>{{$prContractor->contractor_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -82,13 +83,16 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
+            var prDetailId = "{{ $prDetail->id }}";
             var table = $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
 
                 ajax: {
                     url: "{{ route('delayReason.create') }}",
+                    data: function(d) {
+                        d.prDetailId = prDetailId;
+                    }
                 },
                 columns: [{
                         data: 'contract_name',

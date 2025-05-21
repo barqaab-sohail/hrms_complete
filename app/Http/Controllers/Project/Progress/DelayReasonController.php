@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers\Project\Progress;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use DB;
+use DataTables;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\Project\PrDetail;
+use App\Http\Controllers\Controller;
 use App\Models\Project\Progress\PrDelayReason;
 use App\Models\Project\Contractor\PrContractor;
 use App\Http\Requests\Project\Progress\DelayReasonStore;
-use DB;
-use DataTables;
 
 class DelayReasonController extends Controller
 {
-    public function index()
+    public function show($prDetailId)
     {
 
-        $prContractors = PrContractor::where('pr_detail_id', session('pr_detail_id'))->get();
-        $view =  view('project.progress.delayReason.create', compact('prContractors'))->render();
+        $prContractors = PrContractor::where('pr_detail_id', $prDetailId)->get();
+        $prDetail = PrDetail::find($prDetailId);
+        $view =  view('project.progress.delayReason.create', compact('prContractors', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -25,7 +27,7 @@ class DelayReasonController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = PrDelayReason::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
+            $data = PrDelayReason::where('pr_detail_id', $request->prDetailId)->latest()->get();
 
             return DataTables::of($data)
 
@@ -60,8 +62,6 @@ class DelayReasonController extends Controller
     {
 
         $input = $request->all();
-        $input['pr_detail_id'] = session('pr_detail_id');
-
 
         DB::transaction(function () use ($input, $request) {
 

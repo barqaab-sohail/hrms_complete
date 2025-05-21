@@ -16,7 +16,7 @@
         </div>
     </div>
     <br>
-    <!-- @include('project.expense.import') -->
+   
     Total Expenses = {{$totalExpenses}} ::
     Payment Received = {{$totalReceived}} ::
     Pending Invoices without Sales Tax = {{$pendingInvoicesWOSTax?$pendingInvoicesWOSTax:'No Pending Invoice'}}
@@ -61,6 +61,7 @@
                 <form id="ExpenseForm" name="ExpenseForm" class="form-horizontal">
 
                     <input type="hidden" name="expense_id" id="expense_id">
+                    <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
 
                     <div class="form-group">
                         <label class="control-label text-right">Month<span class="text_requried">*</span></label>
@@ -168,6 +169,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            var prDetailId = "{{ $prDetail->id }}";
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -200,7 +202,12 @@
                         }
                     },
                 ],
-                ajax: "{{ route('projectMonthlyExpense.create') }}",
+                ajax: { 
+                    url:"{{ route('projectMonthlyExpense.create') }}",
+                    data: function(d) {
+                    d.prDetailId = prDetailId;
+                }
+                },
                 columns: [{
                         data: "month",
                         name: 'month'

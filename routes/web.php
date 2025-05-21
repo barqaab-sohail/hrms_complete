@@ -239,10 +239,10 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
     Route::resource('projectRights', 'ProjectRightController');
     Route::resource('projectCustomerNo', 'ProjectCustomerNoController');
     Route::resource('projectLedgerActivity', 'ProjectLedgerActivityController');
-    Route::post('/importLedgerActivity', 'ProjectLedgerActivityController@importLedgerActivity')->name('project.importLedgerActivity');
+    Route::post('/importLedgerActivity/{prDetailId}', 'ProjectLedgerActivityController@importLedgerActivity')->name('project.importLedgerActivity');
     Route::resource('projectStaff', 'ProjectStaffController');
     Route::resource('projectMonthlyExpense', 'ProjectMonthlyExpenseController');
-    Route::post('/importExpense', 'ProjectMonthlyExpenseController@importExpense')->name('project.importExpense');
+    Route::post('/importExpense/{prDetailId}', 'ProjectMonthlyExpenseController@importExpense')->name('project.importExpense');
 
     //Progress Routes
     Route::resource('/monthlyProgress', 'Progress\MonthlyProgressController');

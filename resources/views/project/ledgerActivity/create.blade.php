@@ -15,7 +15,7 @@
         </div>
     </div>
     <br>
-    <!-- @include('project.expense.import') -->
+   
 
     <table class="table table-bordered data-table">
         <thead>
@@ -62,6 +62,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            var prDetailId = "{{ $prDetail->id }}";
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -94,7 +95,12 @@
                         }
                     },
                 ],
-                ajax: "{{ route('projectLedgerActivity.create') }}",
+                ajax: { 
+                    url:"{{ route('projectLedgerActivity.create') }}",
+                    data: function(d) {
+                    d.prDetailId = prDetailId;
+                }
+                },
                 columns: [{
                         data: "voucher_date",
                         name: 'voucher_date'
@@ -184,7 +190,7 @@
             $('#syncLedgerActivity').on('click', function(event) {
                 $('.fa-spinner').show();
                 $('#syncLedgerActivity').attr('disabled', 'disabled');
-                var url = "{{route('project.importLedgerActivity')}}"
+                var url = "{{route('project.importLedgerActivity', $prDetail->id)}}";
                 event.preventDefault();
                 //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
                 $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request

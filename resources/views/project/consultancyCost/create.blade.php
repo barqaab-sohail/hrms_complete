@@ -33,7 +33,7 @@
         <form id="consultancyCostForm" name="consultancyCostForm" action="{{route('projectConsultancyCost.store')}}" class="form-horizontal">
 
           <input type="hidden" name="cost_id" id="cost_id">
-
+          <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
           <div class="form-group">
             <label class="control-label text-right">Cost Type<span class="text_requried">*</span></label>
             <select id="pr_cost_type_id" name="pr_cost_type_id" class="form-control selectTwo" data-validation="required">
@@ -117,10 +117,15 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+      var prDetailId = "{{ $prDetail->id }}";
       var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('projectConsultancyCost.create') }}",
+        ajax: {url:"{{ route('projectConsultancyCost.create') }}",
+        data: function(d) {
+                        d.prDetailId = prDetailId;
+                    }
+      },
         columns: [{
             data: "pr_cost_type_id",
             name: 'pr_cost_type_id'

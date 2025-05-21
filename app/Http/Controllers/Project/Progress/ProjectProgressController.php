@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers\Project\Progress;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Collection;
-use App\Http\Requests\Project\Progress\AchievedProgressStore;
-use App\Models\Project\Progress\PrProgressActivity;
-use App\Models\Project\Progress\PrAchievedProgress;
 use DB;
 use DataTables;
+use Illuminate\Http\Request;
+use App\Models\Project\PrDetail;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Collection;
+use App\Models\Project\Progress\PrAchievedProgress;
+use App\Models\Project\Progress\PrProgressActivity;
+use App\Http\Requests\Project\Progress\AchievedProgressStore;
 
 class ProjectProgressController extends Controller
 {
     private $test = 0;
 
-    public function index()
+    public function show($prDetailId)
     {
 
-        $prProgressActivities = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->get();
+        $prProgressActivities = PrProgressActivity::where('pr_detail_id', $prDetailId)->get();
+        $prDetail = PrDetail::find($prDetailId);
 
-        $view =  view('project.progress.achived.create', compact('prProgressActivities'))->render();
+        $view =  view('project.progress.achived.create', compact('prProgressActivities', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -28,30 +30,30 @@ class ProjectProgressController extends Controller
     {
         $customData1 = new Collection;
 
-        $projectLevel = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->max('level');
+        $projectLevel = PrProgressActivity::where('pr_detail_id', $request->prDetailId)->max('level');
 
         if ($projectLevel > 1) {
-            $levelOnes = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 1)->get();
+            $levelOnes = PrProgressActivity::where('pr_detail_id', $request->prDetailId)->where('level', 1)->get();
 
 
 
             foreach ($levelOnes as $levelOne) {
-                $levelOneIds =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('id', $levelOne->id)->pluck('id')->toArray();
-                $leveltwoSum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $levelOneIds)->sum('weightage');
+                $levelOneIds =  PrProgressActivity::where('pr_detail_id', $request->prDetailId)->where('id', $levelOne->id)->pluck('id')->toArray();
+                $leveltwoSum = PrProgressActivity::where('pr_detail_id', $request->prDetailId)->whereIn('belong_to_activity', $levelOneIds)->sum('weightage');
 
 
                 //Only Level One Working
                 //check if level two sume is 0 than it is heading
                 if ($leveltwoSum === 0) {
-                    $levelTwoIds = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $levelOneIds)->pluck('id')->toArray();
-                    $levelThreeIds = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity',  $levelTwoIds)->pluck('id')->toArray();
+                    $levelTwoIds = PrProgressActivity::where('pr_detail_id', $request->prDetailId)->whereIn('belong_to_activity', $levelOneIds)->pluck('id')->toArray();
+                    $levelThreeIds = PrProgressActivity::where('pr_detail_id', $request->prDetailId)->whereIn('belong_to_activity',  $levelTwoIds)->pluck('id')->toArray();
 
                     //Sum of level 3 progress is overall progress of level 1;
                     $totalAchievedProgressLevel1 = 0.0;
                     $totalWeightageProgressLevel1 = 0.0;
                     $lastAchievedProgressDateLevel1 = PrAchievedProgress::whereIn('pr_progress_activity_id', $levelThreeIds)->latest()->first();
                     foreach ($levelThreeIds as $levelThreeId) {
-                        $totalWeightageProgressLevel1 +=  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('id', $levelThreeId)->sum('weightage');
+                        $totalWeightageProgressLevel1 +=  PrProgressActivity::where('pr_detail_id', $request->prDetailId)->where('id', $levelThreeId)->sum('weightage');
                         $totalCurrentProgress = PrAchievedProgress::where('pr_progress_activity_id', $levelThreeId)->latest()->first();
                         $totalAchievedProgressLevel1 += $totalCurrentProgress->percentage_complete ?? 0;
                     }
@@ -68,7 +70,7 @@ class ProjectProgressController extends Controller
                     ]);
                 } else {
                     $totalAchievedProgressLevel1 = 0.0;
-                    $levelTwoIds = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->whereIn('belong_to_activity', $levelOneIds)->pluck('id')->toArray();
+                    $levelTwoIds = PrProgressActivity::where('pr_detail_id', $request->prDetailId)->whereIn('belong_to_activity', $levelOneIds)->pluck('id')->toArray();
                     $lastAchievedProgressDateLevel1 = PrAchievedProgress::whereIn('pr_progress_activity_id', $levelTwoIds)->latest()->first();
                     //Sum of level 2 progress
                     foreach ($levelTwoIds as $levelTwoId) {
@@ -88,9 +90,9 @@ class ProjectProgressController extends Controller
                     ]);
                 }
                 //Level Two Working
-                $levelTwos =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 2)->where('belong_to_activity', $levelOne->id)->get();
+                $levelTwos =  PrProgressActivity::where('pr_detail_id', $request->prDetailId)->where('level', 2)->where('belong_to_activity', $levelOne->id)->get();
                 foreach ($levelTwos as $levelTwo) {
-                    $levelTwoSum = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $levelTwo->id)->sum('weightage');
+                    $levelTwoSum = PrProgressActivity::where('pr_detail_id', $request->prDetailId)->where('belong_to_activity', $levelTwo->id)->sum('weightage');
                     //get Level 2 sub activity achived progress
                     $latestProgress2 = PrAchievedProgress::where('pr_progress_activity_id', $levelTwo->id)->latest()->first();
                     $lastUpdateProgress2 = '';
@@ -101,7 +103,7 @@ class ProjectProgressController extends Controller
                         $lastUpdateProgress2 = $latestProgress2->date;
                     } else {
                         //Otherwise get level 3 all ids
-                        $levelThreeIds =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('belong_to_activity', $levelTwo->id)->pluck('id')->toArray();
+                        $levelThreeIds =  PrProgressActivity::where('pr_detail_id', $request->prDetailId)->where('belong_to_activity', $levelTwo->id)->pluck('id')->toArray();
                         // Get last update date of level 2;
                         $lastUpdateProgress2 =  PrAchievedProgress::whereIn('pr_progress_activity_id', $levelThreeIds)->latest()->first();
                         $lastUpdateProgress2 =  $lastUpdateProgress2->date ?? '';
@@ -143,7 +145,7 @@ class ProjectProgressController extends Controller
 
 
                     //Only work if Level Three exist otherwiese not work
-                    $levelThrees =  PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 3)->where('belong_to_activity', $levelTwo->id)->get();
+                    $levelThrees =  PrProgressActivity::where('pr_detail_id', $request->prDetailId)->where('level', 3)->where('belong_to_activity', $levelTwo->id)->get();
 
                     foreach ($levelThrees as $levelThree) {
 
@@ -171,7 +173,7 @@ class ProjectProgressController extends Controller
                 }
             }
         } else {
-            $progressActivities = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', 1)->get();
+            $progressActivities = PrProgressActivity::where('pr_detail_id', $request->prDetailId)->where('level', 1)->get();
             foreach ($progressActivities as $progressActivity) {
                 //get activity achived progress
                 $latestProgress = PrAchievedProgress::where('pr_progress_activity_id', $progressActivity->id)->latest()->first();
@@ -263,7 +265,7 @@ class ProjectProgressController extends Controller
 
             PrAchievedProgress::create(
                 [
-                    'pr_detail_id' => session('pr_detail_id'),
+                    'pr_detail_id' => $request->prDetailId,
                     'pr_progress_activity_id' => $request->activity_id,
                     'date' => $request->date,
                     'percentage_complete' => $request->progress
@@ -279,7 +281,7 @@ class ProjectProgressController extends Controller
     public function edit(Request $request, $id)
     {
         if ($request->ajax()) {
-            $data = PrAchievedProgress::where('pr_detail_id', session('pr_detail_id'))->where('pr_progress_activity_id', $id)->latest()->get();
+            $data = PrAchievedProgress::where('pr_detail_id', $request->prDetailId)->where('pr_progress_activity_id', $id)->latest()->get();
 
             return DataTables::of($data)
                 ->addColumn('activity_name', function ($row) {

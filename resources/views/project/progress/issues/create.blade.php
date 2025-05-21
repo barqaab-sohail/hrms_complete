@@ -11,6 +11,7 @@
 	              <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
 	                <form id="issueForm" name="issueForm" action="{{route('projectIssues.store')}}"class="form-horizontal">
 	                   <input type="hidden" name="issue_id" id="issue_id">
+					   <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
 	                   	<div class="row">
 			                <div class="col-md-12">
 				                <div class="form-group">
@@ -110,13 +111,16 @@ $(document).ready(function() {
 	              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	          }
 	    	});
-
+			var prDetailId = "{{ $prDetail->id }}";
 		    var table = $('#myTable').DataTable({
 		  		processing: true,
 		  		serverSide: true,
 		  		
 			  	ajax: {
 			   	url: "{{ route('projectIssues.create') }}",
+				   data: function(d) {
+                        d.prDetailId = prDetailId;
+                    }
 			  	},
 			  	columns: [
 			  		{data: 'description', name: 'description'},

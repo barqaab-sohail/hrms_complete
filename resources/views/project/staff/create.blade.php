@@ -32,6 +32,7 @@
         <form id="staffForm" name="staffForm" class="form-horizontal">
 
           <input type="hidden" name="staff_id" id="staff_id">
+          <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
 
           <div class="form-group">
             <label class="control-label text-right">Employee Name<span class="text_requried">*</span></label>
@@ -96,10 +97,16 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+      var prDetailId = "{{ $prDetail->id }}";
       var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('projectStaff.create') }}",
+        ajax: {
+          url:"{{ route('projectStaff.create') }}",
+          data: function(d) {
+          d.prDetailId = prDetailId;
+          }
+        },
         columns: [{
             data: "hr_employee_id",
             name: 'hr_employee_id'

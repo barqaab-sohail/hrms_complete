@@ -36,6 +36,7 @@
               <form id="prPartnerForm" name="prPartnerForm" class="form-horizontal">
                    
                   <input type="hidden" name="pr_partner_id" id="pr_partner_id">
+                  <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
                   <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -138,11 +139,17 @@ $(document).ready(function() {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
     });
+    var prDetailId = "{{ $prDetail->id }}";
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
         destroy: true,
-        ajax: "{{ route('projectPartner.create') }}",
+        ajax: {
+          url:"{{ route('projectPartner.create') }}",
+          data: function (d) {
+            d.prDetailId = prDetailId;
+          }
+      },
         columns: [
             {data: "partner_id", name: 'partner_id'},
             {data: "pr_role_id", name: 'pr_role_id'},

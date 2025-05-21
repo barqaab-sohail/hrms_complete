@@ -32,6 +32,7 @@
                 <div id="json_message_modal" align="left"><strong></strong><i hidden class="fas fa-times float-right"></i> </div>
                 <form id="positionForm" name="positionForm" class="form-horizontal">
                     <input type="hidden" name="position_id" id="position_id">
+                    <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
                     <div class="form-group">
                         <label class="control-label text-right">Employee</label><br>
                         <select name="hr_employee_id" id="hr_employee_id" class="form-control selectTwo" data-validation="required">
@@ -133,10 +134,17 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            var prDetailId = "{{ $prDetail->id }}";
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('projectPosition.create') }}",
+                ajax:{
+                    url: "{{ route('projectPosition.create') }}",
+                    data: function(d) {
+                        d.prDetailId = prDetailId;
+                    }
+                },
+
                 columns: [{
                         data: "nominated_person",
                         name: 'nominated_person'

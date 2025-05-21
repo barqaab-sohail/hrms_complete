@@ -11,6 +11,7 @@ use App\Models\Project\Payment\PaymentReceive;
 use App\Models\Project\Payment\PaymentDeduction;
 use App\Models\Project\Payment\PaymentStatus;
 use App\Models\Project\Invoice\InvoiceCost;
+use App\Models\Project\PrDetail;
 use DB;
 use DataTables;
 
@@ -27,25 +28,26 @@ class PaymentController extends Controller
         return response()->json($totalInvoiceValue);
     }
 
-    public function index()
+    public function show($prDetailId)
     {
 
-        $invoices = Invoice::where('pr_detail_id', session('pr_detail_id'))->get();
+        $invoices = Invoice::where('pr_detail_id', $prDetailId)->get();
         //following is not working during editing so above is working
         //$invoices = pendingInvoices(session('pr_detail_id'));
         $paymentStatuses = PaymentStatus::all();
+        $prDetail = PrDetail::find($prDetailId);
 
-        $invoiceIds = Invoice::where('pr_detail_id', session('pr_detail_id'))->pluck('id')->toArray();
+        $invoiceIds = Invoice::where('pr_detail_id', $prDetailId)->pluck('id')->toArray();
         $totalInvoiceRaised = InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('amount') + InvoiceCost::whereIn('invoice_id', $invoiceIds)->sum('sales_tax');
         $totalPaymentReceived = PaymentReceive::whereIn('invoice_id', $invoiceIds)->sum('amount');
-        $totalDeduction = PaymentDeduction::where('pr_detail_id', session('pr_detail_id'))->sum('withholding_tax') + PaymentDeduction::where('pr_detail_id', session('pr_detail_id'))->sum('sales_tax') + PaymentDeduction::where('pr_detail_id', session('pr_detail_id'))->sum('others');
+        $totalDeduction = PaymentDeduction::where('pr_detail_id', $prDetailId)->sum('withholding_tax') + PaymentDeduction::where('pr_detail_id', $prDetailId)->sum('sales_tax') + PaymentDeduction::where('pr_detail_id', $prDetailId)->sum('others');
         $totalPendingPayment = $totalInvoiceRaised - $totalPaymentReceived - $totalDeduction;
 
         $totalInvoiceRaised = addComma($totalInvoiceRaised);
         $totalPaymentReceived = addComma($totalPaymentReceived);
         $totalPendingPayment = addComma($totalPendingPayment);
 
-        $view =  view('project.payment.create', compact('invoices', 'paymentStatuses', 'totalPaymentReceived', 'totalPendingPayment', 'totalInvoiceRaised'))->render();
+        $view =  view('project.payment.create', compact('invoices', 'paymentStatuses', 'totalPaymentReceived', 'totalPendingPayment', 'totalInvoiceRaised', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -53,7 +55,7 @@ class PaymentController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = PaymentReceive::with('invoice', 'invoiceMonth', 'invoice.invoiceCost', 'deduction', 'paymentStatus')->where('pr_detail_id', session('pr_detail_id'))->latest()->get();
+            $data = PaymentReceive::with('invoice', 'invoiceMonth', 'invoice.invoiceCost', 'deduction', 'paymentStatus')->where('pr_detail_id', $request->prDetailId)->latest()->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -121,7 +123,7 @@ class PaymentController extends Controller
 
         $input = $request->all();
 
-        $input['pr_detail_id'] = session('pr_detail_id');
+
         $input['amount'] = intval(str_replace(',', '', $request->amount));
         $input['withholding_tax'] = intval(str_replace(',', '', $request->withholding_tax));
         $input['sales_tax'] = intval(str_replace(',', '', $request->sales_tax));

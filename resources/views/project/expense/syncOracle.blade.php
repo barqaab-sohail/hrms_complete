@@ -4,7 +4,7 @@
         $('#syncExpense').on('click', function(event) {
             $('.fa-spinner').show();
             $('#syncExpense').attr('disabled', 'disabled');
-            var url = "{{route('project.importExpense')}}"
+            var url = "{{route('project.importExpense', $prDetail->id)}}";
             event.preventDefault();
             //refresh token on each ajax request if this code not added than sendcond time ajax request on same page show earr token mismatched
             $.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request

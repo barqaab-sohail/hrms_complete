@@ -70,11 +70,17 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+      var prDetailId = "{{ $prDetail->id }}";
       var mainTable = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
         destroy: true,
-        ajax: "{{ route('projectProgress.create') }}",
+        ajax: { 
+              url:"{{ route('projectProgress.create') }}",
+              data: function(d) {
+                        d.prDetailId = prDetailId;
+                    },
+              },
         paging: false,
         columns: [{
             data: "name",
@@ -129,11 +135,13 @@
         var activity_id = $(this).data('id');
         var date = $("#date" + activity_id).val();
         var progress = $("#progress" + activity_id).val();
+        var prDetailId = "{{ $prDetail->id }}";
         $.ajax({
           data: {
             'activity_id': activity_id,
             'date': date,
-            'progress': progress
+            'progress': progress,
+            'prDetailId': prDetailId
           },
           url: "{{ route('projectProgress.store') }}",
           type: "POST",
@@ -172,11 +180,17 @@
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
           });
+          var prDetailId = "{{ $prDetail->id }}";
           var table = $('.delete-data-table').DataTable({
             processing: true,
             serverSide: true,
             destroy: true,
-            ajax: "{{ url('hrms/project/projectProgress') }}" + '/' + activity_id + '/edit',
+            ajax: {
+              url:"{{ url('hrms/project/projectProgress') }}" + '/' + activity_id + '/edit',
+              data: function(d) {
+                        d.prDetailId = prDetailId;
+              },
+            },
             columns: [{
                 data: "activity_name",
                 name: 'activity_name'
