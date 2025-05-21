@@ -44,8 +44,8 @@ class MonthlyProgressStore extends FormRequest
         $rules = [
             'pr_progress_activity_id' => 'required',
             'date' => 'required',
-            'schedule' => ['required', Rule::unique('pr_monthly_progresses')->where(fn ($query) => $query->where('date', request()->date)->where('id', '!=', $this->monthlyProgress_id))],
-            'actual' => ['required', Rule::unique('pr_monthly_progresses')->where(fn ($query) => $query->where('date', request()->date)->where('id', '!=', $this->monthlyProgress_id))],
+            'scheduled' => ['required', Rule::unique('pr_monthly_progresses')->where(fn($query) => $query->where('date', request()->date)->where('id', '!=', $this->monthlyProgress_id))],
+            'actual' => ['required', Rule::unique('pr_monthly_progresses')->where(fn($query) => $query->where('date', request()->date)->where('id', '!=', $this->monthlyProgress_id))],
 
         ];
 

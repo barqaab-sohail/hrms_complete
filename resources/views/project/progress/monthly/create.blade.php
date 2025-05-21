@@ -31,6 +31,7 @@
                 <form id="monthlyProgressForm" name="monthlyProgressForm" action="{{route('monthlyProgress.store')}}"class="form-horizontal">
                    
                   <input type="hidden" name="monthlyProgress_id" id="monthlyProgress_id">
+                  <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
 
                   <div class="row">
                     <div class="col-md-6">
@@ -128,10 +129,16 @@ $(document).ready(function() {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
     });
+    var prDetailId = "{{ $prDetail->id }}";
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('monthlyProgress.create') }}",
+        ajax: {
+          url:"{{ route('monthlyProgress.create') }}",
+          data: function(d) {
+            d.prDetailId = prDetailId;
+        }
+        },
         columns: [
             {data: "pr_progress_activity_id", name: 'pr_progress_activity_id'},
             {data: "date", name: 'date'},

@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Project\Progress;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Project\Progress\PrProgressActivity;
-use App\Http\Requests\Project\Progress\ActivityStore;
-use App\Models\Project\Progress\PrSubTotalWeightage;
 use DB;
 use DataTables;
+use Illuminate\Http\Request;
+use App\Models\Project\PrDetail;
+use App\Http\Controllers\Controller;
+use App\Models\Project\Progress\PrProgressActivity;
+use App\Models\Project\Progress\PrSubTotalWeightage;
+use App\Http\Requests\Project\Progress\ActivityStore;
 
 class ActivitiesController extends Controller
 {
-    public function index()
+    public function show($prDetailId)
     {
 
-        $prProgressActivities = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->get();
-
-        $view =  view('project.progress.activities.create', compact('prProgressActivities'))->render();
+        $prProgressActivities = PrProgressActivity::where('pr_detail_id', $prDetailId)->get();
+        $prDetail = PrDetail::find($prDetailId);
+        $view =  view('project.progress.activities.create', compact('prProgressActivities', 'prDetail'))->render();
         return response()->json($view);
     }
 
@@ -25,7 +26,7 @@ class ActivitiesController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->latest()->get();
+            $data = PrProgressActivity::where('pr_detail_id', $request->prDetailId)->latest()->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -54,7 +55,7 @@ class ActivitiesController extends Controller
         }
 
 
-        $prProgressActivities = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->get();
+        $prProgressActivities = PrProgressActivity::where('pr_detail_id', $request->prDetailId)->get();
         $view =  view('project.progress.activities.create', compact('prProgressActivities'))->render();
         return response()->json($view);
     }
@@ -64,7 +65,6 @@ class ActivitiesController extends Controller
 
         $input = $request->all();
 
-        $input['pr_detail_id'] = session('pr_detail_id');
 
         if (!$request->belong_to_activity) {
             $input['belong_to_activity'] = null;
@@ -117,10 +117,10 @@ class ActivitiesController extends Controller
         return response()->json(['status' => 'OK', 'message' => "Data Successfully Deleted"]);
     }
 
-    public function mainActivities($level)
+    public function mainActivities($level, $prDetailId)
     {
 
-        $activities = PrProgressActivity::where('pr_detail_id', session('pr_detail_id'))->where('level', "<", $level)->get();
+        $activities = PrProgressActivity::where('pr_detail_id', $prDetailId)->where('level', $level)->get();
         return response()->json($activities);
     }
 }

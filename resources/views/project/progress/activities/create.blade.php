@@ -31,6 +31,7 @@
         <form id="activityForm" name="activityForm" action="{{route('projectProgressActivities.store')}}" class="form-horizontal">
 
           <input type="hidden" name="activity_id" id="activity_id">
+          <input type="hidden" value="{{$prDetail->id}}" name="pr_detail_id" id="pr_detail_id">
 
           <div class="row">
             <div class="col-md-1">
@@ -140,7 +141,7 @@
     function getActivities($level, callback) {
       $.ajax({
         type: "get",
-        url: "{{url('hrms/project/proejctProgressMainActivities')}}" + "/" + $level,
+        url: "{{ url('hrms/project/projectProgressMainActivities') }}/" + $level + "/{{ $prDetail->id }}",
         success: function(res) {
           if (res) {
             $("#belong_to_activity").empty();
@@ -167,10 +168,17 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+      
+      var prDetailId = "{{ $prDetail->id }}";
       var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('projectProgressActivities.create') }}",
+        ajax: {
+          url:"{{ route('projectProgressActivities.create') }}",
+          data: function(d) {
+          d.prDetailId = prDetailId;
+          }
+        },
         columns: [{
             data: "level",
             name: 'level'
