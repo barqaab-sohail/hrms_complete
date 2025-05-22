@@ -6,14 +6,14 @@
 
   <div class="dropdown-menu" role="group" aria-labelledby="dropdownMenuButton" style="width: 100%;">   
           <br>       
-            <a type="submit" role="button" id="addAsset" style="color:white" href="{{route('asset.edit',session('asset_id'))}}" class="btn btn-success  dropdown-item" {{Request::is('hrms/asset/*/edit')?'style=background-color:#737373':''}}>Asset Detail</a>
-            <a type="submit" role="button" id="addPurchase" style="color:white" href="{{route('asPurchase.edit',session('asset_id'))}}" class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asPurchase')?'style=background-color:#737373':''}}>Purchase Detail</a>
-             <a type="submit" role="button" id="addOwnership" style="color:white" href="{{route('asOwnership.index',session('asset_id'))}}" class="btn btn-success  dropdown-item" {Request::is('hrms/asOwnership')?'style=background-color:#737373':''}}>Ownership</a>
-            <a type="submit" role="button" id="addLocation" style="color:white" href="{{route('asLocation.index',session('asset_id'))}}" class="btn btn-success  dropdown-item" {Request::is('hrms/asLocation')?'style=background-color:#737373':''}}>Asset Location</a>
-            <a type="submit" role="button" id="addDocument" style="color:white" href="{{route('asDocument.index')}}" class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asDocument')?'style=background-color:#737373':''}}>Documents</a>
-            <a type="submit" role="button" id="addMaintenance" style="color:white" href="{{route('asMaintenance.index')}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asMaintenance')?'style=background-color:#737373':''}}>Maintenance</a>
-            <a type="submit" role="button" id="addCondition" style="color:white" href="{{route('asCondition.index')}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asCondition')?'style=background-color:#737373':''}}>Condition</a>
-            <a type="submit" role="button" id="addConsumable" style="color:white" href="{{route('asConsumable.index')}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asConsumable')?'style=background-color:#737373':''}}>Consumable</a>
+            <a type="submit" role="button" id="addAsset" style="color:white" href="{{route('asset.edit',$data->id)}}" class="btn btn-success  dropdown-item" {{Request::is('hrms/asset/*/edit')?'style=background-color:#737373':''}}>Asset Detail</a>
+            <a type="submit" role="button" id="addPurchase" style="color:white" href="{{route('asPurchase.edit',$data->id)}}" class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asPurchase')?'style=background-color:#737373':''}}>Purchase Detail</a>
+             <a type="submit" role="button" id="addOwnership" style="color:white" href="{{route('asOwnership.show',$data->id)}}" class="btn btn-success  dropdown-item" {Request::is('hrms/asOwnership')?'style=background-color:#737373':''}}>Ownership</a>
+            <a type="submit" role="button" id="addLocation" style="color:white" href="{{route('asLocation.show',$data->id)}}" class="btn btn-success  dropdown-item" {Request::is('hrms/asLocation')?'style=background-color:#737373':''}}>Asset Location</a>
+            <a type="submit" role="button" id="addDocument" style="color:white" href="{{route('asDocument.show',$data->id)}}" class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asDocument')?'style=background-color:#737373':''}}>Documents</a>
+            <a type="submit" role="button" id="addMaintenance" style="color:white" href="{{route('asMaintenance.show',$data->id)}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asMaintenance')?'style=background-color:#737373':''}}>Maintenance</a>
+            <a type="submit" role="button" id="addCondition" style="color:white" href="{{route('asCondition.show', $data->id)}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asCondition')?'style=background-color:#737373':''}}>Condition</a>
+            <a type="submit" role="button" id="addConsumable" style="color:white" href="{{route('asConsumable.show',$data->id)}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asConsumable')?'style=background-color:#737373':''}}>Consumable</a>
             <br>
             
            

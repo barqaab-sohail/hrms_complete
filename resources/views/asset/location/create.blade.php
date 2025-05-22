@@ -13,6 +13,7 @@
       <hr class="m-t-0 m-b-40">
       <div class="row">
         <input type="hidden" name="as_location_id" id="as_location_id" />
+        <input type="hidden" value="{{$assetId}}" name="asset_id" id="asset_id">
         <div class="col-md-2">
           <div class="form-group row">
             <div class="col-md-12">
@@ -151,12 +152,16 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
+    var assetId = "{{ $assetId }}";
     var table = $('.data-table').DataTable({
       processing: true,
       serverSide: true,
-      ajax:{url:"{{ route('asLocation.create') }}", data: {
-            assetId: $("#id").val()
-        }},
+      ajax:{
+        url:"{{ route('asLocation.create') }}", 
+        data: function(d) {
+          d.assetId = assetId;
+        }
+      },
       columns: [
 
         {
@@ -228,7 +233,7 @@
       }, 3000);
       e.preventDefault();
       var formData = new FormData(this);
-      formData.append("asset_id", $("#id").val());
+      
       $.ajax({
         data: formData,
         url: "{{ route('asLocation.store') }}",

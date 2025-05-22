@@ -11,94 +11,94 @@ use DB;
 
 class AsMaintenanceController extends Controller
 {
-    public function index(){
+    public function show($assetId)
+    {
 
-       	$view =  view('asset.maintenance.create')->render();
+        $view =  view('asset.maintenance.create', compact('assetId'))->render();
         return response()->json($view);
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
 
-    	if ($request->ajax()) {
+        if ($request->ajax()) {
 
-            $data= AsMaintenance::where('asset_id',$request->assetId)
-                        ->latest()->get();
-           
+            $data = AsMaintenance::where('asset_id', $request->assetId)
+                ->latest()->get();
+
 
             return  DataTables::of($data)
-                    ->addIndexColumn()  
-                    ->addColumn('Edit', function($row){
-                       
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editMaintenance">Edit</a>';
-                                             
-                            return $btn;
-                    })
-                    ->editColumn('maintenance_date', function($row){                
-                        
-                        return \Carbon\Carbon::parse($row->maintenance_date)->format('M d, Y');
-                            
-                     })
-                    ->addColumn('Delete', function($row){                
-                        
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMaintenance">Delete</a>';
-                           
-                                 
-                            return $btn;
-                    })
-                
-                    ->rawColumns(['Edit','Delete'])
-                    ->make(true);
-          
+                ->addIndexColumn()
+                ->addColumn('Edit', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editMaintenance">Edit</a>';
+
+                    return $btn;
+                })
+                ->editColumn('maintenance_date', function ($row) {
+
+                    return \Carbon\Carbon::parse($row->maintenance_date)->format('M d, Y');
+                })
+                ->addColumn('Delete', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteMaintenance">Delete</a>';
+
+
+                    return $btn;
+                })
+
+                ->rawColumns(['Edit', 'Delete'])
+                ->make(true);
         }
-        
+
         $view =  view('asset.maintenance.create')->render();
         return response()->json($view);
-
     }
 
-    public function store (AsMaintenanceStore $request){
+    public function store(AsMaintenanceStore $request)
+    {
 
         $input = $request->all();
-        if($request->filled('maintenance_date')){
-            $input ['maintenance_date']= \Carbon\Carbon::parse($request->maintenance_date)->format('Y-m-d');
+        if ($request->filled('maintenance_date')) {
+            $input['maintenance_date'] = \Carbon\Carbon::parse($request->maintenance_date)->format('Y-m-d');
         }
 
-        if($request->filled('maintenance_cost')){
-        	$input ['maintenance_cost'] = (int)str_replace(',', '', $input['maintenance_cost']);
+        if ($request->filled('maintenance_cost')) {
+            $input['maintenance_cost'] = (int)str_replace(',', '', $input['maintenance_cost']);
         }
 
-        DB::transaction(function () use ($input) {  
-            
-           
-                AsMaintenance::updateOrCreate(['id' => $input['as_maintenance_id']],
-                    
-                    ['maintenance_detail'=> $input['maintenance_detail'],
-                    'maintenance_cost'=> $input['maintenance_cost'],
-                    'maintenance_date'=> $input['maintenance_date'],
-                    'asset_id'=> $input['asset_id']]); 
+        DB::transaction(function () use ($input) {
 
+
+            AsMaintenance::updateOrCreate(
+                ['id' => $input['as_maintenance_id']],
+
+                [
+                    'maintenance_detail' => $input['maintenance_detail'],
+                    'maintenance_cost' => $input['maintenance_cost'],
+                    'maintenance_date' => $input['maintenance_date'],
+                    'asset_id' => $input['asset_id']
+                ]
+            );
         }); // end transcation      
-       return response()->json(['success'=>"Data saved successfully."]);
-
+        return response()->json(['success' => "Data saved successfully."]);
     }
 
     public function edit($id)
     {
-        
+
         $asMaintenance = AsMaintenance::find($id);
-    
+
         return response()->json($asMaintenance);
     }
 
-    public function destroy ($id){
+    public function destroy($id)
+    {
 
-        DB::transaction(function () use ($id) {  
-            AsMaintenance::find($id)->delete(); 
+        DB::transaction(function () use ($id) {
+            AsMaintenance::find($id)->delete();
         }); // end transcation 
 
-        return response()->json(['success'=>"data  delete successfully."]);
-
+        return response()->json(['success' => "data  delete successfully."]);
     }
-
-
 }

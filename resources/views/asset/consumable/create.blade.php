@@ -13,6 +13,7 @@
             <hr class="m-t-0 m-b-40">
             <div class="row">
               <input type="hidden" name="as_consumable_id" id="as_consumable_id"/>
+              <input type="hidden" value="{{$assetId}}" name="asset_id" id="asset_id">
               
                 <div class="col-md-3">
                   <div class="form-group row">
@@ -143,12 +144,16 @@ $(function () {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
     });
+    var assetId = "{{ $assetId }}";
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax:{url:"{{ route('asConsumable.create') }}", data: {
-            assetId: $("#id").val()
-        }},
+        ajax:{
+          url:"{{ route('asConsumable.create') }}", 
+          data: function(d) {
+            d.assetId = assetId;
+      }
+      },
         columns: [
             
             {data: "consumable_id", name: 'consumable_id'},

@@ -17,6 +17,7 @@
                         <div class="col-md-12">
                             <label class="control-label text-right">Document Description</label>
                             <input type="hidden" name="as_document_id" id="as_document_id">
+                            <input type="hidden" value="{{$assetId}}" name="asset_id" id="asset_id">
 
                             <input type="text" id="description" name="description" value="{{ old('description') }}" class="form-control exempted" data-validation="required" placeholder="Enter Document Detail">
                         </div>
@@ -163,12 +164,16 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        var assetId = "{{ $assetId }}";
         var table = $('.data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax:{url:"{{ route('asDocument.create') }}", data: {
-            assetId: $("#id").val()
-            }},
+            ajax:{
+                url:"{{ route('asDocument.create') }}", 
+                data: function(d) {
+                d.assetId = assetId;
+            }
+        },
             columns: [{
                     data: "description",
                     name: 'description'
@@ -248,7 +253,7 @@
 
             e.preventDefault();
             var formData = new FormData(this);
-            formData.append("asset_id", $("#id").val());
+           
             $.ajax({
                 data: formData,
                 url: "{{ route('asDocument.store') }}",

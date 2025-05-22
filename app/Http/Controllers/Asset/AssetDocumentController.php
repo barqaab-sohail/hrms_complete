@@ -16,10 +16,10 @@ class AssetDocumentController extends Controller
 {
 
 
-    public function index()
+    public function show($assetId)
     {
 
-        $view =  view('asset.document.create')->render();
+        $view =  view('asset.document.create', compact('assetId'))->render();
         return response()->json($view);
     }
 
@@ -31,11 +31,10 @@ class AssetDocumentController extends Controller
 
             return  DataTables::of($data)
                 ->addIndexColumn()
-                ->editColumn('document_date', function($row){
-                    if($row->document_date){
-                    return \Carbon\Carbon::parse($row->document_date)->format('M d, Y');
-                    }
-                    else{
+                ->editColumn('document_date', function ($row) {
+                    if ($row->document_date) {
+                        return \Carbon\Carbon::parse($row->document_date)->format('M d, Y');
+                    } else {
                         return '';
                     }
                 })
