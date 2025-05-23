@@ -53,7 +53,7 @@
                                                 </li>
                                                 @endcan
 
-                                                @canany(['hr view record','hr edit record','hr delete record'])
+                                                @canany(['hr view record','hr edit record','hr delete record','hr view list'])
                                                 <li><a class="{{Request::is('hrms/employee')?'active':''}}" href="{{route('employee.index')}}">List of Employees</a></li>
                                                 @endcanany
 
