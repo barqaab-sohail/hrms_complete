@@ -191,6 +191,19 @@
                                 </li>
                                 @endcanany
                                 <!-- End Folder -->
+                                 <!-- Emails -->
+                                 @canany(['folder record'])
+                                 <li class="{{Request::is('email*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-folder"></i><span class="hide-menu">Emails</span></a>
+                                         <ul aria-expanded="false" class="collapse">
+                                                 @can('Super Admin')
+                                                 <li><a class="{{Request::is('emails')?'active':''}}" href="{{route('emails.index')}}">List of
+                                                        Emails</a></li>
+                                                 @endcan
+
+                                         </ul>
+                                 </li>
+                                 @endcanany
+                                 <!-- End Emails -->
 
                                 <!-- Leave -->
                                 <li class="{{Request::is('hrms/*leave*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-calendar-alt" aria-hidden="true"></i><span class="hide-menu">Leave Management</span></a>

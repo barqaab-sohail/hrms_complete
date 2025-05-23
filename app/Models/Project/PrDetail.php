@@ -2,9 +2,10 @@
 
 namespace App\Models\Project;
 
-use App\Models\Project\Progress\PrAchievedProgress;
+use App\Models\Email\EmailAddress;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Project\Progress\PrAchievedProgress;
 
 class PrDetail extends Model implements Auditable
 {
@@ -169,5 +170,18 @@ class PrDetail extends Model implements Auditable
     public function prDocuments()
     {
         return $this->hasMany('App\Models\Project\PrDocument')->select('description', 'pr_detail_id', 'reference_no', 'extension', 'path', 'file_name', 'document_date', 'size');;
+    }
+
+    // Email Addresses
+
+    public function emailAddresses()
+    {
+        return $this->morphMany(EmailAddress::class, 'emailable');
+    }
+
+    public function primaryEmail()
+    {
+        return $this->morphOne(EmailAddress::class, 'emailable')
+            ->where('is_primary', true);
     }
 }

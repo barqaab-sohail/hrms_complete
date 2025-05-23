@@ -2,11 +2,12 @@
 
 namespace App\Models\Hr;
 
+use DB;
+use App\Models\Hr\EmployeeSalary;
+use App\Models\Email\EmailAddress;
+use App\Models\Hr\HrDocumentation;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
-use App\Models\Hr\EmployeeSalary;
-use App\Models\Hr\HrDocumentation;
-use DB;
 
 
 
@@ -54,6 +55,18 @@ class HrEmployee extends Model implements Auditable
     {
         return $this->employeeCurrentDesignation->name ?? '';
     }
+
+    public function getFullNameWithDesignationAttribute()
+    {
+        return $this->full_name . ' - ' . ($this->employeeCurrentDesignation->name ?? 'No Designation');
+    }
+
+    public function getFullNameWithEmployeeIdAndDesignationAttribute()
+    {
+        return $this->employee_no . '-' . $this->full_name . ' - ' . ($this->employeeCurrentDesignation->name ?? 'No Designation');
+    }
+
+
     function getProjectAttribute()
     {
         return $this->employeeCurrentProject->name ?? '';
@@ -702,5 +715,29 @@ class HrEmployee extends Model implements Auditable
     public function salayEffectiveDate()
     {
         return $this->hasOne('App\Models\Hr\EmployeeSalary')->orderBy('effective_date', 'desc');
+    }
+
+    // Email Addresses
+    public function emailAddresses()
+    {
+        return $this->morphMany(EmailAddress::class, 'emailable');
+    }
+
+    public function primaryEmail()
+    {
+        return $this->morphOne(EmailAddress::class, 'emailable')
+            ->where('is_primary', true);
+    }
+
+    public function projectEmails()
+    {
+        return $this->morphMany(EmailAddress::class, 'emailable')
+            ->where('type', 'project');
+    }
+
+    public function personalEmails()
+    {
+        return $this->morphMany(EmailAddress::class, 'emailable')
+            ->where('type', 'personal');
     }
 }

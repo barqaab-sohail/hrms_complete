@@ -7,6 +7,7 @@ use App\Livewire\Asset\ListAsset;
 use App\Livewire\Asset\CreateAsset;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Email\EmailAddressController;
 use App\Http\Controllers\Project\DocumentSearchController;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
 
@@ -402,7 +403,16 @@ Route::group(['prefix' => 'invoice', 'middleware' => ['auth', 'XssSanitizer'], '
     Route::resource('/invoiceRights', 'InvoiceRightsController');
 });
 
-
+// Email Address Routes
+Route::group(['prefix' => 'emails', 'as' => 'emails.'], function () {
+    Route::get('/{type}', [EmailAddressController::class, 'type'])->name('type');
+    Route::get('/', [EmailAddressController::class, 'index'])->name('index');
+    Route::get('/create', [EmailAddressController::class, 'create'])->name('create');
+    Route::post('/', [EmailAddressController::class, 'store'])->name('store');
+    Route::get('/{email}/edit', [EmailAddressController::class, 'edit'])->name('edit');
+    Route::put('/{email}', [EmailAddressController::class, 'update'])->name('update');
+    Route::delete('/{email}', [EmailAddressController::class, 'destroy'])->name('destroy');
+});
 
 //General Routes
 Route::group(['middleware' => ['auth', 'XssSanitizer']], function () {
