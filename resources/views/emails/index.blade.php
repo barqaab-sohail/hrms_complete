@@ -18,10 +18,26 @@
 				<form id="emailForm" name="emailForm" action="{{route('emails.store')}}" class="form-horizontal">
 					<input type="hidden" name="email_id" id="email_id">
 					<div class="row">
-						<div class="col-md-12">
+						<!-- Emailable Type Selection -->
+						<div class="col-md-6">
 							<div class="form-group">
-								<label class="control-label text-right">Name</label>
-								<input type="text" name="name" id="name" value="{{ old('name') }}" class="form-control" >
+								<label class="control-label text-right">Email For</label>
+								<select id="emailable_type" class="form-control @error('emailable_type') is-invalid @enderror" 
+                                    name="emailable_type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="employee" {{ old('emailable_type') == 'employee' ? 'selected' : '' }}>Employee</option>
+                                    <option value="project" {{ old('emailable_type') == 'project' ? 'selected' : '' }}>Project</option>
+                                </select>
+                            </div>
+						</div>
+						 <!-- Emailable ID Selection (dynamic based on type) -->
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label text-right">Select</label>
+								<select id="emailable_id" class="form-control @error('emailable_id') is-invalid @enderror" 
+                                    name="emailable_id" required disabled>
+                                    <option value="">First select type above</option>
+                                </select>
                             </div>
 						</div>
 					</div>
@@ -53,7 +69,7 @@
 <div class="card">
 	<div class="card-body">
 		<button type="button" class="btn btn-success float-right" id="createEmail" data-toggle="modal">Add Email</button>
-		<h4 class="card-title" style="color:black">List of Folders</h4>
+		<h4 class="card-title" style="color:black">List of Emails</h4>
 		<div class="table-responsive m-t-40">
 			<table id="myTable" class="table table-bordered table-striped">
 				<thead>
@@ -75,6 +91,61 @@
 		</div>
 	</div>
 </div>
+@push('scripts')
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const typeSelect = document.getElementById('emailable_type');
+		const idSelect = document.getElementById('emailable_id');
+		
+		typeSelect.addEventListener('change', function() {
+			// Clear and disable the ID select until we load options
+			idSelect.innerHTML = '<option value="">Loading...</option>';
+			idSelect.disabled = true;
+			
+			if (!this.value) {
+				idSelect.innerHTML = '<option value="">First select type above</option>';
+				return;
+			}
+			console.log('Selected type:', this.value);
+			const baseUrl = "{{ url('/emails/type') }}";
+			// Fetch the appropriate items based on type
+			fetch(`${baseUrl}/${this.value}`)
+			.then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+	.then(data => {
+        idSelect.innerHTML = '<option value="">Select ' + this.value + '</option>';
+        
+        // Handle both array and object responses
+        if (Array.isArray(data)) {
+            // If array format (unlikely based on your backend)
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = item.text || item.name;
+                idSelect.appendChild(option);
+            });
+        } else if (typeof data === 'object' && data !== null) {
+            // Handle object format (what your backend actually returns)
+            Object.entries(data).forEach(([id, text]) => {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = text;
+                idSelect.appendChild(option);
+            });
+        }
+        
+        idSelect.disabled = false;
+    })
+				.catch(error => {
+					idSelect.innerHTML = '<option value="">Error loading options</option>';
+					console.error('Error:', error);
+				});
+		});
+	});
+	</script>
+@endpush
 <script>
 	$(document).ready(function() {
 

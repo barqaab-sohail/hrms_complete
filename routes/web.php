@@ -405,7 +405,7 @@ Route::group(['prefix' => 'invoice', 'middleware' => ['auth', 'XssSanitizer'], '
 
 // Email Address Routes
 Route::group(['prefix' => 'emails', 'as' => 'emails.'], function () {
-    Route::get('/{type}', [EmailAddressController::class, 'type'])->name('type');
+    Route::get('/type/{type}', [EmailAddressController::class, 'getTypeaheadData']);
     Route::get('/', [EmailAddressController::class, 'index'])->name('index');
     Route::get('/create', [EmailAddressController::class, 'create'])->name('create');
     Route::post('/', [EmailAddressController::class, 'store'])->name('store');

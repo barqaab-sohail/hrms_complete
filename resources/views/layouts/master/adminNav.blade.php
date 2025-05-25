@@ -193,7 +193,7 @@
                                 <!-- End Folder -->
                                  <!-- Emails -->
                                  @canany(['folder record'])
-                                 <li class="{{Request::is('email*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-folder"></i><span class="hide-menu">Emails</span></a>
+                                 <li class="{{Request::is('email*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-email"></i><span class="hide-menu">Emails</span></a>
                                          <ul aria-expanded="false" class="collapse">
                                                  @can('Super Admin')
                                                  <li><a class="{{Request::is('emails')?'active':''}}" href="{{route('emails.index')}}">List of
@@ -238,7 +238,7 @@
                                 <!-- End Submissions -->
                                 <!-- Admin Document -->
                                 @canany(['admin edit document', 'admin view document'])
-                                <li class="{{Request::is('hrms/adminDocument*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-book" aria-hidden="true"></i><span class="hide-menu">Admin Document</span></a>
+                                <li class="{{Request::is('hrms/adminDocument*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-file-multiple" aria-hidden="true"></i><span class="hide-menu">Admin Document</span></a>
                                         <ul aria-expanded="false" class="collapse">
                                                 <li><a class="{{Request::is('hrms/adminDocument')?'active':''}}" href="{{route('adminDocument.index')}}">List of Documents</a></li>
                                         </ul>
