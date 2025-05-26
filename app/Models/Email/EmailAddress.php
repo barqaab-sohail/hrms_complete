@@ -17,8 +17,6 @@ class EmailAddress extends Model
         'description',
         'emailable_id',
         'emailable_type',
-        'created_by',
-        'updated_by'
     ];
 
     protected $casts = [

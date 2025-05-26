@@ -51,6 +51,50 @@ class EmailAddressController extends Controller
         return view('emails.create');
     }
 
+
+    public function store(Request $request)
+    {
+
+        $input = $request->all();
+
+
+        DB::transaction(function () use ($request, $input) {
+
+            EmailAddress::updateOrCreate(
+                ['id' => $request['email_id']],
+                [
+                    'email' => $request['email'],
+                    'type' => $request['type'],
+                    'is_active' => $request['is_active'] ?? true,
+                    'is_primary' => $request['is_primary'] ?? false,
+                    'description' => $request['description'] ?? null,
+                    'emailable_id' => $request['emailable_id'],
+                    'emailable_type' => $request['emailable_type'],
+
+                ]
+            );
+        });  //end transaction
+
+
+        return response()->json(['status' => 'OK', 'message' => "Email Successfully Saved"]);
+    }
+
+    public function edit($id)
+    {
+        $emailAddress = EmailAddress::find($id);
+        return response()->json($emailAddress);
+    }
+
+    public function destroy(Request $request, $id)
+    {
+
+        DB::transaction(function () use ($id) {
+            EmailAddress::find($id)->delete();
+        }); // end transcation 
+        return response()->json(['message' => 'data  delete successfully.']);
+    }
+
+
     // Add a new method specifically for typeahead data
     public function getTypeaheadData($type)
     {

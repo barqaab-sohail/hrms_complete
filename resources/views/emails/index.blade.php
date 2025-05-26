@@ -18,6 +18,58 @@
 				<form id="emailForm" name="emailForm" action="{{route('emails.store')}}" class="form-horizontal">
 					<input type="hidden" name="email_id" id="email_id">
 					<div class="row">
+						
+						<div class="col-md-5">
+							<div class="form-group">
+								<label class="control-label text-right">Email</label>
+								<input type="email" class="form-control @error('email') is-invalid @enderror" 
+                    				name="email" id="email" value="{{ old('email') }}" required>
+                            </div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label class="control-label text-right">Type</label>
+								<select class="form-control @error('type') is-invalid @enderror" 
+									name="type" id="type" required>
+									<option value="">Select Type</option>
+									<option value="company" {{ old('type') == 'company' ? 'selected' : '' }}>Company</option>
+									<option value="project" {{ old('type') == 'project' ? 'selected' : '' }}>Project</option>
+									<option value="personal" {{ old('type') == 'personal' ? 'selected' : '' }}>Personal</option>
+								</select>
+                            </div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label class="control-label text-right">Is Active</label>
+								<div class="form-check mt-2">
+									<input type="checkbox" class="form-check-input @error('is_active') is-invalid @enderror" 
+										name="is_active" id="is_active" value="1" {{ old('is_active') ? 'checked' : '' }}>
+									<label class="form-check-label" for="is_active">Active</label>
+									@error('is_active')
+										<span class="invalid-feedback" role="alert">
+											<strong>{{ $message }}</strong>
+										</span>
+									@enderror
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label class="control-label text-right">Is Primary</label>
+								<div class="form-check mt-2">
+									<input type="checkbox" class="form-check-input @error('is_primary') is-invalid @enderror" 
+										name="is_primary" id="is_primary" value="1" {{ old('is_primary') ? 'checked' : '' }}>
+									<label class="form-check-label" for="is_primary">Primary</label>
+									@error('is_primary')
+										<span class="invalid-feedback" role="alert">
+											<strong>{{ $message }}</strong>
+										</span>
+									@enderror
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
 						<!-- Emailable Type Selection -->
 						<div class="col-md-6">
 							<div class="form-group">
@@ -34,7 +86,7 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="control-label text-right">Select</label>
-								<select id="emailable_id" class="form-control @error('emailable_id') is-invalid @enderror" 
+								<select id="emailable_id" class="form-control select2 @error('emailable_id') is-invalid @enderror" 
                                     name="emailable_id" required disabled>
                                     <option value="">First select type above</option>
                                 </select>
@@ -106,7 +158,7 @@
 				idSelect.innerHTML = '<option value="">First select type above</option>';
 				return;
 			}
-			console.log('Selected type:', this.value);
+			
 			const baseUrl = "{{ url('/emails/type') }}";
 			// Fetch the appropriate items based on type
 			fetch(`${baseUrl}/${this.value}`)
@@ -148,6 +200,20 @@
 @endpush
 <script>
 	$(document).ready(function() {
+		$('.select2').select2({
+        width: "100%",
+        theme: "classic",
+
+			errorPlacement: function (error, element) {
+				if (element.parent(".input-group").length) {
+					error.insertAfter(element.parent()); // radio/checkbox?
+				} else if (element.hasClass("select2")) {
+					error.insertAfter(element.next("span")); // select2
+				} else {
+					error.insertAfter(element); // default
+				}
+			},
+    	});
 
 		$(function() {
 			$.ajaxSetup({

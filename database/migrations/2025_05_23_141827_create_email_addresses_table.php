@@ -23,9 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('emailable_id');
             $table->string('emailable_type');
 
-            // Ownership and timestamps
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });
