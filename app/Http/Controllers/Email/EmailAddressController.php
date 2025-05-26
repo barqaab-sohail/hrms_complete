@@ -55,10 +55,21 @@ class EmailAddressController extends Controller
     public function store(Request $request)
     {
 
-        $input = $request->all();
 
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:email_addresses,email,' . $request->input('email_id'),
+            'type' => 'required|string',
+            'is_active' => 'boolean',
+            'is_primary' => 'boolean',
+            'description' => 'required|string|max:255',
+            'emailable_id' => 'required|integer',
+            'emailable_type' => 'required|string',
+        ]);
+        // if ($validator->fails()) {
+        //     return response()->json(['status' => 'error', 'message' => $validator->errors()->first()], 422);
+        // }
 
-        DB::transaction(function () use ($request, $input) {
+        DB::transaction(function () use ($request) {
 
             EmailAddress::updateOrCreate(
                 ['id' => $request['email_id']],

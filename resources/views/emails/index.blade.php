@@ -45,11 +45,7 @@
 									<input type="checkbox" class="form-check-input @error('is_active') is-invalid @enderror" 
 										name="is_active" id="is_active" value="1" {{ old('is_active') ? 'checked' : '' }}>
 									<label class="form-check-label" for="is_active">Active</label>
-									@error('is_active')
-										<span class="invalid-feedback" role="alert">
-											<strong>{{ $message }}</strong>
-										</span>
-									@enderror
+									
 								</div>
 							</div>
 						</div>
@@ -60,12 +56,18 @@
 									<input type="checkbox" class="form-check-input @error('is_primary') is-invalid @enderror" 
 										name="is_primary" id="is_primary" value="1" {{ old('is_primary') ? 'checked' : '' }}>
 									<label class="form-check-label" for="is_primary">Primary</label>
-									@error('is_primary')
-										<span class="invalid-feedback" role="alert">
-											<strong>{{ $message }}</strong>
-										</span>
-									@enderror
+									
 								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<!-- Description Field -->
+						<div class="col-md-6">
+							<div class="form-group	">
+								<label class="control-label text-right">Description</label>
+								<input class="form-control @error('description') is-invalid @enderror" 
+									name="description" id="description"{{ old('description') }}>	
 							</div>
 						</div>
 					</div>
@@ -102,9 +104,7 @@
 			</div>
 		</div>
 	</div>
-	<script>
-		formFunctions();
-	</script>
+
 </div>
 <!--End Modal  -->
 <style>
@@ -290,7 +290,7 @@
 
 				e.preventDefault();
 				$(this).html('Save');
-
+				
 				$.ajax({
 					data: $('#emailForm').serialize(),
 					url: "{{ route('emails.store') }}",

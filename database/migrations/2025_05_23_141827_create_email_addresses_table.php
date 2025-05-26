@@ -17,15 +17,12 @@ return new class extends Migration
             $table->string('type')->default('company'); // company, project, personal, etc.
             $table->boolean('is_active')->default(true);
             $table->boolean('is_primary')->default(false);
-            $table->text('description')->nullable();
+            $table->string('description')->nullable();
 
             // Polymorphic relationship
             $table->unsignedBigInteger('emailable_id');
             $table->string('emailable_type');
-
-
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
