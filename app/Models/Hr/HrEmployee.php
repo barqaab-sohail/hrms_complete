@@ -723,6 +723,8 @@ class HrEmployee extends Model implements Auditable
         return $this->morphMany(EmailAddress::class, 'emailable');
     }
 
+
+
     public function primaryEmail()
     {
         return $this->morphOne(EmailAddress::class, 'emailable')

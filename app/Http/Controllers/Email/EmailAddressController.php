@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Models\Project\PrDetail;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\Email\EmailAddressStore;
+use App\Models\Hr\HrDepartment;
 use DB;
 use DataTables;
 
@@ -35,6 +36,15 @@ class EmailAddressController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('emailable_id', function ($row) {
+                    if ($row->emailable_type == 'employee') {
+                        return $row->emailable->full_name_with_employee_id_and_designation;
+                    } elseif ($row->emailable_type == 'project') {
+                        return $row->emailable->name;
+                    } elseif ($row->emailable_type == 'department') {
+                        return $row->emailable->name;
+                    }
+                })
                 ->addColumn('Edit', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editEmail">Edit</a>';
                     return $btn;
@@ -52,22 +62,9 @@ class EmailAddressController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(EmailAddressStore $request)
     {
 
-
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:email_addresses,email,' . $request->input('email_id'),
-            'type' => 'required|string',
-            'is_active' => 'boolean',
-            'is_primary' => 'boolean',
-            'description' => 'required|string|max:255',
-            'emailable_id' => 'required|integer',
-            'emailable_type' => 'required|string',
-        ]);
-        // if ($validator->fails()) {
-        //     return response()->json(['status' => 'error', 'message' => $validator->errors()->first()], 422);
-        // }
 
         DB::transaction(function () use ($request) {
 
@@ -92,8 +89,12 @@ class EmailAddressController extends Controller
 
     public function edit($id)
     {
-        $emailAddress = EmailAddress::find($id);
-        return response()->json($emailAddress);
+        try {
+            $emailAddress = EmailAddress::with('emailable')->findOrFail($id);
+            return response()->json($emailAddress);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
     }
 
     public function destroy(Request $request, $id)
@@ -122,6 +123,8 @@ class EmailAddressController extends Controller
                 ->pluck('full_name_with_employee_id_and_designation', 'id');
         } elseif ($type == 'project') {
             return PrDetail::pluck('name', 'id');
+        } elseif ($type == 'department') {
+            return HrDepartment::pluck('name', 'id');
         } else {
             return response()->json(['error' => 'Invalid typeee'], 400);
         }

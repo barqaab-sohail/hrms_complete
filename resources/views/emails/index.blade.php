@@ -81,6 +81,7 @@
                                     <option value="">Select Type</option>
                                     <option value="employee" {{ old('emailable_type') == 'employee' ? 'selected' : '' }}>Employee</option>
                                     <option value="project" {{ old('emailable_type') == 'project' ? 'selected' : '' }}>Project</option>
+									<option value="department" {{ old('emailable_type') == 'department' ? 'selected' : '' }}>Department</option>
                                 </select>
                             </div>
 						</div>
@@ -200,6 +201,64 @@
 @endpush
 <script>
 	$(document).ready(function() {
+	
+	// Consolidated fetch function
+function fetchEmailableOptions(type) {
+    const idSelect = document.getElementById('emailable_id');
+    idSelect.innerHTML = '<option value="">Loading...</option>';
+    idSelect.disabled = true;
+
+    if (!type) {
+        idSelect.innerHTML = '<option value="">First select type above</option>';
+        return Promise.resolve();
+    }
+
+    const baseUrl = "{{ url('/emails/type') }}";
+    return fetch(`${baseUrl}/${type}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => {
+            idSelect.innerHTML = '<option value="">Select ' + type + '</option>';
+            
+            if (Array.isArray(data)) {
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item.text || item.name;
+                    idSelect.appendChild(option);
+                });
+            } else if (typeof data === 'object' && data !== null) {
+                Object.entries(data).forEach(([id, text]) => {
+                    const option = document.createElement('option');
+                    option.value = id;
+                    option.textContent = text;
+                    idSelect.appendChild(option);
+                });
+            }
+            
+            idSelect.disabled = false;
+            return data; // Return data for chaining if needed
+        })
+        .catch(error => {
+            idSelect.innerHTML = '<option value="">Error loading options</option>';
+            console.error('Error:', error);
+            throw error; // Re-throw for error handling
+        });
+}
+
+// Set up change event handler
+document.addEventListener('DOMContentLoaded', function() {
+    const typeSelect = document.getElementById('emailable_type');
+    
+    typeSelect.addEventListener('change', function() {
+        fetchEmailableOptions(this.value);
+    });
+});
+
+
+
 		$('.select2').select2({
         width: "100%",
         theme: "classic",
@@ -311,19 +370,45 @@
 					}
 				});
 			});
-            $('body').unbind().on('click', '.editEmail', function () {
-                var email_id = $(this).data('id');
-
-                $('#json_message_modal').html('');
-                $.get("{{ url('emails') }}" +'/' + email_id +'/edit', function (data) {
-                    console.log(data);
-                    $('#modelHeading').html("Edit Email");
-                    $('#saveBtn').val("edit-email");
-                    $('#ajaxModel').modal('show');
-                    $('#email_id').val(data.id);
-                    $('#name').val(data.name); 
-                })
+            
+			// Edit email handler
+$('body').on('click', '.editEmail', function() {
+    var email_id = $(this).data('id');
+    
+    $('#json_message_modal').html('');
+    $.get("{{ url('emails') }}" +'/' + email_id +'/edit', function(data) {
+        $('#modelHeading').html("Edit Email");
+        $('#saveBtn').val("edit-email");
+        $('#ajaxModel').modal('show');
+        
+        // Fill basic fields
+        $('#email_id').val(data.id);
+        $('#email').val(data.email); 
+        $('#type').val(data.type); 
+        $('#description').val(data.description);
+        $('#is_active').prop('checked', data.is_active);
+        $('#is_primary').prop('checked', data.is_primary);
+        
+        // Handle emailable_type and emailable_id
+        var emailableType = data.emailable_type;
+        var emailableId = data.emailable_id;
+        
+        if (emailableType) {
+            // Use the shared fetch function
+            fetchEmailableOptions(emailableType).then(function() {
+                $('#emailable_type').val(emailableType);
+                $('#emailable_id').val(emailableId).trigger('change');
+                $('#emailable_id').prop('disabled', false);
             });
+        } else {
+            $('#emailable_type').val('');
+            $('#emailable_id').html('<option value="">First select type above</option>');
+            $('#emailable_id').prop('disabled', true);
+        }
+    }).fail(function(xhr, status, error) {
+        console.error("Error loading email data:", error);
+    });
+});
 
 			$('body').on('click', '.deleteEmail', function() {
 				var email_id = $(this).data("id");

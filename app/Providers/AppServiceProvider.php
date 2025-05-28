@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Livewire;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,9 +15,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
-    }
+    public function register() {}
 
 
 
@@ -32,5 +31,6 @@ class AppServiceProvider extends ServiceProvider
         // Livewire::setUpdateRoute(function ($handle) {
         //     return Route::post('/hrms11/livewire/update', $handle);
         // });
+
     }
 }
