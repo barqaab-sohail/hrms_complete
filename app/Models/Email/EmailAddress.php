@@ -25,17 +25,16 @@ class EmailAddress extends Model
 
     protected $fillable = [
         'email',
-        'type',
         'is_active',
-        'is_primary',
         'description',
         'emailable_id',
         'emailable_type',
+        'total_space',
+        'space_unit',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
-        'is_primary' => 'boolean'
     ];
 
     // app/Models/EmailAddress.php

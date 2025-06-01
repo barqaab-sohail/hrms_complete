@@ -45,6 +45,20 @@ class EmailAddressController extends Controller
                         return $row->emailable->name;
                     }
                 })
+                ->editColumn('total_space', function ($row) {
+                    if ($row->total_space > 0) {
+                        return $row->total_space . ' ' . $row->space_unit;
+                    } else {
+                        return 'Not Allocated';
+                    }
+                })
+                ->editColumn('is_active', function ($row) {
+                    if ($row->is_active) {
+                        return '<span class="badge badge-success">Active</span>';
+                    } else {
+                        return '<span class="badge badge-danger">Inactive</span>';
+                    }
+                })
                 ->addColumn('Edit', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editEmail">Edit</a>';
                     return $btn;
@@ -53,7 +67,7 @@ class EmailAddressController extends Controller
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteEmail">Delete</a>';
                     return $btn;
                 })
-                ->rawColumns(['Edit', 'Delete'])
+                ->rawColumns(['Edit', 'Delete', 'is_active'])
                 ->make(true);
         }
 
@@ -72,12 +86,12 @@ class EmailAddressController extends Controller
                 ['id' => $request['email_id']],
                 [
                     'email' => $request['email'],
-                    'type' => $request['type'],
-                    'is_active' => $request['is_active'] ?? true,
-                    'is_primary' => $request['is_primary'] ?? false,
+                    'is_active' => $request['is_active'] ?? false,
                     'description' => $request['description'] ?? null,
                     'emailable_id' => $request['emailable_id'],
                     'emailable_type' => $request['emailable_type'],
+                    'total_space' => $request['total_space'] ?? 0,
+                    'space_unit' => $request['space_unit'] ?? 'MB',
 
                 ]
             );

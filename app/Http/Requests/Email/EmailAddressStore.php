@@ -23,12 +23,12 @@ class EmailAddressStore extends FormRequest
     {
         $rules = [
             'email' => 'required|email|unique:email_addresses,email,' . $this->email_id,
-            'type' => 'required|string',
             'is_active' => 'boolean',
-            'is_primary' => 'boolean',
-            'description' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
             'emailable_id' => 'required|integer',
             'emailable_type' => 'required|string',
+            'total_space' => 'required|numeric|min:0.0',
+            'space_unit' => 'required|string|in:MB,GB', // Ensure space unit is one of the allowed values
         ];
 
         return $rules;

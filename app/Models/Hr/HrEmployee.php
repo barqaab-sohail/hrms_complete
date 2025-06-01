@@ -63,7 +63,7 @@ class HrEmployee extends Model implements Auditable
 
     public function getFullNameWithEmployeeIdAndDesignationAttribute()
     {
-        return $this->employee_no . '-' . $this->full_name . ' - ' . ($this->employeeCurrentDesignation->name ?? 'No Designation');
+        return $this->employee_no . '-' . $this->full_name . ' - ' . ($this->employeeCurrentDesignation->name ?? 'No Designation') . ' - ' . $this->hr_status_id;
     }
 
 

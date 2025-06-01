@@ -28,16 +28,23 @@
 						</div>
 						<div class="col-md-3">
 							<div class="form-group">
-								<label class="control-label text-right">Type</label>
-								<select class="form-control @error('type') is-invalid @enderror" 
-									name="type" id="type" required>
-									<option value="">Select Type</option>
-									<option value="company" {{ old('type') == 'company' ? 'selected' : '' }}>Company</option>
-									<option value="project" {{ old('type') == 'project' ? 'selected' : '' }}>Project</option>
-									<option value="personal" {{ old('type') == 'personal' ? 'selected' : '' }}>Personal</option>
-								</select>
-                            </div>
+								<label class="control-label text-right">Space Allocation</label>
+								<input type="number" class="form-control @error('total_space') is-invalid @enderror" 
+									name="total_space" id="total_space"{{ old('total_space') }}>	
+							</div>
 						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label class="control-label text-right">Space Unit</label>
+								<select class="form-control @error('space_unit') is-invalid @enderror" 
+									name="space_unit" id="space_unit" required>
+									<option value="">Select Unit</option>
+									<option value="MB" {{ old('space_unit') == 'MB' ? 'selected' : '' }}>MB</option>
+									<option value="GB" {{ old('space_unit') == 'GB' ? 'selected' : '' }}>GB</option>
+								</select>
+							</div>
+						</div>
+
 						<div class="col-md-2">
 							<div class="form-group">
 								<label class="control-label text-right">Is Active</label>
@@ -49,22 +56,13 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-2">
-							<div class="form-group">
-								<label class="control-label text-right">Is Primary</label>
-								<div class="form-check mt-2">
-									<input type="checkbox" class="form-check-input @error('is_primary') is-invalid @enderror" 
-										name="is_primary" id="is_primary" value="1" {{ old('is_primary') ? 'checked' : '' }}>
-									<label class="form-check-label" for="is_primary">Primary</label>
-									
-								</div>
-							</div>
-						</div>
 					</div>
 					<div class="row">
+						
 						<!-- Description Field -->
-						<div class="col-md-6">
-							<div class="form-group	">
+						
+						<div class="col-md-12">
+							<div class="form-group">
 								<label class="control-label text-right">Description</label>
 								<input class="form-control @error('description') is-invalid @enderror" 
 									name="description" id="description"{{ old('description') }}>	
@@ -73,7 +71,7 @@
 					</div>
 					<div class="row">
 						<!-- Emailable Type Selection -->
-						<div class="col-md-6">
+						<div class="col-md-3">
 							<div class="form-group">
 								<label class="control-label text-right">Email For</label>
 								<select id="emailable_type" class="form-control @error('emailable_type') is-invalid @enderror" 
@@ -86,7 +84,7 @@
                             </div>
 						</div>
 						 <!-- Emailable ID Selection (dynamic based on type) -->
-						<div class="col-md-6">
+						<div class="col-md-9">
 							<div class="form-group">
 								<label class="control-label text-right">Select</label>
 								<select id="emailable_id" class="form-control select2 @error('emailable_id') is-invalid @enderror" 
@@ -128,12 +126,11 @@
 				<thead>
 					<tr>
 						<th>Email</th>
-                        <th>Type</th>
+						<th>Total Space</th>
                         <th>Status</th>
-                        <th>Primary</th>
-                        <th>Description</th>
-                        <th>emailable_id</th>
-                        <th>emailable_type</th>
+                        <th>Email Used By</th>
+                        <th>Email Model</th>
+						<th>Description</th>
 						<th style="width:5%">Edit</th>
 						@role('Super Admin')
 						<th style="width:5%">Delete</th>
@@ -284,6 +281,38 @@ document.addEventListener('DOMContentLoaded', function() {
 			var table = $('#myTable').DataTable({
 				processing: true,
 				serverSide: true,
+				responsive: true,
+				"lengthMenu": [
+					[10, 25, 50, -1],
+					[10, 25, 50, "All"]
+				],
+				"pageLength": 10,
+				dom: 'Blfrtip',
+				buttons: [{
+						extend: 'copyHtml5',
+						exportOptions: {
+							columns: [0, 1, 2, 3, 4,5]
+						}
+					},
+					{
+						extend: 'excelHtml5',
+						exportOptions: {
+							columns: [0, 1, 2, 3, 4,5]
+						}
+					},
+					{
+						extend: 'pdfHtml5',
+						exportOptions: {
+							columns: [0, 1, 2, 3, 4,5]
+						}
+					}, {
+						extend: 'csvHtml5',
+						exportOptions: {
+							columns: [0, 1, 2, 3, 4,5]
+						}
+					},
+				],
+
 				"aaSorting": [],
 				ajax: {
 					url: "{{ route('emails.create') }}",
@@ -292,21 +321,14 @@ document.addEventListener('DOMContentLoaded', function() {
 						data: 'email',
 						name: 'email'
 					},
-                    {
-						data: 'type',
-						name: 'type'
+					{
+						data: 'total_space',
+						name: 'total_space',
 					},
+                   
                     {
 						data: 'is_active',
 						name: 'is_active',
-					},
-                    {
-						data: 'is_primary',
-						name: 'is_primary',
-					},
-                    {
-						data: 'description',
-						name: 'description',
 					},
                     {
 						data: 'emailable_id',
@@ -315,6 +337,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     {
 						data: 'emailable_type',
 						name: 'emailable_type'
+					},
+					{
+						data: 'description',
+						name: 'description',
 					},
 					{
 						data: 'Edit',
@@ -334,6 +360,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			$('#createEmail').click(function(e) {
 				$('#json_message_modal').html('');
+				$('#email_id').val("");
+				$("#emailable_id").val('').trigger('change');
+				$('#modelHeading').html("Create New Email");
 				$('#emailForm').trigger("reset");
 	
 				$('#ajaxModel').modal('show');
@@ -384,10 +413,10 @@ $('body').on('click', '.editEmail', function() {
         // Fill basic fields
         $('#email_id').val(data.id);
         $('#email').val(data.email); 
-        $('#type').val(data.type); 
         $('#description').val(data.description);
         $('#is_active').prop('checked', data.is_active);
-        $('#is_primary').prop('checked', data.is_primary);
+		$('#total_space').val(data.total_space);
+		$('#space_unit').val(data.space_unit).trigger('change');
         
         // Handle emailable_type and emailable_id
         var emailableType = data.emailable_type;
