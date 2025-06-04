@@ -192,7 +192,7 @@
                                 @endcanany
                                 <!-- End Folder -->
                                  <!-- Emails -->
-                                 @canany(['folder record'])
+                                 @canany(['Email Edit Record'])
                                  <li class="{{Request::is('email*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-email"></i><span class="hide-menu">Emails</span></a>
                                          <ul aria-expanded="false" class="collapse">
                                                  @can('Email Edit Record')

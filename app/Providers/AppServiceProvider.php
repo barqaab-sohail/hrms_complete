@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Livewire;
+use App\Models\Submission\Security;
+use App\Observers\SecurityObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        Security::observe(SecurityObserver::class);
 
         // Livewire::setUpdateRoute(function ($handle) {
         //     return Route::post('/hrms11/livewire/update', $handle);
