@@ -101,4 +101,17 @@ class Security extends Model
         // Download the PDF
         return $pdf->download('securities-report-' . now()->format('Y-m-d') . '.pdf');
     }
+
+    // sorted by status
+    /**
+     * Scope a query to order securities by status.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrderByStatus($query)
+    {
+        return $query->orderByRaw("FIELD(status, 'expired', 'active', 'released')")
+            ->orderBy('id', 'desc');
+    }
 }

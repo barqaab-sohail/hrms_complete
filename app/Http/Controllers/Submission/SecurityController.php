@@ -20,7 +20,7 @@ class SecurityController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Security::orderBy('id', 'desc')->get();
+            $data = Security::orderByStatus()->get();
 
             return DataTables::of($data)
                 ->editColumn('type', function ($data) {
