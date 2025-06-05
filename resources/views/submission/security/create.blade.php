@@ -533,7 +533,7 @@
                 $('#project_name').val(data.project_name);
                 $('#remarks').val(data.remarks);
                 $('#reference_number').val(data.reference_number);
-                $('#status').val(data.status);
+                $('#status').val(data.status).trigger('change');
                 $('#client_id').val(data.client_id).trigger('change');
                 $('#submitted_by').val(data.submitted_by).trigger('change');
                 $('#bank_id').val(data.bank_id).trigger('change');
