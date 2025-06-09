@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SecuritiesExport;
 use PDF;
+use DateTimeInterface;
 
 class Security extends Model
 {
@@ -34,11 +35,15 @@ class Security extends Model
     ];
 
     protected $casts = [
-        'date_issued' => 'date',
-        'expiry_date' => 'date',
+        'date_issued' => 'datetime',
+        'expiry_date' => 'datetime',
         'amount' => 'decimal:2',
     ];
 
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d'); // Format as simple date without time
+    }
 
     public function submittedBy()
     {

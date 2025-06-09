@@ -508,7 +508,7 @@
             var security_id = $(this).data('id');
 
             $.get("{{ url('hrms/securities') }}" + '/' + security_id + '/edit', function(data) {
-                console.log(data);
+              
                 $('#formDocument').toggle();
                 $('#formDocument').trigger("reset");
 
@@ -519,15 +519,9 @@
                 $('#bid_security_type').val(data.bid_security_type).trigger('change');
                 $('#favor_of').val(data.favor_of);
 
-                if (data.date_issued) {
-                    const dateIssued = new Date(data.date_issued);
-                    $('#date_issued').val(dateIssued.toISOString().split('T')[0]);
-                }
-
-                if (data.expiry_date) {
-                    const expiryDate = new Date(data.expiry_date);
-                    $('#expiry_date').val(expiryDate.toISOString().split('T')[0]);
-                }
+             
+                $('#date_issued').val(data.date_issued);
+                $('#expiry_date').val(data.expiry_date);
 
                 $('#amount').val(data.amount);
                 $('#project_name').val(data.project_name);

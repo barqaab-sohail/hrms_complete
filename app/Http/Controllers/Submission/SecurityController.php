@@ -67,10 +67,9 @@ class SecurityController extends Controller
                 ->editColumn('bank_id', function ($data) {
                     return $data->bank->name ?? '';
                 })
-                // ->editColumn('document_path', function ($data) {
-
-                //     return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="' . $data->document_path . '" width="30/" style="cursor: pointer;">';
-                // })
+                ->editColumn('submitted_by', function ($data) {
+                    return $data->bank->name ?? '';
+                })
                 ->editColumn('document_path', function ($data) {
                     if ($data->document_path) {
                         $pdfUrl = asset('storage/' . $data->document_path);
@@ -171,6 +170,7 @@ class SecurityController extends Controller
     public function edit($id)
     {
         $security = Security::find($id);
+
         return response()->json($security);
     }
 
