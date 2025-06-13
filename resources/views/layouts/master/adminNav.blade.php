@@ -1,8 +1,34 @@
 <style>
         .text_requried {
-                color: red;
+            color: red;
         }
-</style>
+        
+        /* Add these styles to increase sidebar width */
+        .left-sidebar {
+            width: 300px; /* Adjust this value as needed (default is usually 240px) */
+        }
+        
+        .scroll-sidebar {
+            width: 300px; /* Should match left-sidebar width */
+        }
+        
+        /* Optional: Adjust the menu item text to prevent wrapping */
+        .sidebar-nav .hide-menu {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Optional: Adjust padding for better alignment */
+        .sidebar-nav ul li a {
+            padding: 10px 15px 10px 20px;
+        }
+        
+        /* Optional: Make sure the arrow icons don't cause wrapping */
+        .sidebar-nav .has-arrow::after {
+            right: 20px;
+        }
+    </style>
 
 <aside class="left-sidebar">
         <!-- Sidebar scroll-->
@@ -238,7 +264,7 @@
                                 <!-- End Submissions -->
                                 <!-- Admin Document -->
                                 @canany(['admin edit document', 'admin view document'])
-                                <li class="{{Request::is('hrms/adminDocument*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-file-multiple" aria-hidden="true"></i><span class="hide-menu">Admin Document</span></a>
+                                <li class="{{Request::is('hrms/adminDocument*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-file-multiple" aria-hidden="true"></i><span class="hide-menu">Office Orders/Notifications</span></a>
                                         <ul aria-expanded="false" class="collapse">
                                                 <li><a class="{{Request::is('hrms/adminDocument')?'active':''}}" href="{{route('adminDocument.index')}}">List of Documents</a></li>
                                         </ul>

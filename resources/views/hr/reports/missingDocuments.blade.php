@@ -2,12 +2,12 @@ text/x-generic missingDocuments.blade.php ( HTML document, UTF-8 Unicode text )
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
 @section('Heading')
-<h3 class="text-themecolor">Missing Document List</h3>
+<h3 class="text-themecolor">Mandatory Missing Document List</h3>
 @stop
 @section('content')
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">Missing Document List</h4>
+        <h4 class="card-title">Mandatory Missing Document List</h4>
 
         <div class="table-responsive m-t-40">
 

@@ -1,5 +1,5 @@
 @extends('layouts.master.master')
-@section('title', 'Project Detail')
+@section('title', $data->name )
 @section('Heading')
 <h3 class="text-themecolor">Project Name</h3>
 <ol class="breadcrumb">

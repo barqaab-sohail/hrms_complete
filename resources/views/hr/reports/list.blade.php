@@ -25,12 +25,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><a href="{{route('missingDocuments.list')}}" style="color:black">Missing Document List</a>
+                        <td><a href="{{route('missingDocuments.list')}}" style="color:black">Mandatory Missing Document List</a>
                         </td>
 
                     </tr>
                     <tr>
-                        <td><a href="{{route('newmissingdocuments')}}" style="color:black">New Missing Document List</a>
+                        <td><a href="{{route('newmissingdocuments')}}" style="color:black">Complete Missing Document List</a>
                         </td>
 
                     </tr>

@@ -76,6 +76,26 @@
     thead th {
         font-weight: bold;
     }
+     .page-wrapper {
+        margin-left: 270px; /* This should match your sidebar width */
+        padding-left: 10px; /* This adds the 20px space you want */
+    }
+
+    .page-titles{
+        margin-left: 0px; 
+
+    }
+    
+    /* If you're using a collapsed sidebar state, adjust that too */
+    .mini-sidebar .page-wrapper {
+        margin-left: 70px; /* Adjust if you have a collapsed sidebar width */
+        padding-left: 20px;
+    }
+    
+    /* Make sure the transition is smooth if you're using sidebar toggling */
+    .page-wrapper {
+        transition: all 0.3s ease;
+    }
 </style>
 
 <body class="fix-header fix-sidebar card-no-border">

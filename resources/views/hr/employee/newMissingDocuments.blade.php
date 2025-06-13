@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Employees with Missing Documents</h3>
+                    <h3 class="card-title">Complete Missing Document List</h3>
                     <div class="card-tools">
                     </div>
                 </div>
