@@ -20,45 +20,55 @@ class ProjectDocumentController extends Controller
 {
 
 
-    
-    public function documentDataTable($data){
-        return  DataTables::of($data)
-                  ->addIndexColumn()
-                  ->addColumn('document', function ($row){
-                    if($row->extension!='pdf'){
-                        return '<img id="ViewIMG" src="'.$row->full_path.'" href="'.$row->full_path.'" width="30/" style="cursor: pointer;">';
-                    }else{
-                        return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="'.$row->full_path.'" width="30/" style="cursor: pointer;">';
-                    }
-                  })
-                  ->addColumn('copy_link', function ($row){
-                    return '<a class="copyLink" link="'.$row->full_path.'" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
-                  })   
-                 ->addColumn('Edit', function($row){
-                     
-                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editDocument">Edit</a>';
-                                           
-                          return $btn;
-                  })
-                  ->addColumn('Delete', function($row){                
-                      
-                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
-                                
-                          return $btn;
-                  })
-              
-                  ->rawColumns(['document','copy_link','Edit','Delete'])
-                  ->make(true);
 
+    public function documentDataTable($data)
+    {
+        return  DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('document', function ($row) {
+                if ($row->extension != 'pdf') {
+                    return '<img id="ViewIMG" src="' . $row->full_path . '" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
+                } else {
+                    return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
+                }
+            })
+            ->editColumn('description', function ($row) {
+                // Trim to 50 chars and add ellipsis if longer
+                $shortDescription = strlen($row->description) > 50
+                    ? substr($row->description, 0, 50) . '...'
+                    : $row->description;
+
+                return '<span title="' . htmlspecialchars($row->description, ENT_QUOTES) . '">'
+                    . htmlspecialchars($shortDescription)
+                    . '</span>';
+            })
+            ->addColumn('copy_link', function ($row) {
+                return '<a class="copyLink" link="' . $row->full_path . '" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+            })
+            ->addColumn('Edit', function ($row) {
+
+                $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editDocument">Edit</a>';
+
+                return $btn;
+            })
+            ->addColumn('Delete', function ($row) {
+
+                $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
+
+                return $btn;
+            })
+
+            ->rawColumns(['document', 'description', 'copy_link', 'Edit', 'Delete'])
+            ->make(true);
     }
-    
-    
+
+
     public function showFolder($folderId, $prDetailId)
-    {       
-        $data = PrDocument::where('pr_detail_id',$prDetailId)->where('pr_folder_name_id', $folderId)->orderByRaw('ISNULL(document_date), document_date desc')->get();
-        return $this->documentDataTable($data);     
+    {
+        $data = PrDocument::where('pr_detail_id', $prDetailId)->where('pr_folder_name_id', $folderId)->orderByRaw('ISNULL(document_date), document_date desc')->get();
+        return $this->documentDataTable($data);
     }
-    
+
     // public function show($id)
     // {
     //     $folderName = PrFolderName::find($id);
@@ -70,7 +80,7 @@ class ProjectDocumentController extends Controller
 
     //     return view('project.document.list', compact('documentIds', 'folderName'));
     // }
-    
+
     public function show(Request $request, $id)
     {
         $prFolderNames = PrFolderName::all();
@@ -81,22 +91,22 @@ class ProjectDocumentController extends Controller
         } else {
             return back()->withError('Please contact to administrator, SSE_JS');
         }
-            //->where('pr_folder_name_id', $id)
-       // $Ids = $documentIds->pluck('id')->toArray();
-        
+        //->where('pr_folder_name_id', $id)
+        // $Ids = $documentIds->pluck('id')->toArray();
+
     }
 
-    
 
-    public function create(Request $request){
+
+    public function create(Request $request)
+    {
 
         if ($request->ajax()) {
-       
-        $data = PrDocument::where('pr_detail_id', $request->prDetailId)->orderByRaw('ISNULL(document_date), document_date desc')->get();
-          //->latest()->get();
-        return $this->documentDataTable($data);
+
+            $data = PrDocument::where('pr_detail_id', $request->prDetailId)->orderByRaw('ISNULL(document_date), document_date desc')->get();
+            //->latest()->get();
+            return $this->documentDataTable($data);
         }
- 
     }
 
     // public function create(Request $request)
@@ -133,9 +143,10 @@ class ProjectDocumentController extends Controller
         }
     }
 
-    public function store(DocumentStore $request){
+    public function store(DocumentStore $request)
+    {
 
-        $input = $request->only('pr_folder_name_id','reference_no', 'description', 'document','pr_document_id','pr_detail_id');
+        $input = $request->only('pr_folder_name_id', 'reference_no', 'description', 'document', 'pr_document_id', 'pr_detail_id');
 
         if ($request->filled('document_date')) {
             $input['document_date'] = \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
@@ -147,9 +158,9 @@ class ProjectDocumentController extends Controller
             //No document_id and document - Create document and have document
             //Document_id and No document - Update and no document
 
-            
-           // Only document Avaiable
-            if ($request->hasFile('document')){
+
+            // Only document Avaiable
+            if ($request->hasFile('document')) {
                 $extension = request()->document->getClientOriginalExtension();
 
                 $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . time() . '.' . $extension;
@@ -176,7 +187,7 @@ class ProjectDocumentController extends Controller
                 $input['pr_detail_id'] = $request->pr_detail_id;
 
                 //check create new data or update data
-                if($request->pr_document_id){
+                if ($request->pr_document_id) {
                     //update record
                     $prDocument = PrDocument::findOrFail($request->pr_document_id);
                     $path = public_path('storage/' . $prDocument->path . $prDocument->file_name);
@@ -185,34 +196,29 @@ class ProjectDocumentController extends Controller
                     }
                     $prDocument->update($input);
                     $input['pr_document_id'] = $request->pr_document_id;
-                }else{
+                } else {
 
                     //create record
                     $prDocument = PrDocument::create($input);
                     $input['pr_document_id'] = $prDocument->id;
-
                 }
-               
+
                 if (strlen($input['content']) > 50 && strlen($input['content']) < 16777200) {
-                    
+
                     PrDocumentContent::updateOrCreate(
                         ['pr_document_id' => $input['pr_document_id']],       //It is find and update 
                         $input
                     );
                 }
-
-            }else{
+            } else {
 
                 $prDocument = PrDocument::findOrFail($request->pr_document_id);
                 $prDocument->update($input);
-
             }
-
-
         });  //end transaction
 
-        
-        return response()->json(['status'=> 'OK', 'message' => "Document Successfully Saved"]);
+
+        return response()->json(['status' => 'OK', 'message' => "Document Successfully Saved"]);
     }
 
 

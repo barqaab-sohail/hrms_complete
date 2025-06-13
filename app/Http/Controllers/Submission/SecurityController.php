@@ -61,14 +61,12 @@ class SecurityController extends Controller
 
                     return '<span class="badge badge-' . $color . '">' . $status . '</span>';
                 })
-                ->editColumn('submitted_by', function ($data) {
-                    return $data->submittedBy->name ?? '';
-                })
+
                 ->editColumn('bank_id', function ($data) {
                     return $data->bank->name ?? '';
                 })
                 ->editColumn('submitted_by', function ($data) {
-                    return $data->bank->name ?? '';
+                    return $data->submittedBy->name ?? '';
                 })
                 ->editColumn('document_path', function ($data) {
                     if ($data->document_path) {

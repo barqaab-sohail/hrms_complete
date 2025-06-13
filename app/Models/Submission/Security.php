@@ -47,7 +47,7 @@ class Security extends Model
 
     public function submittedBy()
     {
-        return $this->belongsTo(Partner::class);
+        return $this->belongsTo(Partner::class, 'submitted_by');
     }
 
     public function client()

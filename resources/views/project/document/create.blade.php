@@ -139,6 +139,7 @@
             <thead>
             <tr>
                 <th>Document Name</th>
+                <th>Reference No</th>
                 <th>Date</th>
                 <th>View</th>
                 <th>Copy Link</th>
@@ -301,6 +302,7 @@ function createDatatable(url){
         }},
         columns: [
             {data: "description", name: 'description'},
+            {data: "reference_no", name: 'reference_no'},
             {data: "document_date", name: 'document_date'},
             {data: "document", name: 'document'},
             {data: "copy_link", name: 'copy_link'},

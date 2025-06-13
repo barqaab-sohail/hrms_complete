@@ -231,6 +231,7 @@
                         <tr>
                             <th>Project Name</th>
                             <th>Type</th>
+                            <th>Security Provided By</th>
                             <th>Issued Date</th>
                             <th>Expiry Date</th>
                             <th>Amount</th>
@@ -413,6 +414,10 @@
                 {
                     data: "type",
                     name: 'type'
+                },
+                {
+                    data: "submitted_by",
+                    name: 'submitted_by'
                 },
                 {
                     data: "date_issued",
