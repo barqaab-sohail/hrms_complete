@@ -1,7 +1,7 @@
 @extends('layouts.master.master')
-@section('title', 'Checking Employees')
+@section('title', 'HR Report Checking')
 @section('Heading')
-<h3 class="text-themecolor">Search</h3>
+<h3 class="text-themecolor">HR Monthly Report Checking</h3>
 @stop
 @section('content')
 <div class="card">

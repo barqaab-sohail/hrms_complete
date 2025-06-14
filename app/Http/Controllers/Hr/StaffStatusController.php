@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Hr;
 
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
+use App\Models\Hr\HrEmployeeCompany;
+use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class StaffStatusController extends Controller
 {
@@ -17,9 +18,11 @@ class StaffStatusController extends Controller
 
     public function processFiles(Request $request)
     {
+
         $request->validate([
             'excel_files.*' => 'required|mimes:xls,xlsx|max:2048'
         ]);
+
 
         $employeeNumbers = [];
 
@@ -34,15 +37,29 @@ class StaffStatusController extends Controller
         // Remove duplicates
         $employeeNumbers = array_unique($employeeNumbers);
 
+        $otherCompanyEmployees = HrEmployeeCompany::where('partner_id', '!=', 1)
+            ->pluck('hr_employee_id');
+
         // Get employees with incorrect status
         $employees = HrEmployee::whereNotIn('employee_no', $employeeNumbers)
             ->where('hr_status_id', 1) // Not Active
-            ->get(['employee_no', 'first_name', 'last_name']);
+            ->whereNotIn('id', $otherCompanyEmployees)
+            ->with(['employeeCurrentDepartment' => function ($query) {
+                $query->select('name',);
+            }])
+            ->get(['id', 'employee_no', 'first_name', 'last_name']);
 
         // Generate text file content
-        $content = "Employee No\tEmployee Name\n";
+        $content = "Emp. No\tEmployee Name \t\tDepartment\n";
         foreach ($employees as $employee) {
-            $content .= "{$employee->employee_no}\t{$employee->first_name} {$employee->last_name}\n";
+
+            if ($employee->hrDepartment) {
+                $content .= "{$employee->employee_no}\t{$employee->first_name} {$employee->last_name}\t\t{$employee->hrDepartment->name}\n";
+            } else {
+                $content .= "{$employee->employee_no}\t{$employee->first_name} {$employee->last_name}\t\tN/A\n";
+            }
+
+            // $content .= "{$employee->employee_no}\t{$employee->first_name} {$employee->last_name}\t{$employee->employee_no}\n";
         }
 
         // Save to text file

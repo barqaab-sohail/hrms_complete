@@ -59,6 +59,12 @@
         <!--TASK -->
         <div class="card">
             <div class="card-body">
+
+                <!-- Toggle table button -->
+                <button type="button" id="toggleTableBtn" class="btn btn-primary">
+                    Show Table
+                </button>
+
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#taskModal">
                     Add New Task
@@ -68,7 +74,7 @@
                 @include('self.task.modal')
                 @include('self.task.editModal')
 
-                <div id="append_data" class="table-responsive m-t-40 table-container">
+                <div id="append_data" class="table-responsive m-t-40 table-container" style="display: none;">
                 </div>
             </div>
         </div>
@@ -122,8 +128,24 @@
 
 @push('scripts')
 <script>
-    $(document).ready(function() {
 
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('toggleTableBtn');
+        const tableContainer = document.getElementById('append_data');
+        
+        toggleBtn.addEventListener('click', function() {
+            if (tableContainer.style.display === 'none') {
+                tableContainer.style.display = 'block';
+                toggleBtn.textContent = 'Hide Table';
+            } else {
+                tableContainer.style.display = 'none';
+                toggleBtn.textContent = 'Show Table';
+            }
+        });
+    });
+
+    $(document).ready(function() {
+      
         //var url = "{{route('task.index')}}";
         //refreshTable("{{route('task.index')}}");
         //load_data();

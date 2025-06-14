@@ -28,7 +28,7 @@
         .sidebar-nav .has-arrow::after {
             right: 20px;
         }
-    </style>
+</style>
 
 <aside class="left-sidebar">
         <!-- Sidebar scroll-->
