@@ -56,7 +56,8 @@
                                                 @endcan
                                                 @can('Super Admin')
                                                 <li><a class="{{Request::is('hrms/employee/checking')?'active':''}}" href="{{route('checking.data',Auth::User(
-                                                )->hrEmployee->id)}}">Check Employee Status</a></li>
+                                                )->hrEmployee->id)}}">HR Monthly Report Checking</a></li>
+                                                <li><a class="{{Request::is('hrms/employee/employee_asset_status')?'active':''}}" href="{{route('employee.asset.status')}}">Check Employee Asset Status</a></li>
                                                 @endcan
                                                 @can('hr active employees')
                                                 <!-- <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>

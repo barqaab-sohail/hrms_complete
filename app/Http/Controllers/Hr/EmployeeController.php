@@ -615,4 +615,11 @@ class EmployeeController extends Controller
             return view('hr.employee.search.result', compact('result'));
         }
     }
+
+    public function employeeAssetStatus()
+    {
+
+        $employees = HrEmployee::all();
+        return view('hr.asset_status.status', compact('employees'));
+    }
 }

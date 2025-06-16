@@ -79,7 +79,12 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     //temporary
     Route::get('/employee/allEmployeeList', 'EmployeeController@allEmployeeList')->name('employee.allEmployeeList');
 
+
     //end temporary
+    // Check Employee Asset Status
+    Route::get('/employee/employee_asset_status', 'EmployeeController@employeeAssetStatus')->name('employee.asset.status');
+    // End Check Employee Asset Status
+
     Route::get('/employee/activeEmployeesList', 'EmployeeController@activeEmployeesList')->name('employee.activeEmployeesList');
 
     Route::get('/employee/alertList', 'HrAlertController@alertList')->name('hrAlert.list');
