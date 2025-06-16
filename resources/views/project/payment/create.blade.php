@@ -1,5 +1,5 @@
 <div class="card-body">
-  @if(projectPaymentRight($pdDetail->id)==3 || projectPaymentRight($pdDetail->id)==4)
+  @if(projectPaymentRight($prDetail->id)==3 || projectPaymentRight($prDetail->id)==4)
   <button type="button" class="btn btn-success float-right" id="createPayment" data-toggle="modal">Add Payment</button>
   @endif
   <h3>Total Invoice Raised = {{$totalInvoiceRaised}} - Invoice Received = {{$totalPaymentReceived}} - Pending Payments = {{$totalPendingPayment}}</h3>
@@ -20,10 +20,10 @@
         <th>Cheque Date</th>
         <th>Total Deduction</th>
         <th>Payment Status</th>
-        @if(projectPaymentRight($pdDetail->id)==3 || projectPaymentRight($pdDetail->id)==4)
+        @if(projectPaymentRight($prDetail->id)==3 || projectPaymentRight($prDetail->id)==4)
         <th>Edit</th>
         @endif
-        @if(projectPaymentRight($pdDetail->id)==4)
+        @if(projectPaymentRight($prDetail->id)==4)
         <th>Delete</th>
         @endif
       </tr>
