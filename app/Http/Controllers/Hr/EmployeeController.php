@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers\Hr;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Notifications\UpdateRecordNotification;
-use App\Models\Common\Gender;
-use App\Models\Common\MaritalStatus;
-use App\Models\Common\Religion;
-use App\Models\Common\BloodGroup;
-use App\Models\Hr\HrEmployee;
-use App\Models\Hr\HrDesignation;
-use App\Models\Hr\HrCategory;
-use App\Models\Hr\EmployeeManager;
-use App\Models\Hr\HrStatus;
-use App\Models\Common\Education;
-use App\Models\Project\PrDetail;
-use App\Models\Hr\HrDocumentation;
-use App\Models\Hr\HrEmployeeHusband;
-use App\Models\Common\Office;
 use DB;
-use App\Http\Requests\Hr\EmployeeStore;
-use DataTables;
-use App\User;
-use Illuminate\Support\Facades\Cache;
 use PDF;
+use App\User;
+use DataTables;
+use App\Models\Hr\HrStatus;
+use Illuminate\Http\Request;
+use App\Models\Common\Gender;
+use App\Models\Common\Office;
+use App\Models\Hr\HrCategory;
+use App\Models\Hr\HrEmployee;
+use App\Models\Common\Religion;
+use App\Models\Asset\AsLocation;
+use App\Models\Common\Education;
+use App\Models\Hr\HrDesignation;
+use App\Models\Project\PrDetail;
+use App\Models\Common\BloodGroup;
+use App\Models\Hr\EmployeeManager;
+use App\Models\Hr\HrDocumentation;
+use App\Http\Controllers\Controller;
+use App\Models\Common\MaritalStatus;
+use App\Models\Hr\HrEmployeeHusband;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use App\Http\Requests\Hr\EmployeeStore;
+use App\Notifications\UpdateRecordNotification;
 
 class EmployeeController extends Controller
 {
@@ -621,5 +622,15 @@ class EmployeeController extends Controller
 
         $employees = HrEmployee::all();
         return view('hr.asset_status.status', compact('employees'));
+    }
+
+    public function employeeAssetResult(Request $request)
+    {
+        $asset = AsLocation::where('hr_employee_id', $request->employee)->with('asset.asClass')->get();
+        // if (!$asset->isEmpty()) {
+        //     return response()->json(['status' => 'Not Ok', 'message' => 'No Asset Found']);
+        // }
+        $data = HrEmployee::findOrFail($request->employee);
+        return response()->json($asset);
     }
 }

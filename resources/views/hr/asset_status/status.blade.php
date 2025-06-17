@@ -8,7 +8,7 @@
 	<div class="card-body">
 		<h4 class="card-title">Search <button type="button" id="resetForm" class="btn btn-danger float-right">Reset Search</button></h4>
 		<hr>
-		<form id="employeeSearch" method="get" class="form-horizontal form-prevent-multiple-submits" action="{{route('employee.result')}}" enctype="multipart/form-data">
+		<form id="employeeSearch" method="get" class="form-horizontal form-prevent-multiple-submits" action="{{route('employee.asset.result')}}" enctype="multipart/form-data">
 			{{csrf_field()}}
 			<div class="form-body">
 				<div class="row">
@@ -72,9 +72,7 @@
 			// Reset all select2 dropdowns
 			$('.searchSelect').val('').trigger('change');
 
-			// Clear text input
-			$('#document_name').val('');
-
+			
 			// Clear any error messages
 			$('#json_message').html('');
 
@@ -88,28 +86,7 @@
 			$('html,body').scrollTop(0);
 		});
 
-		// $('select').change(function(){	
-		// 	$(this).removeClass('searchSelect');
-		// 	if($(this).attr("id") != "employee"){
-		// 		$('#document_name').val('');
-		// 	}
-		//  		$('.searchSelect').each(function () {
-		//  			if($(this).val() && $(this).attr("id") != "project"){
-		//        		$(this).val('').select2('val', 'All');
-		//        	}
-		//    	});
-		//    	$(this).addClass('searchSelect');
-		//  	});
-
-		$('#document_name').focus(function() {
-			$('.searchSelect').each(function() {
-				if ($(this).val() && $(this).attr("id") != "employee") {
-					$(this).val('').select2('val', 'All');
-				}
-			});
-		});
-
-
+		
 
 		//submit function
 		$("#employeeSearch").submit(function(e) {
@@ -137,7 +114,7 @@
 				cache: false,
 				processData: false,
 				success: function(data) {
-
+					console.log(data);
 					$('div.table-container').html(data);
 					$('.fa-spinner').hide();
 

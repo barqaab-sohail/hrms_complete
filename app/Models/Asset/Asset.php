@@ -13,7 +13,7 @@ class Asset extends Model implements Auditable
 
     function getPictureAttribute()
     {
-      
+
         $picture = AsDocumentation::where('asset_id', $this->id)->where('description', 'image')->first();
         if ($picture) {
             return asset('/storage/' . $picture->path . $picture?->file_name);
@@ -21,6 +21,15 @@ class Asset extends Model implements Auditable
         return '';
     }
 
+    public function asClass()
+    {
+        return $this->hasOneThrough('App\Models\Asset\AsClass', 'App\Models\Asset\AsSubClass', 'id', 'id', 'as_sub_class_id', 'as_class_id');
+    }
+
+    public function asSubClass()
+    {
+        return $this->belongsTo('App\Models\Asset\AsSubClass', 'as_sub_class_id');
+    }
     public function companyAsset()
     {
         return $this->hasManyThrough(
@@ -120,10 +129,7 @@ class Asset extends Model implements Auditable
 
 
 
-    public function asClass()
-    {
-        return $this->hasOne('App\Models\Asset\AsSubClass', 'id', 'as_sub_class_id');
-    }
+
 
     //Allocation at the time of Purhcase
     public function asAllocationFirst()
@@ -138,13 +144,6 @@ class Asset extends Model implements Auditable
         return $this->hasOne('App\Models\Asset\AsLocation')->orderBy('id', 'desc');
     }
 
-
-
-
-    public function asSubClass()
-    {
-        return $this->belongsTo('App\Models\Asset\AsSubClass');
-    }
 
     public function asPurchase()
     {
