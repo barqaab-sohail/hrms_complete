@@ -627,7 +627,15 @@ class EmployeeController extends Controller
 
     public function employeeAssetResult(Request $request)
     {
-        $asset = AsLocation::where('hr_employee_id', $request->employee)->with('asset', 'asset.asSubClass')->get();
+        $asset = AsLocation::where('hr_employee_id', $request->employee)
+            ->whereIn('id', function ($query) use ($request) {
+                $query->select(DB::raw('MAX(id)'))
+                    ->from('as_locations')
+                    ->groupBy('asset_id');
+            })
+            ->with('asset', 'asset.asSubClass')
+            ->get();
+
         $emails = EmailAddress::where('emailable_type', 'employee')->where('emailable_id', $request->employee)->get();
         // if (!$asset->isEmpty()) {
         //     return response()->json(['status' => 'Not Ok', 'message' => 'No Asset Found']);
