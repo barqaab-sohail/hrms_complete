@@ -18,6 +18,7 @@ use App\Models\Common\Education;
 use App\Models\Hr\HrDesignation;
 use App\Models\Project\PrDetail;
 use App\Models\Common\BloodGroup;
+use App\Models\Email\EmailAddress;
 use App\Models\Hr\EmployeeManager;
 use App\Models\Hr\HrDocumentation;
 use App\Http\Controllers\Controller;
@@ -626,11 +627,13 @@ class EmployeeController extends Controller
 
     public function employeeAssetResult(Request $request)
     {
-        $asset = AsLocation::where('hr_employee_id', $request->employee)->with('asset.asClass')->get();
+        $asset = AsLocation::where('hr_employee_id', $request->employee)->with('asset', 'asset.asSubClass')->get();
+        $emails = EmailAddress::where('emailable_type', 'employee')->where('emailable_id', $request->employee)->get();
         // if (!$asset->isEmpty()) {
         //     return response()->json(['status' => 'Not Ok', 'message' => 'No Asset Found']);
+
         // }
         $data = HrEmployee::findOrFail($request->employee);
-        return response()->json($asset);
+        return response()->json([$asset, $emails]);
     }
 }
