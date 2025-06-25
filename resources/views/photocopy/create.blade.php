@@ -98,7 +98,7 @@ $(document).ready(function() {
             serverSide: true,
             "aaSorting": [],
             ajax: {
-                url: "{{ route('photocopy.create') }}",
+                url: "{{ route('photocopy.index') }}",
             },
             columns: [{
                     data: 'name',

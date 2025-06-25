@@ -16,7 +16,12 @@ class CardController extends Controller
     public function create()
     {
 
+
         $employees = HrEmployee::where('hr_status_id', 1)->get();
+        if (request()->ajax()) {
+            // Return just the content for AJAX requests
+            return view('hr/card/create', compact('employees'))->render();
+        }
         return view('hr/card/create', compact('employees'));
     }
 

@@ -14,61 +14,50 @@ use DB;
 
 class PersonalDocumentsController extends Controller
 {
-    public function show($data)
-    {
-        return  DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn('document', function ($row) {
-                if ($row->extension != 'pdf') {
-                    return '<img id="ViewIMG" src="' . $row->full_path . '" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
-                } else {
-                    return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
-                }
-            })
-            ->addColumn('copy_link', function ($row) {
-                return '<a class="copyLink" link="' . $row->full_path . '" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
-            })
-            ->addColumn('Edit', function ($row) {
-
-                $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editDocument">Edit</a>';
-
-                return $btn;
-            })
-            ->addColumn('Delete', function ($row) {
-
-                $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
-
-                return $btn;
-            })
-
-            ->rawColumns(['document', 'copy_link', 'Edit', 'Delete'])
-            ->make(true);
-    }
-
-
 
     public function index(Request $request)
     {
 
         if ($request->ajax()) {
-            $view = view('self.document.create')->render();
-            return response()->json($view);
-        } else {
-            return view('self.document.create');
+
+            $data = PersonalDocument::where('user_id', Auth::id())->orderByRaw('ISNULL(document_date), document_date desc')->get();
+            return  DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('document', function ($row) {
+                    if ($row->extension != 'pdf') {
+                        return '<img id="ViewIMG" src="' . $row->full_path . '" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
+                    } else {
+                        return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
+                    }
+                })
+                ->addColumn('copy_link', function ($row) {
+                    return '<a class="copyLink" link="' . $row->full_path . '" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+                })
+                ->addColumn('Edit', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editDocument">Edit</a>';
+
+                    return $btn;
+                })
+                ->addColumn('Delete', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
+
+                    return $btn;
+                })
+
+                ->rawColumns(['document', 'copy_link', 'Edit', 'Delete'])
+                ->make(true);
         }
     }
+
 
 
 
     public function create(Request $request)
     {
 
-        if ($request->ajax()) {
-
-            $data = PersonalDocument::where('user_id', Auth::id())->orderByRaw('ISNULL(document_date), document_date desc')->get();
-            //->latest()->get();
-            return $this->show($data);
-        }
+        return view('self.document.create');
     }
 
 

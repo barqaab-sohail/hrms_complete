@@ -207,7 +207,7 @@
 				serverSide: true,
 				"aaSorting": [],
 				ajax: {
-					url: "{{ route('office.index') }}",
+					url: "{{ route('office.loadData') }}",
 				},
 				columns: [{
 						data: 'name',

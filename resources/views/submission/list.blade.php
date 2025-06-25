@@ -160,7 +160,7 @@
 				serverSide: true,
 				"aaSorting": [],
 				ajax: {
-					url: "{{ route('submission.index') }}",
+					url: "{{ route('submission.loadData') }}",
 				},
 				columns: [{
 						data: 'submission_no',

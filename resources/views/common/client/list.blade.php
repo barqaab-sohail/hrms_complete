@@ -82,7 +82,7 @@
 				serverSide: true,
 				"aaSorting": [],
 				ajax: {
-					url: "{{ route('client.index') }}",
+					url: "{{ route('client.loadData') }}",
 				},
 				columns: [{
 						data: 'name',

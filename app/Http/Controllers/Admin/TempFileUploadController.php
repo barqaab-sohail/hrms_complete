@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,41 +12,42 @@ use DB;
 
 class TempFileUploadController extends Controller
 {
-    
+
     public function create(Request $request)
     {
-        if($request->ajax()){
-	    	$data = TempUploadFile::all();
-	    	return DataTables::of($data)	
-                ->editColumn('size', function($data){
 
-                    return round($data->size / (1024*1024),3) .' MB';
-                })
-                 ->addColumn('path', function ($row){
-                    return '<a class="copyLink" link="'.$row->full_path.'" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
-                  })   
-	            ->addColumn('Delete', function($data){
-	                  
-	                $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteAllowanceName">Delete</a>';
-	                return $button;
-	            })
-	            ->rawColumns(['path','Delete'])
-	            ->make(true);
-	    }
-        
-    	return view ('admin.tempFileUpload.list');
-       
+        return view('admin.tempFileUpload.list');
 
-       
         // return view('media');
+    }
 
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = TempUploadFile::all();
+            return DataTables::of($data)
+                ->editColumn('size', function ($data) {
+
+                    return round($data->size / (1024 * 1024), 3) . ' MB';
+                })
+                ->addColumn('path', function ($row) {
+                    return '<a class="copyLink" link="' . $row->full_path . '" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+                })
+                ->addColumn('Delete', function ($data) {
+
+                    $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteAllowanceName">Delete</a>';
+                    return $button;
+                })
+                ->rawColumns(['path', 'Delete'])
+                ->make(true);
+        }
     }
 
     public function store(Request $request)
 
     {
 
-       
+
         $file = $request->file('file');
 
         $chunkNumber = $request->input('resumableChunkNumber');
@@ -63,20 +65,18 @@ class TempFileUploadController extends Controller
 
         if ($chunkNumber == $totalChunks) {
             $this->mergeChunks($fileName, $totalChunks);
-            
         }
-        
-        
-        
-        return response()->json(['message' =>  'File Sucessfully Uploaded']);
 
+
+
+        return response()->json(['message' =>  'File Sucessfully Uploaded']);
     }
 
     private function mergeChunks($fileName, $totalChunks)
 
     {
 
-        $filePath =  public_path('storage/uploads/'.$fileName);
+        $filePath =  public_path('storage/uploads/' . $fileName);
         //storage_path('app/uploads/' . $fileName);
 
         $output = fopen($filePath, 'wb');
@@ -92,7 +92,6 @@ class TempFileUploadController extends Controller
             fclose($chunkFile);
 
             unlink($chunkPath);
-
         }
 
         fclose($output);
@@ -100,27 +99,24 @@ class TempFileUploadController extends Controller
         $size = filesize($filePath);
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
         TempUploadFile::create([
-            'file_name'=>$fileName,
-            'path'=>'uploads/',
-            'size'=>$size,
-            'extension'=>$extension
+            'file_name' => $fileName,
+            'path' => 'uploads/',
+            'size' => $size,
+            'extension' => $extension
         ]);
-
     }
 
     public function destroy($id)
     {
-        DB::transaction(function () use ($id) {  
-            $tempUploadFile = TempUploadFile::findOrFail($id);   
+        DB::transaction(function () use ($id) {
+            $tempUploadFile = TempUploadFile::findOrFail($id);
             $path = public_path('storage/' . $tempUploadFile->path . $tempUploadFile->file_name);
             if (File::exists($path)) {
                 File::delete($path);
             }
             $tempUploadFile->forceDelete();
-
         }); // end transcation
 
-        return response()->json(['success'=>'data  delete successfully.']);
-   
+        return response()->json(['success' => 'data  delete successfully.']);
     }
 }

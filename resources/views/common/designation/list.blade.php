@@ -95,7 +95,7 @@
 				serverSide: true,
 				"aaSorting": [],
 				ajax: {
-					url: "{{ route('hrDesignation.index') }}",
+					url: "{{ route('hrDesignation.loadData') }}",
 				},
 				columns: [{
 						data: 'name',

@@ -124,8 +124,8 @@
         </div>
     </div>
 </div>
-@stop
-@push('scripts')
+
+
 <script>
     $(document).ready(function() {
 
@@ -288,7 +288,7 @@
             }
         });
 
-        var table = createDatatable("{{ route('personaldocuments.create') }}");
+        var table = createDatatable("{{ route('personaldocuments.index') }}");
 
         $('a[id^=documentList]').click(function(e) {
             $('#hideDiv').hide();
@@ -302,7 +302,7 @@
                 table = createDatatable(url);
             } else {
                 table.destroy();
-                table = createDatatable("{{ route('projectDocument.create') }}");
+                table = createDatatable("{{ route('projectDocument.index') }}");
             }
         });
 
@@ -419,4 +419,4 @@
         });
     }); // end function
 </script>
-@endpush
+@stop

@@ -13,6 +13,12 @@ class DirectCostDescriptionController extends Controller
 {
     public function index(Request $request)
     {
+
+        return view('common.direct_cost_description.list');
+    }
+
+    public function loadData(Request $request)
+    {
         if ($request->ajax()) {
             $data = DirectCostDescription::orderBy('id', 'desc')->get();
             return DataTables::of($data)
@@ -31,7 +37,6 @@ class DirectCostDescriptionController extends Controller
                 ->rawColumns(['edit', 'delete'])
                 ->make(true);
         }
-        return view('common.direct_cost_description.list');
     }
 
     public function store(Request $request)

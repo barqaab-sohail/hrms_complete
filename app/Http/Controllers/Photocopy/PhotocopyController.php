@@ -18,6 +18,12 @@ class PhotocopyController extends Controller
     public function create(Request $request)
     {
 
+        // Return the view for regular requests
+        return view('photocopy.create')->render();
+    }
+
+    public function index(Request $request)
+    {
         if ($request->ajax()) {
             $data = Photocopy::all();
 
@@ -39,8 +45,6 @@ class PhotocopyController extends Controller
                 ->rawColumns(['Edit', 'Delete'])
                 ->make(true);
         }
-
-        return  view('photocopy.create');
     }
 
     public function store(Request $request)

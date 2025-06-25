@@ -49,6 +49,10 @@ class AdminDocumentController extends Controller
                 ->rawColumns(['edit', 'delete', 'link', 'view'])
                 ->make(true);
         }
+    }
+
+    public function create()
+    {
         return view('adminDocument.list');
     }
     public function store(AdminDocumentStore $request)

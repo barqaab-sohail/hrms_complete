@@ -31,6 +31,10 @@ class MisUserController extends Controller
                 ->rawColumns(['full_name', 'is_allow_mis'])
                 ->make(true);
         }
+    }
+
+    public function create()
+    {
         $users = User::all();
         return view('admin.misUser.list', compact('users'));
     }

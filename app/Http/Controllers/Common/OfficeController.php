@@ -18,6 +18,13 @@ class OfficeController extends Controller
 	public function index(Request $request)
 	{
 
+
+		$employees = HrEmployee::all(['id', 'first_name', 'last_name', 'employee_no']);
+		return view('common.office.list', compact('employees'));
+	}
+
+	public function loadData(Request $request)
+	{
 		if ($request->ajax()) {
 			$data = Office::orderBy('id', 'desc')->get();
 			return DataTables::of($data)
@@ -75,8 +82,6 @@ class OfficeController extends Controller
 				->rawColumns(['edit', 'delete', 'phone_no', 'hr_employee_id', 'is_active'])
 				->make(true);
 		}
-		$employees = HrEmployee::all(['id', 'first_name', 'last_name', 'employee_no']);
-		return view('common.office.list', compact('employees'));
 	}
 
 	public function create()

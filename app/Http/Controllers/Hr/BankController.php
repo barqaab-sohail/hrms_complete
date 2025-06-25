@@ -21,6 +21,16 @@ class BankController extends Controller
     public function allBankAccounts(Request $request)
     {
 
+
+        $employees = HrEmployee::select(['id',  'first_name', 'last_name', 'employee_no'])->with('employeeCurrentDesignation')->where('hr_status_id', 1)->get();
+        $employeeBanks = EmployeeBank::with('hrEmployee', 'bank')->get();
+        $banks = Bank::all();
+        return view('common.bank.list', compact('employeeBanks', 'banks', 'employees'));
+    }
+
+    public function loadData(Request $request)
+    {
+
         if ($request->ajax()) {
             $data = EmployeeBank::with('hrEmployee', 'bank', 'hrEmployee.employeeCurrentDesignation')->get();
             return DataTables::of($data)
@@ -49,11 +59,6 @@ class BankController extends Controller
                 ->rawColumns(['Edit', 'Delete'])
                 ->make(true);
         }
-
-        $employees = HrEmployee::select(['id',  'first_name', 'last_name', 'employee_no'])->with('employeeCurrentDesignation')->where('hr_status_id', 1)->get();
-        $employeeBanks = EmployeeBank::with('hrEmployee', 'bank')->get();
-        $banks = Bank::all();
-        return view('common.bank.list', compact('employeeBanks', 'banks', 'employees'));
     }
 
     public function show($id)
@@ -62,7 +67,7 @@ class BankController extends Controller
         $employeeBanks = EmployeeBank::where('hr_employee_id', $id)->get();
         $banks = Bank::all();
 
-        $view =  view('hr.bank.create', compact('employeeBanks', 'banks','id'))->render();
+        $view =  view('hr.bank.create', compact('employeeBanks', 'banks', 'id'))->render();
         return response()->json($view);
     }
 
@@ -108,7 +113,7 @@ class BankController extends Controller
         $validated = $request->validate([
             'bank_id' =>  ['required'],
             'hr_employee_id' =>  ['required'],
-            'account_no' => ['required', Rule::unique('employee_banks')->where(fn ($query) => $query->where('bank_id', $request->bank_id)->where('id', '!=', $request->employee_bank_id))]
+            'account_no' => ['required', Rule::unique('employee_banks')->where(fn($query) => $query->where('bank_id', $request->bank_id)->where('id', '!=', $request->employee_bank_id))]
         ]);
 
 

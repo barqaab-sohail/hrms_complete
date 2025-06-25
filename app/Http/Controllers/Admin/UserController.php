@@ -36,6 +36,10 @@ class UserController extends Controller
                 ->rawColumns(['edit', 'delete'])
                 ->make(true);
         }
+    }
+
+    public function create()
+    {
         $users = User::all();
         $employees = HrEmployee::select('id', 'first_name', 'last_name', 'employee_no', 'hr_status_id')->where('hr_status_id', 1)->get();
         return view('admin.user.list', compact('users', 'employees'));

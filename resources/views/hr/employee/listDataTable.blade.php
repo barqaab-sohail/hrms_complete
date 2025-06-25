@@ -62,7 +62,7 @@
             "aaSorting": [],
          
             ajax: {
-                url: "{{ route('employee.index') }}",
+                url: "{{ route('employee.loadData') }}",
             },
             columns: [{
                     data: 'employee_no',

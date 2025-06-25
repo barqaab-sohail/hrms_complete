@@ -21,6 +21,11 @@ class FolderController extends Controller
     public function create(Request $request)
     {
 
+        return  view('folder.create');
+    }
+
+    public function index(Request $request)
+    {
         if ($request->ajax()) {
             $data = Folder::all();
 
@@ -42,8 +47,6 @@ class FolderController extends Controller
                 ->rawColumns(['Edit', 'Delete'])
                 ->make(true);
         }
-
-        return  view('folder.create');
     }
 
     public function store(Request $request)

@@ -103,12 +103,15 @@ class SecurityController extends Controller
                 ->rawColumns(['edit', 'delete', 'copy_link', 'document_path', 'status'])
                 ->make(true);
         }
+    }
 
+    public function create()
+    {
         $banks = Bank::select('name', 'id')->get();
         $clients = Client::select('name', 'id')->get();
         $partners = Partner::select('name', 'id')->get();
 
-        return view('submission.security.create', compact('banks', 'clients', 'partners'));
+        return view('submission.security.create', compact('banks', 'clients', 'partners'))->render();
     }
 
     public function store(SecurityStore $request)

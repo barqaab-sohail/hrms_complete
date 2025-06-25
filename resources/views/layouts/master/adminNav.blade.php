@@ -28,6 +28,10 @@
         .sidebar-nav .has-arrow::after {
             right: 20px;
         }
+         /* Add active link styling */
+    .sidebar-nav li.active > a {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
 </style>
 
 <aside class="left-sidebar">
@@ -44,7 +48,7 @@
                         <ul id="sidebarnav">
                                 {{--/////Second Start--}}
 
-                                <li class="{{Request::is('dashboard')?'active':''}}"><a id="notInclude" class="waves-effect waves-dark navA" href="{{url('/dashboard')}}" aria-expanded="false"><i class="fas fa-tachometer-alt"></i><span class="hide-menu">Dashboard</span></a>
+                                <li class="{{Request::is('dashboard')?'active':''}}"><a id="notInclude" class="waves-effect waves-dark navA not-ajax" href="{{url('/dashboard')}}" aria-expanded="false"><i class="fas fa-tachometer-alt"></i><span class="hide-menu">Dashboard</span></a>
                                 </li>
 
                                 <!-- HR -->
@@ -257,7 +261,7 @@
                                                 @canany(['sub edit record', 'sub view record'])
                                                 <li><a class="{{Request::is('hrms/submission')?'active':''}}" href="{{route('submission.index')}}">List of Submissions</a></li>
                                                 <li><a class="{{Request::is('hrms/submission/search')?'active':''}}" href="{{route('submission.search')}}">Search & Reports</a></li>
-                                                <li><a class="{{Request::is('hrms/securities/index')?'active':''}}" href="{{route('securities.index')}}">Securities</a></li>
+                                                <li><a class="{{Request::is('hrms/securities/index')?'active':''}}" href="{{route('securities.create')}}">Securities</a></li>
                                                 @endcanany
 
                                         </ul>
@@ -267,7 +271,7 @@
                                 @canany(['admin edit document', 'admin view document'])
                                 <li class="{{Request::is('hrms/adminDocument*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-file-multiple" aria-hidden="true"></i><span class="hide-menu">Office Orders/Notifications</span></a>
                                         <ul aria-expanded="false" class="collapse">
-                                                <li><a class="{{Request::is('hrms/adminDocument')?'active':''}}" href="{{route('adminDocument.index')}}">List of Documents</a></li>
+                                                <li><a class="{{Request::is('hrms/adminDocument')?'active':''}}" href="{{route('adminDocument.create')}}">List of Documents</a></li>
                                         </ul>
                                 </li>
                                 @endcanany
@@ -316,9 +320,9 @@
                                                         Services</span></a>
                                         <ul aria-expanded="false" class="collapse">
                                                 <li><a class="{{Request::is('hrms/selfServices/selfContact/create')?'active':''}}" href="{{route('selfContact.create')}}">Personal Contact</a></li>
-                                                <li><a class="{{Request::is('hrms/multiplePrints/print')?'active':''}}" href="{{route('multiplePrint.print')}}">CNIC Multiple Prints</a></li>
+                                                <li><a class="{{Request::is('hrms/multiplePrints/print')?'active':''}} not-ajax" href="{{route('multiplePrint.print')}}">CNIC Multiple Prints</a></li>
                                                 @can('personal documents')
-                                                <li><a class="{{Request::is('hrms/personaldocuments/show')?'active':''}}" href="{{route('personaldocuments.index')}}">Personal Documents</a></li>
+                                                <li><a class="{{Request::is('hrms/personaldocuments/create')?'active':''}}" href="{{route('personaldocuments.create')}}">Personal Documents</a></li>
                                                 @endcan
 
                                         </ul>
@@ -347,13 +351,13 @@
                                         <ul aria-expanded="false" class="collapse">
                                                 <li><a class="{{Request::is('hrms/Hr/importBankDetail')?'active':''}}" href="{{route('importBankDetail.view')}}">Banks Detail</a></li>
                                                 <li><a class="{{Request::is('hrms/admin/activeUser')?'active':''}}" href="{{route('activeUser.index')}}">Active User List</a></li>
-                                                <li><a class="{{Request::is('hrms/admin/lastLogin')?'active':''}}" href="{{route('lastLogin.detail')}}">Last Login Detail</a></li>
+                                                <li><a class="{{Request::is('hrms/admin/lastLogin')?'active':''}}" href="{{route('lastLogin.create')}}">Last Login Detail</a></li>
                                                 <li><a class="{{Request::is('hrms/admin/permission/employeePermission')?'active':''}}" href="{{route('permission.search')}}">Emplolyee Permission</a></li>
                                                 <li><a class="{{Request::is('hrms/admin/permission')?'active':''}}" href="{{route('permission.index')}}">Permissions</a></li>
                                                 <li><a class="{{Request::is('hrms/admin/userList')?'active':''}}" href="{{route('permission.userList')}}">User List</a></li>
                                                 <li><a class="{{Request::is('hrms/admin/audit/search')?'active':''}}" href="{{route('audit.search')}}">Search User Log</a></li>
-                                                <li><a class="{{Request::is('hrms/admin/addUser')?'active':''}}" href="{{route('addUser.index')}}">Users</a></li>
-                                                <li><a class="{{Request::is('hrms/admin/misUser')?'active':''}}" href="{{route('misUser.index')}}">MIS User Rights</a></li>
+                                                <li><a class="{{Request::is('hrms/admin/addUser')?'active':''}}" href="{{route('addUser.create')}}">Users</a></li>
+                                                <li><a class="{{Request::is('hrms/admin/misUser')?'active':''}}" href="{{route('misUser.create')}}">MIS User Rights</a></li>
 
                                         </ul>
                                 </li>

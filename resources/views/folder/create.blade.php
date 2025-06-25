@@ -83,7 +83,7 @@
 				serverSide: true,
 				"aaSorting": [],
 				ajax: {
-					url: "{{ route('folder.create') }}",
+					url: "{{ route('folder.index') }}",
 				},
 				columns: [{
 						data: 'name',

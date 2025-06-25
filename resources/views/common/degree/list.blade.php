@@ -95,7 +95,7 @@
 				serverSide: true,
 				"aaSorting": [],
 				ajax: {
-					url: "{{ route('degree.index') }}",
+					url: "{{ route('degree.loadData') }}",
 				},
 				columns: [{
 						data: 'degree_name',

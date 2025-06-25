@@ -93,7 +93,7 @@
                 var table = $('.data-table').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('allBankAccounts.list') }}",
+                    ajax: "{{ route('allBankAccounts.loadData') }}",
                     columns: [{
                             data: "hr_employee_id",
                             name: 'hr_employee_id'

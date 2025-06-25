@@ -70,7 +70,7 @@
 
 
 
-
+<script src="https://cdn.jsdelivr.net/npm/cropme@latest/dist/cropme.min.js"></script>
 <script>
     $(document).ready(function() {
 
@@ -295,9 +295,9 @@
 
     });
 </script>
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/cropme@latest/dist/cropme.min.js"></script>
-@endpush
+
+
+
 
 
 @stop

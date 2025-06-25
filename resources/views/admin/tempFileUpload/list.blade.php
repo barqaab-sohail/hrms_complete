@@ -61,7 +61,7 @@ $(document).ready(function() {
         var table = $('.data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('tempfileupload.create') }}",
+            ajax: "{{ route('tempfileupload.index') }}",
             columns: [{
                     data: "file_name",
                     name: 'file_name'

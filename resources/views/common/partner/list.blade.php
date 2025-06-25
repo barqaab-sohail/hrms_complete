@@ -82,7 +82,7 @@
 				serverSide: true,
 				"aaSorting": [],
 				ajax: {
-					url: "{{ route('partner.index') }}",
+					url: "{{ route('partner.loadData') }}",
 				},
 				columns: [{
 						data: 'name',

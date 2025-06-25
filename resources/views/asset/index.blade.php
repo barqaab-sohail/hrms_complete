@@ -76,7 +76,7 @@
 				],
 				"aaSorting": [],
 				ajax: {
-					url: "{{ route('asset.index') }}",
+					url: "{{ route('asset.loadData') }}",
 				},
 				columns: [{
 						data: 'id',

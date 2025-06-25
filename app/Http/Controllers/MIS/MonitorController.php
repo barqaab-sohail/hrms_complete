@@ -13,6 +13,11 @@ class MonitorController extends Controller
     public function index(Request $request)
     {
 
+        return view('MIS.monitor.list');
+    }
+
+    public function create(Request $request)
+    {
 
         if ($request->ajax()) {
             $totalPowerProjectsRunningIds = PrDetail::where('pr_division_id', 2)->where('pr_status_id', 1)->pluck('id')->toArray();
@@ -30,7 +35,5 @@ class MonitorController extends Controller
                 ->rawColumns(['project_name'])
                 ->make(true);
         }
-
-        return view('MIS.monitor.list');
     }
 }

@@ -100,7 +100,8 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
 
 
     Route::get('/employee/user/data/{id}', 'EmployeeController@userData')->name('user.data');
-    Route::resource('/employee', 'EmployeeController');
+    Route::resource('/employee', 'EmployeeController')->except(['show']);
+    Route::get('/employee/loaddata', 'EmployeeController@loadData')->name('employee.loadData');
     Route::get('/employees/refresh', 'EmployeeController@refresh')->name('employees.refresh');
 
 
@@ -160,6 +161,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::post('/hrReports/searchEmployeeResult', 'HrReportsController@searchEmployeeResult')->name('hrReports.searchEmployeeResult');
     Route::resource('/employeeBank', 'BankController');
     Route::get('/allBankAccounts', 'BankController@allBankAccounts')->name('allBankAccounts.list');
+    Route::get('/allBankAccounts/loaddata', 'BankController@loadData')->name('allBankAccounts.loadData');
     Route::get('/importBankDetail', 'BankController@view')->name('importBankDetail.view');
     Route::post('/importBankDetail', 'BankController@import')->name('importBankDetail.import');
 
@@ -193,7 +195,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/selfServices/selfContact', 'SelfContactController');
     Route::get('/multiplePrints', 'MultiplePrintsController@print')->name('multiplePrint.print');
     Route::post('/multiplePrints', 'MultiplePrintsController@output')->name('multiplePrint.output');
-    Route::resource('/personaldocuments', 'PersonalDocumentsController');
+    Route::resource('/personaldocuments', 'PersonalDocumentsController')->except(['show']);
 });
 
 //CV Routes
@@ -281,6 +283,7 @@ Route::group(['prefix' => 'hrms/project', 'middleware' => ['auth', 'XssSanitizer
 // MIS Dashboard Progress Check
 Route::group(['prefix' => 'hrms/', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'MIS'], function () {
     Route::get('/MISMonitor', 'MonitorController@index')->name('MISMonitor.index');
+    Route::get('/create', 'MonitorController@create')->name('MISMonitor.create');
 });
 
 
@@ -292,7 +295,8 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::post('/assetStoreSubClass', 'AssetController@storeSubClass')->name('asset.storeSubClass');
     Route::get('/asset/search', 'AssetController@search')->name('asset.search');
     Route::get('/employee/asset/search/result', 'AssetController@result')->name('asset.result');
-    Route::resource('/asset', 'AssetController');
+    Route::resource('/asset', 'AssetController')->except(['show']);
+    Route::get('/asset/loaddata', 'AssetController@loadData')->name('asset.loadData');
 
     Route::resource('/asDocument', 'AssetDocumentController');
     Route::resource('/asPurchase', 'AsPurchaseController');
@@ -348,6 +352,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/submission/search', 'SubmissionController@search')->name('submission.search');
     Route::get('/submission/search/result', 'SubmissionController@result')->name('submission.result');
     Route::resource('/submission', 'SubmissionController');
+    Route::get('/loaddata', 'SubmissionController@loadData')->name('submission.loadData');
     Route::resource('/submissionPartner', 'PartnerController');
     Route::resource('/submissionDate', 'DateAndTimeController');
     Route::resource('/submissionContact', 'SubContactController');
@@ -370,13 +375,20 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
 
 //Misc Routes
 Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Common'], function () {
-    Route::resource('/office', 'OfficeController');
-    Route::resource('/degree', 'DegreeController');
-    Route::resource('/hrDesignation', 'DesignationController');
-    Route::resource('/client', 'ClientController');
-    Route::resource('/partner', 'PartnerController');
-    Route::resource('/allowanceName', 'AllowanceNameController');
-    Route::resource('/directCostDescription', 'DirectCostDescriptionController');
+    Route::resource('/office', 'OfficeController')->except(['show']);
+    Route::get('/office/loaddata', 'OfficeController@loadData')->name('office.loadData');
+    Route::resource('/degree', 'DegreeController')->except(['show']);
+    Route::get('/degree/loaddata', 'DegreeController@loadData')->name('degree.loadData');
+    Route::resource('/hrDesignation', 'DesignationController')->except(['show']);
+    Route::get('/hrDesignation/loaddata', 'DesignationController@loaddata')->name('hrDesignation.loadData');
+    Route::resource('/client', 'ClientController')->except(['show']);
+    Route::get('/client/loaddata', 'ClientController@loadData')->name('client.loadData');
+    Route::resource('/partner', 'PartnerController')->except(['show']);
+    Route::get('/partner/loaddata', 'PartnerController@loadData')->name('partner.loadData');
+    Route::resource('/allowanceName', 'AllowanceNameController')->except(['show']);
+    Route::get('/allowanceName/loaddata', 'AllowanceNameController@loadData')->name('allowanceName.loadData');
+    Route::resource('/directCostDescription', 'DirectCostDescriptionController')->except(['show']);
+    Route::get('/directCostDescription/loaddata', 'DirectCostDescriptionController@loadData')->name('directCostDescription.loadData');
 });
 
 
@@ -385,6 +397,7 @@ Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth', 'XssSanitizer'],
 Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Admin'], function () {
     Route::post('/updateLedgerActivity', [ProjectLedgerActivityController::class, 'updateLedgerActivity'])->name('project.updateLedgerActivity');
     Route::get('/lastLogin', 'ActiveUserController@lastLogin')->name('lastLogin.detail');
+    Route::get('/lastLogin/create', 'ActiveUserController@create')->name('lastLogin.create');
     Route::get('/activeUser', 'ActiveUserController@index')->name('activeUser.index');
     Route::get('/logoutAll/{id?}', 'ActiveUserController@logoutAll')->name('logout.all');
     Route::get('/permission/employeePermission', 'PermissionController@search')->name('permission.search');

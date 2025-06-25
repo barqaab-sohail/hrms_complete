@@ -96,6 +96,16 @@
     .page-wrapper {
         transition: all 0.3s ease;
     }
+
+     /* Add loading indicator style */
+     .ajax-loading {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+    }
 </style>
 
 <body class="fix-header fix-sidebar card-no-border">
@@ -133,10 +143,18 @@
                 </div>
 
                 @include('layouts.master.message')
-                <div class="col-lg-12 d-flex flex-column min-vh-100 justify-content-center align-items-center">
-                    <img id="loading-image" src="{{asset('spinner.gif')}}" style="display:none;" />
+                <!-- AJAX loading indicator -->
+                <div class="ajax-loading">
+                    <img src="{{asset('spinner.gif')}}" alt="Loading..." />
                 </div>
-                @yield('content')
+
+                {{-- <div class="col-lg-12 d-flex flex-column min-vh-100 justify-content-center align-items-center">
+                    <img id="loading-image" src="{{asset('spinner.gif')}}" style="display:none;" />
+                </div> --}}
+                 <!-- Main content container for AJAX loading -->
+                 <div id="ajax-content-container">
+                    @yield('content')
+                </div>
             </div>
         </div>
     </div>
@@ -145,6 +163,94 @@
     <div style="text-align:center">
         <p>HRMS {{ Config::get('app.version') }} - Developed by: BARQAAB IT</p>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            // Handle navigation link clicks
+            $(document).on('click', '#sidebarnav a:not(.has-arrow):not(.not-ajax)', function(e) {
+                e.preventDefault();
+                
+                var url = $(this).attr('href');
+                var title = $(this).text().trim();
+                
+               // Remove active class from all a tags
+                $('#sidebarnav a').removeClass('active');
+                
+                // Add active class to clicked a tag
+                $(this).addClass('active');
+                
+                // Update browser history
+                history.pushState(null, title, url);
+                
+                // Load content via AJAX
+                loadContent(url);
+            });
+            
+            // Handle browser back/forward buttons
+            window.onpopstate = function() {
+                loadContent(location.pathname + location.search);
+            };
+            
+            function loadContent(url) {
+                // Show loading indicator
+                $('.ajax-loading').show();
+                
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function(response) {
+                        // Extract the content section from the response
+                        var content = $(response).filter('#ajax-content-container').html();
+                        if (!content) {
+                            content = $(response).find('#ajax-content-container').html();
+                        }
+                        
+                        // Update the content container
+                        $('#ajax-content-container').html(content);
+                        
+                        // Hide loading indicator
+                        $('.ajax-loading').hide();
+                        
+                        // Update page title if available
+                        var pageTitle = $(response).filter('title').text();
+                        if (pageTitle) {
+                            document.title = pageTitle;
+                        }
+                    },
+                    error: function(xhr) {
+                        // Handle errors
+                        $('.ajax-loading').hide();
+                        console.error('Error loading content: ', xhr.statusText);
+                        
+                        // Fallback to full page load if AJAX fails
+                        window.location.href = url;
+                    }
+                });
+            }
+            // Initialize active state based on current URL on page load
+            function initializeActiveState() {
+                var currentPath = window.location.pathname;
+                
+                // Remove active class from all a tags
+                $('#sidebarnav a').removeClass('active');
+                
+                // Find matching link and add active class
+                $('#sidebarnav a').each(function() {
+                    var href = $(this).attr('href');
+                    if (currentPath === href || currentPath.startsWith(href)) {
+                        $(this).addClass('active');
+                        return false; // break the loop after first match
+                    }
+                });
+            }
+            
+            // Call the initialization function when page loads
+            initializeActiveState();
+            
+        });
+        </script>
+
 
 </body>
 

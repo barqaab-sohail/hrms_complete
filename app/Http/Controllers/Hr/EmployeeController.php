@@ -225,6 +225,12 @@ class EmployeeController extends Controller
 
     public function index(Request $request)
     {
+
+        return view('hr.employee.listDataTable');
+    }
+
+    public function loadData(Request $request)
+    {
         if ($request->ajax()) {
             // Use cached data if available, otherwise fetch fresh data
             $value = Cache::remember('employees', now()->addHours(12), function () {
@@ -240,8 +246,6 @@ class EmployeeController extends Controller
                 ->rawColumns(['full_name', 'project', 'delete'])
                 ->toJson();
         }
-
-        return view('hr.employee.listDataTable');
     }
 
 

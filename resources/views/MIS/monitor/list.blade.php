@@ -38,7 +38,7 @@
                 serverSide: true,
                 "aaSorting": [],
                 ajax: {
-                    url: "{{ route('MISMonitor.index') }}",
+                    url: "{{ route('MISMonitor.create') }}",
                 },
                 columns: [{
                         data: 'project_name',

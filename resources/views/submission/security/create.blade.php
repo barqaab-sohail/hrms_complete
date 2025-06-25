@@ -250,10 +250,11 @@
         </div>
     </div>
 </div>
-@stop
-@push('scripts')
+
+
 <script>
     $(document).ready(function() {
+       
         // show and hide bid security type
         $('.dependent').hide();
         $('#type').change(function() {
@@ -625,4 +626,4 @@
         });
     }); // end function
 </script>
-@endpush
+@stop

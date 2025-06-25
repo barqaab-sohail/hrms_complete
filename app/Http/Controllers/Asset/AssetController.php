@@ -29,6 +29,11 @@ class AssetController extends Controller
 
         // authorize only user who add the Asset
         $assets = Asset::join('audits', 'audits.auditable_id', 'assets.id')->select('assets.*', 'audits.user_id', 'audits.auditable_id', 'audits.auditable_type')->where('auditable_type', 'App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->with('asCurrentLocation', 'asCurrentAllocation', 'asDocumentation')->get();
+        return view('asset.index', compact('assets'));
+    }
+
+    public function loadData(Request $request)
+    {
         if ($request->ajax()) {
 
             $data = Asset::join('audits', 'audits.auditable_id', 'assets.id')->select('assets.*', 'audits.user_id', 'audits.auditable_id', 'audits.auditable_type')->where('auditable_type', 'App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->distinct()->with('asCurrentLocation', 'asCurrentAllocation', 'asDocumentation')->get();
@@ -96,7 +101,6 @@ class AssetController extends Controller
                 ->rawColumns(['location', 'bar_code', 'image', 'edit', 'delete'])
                 ->make(true);
         }
-        return view('asset.index', compact('assets'));
     }
 
     public function create()

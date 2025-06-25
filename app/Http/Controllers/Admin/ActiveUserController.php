@@ -58,9 +58,10 @@ class ActiveUserController extends Controller
 				->rawColumns(['full_name', 'cnic', 'father_name', 'location'])
 				->make(true);
 		}
-		// $ip = '39.42.113.71';
-		// $position = Location::get($ip);
-		// dd($position);
+	}
+
+	public function create()
+	{
 		return view('admin.activeUser.lastLoginDetail');
 	}
 
