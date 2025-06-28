@@ -1,12 +1,7 @@
 @extends('layouts.master.master')
 @section('title', 'Edit Submission')
 @section('Heading')
-<h3 class="text-themecolor">Submission Name</h3>
-<ol class="breadcrumb">
-	<li class="breadcrumb-item"><a href="javascript:void(0)">{{$data->project_name??''}}</a></li>
-
-
-</ol>
+<h3 class="text-themecolor">{{$data->project_name}}</h3>
 @stop
 @section('content')
 <div class="row">

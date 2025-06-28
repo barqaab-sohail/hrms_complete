@@ -1,17 +1,15 @@
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
-@section('Heading')
-	<!-- <h3 class="text-themecolor">List of Employees</h3> -->
-@stop
+<h3 class="text-themecolor"></h3>
 @section('content')
 <div class="card">
-	<div class="card-body">	
+	<div class="card-body">
 		<h4 class="card-title" style="color:black">List of Employees</h4>
 
-		<div class="table-responsive m-t-40">	
+		<div class="table-responsive m-t-40">
 			{!!$dataTable->table()!!}
 		</div>
-		
+
 	</div>
 </div>
 {!!$dataTable->scripts()!!}

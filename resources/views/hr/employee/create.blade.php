@@ -1,13 +1,6 @@
 @extends('layouts.master.master')
 @section('title', 'Add Employee')
-@section('Heading')
-<h3 class="text-themecolor">Human Resource</h3>
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="javascript:void(0)">New Employee</a></li>
-
-
-</ol>
-@stop
+<h3 class="text-themecolor"></h3>
 @section('content')
 <div class="row">
     <div class="col-lg-12">

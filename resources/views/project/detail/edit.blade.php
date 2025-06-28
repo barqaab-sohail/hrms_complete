@@ -1,12 +1,7 @@
 @extends('layouts.master.master')
 @section('title', $data->name )
 @section('Heading')
-<h3 class="text-themecolor">Project Name</h3>
-<ol class="breadcrumb">
-	<li class="breadcrumb-item"><a href="javascript:void(0)">{{$data->name??''}}</a></li>
-
-
-</ol>
+<h3 class="text-themecolor">{{$data->name}}</h3>
 @stop
 @section('content')
 <div class="row">

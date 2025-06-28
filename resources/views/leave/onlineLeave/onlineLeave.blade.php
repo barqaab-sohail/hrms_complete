@@ -1,9 +1,6 @@
 @extends('leave.onlineLeave.layouts.master')
 @section('title', 'Online Leave')
-@section('Heading')
 <h3 class="text-themecolor"></h3>
-
-@stop
 @section('content')
 <div class="row">
     <div class="col-lg-12">

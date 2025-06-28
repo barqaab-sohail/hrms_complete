@@ -1,14 +1,7 @@
 @extends('layouts.master.master')
 @section('title', 'Personal Documents')
 @section('Heading')
-
 <h3 class="text-themecolor">Personal Documents</h3>
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="javascript:void(0)"></a></li>
-
-
-</ol>
-
 @stop
 @section('content')
 

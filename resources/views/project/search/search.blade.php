@@ -1,8 +1,6 @@
 @extends('layouts.master.master')
-@section('title', 'BARQAAB HR')
-@section('Heading')
-	<h3 class="text-themecolor">Search Project Document</h3>
-@stop
+@section('title', 'Search Project Document')
+<h3 class="text-themecolor"></h3>
 @section('content')
 <div class="card">
 	<div class="card-body">	

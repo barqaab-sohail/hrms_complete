@@ -1,13 +1,6 @@
 @extends('layouts.master.master')
-@section('title', 'BARQAAB HR')
-@section('Heading')
-<h3 class="text-themecolor">Last Login Detail</h3>
-<ol class="breadcrumb">
-	<li class="breadcrumb-item"><a href="javascript:void(0)"></a></li>
-
-
-</ol>
-@stop
+@section('title', 'Last Login Detail')
+<h3 class="text-themecolor"></h3>
 @section('content')
 <div class="card">
 	<div class="card-body">

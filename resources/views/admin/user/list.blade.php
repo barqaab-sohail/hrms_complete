@@ -1,8 +1,6 @@
 @extends('layouts.master.master')
 @section('title', 'User')
-@section('Heading')
-<!-- <h3 class="text-themecolor">List of Employees</h3> -->
-@stop
+<h3 class="text-themecolor"></h3>
 @section('content')
 <div class="modal fade" id="userModal" aria-hidden="true">
     <div class="modal-dialog">

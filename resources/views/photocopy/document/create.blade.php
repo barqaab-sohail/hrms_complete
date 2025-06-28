@@ -1,7 +1,7 @@
 @extends('layouts.master.master')
 @section('title', $photocopy->name)
 @section('Heading')
-<!-- <h3 class="text-themecolor">List of Employees</h3> -->
+<h3 class="text-themecolor">{{$photocopy->name}}</h3>
 @stop
 @section('content')
 <div style="margin-top:10px; margin-right: 10px;">

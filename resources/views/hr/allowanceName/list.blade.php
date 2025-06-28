@@ -1,8 +1,6 @@
 @extends('layouts.master.master')
 @section('title', 'Allowance List')
-@section('Heading')
-<!-- <h3 class="text-themecolor">List of Employees</h3> -->
-@stop
+<h3 class="text-themecolor"></h3>
 @section('content')
 <div class="card-body">
     <button type="button" class="btn btn-success float-right" id="createAllowanceName" data-toggle="modal">Add New Allowance</button>

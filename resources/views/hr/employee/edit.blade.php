@@ -1,9 +1,7 @@
 @extends('layouts.master.master')
 @section('title', "$data->fullName")
 @section('Heading')
-<h3 class="text-themecolor">Human Resource</h3>
-
-<h4>{{'Employee Name: '}} {{ucwords($data->first_name)}} {{ ucwords($data->last_name)}}</h4>
+<h3 class="text-themecolor">{{'Employee Name: '}} {{ucwords($data->first_name)}} {{ ucwords($data->last_name)}}</h3>
 @stop
 @section('content')
 

@@ -1,8 +1,7 @@
 @extends('layouts.master.master')
 @section('title', 'Edit Asset')
 @section('Heading')
-<h3 class="text-themecolor">Asset Management</h3>
-<h4>{{'Edit Asset Description: '}} {{ucwords($data->description)}}</h4>
+<h3 class="text-themecolor">{{$data->description}}</h3>
 @stop
 @section('content')
 <div class="row">

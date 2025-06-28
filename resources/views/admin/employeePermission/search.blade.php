@@ -1,8 +1,6 @@
 @extends('layouts.master.master')
 @section('title', 'Employee Permissions')
-@section('Heading')
-<h3 class="text-themecolor">Employee Permission Search</h3>
-@stop
+<h3 class="text-themecolor"></h3>
 @section('content')
 <div class="card">
 	<div class="card-body">

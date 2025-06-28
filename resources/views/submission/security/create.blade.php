@@ -1,15 +1,6 @@
 @extends('layouts.master.master')
 @section('title', 'Securities')
-@section('Heading')
-
-<h3 class="text-themecolor">Securities</h3>
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="javascript:void(0)"></a></li>
-
-
-</ol>
-
-@stop
+<h3 class="text-themecolor"></h3>
 @section('content')
 
 

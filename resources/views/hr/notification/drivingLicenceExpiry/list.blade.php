@@ -1,13 +1,6 @@
 @extends('layouts.master.master')
 @section('title', 'BARQAAB HR')
-@section('Heading')
-	<h3 class="text-themecolor">List of Notifications</h3>
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="javascript:void(0)">List of Notifications</a></li>
-		
-	
-	</ol>
-@stop
+<h3 class="text-themecolor"></h3>
 @section('content')
 	<div class="card">
 		<div class="card-body">

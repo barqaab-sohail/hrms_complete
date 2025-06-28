@@ -136,6 +136,7 @@
                 <!-- ============================================================== -->
                 <div class="row page-titles">
                     <div class="col-md-12 col-8 align-self-center">
+                     
                         <h3 class="text-themecolor"> @yield('h3')</h3>
                         @yield('Heading')
 
@@ -193,6 +194,7 @@
             
             function loadContent(url) {
                 // Show loading indicator
+                
                 $('.ajax-loading').show();
                 
                 $.ajax({
@@ -214,9 +216,21 @@
                         
                         // Update page title if available
                         var pageTitle = $(response).filter('title').text();
+                      
                         if (pageTitle) {
                             document.title = pageTitle;
+                             // Update the h3 text
+                             var headingElements = $('h3.text-themecolor');
+                            if (headingElements.length > 1) {
+                                // Keep the first one and remove all others
+                                headingElements.slice(1).remove();
+                                
+                                // Optional: console log how many were removed
+                                console.log('Removed ' + (headingElements.length - 1) + ' duplicate heading(s)');
+                            }
+                           $('h3.text-themecolor').text(pageTitle);
                         }
+                       
                     },
                     error: function(xhr) {
                         // Handle errors

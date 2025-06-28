@@ -1,11 +1,6 @@
 @extends('layouts.master.master')
 @section('title', 'Add Project')
-@section('Heading')
-<h3 class="text-themecolor">Projects</h3>
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="javascript:void(0)">New Project Detail</a></li>
-</ol>
-@stop
+<h3 class="text-themecolor"></h3>
 @section('content')
 <div class="row">
     <div class="col-lg-12">

@@ -6,7 +6,6 @@
 @stop
 @section('content')
 
-
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">CNIC Multiple Prints</h4>

@@ -1,13 +1,6 @@
 @extends('layouts.master.master')
 @section('title', 'Permissions List')
-@section('Heading')
-<h3 class="text-themecolor">Permission List</h3>
-<ol class="breadcrumb">
-	<li class="breadcrumb-item"><a href="javascript:void(0)"></a></li>
-
-
-</ol>
-@stop
+<h3 class="text-themecolor"></h3>
 @section('content')
 
 

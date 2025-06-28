@@ -1,7 +1,7 @@
 @extends('layouts.master.master')
 @section('title', $folder->name)
 @section('Heading')
-<!-- <h3 class="text-themecolor">List of Employees</h3> -->
+<h3 class="text-themecolor">{{$folder->name}}</h3>
 @stop
 @section('content')
 
