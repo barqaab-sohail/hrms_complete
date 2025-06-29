@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
 @section('title', 'Personal Contacts')
-<h3 class="text-themecolor"></h3>
+@section('Heading')
+<h3 class="text-themecolor">Personal Contacts</h3>
+@stop
 @section('content')
 
 <div class="row">

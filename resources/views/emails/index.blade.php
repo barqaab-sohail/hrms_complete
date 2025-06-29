@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
-@section('title', 'Email List')
-<h3 class="text-themecolor"></h3>
+@section('title', 'List of Emails')
+@section('Heading')
+<h3 class="text-themecolor">List of Emails</h3>
+@stop
 
 @section('content')
 <!-- Model -->

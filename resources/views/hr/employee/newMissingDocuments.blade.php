@@ -1,7 +1,7 @@
 @extends('layouts.master.master')
-@section('title', 'Missing Documents')
-@section('Missing Documents')
-<!-- <h3 class="text-themecolor">List of Employees</h3> -->
+@section('title', 'Employee Missing Documents')
+@section('Heading')
+<h3 class="text-themecolor">Employee Missing Documents</h3>
 @stop
 @section('content')
 <div class="container-fluid">

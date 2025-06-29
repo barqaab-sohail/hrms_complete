@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
-@section('title', 'Folders')
-<h3 class="text-themecolor"></h3>
+@section('title', 'List of Folders')
+@section('Heading')
+<h3 class="text-themecolor">List of Folders</h3>
+@stop
 @section('content')
 <div class="card">
 	<div class="card-body">

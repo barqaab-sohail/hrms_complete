@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
-@section('title', 'Add Asset')
-<h3 class="text-themecolor"></h3>
+@section('title', 'Add New Asset')
+@section('Heading')
+<h3 class="text-themecolor">Add New Asset</h3>
+@stop
 @section('content')
 
 <div class="row">

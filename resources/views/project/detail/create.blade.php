@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
-@section('title', 'Add Project')
-<h3 class="text-themecolor"></h3>
+@section('title', 'Add New Project')
+@section('Heading')
+<h3 class="text-themecolor">Add New Project</h3>
+@stop
 @section('content')
 <div class="row">
     <div class="col-lg-12">

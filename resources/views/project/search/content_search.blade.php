@@ -1,7 +1,8 @@
 @extends('layouts.master.master')
 @section('title', 'Search Project Documents with Content')
-<h3 class="text-themecolor"></h3>
-
+@section('Heading')
+<h3 class="text-themecolor">Search Project Documents with Content</h3>
+@stop
 @section('content')
 <div class="container-fluid">
     <div class="row">

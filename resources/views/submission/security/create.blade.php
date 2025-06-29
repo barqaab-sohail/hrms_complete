@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
 @section('title', 'Securities')
-<h3 class="text-themecolor"></h3>
+@section('Heading')
+<h3 class="text-themecolor">Securities</h3>
+@stop
 @section('content')
 
 

@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
 @section('title', 'Submissions')
-<h3 class="text-themecolor"></h3>
+@section('Heading')
+<h3 class="text-themecolor">Submissions</h3>
+@stop
 @section('content')
 <!-- Model -->
 <div class="modal fade" id="ajaxModel" aria-hidden="true">

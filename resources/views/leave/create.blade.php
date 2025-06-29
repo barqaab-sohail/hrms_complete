@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
-@section('title', 'Apply Leave')
-<h3 class="text-themecolor"></h3>
+@section('title', 'Apply New Leave')
+@section('Heading')
+<h3 class="text-themecolor">Apply New Leave</h3>
+@stop
 @section('content')
 <div class="row">
     <div class="col-lg-12">

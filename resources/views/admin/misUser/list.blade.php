@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
 @section('title', 'MIS User Rights')
-<h3 class="text-themecolor"></h3>
+@section('Heading')
+<h3 class="text-themecolor">MIS User Rights</h3>
+@stop
 @section('content')
 
 <div class="card">

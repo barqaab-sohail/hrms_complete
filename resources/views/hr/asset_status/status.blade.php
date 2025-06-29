@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
-@section('title', 'Employee Search')
-<h3 class="text-themecolor"></h3>
+@section('title', ' Employee Issued Assest Search')
+@section('Heading')
+<h3 class="text-themecolor">Employee Issued Assest Search</h3>
+@stop
 @section('content')
 <div class="card">
 	<div class="card-body">

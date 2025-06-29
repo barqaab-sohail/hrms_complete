@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
 @section('title', 'Permissions List')
-<h3 class="text-themecolor"></h3>
+@section('Heading')
+<h3 class="text-themecolor">Permissions List</h3>
+@stop
 @section('content')
 
 

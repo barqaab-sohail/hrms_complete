@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
 @section('title', 'Employee Card')
-<h3 class="text-themecolor"></h3>
+@section('Heading')
+<h3 class="text-themecolor">Employee Card</h3>
+@stop
 @section('content')
 <style type="text/css">
     .image {

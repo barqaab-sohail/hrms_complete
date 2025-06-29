@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
 @section('title', 'Last Login Detail')
-<h3 class="text-themecolor"></h3>
+@section('Heading')
+<h3 class="text-themecolor">Last Login Detail</h3>
+@stop
 @section('content')
 
 <div class="card">

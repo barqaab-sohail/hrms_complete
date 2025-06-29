@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
-@section('title', 'Temp Upload File')
-<h3 class="text-themecolor"></h3>
+@section('title', 'Temp Upload Files')
+@section('Heading')
+<h3 class="text-themecolor">Temp Upload Files</h3>
+@stop
 @section('content')
 <div class="card-body">
     <div class="video_upload mt-5" id="video_upload ">
