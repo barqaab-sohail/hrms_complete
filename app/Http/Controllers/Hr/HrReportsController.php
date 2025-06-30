@@ -4,6 +4,7 @@ namespace App\Http\Controllers\HR;
 
 use DB;
 use DataTables;
+use App\Models\Hr\HrReport;
 use App\Models\Hr\HrStatus;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
@@ -20,7 +21,60 @@ class HrReportsController extends Controller
 {
 
 
+    public function index()
+    {
+        $reports = HrReport::orderBy('order')->get();
+        return view('hr.reports.index', compact('reports'));
+    }
 
+    public function create()
+    {
+        return view('hr.reports.create');
+    }
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'route' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'is_active' => 'boolean',
+            'order' => 'integer'
+        ]);
+
+        HrReport::create($validated);
+
+        return redirect()->route('hr.reports.index')
+            ->with('success', 'Report created successfully');
+    }
+
+    public function edit(HrReport $hrReport)
+    {
+        return view('hr.reports.edit', compact('hrReport'));
+    }
+
+    public function update(Request $request, HrReport $hrReport)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'route' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'is_active' => 'boolean',
+            'order' => 'integer'
+        ]);
+
+        $hrReport->update($validated);
+
+        return redirect()->route('hr.reports.index')
+            ->with('success', 'Report updated successfully');
+    }
+
+    public function destroy(HrReport $hrReport)
+    {
+        $hrReport->delete();
+
+        return redirect()->route('hr.reports.index')
+            ->with('success', 'Report deleted successfully');
+    }
     function getEmployeesWithMissingDocuments()
     {
 
@@ -175,6 +229,13 @@ class HrReportsController extends Controller
     {
 
         return view('hr.reports.list');
+    }
+
+    public function shortProfile()
+    {
+        $employees = HrEmployee::where('hr_status_id', 1)->with('employeeCurrentDesignation')->get();
+
+        return view('hr.reports.shortProfile', compact('employees'));
     }
 
 
@@ -410,24 +471,38 @@ class HrReportsController extends Controller
             if ($request->has('status') && $request->status != '') {
                 $query->where('hr_status_id', $request->status);
             }
-            if ($request->has('department') && $request->department != '') {
-                $query->whereHas('employeeCurrentDepartment', function ($q) use ($request) {
-                    $q->where('hr_departments.id', $request->department);
-                });
-            }
-            if ($request->has('designation') && $request->designation != '') {
-                $query->whereHas('employeeCurrentDesignation', function ($q) use ($request) {
-                    $q->where('hr_designations.id', $request->designation);
-                });
-            }
-
-            if ($request->has('education') && $request->education != '') {
-                $query->whereHas('hrEducation', function ($q) use ($request) {
-                    $q->where('hr_educations.education_id', $request->education);
+            // Multiple departments filter (OR condition)
+            if ($request->filled('department')) {
+                $query->where(function ($q) use ($request) {
+                    foreach ($request->department as $department) {
+                        $q->orWhereHas('employeeCurrentDepartment', function ($q) use ($department) {
+                            $q->where('hr_departments.id', $department);
+                        });
+                    }
                 });
             }
 
+            // Multiple designations filter (OR condition)
+            if ($request->filled('designation')) {
+                $query->where(function ($q) use ($request) {
+                    foreach ($request->designation as $designation) {
+                        $q->orWhereHas('employeeCurrentDesignation', function ($q) use ($designation) {
+                            $q->where('hr_designations.id', $designation);
+                        });
+                    }
+                });
+            }
 
+            // Multiple education filter (OR condition)
+            if ($request->filled('education')) {
+                $query->where(function ($q) use ($request) {
+                    foreach ($request->education as $education) {
+                        $q->orWhereHas('hrEducation', function ($q) use ($education) {
+                            $q->where('hr_educations.education_id', $education);
+                        });
+                    }
+                });
+            }
 
 
             // Add other filters as needed...

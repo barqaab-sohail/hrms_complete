@@ -12,14 +12,11 @@
             <table id="myTable" class="table table-bordered table-striped" style="width:100%">
                 <thead>
                     <tr>
-
                         <th>Name of Report</th>
                         <th class="text-center" style="width:5%">Show</th>
                     </tr>
                 </thead>
-
                 <tbody>
-
                     <tr>
                         <td><a href="{{route('hrReports.cnicExpiryList')}}" style="color:black">CNIC Expiry List</a>
                         </td>

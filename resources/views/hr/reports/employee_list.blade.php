@@ -1,6 +1,8 @@
 @extends('layouts.master.master')
-@section('title', 'BARQAAB HR')
-<h3 class="text-themecolor"></h3>
+@section('title', 'List of Employees')
+@section('Heading')
+<h3 class="text-themecolor">List of Employees</h3>
+@stop
 @section('content')
 @include('hr.reports.partials.search_form')
 
@@ -48,21 +50,21 @@
 <script>
     $(document).ready(function() {
         var table = $('#employees-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('hr.reports.employee_list') }}",
-                data: function(d) {
-                    // Add your search form data to the request
-                    d.employee_name = $('input[name=employee_name]').val();
-                    d.designation = $('select[name=designation]').val();
-                    d.department = $('select[name=department]').val();
-                    d.education = $('select[name=education]').val();
-                    d.employee_no = $('input[name=employee_no]').val();
-                    d.status = $('select[name=status]').val();
-                }
-            },
-            columns: [{
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "{{ route('hr.reports.employee_list') }}",
+            data: function(d) {
+                // Add your search form data to the request
+                d.employee_name = $('input[name=employee_name]').val();
+                d.designation = $('select[name="designation[]"]').val();
+                d.department = $('select[name="department[]"]').val();
+                d.education = $('select[name="education[]"]').val();
+                d.employee_no = $('input[name=employee_no]').val();
+                d.status = $('select[name=status]').val();
+            }
+        },
+        columns: [{
                     data: 'sr_no',
                     name: 'sr_no'
                 },
@@ -146,15 +148,20 @@
 
             ],
             scrollX: true,
-            dom: 'Blfrtip',
-            buttons: [
-                'copy'
-            ],
-            lengthMenu: [
-                [10, 25, 50, 100, -1],
-                [10, 25, 50, 100, "All"]
-            ]
-        });
+        dom: 'Blfrtip',
+        buttons: [
+            'copy'
+        ],
+        lengthMenu: [
+            [10, 25, 50, 100, -1],
+            [10, 25, 50, 100, "All"]
+        ]
+    });
+
+    // This will reload the table when any select2 field changes
+    $('.select2').on('change', function() {
+        table.ajax.reload();
+    });
 
         // Handle search form submission
         $('#search-form').on('submit', function(e) {

@@ -6,7 +6,7 @@ use App\Models\Hr\HrExperience;
 use App\Livewire\Asset\ListAsset;
 use App\Livewire\Asset\CreateAsset;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Hr\HrReportsController;
 use App\Http\Controllers\Email\EmailAddressController;
 use App\Http\Controllers\Project\DocumentSearchController;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
@@ -145,9 +145,10 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/posting', 'PostingController');
 
 
-    Route::get('/hrReports/list', 'HrReportsController@list')->name('hrReports.list');
+    Route::get('/hrReports/list', 'HrReportsController@index')->name('hrReports.list');
     Route::get('/hrReports/pictureList', 'HrReportsController@pictureList')->name('hrReports.pictureList');
     Route::get('/hrReports/cnicExpiryList', 'HrReportsController@cnicExpiryList')->name('hrReports.cnicExpiryList');
+    Route::get('/hrReports/shortprofile', 'HrReportsController@shortProfile')->name('hrReports.shortprofile');
     Route::get('/hrReports/missingDocumentList', 'HrReportsController@missingDocumentList')->name('hrReports.missingDocumentList');
     // New Missing Documents Route
     Route::get('/hrReports/newmissingdocuments', 'HrReportsController@missingDocumentsView')->name('newmissingdocuments');
@@ -164,6 +165,14 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/allBankAccounts/loaddata', 'BankController@loadData')->name('allBankAccounts.loadData');
     Route::get('/importBankDetail', 'BankController@view')->name('importBankDetail.view');
     Route::post('/importBankDetail', 'BankController@import')->name('importBankDetail.import');
+    Route::prefix('hr/reports')->name('hr.reports.')->group(function () {
+        Route::get('/', [HrReportsController::class, 'index'])->name('index');
+        Route::get('/create', [HrReportsController::class, 'create'])->name('create');
+        Route::post('/', [HrReportsController::class, 'store'])->name('store');
+        Route::get('/{hrReport}/edit', [HrReportsController::class, 'edit'])->name('edit');
+        Route::put('/{hrReport}', [HrReportsController::class, 'update'])->name('update');
+        Route::delete('/{hrReport}', [HrReportsController::class, 'destroy'])->name('destroy');
+    });
 
     //Route::resource('/hrMonthlyReport', 'HrMonthlyReportController');
     //Route::get('/hrMonthlyReportProject/refreshTable', 'HrMonthlyReportProjectController@refreshTable')->name('hrMonthlyProject.table');

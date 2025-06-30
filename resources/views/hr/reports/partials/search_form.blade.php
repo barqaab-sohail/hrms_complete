@@ -13,10 +13,9 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="designation">Designation</label>
-                        <select class="form-control select2" id="designation" name="designation">
-                            <option value="">All Designations</option>
+                        <select class="form-control select2" id="designation" name="designation[]" multiple="multiple">
                             @foreach($designations as $id => $name)
-                            <option value="{{ $id }}" {{ request('designation') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                            <option value="{{ $id }}" {{ in_array($id, (array)request('designation')) ? 'selected' : '' }}>{{ $name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -24,10 +23,9 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="department">Department</label>
-                        <select class="form-control select2" id="department" name="department">
-                            <option value="">All Departments</option>
+                        <select class="form-control select2" id="department" name="department[]" multiple="multiple">
                             @foreach($departments as $id => $name)
-                            <option value="{{ $id }}" {{ request('department') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                            <option value="{{ $id }}" {{ in_array($id, (array)request('department')) ? 'selected' : '' }}>{{ $name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -35,10 +33,9 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="department">Degree</label>
-                        <select class="form-control select2" id="education" name="education">
-                            <option value="">All Degrees</option>
+                        <select class="form-control select2" id="education" name="education[]" multiple="multiple">
                             @foreach($educations as $id => $degree_name)
-                            <option value="{{ $id }}" {{ request('education') == $id ? 'selected' : '' }}>{{ $degree_name }}</option>
+                            <option value="{{ $id }}" {{ in_array($id, (array)request('education')) ? 'selected' : '' }}>{{ $degree_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -63,7 +60,6 @@
                         </select>
                     </div>
                 </div>
-                <!-- Add more search fields as needed -->
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -78,13 +74,22 @@
 <script>
     $(document).ready(function() {
         $('.select2').select2({
-            width: '100%', // Make it full width of its container
-            dropdownAutoWidth: true, // Auto-adjust dropdown width
+            width: '100%',
+            dropdownAutoWidth: true,
+            placeholder: "Select options",
+            allowClear: true
+        });
+        
+        // Handle form submission via AJAX
+        $('#searchForm').on('submit', function(e) {
+            e.preventDefault();
+            $('#employees-table').DataTable().ajax.reload();
         });
     });
 
     function resetForm() {
-        document.getElementById("searchForm").reset();
-        window.location = "{{ route('hr.reports.employee_list') }}";
+        $('#searchForm')[0].reset();
+        $('.select2').val(null).trigger('change');
+        $('#employees-table').DataTable().ajax.reload();
     }
 </script>
