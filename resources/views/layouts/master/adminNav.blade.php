@@ -99,7 +99,7 @@
 
                                         <ul aria-expanded="false" class="collapse">
                                                 @can('hr reports')
-                                                <li><a class="{{Request::is('hrms/hrReports/list')?'active':''}}" href="{{route('hrReports.list')}}">Reports</a></li>
+                                                <li><a class="{{Request::is('hrms/hrReports/create')?'active':''}}" href="{{route('hrReports.create')}}">Reports</a></li>
                                                 @endcan
                                                 @can('project monitor')
                                                 <li><a class="{{Request::is('hrms/MISMonitor')?'active':''}}" href="{{route('MISMonitor.index')}}">Monitoring</a></li>

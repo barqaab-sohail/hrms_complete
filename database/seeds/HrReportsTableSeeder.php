@@ -17,36 +17,43 @@ class HrReportsTableSeeder extends Seeder
             [
                 'name' => 'CNIC Expiry List',
                 'route' => 'hrReports.cnicExpiryList',
-                'description' => 'List of employees with expiring CNICs'
+                'order' => 1,
+                'description' => 'List of CNIC Expiry Employees'
             ],
             [
                 'name' => 'Mandatory Missing Document List',
                 'route' => 'missingDocuments.list',
-                'description' => 'List of employees with missing mandatory documents'
+                'order' => 2,
+                'description' => 'List of Mandatory Documents Missing from Employees'
             ],
             [
                 'name' => 'Complete Missing Document List',
                 'route' => 'newmissingdocuments',
-                'description' => 'Complete list of all missing documents'
+                'order' => 3,
+                'description' => 'Complete list of all missing documents from employees'
             ],
             [
                 'name' => 'Search Employee',
                 'route' => 'hrReports.searchEmployee',
+                'order' => 4,
                 'description' => 'Search employees by various criteria'
             ],
             [
                 'name' => 'Report_1',
                 'route' => 'hrReports.report_1',
-                'description' => 'Basic employee information report'
+                'order' => 5,
+                'description' => 'Employee Maximum Information Report'
             ],
             [
                 'name' => 'Employee List (Full Details)',
                 'route' => 'hr.reports.employee_list',
-                'description' => 'Complete employee details report'
+                'order' => 6,
+                'description' => 'Employee Maximum Information Report with Search Options'
             ],
             [
                 'name' => 'Employee Pictures',
                 'route' => 'hrReports.pictureList',
+                'order' => 7,
                 'description' => 'List of all employee pictures'
             ]
         ];

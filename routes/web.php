@@ -146,6 +146,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
 
 
     Route::get('/hrReports/list', 'HrReportsController@index')->name('hrReports.list');
+    Route::get('/hrReports/create', 'HrReportsController@create')->name('hrReports.create');
     Route::get('/hrReports/pictureList', 'HrReportsController@pictureList')->name('hrReports.pictureList');
     Route::get('/hrReports/cnicExpiryList', 'HrReportsController@cnicExpiryList')->name('hrReports.cnicExpiryList');
     Route::get('/hrReports/shortprofile', 'HrReportsController@shortProfile')->name('hrReports.shortprofile');
@@ -167,11 +168,10 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::post('/importBankDetail', 'BankController@import')->name('importBankDetail.import');
     Route::prefix('hr/reports')->name('hr.reports.')->group(function () {
         Route::get('/', [HrReportsController::class, 'index'])->name('index');
-        Route::get('/create', [HrReportsController::class, 'create'])->name('create');
         Route::post('/', [HrReportsController::class, 'store'])->name('store');
-        Route::get('/{hrReport}/edit', [HrReportsController::class, 'edit'])->name('edit');
-        Route::put('/{hrReport}', [HrReportsController::class, 'update'])->name('update');
-        Route::delete('/{hrReport}', [HrReportsController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}/edit', [HrReportsController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [HrReportsController::class, 'store'])->name('update');
+        Route::delete('/{id}', [HrReportsController::class, 'destroy'])->name('destroy');
     });
 
     //Route::resource('/hrMonthlyReport', 'HrMonthlyReportController');

@@ -46,6 +46,18 @@ class HrEmployee extends Model implements Auditable
     }
 
 
+    // Add this to your Employee model
+    function getPictureSize()
+    {
+        $picture = HrDocumentation::where('hr_employee_id', $this->id)->where('description', 'Picture')->first();
+
+        if (isset($picture->size)) {
+            return round($picture->size / (1024), 2) . ' KB';
+        }
+
+        return 'N/A';
+    }
+
     public function picture()
     {
         return $this->hasOne('App\Models\Hr\HrDocumentation')->where('description', '=', 'Picture');

@@ -17,63 +17,75 @@ use App\Http\Controllers\Controller;
 use App\Models\Hr\HrEmployeeCompany;
 
 
+
 class HrReportsController extends Controller
 {
-
-
-    public function index()
+    public function index(Request $request)
     {
-        $reports = HrReport::orderBy('order')->get();
-        return view('hr.reports.index', compact('reports'));
+        if ($request->ajax()) {
+            $data = HrReport::orderBy('order', 'asc')->get()->map(function ($report) {
+                // Convert route name to URL
+                try {
+                    $report->full_url = route($report->route);
+                } catch (\Exception $e) {
+                    // Fallback to URL if route name doesn't exist
+                    $report->full_url = url($report->route);
+                }
+                return $report;
+            });
+            return DataTables::of($data)
+                ->addIndexColumn()
+
+                ->addColumn('action', function ($row) {
+                    $btn = '';
+                    if (auth()->user()->can('hr-reports-edit') && auth()->user()->can('hr-reports-delete')) {
+                        $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-info btn-sm editReport">Edit</a> ';
+                        $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm deleteReport">Delete</a>';
+                    } else if (auth()->user()->can('hr-reports-edit')) {
+                        $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-info btn-sm editReport">Edit</a> ';
+                    } else if (auth()->user()->can('hr-reports-delete')) {
+                        $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm deleteReport">Delete</a>';
+                    }
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
     }
 
     public function create()
     {
-        return view('hr.reports.create');
+        return view('hr.reports.index');
     }
+
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
-            'route' => 'required|string|max:255',
+            'route' => 'required|string|max:255|unique:hr_reports,route,' . $request->report_id,
             'description' => 'nullable|string',
             'is_active' => 'boolean',
-            'order' => 'integer'
+            'order' => 'integer|unique:hr_reports,order,' . $request->report_id,
         ]);
 
-        HrReport::create($validated);
+        HrReport::updateOrCreate(
+            ['id' => $request->report_id],
+            $request->all()
+        );
 
-        return redirect()->route('hr.reports.index')
-            ->with('success', 'Report created successfully');
+        return response()->json(['message' => 'Report saved successfully.']);
     }
 
-    public function edit(HrReport $hrReport)
+    public function edit($id)
     {
-        return view('hr.reports.edit', compact('hrReport'));
+        $report = HrReport::find($id);
+        return response()->json($report);
     }
 
-    public function update(Request $request, HrReport $hrReport)
+    public function destroy($id)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'route' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'is_active' => 'boolean',
-            'order' => 'integer'
-        ]);
-
-        $hrReport->update($validated);
-
-        return redirect()->route('hr.reports.index')
-            ->with('success', 'Report updated successfully');
-    }
-
-    public function destroy(HrReport $hrReport)
-    {
-        $hrReport->delete();
-
-        return redirect()->route('hr.reports.index')
-            ->with('success', 'Report deleted successfully');
+        HrReport::find($id)->delete();
+        return response()->json(['message' => 'Report deleted successfully.']);
     }
     function getEmployeesWithMissingDocuments()
     {

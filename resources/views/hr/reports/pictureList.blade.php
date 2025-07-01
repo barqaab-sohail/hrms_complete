@@ -26,7 +26,7 @@
                         <td>{{$employee->employee_no??''}}</td>
                         <td>{{$employee->first_name}} {{$employee->last_name}}</td>
                         <td>{{$employee->employeeCurrentDesignation->name??''}}</td>
-                        <td>{{round(($employee->picture->size??0 / 1000),2)}}</td>
+                        <td>{{ $employee->getPictureSize() }}</td>
                         <td class="text-center">
                             <a class="btn btn-success btn-sm" href="{{route('employee.edit',$employee->id)}}" title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>
                         </td>

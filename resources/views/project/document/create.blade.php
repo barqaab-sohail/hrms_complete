@@ -109,7 +109,11 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9">
-                            <button type="submit" class="btn btn-success btn-prevent-multiple-submits"><i class="fa fa-spinner fa-spin" style="font-size:18px"></i>Save</button>
+                            <button type="submit" class="btn btn-success btn-prevent-multiple-submits">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+                                <span class="sr-only">Loading...</span>
+                                <span class="btn-text">Save Document</span>
+                            </button>
                             <hr>
                             <br>
                         </div>
@@ -153,7 +157,27 @@
         </table>
 
 </div>   
+<style>
+.spinner-border {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: text-bottom;
+    border: .25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    -webkit-animation: spinner-border .75s linear infinite;
+    animation: spinner-border .75s linear infinite;
+}
 
+@-webkit-keyframes spinner-border {
+    to { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spinner-border {
+    to { transform: rotate(360deg); }
+}
+</style>
         
 <script>
     $(document).ready(function() {
@@ -401,6 +425,13 @@ $(function () {
     
       $("#formDocument").submit(function(e) {
         e.preventDefault();
+        // Disable button and show spinner
+        var $submitBtn = $(this).find('.btn-prevent-multiple-submits');
+        $submitBtn.prop('disabled', true);
+        $submitBtn.find('.spinner-border').show();
+        $submitBtn.find('.btn-text').text('Saving...');
+
+
         var formData = new FormData(this);
         formData.append("pr_detail_id", $("#pr_detail_id").val());
         $.ajax({
@@ -423,6 +454,10 @@ $(function () {
                 table.draw();
                 clearMessage();
               }
+              // Re-enable button and hide spinner
+            $submitBtn.prop('disabled', false);
+            $submitBtn.find('.spinner-border').hide();
+            $submitBtn.find('.btn-text').text('Save Document');
         
           },
           error: function (data) {
@@ -434,6 +469,10 @@ $(function () {
                  $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>'+errorMassage+'</strong></div>');
 
               $('#saveBtn').html('Save Changes');
+               // Re-enable button and hide spinner on error too
+            $submitBtn.prop('disabled', false);
+            $submitBtn.find('.spinner-border').hide();
+            $submitBtn.find('.btn-text').text('Save Document');
           }
       });
     });
