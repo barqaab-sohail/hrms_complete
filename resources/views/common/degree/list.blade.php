@@ -35,6 +35,17 @@
 
 							</div>
 						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label class="control-label text-right">Category</label><br>
+								<select name="category" id="category" class="form-control selectTwo">
+									<option value=""></option>
+									<option value="Engineering">Engineering</option>
+									<option value="IT">IT</option>
+								</select>
+
+							</div>
+						</div>
 					</div>
 
 					<div class="col-sm-offset-2 col-sm-10">
@@ -68,8 +79,10 @@
 			<table id="myTable" class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<th style="width:15%">Degree Name</th>
+						<th style="width:5%">ID</th>
+						<th style="width:25%">Degree Name</th>
 						<th style="width:20%">Level</th>
+						<th style="width:20%">Category</th>
 						<th style="width:5%">Edit</th>
 						@role('Super Admin')
 						<th style="width:5%">Delete</th>
@@ -93,17 +106,30 @@
 			var table = $('#myTable').DataTable({
 				processing: true,
 				serverSide: true,
+				lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
+                ],
 				"aaSorting": [],
 				ajax: {
 					url: "{{ route('degree.loadData') }}",
 				},
-				columns: [{
+				columns: [
+					{
+						data: 'id',
+						name: 'id'
+					},
+					{
 						data: 'degree_name',
 						name: 'degree_name'
 					},
 					{
 						data: 'level',
 						name: 'level'
+					},
+					{
+						data: 'category',
+						name: 'category',
 					},
 					{
 						data: 'edit',
@@ -125,6 +151,7 @@
 				$('#degree_id').val('');
 				$('#degree_name').val('');
 				$('#level').val('').change();
+				$('#category').val('').change();
 				$('#ajaxModel').modal('show');
 			});
 
@@ -136,6 +163,7 @@
 					$('#degree_id').val(data.id);
 					$('#degree_name').val(data.degree_name);
 					$('#level').val(data.level).change();
+					$('#category').val(data.category).change();
 
 				}).done(function() {
 

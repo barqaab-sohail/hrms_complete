@@ -7,6 +7,7 @@ use App\Livewire\Asset\ListAsset;
 use App\Livewire\Asset\CreateAsset;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Hr\HrReportsController;
+use App\Http\Controllers\Common\ShortUrlController;
 use App\Http\Controllers\Email\EmailAddressController;
 use App\Http\Controllers\Project\DocumentSearchController;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
@@ -398,8 +399,10 @@ Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth', 'XssSanitizer'],
     Route::get('/allowanceName/loaddata', 'AllowanceNameController@loadData')->name('allowanceName.loadData');
     Route::resource('/directCostDescription', 'DirectCostDescriptionController')->except(['show']);
     Route::get('/directCostDescription/loaddata', 'DirectCostDescriptionController@loadData')->name('directCostDescription.loadData');
+    Route::get('/createShortUrl', [ShortUrlController::class, 'create'])->name('shorten.create');
+    Route::post('/shorten', [ShortUrlController::class, 'store'])->name('shorten.store');
 });
-
+Route::get('/{code}', [ShortUrlController::class, 'redirect']);
 
 
 //Admin Routes

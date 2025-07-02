@@ -295,6 +295,8 @@
                                                 @endcan
                                                 @can('temp file upload')
                                                 <li><a class="{{Request::is('hrms/admin/tempfileupload')?'active':''}}" href="{{route('tempfileupload.create')}}"> Temp File Upload</a></li>
+                                                <li><a class="{{Request::is('hrms/mis/createShortUrl')?'active':''}}" href="{{route('shorten.create')}}"> Tiny URL</a></li>
+
                                                 @endcan
                                         </ul>
                                 </li>
