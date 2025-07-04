@@ -57,8 +57,8 @@ class DocumentationController extends Controller
                     }
                 })
                 ->addColumn('copy_link', function ($row) {
-                    $encoded_path = str_replace(' ', '%20', $row->full_path);
-                    return '<a class="copyLink" link="' . $encoded_path . '" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+
+                    return '<a class="copyLink" link="' . $row->tiny_url . '" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
                 })
                 ->addColumn('Edit', function ($row) {
 

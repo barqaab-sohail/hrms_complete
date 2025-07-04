@@ -40,6 +40,9 @@ class FolderDocumentsController extends Controller
 
                     return $btn;
                 })
+                ->addColumn('copy_link', function ($row) {
+                    return '<a class="copyLink" link="' . $row->tiny_url . '" style="cursor: auto;" title="Click for Copy Tiny URL"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+                })
                 ->addColumn('Delete', function ($row) {
 
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
@@ -57,7 +60,7 @@ class FolderDocumentsController extends Controller
                         return '<img  id="ViewIMG" src="' . $url . '" width=30/>';
                     }
                 })
-                ->rawColumns(['Edit', 'Delete', 'document'])
+                ->rawColumns(['Edit', 'Delete', 'document', 'copy_link'])
                 ->make(true);
         }
 
@@ -95,7 +98,7 @@ class FolderDocumentsController extends Controller
 
                 $attachment['folder_id'] =  $input['folder_id'];
                 $attachment['description'] = $input['description'];
-                
+
 
                 $folderDocument = FolderDocument::where('id', request()->folder_document_id)->first();
 

@@ -7,8 +7,10 @@ use App\Livewire\Asset\ListAsset;
 use App\Livewire\Asset\CreateAsset;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Hr\HrReportsController;
+use App\Http\Controllers\Hr\BankLetterController;
 use App\Http\Controllers\Common\ShortUrlController;
 use App\Http\Controllers\Email\EmailAddressController;
+use App\Http\Controllers\Hr\ExperienceLetterController;
 use App\Http\Controllers\Project\DocumentSearchController;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
 
@@ -402,8 +404,25 @@ Route::group(['prefix' => 'hrms/misc', 'middleware' => ['auth', 'XssSanitizer'],
     Route::get('/createShortUrl', [ShortUrlController::class, 'create'])->name('shorten.create');
     Route::post('/shorten', [ShortUrlController::class, 'store'])->name('shorten.store');
 });
-Route::get('/{code}', [ShortUrlController::class, 'redirect']);
 
+Route::get('document/{code}', [ShortUrlController::class, 'redirect']);
+
+// Bank Account Opening Letter Routes
+Route::prefix('bank-letters')->group(function () {
+    Route::get('/', [BankLetterController::class, 'create'])->name('bank-letters.create');
+    Route::post('/preview', [BankLetterController::class, 'preview'])->name('bank-letters.preview');
+    Route::post('/generate', [BankLetterController::class, 'generate'])->name('bank-letters.generate');
+});
+
+// Experience Letter Routes
+Route::prefix('hr')->group(function () {
+    // Experience Letters
+    Route::get('experience-letters/create', [ExperienceLetterController::class, 'create'])->name('experience-letters.create');
+    Route::post('experience-letters/preview', [ExperienceLetterController::class, 'preview'])->name('experience-letters.preview');
+    Route::post('experience-letters/generate', [ExperienceLetterController::class, 'generate'])->name('experience-letters.generate');
+    Route::post('experience-letters/generate-without-letterhead', [ExperienceLetterController::class, 'generateWithoutLetterhead'])
+        ->name('experience-letters.generate-without-letterhead');
+});
 
 //Admin Routes
 Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Admin'], function () {

@@ -344,7 +344,7 @@ function createDatatable(url){
 			alert('Link Copied');
             });
             $('.copyLink').hover(function() {
-                $(this).css('cursor', 'pointer').attr('title', 'Click for Copy Link');
+                $(this).css('cursor', 'pointer').attr('title', 'Click to copy short URL');
             }, function() {
                 $(this).css('cursor', 'auto');
             });

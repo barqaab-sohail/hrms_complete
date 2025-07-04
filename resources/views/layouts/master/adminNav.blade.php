@@ -58,6 +58,12 @@
                                                 @can('hr user data')
                                                 <li><a class="{{Request::is('hrms/employee/user/data')?'active':''}}" href="{{route('user.data',Auth::User()->hrEmployee->id)}}">User Data</a></li>
                                                 @endcan
+                                                @can('bank account letter')
+                                                <li><a class="{{Request::is('hrms/bank-letters')?'active':''}}" href="{{route('bank-letters.create')}}">Bank Account Letter</a></li>
+                                                @endcan
+                                                @can('experience letter')
+                                                <li><a class="{{Request::is('hrms/experience-letters')?'active':''}}" href="{{route('experience-letters.create')}}">Experience Letter</a></li>
+                                                @endcan
                                                 @can('Super Admin')
                                                 <li><a class="{{Request::is('hrms/employee/checking')?'active':''}}" href="{{route('checking.data',Auth::User(
                                                 )->hrEmployee->id)}}">HR Monthly Report Checking</a></li>

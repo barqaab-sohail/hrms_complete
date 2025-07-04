@@ -33,7 +33,6 @@ class ProjectDocumentController extends Controller
                 }
             })
             ->editColumn('description', function ($row) {
-                // Trim to 50 chars and add ellipsis if longer
                 $shortDescription = strlen($row->description) > 50
                     ? substr($row->description, 0, 50) . '...'
                     : $row->description;
@@ -43,21 +42,16 @@ class ProjectDocumentController extends Controller
                     . '</span>';
             })
             ->addColumn('copy_link', function ($row) {
-                return '<a class="copyLink" link="' . $row->full_path . '" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
+                return '<a class="copyLink" link="' . $row->tiny_url . '" style="cursor: auto;" title="Click for Copy Tiny URL"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
             })
             ->addColumn('Edit', function ($row) {
-
                 $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editDocument">Edit</a>';
-
                 return $btn;
             })
             ->addColumn('Delete', function ($row) {
-
                 $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
-
                 return $btn;
             })
-
             ->rawColumns(['document', 'description', 'copy_link', 'Edit', 'Delete'])
             ->make(true);
     }

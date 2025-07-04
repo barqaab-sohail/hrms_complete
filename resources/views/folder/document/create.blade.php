@@ -4,9 +4,6 @@
 <h3 class="text-themecolor">{{$folder->name}}</h3>
 @stop
 @section('content')
-
-
-
 <div class="row justify-content-end">
     <div class="col-lg-12 reducedCol">
         <div class="card">
@@ -118,6 +115,7 @@
                             <th>Reference No.</th>
                             <th>Document Date</th>
                             <th>View</th>
+                            <th>Copy Link</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
@@ -126,7 +124,6 @@
 
                     </tbody>
                 </table>
-
 
             </div>
         </div>
@@ -208,6 +205,10 @@
                     name: 'document'
                 },
                 {
+                    data: "copy_link",
+                    name: 'copy_link'                    
+                },
+                {
                     data: 'Edit',
                     name: 'Edit',
                     orderable: false,
@@ -221,6 +222,23 @@
                 },
 
             ],
+            "drawCallback": function(settings) {
+            if(this.api().rows().data().length>0){
+			    $("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
+            }
+
+            $('.copyLink').click(function() {
+			var text = $(this).attr('link').replace(" ", "%20");
+			navigator.clipboard.writeText(text);
+			alert('Link Copied');
+            });
+            $('.copyLink').hover(function() {
+                $(this).css('cursor', 'pointer').attr('title', 'Click to copy short URL');
+            }, function() {
+                $(this).css('cursor', 'auto');
+            });
+
+        },
             order: [
                 [1, "desc"]
             ]
@@ -298,6 +316,7 @@
                     $.each(data.responseJSON.errors, function(key, value) {
                         errorMassage += value + '<br>';
                     });
+                    console.log(errorMassage);
                     $('#json_message').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + errorMassage + '</strong></div>');
 
                     $('#saveBtn').html('Save Changes');

@@ -21,7 +21,7 @@ class AdminDocumentController extends Controller
 
             return DataTables::of($data)
                 ->addColumn('link', function ($data) {
-                    $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-link="' . url('/storage/' . $data->path . $data->file_name) . '" data-mis-user="false" data-original-title="edit mis rights" class="btn btn-primary btn-sm copyLink">Copy Link</a>';
+                    $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-link="' . $data->tiny_url . '" data-mis-user="false" data-original-title="edit mis rights" class="btn btn-primary btn-sm copyLink">Copy Link</a>';
                     return $button;
                 })
                 ->addColumn('view', function ($data) {

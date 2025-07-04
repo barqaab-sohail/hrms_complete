@@ -23,6 +23,7 @@ class FolderDocumentStore extends FormRequest
     {
         $rules = [
             'description' => 'required|max:190',
+            'document_date' => 'required',
         ];
 
         //If method is POST then document is required otherwise in Patch method document is nullable.
@@ -33,6 +34,5 @@ class FolderDocumentStore extends FormRequest
         }
 
         return $rules;
-
     }
 }
