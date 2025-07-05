@@ -151,7 +151,8 @@
                         src="data:image/png;base64,'. DNS2D::getBarcodePNG(url("/storage/$path"),'QRCODE',7,7). '"
                         class="profile-pic" alt="barcode" />' !!}
                     <br>
-                    <p style="margin-top:0%; font-size:0.4rem;">For Content Verification</p>
+                    <p style="margin: 0; font-size: 0.4rem; line-height: 1;">Scan for Content</p>
+                    <p style="margin: 0; font-size: 0.4rem; line-height: 1;">Verification-{{auth()->user()->hrEmployee->employee_no }}</p>
                 </div>
                
             </div>
