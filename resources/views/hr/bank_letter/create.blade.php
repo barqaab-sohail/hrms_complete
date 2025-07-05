@@ -45,6 +45,26 @@
             
             <!-- Modal Container -->
             <div id="modalContainer"></div>
+
+            <hr>
+            <br>
+            <h1>Already Issued Bank Letters</h1>
+            <table class="table table-bordered data-table" width=100%>
+                <thead>
+                    <tr>
+                        <th>Document Name</th>
+                    
+                        <th>Date</th>
+                        <th>View</th>
+                        <th>Copy Link</th>
+                        <th>Delete</th>
+                                        <!-- <th colspan="2" class="text-center"style="width:10%"> Actions </th>  -->
+                    </tr>
+                </thead>
+                <tbody>
+    
+                </tbody>
+            </table>
         
     </div>
 </div>
@@ -52,7 +72,8 @@
         
 <script>
 
-   
+var bankLettersTable;
+
 $(document).ready(function() {
     $('.select2').select2({
         placeholder: 'Select an option',
@@ -78,6 +99,108 @@ $(document).ready(function() {
     // Handle modal close
     $(document).on('hidden.bs.modal', '#previewModal', function() {
         $('#modalContainer').empty();
+    });
+
+   
+     // Make this function available globally so the modal can call it
+     window.updateBankLettersTable = function() {
+        var employeeId = $('#employee_id').val();
+        if ($.fn.DataTable.isDataTable('.data-table')) {
+            $('.data-table').DataTable().ajax.reload(null, false); // false means don't reset paging
+        } else {
+            // Re-initialize the table if it doesn't exist
+            initializeDataTable(employeeId);
+        }
+    };
+
+     // Extract table initialization into a separate function
+    function initializeDataTable(employeeId) {
+        bankLettersTable = $('.data-table').DataTable({
+            processing: true,
+        serverSide: true,
+        ajax: {
+            url: "{{ route('bank-letters.list') }}",
+            type: "GET",
+            data: function(d) {
+                d.employee_id = $('#employee_id').val();
+            }
+        },
+        columns: [
+            { data: "description", name: 'description' },
+            { data: "document_date", name: 'document_date' },
+            { data: "document", name: 'document' },
+            { data: "copy_link", name: 'copy_link' },
+            { data: 'Delete', name: 'Delete', orderable: false, searchable: false },
+        ],
+            drawCallback: function (settings) {
+                if (this.api().rows().data().length > 0) {
+                    $("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
+                }
+
+                $('.copyLink').click(function () {
+                    var text = $(this).attr('link').replace(" ", "%20");
+                    navigator.clipboard.writeText(text);
+                    alert('Link Copied');
+                });
+
+                $('.copyLink').hover(function () {
+                    $(this).css('cursor', 'pointer').attr('title', 'Click for Copy Link');
+                }, function () {
+                    $(this).css('cursor', 'auto');
+                });
+            },
+            order: [[1, "desc"]]
+        });
+    }
+    
+    // Update project field when employee changes
+    $('#employee_id').on('change', function () {
+        var selectedOption = $(this).find('option:selected');
+        var employeeId = selectedOption.val();
+    
+
+        // Destroy existing DataTable if already initialized
+        if ($.fn.DataTable.isDataTable('.data-table')) {
+            $('.data-table').DataTable().destroy();
+        }
+
+        // Re-initialize DataTable with new employeeId
+        initializeDataTable(employeeId);
+
+        // Handle delete action
+        $('body').off('click', '.deleteDocument').on('click', '.deleteDocument', function () {
+            var document_id = $(this).data("id");
+            var con = confirm("Are you sure you want to delete?");
+            if (con) {
+                $.ajax({
+                    type: "DELETE",
+                    url: "{{ route('documentation.store') }}/" + document_id,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data) {
+                        bankLettersTable.ajax.reload(null, false); 
+                        clearMessage();
+                        if ($('#formDocument:visible').length != 0) {
+                            $('#formDocument').toggle();
+                        }
+
+                        if (data.status == "Not OK") {
+                            $('#json_message').html('<div class="alert alert-danger"><strong>' + data.message + '</strong></div>');
+                        } else {
+                            $('#json_message').html('<div class="alert alert-success"><strong>' + data.message + '</strong></div>');
+                        }
+
+                        if (data.error) {
+                            $('#json_message').html('<div class="alert alert-danger"><strong>' + data.error + '</strong></div>');
+                        }
+                    },
+                    error: function (data) {
+                        console.log("Delete error", data);
+                    }
+                });
+            }
+        });
     });
 });
 </script>

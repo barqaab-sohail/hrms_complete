@@ -21,10 +21,10 @@
                         CNIC No. {{ $employee->cnic }}, has 
                         @if($is_current_employee)
                             been employed full-time with this organization since {{ $joining_date }}. 
-                            He is currently serving as {{ $designation }} on "{{ $project }}" Project.
+                            He is currently serving as {{ $designation }} on "{{ $project }}".
                         @else
                             worked with this organization as {{ $designation }} from {{ $joining_date }} till {{ $leaving_date }}, 
-                            on "{{ $project }}" Project.
+                            on "{{ $project }}".
                         @endif
                         </p>
                         
@@ -47,22 +47,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <form method="POST" action="{{ route('experience-letters.generate') }}" style="display: inline-block;">
-                    @csrf
-                    <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                    <input type="hidden" name="project" value="{{ $project }}">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-download"></i> Generate PDF with Letterhead
-                    </button>
-                </form>
-                <form method="POST" action="{{ route('experience-letters.generate-without-letterhead') }}" style="display: inline-block;">
-                    @csrf
-                    <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                    <input type="hidden" name="project" value="{{ $project }}">
-                    <button type="submit" class="btn btn-info">
-                        <i class="fa fa-download"></i> Generate PDF without Letterhead
-                    </button>
-                </form>
+                <button type="button" class="btn btn-primary" id="generateWithLetterhead">
+                    <i class="fa fa-download"></i> Generate PDF with Letterhead
+                </button>
+                <button type="button" class="btn btn-info" id="generateWithoutLetterhead">
+                    <i class="fa fa-download"></i> Generate PDF without Letterhead
+                </button>
             </div>
         </div>
     </div>
@@ -71,5 +61,49 @@
 <script>
     $(document).ready(function() {
         $('#previewModal').modal('show');
+        
+        // Handle PDF generation with letterhead
+        $('#generateWithLetterhead').click(function() {
+            generatePdf('{{ route("experience-letters.generate") }}');
+        });
+        
+        // Handle PDF generation without letterhead
+        $('#generateWithoutLetterhead').click(function() {
+            generatePdf('{{ route("experience-letters.generate-without-letterhead") }}');
+        });
+        
+        function generatePdf(url) {
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    employee_id: '{{ $employee->id }}',
+                    project: '{{ $project }}',
+                    date: '{{ $date }}',
+                    joining_date: '{{ $joining_date }}',
+                    leaving_date: '{{ $leaving_date }}'
+                },
+                success: function(response) {
+                    // Close the modal
+                    $('#previewModal').modal('hide');
+                    
+                    // Trigger DataTable update in parent window
+                    if (window.opener) {
+                        window.opener.updateExperienceLettersTable();
+                    } else {
+                        window.parent.updateExperienceLettersTable();
+                    }
+                    
+                    // Download the PDF if a download URL is provided
+                    if (response.download_url) {
+                        window.location.href = response.download_url;
+                    }
+                },
+                error: function(xhr) {
+                    alert('Error generating PDF: ' + xhr.responseJSON.message);
+                }
+            });
+        }
     });
-</script>
+    </script>

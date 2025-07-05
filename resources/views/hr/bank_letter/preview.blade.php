@@ -45,8 +45,8 @@
                         </tbody>
                     </table>
                     
-                    <p style="margin-top: 40px;">Regards</p>
-                    <p style="margin-top: 40px;">
+                    <p style="margin-top: 40px; text-align: right;">Regards</p>
+                    <p style="margin-top: 40px; text-align: right;">
                         <strong>({{ $signatory }})</strong><br>
                         {{ $signatory_position }}
                     </p>
@@ -54,14 +54,52 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <form method="POST" action="{{ route('bank-letters.generate') }}">
-                    @csrf
-                    <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                    <input type="hidden" name="bank_id" value="{{ $bank->id }}">
-                    <input type="hidden" name="salary" value="{{ $salary }}">
-                    <button type="submit" class="btn btn-primary">Generate PDF</button>
-                </form>
+                <button type="submit" class="btn btn-primary" id="generateWithLetterhead">Generate PDF</button>
+               
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $('#previewModal').modal('show');
+        
+        // Handle PDF generation with letterhead
+        $('#generateWithLetterhead').click(function() {
+            generatePdf('{{ route("bank-letters.generate") }}');
+        });
+        
+                
+        function generatePdf(url) {
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    employee_id: '{{ $employee->id }}',
+                    bank_id: '{{ $bank->id }}',
+                    salary: '{{ $salary }}',
+                },
+                success: function(response) {
+                    // Close the modal
+                    $('#previewModal').modal('hide');
+                    
+                    // Trigger DataTable update in parent window
+                    if (window.opener) {
+                        window.opener.updateBankLettersTable();
+                    } else {
+                        window.parent.updateBankLettersTable();
+                    }
+                    
+                    // Download the PDF if a download URL is provided
+                    if (response.download_url) {
+                        window.location.href = response.download_url;
+                    }
+                },
+                error: function(xhr) {
+                    alert('Error generating PDF: ' + xhr.responseJSON.message);
+                }
+            });
+        }
+    });
+    </script>

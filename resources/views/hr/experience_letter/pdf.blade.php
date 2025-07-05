@@ -18,7 +18,7 @@
         .page {
             position: relative;
             width: 210mm;
-            min-height: 297mm;
+            
             @if(!($show_letterhead ?? true)) 
                 padding-top: 20mm; /* Add top padding when no letterhead */
             @endif
@@ -86,9 +86,13 @@
     <div class="page">
         @if($show_letterhead ?? true)
             <img src="{{ $letterhead_url }}" class="letterhead" alt="BARQAAB Letterhead">
+        @else
+        <br/>
+        <br/>
         @endif
 
         <div class="content">
+           
             <p style="text-align: right;">Dated: {{ $date }}</p>
             
             <p style="text-align: center;"><strong>TO WHOM IT MAY CONCERN</strong></p>
@@ -98,10 +102,10 @@
             CNIC No. {{ $employee->cnic }}, has 
             @if($is_current_employee)
                 been employed full-time with this organization since {{ $joining_date }}. 
-                He is currently serving as {{ $designation }} on "{{ $project }}" Project.
+                He is currently serving as {{ $designation }} on "{{ $project }}".
             @else
                 worked with this organization as {{ $designation }} from {{ $joining_date }} till {{ $leaving_date }}, 
-                on "{{ $project }}" Project.
+                on "{{ $project }}".
             @endif
             </p>
             
@@ -131,7 +135,8 @@
                         src="data:image/png;base64,'. DNS2D::getBarcodePNG(url("/storage/$path"),'QRCODE',6,6). '"
                         class="profile-pic" alt="barcode" />' !!}
                     <br>
-                    <p style="margin-top:0%; font-size:0.4rem;">For Content Verification</p>
+                    <p style="margin: 0; font-size: 0.4rem; line-height: 1;">Scan for Content</p>
+                    <p style="margin: 0; font-size: 0.4rem; line-height: 1;">Verification-{{auth()->user()->hrEmployee->employee_no }}</p>
                 </div>
             </div>
         </div>

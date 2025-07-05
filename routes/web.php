@@ -412,6 +412,7 @@ Route::prefix('bank-letters')->group(function () {
     Route::get('/', [BankLetterController::class, 'create'])->name('bank-letters.create');
     Route::post('/preview', [BankLetterController::class, 'preview'])->name('bank-letters.preview');
     Route::post('/generate', [BankLetterController::class, 'generate'])->name('bank-letters.generate');
+    Route::get('bank-letters/list', [BankLetterController::class, 'list'])->name('bank-letters.list');
 });
 
 // Experience Letter Routes
@@ -422,6 +423,7 @@ Route::prefix('hr')->group(function () {
     Route::post('experience-letters/generate', [ExperienceLetterController::class, 'generate'])->name('experience-letters.generate');
     Route::post('experience-letters/generate-without-letterhead', [ExperienceLetterController::class, 'generateWithoutLetterhead'])
         ->name('experience-letters.generate-without-letterhead');
+    Route::get('experience-letters/list', [ExperienceLetterController::class, 'list'])->name('experience-letters.list');
 });
 
 //Admin Routes
