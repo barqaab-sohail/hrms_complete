@@ -1,3 +1,24 @@
+<style>
+    .spinner-border {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: text-bottom;
+    border: 0.2em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border .75s linear infinite;
+}
+
+@keyframes spinner-border {
+    to { transform: rotate(360deg); }
+}
+
+.d-none {
+    display: none !important;
+}
+</style>
+
 <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -54,8 +75,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" id="generateWithLetterhead">Generate PDF</button>
-               
+                <button type="submit" class="btn btn-primary" id="generateWithLetterhead">
+                    <span id="generateText">Generate PDF</span>
+                    <span id="generateSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                </button>
             </div>
         </div>
     </div>
@@ -63,9 +86,16 @@
 <script>
     $(document).ready(function() {
         $('#previewModal').modal('show');
+
+        
         
         // Handle PDF generation with letterhead
         $('#generateWithLetterhead').click(function() {
+            // Disable button and show spinner
+            $(this).prop('disabled', true);
+            $('#generateText').addClass('d-none');
+            $('#generateSpinner').removeClass('d-none');
+            
             generatePdf('{{ route("bank-letters.generate") }}');
         });
         
@@ -83,6 +113,11 @@
                 success: function(response) {
                     // Close the modal
                     $('#previewModal').modal('hide');
+
+                     // Re-enable button (in case modal stays open)
+                $('#generateWithLetterhead').prop('disabled', false);
+                $('#generateText').removeClass('d-none');
+                $('#generateSpinner').addClass('d-none');
                     
                     // Trigger DataTable update in parent window
                     if (window.opener) {
@@ -97,6 +132,11 @@
                     }
                 },
                 error: function(xhr) {
+
+                    // Re-enable button on error
+                $('#generateWithLetterhead').prop('disabled', false);
+                $('#generateText').removeClass('d-none');
+                $('#generateSpinner').addClass('d-none');
                     alert('Error generating PDF: ' + xhr.responseJSON.message);
                 }
             });

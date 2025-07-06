@@ -18,7 +18,7 @@
                         <option value="">Select Employee</option>
                         @foreach($employees as $employee)
                             <option value="{{ $employee->id }}">
-                                {{ $employee->full_name }}  - {{ $employee->designation}}
+                                {{ $employee->employee_no }} - {{ $employee->first_name }} {{ $employee->last_name }}
                             </option>
                         @endforeach
                     </select>

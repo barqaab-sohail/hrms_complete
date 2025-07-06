@@ -17,7 +17,10 @@ class BankLetterController extends Controller
 
     public function create()
     {
-        $employees = HrEmployee::orderBy('first_name')->get();
+        $employees = HrEmployee::orderBy('first_name')
+            ->select('id', 'employee_no', 'first_name', 'last_name')
+            ->get();
+
         $banks = Bank::whereIn('name', [
             'Bank Alfalah Limited',
             'Faysal Bank Limited',

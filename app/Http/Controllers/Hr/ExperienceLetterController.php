@@ -15,7 +15,10 @@ class ExperienceLetterController extends Controller
 {
     public function create()
     {
-        $employees = HrEmployee::orderBy('first_name')->get();
+
+        $employees = HrEmployee::orderBy('first_name')
+            ->select('id', 'employee_no', 'first_name', 'last_name', 'hr_status_id')
+            ->get();
         return view('hr.experience_letter.create', compact('employees'));
     }
 
@@ -215,7 +218,7 @@ class ExperienceLetterController extends Controller
     {
         $documentation = HrDocumentation::where('hr_employee_id', $request->employee_id)
             ->where('file_name', 'like', '%barqaab_experience_letter%')
-            ->orderBy('document_date', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return DataTables::of($documentation)

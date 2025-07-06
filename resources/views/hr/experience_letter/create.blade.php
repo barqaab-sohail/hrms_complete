@@ -21,7 +21,7 @@
                             data-project="{{ $employee->project ?? '' }}"
                             >
                             {{ $employee->full_name }} - {{ $employee->designation }}
-                            ({{ $employee->hr_status_id == 'Active' ? 'Active' : 'Previous' }})
+                            ({{ $employee->hr_status_id }})
                         </option>
                     @endforeach
                 </select>
