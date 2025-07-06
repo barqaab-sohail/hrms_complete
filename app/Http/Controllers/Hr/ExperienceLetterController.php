@@ -224,28 +224,14 @@ class ExperienceLetterController extends Controller
         return DataTables::of($documentation)
             ->addIndexColumn()
             ->addColumn('document', function ($row) {
-                if ($row->extension != 'pdf') {
-                    return '<img id="ViewIMG" src="' . $row->full_path . '" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
-                } else {
-                    return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
-                }
+
+                return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
             })
             ->addColumn('copy_link', function ($row) {
                 return '<a class="copyLink" link="' . $row->tiny_url . '" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
             })
             ->addColumn('Delete', function ($row) {
-                // Calculate if the document was created more than 1 hour ago
-                $createdAt = Carbon::parse($row->created_at);
-                $oneHourAgo = Carbon::now()->subHour();
-
-                if ($createdAt->lt($oneHourAgo)) {
-                    // More than 1 hour old - disable the button
-                    $btn = '<button class="btn btn-danger btn-sm" disabled>Delete</button>';
-                } else {
-                    // Within 1 hour - enable the button
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
-                }
-
+                $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-created="' . $row->created_at . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDocument">Delete</a>';
                 return $btn;
             })
             ->rawColumns(['document', 'copy_link', 'Edit', 'Delete'])

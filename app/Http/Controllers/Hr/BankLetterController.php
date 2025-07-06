@@ -108,7 +108,7 @@ class BankLetterController extends Controller
         // Create HrDocumentation record
         $documentation = HrDocumentation::create([
             'hr_employee_id' => $employee->id,
-            'description' => 'Bank Letter for ' . $employee->full_name . "-" . now(),
+            'description' => 'Bank Letter for ' . $bank->name . "-" . $employee->full_name . "-" . now(),
             'document_date' => now(),
             'file_name' => $fileName,
             'path' => $folderName,

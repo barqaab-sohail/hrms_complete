@@ -4,6 +4,7 @@
 <h3 class="text-themecolor">Bank Accounts Letter</h3>
 @stop
 @section('content')
+
 <div class="card">
     <div class="card-body">
         
@@ -14,6 +15,7 @@
                 
                 <div class="form-group">
                     <label for="employee_id">Employee</label>
+                    <br>
                     <select class="form-control select2" id="employee_id" name="employee_id" required>
                         <option value="">Select Employee</option>
                         @foreach($employees as $employee)
@@ -24,20 +26,25 @@
                     </select>
                 </div>
                 
-                <div class="form-group">
-                    <label for="bank_id">Bank</label>
-                    <select class="form-control select2" id="bank_id" name="bank_id" required>
-                        <option value="">Select Bank</option>
-                        @foreach($banks as $bank)
-                            <option value="{{ $bank->id }}">{{ $bank->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="salary">Salary (PKR)</label>
-                    <input type="number" class="form-control" id="salary" name="salary" 
-                           placeholder="Leave empty to use employee's default salary">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <label for="bank_id">Bank</label> <br>
+                            <select class="form-control select2" id="bank_id" name="bank_id" required>
+                                <option value="">Select Bank</option>
+                                @foreach($banks as $bank)
+                                    <option value="{{ $bank->id }}">{{ $bank->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="salary">Salary (PKR)</label>
+                            <input type="number" class="form-control" id="salary" name="salary" 
+                                   placeholder="Leave empty to use employee's default salary">
+                        </div>
+                    </div>
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Preview Letter</button>
@@ -46,25 +53,27 @@
             <!-- Modal Container -->
             <div id="modalContainer"></div>
 
-            <hr>
-            <br>
-            <h1>Already Issued Bank Letters</h1>
-            <table class="table table-bordered data-table" width=100%>
-                <thead>
-                    <tr>
-                        <th>Document Name</th>
-                    
-                        <th>Date</th>
-                        <th>View</th>
-                        <th>Copy Link</th>
-                        <th>Delete</th>
-                                        <!-- <th colspan="2" class="text-center"style="width:10%"> Actions </th>  -->
-                    </tr>
-                </thead>
-                <tbody>
-    
-                </tbody>
-            </table>
+            <div id="datatableContainer" class="mt-4" style="display: none;">
+                <hr>
+                <h2>Bank Letters</h2>
+                <p>List of bank letters issued.</p>
+            
+                <table class="table table-bordered data-table" width=100%>
+                    <thead>
+                        <tr>
+                            <th>Document Name</th>
+                        
+                            <th>Date</th>
+                            <th>View</th>
+                            <th>Copy Link</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                    </tbody>
+                </table>
+            </div>
         
     </div>
 </div>
@@ -77,6 +86,7 @@ var bankLettersTable;
 $(document).ready(function() {
     $('.select2').select2({
         placeholder: 'Select an option',
+        width: '100%',
         allowClear: true
     });
     $('#bankLetterForm').on('submit', function(e) {
@@ -155,17 +165,23 @@ $(document).ready(function() {
     
     // Update project field when employee changes
     $('#employee_id').on('change', function () {
-        var selectedOption = $(this).find('option:selected');
-        var employeeId = selectedOption.val();
-    
+        var employeeId = $(this).val();
+        
+        if (employeeId) {
+            // Show the dataTableContainer when an employee is selected
+            $('#datatableContainer').show();
+            
+            // Destroy existing DataTable if already initialized
+            if ($.fn.DataTable.isDataTable('.data-table')) {
+                $('.data-table').DataTable().destroy();
+            }
 
-        // Destroy existing DataTable if already initialized
-        if ($.fn.DataTable.isDataTable('.data-table')) {
-            $('.data-table').DataTable().destroy();
+            // Re-initialize DataTable with new employeeId
+            initializeDataTable(employeeId);
+        } else {
+            // Hide the dataTableContainer when no employee is selected
+            $('#datatableContainer').hide();
         }
-
-        // Re-initialize DataTable with new employeeId
-        initializeDataTable(employeeId);
 
         // Handle delete action
         $('body').off('click', '.deleteDocument').on('click', '.deleteDocument', function () {

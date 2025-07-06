@@ -12,7 +12,7 @@
             @csrf
             
             <div class="form-group">
-                <label for="employee_id">Employee</label>
+                <label for="employee_id">Employee</label> <br>
                 <select class="form-control select2" id="employee_id" name="employee_id" required>
                     <option value="">Select Employee</option>
                     @foreach($employees as $employee)
@@ -75,28 +75,27 @@
         
         <!-- Modal Container -->
         <div id="modalContainer"></div>
-        <hr>
-        <br>
-        <h1>List of BARQAAB Experience Letters already Issued</h1>
-        <table class="table table-bordered data-table" width=100%>
-            <thead>
-                <tr>
-                    <th>Document Name</th>
-                
-                    <th>Date</th>
-                    <th>View</th>
-                    <th>Copy Link</th>
-                    <th>Delete</th>
-                                    <!-- <th colspan="2" class="text-center"style="width:10%"> Actions </th>  -->
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
+        
+        <!-- Table Container (Hidden Initially) -->
+        <div id="tableContainer" class="mt-4" style="display: none;">
+            <hr>
+            <h2>List of BARQAAB Experience Letters already Issued</h2>
+            <table class="table table-bordered data-table" width="100%">
+                <thead>
+                    <tr>
+                        <th>Document Name</th>
+                        <th>Date</th>
+                        <th>View</th>
+                        <th>Copy Link</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
-    
 </div>
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script>
@@ -104,11 +103,12 @@
 $(document).ready(function() {
     $('.select2').select2({
         placeholder: 'Select an option',
+        width: '100%',
         allowClear: true
     });
 
-     // Initialize date picker with custom format
-     $('.date-picker').datepicker({
+    // Initialize date picker with custom format
+    $('.date-picker').datepicker({
         format: 'MM d, yyyy',
         autoclose: true,
         todayHighlight: true
@@ -129,21 +129,21 @@ $(document).ready(function() {
     function initializeDataTable(employeeId) {
         experienceLettersTable = $('.data-table').DataTable({
             processing: true,
-        serverSide: true,
-        ajax: {
-            url: "{{ route('experience-letters.list') }}",
-            type: "GET",
-            data: function(d) {
-                d.employee_id = $('#employee_id').val();
-            }
-        },
-        columns: [
-            { data: "description", name: 'description' },
-            { data: "document_date", name: 'document_date' },
-            { data: "document", name: 'document' },
-            { data: "copy_link", name: 'copy_link' },
-            { data: 'Delete', name: 'Delete', orderable: false, searchable: false },
-        ],
+            serverSide: true,
+            ajax: {
+                url: "{{ route('experience-letters.list') }}",
+                type: "GET",
+                data: function(d) {
+                    d.employee_id = $('#employee_id').val();
+                }
+            },
+            columns: [
+                { data: "description", name: 'description' },
+                { data: "document_date", name: 'document_date' },
+                { data: "document", name: 'document' },
+                { data: "copy_link", name: 'copy_link' },
+                { data: 'Delete', name: 'Delete', orderable: false, searchable: false },
+            ],
             drawCallback: function (settings) {
                 if (this.api().rows().data().length > 0) {
                     $("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
@@ -160,11 +160,25 @@ $(document).ready(function() {
                 }, function () {
                     $(this).css('cursor', 'auto');
                 });
+
+                // Check time for delete buttons
+                $('.deleteDocument').each(function() {
+                    var createdAt = new Date($(this).data('created'));
+                    var oneHourAgo = new Date();
+                    oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+                    
+                    if (createdAt < oneHourAgo) {
+                        $(this).prop('disabled', true);
+                        $(this).removeClass('deleteDocument');
+                        $(this).html('Delete');
+                        $(this).css('cursor', 'not-allowed');
+                        $(this).attr('title', 'Cannot delete after 1 hour');
+                    }
+                });
             },
             order: [[1, "desc"]]
         });
     }
-    
     
     // Update project field when employee changes
     $('#employee_id').on('change', function () {
@@ -174,17 +188,34 @@ $(document).ready(function() {
 
         $('#project').val(selectedOption.data('project'));
 
-        // Destroy existing DataTable if already initialized
-        if ($.fn.DataTable.isDataTable('.data-table')) {
-            $('.data-table').DataTable().destroy();
-        }
+        if (employeeId) {
+            // Show the table container when an employee is selected
+            $('#tableContainer').show();
+            
+            // Destroy existing DataTable if already initialized
+            if ($.fn.DataTable.isDataTable('.data-table')) {
+                $('.data-table').DataTable().destroy();
+            }
 
-        // Re-initialize DataTable with new employeeId
-        initializeDataTable(employeeId);
+            // Re-initialize DataTable with new employeeId
+            initializeDataTable(employeeId);
+        } else {
+            // Hide the table container when no employee is selected
+            $('#tableContainer').hide();
+        }
 
         // Handle delete action
         $('body').off('click', '.deleteDocument').on('click', '.deleteDocument', function () {
             var document_id = $(this).data("id");
+            var createdAt = new Date($(this).data('created'));
+            var oneHourAgo = new Date();
+            oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+            
+            if (createdAt < oneHourAgo) {
+                alert('Cannot delete after 1 hour');
+                return false;
+            }
+
             var con = confirm("Are you sure you want to delete?");
             if (con) {
                 $.ajax({
@@ -218,7 +249,6 @@ $(document).ready(function() {
         });
     });
 
-    
     $('#experienceLetterForm').on('submit', function(e) {
         e.preventDefault();
         
