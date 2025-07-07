@@ -222,6 +222,7 @@
                 },
 
             ],
+            order: [],
             "drawCallback": function(settings) {
             if(this.api().rows().data().length>0){
 			    $("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
@@ -239,7 +240,7 @@
             });
 
         },
-        order: [[2, "desc"]]
+      
         });
 
         $('#hideButton').click(function() {

@@ -31,6 +31,9 @@ class FolderDocumentsController extends Controller
 
             return  DataTables::of($data)
                 ->addIndexColumn()
+                ->editColumn('description', function ($row) {
+                    return ucwords(strtolower($row->description)); // Convert to Title Case
+                })
                 ->editColumn('document_date', function ($row) {
                     if ($row->document_date) {
                         return \Carbon\Carbon::parse($row->document_date)->format('M d, Y');
