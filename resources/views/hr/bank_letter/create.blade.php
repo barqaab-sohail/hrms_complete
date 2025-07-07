@@ -16,8 +16,6 @@
     }
 </style>
 
-
-
 <div class="card">
     <div class="card-body">
         
@@ -150,7 +148,7 @@ $(document).ready(function() {
         },
         columns: [
             { data: "description", name: 'description', className: "max-width-column"  },
-            { data: "document_date", name: 'document_date',className: "min-width-column"  },
+            { data: "document_date", name: 'document_date', className: "min-width-column"  },
             { data: "document", name: 'document', className: "min-width-column"  },
             { data: "copy_link", name: 'copy_link', className: "min-width-column"  },
             { data: 'Delete', name: 'Delete', orderable: false, searchable: false, className: "min-width-column"  },
