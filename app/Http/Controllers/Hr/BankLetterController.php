@@ -108,7 +108,7 @@ class BankLetterController extends Controller
         // Create HrDocumentation record
         $documentation = HrDocumentation::create([
             'hr_employee_id' => $employee->id,
-            'description' => 'Bank Letter for ' . $bank->name . "-" . $employee->full_name . "-" . now(),
+            'description' => 'Bank Letter for ' . $bank->name . "-" . $employee->full_name . "-" . now()->format('F d, Y, H:i:s'),
             'document_date' => now(),
             'file_name' => $fileName,
             'path' => $folderName,
@@ -145,6 +145,9 @@ class BankLetterController extends Controller
                 } else {
                     return '<img id="ViewPDF" src="https://hrms.barqaab.pk/Massets/images/document.png" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';
                 }
+            })
+            ->editColumn('document_date', function ($row) {
+                return $row->document_date ? \Carbon\Carbon::parse($row->document_date)->format('F d, Y') : '';
             })
             ->addColumn('copy_link', function ($row) {
                 return '<a class="copyLink" link="' . $row->tiny_url . '" style="cursor: auto;" title="Click for Copy Link"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';

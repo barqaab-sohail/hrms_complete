@@ -105,7 +105,7 @@
                 He is currently serving as {{ $designation }} on "{{ $project }}".
             @else
                 worked with this organization as {{ $designation }} from {{ $joining_date }} till {{ $leaving_date }}, 
-                on "{{ $project }}".
+                on "{!! $project !!}".
             @endif
             </p>
             

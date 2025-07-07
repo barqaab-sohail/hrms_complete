@@ -4,6 +4,19 @@
 <h3 class="text-themecolor">Bank Accounts Letter</h3>
 @stop
 @section('content')
+<style>
+    /* Add this in your head section or in a style tag */
+    .max-width-column {
+        width: 60% !important; /* Adjust this percentage as needed */
+        min-width: 300px; /* Set a minimum width if desired */
+    }
+    .min-width-column {
+        width: 1% !important;
+        white-space: nowrap;
+    }
+</style>
+
+
 
 <div class="card">
     <div class="card-body">
@@ -62,7 +75,6 @@
                     <thead>
                         <tr>
                             <th>Document Name</th>
-                        
                             <th>Date</th>
                             <th>View</th>
                             <th>Copy Link</th>
@@ -126,8 +138,9 @@ $(document).ready(function() {
      // Extract table initialization into a separate function
     function initializeDataTable(employeeId) {
         bankLettersTable = $('.data-table').DataTable({
-            processing: true,
+        processing: true,
         serverSide: true,
+        autoWidth: false,
         ajax: {
             url: "{{ route('bank-letters.list') }}",
             type: "GET",
@@ -136,11 +149,11 @@ $(document).ready(function() {
             }
         },
         columns: [
-            { data: "description", name: 'description' },
-            { data: "document_date", name: 'document_date' },
-            { data: "document", name: 'document' },
-            { data: "copy_link", name: 'copy_link' },
-            { data: 'Delete', name: 'Delete', orderable: false, searchable: false },
+            { data: "description", name: 'description', className: "max-width-column"  },
+            { data: "document_date", name: 'document_date',className: "min-width-column"  },
+            { data: "document", name: 'document', className: "min-width-column"  },
+            { data: "copy_link", name: 'copy_link', className: "min-width-column"  },
+            { data: 'Delete', name: 'Delete', orderable: false, searchable: false, className: "min-width-column"  },
         ],
             drawCallback: function (settings) {
                 if (this.api().rows().data().length > 0) {
