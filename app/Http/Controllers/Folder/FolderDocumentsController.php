@@ -119,11 +119,14 @@ class FolderDocumentsController extends Controller
                 } else {
                     FolderDocument::create($attachment);
                 }
-            }
-
-            if ($input['folder_document_id']) {
-
-                FolderDocument::findOrFail($input['folder_document_id'])->update($input);
+            } else {
+                // update existing document without file upload
+                $updateData = [
+                    'document_date' => $input['document_date'],
+                    'reference_no' => $input['reference_no'],
+                    'description' => $input['description'],
+                ];
+                FolderDocument::findOrFail($input['folder_document_id'])->update($updateData);
             }
         }); // end transcation     
 
