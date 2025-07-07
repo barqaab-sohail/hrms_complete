@@ -2,24 +2,28 @@
 
 namespace App\Http\Controllers\Hr;
 
+use DataTables;
+use Carbon\Carbon;
 use App\Models\Common\Bank;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Hr\HrDocumentation;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
-use DataTables;
-use Carbon\Carbon;
 
 class BankLetterController extends Controller
 {
 
     public function create()
     {
-        $employees = HrEmployee::orderBy('first_name')
-            ->select('id', 'employee_no', 'first_name', 'last_name')
-            ->get();
+        $cacheTime = config('cache.employees_list_active', 1440); // 1440 minutes = 24 hours
+        $employees = Cache::remember('employees_list_active', $cacheTime, function () {
+            return HrEmployee::where('hr_status_id', 1)->orderBy('first_name')
+                ->select('id', 'employee_no', 'first_name', 'last_name', 'hr_status_id')
+                ->get();
+        });
 
         $banks = Bank::whereIn('name', [
             'Bank Alfalah Limited',

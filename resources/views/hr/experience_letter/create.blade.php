@@ -31,7 +31,7 @@
                             data-status="{{ $employee->hr_status_id }}"
                             data-project="{{ $employee->project ?? '' }}"
                             >
-                            {{ $employee->full_name }} - {{ $employee->designation }}
+                            {{ $employee->employee_no }} - {{ $employee->full_name }} - {{ $employee->designation }}
                             ({{ $employee->hr_status_id }})
                         </option>
                     @endforeach

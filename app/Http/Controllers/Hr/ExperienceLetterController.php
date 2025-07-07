@@ -9,6 +9,7 @@ use App\Models\Hr\HrEmployee;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Hr\HrDocumentation;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class ExperienceLetterController extends Controller
@@ -16,9 +17,12 @@ class ExperienceLetterController extends Controller
     public function create()
     {
 
-        $employees = HrEmployee::orderBy('first_name')
-            ->select('id', 'employee_no', 'first_name', 'last_name', 'hr_status_id')
-            ->get();
+        $cacheTime = config('cache.employees_list', 1440); // 1440 minutes = 24 hours
+        $employees = Cache::remember('employees_list', $cacheTime, function () {
+            return HrEmployee::orderBy('first_name')
+                ->select('id', 'employee_no', 'first_name', 'last_name', 'hr_status_id')
+                ->get();
+        });
         return view('hr.experience_letter.create', compact('employees'));
     }
 
