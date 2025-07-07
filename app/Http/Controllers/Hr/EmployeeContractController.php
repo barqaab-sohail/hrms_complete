@@ -14,8 +14,8 @@ class EmployeeContractController extends Controller
 {
     public function show($id)
     {
-        $employeeContracts = EmployeeContract::where('hr_employee_id', $id)->get();
-        $view =  view('hr.contract.create', compact('employeeContracts','id'))->render();
+        $employeeContracts = EmployeeContract::where('hr_employee_id', $id)->orderBy('to', 'desc')->get();
+        $view =  view('hr.contract.create', compact('employeeContracts', 'id'))->render();
         return response()->json($view);
     }
 
@@ -23,7 +23,7 @@ class EmployeeContractController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = EmployeeContract::where('hr_employee_id', $request->hrEmployeeId)->latest()->get();
+            $data = EmployeeContract::where('hr_employee_id', $request->hrEmployeeId)->orderBy('to', 'desc')->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()

@@ -239,9 +239,7 @@
             });
 
         },
-            order: [
-                [1, "desc"]
-            ]
+        order: [[2, "desc"]]
         });
 
         $('#hideButton').click(function() {

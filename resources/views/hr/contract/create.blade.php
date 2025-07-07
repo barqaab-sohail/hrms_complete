@@ -118,9 +118,7 @@
                     },
 
                 ],
-                order: [
-                    [1, "desc"]
-                ]
+                
             });
 
             $('#createContract').click(function() {

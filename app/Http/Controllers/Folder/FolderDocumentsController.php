@@ -23,7 +23,11 @@ class FolderDocumentsController extends Controller
     public function create(Request $request)
     {
         if ($request->ajax()) {
-            $data = FolderDocument::where('folder_id', $request->folderId)->latest()->get();
+            $data = FolderDocument::where('folder_id', $request->folderId)
+                ->orderBy('document_date', 'desc') // Add this line to sort by document_date in descending order
+                ->latest()
+                ->get();
+
 
             return  DataTables::of($data)
                 ->addIndexColumn()
