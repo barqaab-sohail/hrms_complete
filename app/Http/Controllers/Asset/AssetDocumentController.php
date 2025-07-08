@@ -27,10 +27,13 @@ class AssetDocumentController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = AsDocumentation::where('asset_id', $request->assetId)->latest()->get();
+            $data = AsDocumentation::where('asset_id', $request->assetId)->orderBy('document_date', 'desc')->latest()->get();
 
             return  DataTables::of($data)
                 ->addIndexColumn()
+                ->editColumn('description', function ($row) {
+                    return ucwords(strtolower($row->description)); // Convert to Title Case
+                })
                 ->editColumn('document_date', function ($row) {
                     if ($row->document_date) {
                         return \Carbon\Carbon::parse($row->document_date)->format('M d, Y');
