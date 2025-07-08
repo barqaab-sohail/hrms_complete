@@ -47,9 +47,13 @@ class BankLetterController extends Controller
         $employee = HrEmployee::findOrFail($request->employee_id);
         $bank = Bank::findOrFail($request->bank_id);
         $salary =  $request->filled('salary') ? $request->salary : $employee->employeeCurrentSalary->total_salary ?? '';
+        $isManualSalary = $request->filled('salary') ? true : false;
+        $effectiveDate = \Carbon\Carbon::parse($employee->salayEffectiveDate?->effective_date)?->format('M d, Y');
 
         $data = [
             'employee' => $employee,
+            'effective_date' => $effectiveDate,
+            'is_manual_salary' => $isManualSalary,
             'designation' => $employee->designation,
             'bank' => $bank,
             'salary' => $salary,

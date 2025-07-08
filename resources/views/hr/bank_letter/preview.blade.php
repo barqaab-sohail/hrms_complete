@@ -65,7 +65,10 @@
                             </tr>
                         </tbody>
                     </table>
-                    
+                    @if(!$is_manual_salary)
+                    <div class="text-right"><strong>Salary Updated: {{$effective_date}}</strong><div>
+                    @endif
+                   
                     <p style="margin-top: 40px; text-align: right;">Regards</p>
                     <p style="margin-top: 40px; text-align: right;">
                         <strong>({{ $signatory }})</strong><br>
