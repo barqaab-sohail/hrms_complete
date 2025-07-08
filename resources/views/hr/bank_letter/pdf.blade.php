@@ -80,12 +80,16 @@
         
         .stamp-img {
             position: absolute;
-            left: 50%;
+            left: 10%;
             transform: translateX(-50%);
             width: 300px;
             height: auto;
-            top: 200px;
+            top: -160px;
             z-index: 1;
+        }
+
+        .no-wrap {
+        white-space: nowrap;
         }
     </style>
 </head>
@@ -123,7 +127,7 @@
                         <td>1.</td>
                         <td>Mr. {{ $employee->full_name }}</td>
                         <td>{{ $employee->designation }}</td>
-                        <td>{{ $employee->cnic }}</td>
+                        <td class="no-wrap">{{ $employee->cnic }}</td>
                         <td>Rs. {{ $salary }}/-</td>
                     </tr>
                 </tbody>
@@ -131,9 +135,14 @@
             
             <div class="signature-block">
                 <p>Regards</p>
+                <br>
+                <br>
                 <div class="signature-wrapper">
+                    
                     <!-- Signature centered relative to name -->
                     <img src="{{ $sign }}" class="signature-img" alt="Signature">
+                    <!-- Stamp centered relative to name -->
+                    <img src="{{ $stamp }}" class="stamp-img" alt="Stamp">
                     
                     <!-- Name and position right-aligned -->
                     <div class="signatory-info">
@@ -141,11 +150,13 @@
                         <p>{{ $signatory_position }}</p>
                     </div>
                     
-                    <!-- Stamp centered relative to name -->
-                    <img src="{{ $stamp }}" class="stamp-img" alt="Stamp">
+                    
                 </div>
               
                 <div class="col-md-12" style="text-align:left; color:black; font-weight: bold;">
+                    <br>
+                    <br>
+                    <br>
                     <br>
                     {!! '<img
                         src="data:image/png;base64,'. DNS2D::getBarcodePNG(url("/storage/$path"),'QRCODE',7,7). '"

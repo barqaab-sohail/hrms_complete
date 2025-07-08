@@ -20,7 +20,9 @@ class BankLetterController extends Controller
     {
         $cacheTime = config('cache.employees_list_active', 1440); // 1440 minutes = 24 hours
         $employees = Cache::remember('employees_list_active', $cacheTime, function () {
-            return HrEmployee::where('hr_status_id', 1)->orderBy('first_name')
+            return HrEmployee::where('hr_status_id', 1)
+                ->orderBy('first_name')
+                ->with(['salayEffectiveDate', 'employeeCurrentSalary', 'employeeCurrentDesignation'])
                 ->select('id', 'employee_no', 'first_name', 'last_name', 'hr_status_id')
                 ->get();
         });

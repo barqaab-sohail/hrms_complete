@@ -116,8 +116,12 @@
                             <th>Document Date</th>
                             <th>View</th>
                             <th>Copy Link</th>
+                            @can('folder_documents.edit')
                             <th>Edit</th>
+                            @endcan
+                            @can('folder_documents.delete') 
                             <th>Delete</th>
+                            @endcan
                         </tr>
                     </thead>
                     <tbody>
@@ -208,18 +212,22 @@
                     data: "copy_link",
                     name: 'copy_link'                    
                 },
+                @can('folder_documents.edit')
                 {
                     data: 'Edit',
                     name: 'Edit',
                     orderable: false,
                     searchable: false
                 },
+                @endcan
+                @can('folder_documents.delete')
                 {
                     data: 'Delete',
                     name: 'Delete',
                     orderable: false,
                     searchable: false
                 },
+                @endcan
 
             ],
             order: [],

@@ -147,8 +147,12 @@
                 <th>Date</th>
                 <th>View</th>
                 <th>Copy Link</th>
+                @can('pr edit document')
                 <th>Edit</th>
+                @endcan
+                @can('pr delete document')
                 <th>Delete</th> 
+                @endcan#
             </tr>
             </thead>
             <tbody>
@@ -330,8 +334,12 @@ function createDatatable(url){
             {data: "document_date", name: 'document_date'},
             {data: "document", name: 'document'},
             {data: "copy_link", name: 'copy_link'},
+            @can('pr edit document')
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
+            @endcan
+            @can('pr delete document')
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
+            @endcan
         ],
         "drawCallback": function(settings) {
             if(this.api().rows().data().length>0){

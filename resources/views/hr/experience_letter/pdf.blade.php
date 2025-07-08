@@ -69,16 +69,30 @@
         }
         .stamp-img {
             position: absolute;
-            left: 50%;
+            left: 10%;
             transform: translateX(-50%);
             width: 300px;
             height: auto;
-            top: 200px;
+            top: -160px;
             z-index: 1;
         }
         .justified-text {
             text-align: justify;
             margin-bottom: 10px;
+        }
+        .main-content {
+            min-height: calc(100% - 100px); /* Adjust this value as needed */
+            position: relative;
+            padding-bottom: 50px; /* Space for QR code */
+        }
+        
+        .qr-container {
+            position: absolute;
+            bottom: 85;
+            left: 50;
+            width: 100%;
+            text-align: left;
+            padding-top: 20px; /* Space above QR code */
         }
     </style>
 </head>
@@ -101,18 +115,18 @@
             <p class="justified-text">This is to certify that <strong>Mr. {{ $employee->full_name }}</strong>, s/o {{ $employee->father_name }}, holding
             CNIC No. {{ $employee->cnic }}, has 
             @if($is_current_employee)
-                been employed full-time with this organization since {{ $joining_date }}. 
-                He is currently serving as {{ $designation }} on "{{ $project }}".
+                been employed with this organization since {{ $joining_date }}. 
+                He is currently serving as {{ $designation }} on {{ $project }}.
             @else
                 worked with this organization as {{ $designation }} from {{ $joining_date }} till {{ $leaving_date }}, 
-                on "{!! $project !!}".
+                on {!! $project !!}.
             @endif
             </p>
             
-            <p class="justified-text">Throughout the tenure of employment, Mr. {{ $employee->full_name }} demonstrated a
+            <p class="justified-text">Throughout the tenure of employment, Mr. {{ $employee->full_name }} exhibited a
             strong work ethic, professionalism, and dedication to his responsibilities.</p>
             
-            <p>This <strong>Experience Certificate</strong> 
+            <p>This Experience Certificate 
             is issued upon his own request.</p>
             
             <div class="signature-block">
@@ -120,24 +134,22 @@
                     @if($show_signature ?? true)
                         <img src="{{ $sign }}" class="signature-img" alt="Signature">
                     @endif
+                    @if($show_stamp ?? true)
+                    <img src="{{ $stamp }}" class="stamp-img" alt="Stamp">
+                    @endif
                     <div class="signatory-info">
                         <p><strong>({{ $signatory }})</strong></p>
                         <p>{{ $signatory_position }}</p>
                     </div>
-                    @if($show_stamp ?? true)
-                        <img src="{{ $stamp }}" class="stamp-img" alt="Stamp">
-                    @endif
                 </div>
-              
-                <div class="col-md-12" style="text-align:left; color:black; font-weight: bold;">
-                    <br>
-                    {!! '<img
-                        src="data:image/png;base64,'. DNS2D::getBarcodePNG(url("/storage/$path"),'QRCODE',6,6). '"
-                        class="profile-pic" alt="barcode" />' !!}
-                    <br>
-                    <p style="margin: 0; font-size: 0.4rem; line-height: 1;">Scan for Content</p>
-                    <p style="margin: 0; font-size: 0.4rem; line-height: 1;">Verification-{{auth()->user()->hrEmployee->employee_no }}</p>
-                </div>
+            </div>  
+            <div class="qr-container">
+                {!! '<img
+                    src="data:image/png;base64,'. DNS2D::getBarcodePNG(url("/storage/$path"),'QRCODE',6,6). '"
+                    class="profile-pic" alt="barcode" />' !!}
+                <br>
+                <p style="margin: 0; font-size: 0.4rem; line-height: 1;">Scan for Content</p>
+                <p style="margin: 0; font-size: 0.4rem; line-height: 1;">Verification-{{auth()->user()->hrEmployee->employee_no }}</p>
             </div>
         </div>
     </div>

@@ -99,10 +99,13 @@
                         <th style="width:55%">Description</th>
                         <th style="width:10%">View</th>
                         <th style="width:5%">Copy Link</th>
+                        @can('admin_document.edit')
                         <th style="width:5%">Edit</th>
-                        @role('Super Admin')
+                        @endcan
+                        @can('admin_document.delete')   
                         <th style="width:5%">Delete</th>
-                        @endrole
+                        @endcan
+                        
                     </tr>
                 </thead>
             </table>
@@ -166,19 +169,22 @@
                         data: 'link',
                         name: 'link'
                     },
+                    @can('admin_document.edit')
                     {
                         data: 'edit',
                         name: 'edit',
                         orderable: false,
                         searchable: false
                     },
-                    @role('Super Admin') {
+                    @endcan
+                    @can('admin_document.delete')
+                    {
                         data: 'delete',
                         name: 'delete',
                         orderable: false,
                         searchable: false
                     }
-                    @endrole
+                    @endcan
                 ],
                 "drawCallback": function(settings) {
                     $("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
