@@ -152,7 +152,7 @@
                 @endcan
                 @can('pr delete document')
                 <th>Delete</th> 
-                @endcan#
+                @endcan
             </tr>
             </thead>
             <tbody>

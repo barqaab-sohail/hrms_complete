@@ -26,7 +26,7 @@ class AsConsumableController extends Controller
 
         if ($request->ajax()) {
 
-            $data = AsConsumable::where('asset_id', $request->assetId)
+            $data = AsConsumable::where('asset_id', $request->assetId)->orderBy('consumable_date', 'desc')
                 ->latest()->get();
 
             return  DataTables::of($data)

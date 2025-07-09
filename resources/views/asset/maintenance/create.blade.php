@@ -132,7 +132,7 @@ $(function () {
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},
 
         ],
-        order: [[ 1, "desc" ]]
+        order: []
     });
 
     $('#hideButton').click(function(){

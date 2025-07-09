@@ -23,7 +23,7 @@ class AsMaintenanceController extends Controller
 
         if ($request->ajax()) {
 
-            $data = AsMaintenance::where('asset_id', $request->assetId)
+            $data = AsMaintenance::where('asset_id', $request->assetId)->orderBy('maintenance_date', 'desc')
                 ->latest()->get();
 
 
