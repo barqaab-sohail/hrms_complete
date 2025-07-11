@@ -194,6 +194,10 @@ $(document).ready(function() {
     
     // Update project field when employee changes
     $('#employee_id').on('change', function () {
+        $('#project').val('').trigger('change'); // Clear project field
+        $('#letter_date').val(''); // Clear letter date field
+        $('#joining_date').val(''); // Clear joining date field
+        $('#leaving_date').val(''); // Clear leaving date field
         var selectedOption = $(this).find('option:selected');
         var employeeId = selectedOption.val();
         console.log("Selected Employee ID:", employeeId);
