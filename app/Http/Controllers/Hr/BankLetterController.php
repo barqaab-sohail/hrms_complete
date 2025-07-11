@@ -83,9 +83,9 @@ class BankLetterController extends Controller
         $salary = $request->filled('salary') ? $request->salary : $employee->salary;
 
         // Generate filename and path
-        $fileName = "barqaab_bank_letter_{$employee->first_name}_{$employee->last_name}_" . time() . '.pdf';
-        $downloadFileName = "bank_letter_{$employee->first_name}_{$employee->last_name}.pdf";
         $employeeName = str_replace(' ', '_', strtolower($employee->full_name));
+        $fileName = "barqaab_bank_letter_{$employeeName}_" . time() . '.pdf';
+        $downloadFileName = $fileName;
         $folderName = "hr/documentation/" . $employee->id . '-' . $employeeName . "/";
         $fullPath = $folderName . $fileName;
 

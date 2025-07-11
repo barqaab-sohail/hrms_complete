@@ -73,20 +73,20 @@ class ExperienceLetterController extends Controller
         $isCurrentEmployee = $employee->hr_status_id == "Active";
         // Use manual values if provided, otherwise get from employee
         $project = $request->filled('project') ? $request->project : ($employee->project ?? 'N/A');
-        $joiningDate = $request->filled('joining_date') ? $request->joining_date : ($employee->joining_date ? \Carbon\Carbon::parse($employee->joining_date)->format('F d, Y') : '');
+        $joiningDate = $request->filled('joining_date') ? $request->joining_date->format('F d, Y') : ($employee->joining_date ? \Carbon\Carbon::parse($employee->joining_date)->format('F d, Y') : '');
         $leavingDate = !$isCurrentEmployee
-            ? ($request->filled('leaving_date') ? $request->leaving_date : ($employee->last_working_date ? \Carbon\Carbon::parse($employee->last_working_date)->format('F d, Y') : ''))
+            ? ($request->filled('leaving_date') ? $request->leaving_date->format('F d, Y') : ($employee->last_working_date ? \Carbon\Carbon::parse($employee->last_working_date)->format('F d, Y') : ''))
             : null;
         $letterDate = $request->filled('date') ? $request->date : \Carbon\Carbon::now()->format('F d, Y');
 
 
 
         // Generate filename and path
-        $fileName = "barqaab_experience_letter_" . ($isCurrentEmployee ? 'current' : 'previous') .
-            "_{$employee->first_name}_{$employee->last_name}_" . time() . '.pdf';
-        $downloadFileName = "experience_letter_" . ($isCurrentEmployee ? 'current' : 'previous') .
-            "_{$employee->first_name}_{$employee->last_name}.pdf";
         $employeeName = str_replace(' ', '_', strtolower($employee->full_name));
+        $fileName = "barqaab_experience_letter_" . ($isCurrentEmployee ? 'current' : 'previous') .
+            "_{$employeeName}_" . time() . '.pdf';
+        // Replace spaces with underscores
+        $downloadFileName = $fileName;
         $folderName = "hr/documentation/" . $employee->id . '-' . $employeeName . "/";
         $fullPath = $folderName . $fileName;
 
@@ -159,11 +159,11 @@ class ExperienceLetterController extends Controller
         $letterDate = $request->filled('date') ? $request->date : \Carbon\Carbon::now()->format('F d, Y');
 
         // Generate filename and path
-        $fileName = "barqaab_experience_letter_no_letterhead_" . ($isCurrentEmployee ? 'current' : 'previous') .
-            "_{$employee->first_name}_{$employee->last_name}_" . time() . '.pdf';
-        $downloadFileName = "experience_letter_no_letterhead_" . ($isCurrentEmployee ? 'current' : 'previous') .
-            "_{$employee->first_name}_{$employee->last_name}.pdf";
         $employeeName = str_replace(' ', '_', strtolower($employee->full_name));
+        $fileName = "barqaab_experience_letter_" . ($isCurrentEmployee ? 'current' : 'previous') .
+            "_{$employeeName}_" . time() . '.pdf';
+        // Replace spaces with underscores
+        $downloadFileName = $fileName;
         $folderName = "hr/documentation/" . $employee->id . '-' . $employeeName . "/";
         $fullPath = $folderName . $fileName;
 
