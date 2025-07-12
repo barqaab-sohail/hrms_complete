@@ -21,6 +21,7 @@ class BackgroundRemovalController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
+
         try {
             $uploadedPath = $request->file('image')->store('temp');
             $fullInputPath = storage_path('app/' . $uploadedPath);
