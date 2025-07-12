@@ -3,6 +3,7 @@
 /storage/logs/laravel.log
 /public/hot
 /public/storage
+public/~
 /public/sample_output.pdf
 /public/prints_output.pdf
 /storage/*.key
