@@ -12,6 +12,7 @@ use App\Http\Controllers\Common\ShortUrlController;
 use App\Http\Controllers\Email\EmailAddressController;
 use App\Http\Controllers\Hr\ExperienceLetterController;
 use App\Http\Controllers\Project\DocumentSearchController;
+use App\Http\Controllers\Self\BackgroundRemovalController;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
 
 
@@ -208,7 +209,11 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/multiplePrints', 'MultiplePrintsController@print')->name('multiplePrint.print');
     Route::post('/multiplePrints', 'MultiplePrintsController@output')->name('multiplePrint.output');
     Route::resource('/personaldocuments', 'PersonalDocumentsController')->except(['show']);
+
+    Route::get('/bg-remove', [BackgroundRemovalController::class, 'showForm'])->name('bg-remove.showForm');
+    Route::post('/bg-remove', [BackgroundRemovalController::class, 'processImage'])->name('bg.remove');
 });
+
 
 //CV Routes
 Route::group(['prefix' => 'hrms/cvData', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Cv'], function () {

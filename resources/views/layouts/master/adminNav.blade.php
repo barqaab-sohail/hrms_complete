@@ -332,6 +332,9 @@
                                                 @can('personal documents')
                                                 <li><a class="{{Request::is('hrms/personaldocuments/create')?'active':''}}" href="{{route('personaldocuments.create')}}">Personal Documents</a></li>
                                                 @endcan
+                                                @can('remove background')
+                                                <li><a class="{{Request::is('hrms/bg-remove/showForm')?'active':''}}" href="{{route('bg-remove.showForm')}}">Remove Background</a></li>
+                                                @endcan
 
                                         </ul>
                                 </li>
