@@ -28,6 +28,8 @@ class ExperienceLetterController extends Controller
 
     public function preview(Request $request)
     {
+
+
         $request->validate([
             'employee_id' => 'required|exists:hr_employees,id',
             'project' => 'nullable|string|max:555'
