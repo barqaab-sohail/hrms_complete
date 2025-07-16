@@ -4,6 +4,7 @@
 /public/hot
 /public/storage
 /app/Python/rembg_models
+/public/rembg_models/
 /public/sample_output.pdf
 /public/prints_output.pdf
 /storage/*.key

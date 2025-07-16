@@ -73,6 +73,28 @@
 </head>
 @include('layouts.master.adminScripts')
 <style>
+    @media (max-width: 768px) {
+        .container-fluid {
+            padding: 0 0px 25px 0px !important;
+        }
+
+        table#myTable th,
+        table#myTable td {
+            font-size: 12px;
+            padding: 4px;
+        }
+
+        .table-scroll-notice {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .table-responsive {
+            border: 1px solid #dee2e6;
+        }
+    }
     thead th {
         font-weight: bold;
     }

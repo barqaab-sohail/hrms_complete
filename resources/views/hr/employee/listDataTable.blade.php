@@ -4,9 +4,33 @@
 <h3 class="text-themecolor">List of Employees</h3>
 @stop
 @section('content')
+
+<style>
+    @media (max-width: 768px) {
+        table#myTable th, table#myTable td {
+            font-size: 12px;
+            padding: 4px;
+        }
+        .table-responsive {
+            border: 1px solid #dee2e6;
+        }
+        .table-scroll-notice {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+    }
+</style>
+
 <div class="card">
     <div class="card-body">
         <h4 class="card-title" style="color:black">List of Employees</h4>
+        
+        <div class="table-scroll-notice d-md-none">
+            👉 Swipe left/right to see full table
+        </div>
+
         <div class="table-responsive m-t-40">
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
@@ -32,7 +56,6 @@
                 </thead>
             </table>
         </div>
-
     </div>
 </div>
 

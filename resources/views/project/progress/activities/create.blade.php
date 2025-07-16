@@ -131,7 +131,7 @@
       if ($(this).val() > 1) {
         $("#hideDiv").show();
         $("#belong_to_activity").val('')
-        getActivities($(this).val());
+        getActivities(($(this).val()-1));
       } else {
         $("#hideDiv").hide();
         $("#belong_to_activity").empty();
@@ -143,6 +143,7 @@
         type: "get",
         url: "{{ url('hrms/project/projectProgressMainActivities') }}/" + $level + "/{{ $prDetail->id }}",
         success: function(res) {
+          console.log(res);
           if (res) {
             $("#belong_to_activity").empty();
             $("#belong_to_activity").append('<option value="">Select Activity</option>');

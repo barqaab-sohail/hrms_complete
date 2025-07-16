@@ -10,6 +10,8 @@
                     <img src="{{asset('Massets/images/bqb-white-logo-1.png') }}" alt="HRMS" class="light-logo" style="height:50px" />
                 </b>
                 <!--End Logo icon -->
+
+                
                 <!-- Logo text -->
                 <span>
                     <h3 class="light-logo"> <img src="{{asset('Massets/images/bqb-white-logo-2.png')}}" /></h3>
@@ -19,6 +21,7 @@
         <!-- ============================================================== -->
         <!-- End Logo -->
         <!-- ============================================================== -->
+       
         <div class="navbar-collapse">
             <!-- ============================================================== -->
             <!-- toggle and nav items Left Site-->
