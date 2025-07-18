@@ -87,6 +87,20 @@
             ajax: {
                 url: "{{ route('employee.loadData') }}",
             },
+            createdRow: function(row, data, dataIndex) {
+                console.log(data);
+                if (data.color === 'Green') {
+                    $(row).css({
+                        'color': 'black',
+                       
+                    });
+                } else {
+                    $(row).css({
+                        'color': 'red',
+                       
+                    });
+                }
+            },
             columns: [{
                     data: 'employee_no',
                     name: 'employee_no'

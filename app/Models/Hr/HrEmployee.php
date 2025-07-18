@@ -167,6 +167,10 @@ class HrEmployee extends Model implements Auditable
         return \Carbon\Carbon::parse($this->date_of_birth)->format('M d, Y');
     }
 
+    public function hrEmployeeCompany()
+    {
+        return $this->hasOneThrough('App\Models\Common\Partner', 'App\Models\Hr\HrEmployeeCompany', 'hr_employee_id', 'id', 'id', 'partner_id')->orderBy('hr_employee_companies.effective_date', 'desc');;
+    }
 
     public function user()
     {

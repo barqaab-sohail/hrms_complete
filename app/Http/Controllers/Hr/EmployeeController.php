@@ -12,6 +12,7 @@ use App\Models\Common\Gender;
 use App\Models\Common\Office;
 use App\Models\Hr\HrCategory;
 use App\Models\Hr\HrEmployee;
+use App\Models\Common\Partner;
 use App\Models\Common\Religion;
 use App\Models\Asset\AsLocation;
 use App\Models\Common\Education;
@@ -23,6 +24,7 @@ use App\Models\Hr\EmployeeManager;
 use App\Models\Hr\HrDocumentation;
 use App\Http\Controllers\Controller;
 use App\Models\Common\MaritalStatus;
+use App\Models\Hr\HrEmployeeCompany;
 use App\Models\Hr\HrEmployeeHusband;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -129,7 +131,8 @@ class EmployeeController extends Controller
                 "delete" =>  $delete,
                 "last_working_date" =>  $lastWorkingDate,
                 "expiry_date" =>   $employee->employeeAppointment->expiry_date ?? '',
-                "hr_status_id" => $employee->hr_status_id ?? ''
+                "hr_status_id" => $employee->hr_status_id ?? '',
+
             );
         }
         Cache::put('employees', $transformedEmployees, now()->addHour(12));
@@ -157,7 +160,8 @@ class EmployeeController extends Controller
             'hrContactMobile',
             'hrBloodGroup',
             'employeeCurrentSalary',
-            'salayEffectiveDate'
+            'salayEffectiveDate',
+            'hrEmployeeCompany'
         ])->get();
 
         return $this->employeeSortData($data)
@@ -180,8 +184,10 @@ class EmployeeController extends Controller
                     : $project;
 
                 $fullName = $employee->full_name;
+                $color = $employee->hrEmployeeCompany?->name ? 'Red' : 'Black';
+                $company = $employee->hrEmployeeCompany?->name ? $employee->hrEmployeeCompany?->name : 'BARQAAB';
                 if (Auth::user()->can('hr edit record') || Auth::user()->can('hr view record')) {
-                    $fullName = '<a href="' . route('employee.edit', $employee->id) . '" style="color:grey">' . $fullName . '</a>';
+                    $fullName = '<a title = "' . $company . '" href="' . route('employee.edit', $employee->id) . '" style="color:' . $color . '">' . $fullName . '</a>';
                 }
 
                 $salary = '';
@@ -216,7 +222,8 @@ class EmployeeController extends Controller
                     "delete" => $delete,
                     "last_working_date" => $lastWorkingDate,
                     "expiry_date" => $employee->employeeAppointment->expiry_date ?? '',
-                    "hr_status_id" => $employee->hr_status_id ?? ''
+                    "hr_status_id" => $employee->hr_status_id ?? '',
+                    "color" => $employee->hrEmployeeCompany?->name ? 'Red' : 'Green'
                 ];
             })
             ->values()
@@ -449,6 +456,8 @@ class EmployeeController extends Controller
         $bloodGroups = BloodGroup::all();
         $degrees = Education::all();
         $designations = HrDesignation::all();
+        $partners = HrEmployeeCompany::pluck('partner_id');
+        $companies = Partner::whereIn('id', $partners)->get();
         $projects = PrDetail::select('id', 'name', 'project_no')->get();
         $offices = Office::select('id', 'name')->where('is_active', 1)->get();
 
@@ -457,7 +466,7 @@ class EmployeeController extends Controller
 
         $employees = HrEmployee::select('id', 'first_name', 'last_name')->with('employeeDesignation')->get();
 
-        return view('hr.employee.search.search', compact('categories', 'offices', 'degrees', 'designations', 'projects', 'managers', 'employees', 'bloodGroups'));
+        return view('hr.employee.search.search', compact('categories', 'offices', 'degrees', 'designations', 'projects', 'managers', 'employees', 'bloodGroups', 'companies'));
     }
 
 
@@ -552,6 +561,9 @@ class EmployeeController extends Controller
                 ->when($data['office_id'], function ($query) use ($data) {
                     $employees = currentActiveOffice($data['office_id']);
                     return     $query->whereIn('hr_employees.id', $employees);
+                })
+                ->when($data['company_id'], function ($query) use ($data) {
+                    return $query->join('hr_employee_companies', 'hr_employee_companies.hr_employee_id', 'hr_employees.id')->where('partner_id', '=', $data['company_id']);
                 })
                 ->select('hr_employees.*')
                 ->get();

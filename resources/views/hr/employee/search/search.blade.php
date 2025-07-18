@@ -161,6 +161,20 @@
 							</div>
 						</div>
 					</div>
+					<div class="col-md-3">
+						<!--/span 5-2 -->
+						<div class="form-group row">
+							<div class="col-md-12 required">
+								<label class="control-label text-right">Other Companies</label><br>
+								<select name="company_id" id="company_id" class="form-control searchSelect">
+									<option value=""></option>
+									@foreach($companies as $company)
+									<option value="{{$company->id}}" {{(old("company")==$company->id? "selected" : "")}}>{{$company->name}}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
