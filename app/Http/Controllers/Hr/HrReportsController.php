@@ -191,12 +191,13 @@ class HrReportsController extends Controller
 
             if (!empty($missingDocs)) {
                 $project = '';
-                if ($employee->employeeCurrentProject->name == 'overhead') {
+                if ($employee->employeeCurrentProject?->name == 'overhead') {
                     $project = $employee->employeeCurrentOffice->name;
                 } else {
-                    $project = $employee->employeeCurrentProject->name ?? 'N/A';
+                    $project = $employee->employeeCurrentProject?->name ?? 'N/A';
                 }
                 $missingData[] = [
+                    'id' => $employee->id,
                     'employee_no' => $employee->employee_no,
                     'employee_name' => $employee->first_name . ' ' . $employee->last_name ?? 'N/A',
                     'designation' => $employee->employeeCurrentDesignation->name ?? 'N/A',
@@ -226,7 +227,10 @@ class HrReportsController extends Controller
                     return "$doc, </br>";
                 })->implode(' ');
             })
-            ->rawColumns(['missing_documents'])
+            ->editColumn('employee_name', function ($row) {
+                return '<a href="' . route('employee.edit', $row['id']) . '" style="color:grey">' . $row['employee_name'] . '</a>';
+            })
+            ->rawColumns(['employee_name', 'missing_documents'])
             ->make(true);
     }
 
@@ -352,7 +356,7 @@ class HrReportsController extends Controller
                 })
                 ->addColumn('project', function ($row) {
 
-                    $project = $row->employeeCurrentProject->name ?? 'N/A';
+                    $project = $row->employeeCurrentProject?->name ?? 'N/A';
                     if ($project == 'overhead') {
                         $project = $row->employeeCurrentOffice->name ?? 'N/A';
                     }

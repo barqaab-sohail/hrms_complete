@@ -45,6 +45,7 @@
         $('#missing-documents-table').DataTable({
             processing: true,
             serverSide: true,
+            
             ajax: {
                 url: "{{ route('hrReports.newmissingdocuments') }}",
                 type: "GET"
@@ -89,15 +90,13 @@
                 }
             ],
             responsive: true,
-            dom: 'frtip',
+            
+            dom: 'Blfrtip',
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
             pageLength: 25,
-            order: [
-                [1, 'asc']
-            ]
-        });
+            order: []        });
     });
 </script>
 @endpush
