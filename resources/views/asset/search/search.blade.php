@@ -4,6 +4,7 @@
 <h3 class="text-themecolor">Search Asset</h3>
 @stop
 @section('content')
+
 <div class="card">
 	<div class="card-body">
 		<h4 class="card-title">Search Asset <button type="button" id="resetForm" class="btn btn-danger float-right">Reset Search</button></h4>

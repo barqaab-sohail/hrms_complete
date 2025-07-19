@@ -1,5 +1,6 @@
 @if($result->count()!=0)
 <hr>
+
 <div class="card">
     <div class="card-body">
         <!--<div class="float-right">
@@ -8,58 +9,63 @@
 
         <div class="table-responsive m-t-40">
 
-            <table id="myDataTable" class="table table-bordered table-striped " width="100%" cellspacing="0">
+            <table id="myDataTable" class="table table-bordered table-striped" width="100%" cellspacing="0" style="color:black;">
                 <thead>
                     <tr>
-                        <th>Asset Id</th>
-                        <th>Description</th>
-                        <th>Ownership</th>
-                        <th>Allocation/Location</th>
-                        <th>Image</th>
-
+                        <th style="color:black;">Asset Id</th>
+                        <th style="color:black; width: 50%;">Description</th>
+                        <th style="color:black;">Ownership</th>
+                        <th style="color:black;">Allocation/Location</th>
+                        <th style="color:black;">Image</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($result as $asset)
-
-                    <tr>
-                        <td>{{$asset->asset_code??''}}</td>
-                        <td>{{$asset->description}}</td>
-                        <td>{{$asset->asOwnership->name??''}}</td>
-                        <td>
-                            @isset($asset->asCurrentAllocation->first_name)
-                            {{$asset->asCurrentAllocation?->first_name}} {{$asset->asCurrentAllocation?->last_name}} - {{$asset->asCurrentAllocation?->employeeCurrentDesignation?->name}}
-                            @endisset
-                            {{$asset->asCurrentLocation->name??''}}
-                        </td>
-                        <td>
-
-                            @if(file_exists(public_path('storage/'.$asset->asPicture->path.$asset->asPicture->file_name)))
-                            @php
-                            $arrContextOptions=array(
-                            "ssl"=>array(
-                            "verify_peer"=>false,
-                            "verify_peer_name"=>false,
-                            ),
-                            );
-
-                            $path = asset('storage/'.$asset->asPicture->path.$asset->asPicture->file_name);
-                            $type = pathinfo($path, PATHINFO_EXTENSION);
-                            $data = file_get_contents($path, false, stream_context_create($arrContextOptions));
-                            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-                            @endphp
-                            <img class="img-fluid profile-pic ViewIMG" src="{{$base64}}" onerror="this.src ='{{asset('Massets/images/default.png')}}';" alt="user" width="10%" />
-                            @else
-                            <img class="img-fluid profile-pic ViewIMG" src="{{asset('Massets/images/asset1.png')}}" alt="user" width="30%" />
-                            @endif
-
-                        </td>
-
-                    </tr>
+                        <tr>
+                            <td style="color:black;">{{ $asset->asset_code ?? '' }}</td>
+            
+                            <td style="color:black; white-space: normal; word-wrap: break-word; max-width:100%;">
+                                <a href="{{ route('asset.edit', $asset->id) }}" style="color:black;">
+                                    {{ $asset->description }}
+                                </a>
+                            </td>
+            
+                            <td style="color:black;">{{ $asset->asOwnership->name ?? '' }}</td>
+            
+                            <td style="color:black;">
+                                @isset($asset->asCurrentAllocation->first_name)
+                                    {{ $asset->asCurrentAllocation?->first_name }}
+                                    {{ $asset->asCurrentAllocation?->last_name }}
+                                    - {{ $asset->asCurrentAllocation?->employeeCurrentDesignation?->name }}
+                                    <br>
+                                @endisset
+                                {{ $asset->asCurrentLocation->name ?? '' }}
+                            </td>
+            
+                            <td style="color:black;">
+                                @php
+                                    $imagePath = public_path('storage/' . $asset->asPicture->path . $asset->asPicture->file_name);
+                                    $imageUrl = asset('storage/' . $asset->asPicture->path . $asset->asPicture->file_name);
+                                    $defaultImage = asset('Massets/images/asset1.png');
+                                @endphp
+            
+                                @if(file_exists($imagePath))
+                                    <img class="img-fluid profile-pic ViewIMG"
+                                         src="{{ $imageUrl }}"
+                                         onerror="this.src='{{ asset('Massets/images/default.png') }}';"
+                                         alt="Asset Image"
+                                         style="width: 30%;" />
+                                @else
+                                    <img class="img-fluid profile-pic ViewIMG"
+                                         src="{{ $defaultImage }}"
+                                         alt="Default Image"
+                                         style="width: 30%;" />
+                                @endif
+                            </td>
+                        </tr>
                     @endforeach
-
                 </tbody>
-            </table>
+            </table>            
         </div>
     </div>
 </div>
