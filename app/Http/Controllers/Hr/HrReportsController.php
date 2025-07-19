@@ -15,6 +15,7 @@ use App\Models\Hr\HrDesignation;
 use App\Models\Hr\HrDocumentName;
 use App\Http\Controllers\Controller;
 use App\Models\Hr\HrEmployeeCompany;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -338,7 +339,13 @@ class HrReportsController extends Controller
 
 
                 ->addColumn('full_name', function ($row) {
-                    return $row->first_name . '' .  $row->last_name;
+                    $fullName = '';
+                    if (Auth::user()->can('hr edit record') || Auth::user()->can('hr view record')) {
+                        $fullName = '<a href="' . route('employee.edit', $row->id) . '" style="color:grey">' . $row->full_name . '</a>';
+                    } else {
+                        $fullName = $row->full_name;
+                    }
+                    return $fullName;
                 })
                 ->addColumn('designation', function ($row) {
                     return $row->employeeCurrentDesignation->name ?? '';
@@ -405,7 +412,7 @@ class HrReportsController extends Controller
                     return $btn;
                 })
 
-                ->rawColumns(['Edit', 'Delete'])
+                ->rawColumns(['full_name', 'Edit', 'Delete'])
                 ->make(true);
         }
 

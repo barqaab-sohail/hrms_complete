@@ -1,4 +1,3 @@
-text/x-generic missingDocuments.blade.php ( HTML document, UTF-8 Unicode text )
 @extends('layouts.master.master')
 @section('title', 'Missing Documents List')
 @section('Heading')
