@@ -377,6 +377,11 @@ class HrEmployee extends Model implements Auditable
         return $this->hasMany('App\Models\Hr\HrDocumentation')->select('description', 'hr_employee_id', 'extension', 'path', 'file_name', 'document_date', 'size');
     }
 
+    public function joiningReportDocument()
+    {
+        return $this->hasOne('App\Models\Hr\HrDocumentation')->where('description', '=', 'Joining Report');
+    }
+
     public function hrContactPermanent()
     {
         return $this->hasOne('App\Models\Hr\HrContact')->where('hr_contact_type_id', '=', 1);

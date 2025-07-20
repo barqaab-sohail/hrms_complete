@@ -11,6 +11,7 @@ use App\Http\Controllers\Hr\BankLetterController;
 use App\Http\Controllers\Common\ShortUrlController;
 use App\Http\Controllers\Email\EmailAddressController;
 use App\Http\Controllers\Hr\ExperienceLetterController;
+use App\Http\Controllers\Hr\StaffStatusController;
 use App\Http\Controllers\Project\DocumentSearchController;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
 use App\Http\Controllers\Self\BackgroundRemovalController;
@@ -41,6 +42,7 @@ use App\Http\Controllers\Self\BackgroundRemovalController;
 
 
 
+Route::get('/joining_date_mis_matched', [StaffStatusController::class, 'joiningDateMisMatched'])->name('joining_date_mis_matched')->middleware('auth');
 
 Route::get('/employeeAllowances/{id}', 'Hr\EmployeeSalaryController@getEmployeeAllowanceName');
 Route::get('/verifyCard', 'HomeController@employee');

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Hr;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Hr\HrEmployee;
 use App\Http\Controllers\Controller;
 use App\Models\Hr\HrEmployeeCompany;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use App\Exports\JoiningDateMismatchExport;
 
 class StaffStatusController extends Controller
 {
@@ -34,9 +37,10 @@ class StaffStatusController extends Controller
             );
         }
 
-        // Remove duplicates
+        // Remove duplicates and Final List of Employee Numbers of HR Excel Files
         $employeeNumbers = array_unique($employeeNumbers);
 
+        // HRMS Employee Numbers who status is Not Active
         $otherCompanyEmployees = HrEmployeeCompany::where('partner_id', '!=', 1)
             ->pluck('hr_employee_id');
 
@@ -123,5 +127,38 @@ class StaffStatusController extends Controller
         }
 
         return $employeeData;
+    }
+
+    public function joiningDateMisMatched()
+    {
+        $misMatchDate = [];
+        $hrEmployees = HrEmployee::where('hr_status_id', 1)->get();
+
+        foreach ($hrEmployees as $hrEmployee) {
+            $joiningReportDate = $hrEmployee->joiningReportDocument->document_date ?? 'Joining Report not found';
+
+            $joiningDate = '';
+
+            if (!empty($hrEmployee->joining_date) && $hrEmployee->joining_date !== 'N/A') {
+                try {
+                    $joiningDate = \Carbon\Carbon::parse($hrEmployee->joining_date)->format('Y-m-d');
+                } catch (\Exception $e) {
+                    $joiningDate = 'Invalid date format';
+                }
+            } else {
+                $joiningDate = 'Joining Date not found';
+            }
+
+            if ($joiningReportDate != $joiningDate) {
+                $misMatchDate[] = [
+                    'employee_no' => $hrEmployee->employee_no,
+                    'employee_name' => $hrEmployee->first_name . ' ' . $hrEmployee->last_name,
+                    'joining_date' => $joiningDate,
+                    'joining_report_date' => $joiningReportDate
+                ];
+            }
+        }
+
+        return Excel::download(new JoiningDateMismatchExport($misMatchDate), 'joining_date_mismatches.xlsx');
     }
 }
