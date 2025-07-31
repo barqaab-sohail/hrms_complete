@@ -63,7 +63,7 @@
 
         $('#myDataTable').DataTable({
             "order": [
-                [2, "desc"]
+                
             ],
             stateSave: false,
             dom: 'flrti',

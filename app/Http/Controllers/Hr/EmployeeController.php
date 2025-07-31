@@ -524,6 +524,12 @@ class EmployeeController extends Controller
             return view('hr.employee.search.result', compact('result', 'documents'));
         } else {
 
+            // $color = $employee->hrEmployeeCompany?->name ? 'Red' : 'Black';
+            // $company = $employee->hrEmployeeCompany?->name ? $employee->hrEmployeeCompany?->name : 'BARQAAB';
+            // if (Auth::user()->can('hr edit record') || Auth::user()->can('hr view record')) {
+            //     $fullName = '<a title = "' . $company . '" href="' . route('employee.edit', $employee->id) . '" style="color:' . $color . '">' . $fullName . '</a>';
+            // }
+
             $documents = false;
             $result = HrEmployee::whereIn('hr_status_id', [1, 2, 3, 4, 5, 6, 7])
                 ->when($data['employee'], function ($query) use ($data) {

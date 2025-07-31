@@ -18,7 +18,17 @@
 								<select name="employee" id="employee" class="form-control searchSelect">
 									<option value=""></option>
 									@foreach($employees as $employee)
-									<option value="{{$employee->id}}" {{(old("employee")==$employee->id? "selected" : "")}}>{{$employee->first_name}} {{$employee->last_name}} - {{$employee->employeeCurrentDesignation->name??''}}</option>
+										@php
+											$color = $employee->hrEmployeeCompany?->name ? 'red' : 'black';
+											$fullName = "$employee->first_name $employee->last_name - " . ($employee->employeeCurrentDesignation->name ?? '');
+										@endphp
+										<option 
+											value="{{ $employee->id }}" 
+											{{ old('employee') == $employee->id ? 'selected' : '' }}
+											data-color="{{ $color }}"
+										>
+											{{ $fullName }}
+										</option>
 									@endforeach
 								</select>
 							</div>
@@ -207,8 +217,14 @@
 
 <script>
 	$(document).ready(function() {
+		$('#employee').select2({
+        templateResult: formatOption,
+        templateSelection: formatOption
+    });
+
+
 		$('.fa-spinner').hide();
-		$('select').select2();
+		$('select').not('#employee').select2();
 		formFunctions();
 
 		// Reset Form Button Functionality
@@ -309,6 +325,14 @@
 
 
 	});
+
+	function formatOption(option) {
+    if (!option.id) return option.text;
+    
+    var color = $(option.element).data('color');
+    var $span = $('<span>').css('color', color).text(option.text);
+    return $span;
+	}
 </script>
 
 

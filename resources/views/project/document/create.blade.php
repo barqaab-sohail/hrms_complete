@@ -358,7 +358,7 @@ function createDatatable(url){
             });
 
         },
-        order: [[ 1, "desc" ]]
+        order: []
     });
 
 }

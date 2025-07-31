@@ -26,9 +26,9 @@ class ProjectController extends Controller
     {
         //$user = User::permission()
         $projects = collect();
-        $waterProjects = PrDetail::with('client', 'prRole','prCost','prDivision')->where('pr_division_id', 1)->whereNotIn('name', array('overhead'))->get();
+        $waterProjects = PrDetail::with('client', 'prRole', 'prCost', 'prDivision')->where('pr_division_id', 1)->whereNotIn('name', array('overhead'))->get();
 
-        $powerProjects = PrDetail::with('client', 'prRole','prCost','prDivision')->where('pr_division_id', 2)->get();
+        $powerProjects = PrDetail::with('client', 'prRole', 'prCost', 'prDivision')->where('pr_division_id', 2)->get();
 
         return view('project.detail.list', compact('projects', 'waterProjects', 'powerProjects'));
     }
@@ -167,26 +167,26 @@ class ProjectController extends Controller
             $query = $request->input('reference_no');
 
             $result = DB::table('pr_documents')
-                ->where('reference_no', 'LIKE', "%{$query}%")
+                ->where('reference_no', 'LIKE', "%{$query}%")->orderByRaw('ISNULL(document_date), document_date desc')
                 ->get();
             return view('project.search.searchResult', compact('result'));
         } else if ($request->filled('description')) {
             $query = $request->input('description');
 
             $result = DB::table('pr_documents')
-                ->where('description', 'LIKE', "%{$query}%")
+                ->where('description', 'LIKE', "%{$query}%")->orderByRaw('ISNULL(document_date), document_date desc')
                 ->get();
             return view('project.search.searchResult', compact('result'));
         } else if ($request->filled('document_date')) {
             $query = \Carbon\Carbon::parse($request->document_date)->format('Y-m-d');
 
             $result = DB::table('pr_documents')
-                ->where('document_date', 'LIKE', "%{$query}%")
+                ->where('document_date', 'LIKE', "%{$query}%")->orderByRaw('ISNULL(document_date), document_date desc')
                 ->get();
             return view('project.search.searchResult', compact('result'));
         } else {
 
-            $result = DB::table('pr_documents')
+            $result = DB::table('pr_documents')->orderByRaw('ISNULL(document_date), document_date desc')
                 ->get();
             return view('project.search.searchResult', compact('result'));
         }

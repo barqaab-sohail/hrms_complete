@@ -26,10 +26,16 @@
                     </thead>
                     <tbody>
                         @foreach($result as $employee)
-                            <tr>
+                                    @php
+                                    $color = $employee->hrEmployeeCompany?->name ? 'red' : 'black';	
+                                    $company = $employee->hrEmployeeCompany?->name ? $employee->hrEmployeeCompany?->name : 'BARQAAB';	
+									@endphp
+
+                            <tr style="color:{{$color}}">
                                 <td>{{$employee->employee_no??''}}</td>
                                 <td>
-                                    <a href="{{route('employee.edit',$employee->id)}}"  style="color:grey" title="Edit">
+                                    
+                                    <a href="{{route('employee.edit',$employee->id)}}"  style="color:{{$color}}" title="{{$company}}">
                                     {{$employee->first_name}} {{$employee->last_name}}
                                     </a>
                                 </td>
