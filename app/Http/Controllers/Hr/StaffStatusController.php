@@ -21,11 +21,9 @@ class StaffStatusController extends Controller
 
     public function processFiles(Request $request)
     {
-
         $request->validate([
             'excel_files.*' => 'required|mimes:xls,xlsx|max:2048'
         ]);
-
 
         $employeeNumbers = [];
 
@@ -44,30 +42,69 @@ class StaffStatusController extends Controller
         $otherCompanyEmployees = HrEmployeeCompany::where('partner_id', '!=', 1)
             ->pluck('hr_employee_id');
 
-        // Get employees with incorrect status
-        $employees = HrEmployee::whereNotIn('employee_no', $employeeNumbers)
-            ->where('hr_status_id', 1) // Not Active
+        // SECTION 1: Employees in DB marked as active but not in Excel files
+        $dbEmployeesNotInExcel = HrEmployee::whereNotIn('employee_no', $employeeNumbers)
+            ->where('hr_status_id', 1) // Active in DB but not in Excel
             ->whereNotIn('id', $otherCompanyEmployees)
             ->with(['employeeCurrentDepartment' => function ($query) {
-                $query->select('name',);
+                $query->select('name');
             }])
             ->get(['id', 'employee_no', 'first_name', 'last_name']);
 
-        // Generate text file content
-        $content = "Emp. No\tEmployee Name \t\tDepartment\n";
-        foreach ($employees as $employee) {
+        // SECTION 2: Employees in Excel files but not in DB or marked inactive
+        $excelEmployeesNotInDb = [];
+        $dbEmployeeNumbers = HrEmployee::where('hr_status_id', 1) // Active employees
+            ->whereNotIn('id', $otherCompanyEmployees)
+            ->pluck('employee_no')
+            ->toArray();
 
-            if ($employee->hrDepartment) {
-                $content .= "{$employee->employee_no}\t{$employee->first_name} {$employee->last_name}\t\t{$employee->hrDepartment->name}\n";
-            } else {
-                $content .= "{$employee->employee_no}\t{$employee->first_name} {$employee->last_name}\t\tN/A\n";
+        // Find Excel employees not in DB or marked inactive
+        foreach ($employeeNumbers as $empNo) {
+            if (!in_array($empNo, $dbEmployeeNumbers)) {
+                $excelEmployeesNotInDb[] = $empNo;
             }
+        }
 
-            // $content .= "{$employee->employee_no}\t{$employee->first_name} {$employee->last_name}\t{$employee->employee_no}\n";
+        // Generate text file content
+        $content = "===== EMPLOYEES IN DATABASE BUT NOT IN EXCEL FILES (OR STATUS MISMATCH) =====\n";
+        $content .= "Emp. No\tEmployee Name \t\tDepartment\n";
+        foreach ($dbEmployeesNotInExcel as $employee) {
+            $deptName = $employee->hrDepartment ? $employee->hrDepartment->name : 'N/A';
+            $content .= "{$employee->employee_no}\t{$employee->first_name} {$employee->last_name}\t\t{$deptName}\n";
+        }
+
+        $content .= "\n\n===== EMPLOYEES IN EXCEL FILES BUT NOT IN DATABASE (OR INACTIVE) =====\n";
+        $content .= "Employee Numbers\n";
+        foreach ($excelEmployeesNotInDb as $empNo) {
+            $content .= "{$empNo}\n";
+        }
+
+        // Get additional info for Excel employees not in DB
+        if (!empty($excelEmployeesNotInDb)) {
+            $content .= "\n\n===== DETAILS FOR EXCEL EMPLOYEES NOT IN DATABASE =====";
+            $missingEmployees = HrEmployee::whereIn('employee_no', $excelEmployeesNotInDb)
+                ->where('hr_status_id', '!=', 1) // Inactive in DB but in Excel
+                ->with(['employeeCurrentDepartment' => function ($query) {
+                    $query->select('name');
+                }])
+                ->get(['id', 'employee_no', 'first_name', 'last_name', 'hr_status_id']);
+
+            if ($missingEmployees->isNotEmpty()) {
+                $content .= "\n\nThese employees exist in database but are INACTIVE:\n";
+                $content .= "Emp. No\tEmployee Name \t\tStatus\tDepartment\n";
+                foreach ($missingEmployees as $employee) {
+                    $deptName = $employee->hrDepartment ? $employee->hrDepartment->name : 'N/A';
+                    $status = $employee->hr_status_id == 1 ? 'Active' : 'Inactive';
+                    $content .= "{$employee->employee_no}\t{$employee->first_name} {$employee->last_name}\t\t{$status}\t{$deptName}\n";
+                }
+            } else {
+                $content .= "\n\nThese employee numbers don't exist in database at all:\n";
+                $content .= implode("\n", $excelEmployeesNotInDb);
+            }
         }
 
         // Save to text file
-        $filename = 'status_discrepancies_' . now()->format('Ymd_His') . '.txt';
+        $filename = 'employee_status_comparison_' . now()->format('Ymd_His') . '.txt';
         Storage::put($filename, $content);
 
         // Download the file
@@ -107,8 +144,6 @@ class StaffStatusController extends Controller
 
                     // Check if the value is numeric (allows integers and numeric strings)
                     if (is_numeric($employeeNo)) {
-                        // If you want only integers, you can add this additional check:
-                        // if (ctype_digit($employeeNo)) {
                         $employeeData[] = $employeeNo;
                     }
                 }
