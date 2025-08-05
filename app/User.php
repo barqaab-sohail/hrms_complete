@@ -22,7 +22,12 @@ class User extends Authenticatable implements Auditable
      * @var array
      */
     protected $fillable = [
-        'email', 'password', 'user_status', 'session_id', 'last_login_at', 'last_login_ip',
+        'email',
+        'password',
+        'user_status',
+        'session_id',
+        'last_login_at',
+        'last_login_ip',
     ];
 
     /**
@@ -31,7 +36,8 @@ class User extends Authenticatable implements Auditable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
