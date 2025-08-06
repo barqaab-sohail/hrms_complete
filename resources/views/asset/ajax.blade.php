@@ -20,7 +20,7 @@
                             <select name="as_class_id" id="as_class" class="form-control selectTwo" data-validation="required">
                                 <option value=""></option>
                                 @foreach($asClasses as $class)
-                                <option value="{{$class->id}}" {{(old("as_class_id", $data->asClass->as_class_id)==$class->id? "selected" : "")}}>{{$class->name}}</option>
+                                <option value="{{$class->id}}" {{(old("as_class_id", $data->asClass->id)==$class->id? "selected" : "")}}>{{$class->name}}</option>
                                 @endforeach
                             </select>
 

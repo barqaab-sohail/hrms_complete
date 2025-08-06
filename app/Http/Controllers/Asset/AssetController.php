@@ -149,7 +149,8 @@ class AssetController extends Controller
         session()->put('asset_id', $id);
         $asClasses = AsClass::all();
         $asSubClasses = AsSubClass::all();
-        $data = Asset::find($id);
+        $data = Asset::with('asClass')->find($id);
+        //dd($data);
 
         if ($request->ajax()) {
             return view('asset.ajax', compact('asClasses', 'asSubClasses', 'data'));
