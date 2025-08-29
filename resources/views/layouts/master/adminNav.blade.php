@@ -274,7 +274,7 @@
                                 </li>
                                 <!-- End Submissions -->
                                 <!-- Admin Document -->
-                                @canany(['admin_document.edit.', 'admin_document.view', 'admin_document.delete'])
+                                @canany(['admin_document.edit', 'admin_document.view', 'admin_document.delete'])
                                 <li class="{{Request::is('hrms/adminDocument*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-file-multiple" aria-hidden="true"></i><span class="hide-menu">Office Orders/Notifications</span></a>
                                         <ul aria-expanded="false" class="collapse">
                                                 <li><a class="{{Request::is('hrms/adminDocument')?'active':''}}" href="{{route('adminDocument.create')}}">List of Documents</a></li>

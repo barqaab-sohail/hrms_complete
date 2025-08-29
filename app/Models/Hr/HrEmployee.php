@@ -26,15 +26,15 @@ class HrEmployee extends Model implements Auditable
         return $this->first_name . ' ' . $this->last_name;
     }
 
-    function getCurrentSalaryAttribute()
-    {
-        $hrSalary = $this->employeeCurrentSalary ?? '';
-        if ($hrSalary) {
-            $data = EmployeeSalary::where('hr_employee_id', $this->id)->where('hr_salary_id', $hrSalary->id)->first();
-            return ['effective_date' => \Carbon\Carbon::parse($data->effective_date)->format('M d, Y'), 'salary' => number_format($hrSalary->total_salary)];
-        }
-        return null;
-    }
+    // function getCurrentSalaryAttribute()
+    // {
+    //     $hrSalary = $this->employeeCurrentSalary ?? '';
+    //     if ($hrSalary) {
+    //         $data = EmployeeSalary::where('hr_employee_id', $this->id)->where('hr_salary_id', $hrSalary->id)->first();
+    //         return ['effective_date' => \Carbon\Carbon::parse($data->effective_date)->format('M d, Y'), 'salary' => number_format($hrSalary->total_salary)];
+    //     }
+    //     return null;
+    // }
     function getPictureAttribute()
     {
         $defaultPicture = asset('Massets/images/default.png');
@@ -47,57 +47,57 @@ class HrEmployee extends Model implements Auditable
 
 
     // Add this to your Employee model
-    function getPictureSize()
-    {
-        $picture = HrDocumentation::where('hr_employee_id', $this->id)->where('description', 'Picture')->first();
+    // function getPictureSize()
+    // {
+    //     $picture = HrDocumentation::where('hr_employee_id', $this->id)->where('description', 'Picture')->first();
 
-        if (isset($picture->size)) {
-            return round($picture->size / (1024), 2) . ' KB';
-        }
+    //     if (isset($picture->size)) {
+    //         return round($picture->size / (1024), 2) . ' KB';
+    //     }
 
-        return 'N/A';
-    }
+    //     return 'N/A';
+    // }
 
     public function picture()
     {
         return $this->hasOne('App\Models\Hr\HrDocumentation')->where('description', '=', 'Picture');
     }
 
-    function getDesignationAttribute()
-    {
-        return $this->employeeCurrentDesignation->name ?? '';
-    }
+    // function getDesignationAttribute()
+    // {
+    //     return $this->employeeCurrentDesignation->name ?? '';
+    // }
 
     public function getFullNameWithDesignationAttribute()
     {
         return $this->full_name . ' - ' . ($this->employeeCurrentDesignation->name ?? 'No Designation');
     }
 
-    public function getFullNameWithEmployeeIdAndDesignationAttribute()
-    {
-        return $this->employee_no . '-' . $this->full_name . ' - ' . ($this->employeeCurrentDesignation->name ?? 'No Designation') . ' - ' . $this->hr_status_id;
-    }
+    // public function getFullNameWithEmployeeIdAndDesignationAttribute()
+    // {
+    //     return $this->employee_no . '-' . $this->full_name . ' - ' . ($this->employeeCurrentDesignation->name ?? 'No Designation') . ' - ' . $this->hr_status_id;
+    // }
 
 
-    function getProjectAttribute()
-    {
-        return $this->employeeCurrentProject->name ?? '';
-    }
+    // function getProjectAttribute()
+    // {
+    //     return $this->employeeCurrentProject->name ?? '';
+    // }
 
-    public function getJoiningDateAttribute()
-    {
-        if ($this->employeeAppointment) {
-            return \Carbon\Carbon::parse($this->employeeAppointment->joining_date)->format('M d, Y');
-        } else {
-            return 'N/A';
-        }
-    }
+    // public function getJoiningDateAttribute()
+    // {
+    //     if ($this->employeeAppointment) {
+    //         return \Carbon\Carbon::parse($this->employeeAppointment->joining_date)->format('M d, Y');
+    //     } else {
+    //         return 'N/A';
+    //     }
+    // }
 
-    public function getLastWorkingDateAttribute()
-    {
-        $lastWorkingDate = $this->hrExit->effective_date ?? '';
-        return  $lastWorkingDate ? \Carbon\Carbon::parse($lastWorkingDate)->format('M d, Y') : '';
-    }
+    // public function getLastWorkingDateAttribute()
+    // {
+    //     $lastWorkingDate = $this->hrExit->effective_date ?? '';
+    //     return  $lastWorkingDate ? \Carbon\Carbon::parse($lastWorkingDate)->format('M d, Y') : '';
+    // }
 
 
 

@@ -16,13 +16,13 @@ class ExperienceLetterController extends Controller
 {
     public function create()
     {
-
-        $cacheTime = config('cache.employees_list', 1440); // 1440 minutes = 24 hours
-        $employees = Cache::remember('employees_list', $cacheTime, function () {
-            return HrEmployee::orderBy('first_name')
+        $employees = Cache::remember('employees_list', now()->addDay(), function () {
+            return HrEmployee::query()
+                ->orderBy('first_name')
                 ->select('id', 'employee_no', 'first_name', 'last_name', 'hr_status_id')
                 ->get();
         });
+
         return view('hr.experience_letter.create', compact('employees'));
     }
 

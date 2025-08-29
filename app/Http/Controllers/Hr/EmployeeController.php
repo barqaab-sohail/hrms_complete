@@ -166,9 +166,11 @@ class EmployeeController extends Controller
 
         return $this->employeeSortData($data)
             ->map(function ($employee) {
-                $lastWorkingDate = $employee->hr_status_id == "Active"
-                    ? ''
-                    : ($employee->last_working_date ?? '');
+                $lastWorkingDate = '';
+                if ($employee->hr_status_id != "Active") {
+                    $lastWorkingDate = $employee->hrExit->effective_date ?? '';
+                    $lastWorkingDate = $lastWorkingDate ? \Carbon\Carbon::parse($lastWorkingDate)->format('M d, Y') : '';
+                }
 
                 $delete = '';
                 if (Auth::user()->hasPermissionTo('hr delete record') || Auth::user()->hasRole('Super Admin')) {
@@ -210,7 +212,7 @@ class EmployeeController extends Controller
                         : '',
                     "joining_date" => $joiningDate,
                     "cnic" => $employee->cnic ?? '',
-                    "designation" => $employee->designation ?? '',
+                    "designation" => $employee->employeeCurrentDesignation->name ?? '',
                     "blood_group" => $employee->hrBloodGroup->name ?? '',
                     "age" => $employee->date_of_birth
                         ? \Carbon\Carbon::parse($employee->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days')
