@@ -166,6 +166,11 @@
         };
 
         $('#myDataTable').DataTable({
+            processing: true,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, 'All'],
+            ],
             stateSave: false,
             dom: 'Blfrtip',
             buttons: [
@@ -192,12 +197,7 @@
             scrollY: "400px",
             scrollX: true,
             scrollCollapse: true,
-            // Show all records by setting pageLength to -1
-            pageLength: -1,
-            // Remove length menu to prevent user from changing
-            lengthMenu: [[-1], ["All"]],
-            // Disable pagination to show all records
-            paging: false,
+            paging: true,
             fixedColumns: {
                 leftColumns: 1,
                 rightColumns: 2
