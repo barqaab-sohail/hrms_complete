@@ -303,7 +303,7 @@ class AssetController extends Controller
     {
         $offices = Office::select('id', 'name')->get();
         $classes = AsClass::select('id', 'name')->get();
-        $employees = HrEmployee::select('id', 'first_name', 'last_name')->with('employeeCurrentDesignation')->get();
+        $employees = HrEmployee::select('id', 'first_name', 'last_name', 'employee_no')->with('employeeCurrentDesignation')->get();
         $clients = AsOwnership::pluck('client_id')->unique();
         $owners = Client::whereIn('id', $clients)->get();
         return view('asset.search.search', compact('offices', 'classes', 'employees', 'owners'));
