@@ -65,6 +65,22 @@
 						</div>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-md-5">
+						<!--/span 5-1 -->
+						<div class="form-group row">
+							<div class="col-md-12 required">
+								<label class="control-label text-right">Asset Owner</label><br>
+								<select name="client_id" id="client_id" class="form-control searchSelect">
+									<option value=""></option>
+									@foreach($owners as $owner)
+									<option value="{{$owner->id}}" {{(old("client_id")==$owner->id? "selected" : "")}}>{{$owner->name}}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="form-actions">
 				<div class="row">

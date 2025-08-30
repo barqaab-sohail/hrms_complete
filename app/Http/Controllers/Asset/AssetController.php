@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers\Asset;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Models\Common\Office;
-use App\Http\Requests\Asset\AssetStore;
-use App\Http\Requests\Asset\AssetSearchStore;
-use App\Http\Requests\Asset\ClassStore;
-use App\Http\Requests\Asset\SubClassStore;
-use App\Models\Asset\Asset;
-use App\Models\Asset\AsClass;
-use App\Models\Asset\AsSubClass;
-use App\Models\Asset\AsDocumentation;
-use App\Models\Hr\HrEmployee;
-use Illuminate\Support\Facades\RateLimiter;
 use DB;
 use Storage;
 use DataTables;
+use App\Models\Asset\Asset;
+use Illuminate\Http\Request;
+use App\Models\Asset\AsClass;
+use App\Models\Common\Client;
+use App\Models\Common\Office;
+use App\Models\Hr\HrEmployee;
+use App\Models\Asset\AsSubClass;
+use App\Models\Asset\AsOwnership;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use App\Models\Asset\AsDocumentation;
+use App\Http\Requests\Asset\AssetStore;
+use App\Http\Requests\Asset\ClassStore;
+use App\Http\Requests\Asset\SubClassStore;
+use Illuminate\Support\Facades\RateLimiter;
+use App\Http\Requests\Asset\AssetSearchStore;
 
 class AssetController extends Controller
 {
@@ -302,7 +304,9 @@ class AssetController extends Controller
         $offices = Office::select('id', 'name')->get();
         $classes = AsClass::select('id', 'name')->get();
         $employees = HrEmployee::select('id', 'first_name', 'last_name')->with('employeeCurrentDesignation')->get();
-        return view('asset.search.search', compact('offices', 'classes', 'employees'));
+        $clients = AsOwnership::pluck('client_id')->unique();
+        $owners = Client::whereIn('id', $clients)->get();
+        return view('asset.search.search', compact('offices', 'classes', 'employees', 'owners'));
     }
 
     public function result(Request $request)
@@ -328,12 +332,23 @@ class AssetController extends Controller
                             ->whereColumn('asset_id', 'assets.id');
                     });
             });
+            $query->leftJoin('as_ownerships', function ($join) {
+                $join->on('as_ownerships.asset_id', '=', 'assets.id')
+                    ->where('as_ownerships.date', '=', function ($query) {
+                        $query->selectRaw('MAX(date)')
+                            ->from('as_ownerships')
+                            ->whereColumn('asset_id', 'assets.id');
+                    });
+            });
         })
             ->when($request->has('as_sub_class_id'), function ($query) use ($data) {
                 return $query->where('as_sub_class_id', '=', $data['as_sub_class_id']);
             })
             ->when($data['office_id'], function ($query) use ($data) {
                 return $query->where('office_id', '=', $data['office_id']);
+            })
+            ->when($data['client_id'], function ($query) use ($data) {
+                return $query->where('client_id', '=', $data['client_id']);
             })
             ->select('assets.*')
             ->groupBy('assets.id')
