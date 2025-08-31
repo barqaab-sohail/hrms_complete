@@ -311,49 +311,119 @@ class AssetController extends Controller
 
     public function result(Request $request)
     {
-        $data = $request->all();
-        $result = Asset::when(isset($data['hr_employee_id']) && !empty($data['hr_employee_id']), function ($query) use ($data) {
-            $query->join('as_locations', function ($join) use ($data) {
-                $join->on('as_locations.asset_id', '=', 'assets.id')
-                    ->where('as_locations.hr_employee_id', '=', $data['hr_employee_id'])
-                    ->where('as_locations.date', '=', function ($query) {
-                        $query->selectRaw('MAX(date)')
-                            ->from('as_locations')
-                            ->whereColumn('asset_id', 'assets.id');
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            $assets = Asset::query()
+                ->when(isset($data['hr_employee_id']) && !empty($data['hr_employee_id']), function ($query) use ($data) {
+                    $query->join('as_locations', function ($join) use ($data) {
+                        $join->on('as_locations.asset_id', '=', 'assets.id')
+                            ->where('as_locations.hr_employee_id', '=', $data['hr_employee_id'])
+                            ->where('as_locations.date', '=', function ($query) {
+                                $query->selectRaw('MAX(date)')
+                                    ->from('as_locations')
+                                    ->whereColumn('asset_id', 'assets.id');
+                            });
                     });
-            });
-        }, function ($query) {
-            // If hr_employee_id is not provided, do a left join to get all assets
-            $query->leftJoin('as_locations', function ($join) {
-                $join->on('as_locations.asset_id', '=', 'assets.id')
-                    ->where('as_locations.date', '=', function ($query) {
-                        $query->selectRaw('MAX(date)')
-                            ->from('as_locations')
-                            ->whereColumn('asset_id', 'assets.id');
+                }, function ($query) {
+                    $query->leftJoin('as_locations', function ($join) {
+                        $join->on('as_locations.asset_id', '=', 'assets.id')
+                            ->where('as_locations.date', '=', function ($query) {
+                                $query->selectRaw('MAX(date)')
+                                    ->from('as_locations')
+                                    ->whereColumn('asset_id', 'assets.id');
+                            });
                     });
-            });
-            $query->leftJoin('as_ownerships', function ($join) {
-                $join->on('as_ownerships.asset_id', '=', 'assets.id')
-                    ->where('as_ownerships.date', '=', function ($query) {
-                        $query->selectRaw('MAX(date)')
-                            ->from('as_ownerships')
-                            ->whereColumn('asset_id', 'assets.id');
+                    $query->leftJoin('as_ownerships', function ($join) {
+                        $join->on('as_ownerships.asset_id', '=', 'assets.id')
+                            ->where('as_ownerships.date', '=', function ($query) {
+                                $query->selectRaw('MAX(date)')
+                                    ->from('as_ownerships')
+                                    ->whereColumn('asset_id', 'assets.id');
+                            });
                     });
-            });
-        })
-            ->when($request->has('as_sub_class_id'), function ($query) use ($data) {
-                return $query->where('as_sub_class_id', '=', $data['as_sub_class_id']);
-            })
-            ->when($data['office_id'], function ($query) use ($data) {
-                return $query->where('office_id', '=', $data['office_id']);
-            })
-            ->when($data['client_id'], function ($query) use ($data) {
-                return $query->where('client_id', '=', $data['client_id']);
-            })
-            ->select('assets.*')
-            ->groupBy('assets.id')
-            ->get();
-        return view('asset.search.result', compact('result'));
+                })
+                ->when($request->has('as_sub_class_id') && !empty($data['as_sub_class_id']), function ($query) use ($data) {
+                    return $query->where('as_sub_class_id', '=', $data['as_sub_class_id']);
+                })
+                ->when($request->has('office_id') && !empty($data['office_id']), function ($query) use ($data) {
+                    return $query->where('office_id', '=', $data['office_id']);
+                })
+                ->when($request->has('client_id') && !empty($data['client_id']), function ($query) use ($data) {
+                    return $query->where('client_id', '=', $data['client_id']);
+                })
+                ->select('assets.*')
+                ->groupBy('assets.id');
+
+            return DataTables::of($assets)
+                ->addColumn('ownership', function ($asset) {
+                    return $asset->asOwnership->name ?? '';
+                })
+                ->addColumn('purchase_condition', function ($asset) {
+                    return ($asset->asPurchase->as_purchase_condition_id ?? null) == 1 ? 'New' : (isset($asset->asPurchase->as_purchase_condition_id) ? 'Used' : '');
+                })
+                ->addColumn('purchase_date', function ($asset) {
+                    return $asset->asPurchase?->purchase_date ? \Carbon\Carbon::parse($asset->asPurchase?->purchase_date)->format('M d, Y') : '';
+                })
+                ->addColumn('purchase_cost', function ($asset) {
+                    return $asset->asPurchase?->purchase_cost ? number_format($asset->asPurchase->purchase_cost, 2) : '';
+                })
+                ->addColumn('allocation_location', function ($asset) {
+                    $location = '';
+                    if (isset($asset->asCurrentAllocation->first_name)) {
+                        $location = $asset->asCurrentAllocation?->employee_no . '-' . $asset->asCurrentAllocation?->full_name . '-' . ($asset->asCurrentAllocation?->employeeCurrentDesignation?->name ?? '');
+                        $location .= '<br>';
+                    }
+                    $location .= $asset->asCurrentLocation->name ?? '';
+                    return $location;
+                })
+                ->addColumn('image', function ($asset) {
+                    $imagePath = public_path('storage/' . ($asset->asPicture->path ?? '') . ($asset->asPicture->file_name ?? ''));
+                    $imageUrl = asset('storage/' . ($asset->asPicture->path ?? '') . ($asset->asPicture->file_name ?? ''));
+                    $defaultImage = asset('Massets/images/asset1.png');
+
+                    // Prepare base64 for PDF
+                    $base64Image = '';
+                    if (file_exists($imagePath) && $asset->asPicture) {
+                        $imageData = base64_encode(file_get_contents($imagePath));
+                        $base64Image = 'data:' . mime_content_type($imagePath) . ';base64,' . $imageData;
+                    } else {
+                        $defaultPath = public_path('Massets/images/asset1.png');
+                        if (file_exists($defaultPath)) {
+                            $imageData = base64_encode(file_get_contents($defaultPath));
+                            $base64Image = 'data:' . mime_content_type($defaultPath) . ';base64,' . $imageData;
+                        }
+                    }
+
+                    if (file_exists($imagePath) && $asset->asPicture) {
+                        return '<img class="img-fluid profile-pic ViewIMG export-image"
+                             src="' . $imageUrl . '"
+                             data-base64="' . $base64Image . '"
+                             alt="Asset Image"
+                             style="width: 50px; height: 50px; object-fit: cover;" />';
+                    } else {
+                        return '<img class="img-fluid profile-pic ViewIMG export-image"
+                             src="' . $defaultImage . '"
+                             data-base64="' . $base64Image . '"
+                             alt="Default Image"
+                             style="width: 50px; height: 50px; object-fit: cover;" />';
+                    }
+                })
+                ->addColumn('action', function ($asset) {
+                    return '<a href="' . route('asset.edit', $asset->id) . '" class="btn btn-success btn-sm" title="Edit"><i class="fas fa-pencil-alt text-white"></i></a>';
+                })
+                ->rawColumns(['allocation_location', 'image', 'action'])
+                ->make(true);
+        }
+
+        // For non-AJAX requests, return the search view
+        $offices = Office::select('id', 'name')->get();
+        $classes = AsClass::select('id', 'name')->get();
+        $employees = HrEmployee::select('id', 'first_name', 'last_name', 'employee_no')->with('employeeCurrentDesignation')->get();
+        $clients = AsOwnership::pluck('client_id')->unique();
+        $owners = Client::whereIn('id', $clients)->get();
+
+        return view('asset.search.search', compact('offices', 'classes', 'employees', 'owners'));
     }
 
     public function verification($assetCode)
