@@ -32,6 +32,10 @@
     .sidebar-nav li.active > a {
         background-color: rgba(0, 0, 0, 0.1);
     }
+    /* Style for nested dropdown menus */
+    .sidebar-nav .collapse .collapse {
+        margin-left: 15px;
+    }
 </style>
 
 <aside class="left-sidebar">
@@ -58,23 +62,41 @@
                                                 @can('hr user data')
                                                 <li><a class="{{Request::is('hrms/employee/user/data')?'active':''}}" href="{{route('user.data',Auth::User()->hrEmployee->id)}}">User Data</a></li>
                                                 @endcan
-                                                @can('bank account letter')
-                                                <li><a class="{{Request::is('hrms/bank-letters')?'active':''}}" href="{{route('bank-letters.create')}}">Bank Account Letter</a></li>
-                                                @endcan
-                                                @can('experience letter')
-                                                <li><a class="{{Request::is('hrms/experience-letters')?'active':''}}" href="{{route('experience-letters.create')}}">Experience Letter</a></li>
-                                                @endcan
+                                                
+                                                {{-- Start Auto Generatered Conetnt --}}
+                                                <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false">Auto Generated Content</a>
+                                                    <ul aria-expanded="false" class="collapse">
+                                                        @can('bank account letter')
+                                                        <li><a class="{{Request::is('hrms/bank-letters')?'active':''}}" href="{{route('bank-letters.create')}}">Bank Account Letter</a></li>
+                                                        @endcan
+                                                        @can('experience letter')
+                                                        <li><a class="{{Request::is('hrms/experience-letters')?'active':''}}" href="{{route('experience-letters.create')}}">Experience Letter</a></li>
+                                                        <li><a class="{{Request::is('hrms/employee/card')?'active':''}}" href="{{route('employee.card')}}">Employees Card</a></li>
+                                                        @endcan
+                                                    </ul>
+                                                </li>
+                                                {{-- End Auto Generatered Conetnt --}}
+                                                
+                                                {{-- Checking Status --}}
                                                 @can('Super Admin')
-                                                <li><a class="{{Request::is('hrms/employee/checking')?'active':''}}" href="{{route('checking.data',Auth::User(
-                                                )->hrEmployee->id)}}">HR Monthly Report Checking</a></li>
-                                                <li><a class="{{Request::is('hrms/employee/employee_asset_status')?'active':''}}" href="{{route('employee.asset.status')}}">Check Employee Asset Status</a></li>
+                                                <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false">Checking Status</a>
+                                                    <ul aria-expanded="false" class="collapse">
+                                                      
+                                                        <li><a class="{{Request::is('hrms/employee/checking')?'active':''}}" href="{{route('checking.data',Auth::User(
+                                                        )->hrEmployee->id)}}">HR Monthly Report Checking</a></li>
+                                                        <li><a class="{{Request::is('hrms/employee/employee_asset_status')?'active':''}}" href="{{route('employee.asset.status')}}">Check Employee Asset Status</a></li>
+                                                       
+                                                    </ul>
+                                                </li>
                                                 @endcan
+                                                {{-- End Checking Stations --}}
+                                                
                                                 @can('hr active employees')
                                                 <!-- <li ><a class="{{Request::is('hrms/employee/user')?'active':''}}" href="{{url('/hrms/testing')}}">User Detail</a></li>
 
                         <li><a  class="{{Request::is('hrms/employee/allEmployeeList')?'active':''}}" href="{{route('employee.allEmployeeList')}}">All Employees</a></li> -->
 
-                                                <li><a class="{{Request::is('hrms/employee/card')?'active':''}}" href="{{route('employee.card')}}">Employees Card</a></li>
+                                                
                                                 <li><a class="{{Request::is('hrms/employee/activeEmployeesList')?'active':''}}" href="{{route('employee.activeEmployeesList')}}">Active Employees List</a></li>
                                                 @endcan
 
@@ -115,28 +137,6 @@
 
 
                                 <!-- End HR Reports -->
-                                <!-- HR Monthly Report -->
-
-                                <!-- <li class="{{Request::is('input/*')?'active':''}}"> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu">Monthly Input</span></a>
-                    @can('monthly input')
-                    <ul aria-expanded="false" class="collapse">
-                        <li><a class="{{Request::is('input/inputMonth/create')?'active':''}}" href="{{route('inputMonth.create')}}">Add Month</a></li>
-
-                        <li><a class="{{Request::is('input/inputProject/create')?'active':''}}" href="{{route('inputProject.create')}}">Add Project</a></li>
-
-                        <li><a class="{{Request::is('input/input/create')?'active':''}}" href="{{route('input.create')}}">Add Input</a></li>
-
-                        <li><a class="{{Request::is('hrms/input/search')?'active':''}}" href="{{route('input.search')}}">Search</a></li>
-
-                    </ul>
-
-
-
-                    @endcan
-                </li> -->
-
-                                <!-- End HR Reports -->
-
 
 
                                 <!-- Project -->

@@ -337,22 +337,43 @@ class AssetController extends Controller
                     'asPicture'
                 ])
                 ->when(isset($data['hr_employee_id']) && !empty($data['hr_employee_id']), function ($query) use ($data, $latestLocationSubquery) {
-                    $query->whereHas('asLocations', function ($q) use ($data, $latestLocationSubquery) {
-                        $q->joinSub($latestLocationSubquery, 'latest_location', function ($join) {
-                            $join->on('as_locations.asset_id', '=', 'latest_location.asset_id')
-                                ->on('as_locations.date', '=', 'latest_location.max_date');
-                        })
-                            ->where('hr_employee_id', $data['hr_employee_id']);
+                    $query->whereExists(function ($q) use ($data, $latestLocationSubquery) {
+                        $q->select(DB::raw(1))
+                            ->from('as_locations')
+                            ->joinSub($latestLocationSubquery, 'latest_location', function ($join) {
+                                $join->on('as_locations.asset_id', '=', 'latest_location.asset_id')
+                                    ->on('as_locations.date', '=', 'latest_location.max_date');
+                            })
+                            ->whereColumn('as_locations.asset_id', 'assets.id')
+                            ->where('as_locations.hr_employee_id', $data['hr_employee_id']);
                     });
                 })
                 ->when($request->has('as_sub_class_id') && !empty($data['as_sub_class_id']), function ($query) use ($data) {
                     return $query->where('as_sub_class_id', $data['as_sub_class_id']);
                 })
-                ->when($request->has('office_id') && !empty($data['office_id']), function ($query) use ($data) {
-                    return $query->where('office_id', $data['office_id']);
+                ->when($request->has('office_id') && !empty($data['office_id']), function ($query) use ($data, $latestLocationSubquery) {
+                    return $query->whereExists(function ($q) use ($data, $latestLocationSubquery) {
+                        $q->select(DB::raw(1))
+                            ->from('as_locations')
+                            ->joinSub($latestLocationSubquery, 'latest_location', function ($join) {
+                                $join->on('as_locations.asset_id', '=', 'latest_location.asset_id')
+                                    ->on('as_locations.date', '=', 'latest_location.max_date');
+                            })
+                            ->whereColumn('as_locations.asset_id', 'assets.id')
+                            ->where('as_locations.office_id', $data['office_id']);
+                    });
                 })
-                ->when($request->has('client_id') && !empty($data['client_id']), function ($query) use ($data) {
-                    return $query->where('client_id', $data['client_id']);
+                ->when($request->has('client_id') && !empty($data['client_id']), function ($query) use ($data, $latestOwnershipSubquery) {
+                    return $query->whereExists(function ($q) use ($data, $latestOwnershipSubquery) {
+                        $q->select(DB::raw(1))
+                            ->from('as_ownerships')
+                            ->joinSub($latestOwnershipSubquery, 'latest_ownership', function ($join) {
+                                $join->on('as_ownerships.asset_id', '=', 'latest_ownership.asset_id')
+                                    ->on('as_ownerships.date', '=', 'latest_ownership.max_date');
+                            })
+                            ->whereColumn('as_ownerships.asset_id', 'assets.id')
+                            ->where('as_ownerships.client_id', $data['client_id']);
+                    });
                 })
                 ->select('assets.*');
 
