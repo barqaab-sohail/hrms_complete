@@ -193,121 +193,159 @@
             assetTable.ajax.reload();
         });
         
-        // Initialize DataTable
-		var assetTable = $('#assetDataTable').DataTable({
-			processing: true,
-			serverSide: true,
-			ajax: {
-				url: "{{ route('asset.result') }}",
-				data: function(d) {
-					d.office_id = $('#office_id').val();
-					d.class_id = $('#class_id').val();
-					d.as_sub_class_id = $('#as_sub_class_id').val();
-					d.hr_employee_id = $('#hr_employee_id').val();
-					d.client_id = $('#client_id').val();
-				}
-			},
-			columns: [
-				{ data: 'asset_code', name: 'asset_code' },
-				{ 
-					data: 'description', 
-					name: 'description',
-					render: function(data, type, row) {
-						return '<a href="/asset/' + row.id + '/edit" style="color:black;">' + data + '</a>';
-					}
-				},
-				{ data: 'ownership', name: 'ownership' },
-				{ data: 'purchase_condition', name: 'purchase_condition' },
-				{ data: 'purchase_date', name: 'purchase_date' },
-				{ data: 'purchase_cost', name: 'purchase_cost' },
-				{ data: 'allocation_location', name: 'allocation_location' },
-				{ data: 'image', name: 'image', orderable: false, searchable: false },
-				{ data: 'action', name: 'action', orderable: false, searchable: false }
-			],
-			lengthMenu: [
-				[10, 25, 50, -1],
-				[10, 25, 50, 'All'],
-			],
-			dom: 'Blfrtip',
-			buttons: [
-				{
-					extend: 'copyHtml5',
-					exportOptions: {
-						columns: [0, 1, 2, 3, 4, 5, 6] // Exclude image column for copy
-					}
-				},
-				{
-					extend: 'excelHtml5',
-					exportOptions: {
-						columns: [0, 1, 2, 3, 4, 5, 6] // Exclude image column for Excel
-					}
-				},
-				{
-					extend: 'pdfHtml5',
-					text: 'PDF',
-					className: 'btn-primary',
-					action: function(e, dt, node, config) {
-						$('#progressModal').modal('show');
-						
-						setTimeout(function() {
-							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
-							$('#progressModal').modal('hide');
-						}, 2000);
-					},
-					exportOptions: {
-						columns: [0, 1, 2, 3, 4, 5, 6, 7] // Include image column for PDF
-					},
-					orientation: 'landscape',
-					pageSize: 'A4',
-					customize: function(doc) {
-						doc.pageOrientation = 'landscape';
-						doc.defaultStyle.fontSize = 8;
-						doc.styles.tableHeader.fontSize = 9;
-						doc.pageMargins = [20, 30, 20, 30];
-						
-						// Process images for PDF
-						var images = document.querySelectorAll('.export-image');
-						
-						// Loop through table rows and replace image HTML with actual images
-						for (var i = 1; i < doc.content[1].table.body.length; i++) {
-							if (images[i-1] && images[i-1].getAttribute('data-base64')) {
-								doc.content[1].table.body[i][7] = {
-									image: images[i-1].getAttribute('data-base64'),
-									width: 30,
-									height: 30,
-									alignment: 'center'
-								};
-							} else {
-								doc.content[1].table.body[i][7] = {text: 'No Image', style: 'imagePlaceholder'};
-							}
-						}
-						
-						// Add style definition for image placeholders
-						doc.styles.imagePlaceholder = {
-							fontSize: 7,
-							alignment: 'center',
-							color: '#999999'
-						};
-						
-						return doc;
-					}
-				},
-				{
-					extend: 'csvHtml5',
-					exportOptions: {
-						columns: [0, 1, 2, 3, 4, 5, 6] // Exclude image column for CSV
-					}
-				}
-			],
-			scrollY: "400px",
-			scrollX: true,
-			scrollCollapse: true,
-			paging: true,
-			fixedColumns: {
-				leftColumns: 1,
-				rightColumns: 2
-			}
-		});
+        // Initialize DataTable with smaller page length for faster loading
+        var assetTable = $('#assetDataTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('asset.result') }}",
+                data: function(d) {
+                    d.office_id = $('#office_id').val();
+                    d.class_id = $('#class_id').val();
+                    d.as_sub_class_id = $('#as_sub_class_id').val();
+                    d.hr_employee_id = $('#hr_employee_id').val();
+                    d.client_id = $('#client_id').val();
+                }
+            },
+            columns: [
+                { data: 'asset_code', name: 'asset_code' },
+                { 
+                    data: 'description', 
+                    name: 'description',
+                    render: function(data, type, row) {
+                        return '<a href="/asset/' + row.id + '/edit" style="color:black;">' + data + '</a>';
+                    }
+                },
+                { data: 'ownership', name: 'ownership' },
+                { data: 'purchase_condition', name: 'purchase_condition' },
+                { data: 'purchase_date', name: 'purchase_date' },
+                { data: 'purchase_cost', name: 'purchase_cost' },
+                { data: 'allocation_location', name: 'allocation_location' },
+                { data: 'image', name: 'image', orderable: false, searchable: false },
+                { data: 'action', name: 'action', orderable: false, searchable: false }
+            ],
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, 'All'],
+            ],
+            pageLength: 10, // Default to smaller page size for faster loading
+            dom: 'Blfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6] // Exclude image column for copy
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6] // Exclude image column for Excel
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: 'PDF',
+                    className: 'btn-primary',
+                    action: function(e, dt, node, config) {
+                        $('#progressModal').modal('show');
+                        
+                        setTimeout(function() {
+                            $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
+                            $('#progressModal').modal('hide');
+                        }, 2000);
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7] // Include image column for PDF
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    customize: function(doc) {
+                        doc.pageOrientation = 'landscape';
+                        doc.defaultStyle.fontSize = 8;
+                        doc.styles.tableHeader.fontSize = 9;
+                        doc.pageMargins = [20, 30, 20, 30];
+                        
+                        // Process images for PDF
+                        var images = document.querySelectorAll('.export-image');
+                        
+                        // Loop through table rows and replace image HTML with actual images
+                        for (var i = 1; i < doc.content[1].table.body.length; i++) {
+                            if (images[i-1] && images[i-1].getAttribute('data-base64')) {
+                                doc.content[1].table.body[i][7] = {
+                                    image: images[i-1].getAttribute('data-base64'),
+                                    width: 30,
+                                    height: 30,
+                                    alignment: 'center'
+                                };
+                            } else {
+                                doc.content[1].table.body[i][7] = {text: 'No Image', style: 'imagePlaceholder'};
+                            }
+                        }
+                        
+                        // Add style definition for image placeholders
+                        doc.styles.imagePlaceholder = {
+                            fontSize: 7,
+                            alignment: 'center',
+                            color: '#999999'
+                        };
+                        
+                        return doc;
+                    }
+                },
+                {
+                    extend: 'csvHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6] // Exclude image column for CSV
+                    }
+                }
+            ],
+            scrollY: "400px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1,
+                rightColumns: 2
+            },
+            initComplete: function() {
+                // Initialize lazy loading after table is loaded
+                initLazyLoading();
+            },
+            drawCallback: function() {
+                // Reinitialize lazy loading after each table redraw
+                initLazyLoading();
+            }
+        });
+        
+        // Lazy loading implementation
+        function initLazyLoading() {
+            const lazyImages = document.querySelectorAll('.lazy-load');
+            
+            if ('IntersectionObserver' in window) {
+                // Modern browsers with Intersection Observer support
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.classList.remove('lazy-load');
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(img => {
+                    imageObserver.observe(img);
+                });
+            } else {
+                // Fallback for older browsers
+                lazyImages.forEach(img => {
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy-load');
+                });
+            }
+        }
         
         // Function to view from list table
         $(document).on('click', '.ViewIMG', function() {
@@ -338,6 +376,16 @@
     
     .modal-content {
         border-radius: 0.7rem;
+    }
+    
+    /* Smooth transition for lazy loaded images */
+    .lazy-load {
+        transition: opacity 0.3s;
+        opacity: 0.7;
+    }
+    
+    .lazy-load.loaded {
+        opacity: 1;
     }
 </style>
 

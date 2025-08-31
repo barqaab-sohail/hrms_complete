@@ -382,7 +382,7 @@ class AssetController extends Controller
                     $imageUrl = asset('storage/' . ($asset->asPicture->path ?? '') . ($asset->asPicture->file_name ?? ''));
                     $defaultImage = asset('Massets/images/asset1.png');
 
-                    // Prepare base64 for PDF
+                    // Prepare base64 for PDF (only when needed)
                     $base64Image = '';
                     if (file_exists($imagePath) && $asset->asPicture) {
                         $imageData = base64_encode(file_get_contents($imagePath));
@@ -395,15 +395,20 @@ class AssetController extends Controller
                         }
                     }
 
+                    // Use a tiny placeholder initially for faster loading
+                    $placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjBGMEYwIi8+CjxwYXRoIGQ9Ik0yNSAxNkMyNi42NTY5IDE2IDI4IDE0LjY1NjkgMjggMTNDMjggMTEuMzQzMSAyNi42NTY5IDEwIDI1IDEwQzIzLjM0MzEgMTAgMjIgMTEuMzQzMSAyMiAxM0MyMiAxNC42NTY5IDIzLjM0MzEgMTYgMjUgMTZaTTI2IDM0SDE0VjMySDI0VjE5SDE2VjE3SDI2VjM0WiIgZmlsbD0iIzk5OTk5OSIvPgo8L3N2Zz4K';
+
                     if (file_exists($imagePath) && $asset->asPicture) {
-                        return '<img class="img-fluid profile-pic ViewIMG export-image"
-                             src="' . $imageUrl . '"
+                        return '<img class="img-fluid profile-pic ViewIMG export-image lazy-load"
+                             src="' . $placeholder . '"
+                             data-src="' . $imageUrl . '"
                              data-base64="' . $base64Image . '"
                              alt="Asset Image"
                              style="width: 50px; height: 50px; object-fit: cover;" />';
                     } else {
-                        return '<img class="img-fluid profile-pic ViewIMG export-image"
-                             src="' . $defaultImage . '"
+                        return '<img class="img-fluid profile-pic ViewIMG export-image lazy-load"
+                             src="' . $placeholder . '"
+                             data-src="' . $defaultImage . '"
                              data-base64="' . $base64Image . '"
                              alt="Default Image"
                              style="width: 50px; height: 50px; object-fit: cover;" />';
