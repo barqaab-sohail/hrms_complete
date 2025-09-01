@@ -41,10 +41,10 @@
                         CNIC No. {{ $employee->cnic }}, has 
                         @if($is_current_employee)
                             been employed full-time with this organization since {{ $joining_date }}. 
-                            He is currently serving as {{ $designation }} on "{{ $project }}".
+                            He is currently serving as {{ $designation }} on {{ $project }}.
                         @else
                             worked with this organization as {{ $designation }} from {{ $joining_date }} till {{ $leaving_date }}, 
-                            on "{{ $project }}".
+                            on {{ $project }}.
                         @endif
                         </p>
                         

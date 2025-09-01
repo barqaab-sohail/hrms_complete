@@ -162,6 +162,46 @@ class AssetController extends Controller
     }
 
 
+    public function types()
+    {
+        $subClasses = AsSubClass::all();
+        $asset = Asset::with('asClass', 'currentOwnership')->get();
+        foreach ($subClasses as $subClass) {
+            if ($asset->where('as_sub_class_id', $subClass->id)->count() != 0) {
+                $types[] =  array(
+                    'id' => $subClass->id,
+                    'name' => $subClass->name,
+                    'count' => $asset->where('as_sub_class_id', $subClass->id)->count(),
+                );
+            }
+        }
+
+        return view('asset.types', compact('types'));
+    }
+
+    public function subClassList($subClassId)
+    {
+        $assets = Asset::where('as_sub_class_id', $subClassId)->with('asOwnership', 'asCurrentAllocation', 'asCurrentLocation', 'asPicture')->get();
+        $defaultPicture = asset('Massets/images/asset1.png');
+        $data = [];
+
+        foreach ($assets as $asset) {
+            if ($asset->asPicture) {
+                $picture = asset('storage/' . $asset->asPicture->path . $asset->asPicture->file_name);
+            } else {
+                $picture = $defaultPicture;
+            }
+            $types[] = array(
+                'name' => $asset->description ?? '',
+                'id' => $asset->id,
+                'picture' => $picture,
+                'location' => $asset->asCurrentLocation->name ?? '',
+                'allocation' => $asset->asCurrentAllocation->full_name ?? '',
+            );
+        }
+        return view('asset.type_list', compact('types'));
+    }
+
     public function update(AssetStore $request, $id)
     {
 

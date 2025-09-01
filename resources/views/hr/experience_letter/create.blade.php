@@ -29,9 +29,9 @@
                     @foreach($employees as $employee)
                         <option value="{{ $employee->id }}" 
                             data-status="{{ $employee->hr_status_id }}"
-                            data-project="{{ $employee->project ?? '' }}"
+                            data-project="{{ $employee->employeeCurrentProject->name ?? '' }}"
                             >
-                            {{ $employee->employee_no }} - {{ $employee->full_name }} - {{ $employee->designation }}
+                            {{ $employee->employee_no }} - {{ $employee->full_name }} - {{ $employee->employeeCurrentDesignation?->name }}
                             ({{ $employee->hr_status_id }})
                         </option>
                     @endforeach

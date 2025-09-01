@@ -324,6 +324,8 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/asCondition', 'AsConditionController');
     Route::get('/asset/sub_classes/{id?}', 'AssetController@getSubClasses');
     Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
+    Route::get('/asset/types', 'AssetController@types')->name('asset.types');
+    Route::get('/asset/subclass/{subClassId}', 'AssetController@subClassList')->name('asset.subclass');
 });
 
 
