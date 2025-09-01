@@ -9,18 +9,24 @@
 		<div class="table-responsive m-t-40">	
 			<table id="myTable" class="table table-bordered table-striped"  style="width:100%" >
 				<thead>
+                   
 				<tr>
 					<th>Asset Name</th>
 					<th>Quantity</th>				
 				</tr>
+            
 				</thead>
 				<tbody>
 			
 					@foreach($types as $type)
-						<tr>
-							<td>{{$type['name']}}</td>
-							<td>{{$type['count']}}</td>					
-						</tr>
+                       
+                            <tr>
+                                <a href="{{ route('asset.subclass',  $type['id']) }}">
+                                <td>{{$type['name']}}</td>
+                                <td>{{$type['count']}}</td>					
+                                </a>
+                            </tr>
+                        
 					@endforeach
 				
 				</tbody>
