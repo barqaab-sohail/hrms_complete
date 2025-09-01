@@ -59,7 +59,7 @@
                             <tr>
                                 <td style="border: 1px solid #000; padding: 8px; text-align: center;">1.</td>
                                 <td style="border: 1px solid #000; padding: 8px; text-align: center;">Mr. {{ $employee->full_name }}</td>
-                                <td style="border: 1px solid #000; padding: 8px; text-align: center;">{{ $employee->designation }}</td>
+                                <td style="border: 1px solid #000; padding: 8px; text-align: center;">{{ $employee->employeeCurrentDesignation->name }}</td>
                                 <td style="border: 1px solid #000; padding: 8px; text-align: center;">{{ $employee->cnic }}</td>
                                 <td style="border: 1px solid #000; padding: 8px; text-align: center;">Rs. {{ number_format($salary) }}/-</td>
                             </tr>

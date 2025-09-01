@@ -126,7 +126,7 @@
                     <tr>
                         <td>1.</td>
                         <td>Mr. {{ $employee->full_name }}</td>
-                        <td>{{ $employee->designation }}</td>
+                        <td>{{ $employee->employeeCurrentDesignation->name }}</td>
                         <td class="no-wrap">{{ $employee->cnic }}</td>
                         <td>Rs. {{ $salary }}/-</td>
                     </tr>

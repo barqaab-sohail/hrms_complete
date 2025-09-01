@@ -20,7 +20,7 @@ class ExperienceLetterController extends Controller
             return HrEmployee::query()
                 ->orderBy('first_name')
                 ->select('id', 'employee_no', 'first_name', 'last_name', 'hr_status_id')
-                ->with('employeeCurrentDesignation', 'employeeCurrentProject')
+                ->with('employeeCurrentDesignation', 'employeeCurrentProject', 'employeeAppointment', 'hrExit')
                 ->get();
         });
 
@@ -34,16 +34,16 @@ class ExperienceLetterController extends Controller
             'project' => 'nullable|string|max:555'
         ]);
 
-        $employee = HrEmployee::with('employeeCurrentDesignation', 'employeeCurrentProject')->findOrFail($request->employee_id);
+        $employee = HrEmployee::with('employeeCurrentDesignation', 'employeeCurrentProject', 'employeeAppointment', 'hrExit')->findOrFail($request->employee_id);
 
         // Determine letter type based on hr_status_id
         $isCurrentEmployee = $employee->hr_status_id == "Active";
 
         // Use manual values if provided, otherwise get from employee
         $project = $request->filled('project') ? $request->project : ($employee->employeeCurrentProject->name ?? 'N/A');
-        $joiningDate = $request->filled('joining_date') ? \Carbon\Carbon::parse($request->joining_date)->format('F d, Y') : ($employee->joining_date ? \Carbon\Carbon::parse($employee->joining_date)->format('F d, Y') : '');
+        $joiningDate = $request->filled('joining_date') ? \Carbon\Carbon::parse($request->joining_date)->format('F d, Y') : ($employee->employeeAppointment->joining_date ? \Carbon\Carbon::parse($employee->employeeAppointment->joining_date)->format('F d, Y') : '');
         $leavingDate = !$isCurrentEmployee
-            ? ($request->filled('leaving_date') ? \Carbon\Carbon::parse($request->leaving_date)->format('F d, Y')  : ($employee->last_working_date ? \Carbon\Carbon::parse($employee->last_working_date)->format('F d, Y') : ''))
+            ? ($request->filled('leaving_date') ? \Carbon\Carbon::parse($request->leaving_date)->format('F d, Y')  : ($employee->hrExit->effective_date ? \Carbon\Carbon::parse($employee->hrExit->effective_date)->format('F d, Y') : ''))
             : null;
         $letterDate = $request->filled('letter_date') ? $request->letter_date : \Carbon\Carbon::now()->format('F d, Y');
 
@@ -70,13 +70,13 @@ class ExperienceLetterController extends Controller
             'project' => 'nullable|string|max:555'
         ]);
 
-        $employee = HrEmployee::with('employeeCurrentDesignation', 'employeeCurrentProject')->findOrFail($request->employee_id);
+        $employee = HrEmployee::with('employeeCurrentDesignation', 'employeeCurrentProject', 'employeeAppointment', 'hrExit')->findOrFail($request->employee_id);
         $isCurrentEmployee = $employee->hr_status_id == "Active";
         // Use manual values if provided, otherwise get from employee
         $project = $request->filled('project') ? $request->project : ($employee->employeeCurrentProject->name ?? 'N/A');
-        $joiningDate = $request->filled('joining_date') ? \Carbon\Carbon::parse($request->joining_date)->format('F d, Y') : ($employee->joining_date ? \Carbon\Carbon::parse($employee->joining_date)->format('F d, Y') : '');
+        $joiningDate = $request->filled('joining_date') ? \Carbon\Carbon::parse($request->joining_date)->format('F d, Y') : ($employee->employeeAppointment->joining_date ? \Carbon\Carbon::parse($employee->employeeAppointment->joining_date)->format('F d, Y') : '');
         $leavingDate = !$isCurrentEmployee
-            ? ($request->filled('leaving_date') ? \Carbon\Carbon::parse($request->leaving_date)->format('F d, Y') : ($employee->last_working_date ? \Carbon\Carbon::parse($employee->last_working_date)->format('F d, Y') : ''))
+            ? ($request->filled('leaving_date') ? \Carbon\Carbon::parse($request->leaving_date)->format('F d, Y') : ($employee->hrExit->effective_date ? \Carbon\Carbon::parse($employee->hrExit->effective_date)->format('F d, Y') : ''))
             : null;
         $letterDate = $request->filled('date') ? \Carbon\Carbon::parse($request->date)->format('F d, Y') : \Carbon\Carbon::now()->format('F d, Y');
 

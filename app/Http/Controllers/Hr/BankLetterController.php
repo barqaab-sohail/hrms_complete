@@ -46,7 +46,7 @@ class BankLetterController extends Controller
             'salary' => 'nullable|numeric'
         ]);
 
-        $employee = HrEmployee::findOrFail($request->employee_id);
+        $employee = HrEmployee::with('salayEffectiveDate', 'employeeCurrentSalary', 'employeeCurrentDesignation')->findOrFail($request->employee_id);
         $bank = Bank::findOrFail($request->bank_id);
         $salary =  $request->filled('salary') ? $request->salary : $employee->employeeCurrentSalary->total_salary ?? '';
         $isManualSalary = $request->filled('salary') ? true : false;
@@ -56,7 +56,7 @@ class BankLetterController extends Controller
             'employee' => $employee,
             'effective_date' => $effectiveDate,
             'is_manual_salary' => $isManualSalary,
-            'designation' => $employee->designation,
+            'designation' => $employee->employeeCurrentDesignation->name,
             'bank' => $bank,
             'salary' => $salary,
             'date' => now()->format('F j, Y'),
@@ -78,7 +78,7 @@ class BankLetterController extends Controller
             'salary' => 'sometimes|numeric'
         ]);
 
-        $employee = HrEmployee::findOrFail($request->employee_id);
+        $employee = HrEmployee::with('salayEffectiveDate', 'employeeCurrentSalary', 'employeeCurrentDesignation')->findOrFail($request->employee_id);
         $bank = Bank::findOrFail($request->bank_id);
         $salary = $request->filled('salary') ? $request->salary : $employee->salary;
 
