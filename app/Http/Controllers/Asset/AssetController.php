@@ -28,13 +28,81 @@ class AssetController extends Controller
 
     public function index(Request $request)
     {
-
         // authorize only user who add the Asset
-        $assets = Asset::join('audits', 'audits.auditable_id', 'assets.id')->select('assets.*', 'audits.user_id', 'audits.auditable_id', 'audits.auditable_type')->where('auditable_type', 'App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->with('asCurrentLocation', 'asCurrentAllocation', 'asDocumentation')->get();
-        return view('asset.index', compact('assets'));
+        $assets = Asset::join('audits', 'audits.auditable_id', 'assets.id')
+            ->select('assets.*', 'audits.user_id', 'audits.auditable_id', 'audits.auditable_type')
+            ->where('auditable_type', 'App\Models\Asset\Asset')
+            ->where('user_id', Auth::user()->id)
+            ->with('asCurrentLocation', 'asCurrentAllocation', 'asDocumentation')
+            ->get();
+        $subClassId = null;
+        // Pass a flag to indicate this is the general index view
+        return view('asset.index', compact('assets', 'subClassId'));
     }
 
-    public function loadData(Request $request)
+
+    public function subClassList($subClassId)
+    {
+        $assets = Asset::where('as_sub_class_id', $subClassId)
+            ->with('asOwnership', 'asCurrentAllocation', 'asCurrentLocation', 'asPicture')
+            ->get();
+
+        // Pass the subClassId to the view to indicate filtered view
+        return view('asset.index', compact('assets', 'subClassId'));
+    }
+
+    // AssetController.php
+    public function loadSubclassData(Request $request, $subClassId)
+    {
+        if ($request->ajax()) {
+            $data = Asset::where('as_sub_class_id', $subClassId)
+                ->with('asOwnership', 'asCurrentAllocation', 'asCurrentLocation', 'asDocumentation')
+                ->get();
+
+            return DataTables::of($data)
+                ->addColumn('ownership', function ($data) {
+                    $clientId = $data->currentOwnership->id ?? null;
+                    if ($clientId == null) {
+                        return 'Not Entered';
+                    } else if ($clientId == 20) {
+                        return 'BARQAAB';
+                    } else {
+                        return 'Client';
+                    }
+                })
+                ->addColumn('location', function ($data) {
+                    $location = $data->asCurrentLocation->name ?? '';
+                    $allocation = $data->asCurrentAllocation->full_name ?? '';
+                    if ($location) {
+                        return $location;
+                    } elseif ($allocation) {
+                        return $allocation . ' - ' . $data->asCurrentAllocation->designation ?? '';
+                    } else {
+                        return 'N/A';
+                    }
+                })
+                ->addColumn('image', function ($data) {
+                    if ($data->asDocumentation->extension != 'pdf') {
+                        $image = '<img src="' . url(isset($data->asDocumentation->file_name) ? '/storage/' . $data->asDocumentation->path . $data->asDocumentation->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewIMG' . $data->id . '" width=50>';
+                    } else {
+                        $image = '<img src="' . asset('Massets/images/document.png') . '" href="' . url(isset($data->asDocumentation->file_name) ? '/storage/' . $data->asDocumentation->path . $data->asDocumentation->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewPDF' . $data->id . '" width=50>';
+                    }
+                    return $image;
+                })
+                ->addColumn('edit', function ($data) {
+                    $button = '<a class="btn btn-success btn-sm" href="' . route('asset.edit', $data->id) . '"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+                    return $button;
+                })
+                ->addColumn('delete', function ($data) {
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteAsset">Delete</a>';
+                    return $btn;
+                })
+                ->rawColumns(['location', 'bar_code', 'image', 'edit', 'delete'])
+                ->make(true);
+        }
+    }
+
+    public function loadData(Request $request, $subClassId = null)
     {
         if ($request->ajax()) {
 
@@ -179,28 +247,7 @@ class AssetController extends Controller
         return view('asset.types', compact('types'));
     }
 
-    public function subClassList($subClassId)
-    {
-        $assets = Asset::where('as_sub_class_id', $subClassId)->with('asOwnership', 'asCurrentAllocation', 'asCurrentLocation', 'asPicture')->get();
-        $defaultPicture = asset('Massets/images/asset1.png');
-        $data = [];
 
-        foreach ($assets as $asset) {
-            if ($asset->asPicture) {
-                $picture = asset('storage/' . $asset->asPicture->path . $asset->asPicture->file_name);
-            } else {
-                $picture = $defaultPicture;
-            }
-            $types[] = array(
-                'name' => $asset->description ?? '',
-                'id' => $asset->id,
-                'picture' => $picture,
-                'location' => $asset->asCurrentLocation->name ?? '',
-                'allocation' => $asset->asCurrentAllocation->full_name ?? '',
-            );
-        }
-        return view('asset.type_list', compact('types'));
-    }
 
     public function update(AssetStore $request, $id)
     {

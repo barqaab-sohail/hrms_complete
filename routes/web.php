@@ -6,15 +6,16 @@ use App\Models\Hr\HrExperience;
 use App\Livewire\Asset\ListAsset;
 use App\Livewire\Asset\CreateAsset;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Asset\AssetController;
 use App\Http\Controllers\Hr\HrReportsController;
 use App\Http\Controllers\Hr\BankLetterController;
+use App\Http\Controllers\Hr\StaffStatusController;
 use App\Http\Controllers\Common\ShortUrlController;
 use App\Http\Controllers\Email\EmailAddressController;
 use App\Http\Controllers\Hr\ExperienceLetterController;
-use App\Http\Controllers\Hr\StaffStatusController;
 use App\Http\Controllers\Project\DocumentSearchController;
-use App\Http\Controllers\Project\ProjectLedgerActivityController;
 use App\Http\Controllers\Self\BackgroundRemovalController;
+use App\Http\Controllers\Project\ProjectLedgerActivityController;
 
 
 
@@ -313,7 +314,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/asset/search', 'AssetController@search')->name('asset.search');
     Route::get('/employee/asset/search/result', 'AssetController@result')->name('asset.result');
     Route::resource('/asset', 'AssetController')->except(['show']);
-    Route::get('/asset/loaddata', 'AssetController@loadData')->name('asset.loadData');
+    Route::get('/asset/loaddata/{subClassId?}', 'AssetController@loadData')->name('asset.loadData');
 
     Route::resource('/asDocument', 'AssetDocumentController');
     Route::resource('/asPurchase', 'AsPurchaseController');
@@ -326,6 +327,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
     Route::get('/asset/types', 'AssetController@types')->name('asset.types');
     Route::get('/asset/subclass/{subClassId}', 'AssetController@subClassList')->name('asset.subclass');
+    Route::get('asset/loadSubclassData/{subClassId}', [AssetController::class, 'loadSubclassData'])->name('asset.loadSubclassData');
 });
 
 

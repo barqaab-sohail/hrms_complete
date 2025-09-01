@@ -21,10 +21,16 @@
 					@foreach($types as $type)
                        
                             <tr>
-                                <a href="{{ route('asset.subclass',  $type['id']) }}">
-                                <td>{{$type['name']}}</td>
-                                <td>{{$type['count']}}</td>					
-                                </a>
+                                <td>
+                                    <a href="{{ route('asset.subclass', $type['id']) }}">
+                                        {{$type['name']}}
+                                    </a>
+                                </td>
+                                <td>
+                                    
+                                        {{$type['count']}}
+                                   
+                                </td>	
                             </tr>
                         
 					@endforeach

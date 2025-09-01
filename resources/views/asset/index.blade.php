@@ -4,7 +4,14 @@
 @section('content')
 <div class="card">
 	<div class="card-body">
-		<h4 class="card-title" style="color:black">List of Assets</h4>
+		@if(isset($subClassId) && $subClassId)
+			<h4 class="card-title" style="color:black">List of Assets - Filtered by Subclass</h4>
+			<button onclick="window.history.back()" class="btn btn-secondary">
+				<i class="fas fa-arrow-left"></i> Back
+			</button>
+		@else
+			<h4 class="card-title" style="color:black">List of All Assets</h4>
+		@endif
 
 		<div class="table-responsive m-t-40">
 			<table id="myTable" class="table table-bordered table-striped">
@@ -20,25 +27,27 @@
 						@can('asset delete record')
 						<th class="text-center" style="width:5%">Delete</th>
 						@endcan
-
 					</tr>
 				</thead>
-
 			</table>
 		</div>
 	</div>
 </div>
 
-
 <script>
 	$(document).ready(function() {
-
 		$(function() {
 			$.ajaxSetup({
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				}
 			});
+
+			// Determine the URL based on whether we're filtering by subclass
+			var url = "{{ route('asset.loadData') }}";
+			@if(isset($subClassId) && $subClassId)
+				url = "{{ route('asset.loadSubclassData', $subClassId) }}";
+			@endif
 
 			var table = $('#myTable').DataTable({
 				processing: true,
@@ -74,7 +83,7 @@
 				],
 				"aaSorting": [],
 				ajax: {
-					url: "{{ route('asset.loadData') }}",
+					url: url,
 				},
 				columns: [{
 						data: 'id',
@@ -116,13 +125,11 @@
 				],
 				"drawCallback": function(settings) {
 					$("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
-
 				},
 				'columnDefs': [{
 					"targets": 4,
 					"className": "text-center",
 				}, ],
-
 			});
 
 			$('body').on('click', '.deleteAsset', function() {
@@ -139,17 +146,11 @@
 							}
 						},
 						error: function(data) {
-
 						}
 					});
 				}
 			});
-
-
 		}); // end function
-
-
-
 	});
 </script>
 
