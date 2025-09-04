@@ -42,6 +42,16 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
+                        <label for="department">Year of Education</label>
+                        <select class="form-control select2" id="year" name="year[]"  multiple="multiple">
+                            @for($i = 10; $i <= 21; $i += 2)
+                                <option value="{{ $i }}" {{ in_array($i,  (array)request('year')) ? 'selected' : '' }}>{{ $i }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
                         <label for="employee_no">Employee No</label>
                         <input type="text" class="form-control" id="employee_no" name="employee_no"
                             value="{{ request('employee_no') }}" placeholder="Search by employee no">

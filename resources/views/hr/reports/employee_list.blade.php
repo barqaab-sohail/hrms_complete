@@ -60,6 +60,7 @@
                 d.designation = $('select[name="designation[]"]').val();
                 d.department = $('select[name="department[]"]').val();
                 d.education = $('select[name="education[]"]').val();
+                d.year = $('select[name="year[]"]').val();
                 d.employee_no = $('input[name=employee_no]').val();
                 d.status = $('select[name=status]').val();
             }

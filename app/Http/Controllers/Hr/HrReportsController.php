@@ -474,7 +474,8 @@ class HrReportsController extends Controller
                 'hrContactEmail',
                 'hrEmergency',
                 'employeeCurrentDesignation',
-                'employeeCurrentSalary'
+                'employeeCurrentSalary',
+                'educations'
             ]);
 
             // Apply filters
@@ -518,10 +519,23 @@ class HrReportsController extends Controller
 
             // Multiple education filter (OR condition)
             if ($request->filled('education')) {
+
                 $query->where(function ($q) use ($request) {
                     foreach ($request->education as $education) {
                         $q->orWhereHas('hrEducation', function ($q) use ($education) {
                             $q->where('hr_educations.education_id', $education);
+                        });
+                    }
+                });
+            }
+
+            // Multiple year of education filter (OR condition)
+            if ($request->filled('year')) {
+
+                $query->where(function ($q) use ($request) {
+                    foreach ($request->year as $year) {
+                        $q->orWhereHas('educations', function ($q) use ($year) {
+                            $q->where('educations.level', $year);
                         });
                     }
                 });
