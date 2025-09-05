@@ -91,8 +91,6 @@ class HrReportsController extends Controller
     function getEmployeesWithMissingDocuments()
     {
 
-
-
         $requiredDocumentTitles = [
             "CNIC Front",
             "Picture",
@@ -277,24 +275,47 @@ class HrReportsController extends Controller
         return view('hr.reports.missingDocumentList', compact('employees'));
     }
 
+
     public function examptEducationDocuments($designation)
     {
+        // Normalize the designation by trimming and converting to lowercase for case-insensitive comparison
+        $normalizedDesignation = strtolower(trim($designation));
 
-        $designations = ["Kitchen Helper", "Security Guard", "Office Helper", "Utility Person", "Record Keeper", "Driver", "Electrician", "Sanitary Worker Part Time", "Cook", "Sanitary Worker", "Naib Qasid", "ChowkidarWatchman", "Line Foreman", "Patwari", "Khalasi", "Sweeper Sanitary Worker", "Driver Cum Utility Person Part Time", "Part Time Gardner", "Sweeper", "Office Boy Cum Mali", "Recovery Officer", "Utility Person Part Time", "Field Helper", "Sweeper (Part Time)", "Chakbandi Coordinator", "Hastel Attended", "Office Helper", "Sanitary Worker Part Time", "Utility Person Cook"];
+        $examptedDesignations = [
+            "kitchen helper",
+            "security guard",
+            "office helper",
+            "utility person",
+            "record keeper",
+            "driver",
+            "electrician",
+            "sanitary worker",
+            "sanitary worker part time",
+            "cook",
+            "naib qasid",
+            "chowkidarwatchman",
+            "line foreman",
+            "patwari",
+            "khalasi",
+            "sweeper sanitary worker",
+            "driver cum utility person part time",
+            "part time gardner",
+            "sweeper",
+            "office boy cum mali",
+            "recovery officer",
+            "utility person part time",
+            "field helper",
+            "sweeper (part time)",
+            "chakbandi coordinator",
+            "hastel attended",
+            "sanitary worker part time",
+            "utility person cook",
+            "naib qasid sanitary worker",
+            "sweeper (part time)"
+        ];
 
-        // $hrDesignation = HrDesignation::where('name',$designation)->first();
-
-        // if($hrDesignation->level>11){
-        //     return true;
-        // }else{
-        //     return false;
-        // }
-
-        if (in_array($designation, $designations, true)) {
-            return true;
-        } else {
-            return false;
-        }
+        // Check if the normalized designation exists in the exempted list
+        return in_array($normalizedDesignation, $examptedDesignations, true);
     }
 
     public function mmissingDocuments(Request $request)
@@ -304,7 +325,7 @@ class HrReportsController extends Controller
 
 
         if ($request->ajax()) {
-            $data = HrEmployee::where('hr_status_id', 1)->whereNotIn('id', $otherCompanyEmployeeIds)->with('hrMembership', 'employeeProject', 'employeeCurrentDepartment', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
+            $data = HrEmployee::where('hr_status_id', 1)->whereNotIn('id', $otherCompanyEmployeeIds)->with('hrMembership', 'employeeProject', 'employeeCurrentDepartment', 'employeeCurrentDesignation', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
 
             foreach ($data as $key => $employee) {
 
@@ -322,7 +343,7 @@ class HrReportsController extends Controller
                     $picture = '';
                 }
 
-                if ($this->examptEducationDocuments($employee->designation)) {
+                if ($this->examptEducationDocuments($employee->employeeCurrentDesignation->name)) {
                     $educationalDocuments = 'Not Required';
                 }
 
@@ -333,6 +354,8 @@ class HrReportsController extends Controller
                     $engineeringDegree = 'Not Required';
                 }
 
+
+                // Forget key where Not Required
                 if ($frontCNIC  != 'Missing' && $signedAppointmentLetter != 'Missing' &&  $appointmentLetter != 'Missing' &&  $hrForm != 'Missing' &&  $joiningReport != 'Missing' &&  $educationalDocuments != 'Missing' && $engineeringDegree != 'Missing' && $picture != 'Missing') {
                     $data->forget($key);
                 }
@@ -397,7 +420,10 @@ class HrReportsController extends Controller
                     }
                 })
                 ->addColumn('education_documents', function ($row) {
-                    return $row->educationalDocuments->first() ? '' : 'Missing';
+                    if (!$this->examptEducationDocuments($row->employeeCurrentDesignation->name)) {
+                        return $row->educationalDocuments->first() ? '' : 'Missing';
+                    }
+                    return '';
                 })
                 ->addColumn('mobile', function ($row) {
                     return $row->hrContactMobile->mobile ?? '';

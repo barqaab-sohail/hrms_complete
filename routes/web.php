@@ -42,7 +42,6 @@ use App\Http\Controllers\Project\ProjectLedgerActivityController;
 
 
 
-
 Route::get('/joining_date_mis_matched', [StaffStatusController::class, 'joiningDateMisMatched'])->name('joining_date_mis_matched')->middleware('auth');
 
 Route::get('/employeeAllowances/{id}', 'Hr\EmployeeSalaryController@getEmployeeAllowanceName');
