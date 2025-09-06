@@ -320,134 +320,141 @@ class HrReportsController extends Controller
 
     public function mmissingDocuments(Request $request)
     {
-
-        $otherCompanyEmployeeIds = HrEmployeeCompany::where('partner_id', '!=', 1)->pluck('hr_employee_id')->toArray();
-
+        $otherCompanyEmployeeIds = HrEmployeeCompany::where('partner_id', '!=', 1)
+            ->pluck('hr_employee_id')
+            ->toArray();
 
         if ($request->ajax()) {
-            $data = HrEmployee::where('hr_status_id', 1)->whereNotIn('id', $otherCompanyEmployeeIds)->with('hrMembership', 'employeeProject', 'employeeCurrentDepartment', 'employeeCurrentDesignation', 'appointmentLetter', 'cnicFront', 'hrForm', 'joiningReport', 'engineeringDegree', 'hrContactMobile', 'educationalDocuments', 'picture', 'signedAppointmentLetter')->get();
+            $employees = HrEmployee::where('hr_status_id', 1)
+                ->whereNotIn('id', $otherCompanyEmployeeIds)
+                ->with([
+                    'hrMembership',
+                    'employeeProject',
+                    'employeeCurrentDepartment',
+                    'employeeCurrentDesignation',
+                    'appointmentLetter',
+                    'cnicFront',
+                    'hrForm',
+                    'joiningReport',
+                    'engineeringDegree',
+                    'hrContactMobile',
+                    'educationalDocuments',
+                    'picture',
+                    'signedAppointmentLetter'
+                ])
+                ->get();
 
-            foreach ($data as $key => $employee) {
+            // Filter employees with missing documents
+            $employeesWithMissingDocs = $employees->filter(function ($employee) {
+                return $this->hasMissingDocuments($employee);
+            });
 
-                $frontCNIC = $employee->cnicFront->first() ? '' : 'Missing';
-                $signedAppointmentLetter = $employee->signedAppointmentLetter ? '' : 'Missing';
-                $appointmentLetter = $employee->appointmentLetter->first() ? '' : 'Missing';
-                $hrForm = $employee->hrForm->first() ? '' : 'Missing';
-                $joiningReport = $employee->joiningReport->first() ? '' : 'Missing';
-                $educationalDocuments = $employee->educationalDocuments->first() ? '' : 'Missing';
-
-                $picture = '';
-                if (str_contains($employee->picture, 'Massets/images/default.png')) {
-                    $picture = 'Missing';
-                } else {
-                    $picture = '';
-                }
-
-                if ($this->examptEducationDocuments($employee->employeeCurrentDesignation->name)) {
-                    $educationalDocuments = 'Not Required';
-                }
-
-
-                if ($employee->hrMembership->expiry ?? '') {
-                    $engineeringDegree = $employee->engineeringDegree->first() ? '' : 'Missing';
-                } else {
-                    $engineeringDegree = 'Not Required';
-                }
-
-
-                // Forget key where Not Required
-                if ($frontCNIC  != 'Missing' && $signedAppointmentLetter != 'Missing' &&  $appointmentLetter != 'Missing' &&  $hrForm != 'Missing' &&  $joiningReport != 'Missing' &&  $educationalDocuments != 'Missing' && $engineeringDegree != 'Missing' && $picture != 'Missing') {
-                    $data->forget($key);
-                }
-            }
-
-            return  DataTables::of($data)
+            return DataTables::of($employeesWithMissingDocs)
                 ->addIndexColumn()
-
-
                 ->addColumn('full_name', function ($row) {
-                    $fullName = '';
                     if (Auth::user()->can('hr edit record') || Auth::user()->can('hr view record')) {
-                        $fullName = '<a href="' . route('employee.edit', $row->id) . '" style="color:grey">' . $row->full_name . '</a>';
-                    } else {
-                        $fullName = $row->full_name;
+                        return '<a href="' . route('employee.edit', $row->id) . '" style="color:grey">' . $row->full_name . '</a>';
                     }
-                    return $fullName;
+                    return $row->full_name;
                 })
                 ->addColumn('designation', function ($row) {
                     return $row->employeeCurrentDesignation->name ?? '';
                 })
                 ->addColumn('project', function ($row) {
-
                     $project = $row->employeeCurrentProject?->name ?? 'N/A';
                     if ($project == 'overhead') {
-                        $project = $row->employeeCurrentOffice->name ?? 'N/A';
+                        $project = $row->employeeCurrentOffice?->name ?? 'N/A';
                     }
-                    return $project = strlen($project) > 30 ? substr($project, 0, 30) . '...' : $project;
-                    //return $row->employeeCurrentProject->name ?? '';
+                    return strlen($project) > 30 ? substr($project, 0, 30) . '...' : $project;
                 })
                 ->addColumn('division', function ($row) {
                     return $row->employeeCurrentDepartment->name ?? '';
                 })
                 ->addColumn('front_cnic', function ($row) {
-                    return $row->cnicFront->first() ? '' : 'Missing';
+                    return $this->getDocumentStatus($row->cnicFront->first(), 'Missing');
                 })
                 ->addColumn('picture', function ($row) {
-
-                    if (str_contains($row->picture, 'Massets/images/default.png')) {
-                        return 'Missing';
-                    } else {
-                        return '';
-                    }
+                    return str_contains($row->picture, 'Massets/images/default.png') ? 'Missing' : '';
                 })
                 ->addColumn('signed_appointment_letter', function ($row) {
-                    return $row->signedAppointmentLetter?->first() ? '' : 'Missing';
+                    return $this->getDocumentStatus($row->signedAppointmentLetter?->first(), 'Missing');
                 })
                 ->addColumn('appointment_letter', function ($row) {
-                    return $row->appointmentLetter?->first() ? '' : 'Missing';
+                    return $this->getDocumentStatus($row->appointmentLetter?->first(), 'Missing');
                 })
                 ->addColumn('Hr_Form', function ($row) {
-                    return $row->hrForm->first() ? '' : 'Missing';
+                    return $this->getDocumentStatus($row->hrForm->first(), 'Missing');
                 })
                 ->addColumn('joining_report', function ($row) {
-                    return $row->joiningReport->first() ? '' : 'Missing';
+                    return $this->getDocumentStatus($row->joiningReport->first(), 'Missing');
                 })
                 ->addColumn('engineer_degree', function ($row) {
-                    if ($row->hrMembership->expiry ?? '') {
-                        return $row->engineeringDegree->first() ? '' : 'Missing';
-                    } else {
-                        return '';
+                    if ($row->hrMembership->expiry ?? false) {
+                        return $this->getDocumentStatus($row->engineeringDegree->first(), 'Missing');
                     }
+                    return '';
                 })
                 ->addColumn('education_documents', function ($row) {
-                    if (!$this->examptEducationDocuments($row->employeeCurrentDesignation->name)) {
-                        return $row->educationalDocuments->first() ? '' : 'Missing';
+                    if (!$this->examptEducationDocuments($row->employeeCurrentDesignation->name ?? '')) {
+                        return $this->getDocumentStatus($row->educationalDocuments->first(), 'Missing');
                     }
                     return '';
                 })
                 ->addColumn('mobile', function ($row) {
                     return $row->hrContactMobile->mobile ?? '';
                 })
-
                 ->addColumn('Edit', function ($row) {
-
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editExperience">Edit</a>';
-
-                    return $btn;
+                    return '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editExperience">Edit</a>';
                 })
                 ->addColumn('Delete', function ($row) {
-
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteExperience">Delete</a>';
-
-                    return $btn;
+                    return '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteExperience">Delete</a>';
                 })
-
                 ->rawColumns(['full_name', 'Edit', 'Delete'])
                 ->make(true);
         }
 
         return view('hr.reports.missingDocuments');
     }
+
+    /**
+     * Check if employee has any missing documents
+     */
+    private function hasMissingDocuments($employee): bool
+    {
+        // Check basic documents
+        $missingFrontCNIC = !$employee->cnicFront->first();
+        $missingSignedAppointment = !$employee->signedAppointmentLetter?->first();
+        $missingAppointmentLetter = !$employee->appointmentLetter->first();
+        $missingHrForm = !$employee->hrForm->first();
+        $missingJoiningReport = !$employee->joiningReport->first();
+        $missingPicture = str_contains($employee->picture, 'Massets/images/default.png');
+
+        // Check educational documents (if required)
+        $missingEducationalDocs = false;
+        if (!$this->examptEducationDocuments($employee->employeeCurrentDesignation->name ?? '')) {
+            $missingEducationalDocs = !$employee->educationalDocuments->first();
+        }
+
+        // Check engineering degree (if required)
+        $missingEngineeringDegree = false;
+        if ($employee->hrMembership->expiry ?? false) {
+            $missingEngineeringDegree = !$employee->engineeringDegree->first();
+        }
+
+        // Return true if any document is missing
+        return $missingFrontCNIC || $missingSignedAppointment || $missingAppointmentLetter ||
+            $missingHrForm || $missingJoiningReport || $missingPicture ||
+            $missingEducationalDocs || $missingEngineeringDegree;
+    }
+
+    /**
+     * Helper function to get document status
+     */
+    private function getDocumentStatus($document, $missingText = 'Missing'): string
+    {
+        return $document ? '' : $missingText;
+    }
+
 
 
 
