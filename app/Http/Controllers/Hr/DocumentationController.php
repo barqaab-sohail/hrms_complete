@@ -108,7 +108,7 @@ class DocumentationController extends Controller
 
                 $extension = request()->document->getClientOriginalExtension();
 
-                $fileName = $input['hr_employee_id'] . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . $vriableName . '.' . $extension;
+                $fileName = strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . $vriableName . '.' . $extension;
 
                 if (HrDocumentation::where('file_name', $fileName)->first()) {
                     $fileName = $input['hr_employee_id'] . '-' . strtolower(preg_replace('/[^a-zA-Z0-9_ -]/s', '', str_replace(" ", "_", $input['description']))) . '-' . $vriableName . time() . '.' . $extension;
