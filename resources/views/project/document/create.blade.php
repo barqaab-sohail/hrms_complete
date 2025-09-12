@@ -1,3 +1,6 @@
+
+
+
 @can('pr edit document')
 <div style="margin-top:10px; margin-right: 10px;">
     <button type="button"  id ="hideButton"  class="btn btn-success float-right">Add Document</button>
@@ -205,8 +208,40 @@
             </tbody>
         </table>
 
+        <div class="search-loading" id="searchLoading">
+            <i class="fa fa-spinner fa-spin"></i> Searching documents...
+        </div>
+        <div id="searchResultsInfo"></div>
+        
+
 </div>   
 <style>
+    .search-loading {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.search-loading i {
+    margin-right: 8px;
+}
+
+.dataTables_wrapper {
+    position: relative;
+}
+
+#searchResultsInfo {
+    margin-top: 10px;
+    font-style: italic;
+    color: #6c757d;
+}
 .spinner-border {
     display: inline-block;
     width: 1rem;
@@ -268,27 +303,34 @@
             todayHighlight: true
         });
 
-        // Toggle search form
-        $('#searchButton').click(function() {
-            $('#searchForm').toggle();
-            if ($('#searchForm').is(':visible')) {
-                $('#formDocument').hide();
+         // Toggle search form
+            $('#searchButton').click(function() {
+                $('#searchForm').toggle();
+                if ($('#searchForm').is(':visible')) {
+                    $('#formDocument').hide();
+                }
+            });
+
+            // Clear search form
+            $('#clearSearch').click(function() {
+                clearSearch();
+            });
+
+
+         // Apply search
+         $('#applySearch').click(function() {
+            performSearch();
+        });
+
+        // Allow pressing Enter to search
+        $('#formSearch input').keypress(function(e) {
+            if (e.which === 13) {
+                performSearch();
+                return false;
             }
         });
 
-        // Clear search form
-        $('#clearSearch').click(function() {
-            $('#formSearch')[0].reset();
-            table.draw();
-            $('#searchForm').hide();
-        });
-
-        // Apply search
-        $('#applySearch').click(function() {
-            table.draw();
-        });
-
-        // ... rest of your existing document ready code ...
+       
 
         $("#pdf").hide();
         // Prepare the preview for profile picture
@@ -383,6 +425,42 @@
 
     }); //end document ready
 
+// Function to perform search with loading indicator
+function performSearch() {
+    // Show loading indicator
+    $('#searchLoading').show();
+    $('#searchResultsInfo').hide();
+    
+    // Disable search button during search
+    $('#applySearch').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Searching...');
+    $('#clearSearch').prop('disabled', true);
+    
+    // Perform the search
+    table.draw();
+}
+
+// Function to clear search with loading indicator
+function clearSearch() {
+    // Show loading indicator
+    $('#searchLoading').show();
+    $('#searchResultsInfo').hide();
+    
+    // Disable buttons during clear operation
+    $('#clearSearch').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Clearing...');
+    $('#applySearch').prop('disabled', true);
+    
+    // Reset the form
+    $('#formSearch')[0].reset();
+    
+    // Refresh the table
+    table.draw();
+    
+    // Hide the search form after a brief delay to show the clearing process
+    setTimeout(function() {
+        $('#searchForm').hide();
+    }, 500);
+}
+
 //Create Datatabel Function
 function createDatatable(url){
     return $('.data-table').DataTable({
@@ -394,7 +472,7 @@ function createDatatable(url){
                     [10, 25, 50, 100],
                     [10, 25, 50, 100]
         ],
-        pageLength: 25, // Default page length
+        pageLength: 10, // Default page length
         ajax: {
             url: url,
             data: function (d) {
@@ -425,10 +503,35 @@ function createDatatable(url){
             @endcan
         ],
         "drawCallback": function(settings) {
-            // Hide loading indicator when table is drawn
+            // Hide loading indicators when table is drawn
+            $('#searchLoading').hide();
             $('#table-loading').remove();
             
-            if(this.api().rows().data().length>0){
+            // Re-enable buttons
+            $('#applySearch').prop('disabled', false).html('Search');
+            $('#clearSearch').prop('disabled', false).html('Clear');
+            
+            // Show search results info
+            var api = this.api();
+            var pageInfo = api.page.info();
+            var searchTerms = getSearchTerms();
+            
+            if (searchTerms) {
+                var resultsText = 'Showing ' + pageInfo.recordsDisplay + ' documents';
+                if (pageInfo.recordsDisplay === 1) {
+                    resultsText += ' matching your search: ' + searchTerms;
+                } else if (pageInfo.recordsDisplay > 1) {
+                    resultsText += ' matching your search: ' + searchTerms;
+                } else {
+                    resultsText = 'No documents found matching your search: ' + searchTerms;
+                }
+                
+                $('#searchResultsInfo').html(resultsText).show();
+            } else {
+                $('#searchResultsInfo').hide();
+            }
+            
+            if(api.rows().data().length>0){
 			    $("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
             }
 
@@ -450,6 +553,29 @@ function createDatatable(url){
         },
         order: [[2, 'desc']] // Default sort by date descending
     });
+}
+
+// Helper function to get search terms for results info
+function getSearchTerms() {
+    var terms = [];
+    
+    if ($('input[name="search_reference"]').val()) {
+        terms.push('Reference: "' + $('input[name="search_reference"]').val() + '"');
+    }
+    
+    if ($('input[name="search_description"]').val()) {
+        terms.push('Description: "' + $('input[name="search_description"]').val() + '"');
+    }
+    
+    if ($('input[name="search_date"]').val()) {
+        terms.push('Date: "' + $('input[name="search_date"]').val() + '"');
+    }
+    
+    if ($('input[name="search_content"]').val()) {
+        terms.push('Content: "' + $('input[name="search_content"]').val() + '"');
+    }
+    
+    return terms.join(', ');
 }
 
 //start function

@@ -25,6 +25,7 @@ class AddIndexesToPrDocuments extends Migration
         // Create prefix index for content column using raw SQL
         DB::statement('CREATE INDEX pr_document_contents_content_index ON pr_document_contents (content(255))');
 
+
         Schema::table('short_urls', function (Blueprint $table) {
             $table->index('original_url');
             $table->index('short_code');
