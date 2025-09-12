@@ -4,6 +4,51 @@
 </div>
 @endcan
 
+@can('pr search document')
+<div style="margin-top:10px; margin-right: 10px;">
+    <button type="button"  id ="searchButton"  class="btn btn-info float-right mr-2">Search Document</button>
+</div>
+@endcan
+
+<!-- Search Form -->
+<div id="searchForm" style="display: none; margin-bottom: 20px;" class="card card-body bg-light">
+    <form method="GET" id="formSearch">
+        <h4>Search Documents</h4>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Reference No</label>
+                    <input type="text" name="search_reference" id="search_reference" class="form-control" placeholder="Enter reference number">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Description</label>
+                    <input type="text" name="search_description" id="search_description" class="form-control" placeholder="Enter description">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Date</label>
+                    <input type="text" name="search_date" id="search_date" class="form-control date_input" readonly placeholder="Select date">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Content</label>
+                    <input type="text" name="search_content" id="search_content" class="form-control" placeholder="Search in document content">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <button type="button" id="applySearch" class="btn btn-primary">Search</button>
+                <button type="button" id="clearSearch" class="btn btn-secondary">Clear</button>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div class="card-body">
 
 <form method="post" class="form-horizontal form-prevent-multiple-submits" id="formDocument" enctype="multipart/form-data">
@@ -181,10 +226,32 @@
 @keyframes spinner-border {
     to { transform: rotate(360deg); }
 }
+
+/* Loading indicator */
+#table-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.dataTables_wrapper {
+    position: relative;
+}
+
+.dataTables_processing {
+    display: none !important;
+}
 </style>
         
 <script>
+    // Declare table variable in the global scope
+    var table;
+
     $(document).ready(function() {
+        // Show loading indicator immediately
+        $('.data-table').before('<div id="table-loading" style="text-align: center; padding: 20px;"><i class="fa fa-spinner fa-spin fa-3x"></i><br>Loading documents...</div>');
 
         $('#formDocument').hide();
 
@@ -194,35 +261,35 @@
             $("#hr_employee_id").val('').select2('val', 'All');
         });
 
-        // $('#hideDiv').hide();
-        // $('#hideButton').click(function() {
-        //     $('#hideDiv').toggle();
-        // });
+        // Initialize date picker for search form
+        $('#search_date').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true
+        });
 
+        // Toggle search form
+        $('#searchButton').click(function() {
+            $('#searchForm').toggle();
+            if ($('#searchForm').is(':visible')) {
+                $('#formDocument').hide();
+            }
+        });
 
-        
+        // Clear search form
+        $('#clearSearch').click(function() {
+            $('#formSearch')[0].reset();
+            table.draw();
+            $('#searchForm').hide();
+        });
 
+        // Apply search
+        $('#applySearch').click(function() {
+            table.draw();
+        });
 
-        //refreshTable("{{route('projectDocument.table')}}");
+        // ... rest of your existing document ready code ...
 
-
-        //submit function
-        // $("#formDocument").submit(function(e) {
-        //     e.preventDefault();
-        //     var url = "{{route('projectDocument.store')}}";
-        //     $('.fa-spinner').show();
-        //     submitForm(this, url);
-        //     resetForm();
-        //     $('#wizardPicturePreview').attr('src', "{{asset('Massets/images/document.png')}}").attr('width', '150');
-        //     $('#pdf').attr('src', '');
-        //     $('#h6').text('Click On Image to Add Document');
-
-        //     var folderUrl = $('.fa-folder-open').closest('a').attr('href');
-        //     if (typeof folderUrl !== "undefined") {
-        //         refreshTable(folderUrl,1000);
-        //     }
-
-        // });
         $("#pdf").hide();
         // Prepare the preview for profile picture
         $("#view").change(function() {
@@ -321,19 +388,35 @@ function createDatatable(url){
     return $('.data-table').DataTable({
         processing: true,
         serverSide: true,
+        deferRender: true, // Defer rendering for speed
+        stateSave: true, // Save state (page, filter, etc.)
         lengthMenu: [
-                    [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, 'All'],
+                    [10, 25, 50, 100],
+                    [10, 25, 50, 100]
         ],
-        ajax:{url:url, data: {
-            prDetailId: $("#pr_detail_id").val()
-        }},
+        pageLength: 25, // Default page length
+        ajax: {
+            url: url,
+            data: function (d) {
+                d.prDetailId = $("#pr_detail_id").val(),
+                d.search_reference = $('input[name="search_reference"]').val(),
+                d.search_description = $('input[name="search_description"]').val(),
+                d.search_date = $('input[name="search_date"]').val(),
+                d.search_content = $('input[name="search_content"]').val(),
+                d.draw = d.draw,
+                d.start = d.start,
+                d.length = d.length,
+                d.search = d.search,
+                d.order = d.order,
+                d.columns = d.columns
+            }
+        },
         columns: [
             {data: "description", name: 'description'},
             {data: "reference_no", name: 'reference_no'},
             {data: "document_date", name: 'document_date'},
-            {data: "document", name: 'document'},
-            {data: "copy_link", name: 'copy_link'},
+            {data: "document", name: 'document', orderable: false, searchable: false},
+            {data: "copy_link", name: 'copy_link', orderable: false, searchable: false},
             @can('pr edit document')
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             @endcan
@@ -342,6 +425,9 @@ function createDatatable(url){
             @endcan
         ],
         "drawCallback": function(settings) {
+            // Hide loading indicator when table is drawn
+            $('#table-loading').remove();
+            
             if(this.api().rows().data().length>0){
 			    $("[id^='ViewIMG'], [id^='ViewPDF']").EZView();
             }
@@ -358,9 +444,12 @@ function createDatatable(url){
             });
 
         },
-        order: []
+        "initComplete": function(settings, json) {
+            // Hide loading indicator when table is initialized
+            $('#table-loading').remove();
+        },
+        order: [[2, 'desc']] // Default sort by date descending
     });
-
 }
 
 //start function
@@ -372,7 +461,7 @@ $(function () {
           }
     });
 
-    var table = createDatatable ("{{ route('projectDocument.create') }}");
+    table = createDatatable ("{{ route('projectDocument.create') }}");
 
     $('a[id^=documentList]').click(function(e) {
             $('#hideDiv').hide();
@@ -383,9 +472,13 @@ $(function () {
             var $el = $(this).find("i").toggleClass('fa-folder-open');
             if ($el.hasClass('fa-folder-open')) {
                table.destroy();
+               // Show loading indicator
+               $('.data-table').before('<div id="table-loading" style="text-align: center; padding: 20px;"><i class="fa fa-spinner fa-spin fa-3x"></i><br>Loading folder contents...</div>');
                table = createDatatable (url);
             } else {
                table.destroy();
+               // Show loading indicator
+               $('.data-table').before('<div id="table-loading" style="text-align: center; padding: 20px;"><i class="fa fa-spinner fa-spin fa-3x"></i><br>Loading documents...</div>');
                table = createDatatable ("{{ route('projectDocument.create') }}");
             }
     });

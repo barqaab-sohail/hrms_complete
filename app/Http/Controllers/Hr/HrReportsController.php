@@ -134,7 +134,8 @@ class HrReportsController extends Controller
             "Hastel Attended",
             "Office Helper",
             "Sanitary Worker Part Time",
-            "Utility Person Cook"
+            "Utility Person Cook",
+            "part time helper",
         ];
 
         // Fetch required + PEC document IDs
@@ -281,38 +282,56 @@ class HrReportsController extends Controller
         // Normalize the designation by trimming and converting to lowercase for case-insensitive comparison
         $normalizedDesignation = strtolower(trim($designation));
 
-        $examptedDesignations = [
-            "kitchen helper",
-            "security guard",
-            "office helper",
-            "utility person",
-            "record keeper",
-            "driver",
-            "electrician",
-            "sanitary worker",
-            "sanitary worker part time",
-            "cook",
-            "naib qasid",
-            "chowkidarwatchman",
-            "line foreman",
-            "patwari",
-            "khalasi",
-            "sweeper sanitary worker",
-            "driver cum utility person part time",
-            "part time gardner",
-            "sweeper",
-            "office boy cum mali",
-            "recovery officer",
-            "utility person part time",
-            "field helper",
-            "sweeper (part time)",
-            "chakbandi coordinator",
-            "hastel attended",
-            "sanitary worker part time",
-            "utility person cook",
-            "naib qasid sanitary worker",
-            "sweeper (part time)"
-        ];
+        // Read exempted designations from the text file in public folder
+        $filePath = public_path('exempted_designations.txt');
+
+        // Check if file exists
+        if (!file_exists($filePath)) {
+            // Fallback to the original array if file doesn't exist
+            $examptedDesignations = [
+                "kitchen helper",
+                "security guard",
+                "office helper",
+                "utility person",
+                "record keeper",
+                "driver",
+                "electrician",
+                "sanitary worker",
+                "sanitary worker part time",
+                "cook",
+                "naib qasid",
+                "chowkidarwatchman",
+                "line foreman",
+                "patwari",
+                "khalasi",
+                "sweeper sanitary worker",
+                "driver cum utility person part time",
+                "part time gardner",
+                "sweeper",
+                "office boy cum mali",
+                "recovery officer",
+                "utility person part time",
+                "field helper",
+                "sweeper (part time)",
+                "chakbandi coordinator",
+                "hastel attended",
+                "sanitary worker part time",
+                "utility person cook",
+                "naib qasid sanitary worker",
+                "sweeper (part time)",
+                "part time helper",
+            ];
+        } else {
+            // Read file content and process it
+            $content = file_get_contents($filePath);
+            $examptedDesignations = array_map(function ($line) {
+                // Remove quotes, commas, and trim whitespace
+                return strtolower(trim(str_replace(['"', ',', "'"], '', $line)));
+            }, array_filter(explode("\n", $content), function ($line) {
+                // Filter out empty lines
+                return !empty(trim($line));
+            }));
+        }
 
         // Check if the normalized designation exists in the exempted list
         return in_array($normalizedDesignation, $examptedDesignations, true);
