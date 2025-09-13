@@ -49,7 +49,7 @@ class DocumentStore extends FormRequest
      */
     public function rules()
     {
-        $sizeInMB = 30000;
+        $sizeInMB = 10000;
         
         if($this->size){
             $sizeInMB = (int) $this->size / 1024;

@@ -40,6 +40,9 @@ class HomeController extends Controller
 
     public function index()
     {
+     
+     
+       
         // $allRoutes = Route::getRoutes();
         // dd($allRoutes);
         $educations =  educationChart();

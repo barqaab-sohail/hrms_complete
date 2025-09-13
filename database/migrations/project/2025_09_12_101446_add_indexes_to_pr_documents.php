@@ -11,15 +11,15 @@ class AddIndexesToPrDocuments extends Migration
     {
         Schema::table('pr_documents', function (Blueprint $table) {
             // Add indexes for frequently queried columns
-            $table->index('pr_detail_id');
-            $table->index('pr_folder_name_id');
+           // $table->index('pr_detail_id');
+           // $table->index('pr_folder_name_id');
             $table->index('reference_no');
             $table->index('document_date');
             $table->index(['pr_detail_id', 'pr_folder_name_id']);
         });
 
         Schema::table('pr_document_contents', function (Blueprint $table) {
-            $table->index('pr_document_id');
+           //$table->index('pr_document_id');
         });
 
         // Create prefix index for content column using raw SQL

@@ -341,11 +341,11 @@
             //var fileType = fileName.split('.').pop();
             var size = $("#size").val();
             if(size == ''){
-                size = 38400000;
+                size = 10485760;
             }
             //Restrict File Size Less Than 30MB
             if (fileSize > size) {
-                alert('File Size is bigger than 30MB');
+                alert('File Size is bigger than 10MB');
                 $(this).val('');
             } else {
                 //Restrict File Type
