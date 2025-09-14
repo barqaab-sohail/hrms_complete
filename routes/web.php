@@ -17,7 +17,7 @@ use App\Http\Controllers\Project\DocumentSearchController;
 use App\Http\Controllers\Self\BackgroundRemovalController;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
 use App\Http\Controllers\Self\FileCompressionController;
-
+use App\Http\Controllers\Admin\ExemptedDesignationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -460,6 +460,12 @@ Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth', 'XssSanitizer']
     Route::get('/result', 'AuditController@result')->name('audit.result');
     Route::resource('/addUser', 'UserController');
     Route::resource('/tempfileupload', 'TempFileUploadController');
+
+    Route::get('/exempted-designations', [ExemptedDesignationController::class, 'index'])
+    ->name('exempted-designations.index');
+
+    Route::post('/exempted-designations', [ExemptedDesignationController::class, 'update'])
+    ->name('admin.exempted-designations.update');
 });
 
 //Invoice Routes

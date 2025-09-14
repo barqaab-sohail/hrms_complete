@@ -373,6 +373,7 @@
                                                 <li><a class="{{Request::is('hrms/admin/audit/search')?'active':''}}" href="{{route('audit.search')}}">Search User Log</a></li>
                                                 <li><a class="{{Request::is('hrms/admin/addUser')?'active':''}}" href="{{route('addUser.create')}}">Users</a></li>
                                                 <li><a class="{{Request::is('hrms/admin/misUser')?'active':''}}" href="{{route('misUser.create')}}">MIS User Rights</a></li>
+                                                <li><a class="{{Request::is('hrms/admin/exempted-designations')?'active':''}}" href="{{route('exempted-designations.index')}}">Exampted Designations for Education</a></li>
 
                                         </ul>
                                 </li>
