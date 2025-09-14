@@ -16,7 +16,7 @@ use App\Http\Controllers\Hr\ExperienceLetterController;
 use App\Http\Controllers\Project\DocumentSearchController;
 use App\Http\Controllers\Self\BackgroundRemovalController;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
-
+use App\Http\Controllers\Self\FileCompressionController;
 
 
 /*
@@ -213,6 +213,11 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::resource('/personaldocuments', 'PersonalDocumentsController')->except(['show']);
     Route::get('/bg-remove', [BackgroundRemovalController::class, 'showForm'])->name('bg-remove.showForm');
     Route::post('/bg-remove', [BackgroundRemovalController::class, 'processImage'])->name('bg.remove');
+
+    Route::get('/compress-file', [FileCompressionController::class, 'index'])->name('file.compress.page');
+    Route::post('/compress-file', [FileCompressionController::class, 'compress'])->name('file.compress');
+    Route::get('/cleanup-temp', [FileCompressionController::class, 'cleanup'])->name('file.cleanup');
+    Route::post('/estimate-size', [FileCompressionController::class, 'estimateSize'])->name('file.estimate.size');
 });
 
 //CV Routes

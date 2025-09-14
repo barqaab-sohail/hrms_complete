@@ -331,6 +331,8 @@
                                         <ul aria-expanded="false" class="collapse">
                                                 <li><a class="{{Request::is('hrms/selfServices/selfContact/create')?'active':''}}" href="{{route('selfContact.create')}}">Personal Contact</a></li>
                                                 <li><a class="{{Request::is('hrms/multiplePrints/print')?'active':''}} not-ajax" href="{{route('multiplePrint.print')}}">CNIC Multiple Prints</a></li>
+                                                <li><a class="{{Request::is('hrms/compress-file')?'active':''}} not-ajax" href="{{route('file.compress.page')}}">Reduced File Size</a></li>
+
                                                 @can('personal documents')
                                                 <li><a class="{{Request::is('hrms/personaldocuments/create')?'active':''}}" href="{{route('personaldocuments.create')}}">Personal Documents</a></li>
                                                 @endcan
