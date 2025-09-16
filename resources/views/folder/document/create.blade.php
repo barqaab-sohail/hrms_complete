@@ -277,6 +277,7 @@
                 $('#document_date').val(data.document_date);
                 $('#reference_no').val(data.reference_no);
                 $('#folder_document_id').val(data.id);
+                $('#folder_id').val(data.folder_id);
                 if (file_extension == 'pdf') {
                     $("#pdf").show();
                     $('embed').attr('src', file_name);
