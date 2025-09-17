@@ -95,7 +95,7 @@
 <script src="https://cdn.datatables.net/plug-ins/1.10.25/sorting/date-dd-MMM-yyyy.js"></script>
 
 
-<script src="https://cdn.tiny.cloud/1/6k6kj2mbbmwv1jqeh7sqe7jf29uemxfwvq4kzdpz5a4j9gm1/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/kxbx4meippgcm4thil0cocqpvrv71e2c29qojfktf9za3522/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     tinymce.init({
         selector: 'textarea',
