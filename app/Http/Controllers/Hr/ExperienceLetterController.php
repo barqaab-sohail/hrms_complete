@@ -31,7 +31,9 @@ class ExperienceLetterController extends Controller
     {
         $request->validate([
             'employee_id' => 'required|exists:hr_employees,id',
-            'project' => 'nullable|string|max:555'
+            'project' => 'nullable|string|max:555',
+            'content_type' => 'required|in:predefined,custom',
+            'custom_content' => 'nullable|string|required_if:content_type,custom'
         ]);
 
         $employee = HrEmployee::with('employeeCurrentDesignation', 'employeeCurrentProject', 'employeeAppointment', 'hrExit')->findOrFail($request->employee_id);
@@ -57,7 +59,9 @@ class ExperienceLetterController extends Controller
             'is_current_employee' => $isCurrentEmployee,
             'project' => $project,
             'joining_date' => $joiningDate,
-            'leaving_date' => $leavingDate
+            'leaving_date' => $leavingDate,
+            'content_type' => $request->content_type,
+            'custom_content' => $request->custom_content
         ];
 
         return view('hr.experience_letter.preview', $data);
@@ -67,7 +71,9 @@ class ExperienceLetterController extends Controller
     {
         $request->validate([
             'employee_id' => 'required|exists:hr_employees,id',
-            'project' => 'nullable|string|max:555'
+            'project' => 'nullable|string|max:555',
+            'content_type' => 'required|in:predefined,custom',
+            'custom_content' => 'nullable|string|required_if:content_type,custom'
         ]);
 
         $employee = HrEmployee::with('employeeCurrentDesignation', 'employeeCurrentProject', 'employeeAppointment', 'hrExit')->findOrFail($request->employee_id);
@@ -80,8 +86,6 @@ class ExperienceLetterController extends Controller
             : null;
         $letterDate = $request->filled('date') ? \Carbon\Carbon::parse($request->date)->format('F d, Y') : \Carbon\Carbon::now()->format('F d, Y');
 
-
-
         // Generate filename and path
         $employeeName = str_replace(' ', '_', strtolower($employee->full_name));
         $fileName = "barqaab_experience_letter_" . ($isCurrentEmployee ? 'current' : 'previous') .
@@ -90,8 +94,6 @@ class ExperienceLetterController extends Controller
         $downloadFileName = $fileName;
         $folderName = "hr/documentation/" . $employee->id . '-' . $employeeName . "/";
         $fullPath = $folderName . $fileName;
-
-
 
         $data = [
             'employee' => $employee,
@@ -106,7 +108,9 @@ class ExperienceLetterController extends Controller
             'project' => $project,
             'joining_date' => $joiningDate,
             'leaving_date' => $leavingDate,
-            'path' => $fullPath
+            'path' => $fullPath,
+            'content_type' => $request->content_type,
+            'custom_content' => $request->custom_content
         ];
 
         $pdfContent = Pdf::loadView('hr.experience_letter.pdf', $data)
@@ -128,7 +132,7 @@ class ExperienceLetterController extends Controller
             'path' => $folderName,
             'size' => Storage::disk('public')->size($fullPath),
             'extension' => 'pdf',
-            'content' => null
+            'content' => $request->content_type === 'custom' ? $request->custom_content : null
         ]);
 
         return response()->streamDownload(
@@ -147,7 +151,9 @@ class ExperienceLetterController extends Controller
     {
         $request->validate([
             'employee_id' => 'required|exists:hr_employees,id',
-            'project' => 'nullable|string|max:555'
+            'project' => 'nullable|string|max:555',
+            'content_type' => 'required|in:predefined,custom',
+            'custom_content' => 'nullable|string|required_if:content_type,custom'
         ]);
 
         $employee = HrEmployee::findOrFail($request->employee_id);
@@ -181,7 +187,9 @@ class ExperienceLetterController extends Controller
             'path' => $fullPath,
             'show_letterhead' => false, // Flag to indicate no letterhead
             'show_signature' => false,  // Flag to indicate no signature
-            'show_stamp' => false      // Flag to indicate no stamp
+            'show_stamp' => false,      // Flag to indicate no stamp
+            'content_type' => $request->content_type,
+            'custom_content' => $request->custom_content
         ];
 
         $pdfContent = Pdf::loadView('hr.experience_letter.pdf', $data)
@@ -203,7 +211,7 @@ class ExperienceLetterController extends Controller
             'path' => $folderName,
             'size' => Storage::disk('public')->size($fullPath),
             'extension' => 'pdf',
-            'content' => null
+            'content' => $request->content_type === 'custom' ? $request->custom_content : null
         ]);
 
         return response()->streamDownload(

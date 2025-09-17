@@ -14,6 +14,10 @@
         width: 1% !important;
         white-space: nowrap;
     }
+    #customContentContainer {
+        display: none;
+        margin-top: 20px;
+    }
 </style>
 <div class="card">
     <div class="card-body">
@@ -37,6 +41,31 @@
                     @endforeach
                 </select>
                 <div id="employee_id_error" class="invalid-feedback"></div>
+            </div>
+            
+            <!-- Content Type Toggle -->
+            <div class="form-group">
+                <label>Content Type</label><br>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-outline-primary active">
+                        <input type="radio" name="content_type" value="predefined" autocomplete="off" checked> Predefined Content
+                    </label>
+                    <label class="btn btn-outline-primary">
+                        <input type="radio" name="content_type" value="custom" autocomplete="off"> Custom Content
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Custom Content Container (Initially Hidden) -->
+            <div id="customContentContainer" class="form-group">
+                <label for="custom_content">Custom Letter Content</label>
+                <textarea class="form-control" id="custom_content" name="custom_content" rows="10" 
+                          placeholder="Enter your custom experience letter content here..."></textarea>
+                <small class="form-text text-muted">
+                    You can use the following placeholders: 
+                    {employee_name}, {father_name}, {cnic}, {designation}, {project}, 
+                    {joining_date}, {leaving_date}, {current_date}
+                </small>
             </div>
             
             <div class="form-group">
@@ -123,6 +152,15 @@ $(document).ready(function() {
         format: 'MM d, yyyy',
         autoclose: true,
         todayHighlight: true
+    });
+
+    // Toggle custom content field based on content type selection
+    $('input[name="content_type"]').change(function() {
+        if ($(this).val() === 'custom') {
+            $('#customContentContainer').slideDown();
+        } else {
+            $('#customContentContainer').slideUp();
+        }
     });
 
     // Make this function available globally so the modal can call it

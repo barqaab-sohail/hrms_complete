@@ -111,23 +111,28 @@
             
             <p style="text-align: center;"><strong>TO WHOM IT MAY CONCERN</strong></p>
             
-            <!-- In the content section of the PDF view -->
-            <p class="justified-text">This is to certify that <strong>Mr. {{ $employee->full_name }}</strong>, s/o {{ $employee->father_name }}, holding
-            CNIC No. {{ $employee->cnic }}, has 
-            @if($is_current_employee)
-                been employed with this organization since {{ $joining_date }}. 
-                He is currently serving as {{ $designation }} on {{ $project }}.
+            <!-- Custom or predefined content -->
+            @if(($content_type ?? 'predefined') === 'custom' && !empty($custom_content))
+                {!! $custom_content !!}
             @else
-                worked with this organization as {{ $designation }} from {{ $joining_date }} till {{ $leaving_date }}, 
-                on {!! $project !!}.
+                <!-- In the content section of the PDF view -->
+                <p class="justified-text">This is to certify that <strong>Mr. {{ $employee->full_name }}</strong>, s/o {{ $employee->father_name }}, holding
+                CNIC No. {{ $employee->cnic }}, has 
+                @if($is_current_employee)
+                    been employed with this organization since {{ $joining_date }}. 
+                    He is currently serving as {{ $designation }} on {{ $project }}.
+                @else
+                    worked with this organization as {{ $designation }} from {{ $joining_date }} till {{ $leaving_date }}, 
+                    on {!! $project !!}.
+                @endif
+                </p>
+                
+                <p class="justified-text">Throughout the tenure of employment, Mr. {{ $employee->full_name }} exhibited a
+                strong work ethic, professionalism, and dedication to his responsibilities.</p>
+                
+                <p>This Experience Certificate 
+                is issued upon his own request.</p>
             @endif
-            </p>
-            
-            <p class="justified-text">Throughout the tenure of employment, Mr. {{ $employee->full_name }} exhibited a
-            strong work ethic, professionalism, and dedication to his responsibilities.</p>
-            
-            <p>This Experience Certificate 
-            is issued upon his own request.</p>
             
             <div class="signature-block">
                 <div class="signature-wrapper">
