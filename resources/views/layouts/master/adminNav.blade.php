@@ -68,10 +68,10 @@
                                                     <ul aria-expanded="false" class="collapse">
                                                         @can('bank account letter')
                                                         <li><a class="{{Request::is('hrms/bank-letters')?'active':''}}" href="{{route('bank-letters.create')}}">Bank Account Letter</a></li>
+                                                        <li><a class="{{Request::is('hrms/employee/card')?'active':''}}" href="{{route('employee.card')}}">Employees Card</a></li>
                                                         @endcan
                                                         @can('experience letter')
                                                         <li><a class="{{Request::is('hrms/experience-letters')?'active':''}}" href="{{route('experience-letters.create')}}">Experience Letter</a></li>
-                                                        <li><a class="{{Request::is('hrms/employee/card')?'active':''}}" href="{{route('employee.card')}}">Employees Card</a></li>
                                                         @endcan
                                                     </ul>
                                                 </li>
