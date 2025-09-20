@@ -120,7 +120,13 @@
             ],
             processing: true,
             serverSide: true,
-            fixedHeader: true,
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            fixedColumns: {
+                leftColumns: 2,
+                rightColumns: 1
+            },
             dom: 'Blfrtip',
             buttons: ['copy', 'excel', 'pdf'],
             scrollY: "300px",

@@ -16,11 +16,14 @@ use App\Models\Hr\HrDocumentName;
 use App\Http\Controllers\Controller;
 use App\Models\Hr\HrEmployeeCompany;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 
 class HrReportsController extends Controller
 {
+
+    private $filePath = 'exempted_designations.txt';
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -277,65 +280,103 @@ class HrReportsController extends Controller
     }
 
 
-    public function examptEducationDocuments($designation)
-    {
-        // Normalize the designation by trimming and converting to lowercase for case-insensitive comparison
-        $normalizedDesignation = strtolower(trim($designation));
+public function examptEducationDocuments($designation)
+{
+    // Normalize the designation by trimming and converting to lowercase for case-insensitive comparison
+    $normalizedDesignation = strtolower(trim($designation));
 
-        // Read exempted designations from the text file in public folder
-        $filePath = public_path('exempted_designations.txt');
+    // Get exempted designations from file or fallback to default array
+    $exemptedDesignations = $this->getExemptedDesignations();
 
-        // Check if file exists
-        if (!file_exists($filePath)) {
-            // Fallback to the original array if file doesn't exist
-            $examptedDesignations = [
-                "kitchen helper",
-                "security guard",
-                "office helper",
-                "utility person",
-                "record keeper",
-                "driver",
-                "electrician",
-                "sanitary worker",
-                "sanitary worker part time",
-                "cook",
-                "naib qasid",
-                "chowkidarwatchman",
-                "line foreman",
-                "patwari",
-                "khalasi",
-                "sweeper sanitary worker",
-                "driver cum utility person part time",
-                "part time gardner",
-                "sweeper",
-                "office boy cum mali",
-                "recovery officer",
-                "utility person part time",
-                "field helper",
-                "sweeper (part time)",
-                "chakbandi coordinator",
-                "hastel attended",
-                "sanitary worker part time",
-                "utility person cook",
-                "naib qasid sanitary worker",
-                "sweeper (part time)",
-                "part time helper",
-            ];
-        } else {
-            // Read file content and process it
-            $content = file_get_contents($filePath);
-            $examptedDesignations = array_map(function ($line) {
-                // Remove quotes, commas, and trim whitespace
-                return strtolower(trim(str_replace(['"', ',', "'"], '', $line)));
-            }, array_filter(explode("\n", $content), function ($line) {
-                // Filter out empty lines
-                return !empty(trim($line));
-            }));
+    // Check if the normalized designation exists in the exempted list
+    return in_array($normalizedDesignation, $exemptedDesignations, true);
+}
+
+private function getExemptedDesignations()
+{
+    // Default fallback array
+    $defaultDesignations = [
+        "kitchen helper",
+        "security guard",
+        "office helper",
+        "utility person",
+        "record keeper",
+        "driver",
+        "electrician",
+        "sanitary worker",
+        "sanitary worker part time",
+        "cook",
+        "naib qasid",
+        "chowkidarwatchman",
+        "line foreman",
+        "patwari",
+        "khalasi",
+        "sweeper sanitary worker",
+        "driver cum utility person part time",
+        "part time gardner",
+        "sweeper",
+        "office boy cum mali",
+        "recovery officer",
+        "utility person part time",
+        "field helper",
+        "sweeper (part time)",
+        "chakbandi coordinator",
+        "hastel attended",
+        "sanitary worker part time",
+        "utility person cook",
+        "naib qasid sanitary worker",
+        "sweeper (part time)",
+        "part time helper",
+    ];
+
+    try {
+        // Check if file exists in storage
+        if (Storage::exists($this->filePath)) {
+            $content = Storage::get($this->filePath);
+            return $this->processFileContent($content);
         }
 
-        // Check if the normalized designation exists in the exempted list
-        return in_array($normalizedDesignation, $examptedDesignations, true);
+        // Check if file exists in app directory
+        $appFilePath = app_path($this->filePath);
+        if (file_exists($appFilePath)) {
+            $content = file_get_contents($appFilePath);
+            return $this->processFileContent($content);
+        }
+
+        // Fallback to default array if file doesn't exist in either location
+        return $defaultDesignations;
+
+    } catch (\Exception $e) {
+        // Log error and return default array
+        \Log::warning('Failed to read exempted designations file: ' . $e->getMessage());
+        return $defaultDesignations;
     }
+}
+
+private function processFileContent($content)
+{
+    if (empty($content)) {
+        return [];
+    }
+
+    // Use Laravel Collection for cleaner processing
+    return collect(explode("\n", $content))
+        ->map(function ($line) {
+            // Remove quotes, commas, and trim whitespace
+            return trim(str_replace(['"', ',', "'"], '', $line));
+        })
+        ->filter(function ($line) {
+            // Filter out empty lines and lines with only whitespace
+            return !empty($line);
+        })
+        ->map(function ($line) {
+            // Convert to lowercase
+            return strtolower($line);
+        })
+        ->unique() // Remove duplicates
+        ->values()
+        ->toArray();
+}
 
     public function mmissingDocuments(Request $request)
     {
