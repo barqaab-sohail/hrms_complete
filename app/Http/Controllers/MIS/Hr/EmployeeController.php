@@ -13,7 +13,7 @@ class EmployeeController extends Controller
     public function employee($id)
     {
 
-        $data =  HrEmployee::with('hrContactMobile', 'hrBloodGroup', 'hrDocumentations', 'hrEducation', 'hrEmergency', 'hrExperiences', 'hrContactEmail', 'hrContactPermanent')->find($id);
+        $data =  HrEmployee::with('hrContactMobile', 'employeeCurrentProject', 'employeeAppointment', 'hrBloodGroup', 'hrDocumentations', 'hrEducation', 'hrEmergency', 'hrExperiences', 'hrContactEmail', 'hrContactPermanent')->find($id);
 
 
         foreach ($data->hrEducation as $education) {
@@ -26,14 +26,14 @@ class EmployeeController extends Controller
         }
 
         $employee = [
-            'full_name' => $data->full_name ?? '',
+            'full_name' => $data->first_name . ' ' . $data->last_name,
             'father_name' => $data->father_name ?? '',
-            'designation' => $data->designation ?? '',
+            'designation' => $data->employeeCurrentDesignation?->name ?? '',
             'picture' => $data->picture ?? '',
             'cnic' => $data->cnic ?? '',
-            'joining_date' => $data->joining_date ? \Carbon\Carbon::parse($data->joining_date)->format('M d, Y') : '',
+            'joining_date' => $data?->employeeAppointment?->joining_date ? \Carbon\Carbon::parse($data->joining_date)->format('M d, Y') : '',
             'date_of_birth' => $data->date_of_birth ? \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y') : '',
-            'project' => $data->project ?? '',
+            'project' => $data->employeeCurrentProject?->name ?? '',
             'hr_status_id' => $data->hr_status_id ?? '',
             'current_salary' => $data->current_salary['salary'] ? $data->current_salary['salary'] : '',
             'salary_effective_date' => $data->current_salary['effective_date'] ? $data->current_salary['effective_date'] : '',
