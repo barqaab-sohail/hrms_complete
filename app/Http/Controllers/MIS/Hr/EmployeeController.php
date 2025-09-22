@@ -12,44 +12,69 @@ class EmployeeController extends Controller
 {
     public function employee($id)
     {
+        // Find the employee with all relationships
+        $data = HrEmployee::with(
+            'hrContactMobile',
+            'employeeCurrentProject',
+            'employeeAppointment',
+            'hrBloodGroup',
+            'hrDocumentations',
+            'hrEducation',
+            'hrEducation.education', // Eager load the education relationship
+            'hrEmergency',
+            'hrExperiences',
+            'hrContactEmail',
+            'hrContactPermanent'
+        )->find($id);
 
-        $data =  HrEmployee::with('hrContactMobile', 'employeeCurrentProject', 'employeeAppointment', 'hrBloodGroup', 'hrDocumentations', 'hrEducation', 'hrEmergency', 'hrExperiences', 'hrContactEmail', 'hrContactPermanent')->find($id);
-
-
-        foreach ($data->hrEducation as $education) {
-            $educations[] = array(
-                'institute' => $education->institute,
-                'degree' => $education->education->degree_name ?? '',
-                'from' => $education->from ?? '',
-                'to' => $education->to ?? ''
-            );
+        // Check if employee exists
+        if (!$data) {
+            return response()->json([
+                'error' => 'Employee not found'
+            ], 404);
         }
 
+        // Initialize educations array
+        $educations = [];
+
+        // Process education data only if it exists
+        if ($data->hrEducation && $data->hrEducation->isNotEmpty()) {
+            foreach ($data->hrEducation as $education) {
+                $educations[] = [
+                    'institute' => $education->institute ?? '',
+                    'degree' => $education->education->degree_name ?? '',
+                    'from' => $education->from ?? '',
+                    'to' => $education->to ?? ''
+                ];
+            }
+        }
+
+        // Safely access current_salary (assuming it might be JSON/array)
+        $currentSalary = is_array($data->current_salary) ? $data->current_salary : (array)$data->current_salary;
+
+        // Build employee data with null-safe operators
         $employee = [
-            'full_name' => $data->first_name . ' ' . $data->last_name,
+            'full_name' => ($data->first_name ?? '') . ' ' . ($data->last_name ?? ''),
             'father_name' => $data->father_name ?? '',
             'designation' => $data->employeeCurrentDesignation?->name ?? '',
             'picture' => $data->picture ?? '',
             'cnic' => $data->cnic ?? '',
-            'joining_date' => $data?->employeeAppointment?->joining_date ? \Carbon\Carbon::parse($data->joining_date)->format('M d, Y') : '',
+            'joining_date' => $data->employeeAppointment?->joining_date ? \Carbon\Carbon::parse($data->employeeAppointment->joining_date)->format('M d, Y') : '',
             'date_of_birth' => $data->date_of_birth ? \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y') : '',
             'project' => $data->employeeCurrentProject?->name ?? '',
             'hr_status_id' => $data->hr_status_id ?? '',
-            'current_salary' => $data->current_salary['salary'] ? $data->current_salary['salary'] : '',
-            'salary_effective_date' => $data->current_salary['effective_date'] ? $data->current_salary['effective_date'] : '',
-            'hr_blood_group' => $data->hrBloodGroup->name ?? '',
-            'mobile' => $data->hrContactMobile->mobile ?? '',
+            'current_salary' => $currentSalary['salary'] ?? '',
+            'salary_effective_date' => $currentSalary['effective_date'] ?? '',
+            'hr_blood_group' => $data->hrBloodGroup?->name ?? '',
+            'mobile' => $data->hrContactMobile?->mobile ?? '',
             'emgergencyContactName' => $data->hrEmergency?->name ?? '',
             'emgergencyContactRelaction' => $data->hrEmergency?->relation ?? '',
             'emgergencyContact' => $data->hrEmergency?->mobile ?? '',
-            'email' => $data->hrContactEmail->email ?? '',
-            'address' => $data->hrContactPermanent->complete_address ?? '',
-            'experiences' => $data->hrExperiences ?? '',
-            'educations' =>  $educations ?? '',
-            'documents' => $data->hrDocumentations ?? '',
-
-
-
+            'email' => $data->hrContactEmail?->email ?? '',
+            'address' => $data->hrContactPermanent?->complete_address ?? '',
+            'experiences' => $data->hrExperiences ?? [],
+            'educations' => $educations,
+            'documents' => $data->hrDocumentations ?? [],
         ];
 
         return response()->json($employee);
