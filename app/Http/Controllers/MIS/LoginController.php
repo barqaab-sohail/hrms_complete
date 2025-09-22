@@ -49,7 +49,7 @@ class LoginController extends Controller
                 return response()->json([
                     'status' => 200,
                     'userName' => $user->hrEmployee->full_name,
-                    'userDesignation' => $user->hrEmployee->designation,
+                    'userDesignation' => $user->hrEmployee->employeeCurrentDesignation->name ?? '',
                     'email' => $user->email,
                     'pictureUrl' => asset('/storage/' . $picture->path . $picture->file_name),
                     'token' => $token,
