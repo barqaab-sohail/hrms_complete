@@ -187,7 +187,7 @@ function employeeDesignationArray()
 
 function employeeCodeArray()
 {
-    return array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182');
+    return array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000145');
 }
 
 function employeeName($employeeId)
