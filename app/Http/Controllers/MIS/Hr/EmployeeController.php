@@ -130,7 +130,7 @@ class EmployeeController extends Controller
                 "date_of_birth" => \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y') ?? '',
                 "date_of_joining" => \Carbon\Carbon::parse($employee->employeeAppointment->joining_date ?? '')->format('M d, Y') ?? '',
                 "cnic" => $employee->cnic ?? '',
-                "designation" => $employee->designation ?? '',
+                "designation" => $employee->employeeCurrentDesignation->name ?? '',
                 "blood_group" => $employee->hrBloodGroup->name ?? '',
                 "age" => \Carbon\Carbon::parse($employee->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days'),
                 "picture" => $employee->picture,

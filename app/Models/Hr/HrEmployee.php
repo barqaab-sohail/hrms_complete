@@ -157,7 +157,8 @@ class HrEmployee extends Model implements Auditable
             4 => 'Retired',
             5 => 'Long Leave',
             6 => 'ManMonth Ended',
-            7 => 'Death'
+            7 => 'Death',
+            8 => 'Not Join'
 
         ];
     }
