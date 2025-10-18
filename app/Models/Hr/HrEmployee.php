@@ -46,6 +46,8 @@ class HrEmployee extends Model implements Auditable
     }
 
 
+
+
     // Add this to your Employee model
     // function getPictureSize()
     // {
@@ -100,8 +102,19 @@ class HrEmployee extends Model implements Auditable
     // }
 
 
+    public function gender(){
+        return $this->belongsTo('App\Models\Common\Gender');    
+    }
 
+    public function maritalStatus()
+    {
+        return $this->belongsTo('App\Models\Common\MaritalStatus', 'marital_status_id');
+    }
 
+    public function religion()
+    {
+        return $this->belongsTo('App\Models\Common\Religion', 'religion_id');
+    }
 
     public function employeeManager()
     {

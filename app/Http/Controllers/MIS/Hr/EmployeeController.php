@@ -39,7 +39,7 @@ class EmployeeController extends Controller
 
         // Process education data only if it exists
         if ($data->hrEducation && $data->hrEducation->isNotEmpty()) {
-            foreach ($data->hrEducation as $education) {
+    foreach ($data->hrEducation as $education) {
                 $educations[] = [
                     'institute' => $education->institute ?? '',
                     'degree' => $education->education->degree_name ?? '',

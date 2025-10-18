@@ -34,6 +34,67 @@ use App\Notifications\UpdateRecordNotification;
 class EmployeeController extends Controller
 {
 
+
+    // Employees List for View Only Purpose
+
+    // Add these methods to your EmployeeController
+
+public function employeesList()
+{
+    $employees = HrEmployee::where('hr_status_id', 1)
+        ->select('id', 'employee_no', 'first_name', 'last_name', 'father_name', 'cnic')
+        ->get();
+
+    return view('hr.employee.simple-list', compact('employees'));
+}
+
+public function employeeSummary($hrEmployeeId)
+{
+    $employee = HrEmployee::with([
+        'employeeCurrentDesignation',
+        'employeeCurrentProject', 
+        'employeeCurrentOffice',
+        'hrExit',
+        'employeeAppointment',
+        'hrContactMobile',
+        'hrBloodGroup',
+        'employeeCurrentSalary',
+        'salayEffectiveDate',
+        'hrEmployeeHusband',
+        'gender',
+        'maritalStatus',
+        'religion'
+    ])->find($hrEmployeeId);
+
+    if (!$employee) {
+        return response()->json(['error' => 'Employee not found'], 404);
+    }
+
+    // Add the employee picture URL to the response
+    $employeeData = $employee->toArray();
+    $employeeData['picture_url'] = $employee->employeePicture(); // Assuming this method returns the image path
+
+    return response()->json($employeeData);
+}
+
+// Add this method for DataTables
+public function getSimpleEmployeesData()
+{
+    $employees = HrEmployee::where('hr_status_id', 1)
+        ->select('id', 'employee_no', 'first_name', 'last_name', 'father_name', 'cnic')
+        ->get();
+
+    return DataTables::of($employees)
+        ->addColumn('full_name', function($employee) {
+            return $employee->first_name . ' ' . $employee->last_name;
+        })
+        ->addColumn('action', function($employee) {
+            return '<button class="btn btn-sm btn-info view-employee" data-id="'.$employee->id.'">View</button>';
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+}
+
     public function employeeSortData($employees)
     {
         $first = array('1000124', '1000274', '1000110', '1000001', '1000151', '1000182', '1000155', '1000160', '1000139', '1000145', '1000147', '1000173', '1000174', '1000181', '1000171', '1000040');

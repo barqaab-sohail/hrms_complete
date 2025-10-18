@@ -8,6 +8,7 @@ use App\Livewire\Asset\CreateAsset;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Asset\AssetController;
 use App\Http\Controllers\Hr\HrReportsController;
+use App\Http\Controllers\Hr\EmployeeController;
 use App\Http\Controllers\Hr\BankLetterController;
 use App\Http\Controllers\Hr\StaffStatusController;
 use App\Http\Controllers\Common\ShortUrlController;
@@ -75,6 +76,9 @@ Route::post('code/', 'Auth\RegisterController@store')->name('opt.store');
 //HR Routes
 Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'namespace' => 'Hr'], function () {
 
+    Route::get('/hr/employees/simple-list', [EmployeeController::class, 'employeesList'])->name('employee.simpleList');
+    Route::get('/hr/employee/simple-data', [EmployeeController::class, 'getSimpleEmployeesData'])->name('employee.simpleData');
+    Route::get('/hr/employee/summary/{id}', [EmployeeController::class, 'employeeSummary'])->name('employee.summary');
     Route::get('/upload', 'StaffStatusController@showUploadForm')->name('checking.data');
     Route::post('/process-files', 'StaffStatusController@processFiles')->name('process.files');
     Route::get('employee/card', 'CardController@create')->name('employee.card');
