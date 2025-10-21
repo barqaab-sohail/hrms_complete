@@ -115,6 +115,10 @@
                                                 @canany(['hr view record','hr edit record','hr delete record','hr view list'])
                                                 <li><a class="{{Request::is('hrms/employee')?'active':''}}" href="{{route('employee.index')}}">List of Employees</a></li>
                                                 @endcanany
+                                                {{-- Read Only HR Record  --}}
+                                                @can('hr view only')
+                                                <li><a class="{{Request::is('hrms/hr/employees/simple-list')?'active':''}}" href="{{route('employee.simpleList')}}">Employees List</a></li>
+                                                @endcan
 
                                         </ul>
                                 </li>
