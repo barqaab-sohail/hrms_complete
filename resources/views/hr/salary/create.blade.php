@@ -4,8 +4,8 @@
     <table class="table table-striped data-table" id="dataTable">
         <thead>
             <tr>
-                <th>Salary</th>
                 <th>Gross Salary</th>
+                <th>Salary</th>
                 <th>Effective Date</th>
                 @foreach($allowanceNames as $allowanceName)
                 <th class="hideClass" id="{{$allowanceName->name}}">{{$allowanceName->name}}</th>
@@ -295,8 +295,8 @@ $(document).ready(function() {
                 });
             },
             columns: [
+                { data: "gross_salary", name: 'gross_salary' },  
                 { data: "salary", name: 'salary' },
-                { data: "gross_salary", name: 'gross_salary' },
                 { data: 'effective_date', name: 'effective_date' },
                 @foreach($allowanceNames as $allowanceName)
                 { data: '{{$allowanceName->name}}', name: '{{$allowanceName->name}}' },
