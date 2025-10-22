@@ -4,8 +4,8 @@
     <table class="table table-striped data-table" id="dataTable">
         <thead>
             <tr>
-                <th>Gross Salary</th>
                 <th>Salary</th>
+                <th>Gross Salary</th>
                 <th>Effective Date</th>
                 @foreach($allowanceNames as $allowanceName)
                 <th class="hideClass" id="{{$allowanceName->name}}">{{$allowanceName->name}}</th>
@@ -79,50 +79,74 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+    // Function to remove commas from number and convert to float
+    function parseNumberWithCommas(numberString) {
+        if (!numberString) return 0;
+        return parseFloat(numberString.toString().replace(/,/g, '')) || 0;
+    }
+
     // Function to calculate and display Grand Total
     function calculateGrandTotal() {
-        let totalSalary = parseFloat($('#hr_salary').val().replace(/,/g, '')) || 0;
+        let totalSalary = parseNumberWithCommas($('#hr_salary').val());
         let totalAllowances = 0;
+        let hasValidAllowances = false;
         
-        // Calculate total allowances
+        // Calculate total allowances from all allowance inputs
         $('.hr_allowance_amount').each(function() {
-            let allowanceAmount = parseFloat($(this).val().replace(/,/g, '')) || 0;
-            totalAllowances += allowanceAmount;
+            let allowanceAmount = parseNumberWithCommas($(this).val());
+            let allowanceName = $(this).closest('.allowance').find('.hr_allowance_name').val();
+            
+            // Check if this is a valid allowance (both name and amount filled)
+            if (allowanceName && allowanceAmount > 0) {
+                totalAllowances += allowanceAmount;
+                hasValidAllowances = true;
+            }
         });
         
         // Calculate grand total
         let grandTotal = totalSalary + totalAllowances;
         
-        // Format with commas
+        // Format with commas for display
         let formattedGrandTotal = grandTotal.toLocaleString('en-US');
         
         // Update the Grand Total display
         $('#grandTotalValue').text(formattedGrandTotal);
         
-        // Show or hide Grand Total container based on whether there are allowances
-        if (totalAllowances > 0) {
+        // Show or hide Grand Total container based on whether there are valid allowances
+        if (hasValidAllowances) {
             $('#grandTotalContainer').show();
         } else {
             $('#grandTotalContainer').hide();
         }
     }
     
-    // Function to validate allowance inputs
-    function validateAllowanceInputs() {
-        let hasAllowances = false;
+    // Function to prepare form data before submission (remove commas from numbers)
+    function prepareFormData() {
+        // Remove commas from salary input before submission
+        let salaryValue = $('#hr_salary').val();
+        if (salaryValue) {
+            $('#hr_salary').val(parseNumberWithCommas(salaryValue));
+        }
         
-        $('.allowance').each(function() {
-            let allowanceName = $(this).find('.hr_allowance_name').val();
-            let allowanceAmount = $(this).find('.hr_allowance_amount').val();
-            
-            // If either name or amount is filled, consider it a valid allowance
-            if (allowanceName || allowanceAmount) {
-                hasAllowances = true;
-                return false; // Break out of loop
+        // Remove commas from all allowance amounts before submission
+        $('.hr_allowance_amount').each(function() {
+            let amountValue = $(this).val();
+            if (amountValue) {
+                $(this).val(parseNumberWithCommas(amountValue));
             }
         });
+    }
+    
+    // Function to format input with commas (for display)
+    function formatNumberWithCommas(input) {
+        let value = input.val().replace(/,/g, '');
+        if (!value) return;
         
-        return hasAllowances;
+        // Skip for arrow keys
+        if (event.which >= 37 && event.which <= 40) return;
+        
+        // Format number with commas
+        input.val(parseFloat(value).toLocaleString('en-US'));
     }
 
     // Dynamic add allowance
@@ -141,13 +165,30 @@ $(document).ready(function() {
             $('.allowance').find('select').chosen('destroy');
             var $clone = $("#allowance_1").clone();
             $clone.prop('id', 'allowance_' + nextindex).find('input:text').val('');
-            $clone.find(".hr_allowance_name").prop('id', 'hr_allowance_name_id_' + nextindex);
-            $clone.find(".hr_allowance_id").prop('id', 'hr_allowance_id_' + nextindex);
-            $clone.find(".hr_allowance_amount").prop('id', 'amount_' + nextindex).find('input:text').val('');
+            $clone.find(".hr_allowance_name").prop('id', 'hr_allowance_name_id_' + nextindex).val('');
+            $clone.find(".hr_allowance_id").prop('id', 'hr_allowance_id_' + nextindex).val('');
+            $clone.find(".hr_allowance_amount").prop('id', 'amount_' + nextindex).val('');
             $clone.find(".add_allowance").html('X').prop("class", "btn btn-danger remove remove_allowance");
             $clone.find('.remove_div').remove();
             $clone.insertAfter("div.allowance:last");
             $('.allowance').find('select').chosen();
+            
+            // Add event listeners to the newly cloned allowance amount input
+            $clone.find('.hr_allowance_amount').on('change keyup', function(event) {
+                // Format numbers with commas
+                var currentInput = $(this).val();
+                var fixedInput = currentInput.replace(/[A-Za-z!@#$%^&*()]/g, '');
+                $(this).val(fixedInput);
+                formatNumberWithCommas($(this));
+                
+                // Recalculate grand total
+                calculateGrandTotal();
+            });
+            
+            // Add event listener to the newly cloned allowance name select
+            $clone.find('.hr_allowance_name').on('change', function() {
+                calculateGrandTotal();
+            });
             
             // Recalculate grand total after adding new allowance
             calculateGrandTotal();
@@ -161,28 +202,32 @@ $(document).ready(function() {
         calculateGrandTotal();
     });
 
-    // Event listeners for salary and allowance changes
-    $('#hr_salary, .hr_allowance_amount').on('change keyup', function() {
+    // Event listeners for salary and allowance changes (initial bindings)
+    $('#hr_salary').on('change keyup', function(event) {
         // Format numbers with commas
         var currentInput = $(this).val();
         var fixedInput = currentInput.replace(/[A-Za-z!@#$%^&*()]/g, '');
-        
-        // Skip for arrow keys
-        if (event.which >= 37 && event.which <= 40) return;
-        
-        // Format number with commas
-        $(this).val(function(index, value) {
-            return value
-                .replace(/\D/g, "")
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        });
+        $(this).val(fixedInput);
+        formatNumberWithCommas($(this));
         
         // Recalculate grand total
         calculateGrandTotal();
     });
     
-    // Event listener for allowance name changes
-    $(document).on('change', '.hr_allowance_name', function() {
+    // Event listener for initial allowance amount inputs
+    $('.hr_allowance_amount').on('change keyup', function(event) {
+        // Format numbers with commas
+        var currentInput = $(this).val();
+        var fixedInput = currentInput.replace(/[A-Za-z!@#$%^&*()]/g, '');
+        $(this).val(fixedInput);
+        formatNumberWithCommas($(this));
+        
+        // Recalculate grand total
+        calculateGrandTotal();
+    });
+    
+    // Event listener for initial allowance name selects
+    $('.hr_allowance_name').on('change', function() {
         calculateGrandTotal();
     });
 
@@ -250,8 +295,8 @@ $(document).ready(function() {
                 });
             },
             columns: [
-                { data: "gross_salary", name: 'gross_salary' },
                 { data: "salary", name: 'salary' },
+                { data: "gross_salary", name: 'gross_salary' },
                 { data: 'effective_date', name: 'effective_date' },
                 @foreach($allowanceNames as $allowanceName)
                 { data: '{{$allowanceName->name}}', name: '{{$allowanceName->name}}' },
@@ -297,7 +342,10 @@ $(document).ready(function() {
                     }
                     $('#hr_allowance_name_id_' + (key + 1)).val(value.hr_allowance_name_id);
                     $('#hr_allowance_id_' + (key + 1)).val(value.id);
-                    $('#amount_' + (key + 1)).val(value.amount);
+                    
+                    // Format allowance amount with commas for display
+                    let formattedAmount = value.amount?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? '';
+                    $('#amount_' + (key + 1)).val(formattedAmount);
                 });
 
                 $('.hr_allowance_name').chosen('destroy');
@@ -321,13 +369,17 @@ $(document).ready(function() {
         });
         
         $('#saveBtn').unbind().click(function(e) {
-            $(this).attr('disabled', 'ture');
-            //submit enalbe after 3 second
+            e.preventDefault();
+            $(this).attr('disabled', 'true');
+            
+            // Prepare form data (remove commas before submission)
+            prepareFormData();
+            
+            //submit enable after 3 second
             setTimeout(function() {
                 $('.btn-prevent-multiple-submits').removeAttr('disabled');
             }, 3000);
 
-            e.preventDefault();
             $(this).html('Save');
 
             $.ajax({

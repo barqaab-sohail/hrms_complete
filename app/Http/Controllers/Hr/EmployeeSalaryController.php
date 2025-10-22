@@ -27,22 +27,22 @@ class EmployeeSalaryController extends Controller
         return response()->json($view);
     }
 
-    public function getEmployeeAllowanceName($employeeId){
+    public function getEmployeeAllowanceName($employeeId)
+    {
         $employeeSalaries = EmployeeSalary::with('hrAllowances')->where('hr_employee_id', $employeeId)->get();
         $ids = [];
-        foreach($employeeSalaries as $employeeSalary){
+        foreach ($employeeSalaries as $employeeSalary) {
             $employeeSalary->hrAllowances;
-           
-           foreach($employeeSalary->hrAllowances as $hrAllowance){
-            $hrAllowanceNameId = $hrAllowance->hr_allowance_name_id??'';
-           
+
+            foreach ($employeeSalary->hrAllowances as $hrAllowance) {
+                $hrAllowanceNameId = $hrAllowance->hr_allowance_name_id ?? '';
+
                 if (!in_array($hrAllowanceNameId, $ids, true)) {
                     array_push($ids, $hrAllowanceNameId);
-                }	
+                }
             }
         }
-        return  HrAllowanceName::whereIn('id',$ids)->get();
-
+        return  HrAllowanceName::whereIn('id', $ids)->get();
     }
 
     public function create(Request $request)
@@ -50,21 +50,20 @@ class EmployeeSalaryController extends Controller
 
         if ($request->ajax()) {
             $data = EmployeeSalary::where('hr_employee_id', $request->hrEmployeeId)->latest()->get();
-            
+
             $allowanceNames = HrAllowanceName::all();
-            
-            $table= DataTables::of($data)->with(['allowanceNames'=>$allowanceNames]);
-     
-             foreach($allowanceNames as $allowance){
-                $table->addColumn($allowance->name, function ($row) use ($allowance) {       
-                    $hrAllowance = HrAllowance::where('employee_salary_id', $row->id)->where('hr_allowance_name_id',$allowance->id)->first();
+
+            $table = DataTables::of($data)->with(['allowanceNames' => $allowanceNames]);
+
+            foreach ($allowanceNames as $allowance) {
+                $table->addColumn($allowance->name, function ($row) use ($allowance) {
+                    $hrAllowance = HrAllowance::where('employee_salary_id', $row->id)->where('hr_allowance_name_id', $allowance->id)->first();
                     //return response()->json($hrAllowance);
-                    if($hrAllowance){
+                    if ($hrAllowance) {
                         return  addComma($hrAllowance->amount);
-                    }else{
+                    } else {
                         return '';
                     }
-                    
                 });
             }
 
@@ -90,7 +89,7 @@ class EmployeeSalaryController extends Controller
 
                     return addComma($row->gross_salary);
                 })
-                ->rawColumns(['Edit', 'Delete', ])
+                ->rawColumns(['Edit', 'Delete',])
                 ->make(true);
         }
 
