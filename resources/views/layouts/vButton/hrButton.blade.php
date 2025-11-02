@@ -83,10 +83,12 @@
             {{Request::is('hrms/employeeOffice/show')?'style=background-color:#737373':''}}>Office</a>
         @endcan
 
-        @can('hr edit salary')
+        @canany(['hr edit salary','hr view salary','hr add salary','hr delet salary'])
         <a type="submit" role="button" style="color:white" id="addSalary" href="{{route('employeeSalary.show',$id)}}"
             class="dropdown-item btn btn-success "
             {{Request::is('hrms/employeeSalary/show')?'style=background-color:#737373':''}}>Salary</a>
+        @endcan
+        @canany(['hr edit company','hr view company','hr add company','hr delet company'])
         <a type="submit" role="button" style="color:white" id="addCompany" href="{{route('employeeCompany.show',$id)}}"
             class="dropdown-item btn btn-success "
             {{Request::is('hrms/employeeCompany/show')?'style=background-color:#737373':''}}>Company</a>

@@ -1,5 +1,7 @@
 <div class="card-body">
+    @can('hr add salary')
     <button type="button" class="btn btn-success float-right" id="createNewSalary" data-toggle="modal">Add New Salary</button>
+    @endcan
     <br>
     <table class="table table-striped data-table" id="dataTable">
         <thead>
@@ -10,8 +12,12 @@
                 @foreach($allowanceNames as $allowanceName)
                 <th class="hideClass" id="{{$allowanceName->name}}">{{$allowanceName->name}}</th>
                 @endforeach
+                @can('hr edit salary')
                 <th>Edit</th>
+                @endcan
+                @can('hr delet salary')
                 <th>Delete</th>
+                @endcan
             </tr>
         </thead>
         <tbody>
@@ -301,8 +307,12 @@ $(document).ready(function() {
                 @foreach($allowanceNames as $allowanceName)
                 { data: '{{$allowanceName->name}}', name: '{{$allowanceName->name}}' },
                 @endforeach
+                @can('hr edit salary')
                 { data: 'Edit', name: 'Edit', orderable: false, searchable: false },
+                @endcan
+                @can('hr delet salary')
                 { data: 'Delete', name: 'Delete', orderable: false, searchable: false },
+                @endcan
             ],
             order: [ [2, "desc"] ],
         });
