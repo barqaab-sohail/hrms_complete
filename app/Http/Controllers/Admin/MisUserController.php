@@ -17,18 +17,29 @@ class MisUserController extends Controller
             $data = User::all();
             return DataTables::of($data)
                 ->addColumn('full_name', function ($data) {
-                    return $data->hrEmployee->employee_no . '-' . $data->hrEmployee->full_name . '-' . $data->hrEmployee->designation;
+                    return $data->hrEmployee->employee_no . '-' . $data->hrEmployee->full_name . '-' . $data->hrEmployee->employeeCurrentDesignation->name;
                 })
                 ->editColumn('is_allow_mis', function ($data) {
-                    if (!isAllowMis($data->id ?? 0)) {
-                        $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-mis-user="false" data-original-title="edit mis rights" class="btn btn-danger btn-sm editMisUser">Not Allowed</a>';
+                    if (MisUser::isAllowMis($data->id )) {
+                        $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-mis-user="true" data-original-title="edit mis rights" class="btn btn-success btn-sm editMisUser">Allowed</a>';
                         return $button;
                     } else {
-                        $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-mis-user="true" data-original-title="edit mis rights" class="btn btn-success btn-sm editMisUser">MIS Allowed</a>';
+                        $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-mis-user="false" data-original-title="edit mis rights" class="btn btn-danger btn-sm editMisUser">Not Allowed</a>';
                         return $button;
+
                     }
                 })
-                ->rawColumns(['full_name', 'is_allow_mis'])
+                ->editColumn('is_allow_managment_access', function ($data) {
+                    if ( MisUser::isAllowManagement($data->id)) {
+                        $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-management-user="true" data-original-title="edit Management rights" class="btn btn-success btn-sm editManagementUser">Allowed</a>';
+                        return $button;
+                    } else {
+                        $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-management-user="false" data-original-title="edit Management rights" class="btn btn-danger btn-sm editManagementUser">Not Allowed</a>';
+                        return $button;
+                        
+                    }
+                })
+                ->rawColumns(['full_name', 'is_allow_mis','is_allow_managment_access'])
                 ->make(true);
         }
     }
@@ -41,11 +52,14 @@ class MisUserController extends Controller
 
     public function store(Request $request)
     {
-        $user = User::find($request->userId);
-        $status = $request->isAllowMis === "true" ? false : true;
-        $request->isAllowMis === false ? true : true;
-        $misUser = MisUser::where('user_id', $user->id)->first();
-        MisUser::updateOrCreate(['id' => $misUser->id ?? ''], ['user_id' => $request->userId, 'is_allow_mis' => $status]);
-        return response()->json(['status' => 'OK', 'message' => "Successfully Updated"]);
+          if ($request->has('isAllowMis')) {
+            MisUser::toggleMisAccess($request->userId);
+            return response()->json(['status' => 'OK', 'message' => "MIS Successfully Updated"]);
+        } elseif ($request->has('isAllowManagement')) {
+            MisUser::toggleManagementAccess($request->userId);     
+            return response()->json(['status' => 'OK', 'message' => "Management Successfully Updated"]);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'No access type specified'], 400);
+        }
     }
 }

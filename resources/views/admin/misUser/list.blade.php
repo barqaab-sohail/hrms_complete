@@ -14,7 +14,8 @@
                     <tr>
                         <th style="width:25%">Name</th>
                         <th style="width:25%">Email Address</th>
-                        <th style="width:15%">Status</th>
+                        <th style="width:15%">MIS Access</th>
+                        <th style="width:15%">Management Access</th>
                     </tr>
                 </thead>
             </table>
@@ -50,11 +51,16 @@
                         data: 'is_allow_mis',
                         name: 'is_allow_mis'
                     },
+                    {
+                        data    : 'is_allow_managment_access',
+                        name    : 'is_allow_managment_access'
+                    }
+
                 ]
             });
 
 
-            $('body').unbind().on('click', '.editMisUser', function() {
+            $('body').on('click', '.editMisUser', function() {
                 var user_id = $(this).data('id');
                 var is_allow_mis = $(this).data('mis-user');
                 var con = confirm("Are You sure want to change rights !");
@@ -63,6 +69,37 @@
                         data: {
                             userId: user_id,
                             isAllowMis: is_allow_mis,
+                        },
+                        url: "{{ route('misUser.store') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#json_message').html('<div id="json_message" class="alert alert-success" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + data.message + '</strong></div>');
+                            table.draw();
+                        },
+                        error: function(data) {
+                            var errorMassage = '';
+                            $.each(data.responseJSON.errors, function(key, value) {
+                                errorMassage += value + '<br>';
+                            });
+                            $('#json_message_modal').html('<div id="message" class="alert alert-danger" align="left"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>' + errorMassage + '</strong></div>');
+
+                            $('#saveBtn').html('Save Changes');
+                        }
+                    });
+                }
+
+            });
+
+            $('body').on('click', '.editManagementUser', function() {
+                var user_id = $(this).data('id');
+                var is_allow_management = $(this).data('management-user');
+                var con = confirm("Are You sure want to change rights !");
+                if (con) {
+                    $.ajax({
+                        data: {
+                            userId: user_id,
+                            isAllowManagement: is_allow_management,
                         },
                         url: "{{ route('misUser.store') }}",
                         type: "POST",

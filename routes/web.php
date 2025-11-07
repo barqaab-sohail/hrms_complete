@@ -454,6 +454,7 @@ Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth', 'XssSanitizer']
     Route::get('/permission/employeePermission/result', 'PermissionController@result')->name('permission.result');
     Route::delete('/permission/employeePermission/{id}/{userId}', 'PermissionController@employeePermissionDestroy')->name('employeePermission.destroy');
     Route::resource('/misUser', 'MisUserController');
+    
     Route::get('/permission/userList', 'PermissionController@userList')->name('permission.userList');
     Route::post('/permission/addPermission', 'PermissionController@addPermission')->name('permission.add');
     Route::delete('/permission/userAllPermissionDelete', 'PermissionController@userAllPermissionDelete')->name('permission.userAllPermissionDelete');

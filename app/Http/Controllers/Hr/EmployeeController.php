@@ -29,6 +29,8 @@ use App\Models\Hr\HrEmployeeHusband;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Hr\EmployeeStore;
+use App\Models\MisUser;
+
 use App\Notifications\UpdateRecordNotification;
 
 class EmployeeController extends Controller
@@ -420,9 +422,9 @@ public function getSimpleEmployeesData()
 
     public function edit(Request $request, $id)
     {
-        // Sohail, Rasheed and HR
-        $users = [1, 17, 25];
-        if (in_array($id, managementEmployeeIds()) && !in_array(auth()->user()->id, $users)) {
+        
+        $managmentAccessUder = MisUser::where('is_allow_management_access', 1)->pluck('user_id')->toArray();
+        if (in_array($id, managementEmployeeIds()) && !in_array(auth()->user()->id, $managmentAccessUder)) {
             abort(403, 'Your are not authorized');
         }
 
