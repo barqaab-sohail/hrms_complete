@@ -24,7 +24,9 @@ class EmployeeController extends Controller
             'hrEmergency',
             'hrExperiences',
             'hrContactEmail',
-            'hrContactPermanent'
+            'employeeGrossSalary',
+            'employeeCurrentDesignation',
+            'hrContactPermanent',
         )->find($id);
 
         // Check if employee exists
@@ -50,7 +52,7 @@ class EmployeeController extends Controller
         }
 
         // Safely access current_salary (assuming it might be JSON/array)
-        $currentSalary = is_array($data->current_salary) ? $data->current_salary : (array)$data->current_salary;
+        //$currentSalary = is_array($data->current_salary) ? $data->current_salary : (array)$data->current_salary;
 
         // Build employee data with null-safe operators
         $employee = [
@@ -63,8 +65,8 @@ class EmployeeController extends Controller
             'date_of_birth' => $data->date_of_birth ? \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y') : '',
             'project' => $data->employeeCurrentProject?->name ?? '',
             'hr_status_id' => $data->hr_status_id ?? '',
-            'current_salary' => $currentSalary['salary'] ?? '',
-            'salary_effective_date' => $currentSalary['effective_date'] ?? '',
+            'current_salary' => $data->employeeGrossSalary?->gross_salary ?? '',
+            'salary_effective_date' => $data->employeeGrossSalary?->effective_date ?? '',
             'hr_blood_group' => $data->hrBloodGroup?->name ?? '',
             'mobile' => $data->hrContactMobile?->mobile ?? '',
             'emgergencyContactName' => $data->hrEmergency?->name ?? '',

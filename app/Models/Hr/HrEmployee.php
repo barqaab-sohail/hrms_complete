@@ -745,7 +745,15 @@ class HrEmployee extends Model implements Auditable
     {
         return $this->hasOne('App\Models\Leave\LeAccumulative');
     }
-
+    public function employeeGrossSalary()
+    {
+        return $this->hasOne(
+            'App\Models\Hr\EmployeeSalary',                  //Model Through Access Final Model (Immediate Model)
+            'hr_employee_id',                                      
+            'id'                                             
+        )->orderBy('employee_salaries.effective_date', 'desc');
+    }
+    
     public function employeeCurrentSalary()
     {
         return $this->hasOneThrough(
