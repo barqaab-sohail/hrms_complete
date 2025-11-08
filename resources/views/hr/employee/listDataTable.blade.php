@@ -45,7 +45,7 @@
                         <th>CNIC</th>
                         <th>Date of Joining</th>
                         <th>Age</th>
-                        <th>Salary</th>
+                        <th>Gross Salary</th>
                         <th>Effective Salary</th>
                         <th class="text-center" style="width:5%">Expiry</th>
                         <th>Mobile</th>

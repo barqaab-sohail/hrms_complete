@@ -24,7 +24,7 @@ class EmployeeController extends Controller
             'hrEmergency',
             'hrExperiences',
             'hrContactEmail',
-            'employeeGrossSalary',
+            'employeeSalary',
             'employeeCurrentDesignation',
             'hrContactPermanent',
         )->find($id);
@@ -65,8 +65,8 @@ class EmployeeController extends Controller
             'date_of_birth' => $data->date_of_birth ? \Carbon\Carbon::parse($data->date_of_birth)->format('M d, Y') : '',
             'project' => $data->employeeCurrentProject?->name ?? '',
             'hr_status_id' => $data->hr_status_id ?? '',
-            'current_salary' => $data->employeeGrossSalary?->gross_salary ?? '',
-            'salary_effective_date' => $data->employeeGrossSalary?->effective_date ?? '',
+            'current_salary' => $data->employeeSalary?->gross_salary ?? '',
+            'salary_effective_date' => $data->employeeSalary?->effective_date ?? '',
             'hr_blood_group' => $data->hrBloodGroup?->name ?? '',
             'mobile' => $data->hrContactMobile?->mobile ?? '',
             'emgergencyContactName' => $data->hrEmergency?->name ?? '',
@@ -137,7 +137,7 @@ class EmployeeController extends Controller
                 "age" => \Carbon\Carbon::parse($employee->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days'),
                 "picture" => $employee->picture,
                 "mobile" => $employee->hrContactMobile->mobile ?? '',
-                "salary" => $employee->employeeGrossSalary?->gross_salary ?? '',
+                "salary" => $employee->employeeSalary?->gross_salary ?? '',
                 "status" => $employee->hr_status_id ?? ''
             );
         }

@@ -61,6 +61,7 @@ public function employeeSummary($hrEmployeeId)
         'hrContactMobile',
         'hrBloodGroup',
         'employeeCurrentSalary',
+        'employeeSalary',
         'salayEffectiveDate',
         'hrEmployeeHusband',
         'gender',
@@ -168,9 +169,9 @@ public function getSimpleEmployeesData()
 
             $effectiveDate = '';
             $salary = '';
-            if ($employee->employeeCurrentSalary) {
-                $salary =  number_format($employee->employeeCurrentSalary->total_salary);
-                $effectiveDate = \Carbon\Carbon::parse($employee->salayEffectiveDate->effective_date)->format('M d, Y');
+            if ($employee->employeeSalary) {
+                $salary =  number_format($employee->employeeSalary->gross_salary);
+                $effectiveDate = \Carbon\Carbon::parse($employee->employeeSalary->effective_date)->format('M d, Y');
             }
             $joiningDate = '';
             if ($employee->employeeAppointment?->joining_date) {
@@ -223,6 +224,7 @@ public function getSimpleEmployeesData()
             'hrContactMobile',
             'hrBloodGroup',
             'employeeCurrentSalary',
+            'employeeSalary',
             'salayEffectiveDate',
             'hrEmployeeCompany'
         ])->get();
@@ -257,9 +259,9 @@ public function getSimpleEmployeesData()
 
                 $salary = '';
                 $effectiveDate = '';
-                if ($employee->employeeCurrentSalary) {
-                    $salary = number_format($employee->employeeCurrentSalary->total_salary);
-                    $effectiveDate = \Carbon\Carbon::parse($employee->salayEffectiveDate->effective_date)->format('M d, Y');
+                if ($employee->employeeSalary) {
+                    $salary = number_format($employee->employeeSalary->gross_salary);
+                    $effectiveDate = \Carbon\Carbon::parse($employee->employeeSalary->effective_date)->format('M d, Y');
                 }
 
                 $joiningDate = $employee->employeeAppointment?->joining_date
