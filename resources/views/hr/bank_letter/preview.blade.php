@@ -82,6 +82,9 @@
                     <span id="generateText">Generate PDF</span>
                     <span id="generateSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                 </button>
+                
+                <!-- Hidden field to store the letter date -->
+                <input type="hidden" id="letter_date" value="{{ $letter_date_input ?? '' }}">
             </div>
         </div>
     </div>
@@ -104,6 +107,9 @@
         
                 
         function generatePdf(url) {
+            // Get the letter date from hidden field
+            var letterDate = $('#letter_date').val();
+            
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -112,6 +118,7 @@
                     employee_id: '{{ $employee->id }}',
                     bank_id: '{{ $bank->id }}',
                     salary: '{{ $salary }}',
+                    letter_date: letterDate // Include the letter date
                 },
                 success: function(response) {
                     // Close the modal

@@ -27,12 +27,7 @@ class BankLetterController extends Controller
                 ->get();
         });
 
-        $banks = Bank::whereIn('name', [
-            'Bank Alfalah Limited',
-            'Faysal Bank Limited',
-            'Standard Chartered Bank (Pakistan) Limited'
-        ])
-            ->orderBy('name')
+        $banks = Bank::orderBy('name')
             ->get();
 
         return view('hr.bank_letter.create', compact('employees', 'banks'));
@@ -43,7 +38,8 @@ class BankLetterController extends Controller
         $request->validate([
             'employee_id' => 'required|exists:hr_employees,id',
             'bank_id' => 'required|exists:banks,id',
-            'salary' => 'nullable|numeric'
+            'salary' => 'nullable|numeric',
+            'letter_date' => 'nullable|date' // Add validation for date
         ]);
 
         $employee = HrEmployee::with('salayEffectiveDate', 'employeeCurrentSalary', 'employeeCurrentDesignation')->findOrFail($request->employee_id);
@@ -51,6 +47,11 @@ class BankLetterController extends Controller
         $salary =  $request->filled('salary') ? $request->salary : $employee->employeeCurrentSalary->total_salary ?? '';
         $isManualSalary = $request->filled('salary') ? true : false;
         $effectiveDate = \Carbon\Carbon::parse($employee->salayEffectiveDate?->effective_date)?->format('M d, Y');
+        
+        // Use custom date if provided, otherwise use current date
+        $letterDate = $request->filled('letter_date') 
+            ? \Carbon\Carbon::parse($request->letter_date)->format('F j, Y')
+            : now()->format('F j, Y');
 
         $data = [
             'employee' => $employee,
@@ -59,7 +60,8 @@ class BankLetterController extends Controller
             'designation' => $employee->employeeCurrentDesignation->name,
             'bank' => $bank,
             'salary' => $salary,
-            'date' => now()->format('F j, Y'),
+            'date' => $letterDate, // Use the calculated date
+            'letter_date_input' => $request->letter_date, // Pass the original input for form
             'signatory' => 'CH. ATIQ A. HUMAYUN',
             'signatory_position' => 'Deputy Manager (HR & Admin)',
             'letterhead_url' => url('letterhead/barqaab_letterhead.jpg'),
@@ -75,12 +77,18 @@ class BankLetterController extends Controller
         $request->validate([
             'employee_id' => 'required|exists:hr_employees,id',
             'bank_id' => 'required|exists:banks,id',
-            'salary' => 'sometimes|numeric'
+            'salary' => 'sometimes|numeric',
+            'letter_date' => 'nullable|date' // Add validation for date
         ]);
 
         $employee = HrEmployee::with('salayEffectiveDate', 'employeeCurrentSalary', 'employeeCurrentDesignation')->findOrFail($request->employee_id);
         $bank = Bank::findOrFail($request->bank_id);
         $salary = $request->filled('salary') ? $request->salary : $employee->salary;
+        
+        // Use custom date if provided, otherwise use current date
+        $letterDate = $request->filled('letter_date') 
+            ? \Carbon\Carbon::parse($request->letter_date)->format('F j, Y')
+            : now()->format('F j, Y');
 
         // Generate filename and path
         $employeeName = str_replace(' ', '_', strtolower($employee->full_name));
@@ -94,7 +102,7 @@ class BankLetterController extends Controller
             'employee' => $employee,
             'bank' => $bank,
             'salary' => number_format($salary),
-            'date' => now()->format('F j, Y'),
+            'date' => $letterDate, // Use the calculated date
             'signatory' => 'CH. ATIQ A. HUMAYUN',
             'signatory_position' => 'Deputy Manager (HR & Admin)',
             'letterhead_url' => url('letterhead/barqaab_letterhead.jpg'),
@@ -180,74 +188,4 @@ class BankLetterController extends Controller
             ->rawColumns(['document', 'copy_link', 'Edit', 'Delete'])
             ->make(true);
     }
-
-    // public function generate(Request $request)
-    // {
-    //     $request->validate([
-    //         'employee_id' => 'required|exists:hr_employees,id',
-    //         'bank_id' => 'required|exists:banks,id',
-    //         'salary' => 'sometimes|numeric'
-    //     ]);
-
-    //     $employee = HrEmployee::findOrFail($request->employee_id);
-    //     $bank = Bank::findOrFail($request->bank_id);
-    //     $salary = $request->filled('salary') ? $request->salary : $employee->salary;
-
-
-    //     // Generate filename and path
-    //     $fileName = $employee->id . '-' . "bank_letter_{$employee->first_name}_{$employee->last_name}_" . time() . '.' . 'pdf';
-    //     $employeeName = str_replace(' ', '_', strtolower($employee->full_name));
-    //     $folderName = "hr/documentation/" . $employee->id . '-' . $employeeName . "/";
-    //     $fullPath =  $folderName . $fileName;
-
-
-    //     $data = [
-    //         'employee' => $employee,
-    //         'bank' => $bank,
-    //         'salary' => number_format($salary),
-    //         'date' => now()->format('F j, Y'),
-    //         'signatory' => 'CH. ATIQ A. HUMAYUN',
-    //         'signatory_position' => 'Deputy Manager (HR & Admin)',
-    //         'letterhead_url' => url('letterhead/barqaab_letterhead.jpg'),
-    //         'stamp' => asset('letterhead/stamp.png'),
-    //         'sign' => asset('letterhead/sign.png'),
-    //         'path' => $fullPath,
-    //     ];
-
-
-    //     $pdf = Pdf::loadView('hr.bank_letter.pdf', $data);
-    //     $pdf->setPaper('A4', 'portrait');
-    //     $pdf->setOption('isHtml5ParserEnabled', true);
-    //     $pdf->setOption('isRemoteEnabled', true);
-    //     $pdf->setOption('dpi', 300);
-    //     $pdf->setOption('defaultFont', 'DejaVu Sans');
-
-
-
-    //     // Save the PDF to storage
-    //     Storage::disk('public')->put($fullPath, $pdf->output());
-
-    //     // Create HrDocumentation record
-    //     $documentation = HrDocumentation::create([
-    //         'hr_employee_id' => $employee->id,
-    //         'description' => 'Bank Letter for ' . $employee->full_name . "-" . now(),
-    //         'document_date' => now(),
-    //         'file_name' => $fileName,
-    //         'path' => $folderName,
-    //         'size' => Storage::disk('public')->size($fullPath),
-    //         'extension' => 'pdf',
-    //         'content' => null // or you can store some content if needed
-    //     ]);
-
-    //     // Include the document path in the PDF if needed
-    //     // You would need to modify your view to display this
-    //     //  $data['document_path'] = $documentation->full_path;
-
-    //     // Regenerate the PDF with the path if needed
-    //     $pdf = Pdf::loadView('hr.bank_letter.pdf', $data);
-    //     // Save again if you want the path in the PDF
-    //     Storage::disk('public')->put($fullPath, $pdf->output());
-
-    //     return $pdf->download($fileName);
-    // }
 }

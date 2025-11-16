@@ -57,6 +57,18 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Add Date Field -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="letter_date">Letter Date</label>
+                            <input type="date" class="form-control" id="letter_date" name="letter_date" 
+                                   placeholder="Leave empty to use current date">
+                            <small class="form-text text-muted">Leave empty to use current date</small>
+                        </div>
+                    </div>
+                </div>
                 
                 <button type="submit" class="btn btn-primary">Preview Letter</button>
             </form>
@@ -99,6 +111,11 @@ $(document).ready(function() {
         width: '100%',
         allowClear: true
     });
+    
+    // Set default value for date field to today
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById('letter_date').value = today;
+    
     $('#bankLetterForm').on('submit', function(e) {
         e.preventDefault();
         
