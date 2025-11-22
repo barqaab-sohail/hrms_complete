@@ -336,6 +336,11 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/asset/types', 'AssetController@types')->name('asset.types');
     Route::get('/asset/subclass/{subClassId}', 'AssetController@subClassList')->name('asset.subclass');
     Route::get('asset/loadSubclassData/{subClassId}', [AssetController::class, 'loadSubclassData'])->name('asset.loadSubclassData');
+
+    // Asset Disposal Routes
+    Route::get('asset/{id}/disposal/edit', 'AsDisposalController@edit')->name('asDisposal.edit');
+    Route::patch('asset/{id}/disposal', 'AsDisposalController@update')->name('asDisposal.update');
+    Route::delete('asset/{id}/disposal', 'AsDisposalController@destroy')->name('asDisposal.destroy');
 });
 
 

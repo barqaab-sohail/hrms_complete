@@ -14,6 +14,7 @@
             <a type="submit" role="button" id="addMaintenance" style="color:white" href="{{route('asMaintenance.show',$data->id)}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asMaintenance')?'style=background-color:#737373':''}}>Maintenance</a>
             <a type="submit" role="button" id="addCondition" style="color:white" href="{{route('asCondition.show', $data->id)}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asCondition')?'style=background-color:#737373':''}}>Condition</a>
             <a type="submit" role="button" id="addConsumable" style="color:white" href="{{route('asConsumable.show',$data->id)}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/asset/asConsumable')?'style=background-color:#737373':''}}>Consumable</a>
+            <a type="submit" role="button" id="addDisposal" style="color:white" href="{{route('asDisposal.edit',$data->id)}}"  class="btn btn-success  dropdown-item" {Request::is('hrms/*/disposal/edit')?'style=background-color:#737373':''}}>Disposal</a>
             <br>
             
            

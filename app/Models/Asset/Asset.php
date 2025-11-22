@@ -9,7 +9,31 @@ class Asset extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     protected $fillable = ['description', 'asset_code', 'as_sub_class_id'];
-    protected $appends = ['picture'];
+   protected $appends = ['picture', 'is_active']; // Add is_active to appends
+
+   // Add this method to check if asset is active
+    public function getIsActiveAttribute()
+    {
+        return $this->disposal === null;
+    }
+
+    // Add disposal relationship
+    public function disposal()
+    {
+        return $this->hasOne('App\Models\Asset\AssetDisposal');
+    }
+
+    // Add scope for active assets
+    public function scopeActive($query)
+    {
+        return $query->whereDoesntHave('disposal');
+    }
+
+    // Add scope for sold/inactive assets
+    public function scopeSold($query)
+    {
+        return $query->whereHas('disposal');
+    }
 
     function getPictureAttribute()
     {
