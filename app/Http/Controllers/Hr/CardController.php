@@ -49,11 +49,11 @@ class CardController extends Controller
     {
 
         $fpdi = new FPDI;
-        $employee = HrEmployee::find($employeeid);
+        $employee = HrEmployee::with('employeeCurrentDesignation')->find($employeeid);
         $picture =  $employee->picture;
         $count = $fpdi->setSourceFile($file);
         $nameLength = Str::length($employee->full_name);
-        $designationLength = Str::length($employee->designation);
+        $designationLength = Str::length($employee->designation?->name);
 
         for ($i = 1; $i <= $count; $i++) {
 
@@ -86,7 +86,7 @@ class CardController extends Controller
 
 
             $employeeName = strtoupper($employee->full_name);
-            $employeeDesignation = $employee->designation;
+            $employeeDesignation = $employee->employeeCurrentDesignation?->name;
 
             $fpdi->Image($image, 70, 32, 20, 0, 'png');
             $fpdi->SetXY(54, 62);
