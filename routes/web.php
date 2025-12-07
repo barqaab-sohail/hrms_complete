@@ -19,6 +19,7 @@ use App\Http\Controllers\Self\BackgroundRemovalController;
 use App\Http\Controllers\Project\ProjectLedgerActivityController;
 use App\Http\Controllers\Self\FileCompressionController;
 use App\Http\Controllers\Admin\ExemptedDesignationController;
+use App\Http\Controllers\Admin\DocumentSearchController as AdminDocumentSearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -476,6 +477,10 @@ Route::group(['prefix' => 'hrms/admin', 'middleware' => ['auth', 'XssSanitizer']
 
     Route::post('/exempted-designations', [ExemptedDesignationController::class, 'update'])
     ->name('admin.exempted-designations.update');
+    Route::get('/document-search', [AdminDocumentSearchController::class, 'index'])->name('document-search.index');
+    Route::post('/document-search/search', [AdminDocumentSearchController::class, 'search'])->name('document-search.search');
+    Route::get('/document-search/download/{table}/{id}', [AdminDocumentSearchController::class, 'download'])->name('document-search.download');
+Route::post('/document-search/bulk-download', [AdminDocumentSearchController::class, 'bulkDownload'])->name('document-search.bulk-download');
 });
 
 //Invoice Routes
