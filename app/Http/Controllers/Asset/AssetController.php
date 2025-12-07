@@ -26,18 +26,407 @@ use App\Http\Requests\Asset\AssetSearchStore;
 class AssetController extends Controller
 {
 
+    // public function index(Request $request)
+    // {
+    //     // authorize only user who add the Asset
+    //     $assets = Asset::join('audits', 'audits.auditable_id', 'assets.id')
+    //         ->select('assets.*', 'audits.user_id', 'audits.auditable_id', 'audits.auditable_type')
+    //         ->where('auditable_type', 'App\Models\Asset\Asset')
+    //         ->where('user_id', Auth::user()->id)
+    //         ->with('asCurrentLocation', 'asCurrentAllocation', 'asDocumentation')
+    //         ->get();
+    //     $subClassId = null;
+    //     // Pass a flag to indicate this is the general index view
+    //     return view('asset.index', compact('assets', 'subClassId'));
+    // }
+
+    // public function loadData(Request $request, $subClassId = null)
+    // {
+    //     if ($request->ajax()) {
+
+    //         $data = Asset::join('audits', 'audits.auditable_id', 'assets.id')->select('assets.*', 'audits.user_id', 'audits.auditable_id', 'audits.auditable_type')->where('auditable_type', 'App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->distinct()->with('asCurrentLocation', 'asCurrentAllocation', 'asDocumentation')->get();
+
+    //         if (Auth::user()->can('asset all record')) {
+    //             $data = Asset::with('asCurrentLocation', 'asCurrentAllocation', 'asDocumentation')->get();
+    //         }
+
+
+    //         return DataTables::of($data)
+
+    //             ->addColumn('ownership', function ($data) {
+
+    //                 $clientId = $data->currentOwnership->id ?? null;
+    //                 if ($clientId == null) {
+    //                     return 'Not Entered';
+    //                 } else if ($clientId == 20) {
+    //                     return 'BARQAAB';
+    //                 } else {
+    //                     return 'Client';
+    //                 }
+    //             })
+    //             ->addColumn('location', function ($data) {
+
+    //                 $location = $data->asCurrentLocation->name ?? '';
+    //                 $allocation = $data->asCurrentAllocation->full_name ?? '';
+    //                 if ($location) {
+    //                     return $location;
+    //                 } elseif ($allocation) {
+    //                     return $allocation . ' - ' . $data->asCurrentAllocation->designation ?? '';
+    //                 } else {
+    //                     return 'N/A';
+    //                 }
+    //             })
+    //             // ->addColumn('bar_code', function ($data) {
+    //             //     //$barCode ='<img src="data:image/png;base64,'.\DNS1D::getBarcodePNG($data->asset_code,'C39+',1,33,array(0,0,0),true).'" alt="barcode" />';
+
+
+    //             //     $qrCode = '<img  src="data:image/png;base64,' . \DNS2D::getBarcodePNG($data->asset_code, 'QRCODE') . '" alt="barcode"   /><br><p style="color:black; font-weight: bold">' . $data->asset_code . '</p>';
+
+    //             //     return $qrCode;
+    //             // })
+    //             ->addColumn('image', function ($data) {
+    //                 if ($data->asDocumentation->extension != 'pdf') {
+    //                     $image = '<img src="' . url(isset($data->asDocumentation->file_name) ? '/storage/' . $data->asDocumentation->path . $data->asDocumentation->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewIMG' . $data->id . '" width=50>';
+    //                 } else {
+    //                     $image = '<img src="' . asset('Massets/images/document.png') . '" href="' . url(isset($data->asDocumentation->file_name) ? '/storage/' . $data->asDocumentation->path . $data->asDocumentation->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewPDF' . $data->id . '" width=50>';
+    //                 }
+
+
+    //                 return $image;
+    //             })
+
+    //             ->addColumn('edit', function ($data) {
+
+    //                 $button = '<a class="btn btn-success btn-sm" href="' . route('asset.edit', $data->id) . '"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+
+    //                 return $button;
+    //             })
+    //             ->addColumn('delete', function ($data) {
+
+    //                 $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteAsset">Delete</a>';
+    //                 return $btn;
+    //             })
+    //             ->rawColumns(['location', 'bar_code', 'image', 'edit', 'delete'])
+    //             ->make(true);
+    //     }
+    // }
+
     public function index(Request $request)
     {
-        // authorize only user who add the Asset
-        $assets = Asset::join('audits', 'audits.auditable_id', 'assets.id')
-            ->select('assets.*', 'audits.user_id', 'audits.auditable_id', 'audits.auditable_type')
-            ->where('auditable_type', 'App\Models\Asset\Asset')
-            ->where('user_id', Auth::user()->id)
-            ->with('asCurrentLocation', 'asCurrentAllocation', 'asDocumentation')
-            ->get();
+        // Don't load all assets here - let DataTables handle it via AJAX
         $subClassId = null;
-        // Pass a flag to indicate this is the general index view
-        return view('asset.index', compact('assets', 'subClassId'));
+        return view('asset.index', compact('subClassId'));
+    }
+
+    public function loadData(Request $request)
+    {
+        $query = Asset::query()->orderBy('id', 'asc');
+        
+        // Apply user permission filter
+        if (!Auth::user()->can('asset all record')) {
+            $query->whereHas('audits', function($q) {
+                $q->where('user_id', Auth::user()->id)
+                ->where('auditable_type', 'App\Models\Asset\Asset');
+            });
+        }
+        
+        // Handle search
+        if ($request->has('search') && $request->search['value']) {
+            $searchTerm = $request->search['value'];
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('asset_code', 'like', '%' . $searchTerm . '%')
+                ->orWhere('description', 'like', '%' . $searchTerm . '%');
+            });
+        }
+        
+        // Handle ordering
+        if ($request->has('order')) {
+            $orderColumn = $request->order[0]['column'];
+            $orderDirection = $request->order[0]['dir'];
+            
+            $columns = ['id', 'asset_code', 'description'];
+            if (isset($columns[$orderColumn])) {
+                $query->orderBy($columns[$orderColumn], $orderDirection);
+            }
+        } else {
+            $query->orderBy('id', 'desc');
+        }
+        
+        $query->select([
+            'assets.id',
+            'assets.asset_code', 
+            'assets.description',
+            'assets.as_sub_class_id',
+            'assets.created_at'
+        ]);
+        
+        return DataTables::eloquent($query)
+            ->addColumn('ownership', function ($data) {
+                // Optimized ownership retrieval
+                $currentOwnership = $data->currentOwnership()->first(['client_id']);
+                $clientId = $currentOwnership->client_id ?? null;
+                
+                if ($clientId == null) {
+                    return 'Not Entered';
+                } else if ($clientId == 20) {
+                    return 'BARQAAB';
+                } else {
+                    return 'Client';
+                }
+            })
+            ->addColumn('location', function ($data) {
+                // Optimized location retrieval
+                $currentLocation = $data->asCurrentLocation()->first(['name']);
+                
+                $location = $currentLocation->name ?? '';
+                
+                // Get allocation info using a more optimized approach
+                $allocationInfo = null;
+                
+                // First, try to get the hr_employee_id from asLocation
+                $asLocation = $data->asLocation()
+                    ->orderBy('date', 'desc')
+                    ->first(['hr_employee_id']);
+                    
+                if ($asLocation && $asLocation->hr_employee_id) {
+                    // Use a raw query to get employee details with designation in one go
+                    $employee = DB::table('hr_employees as e')
+                        ->select(
+                            'e.first_name',
+                            'e.last_name',
+                            'e.employee_no',
+                            'd.name as designation_name'
+                        )
+                        ->leftJoin('employee_designations as ed', function($join) {
+                            $join->on('e.id', '=', 'ed.hr_employee_id')
+                                ->where('ed.effective_date', function($q) {
+                                    $q->select(DB::raw('MAX(effective_date)'))
+                                        ->from('employee_designations')
+                                        ->whereColumn('hr_employee_id', 'e.id');
+                                });
+                        })
+                        ->leftJoin('hr_designations as d', 'ed.hr_designation_id', '=', 'd.id')
+                        ->where('e.id', $asLocation->hr_employee_id)
+                        ->first();
+                        
+                    if ($employee) {
+                        $parts = [];
+                        
+                        if ($employee->employee_no) {
+                            $parts[] = $employee->employee_no;
+                        }
+                        
+                        $fullName = trim(($employee->first_name ?? '') . ' ' . ($employee->last_name ?? ''));
+                        if ($fullName) {
+                            $parts[] = $fullName;
+                        }
+                        
+                        if ($employee->designation_name) {
+                            $parts[] = $employee->designation_name;
+                        }
+                        
+                        $allocationInfo = implode(' - ', $parts);
+                    }
+                }
+                
+                if ($location) {
+                    return $location;
+                } elseif ($allocationInfo) {
+                    return $allocationInfo;
+                } else {
+                    return 'N/A';
+                }
+            })
+            ->addColumn('image', function ($data) {
+                $documentation = $data->asDocumentation()->first(['file_name', 'path', 'extension']);
+                
+                if (!$documentation) {
+                    return '<img src="' . asset('Massets/images/document.png') . '" 
+                            width="50" height="50" loading="lazy" 
+                            class="img-round picture-container picture-src" 
+                            alt="No Image">';
+                }
+                
+                $fileUrl = url('/storage/' . $documentation->path . $documentation->file_name);
+                
+                if ($documentation->extension != 'pdf') {
+                    // Generate unique ID for EZView
+                    $imageId = 'ViewIMG' . $data->id;
+                    return '<img src="' . $fileUrl . '" 
+                            id="' . $imageId . '"
+                            class="img-round picture-container picture-src" 
+                            width="50" height="50" loading="lazy"
+                            alt="Asset Image">';
+                } else {
+                    // For PDFs, EZView might need href attribute
+                    $pdfId = 'ViewPDF' . $data->id;
+                    return '<a href="' . $fileUrl . '" target="_blank">
+                            <img src="' . asset('Massets/images/document.png') . '" 
+                            id="' . $pdfId . '"
+                            class="img-round picture-container picture-src" 
+                            width="50" height="50"
+                            alt="PDF Document"></a>';
+                }
+            })
+            ->addColumn('edit', function ($data) {
+                return '<a class="btn btn-success btn-sm" href="' . route('asset.edit', $data->id) . '" title="Edit"><i class="fas fa-pencil-alt text-white"></i></a>';
+            })
+            ->addColumn('delete', function ($data) {
+                if (Auth::user()->can('asset delete record')) {
+                    return '<button data-id="' . $data->id . '" class="btn btn-danger btn-sm deleteAsset">Delete</button>';
+                }
+                return '';
+            })
+            ->rawColumns(['image', 'edit', 'delete'])
+            ->make(true);
+    }
+
+    public function loadSubclassData(Request $request, $subClassId)
+    {
+        $query = Asset::where('as_sub_class_id', $subClassId)->orderBy('id', 'asc');
+        
+        // Apply user permission filter
+        if (!Auth::user()->can('asset all record')) {
+            $query->whereHas('audits', function($q) {
+                $q->where('user_id', Auth::user()->id)
+                ->where('auditable_type', 'App\Models\Asset\Asset');
+            });
+        }
+        
+        // Handle search
+        if ($request->has('search') && $request->search['value']) {
+            $searchTerm = $request->search['value'];
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('asset_code', 'like', '%' . $searchTerm . '%')
+                ->orWhere('description', 'like', '%' . $searchTerm . '%');
+            });
+        }
+        
+        $query->orderBy('id', 'desc')
+            ->select([
+                'assets.id',
+                'assets.asset_code', 
+                'assets.description',
+                'assets.as_sub_class_id',
+                'assets.created_at'
+            ]);
+        
+        return DataTables::eloquent($query)
+            ->addColumn('ownership', function ($data) {
+                $currentOwnership = $data->currentOwnership()->first(['client_id']);
+                $clientId = $currentOwnership->client_id ?? null;
+                
+                if ($clientId == null) {
+                    return 'Not Entered';
+                } else if ($clientId == 20) {
+                    return 'BARQAAB';
+                } else {
+                    return 'Client';
+                }
+            })
+                        ->addColumn('location', function ($data) {
+                // Optimized location retrieval
+                $currentLocation = $data->asCurrentLocation()->first(['name']);
+                
+                $location = $currentLocation->name ?? '';
+                
+                // Get allocation info using a more optimized approach
+                $allocationInfo = null;
+                
+                // First, try to get the hr_employee_id from asLocation
+                $asLocation = $data->asLocation()
+                    ->orderBy('date', 'desc')
+                    ->first(['hr_employee_id']);
+                    
+                if ($asLocation && $asLocation->hr_employee_id) {
+                    // Use a raw query to get employee details with designation in one go
+                    $employee = DB::table('hr_employees as e')
+                        ->select(
+                            'e.first_name',
+                            'e.last_name',
+                            'e.employee_no',
+                            'd.name as designation_name'
+                        )
+                        ->leftJoin('employee_designations as ed', function($join) {
+                            $join->on('e.id', '=', 'ed.hr_employee_id')
+                                ->where('ed.effective_date', function($q) {
+                                    $q->select(DB::raw('MAX(effective_date)'))
+                                        ->from('employee_designations')
+                                        ->whereColumn('hr_employee_id', 'e.id');
+                                });
+                        })
+                        ->leftJoin('hr_designations as d', 'ed.hr_designation_id', '=', 'd.id')
+                        ->where('e.id', $asLocation->hr_employee_id)
+                        ->first();
+                        
+                    if ($employee) {
+                        $parts = [];
+                        
+                        if ($employee->employee_no) {
+                            $parts[] = $employee->employee_no;
+                        }
+                        
+                        $fullName = trim(($employee->first_name ?? '') . ' ' . ($employee->last_name ?? ''));
+                        if ($fullName) {
+                            $parts[] = $fullName;
+                        }
+                        
+                        if ($employee->designation_name) {
+                            $parts[] = $employee->designation_name;
+                        }
+                        
+                        $allocationInfo = implode(' - ', $parts);
+                    }
+                }
+                
+                if ($location) {
+                    return $location;
+                } elseif ($allocationInfo) {
+                    return $allocationInfo;
+                } else {
+                    return 'N/A';
+                }
+            })
+            ->addColumn('image', function ($data) {
+                $documentation = $data->asDocumentation()->first(['file_name', 'path', 'extension']);
+                
+                if (!$documentation) {
+                    return '<img src="' . asset('Massets/images/document.png') . '" 
+                            width="50" height="50" loading="lazy" 
+                            class="img-round picture-container picture-src" 
+                            alt="No Image">';
+                }
+                
+                $fileUrl = url('/storage/' . $documentation->path . $documentation->file_name);
+                
+                if ($documentation->extension != 'pdf') {
+                    $imageId = 'ViewIMG' . $data->id;
+                    return '<img src="' . $fileUrl . '" 
+                            id="' . $imageId . '"
+                            class="img-round picture-container picture-src" 
+                            width="50" height="50" loading="lazy"
+                            alt="Asset Image">';
+                } else {
+                    $pdfId = 'ViewPDF' . $data->id;
+                    return '<a href="' . $fileUrl . '" target="_blank">
+                            <img src="' . asset('Massets/images/document.png') . '" 
+                            id="' . $pdfId . '"
+                            class="img-round picture-container picture-src" 
+                            width="50" height="50"
+                            alt="PDF Document"></a>';
+                }
+            })
+            ->addColumn('edit', function ($data) {
+                return '<a class="btn btn-success btn-sm" href="' . route('asset.edit', $data->id) . '" title="Edit"><i class="fas fa-pencil-alt text-white"></i></a>';
+            })
+            ->addColumn('delete', function ($data) {
+                if (Auth::user()->can('asset delete record')) {
+                    return '<button data-id="' . $data->id . '" class="btn btn-danger btn-sm deleteAsset">Delete</button>';
+                }
+                return '';
+            })
+            ->rawColumns(['image', 'edit', 'delete'])
+            ->make(true);
     }
 
 
@@ -52,127 +441,57 @@ class AssetController extends Controller
     }
 
     // AssetController.php
-    public function loadSubclassData(Request $request, $subClassId)
-    {
-        if ($request->ajax()) {
-            $data = Asset::where('as_sub_class_id', $subClassId)
-                ->with('asOwnership', 'asCurrentAllocation', 'asCurrentLocation', 'asDocumentation')
-                ->get();
+    // public function loadSubclassData(Request $request, $subClassId)
+    // {
+    //     if ($request->ajax()) {
+    //         $data = Asset::where('as_sub_class_id', $subClassId)
+    //             ->with('asOwnership', 'asCurrentAllocation', 'asCurrentLocation', 'asDocumentation')
+    //             ->get();
 
-            return DataTables::of($data)
-                ->addColumn('ownership', function ($data) {
-                    $clientId = $data->currentOwnership->id ?? null;
-                    if ($clientId == null) {
-                        return 'Not Entered';
-                    } else if ($clientId == 20) {
-                        return 'BARQAAB';
-                    } else {
-                        return 'Client';
-                    }
-                })
-                ->addColumn('location', function ($data) {
-                    $location = $data->asCurrentLocation->name ?? '';
-                    $allocation = $data->asCurrentAllocation->full_name ?? '';
-                    if ($location) {
-                        return $location;
-                    } elseif ($allocation) {
-                        return $allocation . ' - ' . $data->asCurrentAllocation->designation ?? '';
-                    } else {
-                        return 'N/A';
-                    }
-                })
-                ->addColumn('image', function ($data) {
-                    if ($data->asDocumentation->extension != 'pdf') {
-                        $image = '<img src="' . url(isset($data->asDocumentation->file_name) ? '/storage/' . $data->asDocumentation->path . $data->asDocumentation->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewIMG' . $data->id . '" width=50>';
-                    } else {
-                        $image = '<img src="' . asset('Massets/images/document.png') . '" href="' . url(isset($data->asDocumentation->file_name) ? '/storage/' . $data->asDocumentation->path . $data->asDocumentation->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewPDF' . $data->id . '" width=50>';
-                    }
-                    return $image;
-                })
-                ->addColumn('edit', function ($data) {
-                    $button = '<a class="btn btn-success btn-sm" href="' . route('asset.edit', $data->id) . '"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
-                    return $button;
-                })
-                ->addColumn('delete', function ($data) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteAsset">Delete</a>';
-                    return $btn;
-                })
-                ->rawColumns(['location', 'bar_code', 'image', 'edit', 'delete'])
-                ->make(true);
-        }
-    }
+    //         return DataTables::of($data)
+    //             ->addColumn('ownership', function ($data) {
+    //                 $clientId = $data->currentOwnership->id ?? null;
+    //                 if ($clientId == null) {
+    //                     return 'Not Entered';
+    //                 } else if ($clientId == 20) {
+    //                     return 'BARQAAB';
+    //                 } else {
+    //                     return 'Client';
+    //                 }
+    //             })
+    //             ->addColumn('location', function ($data) {
+    //                 $location = $data->asCurrentLocation->name ?? '';
+    //                 $allocation = $data->asCurrentAllocation->full_name ?? '';
+    //                 if ($location) {
+    //                     return $location;
+    //                 } elseif ($allocation) {
+    //                     return $allocation . ' - ' . $data->asCurrentAllocation->designation ?? '';
+    //                 } else {
+    //                     return 'N/A';
+    //                 }
+    //             })
+    //             ->addColumn('image', function ($data) {
+    //                 if ($data->asDocumentation->extension != 'pdf') {
+    //                     $image = '<img src="' . url(isset($data->asDocumentation->file_name) ? '/storage/' . $data->asDocumentation->path . $data->asDocumentation->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewIMG' . $data->id . '" width=50>';
+    //                 } else {
+    //                     $image = '<img src="' . asset('Massets/images/document.png') . '" href="' . url(isset($data->asDocumentation->file_name) ? '/storage/' . $data->asDocumentation->path . $data->asDocumentation->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewPDF' . $data->id . '" width=50>';
+    //                 }
+    //                 return $image;
+    //             })
+    //             ->addColumn('edit', function ($data) {
+    //                 $button = '<a class="btn btn-success btn-sm" href="' . route('asset.edit', $data->id) . '"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
+    //                 return $button;
+    //             })
+    //             ->addColumn('delete', function ($data) {
+    //                 $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteAsset">Delete</a>';
+    //                 return $btn;
+    //             })
+    //             ->rawColumns(['location', 'bar_code', 'image', 'edit', 'delete'])
+    //             ->make(true);
+    //     }
+    // }
 
-    public function loadData(Request $request, $subClassId = null)
-    {
-        if ($request->ajax()) {
-
-            $data = Asset::join('audits', 'audits.auditable_id', 'assets.id')->select('assets.*', 'audits.user_id', 'audits.auditable_id', 'audits.auditable_type')->where('auditable_type', 'App\Models\Asset\Asset')->where('user_id', Auth::user()->id)->distinct()->with('asCurrentLocation', 'asCurrentAllocation', 'asDocumentation')->get();
-
-            if (Auth::user()->can('asset all record')) {
-                $data = Asset::with('asCurrentLocation', 'asCurrentAllocation', 'asDocumentation')->get();
-            }
-
-
-            return DataTables::of($data)
-
-                ->addColumn('ownership', function ($data) {
-
-                    $clientId = $data->currentOwnership->id ?? null;
-                    if ($clientId == null) {
-                        return 'Not Entered';
-                    } else if ($clientId == 20) {
-                        return 'BARQAAB';
-                    } else {
-                        return 'Client';
-                    }
-                })
-                ->addColumn('location', function ($data) {
-
-                    $location = $data->asCurrentLocation->name ?? '';
-                    $allocation = $data->asCurrentAllocation->full_name ?? '';
-                    if ($location) {
-                        return $location;
-                    } elseif ($allocation) {
-                        return $allocation . ' - ' . $data->asCurrentAllocation->designation ?? '';
-                    } else {
-                        return 'N/A';
-                    }
-                })
-                // ->addColumn('bar_code', function ($data) {
-                //     //$barCode ='<img src="data:image/png;base64,'.\DNS1D::getBarcodePNG($data->asset_code,'C39+',1,33,array(0,0,0),true).'" alt="barcode" />';
-
-
-                //     $qrCode = '<img  src="data:image/png;base64,' . \DNS2D::getBarcodePNG($data->asset_code, 'QRCODE') . '" alt="barcode"   /><br><p style="color:black; font-weight: bold">' . $data->asset_code . '</p>';
-
-                //     return $qrCode;
-                // })
-                ->addColumn('image', function ($data) {
-                    if ($data->asDocumentation->extension != 'pdf') {
-                        $image = '<img src="' . url(isset($data->asDocumentation->file_name) ? '/storage/' . $data->asDocumentation->path . $data->asDocumentation->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewIMG' . $data->id . '" width=50>';
-                    } else {
-                        $image = '<img src="' . asset('Massets/images/document.png') . '" href="' . url(isset($data->asDocumentation->file_name) ? '/storage/' . $data->asDocumentation->path . $data->asDocumentation->file_name : 'Massets/images/document.png') . '" class="img-round picture-container picture-src"  id="ViewPDF' . $data->id . '" width=50>';
-                    }
-
-
-                    return $image;
-                })
-
-                ->addColumn('edit', function ($data) {
-
-                    $button = '<a class="btn btn-success btn-sm" href="' . route('asset.edit', $data->id) . '"  title="Edit"><i class="fas fa-pencil-alt text-white "></i></a>';
-
-                    return $button;
-                })
-                ->addColumn('delete', function ($data) {
-
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteAsset">Delete</a>';
-                    return $btn;
-                })
-                ->rawColumns(['location', 'bar_code', 'image', 'edit', 'delete'])
-                ->make(true);
-        }
-    }
-
+    
     public function create()
     {
         session()->put('asset_id', '');

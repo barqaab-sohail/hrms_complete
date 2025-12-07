@@ -322,7 +322,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/asset/search', 'AssetController@search')->name('asset.search');
     Route::get('/employee/asset/search/result', 'AssetController@result')->name('asset.result');
     Route::resource('/asset', 'AssetController')->except(['show']);
-    Route::get('/asset/loaddata/{subClassId?}', 'AssetController@loadData')->name('asset.loadData');
+    Route::post('/hrms/asset/loaddata', [AssetController::class, 'loadData'])->name('asset.loadData');
 
     Route::resource('/asDocument', 'AssetDocumentController');
     Route::resource('/asPurchase', 'AsPurchaseController');
@@ -335,7 +335,7 @@ Route::group(['prefix' => 'hrms', 'middleware' => ['auth', 'XssSanitizer'], 'nam
     Route::get('/asset/as_code/{id?}', 'AssetController@asCode');
     Route::get('/asset/types', 'AssetController@types')->name('asset.types');
     Route::get('/asset/subclass/{subClassId}', 'AssetController@subClassList')->name('asset.subclass');
-    Route::get('asset/loadSubclassData/{subClassId}', [AssetController::class, 'loadSubclassData'])->name('asset.loadSubclassData');
+    Route::post('/hrms/asset/loadSubclassData/{subClassId}', [AssetController::class, 'loadSubclassData'])->name('asset.loadSubclassData');
 
     // Asset Disposal Routes
     Route::get('asset/{id}/disposal/edit', 'AsDisposalController@edit')->name('asDisposal.edit');

@@ -111,6 +111,21 @@ class Asset extends Model implements Auditable
         )->orderby('date', 'desc');
     }
 
+    public function asCurrentAllocationWithDesignation()
+    {
+        return $this->hasOneThrough(
+            'App\Models\Hr\HrEmployee',
+            'App\Models\Asset\AsLocation',
+            'asset_id',
+            'id',
+            'id',
+            'hr_employee_id'
+        )
+        ->orderby('as_locations.date', 'desc')
+        ->with(['employeeCurrentDesignation']);
+    }
+
+
     public function asAllocations()
     {
         return $this->hasManyThrough(
