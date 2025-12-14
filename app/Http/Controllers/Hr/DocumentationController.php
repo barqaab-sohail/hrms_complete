@@ -49,6 +49,9 @@ class DocumentationController extends Controller
             //->latest()->get();
             return  DataTables::of($data)
                 ->addIndexColumn()
+                ->editColumn('size', function ($row) {
+                    return round($row->size / (1024 * 1024), 2) . ' MB';
+                })
                 ->addColumn('document', function ($row) {
                     if ($row->extension != 'pdf') {
                         return '<img id="ViewIMG" src="' . $row->full_path . '" href="' . $row->full_path . '" width="30/" style="cursor: pointer;">';

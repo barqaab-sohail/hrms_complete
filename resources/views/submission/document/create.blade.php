@@ -76,7 +76,8 @@
 <table class="table table-bordered data-table" width=100%>
     <thead>
       <tr>
-          <th style="width:35%">Description</th>
+          <th style="width:45%">Description</th>
+           <th style="width:10%">Size</th>
           <th style="width:15%">View</th>
           <th style="width:5%">Edit</th>
           <th style="width:5%">Delete</th>
@@ -149,6 +150,7 @@ $(function () {
         ajax: "{{ route('submissionDocument.create') }}",
         columns: [
             {data: "description", name: 'description'},
+            {data: "size", name: 'size'},
             {data: "document", name: 'document'},
             {data: 'Edit', name: 'Edit', orderable: false, searchable: false},
             {data: 'Delete', name: 'Delete', orderable: false, searchable: false},

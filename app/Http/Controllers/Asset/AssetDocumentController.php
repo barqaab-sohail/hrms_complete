@@ -31,6 +31,9 @@ class AssetDocumentController extends Controller
 
             return  DataTables::of($data)
                 ->addIndexColumn()
+                ->editColumn('size', function ($row) {
+                    return round($row->size / (1024 * 1024), 2) . ' MB';
+                })
                 ->editColumn('description', function ($row) {
                     return ucwords(strtolower($row->description)); // Convert to Title Case
                 })

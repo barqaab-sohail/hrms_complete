@@ -120,6 +120,7 @@
         <thead>
             <tr>
                 <th>Document Name</th>
+                 <th>Size</th>
                 @can('hr document date')
                 <th>Date</th>
                 @endcan
@@ -239,6 +240,10 @@
             columns: [{
                     data: "description",
                     name: 'description'
+                },
+                {
+                    data: "size",
+                    name: 'size'
                 },
                 @can('hr document date') {
                     data: "document_date",

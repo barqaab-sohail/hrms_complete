@@ -337,8 +337,9 @@ $(document).ready(function() {
                                     <th>Description</th>
                                     <th>Date</th>
                                     <th>File Name</th>
+                                    <th>Document ID</th>
                                     <th class="text-right">Size</th>
-                                    <th class="text-center" width="150">Actions</th>
+                                    <th class="text-center" width="200">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>`;
@@ -350,13 +351,13 @@ $(document).ready(function() {
                 <tr>
                     <td>
                         <input type="checkbox" class="form-check-input file-checkbox" 
-                               data-id="${file.id}" 
-                               data-size="${file.size_in_bytes}"
-                               data-index="${index}">
+                            data-id="${file.id}" 
+                            data-size="${file.size_in_bytes}"
+                            data-index="${index}">
                     </td>
                     <td class="font-weight-bold">${index + 1}</td>
                     <td>
-                        <div class="text-truncate" style="max-width: 200px;" title="${file.description || 'No description'}">
+                        <div class="text-truncate" style="max-width: 150px;" title="${file.description || 'No description'}">
                             ${file.description || '<span class="text-muted">N/A</span>'}
                         </div>
                     </td>
@@ -367,18 +368,30 @@ $(document).ready(function() {
                             ${file.file_name}
                         </div>
                     </td>
+                    <td>${file.document_identification_id || '<span class="text-muted">N/A</span>'}</td>
                     <td class="text-right">
                         <span class="badge badge-pill ${sizeClass}" title="${file.size_in_bytes.toLocaleString()} bytes">
                             ${file.size}
                         </span>
                     </td>
                     <td class="text-center">
-                        <a href="${file.download_url}" 
-                           class="btn btn-sm btn-outline-primary download-btn" 
-                           title="Download this file"
-                           data-id="${file.id}">
-                            <i class="fas fa-download mr-1"></i> Download
-                        </a>
+                        <div class="btn-group" role="group">
+                            <a href="${file.download_url}" 
+                            class="btn btn-sm btn-outline-primary download-btn" 
+                            title="Download this file"
+                            data-id="${file.id}">
+                                <i class="fas fa-download mr-1"></i>
+                            </a>
+                            
+                            ${file.edit_url ? `
+                            <a href="${file.edit_url}" 
+                            class="btn btn-sm btn-outline-warning edit-btn" 
+                            title="Edit Document"
+                            target="_blank"
+                            data-id="${file.id}">
+                                <i class="fas fa-edit mr-1"></i>
+                            </a>` : ''}
+                        </div>
                     </td>
                 </tr>`;
             });
@@ -597,6 +610,30 @@ $(document).ready(function() {
 
 .download-btn {
     min-width: 100px;
+}
+/* Add to the existing style section */
+.btn-group .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+.btn-group .btn-sm {
+    font-size: 0.875rem;
+}
+
+.edit-btn:hover {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+.btn-outline-warning {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+
+.btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #212529;
 }
 </style>
 @endpush

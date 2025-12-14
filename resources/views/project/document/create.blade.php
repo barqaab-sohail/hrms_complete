@@ -193,6 +193,7 @@
                 <th>Document Name</th>
                 <th>Reference No</th>
                 <th>Date</th>
+                <th>Size</th>
                 <th>View</th>
                 <th>Copy Link</th>
                 @can('pr edit document')
@@ -493,6 +494,7 @@ function createDatatable(url){
             {data: "description", name: 'description'},
             {data: "reference_no", name: 'reference_no'},
             {data: "document_date", name: 'document_date'},
+            {data: "size", name: 'size'},
             {data: "document", name: 'document', orderable: false, searchable: false},
             {data: "copy_link", name: 'copy_link', orderable: false, searchable: false},
             @can('pr edit document')

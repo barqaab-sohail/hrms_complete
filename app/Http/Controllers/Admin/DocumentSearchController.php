@@ -15,6 +15,7 @@ class DocumentSearchController extends Controller
     private $tableConfigs = [
         'as_documentations' => [
             'description_field' => 'description',
+            'document_identification_id' => 'asset_id',
             'date_field' => 'created_at',
             'size_field' => 'size',
             'file_field' => 'file_name',
@@ -22,6 +23,7 @@ class DocumentSearchController extends Controller
         ],
         'hr_documentations' => [
             'description_field' => 'description',
+            'document_identification_id' => 'hr_employee_id',
             'date_field' => 'document_date',
             'size_field' => 'size',
             'file_field' => 'file_name',
@@ -29,6 +31,7 @@ class DocumentSearchController extends Controller
         ],
         'pr_documents' => [
             'description_field' => 'description',
+            'document_identification_id' => 'pr_detail_id',
             'date_field' => 'document_date',
             'size_field' => 'size',
             'file_field' => 'file_name',
@@ -36,6 +39,7 @@ class DocumentSearchController extends Controller
         ],
         'sub_documents' => [
             'description_field' => 'description',
+            'document_identification_id' => 'submission_id',
             'date_field' => 'created_at',
             'size_field' => 'size',
             'file_field' => 'file_name',
@@ -43,6 +47,7 @@ class DocumentSearchController extends Controller
         ],
         'admin_documents' => [
             'description_field' => 'description',
+            'document_identification_id' => 'id',
             'date_field' => 'document_date',
             'size_field' => 'size',
             'file_field' => 'file_name',
@@ -50,6 +55,7 @@ class DocumentSearchController extends Controller
         ],
         'folder_documents' => [
             'description_field' => 'description',
+            'document_identification_id' => 'folder_id',
             'date_field' => 'document_date',
             'size_field' => 'size',
             'file_field' => 'file_name',
@@ -57,6 +63,7 @@ class DocumentSearchController extends Controller
         ],
         'personal_documents' => [
             'description_field' => 'description',
+            'document_identification_id' => 'user_id',
             'date_field' => 'document_date',
             'size_field' => 'size',
             'file_field' => 'file_name',
@@ -103,25 +110,35 @@ class DocumentSearchController extends Controller
         try {
             // Build query to get largest files - CAST size to integer for proper sorting
             $files = DB::table($tableName)
-                ->select([
-                    'id',
-                    $config['description_field'] . ' as description',
-                    $config['date_field'] . ' as document_date',
-                    $config['size_field'] . ' as size',
-                    DB::raw('CAST(' . $config['size_field'] . ' AS UNSIGNED) as size_numeric'),
-                    $config['file_field'] . ' as file_name',
-                    $config['path_field'] . ' as file_path',
-                    DB::raw("'" . $tableName . "' as source_table")
-                ])
-                ->whereNotNull($config['size_field'])
-                ->whereRaw($config['size_field'] . ' REGEXP \'^[0-9]+$\'') // Only numeric values
-                ->orderBy('size_numeric', 'desc')
-                ->limit($limit)
-                ->get();
+            ->select([
+                'id',
+                $config['description_field'] . ' as description',
+                $config['document_identification_id'] . ' as document_identification_id', // ADD THIS
+                $config['date_field'] . ' as document_date',
+                $config['size_field'] . ' as size',
+                DB::raw('CAST(' . $config['size_field'] . ' AS UNSIGNED) as size_numeric'),
+                $config['file_field'] . ' as file_name',
+                $config['path_field'] . ' as file_path',
+                DB::raw("'" . $tableName . "' as source_table")
+            ])
+            ->whereNotNull($config['size_field'])
+            ->whereRaw($config['size_field'] . ' REGEXP \'^[0-9]+$\'')
+            ->orderBy('size_numeric', 'desc')
+            ->limit($limit)
+            ->get();
 
             // Format the results
-            $formattedFiles = $files->map(function ($file) {
+            $formattedFiles = $files->map(function ($file) use ($tableName, $config) {
                 $sizeNumeric = $file->size_numeric ?: intval($file->size);
+                
+                // Get document_identification_id
+                $docId = $file->document_identification_id ?? null;
+                
+                // Generate edit URL based on table
+                $editUrl = null;
+                if ($docId) {
+                    $editUrl = $this->getEditUrl($tableName, $docId);
+                }
                 
                 return [
                     'id' => $file->id,
@@ -132,10 +149,12 @@ class DocumentSearchController extends Controller
                     'file_name' => $file->file_name,
                     'file_path' => $file->file_path,
                     'source_table' => $file->source_table,
+                    'document_identification_id' => $docId,
                     'download_url' => route('document-search.download', [
                         'table' => $file->source_table, 
                         'id' => $file->id
-                    ])
+                    ]),
+                    'edit_url' => $editUrl
                 ];
             });
 
@@ -180,6 +199,34 @@ class DocumentSearchController extends Controller
                 'success' => false,
                 'message' => 'Error searching table: ' . $e->getMessage()
             ], 500);
+        }
+    }
+
+    // Add this method to the controller class:
+    /**
+     * Get edit URL based on table type
+     */
+    private function getEditUrl($tableName, $documentId)
+    {
+        $baseUrl = url('/');
+        
+        switch ($tableName) {
+            case 'as_documentations':
+                return $baseUrl . '/hrms/asset/' . $documentId . '/edit';
+            
+            case 'hr_documentations':
+                return $baseUrl . '/hrms/employee/' . $documentId . '/edit';
+            
+            case 'pr_documents':
+                return $baseUrl . '/hrms/project/project/' . $documentId . '/edit';
+            
+            case 'sub_documents':
+                return $baseUrl . '/hrms/submission/' . $documentId . '/edit';
+            
+           
+            // Add other tables as needed
+            default:
+                return null;
         }
     }
 

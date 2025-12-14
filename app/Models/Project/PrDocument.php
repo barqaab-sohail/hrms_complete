@@ -42,7 +42,7 @@ class PrDocument extends Model implements Auditable
 
     function getSizeAttribute($value)
     {
-        return (round(($value / 1000000), 2));
+        return (round(($value / (1024*1024)), 2));
     }
 
     public function prDocumentContent()

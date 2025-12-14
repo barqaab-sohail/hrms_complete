@@ -49,6 +49,9 @@ class ProjectDocumentController extends Controller
                     . htmlspecialchars($shortDescription)
                     . '</span>';
             })
+            ->editColumn('size', function ($row) {
+                return round($row->size, 2) . ' MB';
+            })
             ->addColumn('copy_link', function ($row) {
                 return '<a class="copyLink" link="' . $row->tiny_url . '" style="cursor: auto;" title="Click for Copy Tiny URL"><img src="https://hrms.barqaab.pk/Massets/images/copyLink.png" width="30"></a>';
             })

@@ -30,7 +30,9 @@ class SubDocumentController extends Controller
             $data = SubDocument::where('submission_id',session('submission_id'))->latest()->get();
 
             return  DataTables::of($data)
-                    
+                    ->editColumn('size', function ($row) {
+                    return round($row->size / (1024 * 1024), 2) . ' MB';
+                     })
                     ->addColumn('Edit', function($data){
    
                            $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editDocument">Edit</a>';

@@ -100,6 +100,7 @@
                 <th>Description</th>
                 <th>Reference No.</th>
                 <th>Document Date</th>
+                <th>Size</th>
                 <th>View</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -185,6 +186,10 @@
                 {
                     data: "document_date",
                     name: 'document_date'
+                },
+                {
+                    data: "size",
+                    name: 'size'
                 },
                 {
                     data: "document",
