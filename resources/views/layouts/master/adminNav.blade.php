@@ -136,6 +136,9 @@
                                                 @can('project monitor')
                                                 <li><a class="{{Request::is('hrms/MISMonitor')?'active':''}}" href="{{route('MISMonitor.index')}}">Monitoring</a></li>
                                                 @endcan
+                                                @can('check document size')
+                                                 <li><a class="{{Request::is('hrms/admin/exempted-designations')?'active':''}}" href="{{route('document-search.index')}}">Check Document Size</a></li>
+                                                @endcan
                                         </ul>
                                 </li>
 
@@ -378,7 +381,6 @@
                                 <li><a class="{{Request::is('hrms/admin/addUser')?'active':''}}" href="{{route('addUser.create')}}">Users</a></li>
                                                 <li><a class="{{Request::is('hrms/admin/misUser')?'active':''}}" href="{{route('misUser.create')}}">MIS User Rights</a></li>
                                                 <li><a class="{{Request::is('hrms/admin/exempted-designations')?'active':''}}" href="{{route('exempted-designations.index')}}">Exampted Designations for Education</a></li>
-                                                <li><a class="{{Request::is('hrms/admin/exempted-designations')?'active':''}}" href="{{route('document-search.index')}}">Check Document Size</a></li>
 
                                         </ul>
                                 </li>
