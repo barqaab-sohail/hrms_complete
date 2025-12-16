@@ -41,62 +41,62 @@ class EmployeeController extends Controller
 
     // Add these methods to your EmployeeController
 
-public function employeesList()
-{
-    $employees = HrEmployee::where('hr_status_id', 1)
-        ->select('id', 'employee_no', 'first_name', 'last_name', 'father_name', 'cnic')
-        ->get();
+    public function employeesList()
+    {
+        $employees = HrEmployee::where('hr_status_id', 1)
+            ->select('id', 'employee_no', 'first_name', 'last_name', 'father_name', 'cnic')
+            ->get();
 
-    return view('hr.employee.simple-list', compact('employees'));
-}
-
-public function employeeSummary($hrEmployeeId)
-{
-    $employee = HrEmployee::with([
-        'employeeCurrentDesignation',
-        'employeeCurrentProject', 
-        'employeeCurrentOffice',
-        'hrExit',
-        'employeeAppointment',
-        'hrContactMobile',
-        'hrBloodGroup',
-        'employeeCurrentSalary',
-        'employeeSalary',
-        'salayEffectiveDate',
-        'hrEmployeeHusband',
-        'gender',
-        'maritalStatus',
-        'religion'
-    ])->find($hrEmployeeId);
-
-    if (!$employee) {
-        return response()->json(['error' => 'Employee not found'], 404);
+        return view('hr.employee.simple-list', compact('employees'));
     }
 
-    // Add the employee picture URL to the response
-    $employeeData = $employee->toArray();
-    $employeeData['picture_url'] = $employee->employeePicture(); // Assuming this method returns the image path
+    public function employeeSummary($hrEmployeeId)
+    {
+        $employee = HrEmployee::with([
+            'employeeCurrentDesignation',
+            'employeeCurrentProject',
+            'employeeCurrentOffice',
+            'hrExit',
+            'employeeAppointment',
+            'hrContactMobile',
+            'hrBloodGroup',
+            'employeeCurrentSalary',
+            'employeeSalary',
+            'salayEffectiveDate',
+            'hrEmployeeHusband',
+            'gender',
+            'maritalStatus',
+            'religion'
+        ])->find($hrEmployeeId);
 
-    return response()->json($employeeData);
-}
+        if (!$employee) {
+            return response()->json(['error' => 'Employee not found'], 404);
+        }
 
-// Add this method for DataTables
-public function getSimpleEmployeesData()
-{
-    $employees = HrEmployee::where('hr_status_id', 1)
-        ->select('id', 'employee_no', 'first_name', 'last_name', 'father_name', 'cnic')
-        ->get();
+        // Add the employee picture URL to the response
+        $employeeData = $employee->toArray();
+        $employeeData['picture_url'] = $employee->employeePicture(); // Assuming this method returns the image path
 
-    return DataTables::of($employees)
-        ->addColumn('full_name', function($employee) {
-            return $employee->first_name . ' ' . $employee->last_name;
-        })
-        ->addColumn('action', function($employee) {
-            return '<button class="btn btn-sm btn-info view-employee" data-id="'.$employee->id.'">View</button>';
-        })
-        ->rawColumns(['action'])
-        ->make(true);
-}
+        return response()->json($employeeData);
+    }
+
+    // Add this method for DataTables
+    public function getSimpleEmployeesData()
+    {
+        $employees = HrEmployee::where('hr_status_id', 1)
+            ->select('id', 'employee_no', 'first_name', 'last_name', 'father_name', 'cnic')
+            ->get();
+
+        return DataTables::of($employees)
+            ->addColumn('full_name', function ($employee) {
+                return $employee->first_name . ' ' . $employee->last_name;
+            })
+            ->addColumn('action', function ($employee) {
+                return '<button class="btn btn-sm btn-info view-employee" data-id="' . $employee->id . '">View</button>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
 
     public function employeeSortData($employees)
     {
@@ -424,7 +424,7 @@ public function getSimpleEmployeesData()
 
     public function edit(Request $request, $id)
     {
-        
+
         $managmentAccessUder = MisUser::where('is_allow_management_access', 1)->pluck('user_id')->toArray();
         if (in_array($id, managementEmployeeIds()) && !in_array(auth()->user()->id, $managmentAccessUder)) {
             abort(403, 'Your are not authorized');
@@ -611,8 +611,18 @@ public function getSimpleEmployeesData()
                         ->where('blood_group_id', '=', $data['blood_group']);
                 })
                 ->when($data['project'], function ($query) use ($data) {
-                    return $query->join('employee_projects', 'employee_projects.hr_employee_id', '=', 'hr_employees.id')
-                        ->where('pr_detail_id', '=', $data['project']);
+                    $employeeIds = DB::table('employee_projects as ep1')
+                        ->select('ep1.hr_employee_id')
+                        ->where('ep1.pr_detail_id', '=', $data['project'])
+                        ->whereIn('ep1.id', function ($subquery) {
+                            $subquery->selectRaw('MAX(id)')
+                                ->from('employee_projects as ep2')
+                                ->whereColumn('ep2.hr_employee_id', 'ep1.hr_employee_id')
+                                ->groupBy('ep2.hr_employee_id');
+                        })
+                        ->pluck('hr_employee_id');
+
+                    return $query->whereIn('hr_employees.id', $employeeIds);
                 })
                 ->when($data['category'], function ($query) use ($data) {
 
