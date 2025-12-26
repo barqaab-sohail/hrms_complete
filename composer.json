@@ -28,6 +28,7 @@
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.3",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "spatie/laravel-backup": "*",
         "spatie/laravel-permission": "^6.4",
         "staudenmeir/belongs-to-through": "^2.5",
         "stevebauman/location": "^7.5",
