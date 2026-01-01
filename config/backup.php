@@ -116,6 +116,8 @@ return [
         'database_dump_file_extension' => '',
 
         'destination' => [
+
+
             /*
              * The compression algorithm to be used for creating the zip archive.
              *
@@ -151,7 +153,7 @@ return [
              * The disk names on which the backups will be stored.
              */
             'disks' => [
-                'local',
+                'public',
             ],
         ],
 
@@ -255,7 +257,7 @@ return [
     'monitor_backups' => [
         [
             'name' => env('APP_NAME', 'laravel-backup'),
-            'disks' => ['local'],
+            'disks' => ['public'],
             'health_checks' => [
                 \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
                 \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
