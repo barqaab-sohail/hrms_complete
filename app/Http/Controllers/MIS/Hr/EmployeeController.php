@@ -137,9 +137,13 @@ class EmployeeController extends Controller
                 "age" => \Carbon\Carbon::parse($employee->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days'),
                 "picture" => $employee->picture,
                 "mobile" => $employee->hrContactMobile->mobile ?? '',
-                "salary" => [
-        'salary' => $employee->employeeSalary?->gross_salary ?? '',
-        'effective_date' => $employee->employeeSalary?->effective_date ? \Carbon\Carbon::parse($employee->employeeSalary->effective_date)->format('M d, Y') : '',
+               "salary" => [
+                    'salary' => $employee->employeeSalary?->gross_salary 
+                        ? number_format($employee->employeeSalary->gross_salary, 2) 
+                        : '',
+                    'effective_date' => $employee->employeeSalary?->effective_date 
+                        ? \Carbon\Carbon::parse($employee->employeeSalary->effective_date)->format('M d, Y') 
+                        : '',
                 ],
                 //$employee->employeeSalary?->gross_salary ?? '',
                 "status" => $employee->hr_status_id ?? ''
