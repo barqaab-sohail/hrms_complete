@@ -139,7 +139,7 @@ class EmployeeController extends Controller
                 "mobile" => $employee->hrContactMobile->mobile ?? '',
                "salary" => [
                     'salary' => $employee->employeeSalary?->gross_salary 
-                        ? number_format($employee->employeeSalary->gross_salary, 2) 
+                        ? number_format($employee->employeeSalary->gross_salary, 0) 
                         : '',
                     'effective_date' => $employee->employeeSalary?->effective_date 
                         ? \Carbon\Carbon::parse($employee->employeeSalary->effective_date)->format('M d, Y') 
