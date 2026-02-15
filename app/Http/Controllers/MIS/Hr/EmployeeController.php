@@ -90,7 +90,7 @@ class EmployeeController extends Controller
         }
 
 
-        $data = HrEmployee::with('employeeDesignation', 'picture', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile')->get();
+        $data = HrEmployee::with('employeeDesignation', 'picture', 'employeeProject', 'employeeOffice', 'employeeAppointment', 'hrContactMobile','employeeSalary')->get();
         //first sort with respect to Designation
         // $designations = employeeDesignationArray();
         // $data = $data->sort(function ($a, $b) use ($designations) {
@@ -137,7 +137,11 @@ class EmployeeController extends Controller
                 "age" => \Carbon\Carbon::parse($employee->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days'),
                 "picture" => $employee->picture,
                 "mobile" => $employee->hrContactMobile->mobile ?? '',
-                "salary" => $employee->employeeSalary?->gross_salary ?? '',
+                "salary" => [
+        'salary' => $employee->employeeSalary?->gross_salary ?? '',
+        'effective_date' => $employee->employeeSalary?->effective_date ? \Carbon\Carbon::parse($employee->employeeSalary->effective_date)->format('M d, Y') : '',
+                ],
+                //$employee->employeeSalary?->gross_salary ?? '',
                 "status" => $employee->hr_status_id ?? ''
             );
         }
