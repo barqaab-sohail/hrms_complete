@@ -62,14 +62,14 @@ class MultiplePrintsController extends Controller
             $size = $fpdi->getTemplateSize($template);
             $fpdi->AddPage($size['orientation'], array($size['width'], $size['height']));
             $fpdi->useTemplate($template);
-            $fpdi->Image($image2, 11, 20, 90, 0, 'png');
-            $fpdi->Image($image2, 105, 20, 90, 0, 'png');
-            $fpdi->Image($image2, 11, 85, 90, 0, 'png');
-            $fpdi->Image($image2, 105, 85, 90, 0, 'png');
-            $fpdi->Image($image2, 11, 150, 90, 0, 'png');
-            $fpdi->Image($image2, 105, 150, 90, 0, 'png');
-            $fpdi->Image($image2, 11, 215, 90, 0, 'png');
-            $fpdi->Image($image2, 105, 215, 90, 0, 'png');
+            $fpdi->Image($image2, 10, 20, 90, 0, 'png');
+            $fpdi->Image($image2, 102, 20, 90, 0, 'png');
+            $fpdi->Image($image2, 10, 85, 90, 0, 'png');
+            $fpdi->Image($image2, 102, 85, 90, 0, 'png');
+            $fpdi->Image($image2, 10, 150, 90, 0, 'png');
+            $fpdi->Image($image2, 102, 150, 90, 0, 'png');
+            $fpdi->Image($image2, 10, 215, 90, 0, 'png');
+            $fpdi->Image($image2, 102, 215, 90, 0, 'png');
         }
         $fpdi->Output($outputFilePath, 'F');
     }
