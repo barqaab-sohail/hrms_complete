@@ -143,7 +143,7 @@ class ProjectLedgerActivityController extends Controller
     public function CustomerLedgerActivity($projectNo, $customerNo, $toDate)
     {
 
-        $url = "http://79.110.232.23:8888/reports/rwservlet?userid=BARQAAB/BARQAAB@scar&domain=classicdomain&report=D:\app\SYSTEM\BARQAAB\REPORTS\AR_LGR&destype=CACHE&desformat=HTML&paramform=no&PPCD=22&PMNODE=12AR302013&PUNCD=__PROJECTNO&PSTCD=__CUSTOMERNO&PENCD=__CUSTOMERNO&PSTDT=30-JUN-19&PENDT=__TODATE&PSTUC=__PROJECTNO&PENUC=__PROJECTNO&PUNCD=__PROJECTNO&PSTVT=AAA&PENVT=ZZZ&PVST=&PPST=";
+        $url = "http://cl4.scarletsystems.com:8888/reports/rwservlet?userid=BARQAAB/BARQAAB@scar&domain=classicdomain&report=E:\app\SYSTEM\BARQAAB\REPORTS\AR_LGR&destype=CACHE&desformat=HTML&paramform=no&PPCD=22&PMNODE=12AR302013&PUNCD=__PROJECTNO&PSTCD=__CUSTOMERNO&PENCD=__CUSTOMERNO&PSTDT=30-JUN-19&PENDT=__TODATE&PSTUC=__PROJECTNO&PENUC=__PROJECTNO&PUNCD=__PROJECTNO&PSTVT=AAA&PENVT=ZZZ&PVST=&PPST=";
         $url = str_replace("__PROJECTNO", $projectNo, $url);
         $url = str_replace("__CUSTOMERNO", $customerNo, $url);
         $url = str_replace("__TODATE", $toDate, $url);
