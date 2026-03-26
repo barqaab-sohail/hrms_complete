@@ -1298,8 +1298,16 @@ var require_module_cjs = __commonJS({
     var flushing = false;
     var queue = [];
     var lastFlushedIndex = -1;
+    var transactionActive = false;
     function scheduler(callback) {
       queueJob(callback);
+    }
+    function startTransaction() {
+      transactionActive = true;
+    }
+    function commitTransaction() {
+      transactionActive = false;
+      queueFlush();
     }
     function queueJob(job) {
       if (!queue.includes(job))
@@ -1313,6 +1321,8 @@ var require_module_cjs = __commonJS({
     }
     function queueFlush() {
       if (!flushing && !flushPending) {
+        if (transactionActive)
+          return;
         flushPending = true;
         queueMicrotask(flushJobs);
       }
@@ -1384,16 +1394,26 @@ var require_module_cjs = __commonJS({
         let value = getter();
         JSON.stringify(value);
         if (!firstTime) {
-          queueMicrotask(() => {
-            callback(value, oldValue);
-            oldValue = value;
-          });
-        } else {
-          oldValue = value;
+          if (typeof value === "object" || value !== oldValue) {
+            let previousValue = oldValue;
+            queueMicrotask(() => {
+              callback(value, previousValue);
+            });
+          }
         }
+        oldValue = value;
         firstTime = false;
       });
       return () => release(effectReference);
+    }
+    async function transaction(callback) {
+      startTransaction();
+      try {
+        await callback();
+        await Promise.resolve();
+      } finally {
+        commitTransaction();
+      }
     }
     var onAttributeAddeds = [];
     var onElRemoveds = [];
@@ -1735,6 +1755,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     function setEvaluator(newEvaluator) {
       theEvaluatorFunction = newEvaluator;
     }
+    var theRawEvaluatorFunction;
+    function setRawEvaluator(newEvaluator) {
+      theRawEvaluatorFunction = newEvaluator;
+    }
     function normalEvaluator(el, expression) {
       let overriddenMagics = {};
       injectMagics(overriddenMagics, el);
@@ -1745,6 +1769,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     function generateEvaluatorFromFunction(dataStack, func) {
       return (receiver = () => {
       }, { scope: scope2 = {}, params = [], context } = {}) => {
+        if (!shouldAutoEvaluateFunctions) {
+          runIfTypeOfFunction(receiver, func, mergeProxies([scope2, ...dataStack]), params);
+          return;
+        }
         let result = func.apply(mergeProxies([scope2, ...dataStack]), params);
         runIfTypeOfFunction(receiver, result);
       };
@@ -1805,6 +1833,33 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         value.then((i) => receiver(i));
       } else {
         receiver(value);
+      }
+    }
+    function evaluateRaw(...args) {
+      return theRawEvaluatorFunction(...args);
+    }
+    function normalRawEvaluator(el, expression, extras = {}) {
+      var _a, _b;
+      let overriddenMagics = {};
+      injectMagics(overriddenMagics, el);
+      let dataStack = [overriddenMagics, ...closestDataStack(el)];
+      let scope2 = mergeProxies([(_a = extras.scope) != null ? _a : {}, ...dataStack]);
+      let params = (_b = extras.params) != null ? _b : [];
+      if (expression.includes("await")) {
+        let AsyncFunction = Object.getPrototypeOf(async function() {
+        }).constructor;
+        let rightSideSafeExpression = /^[\n\s]*if.*\(.*\)/.test(expression.trim()) || /^(let|const)\s/.test(expression.trim()) ? `(async()=>{ ${expression} })()` : expression;
+        let func = new AsyncFunction(["scope"], `with (scope) { let __result = ${rightSideSafeExpression}; return __result }`);
+        let result = func.call(extras.context, scope2);
+        return result;
+      } else {
+        let rightSideSafeExpression = /^[\n\s]*if.*\(.*\)/.test(expression.trim()) || /^(let|const)\s/.test(expression.trim()) ? `(()=>{ ${expression} })()` : expression;
+        let func = new Function(["scope"], `with (scope) { let __result = ${rightSideSafeExpression}; return __result }`);
+        let result = func.call(extras.context, scope2);
+        if (typeof result === "function" && shouldAutoEvaluateFunctions) {
+          return result.apply(scope2, params);
+        }
+        return result;
       }
     }
     var prefixAsString = "x-";
@@ -1934,6 +1989,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     var alpineAttributeRegex = () => new RegExp(`^${prefixAsString}([^:^.]+)\\b`);
     function toParsedDirectives(transformedAttributeMap, originalAttributeOverride) {
       return ({ name, value }) => {
+        if (name === value)
+          value = "";
         let typeMatch = name.match(alpineAttributeRegex());
         let valueMatch = name.match(/:([a-zA-Z0-9\-_:]+)/);
         let modifiers = name.match(/\.[^.\]]+(?=[^\]]*$)/g) || [];
@@ -2048,6 +2105,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return el;
       if (el._x_teleportBack)
         el = el._x_teleportBack;
+      if (el.parentNode instanceof ShadowRoot) {
+        return findClosest(el.parentNode.host, callback);
+      }
       if (!el.parentElement)
         return;
       return findClosest(el.parentElement, callback);
@@ -2883,7 +2943,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       get raw() {
         return raw;
       },
-      version: "3.15.2",
+      get transaction() {
+        return transaction;
+      },
+      version: "3.15.8",
       flushAndStopDeferringMutations,
       dontAutoEvaluateFunctions,
       disableEffectScheduling,
@@ -2904,7 +2967,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       mapAttributes,
       evaluateLater,
       interceptInit,
+      initInterceptors,
+      injectMagics,
       setEvaluator,
+      setRawEvaluator,
       mergeProxies,
       extractProp,
       findClosest,
@@ -2920,6 +2986,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       throttle,
       debounce: debounce2,
       evaluate,
+      evaluateRaw,
       initTree,
       nextTick,
       prefixed: prefix,
@@ -3181,6 +3248,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         handler4 = wrapHandler(handler4, (next, e) => {
           e.target === el && next(e);
         });
+      if (event === "submit") {
+        handler4 = wrapHandler(handler4, (next, e) => {
+          if (e.target._x_pendingModelUpdates) {
+            e.target._x_pendingModelUpdates.forEach((fn) => fn());
+          }
+          next(e);
+        });
+      }
       if (isKeyEvent(event) || isClickEvent(event)) {
         handler4 = wrapHandler(handler4, (next, e) => {
           if (isListeningForASpecificKeyThatHasntBeenPressed(e, modifiers)) {
@@ -3216,7 +3291,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     function isListeningForASpecificKeyThatHasntBeenPressed(e, modifiers) {
       let keyModifiers = modifiers.filter((i) => {
-        return !["window", "document", "prevent", "stop", "once", "capture", "self", "away", "outside", "passive", "preserve-scroll"].includes(i);
+        return !["window", "document", "prevent", "stop", "once", "capture", "self", "away", "outside", "passive", "preserve-scroll", "blur", "change", "lazy"].includes(i);
       });
       if (keyModifiers.includes("debounce")) {
         let debounceIndex = keyModifiers.indexOf("debounce");
@@ -3313,11 +3388,43 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             el.setAttribute("name", expression);
         });
       }
-      let event = el.tagName.toLowerCase() === "select" || ["checkbox", "radio"].includes(el.type) || modifiers.includes("lazy") ? "change" : "input";
-      let removeListener = isCloning ? () => {
-      } : on3(el, event, modifiers, (e) => {
-        setValue(getInputValue(el, modifiers, e, getValue()));
-      });
+      let hasChangeModifier = modifiers.includes("change") || modifiers.includes("lazy");
+      let hasBlurModifier = modifiers.includes("blur");
+      let hasEnterModifier = modifiers.includes("enter");
+      let hasExplicitEventModifiers = hasChangeModifier || hasBlurModifier || hasEnterModifier;
+      let removeListener;
+      if (isCloning) {
+        removeListener = () => {
+        };
+      } else if (hasExplicitEventModifiers) {
+        let listeners2 = [];
+        let syncValue = (e) => setValue(getInputValue(el, modifiers, e, getValue()));
+        if (hasChangeModifier) {
+          listeners2.push(on3(el, "change", modifiers, syncValue));
+        }
+        if (hasBlurModifier) {
+          listeners2.push(on3(el, "blur", modifiers, syncValue));
+          if (el.form) {
+            let syncCallback = () => syncValue({ target: el });
+            if (!el.form._x_pendingModelUpdates)
+              el.form._x_pendingModelUpdates = [];
+            el.form._x_pendingModelUpdates.push(syncCallback);
+            cleanup(() => el.form._x_pendingModelUpdates.splice(el.form._x_pendingModelUpdates.indexOf(syncCallback), 1));
+          }
+        }
+        if (hasEnterModifier) {
+          listeners2.push(on3(el, "keydown", modifiers, (e) => {
+            if (e.key === "Enter")
+              syncValue(e);
+          }));
+        }
+        removeListener = () => listeners2.forEach((remove) => remove());
+      } else {
+        let event = el.tagName.toLowerCase() === "select" || ["checkbox", "radio"].includes(el.type) ? "change" : "input";
+        removeListener = on3(el, event, modifiers, (e) => {
+          setValue(getInputValue(el, modifiers, e, getValue()));
+        });
+      }
       if (modifiers.includes("fill")) {
         if ([void 0, null, ""].includes(getValue()) || isCheckbox(el) && Array.isArray(getValue()) || el.tagName.toLowerCase() === "select" && el.multiple) {
           setValue(getInputValue(el, modifiers, { target: el }, getValue()));
@@ -3833,6 +3940,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       directive2(directiveName, (el) => warn(`You can't use [x-${directiveName}] without first installing the "${name}" plugin here: https://alpinejs.dev/plugins/${slug}`, el));
     }
     alpine_default.setEvaluator(normalEvaluator);
+    alpine_default.setRawEvaluator(normalRawEvaluator);
     alpine_default.setReactivityEngine({ reactive: import_reactivity10.reactive, effect: import_reactivity10.effect, release: import_reactivity10.stop, raw: import_reactivity10.toRaw });
     var src_default2 = alpine_default;
     var module_default2 = src_default2;
@@ -7367,6 +7475,11 @@ function diff(left, right, diffs = {}, path = "") {
     return diffs;
   }
   let leftKeys = Object.keys(left);
+  let rightKeys = Object.keys(right);
+  if (isObject(left) && leftKeys.length === rightKeys.length && leftKeys.some((key, i) => key !== rightKeys[i])) {
+    diffs[path] = right;
+    return diffs;
+  }
   Object.entries(right).forEach(([key, value]) => {
     diffs = { ...diffs, ...diff(left[key], right[key], diffs, path === "" ? key : `${path}.${key}`) };
     leftKeys = leftKeys.filter((i) => i !== key);
@@ -8216,16 +8329,27 @@ import_alpinejs2.default.magic("wire", (el, { cleanup }) => {
   let component;
   return new Proxy({}, {
     get(target, property) {
-      if (!component)
-        component = closestComponent(el);
+      if (!component) {
+        try {
+          component = closestComponent(el);
+        } catch (e) {
+          return () => {
+          };
+        }
+      }
       if (["$entangle", "entangle"].includes(property)) {
         return generateEntangleFunction(component, cleanup);
       }
       return component.$wire[property];
     },
     set(target, property, value) {
-      if (!component)
-        component = closestComponent(el);
+      if (!component) {
+        try {
+          component = closestComponent(el);
+        } catch (e) {
+          return true;
+        }
+      }
       component.$wire[property] = value;
       return true;
     }
@@ -8405,6 +8529,12 @@ var Component = class {
   }
   get parent() {
     return closestComponent(this.el.parentElement);
+  }
+  get isLazy() {
+    return this.snapshot.memo.lazyLoaded !== void 0;
+  }
+  get hasBeenLazyLoaded() {
+    return this.snapshot.memo.lazyLoaded === true;
   }
   inscribeSnapshotAndEffectsOnElement() {
     let el = this.el;
@@ -8819,6 +8949,10 @@ var snapshotCache = {
     }
   }
 };
+var currentPageStatus = null;
+function storeCurrentPageStatus(status) {
+  currentPageStatus = status;
+}
 function updateCurrentPageHtmlInHistoryStateForLaterBackButtonClicks() {
   let url = new URL(window.location.href, document.baseURI);
   replaceUrl(url, document.documentElement.outerHTML);
@@ -8833,6 +8967,9 @@ function whenTheBackOrForwardButtonIsClicked(registerFallback, handleHtml) {
   window.addEventListener("popstate", (e) => {
     let state = e.state || {};
     let alpine = state.alpine || {};
+    if (currentPageStatus && (currentPageStatus < 200 || currentPageStatus >= 300)) {
+      return window.location.href = alpine.url;
+    }
     if (Object.keys(state).length === 0)
       return;
     if (!alpine.snapshotIdx)
@@ -8934,7 +9071,8 @@ function getUriStringFromUrlObject(urlObject) {
 // js/plugins/navigate/fetch.js
 function fetchHtml(destination, callback) {
   let uri = getUriStringFromUrlObject(destination);
-  performFetch(uri, (html, finalDestination) => {
+  performFetch(uri, (html, finalDestination, status) => {
+    storeCurrentPageStatus(status);
     callback(html, finalDestination);
   });
 }
@@ -8949,15 +9087,17 @@ function performFetch(uri, callback) {
     options
   });
   let finalDestination;
+  let status;
   fetch(uri, options).then((response) => {
     let destination = createUrlObjectFromString(uri);
     finalDestination = createUrlObjectFromString(response.url);
     if (destination.pathname + destination.search === finalDestination.pathname + finalDestination.search) {
       finalDestination.hash = destination.hash;
     }
+    status = response.status;
     return response.text();
   }).then((html) => {
-    callback(html, finalDestination);
+    callback(html, finalDestination, status);
   });
 }
 
@@ -8969,7 +9109,8 @@ function prefetchHtml(destination, callback) {
   if (prefetches[uri])
     return;
   prefetches[uri] = { finished: false, html: null, whenFinished: () => setTimeout(() => delete prefetches[uri], cacheDuration) };
-  performFetch(uri, (html, routedUri) => {
+  performFetch(uri, (html, routedUri, status) => {
+    storeCurrentPageStatus(status);
     callback(html, routedUri);
   });
 }
@@ -9449,7 +9590,10 @@ function navigate_default(Alpine23) {
   function navigateTo(destination, { preserveScroll = false, shouldPushToHistoryState = true }) {
     showProgressBar && showAndStartProgressBar();
     fetchHtmlOrUsePrefetchedHtml(destination, (html, finalDestination) => {
-      fireEventForOtherLibrariesToHookInto("alpine:navigating");
+      let swapCallbacks = [];
+      fireEventForOtherLibrariesToHookInto("alpine:navigating", {
+        onSwap: (callback) => swapCallbacks.push(callback)
+      });
       restoreScroll && storeScrollInformationInHtmlBeforeNavigatingAway();
       cleanupAlpineElementsOnThePageThatArentInsideAPersistedElement();
       updateCurrentPageHtmlInHistoryStateForLaterBackButtonClicks();
@@ -9470,6 +9614,7 @@ function navigate_default(Alpine23) {
             unPackPersistedPopovers(persistedEl);
           });
           !preserveScroll && restoreScrollPositionOrScrollToTop();
+          swapCallbacks.forEach((callback) => callback());
           afterNewScriptsAreDoneLoading(() => {
             andAfterAllThis(() => {
               setTimeout(() => {
@@ -9506,7 +9651,10 @@ function navigate_default(Alpine23) {
     if (prevented)
       return;
     storeScrollInformationInHtmlBeforeNavigatingAway();
-    fireEventForOtherLibrariesToHookInto("alpine:navigating");
+    let swapCallbacks = [];
+    fireEventForOtherLibrariesToHookInto("alpine:navigating", {
+      onSwap: (callback) => swapCallbacks.push(callback)
+    });
     updateCurrentPageHtmlInSnapshotCacheForLaterBackButtonClicks(currentPageUrl, currentPageKey);
     preventAlpineFromPickingUpDomChanges(Alpine23, (andAfterAllThis) => {
       enablePersist && storePersistantElementsForLater((persistedEl) => {
@@ -9521,6 +9669,7 @@ function navigate_default(Alpine23) {
           unPackPersistedPopovers(persistedEl);
         });
         restoreScrollPositionOrScrollToTop();
+        swapCallbacks.forEach((callback) => callback());
         andAfterAllThis(() => {
           autofocus && autofocusElementsWithTheAutofocusAttribute();
           nowInitializeAlpineOnTheNewPage(Alpine23);
@@ -9623,7 +9772,7 @@ function track(name, initialSeedValue, alwaysShow = false, except = null) {
   let isInitiallyPresentInUrl = has(url, name);
   let initialValue = isInitiallyPresentInUrl ? get(url, name) : initialSeedValue;
   let initialValueMemo = JSON.stringify(initialValue);
-  let exceptValueMemo = [false, null, void 0].includes(except) ? initialSeedValue : JSON.stringify(except);
+  let exceptValueMemo = JSON.stringify(except);
   let hasReturnedToInitialValue = (newValue) => JSON.stringify(newValue) === initialValueMemo;
   let hasReturnedToExceptValue = (newValue) => JSON.stringify(newValue) === exceptValueMemo;
   if (alwaysShow)
@@ -10247,6 +10396,8 @@ function getPooledCommits(pools) {
 function colocateCommitsByComponent(pools, component, foreignComponent) {
   let pool = findPoolWithComponent(pools, component);
   let foreignPool = findPoolWithComponent(pools, foreignComponent);
+  if (!foreignPool)
+    return;
   let foreignCommit = foreignPool.findCommitByComponent(foreignComponent);
   foreignPool.delete(foreignCommit);
   pool.add(foreignCommit);
@@ -10263,6 +10414,8 @@ function findPoolWithComponent(pools, component) {
 }
 function getDeepChildrenWithBindings(component, callback) {
   getDeepChildren(component, (child) => {
+    if (child.isLazy && !child.hasBeenLazyLoaded)
+      return;
     if (hasReactiveProps(child) || hasWireModelableBindings(child)) {
       callback(child);
     }
@@ -10660,8 +10813,11 @@ globalDirective("current", ({ el, directive: directive2, cleanup }) => {
   let expression = directive2.expression;
   let options = {
     exact: directive2.modifiers.includes("exact"),
-    strict: directive2.modifiers.includes("strict")
+    strict: directive2.modifiers.includes("strict"),
+    ignore: directive2.modifiers.includes("ignore")
   };
+  if (options.ignore)
+    return;
   if (expression.startsWith("#"))
     return;
   if (!el.hasAttribute("href"))
