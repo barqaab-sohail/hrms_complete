@@ -1,15 +1,16 @@
 <?php
 
-namespace App\DataTables\Leave;
+namespace App\DataTables;
 
 use App\Models\Leave\Leave;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
-use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\Facades\DataTables;
 
-class LeaveListDataTable extends DataTable
+
+class LeaveListDataTable extends DataTables
 {
     /**
      * Build DataTable class.

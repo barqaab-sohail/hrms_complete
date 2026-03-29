@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Leave;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Leave\LeaveStore;
-use App\DataTables\Leave\LeaveListDataTable;
+use App\DataTables\LeaveListDataTable;
 use App\Models\Leave\Leave;
 use App\Models\Leave\LeHalfDay;
 use App\Models\Leave\LeStatusType;
@@ -29,11 +29,13 @@ class LeaveController extends Controller
         return view('leave.create', compact('employees'));
     }
 
-    public function index(LeaveListDataTable $dataTable)
+    public function index(Request $request, LeaveListDataTable $dataTable)
     {
+        if ($request->ajax()) {
+            return $dataTable->getData($request);
+        }
 
-        return $dataTable->render('leave.list');
-
+        return view('leave.list');
 
         //  if($request->ajax()){
 
@@ -133,7 +135,7 @@ class LeaveController extends Controller
         if ($request->filled('to')) {
             $input['to'] = \Carbon\Carbon::parse($request->to)->format('Y-m-d');
         }
-       
+
         DB::transaction(function () use ($input, $request) {
 
             $leaveId = Leave::create($input);
@@ -291,32 +293,32 @@ class LeaveController extends Controller
 
 
         if ($request->filled('employee') && $request->filled('from') && $request->filled('to')) {
-            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('from', ">=", $input['from'])->whereDate('to', "<=", $input['to'])->orderBy('from','DESC')->get();
+            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('from', ">=", $input['from'])->whereDate('to', "<=", $input['to'])->orderBy('from', 'DESC')->get();
             $leaveBalance = false;
             return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('from') && $request->filled('to')) {
-            $result = Leave::whereDate('from', ">=", $input['from'])->whereDate('to', "<=", $input['to'])->orderBy('from','DESC')->get();
+            $result = Leave::whereDate('from', ">=", $input['from'])->whereDate('to', "<=", $input['to'])->orderBy('from', 'DESC')->get();
             $leaveBalance = false;
             $title = 'Leave Detail from ' . $request->from . ' to ' . $request->to;
             return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('employee') && $request->filled('from')) {
-            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('from', "=", $input['from'])->orderBy('from','DESC')->get();
+            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('from', "=", $input['from'])->orderBy('from', 'DESC')->get();
             $leaveBalance = false;
             return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('employee') && $request->filled('to')) {
-            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('to', "=", $input['to'])->orderBy('from','DESC')->get();
+            $result = Leave::where('hr_employee_id', $request->employee)->whereDate('to', "=", $input['to'])->orderBy('from', 'DESC')->get();
             $leaveBalance = false;
             return view('leave.search.result', compact('result', 'leaveBalance', 'title'));
         }
 
         if ($request->filled('employee')) {
-            $result = Leave::where('hr_employee_id', $request->employee)->orderBy('from','DESC')->get();
+            $result = Leave::where('hr_employee_id', $request->employee)->orderBy('from', 'DESC')->get();
             $leaveBalance = false;
             $employee = HrEmployee::find($request->employee);
             $title = $employee->full_name . ' - ' . $employee->designation . ' - Leave Detail';
@@ -330,14 +332,16 @@ class LeaveController extends Controller
         }
     }
 
-    public function onlineLeave(){
+    public function onlineLeave()
+    {
         return view('leave.onlineLeave.onlineLeave');
     }
 
-    public function employeeData(Request $request){
+    public function employeeData(Request $request)
+    {
 
-         // Following function restrict maximum 5 request in 1 minute
-         $executed = RateLimiter::attempt(
+        // Following function restrict maximum 5 request in 1 minute
+        $executed = RateLimiter::attempt(
             'send-message:',
             $perMinute = 3,
             function () {
@@ -348,28 +352,24 @@ class LeaveController extends Controller
         if (!$executed) {
             return 'Too many Request sent!, Please retry after some time';
         }
-        
+
         $employee = HrEmployee::where('cnic', $request->cnic)->first();
 
-        if($employee){
+        if ($employee) {
 
             if ($employee->employeeCategory->last()->name == 'A') {
                 $leaveTypes = LeType::all();
                 $casualLeave = casualLeave($employee->id);
-                $annualTotalLeave= annualTotalLeaveBalance($employee->id);
+                $annualTotalLeave = annualTotalLeaveBalance($employee->id);
             } else {
                 $leaveTypes =  LeType::whereIn('id', array(1, 3, 4))->get();
                 $casualLeave = casualLeave($employee->id);
-                $annualTotalLeave= 0;
+                $annualTotalLeave = 0;
             }
-           
-            return view('leave.onlineLeave.applyLeave', compact('employee', 'leaveTypes','casualLeave','annualTotalLeave'));
 
-        }else{
+            return view('leave.onlineLeave.applyLeave', compact('employee', 'leaveTypes', 'casualLeave', 'annualTotalLeave'));
+        } else {
             return redirect()->back()->with('error', 'No Data Found');
         }
-       
-        
-      
     }
 }

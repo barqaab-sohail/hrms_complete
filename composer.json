@@ -31,7 +31,7 @@
         "spatie/laravel-permission": "^6.4",
         "staudenmeir/belongs-to-through": "^2.5",
         "stevebauman/location": "^7.5",
-        "yajra/laravel-datatables-oracle": "*"
+        "yajra/laravel-datatables-oracle": "13.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "*",

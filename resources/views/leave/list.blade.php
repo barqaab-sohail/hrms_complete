@@ -9,12 +9,12 @@
 		<h4 class="card-title" style="color:black">List of Leaves</h4>
 
 		<div class="table-responsive m-t-40">
-			{!!$dataTable->table()!!}
+			<table id="leaves-table"></table>
 		</div>
 
 	</div>
 </div>
-{!!$dataTable->scripts()!!}
+
 
 <!-- Model -->
 <div class="modal fade" id="ajaxModel" aria-hidden="true">
@@ -59,8 +59,11 @@
 
 
 <script>
+	
 	$(document).ready(function() {
-
+		$('#leaves-table').DataTable({
+    ajax: "{{ route('leave.index') }}"
+});
 		$(function() {
 			$.ajaxSetup({
 				headers: {
