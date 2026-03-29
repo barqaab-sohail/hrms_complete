@@ -11,12 +11,12 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
         \DB::table('users')->delete();
-        
+
         \DB::table('users')->insert([
-            'user_status'=>1,
-            'email' => 'admin@barqaab.com',
+            'user_status' => 1,
+            'email' => 'hrms@hrms.com',
             'password' => bcrypt('great786'),
         ]);
     }

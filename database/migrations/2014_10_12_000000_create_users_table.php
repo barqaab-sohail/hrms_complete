@@ -13,11 +13,13 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
+
+
         Schema::create('users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('email')->unique();
-             $table->smallInteger('code')->unsigned()->nullable();
+            $table->smallInteger('code')->unsigned()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->default(bcrypt('Great@786'));
             $table->integer('user_status')->default(0)->comment('0 Not Registered, 1 Registered, 2 Blocked');
@@ -26,7 +28,6 @@ class CreateUsersTable extends Migration
             $table->string('last_login_ip')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            
         });
     }
 

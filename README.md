@@ -12,11 +12,11 @@
 Run following commands one by one:
 1.  git clone https://github.com/barqaab-sohail/hrms_complete.git hrms
 2.  composer update
-3.  create database in the name of "hrms_13" OR any other name but change database name in .env file
+3.  create database in the name of "hmrs" OR any other name but change database name in .env file
 4.  composer dump-autoload
 5.  php artisan migrate
 6.  php artisan db:seed --class=DatabaseSeeder 
-7.  for access application http://localhost/hrms_13/public/login
+7.  for access application http://localhost/hrms/public/login
 8.  and login with email: hrms@hrms.com  and password: great786
 9.  for send email functionality enter mail detail in .env file
 
