@@ -1,93 +1,263 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# 🚀 HRMS - Human Resource Management System (Laravel 13)
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+A comprehensive **Laravel 13-based enterprise web application** designed to manage Human Resources, Assets, Projects, and Leave operations in a centralized platform.
 
-## How to Install This Project
+This system streamlines organizational workflows, improves operational efficiency, and provides real-time insights for better decision-making.
 
-Run following commands one by one:
-1.  git clone https://github.com/barqaab-sohail/hrms_complete.git hrms
-2.  composer update
-3.  create database in the name of "hrms" OR any other name but change database name in .env file
-4.  composer dump-autoload
-5.  php artisan migrate
-6.  php artisan db:seed --class=DatabaseSeeder 
-7.  for access application http://localhost/hrms/public/login
-8.  and login with email: hrms@hrms.com  and password: great786
-9.  for send email functionality enter mail detail in .env file
+---
 
+# 📌 Overview
 
-## About Laravel
+The HRMS system integrates multiple business modules into a single platform:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* 👨‍💼 Human Resource Management System (HRMS)
+* 🏢 Asset Management System (AMS)
+* 📊 Project Management System (PMS)
+* 🗓 Leave Management System (LMS)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# ✨ Key Features
 
-## Learning Laravel
+## 👨‍💼 Human Resource Management System (HRMS)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* Employee Profile Management
+* Education & Experience Tracking
+* Transfer, Posting & Promotion Management
+* Document Repository
+* CNIC & Contract Expiry Tracking
+* Automated Email Notifications
+* HR Reports & Dashboards
+* Audit Trails
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🏢 Asset Management System (AMS)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+* QR Code-Based Asset Tracking
+* Asset Allocation (Employee / Department / Location)
+* Asset Lifecycle Management
+* Inventory Tracking
+* Maintenance Scheduling
+* Real-Time Asset Monitoring
+* Reporting Dashboards
+* Audit Logs
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
-- [云软科技](http://www.yunruan.ltd/)
+---
 
-## Contributing
+## 📊 Project Management System (PMS)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+* Project Planning & Scheduling
+* Task & Milestone Tracking
+* Resource Allocation
+* Budget & Expense Monitoring
+* Risk Management
+* Planned vs Actual Performance Tracking
+* Reporting Dashboards
+* Audit Trails
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🗓 Leave Management System (LMS)
 
-## Security Vulnerabilities
+* Online Leave Application
+* Leave Approval Workflow
+* Leave Balance Management
+* Automated Notifications
+* Leave Reports & Analytics
+* Audit Logs
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+# 📸 Screenshots (Add Your Images)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+> Add screenshots in `/screenshots` folder and update paths below
+
+```
+screenshots/
+├── dashboard.png
+├── employee.png
+├── asset.png
+├── project.png
+├── leave.png
+```
+
+```md
+![Dashboard](screenshots/dashboard.png)
+![Employee](screenshots/employee.png)
+```
+
+---
+
+# ⚙️ Installation Guide
+
+## 🔹 Step 1: Clone Repository
+
+```bash
+git clone https://github.com/barqaab-sohail/hrms_complete.git hrms
+cd hrms
+```
+
+---
+
+## 🔹 Step 2: Install Dependencies
+
+```bash
+composer update
+composer dump-autoload
+```
+
+---
+
+## 🔹 Step 3: Configure Environment
+
+* Create database:
+
+```
+hrms
+```
+
+* Update `.env` file:
+
+```env
+DB_DATABASE=hrms
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+---
+
+## 🔹 Step 4: Run Migrations & Seeder
+
+```bash
+php artisan migrate
+php artisan db:seed --class=DatabaseSeeder
+```
+
+---
+
+## 🔹 Step 5: Run Application
+
+Open in browser:
+
+```
+http://localhost/hrms/public/login
+```
+
+---
+
+# 🔐 Default Login Credentials
+
+```
+Email: hrms@hrms.com
+Password: great786
+```
+
+---
+
+# 📧 Email Configuration
+
+To enable email functionality, update `.env` file:
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your_username
+MAIL_PASSWORD=your_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=example@hrms.com
+MAIL_FROM_NAME="HRMS"
+```
+
+---
+
+# 🧱 Tech Stack
+
+* Laravel 13
+* PHP 8+
+* MySQL
+* Bootstrap / Blade
+* JavaScript / jQuery
+
+---
+
+# 📊 System Modules
+
+| Module | Description                   |
+| ------ | ----------------------------- |
+| HRMS   | Employee lifecycle management |
+| AMS    | Asset tracking & monitoring   |
+| PMS    | Project planning & tracking   |
+| LMS    | Leave management & approvals  |
+
+---
+
+# 🔒 Security Features
+
+* Authentication & Authorization
+* Role-Based Access Control (RBAC)
+* XSS Protection Middleware
+* Audit Logs
+
+---
+
+# 🚀 Future Enhancements
+
+* Mobile App Integration
+* API Services
+* Advanced Analytics Dashboard
+* AI-based Reporting
+
+---
+
+# 📂 Project Structure
+
+```
+app/
+routes/
+resources/
+database/
+public/
+```
+
+---
+
+# 🤝 Contribution
+
+Contributions are welcome!
+
+```bash
+fork → create branch → commit → push → pull request
+```
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+# 👨‍💻 Author
+
+**Sohail Afzal**
+
+---
+
+# ⭐ Support
+
+If you find this project useful:
+
+👉 Give it a ⭐ on GitHub
+👉 Share with others
+
+---
+
+# 📞 Contact
+
+For support or business inquiries:
+
+* Email: [hrms@hrms.com](mailto:hrms@hrms.com)
+
+---
