@@ -1,5 +1,5 @@
 <?php
-namespace Database\Seeders;
+//namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 class SubStatusSeeder extends Seeder
@@ -11,16 +11,16 @@ class SubStatusSeeder extends Seeder
      */
     public function run()
     {
-         \DB::table('sub_statuses')->delete();  
+        \DB::table('sub_statuses')->delete();
         $subStatuses = array(
-        	array('name' => 'Under Preparation'),
+            array('name' => 'Under Preparation'),
             array('name' => 'Submitted and Under Evaluation'),
             array('name' => 'Not Submitted'),
             array('name' => 'Canceled'),
             array('name' => 'Qualify'),
-        	array('name' => 'Won by BARQAAB'),
-        	array('name' => 'Won by Others'),
+            array('name' => 'Won by BARQAAB'),
+            array('name' => 'Won by Others'),
         );
-         \DB::table('sub_statuses')->insert($subStatuses);
+        \DB::table('sub_statuses')->insert($subStatuses);
     }
 }

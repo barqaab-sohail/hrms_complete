@@ -1,5 +1,5 @@
 <?php
-namespace Database\Seeders;
+//namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 class SubCvFormatSeeder extends Seeder
@@ -11,13 +11,13 @@ class SubCvFormatSeeder extends Seeder
      */
     public function run()
     {
-         \DB::table('sub_cv_formats')->delete();  
+        \DB::table('sub_cv_formats')->delete();
         $SubCvFormats = array(
-        	array('name' => 'PEC'),
-        	array('name' => 'Tech-6'),
-        	array('name' => 'World Bank'),
+            array('name' => 'PEC'),
+            array('name' => 'Tech-6'),
+            array('name' => 'World Bank'),
             array('name' => 'Other'),
         );
-         \DB::table('sub_cv_formats')->insert($SubCvFormats);
+        \DB::table('sub_cv_formats')->insert($SubCvFormats);
     }
 }

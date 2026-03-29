@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+//namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,10 +13,10 @@ class UnitSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('units')->delete();  
+        DB::table('units')->delete();
         $units = array(
-        	array('name' => 'Litre'),
-        	array('name' => 'Numbers'),
+            array('name' => 'Litre'),
+            array('name' => 'Numbers'),
             array('name' => 'Kilograms'),
             array('name' => 'Gram'),
             array('name' => 'Meter'),

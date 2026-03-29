@@ -1,5 +1,5 @@
 <?php
-namespace Database\Seeders;
+//namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 class SubEvaluationTypeSeeder extends Seeder
@@ -11,12 +11,12 @@ class SubEvaluationTypeSeeder extends Seeder
      */
     public function run()
     {
-         \DB::table('sub_evaluation_types')->delete();  
+        \DB::table('sub_evaluation_types')->delete();
         $subEvaluationTypes = array(
-        	array('name' => 'Quality cum Cost Based'),
-        	array('name' => 'Least Cost'),
-        	array('name' => 'Quality Based'),
+            array('name' => 'Quality cum Cost Based'),
+            array('name' => 'Least Cost'),
+            array('name' => 'Quality Based'),
         );
-         \DB::table('sub_evaluation_types')->insert($subEvaluationTypes);
+        \DB::table('sub_evaluation_types')->insert($subEvaluationTypes);
     }
 }

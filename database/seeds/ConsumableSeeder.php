@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+//namespace Database\Seeders;
 
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -14,10 +14,10 @@ class ConsumableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('consumables')->delete();  
+        DB::table('consumables')->delete();
         $consumables = array(
-        	array('name' => 'Petrol'),
-        	array('name' => 'Diesel'),
+            array('name' => 'Petrol'),
+            array('name' => 'Diesel'),
             array('name' => 'M-Tag'),
             array('name' => 'Toll Tax'),
         );

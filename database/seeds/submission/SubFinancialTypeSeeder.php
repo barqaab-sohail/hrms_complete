@@ -1,5 +1,5 @@
 <?php
-namespace Database\Seeders;
+//namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 class SubFinancialTypeSeeder extends Seeder
@@ -11,12 +11,12 @@ class SubFinancialTypeSeeder extends Seeder
      */
     public function run()
     {
-         \DB::table('sub_financial_types')->delete();  
+        \DB::table('sub_financial_types')->delete();
         $subFinancialTypes = array(
-        	array('name' => 'Man Month'),
-        	array('name' => 'Lumpsum'),
-        	array('name' => 'activities'),
+            array('name' => 'Man Month'),
+            array('name' => 'Lumpsum'),
+            array('name' => 'activities'),
         );
-         \DB::table('sub_financial_types')->insert($subFinancialTypes);
+        \DB::table('sub_financial_types')->insert($subFinancialTypes);
     }
 }
