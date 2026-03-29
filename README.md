@@ -12,7 +12,7 @@
 Run following commands one by one:
 1.  git clone https://github.com/barqaab-sohail/hrms_complete.git hrms
 2.  composer update
-3.  create database in the name of "hmrs" OR any other name but change database name in .env file
+3.  create database in the name of "hrms" OR any other name but change database name in .env file
 4.  composer dump-autoload
 5.  php artisan migrate
 6.  php artisan db:seed --class=DatabaseSeeder 
